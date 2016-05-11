@@ -1,11 +1,11 @@
-# Agile Data - Database access abstraction framework.
+# Agile Core - Trait collection for PHP frameworks
 
 **Agile Core is a collection of PHP Traits for designing object-oriented frameworks**
 
-[![Build Status](https://travis-ci.org/core/data.png?branch=develop)](https://travis-ci.org/core/data)
-[![Code Climate](https://codeclimate.com/github/core/data/badges/gpa.svg)](https://codeclimate.com/github/core/data)
-[![Test Coverage](https://codeclimate.com/github/core/data/badges/coverage.svg)](https://codeclimate.com/github/core/data/coverage)
-[![Issue Count](https://codeclimate.com/github/core/data/badges/issue_count.svg)](https://codeclimate.com/github/core/data)
+[![Build Status](https://travis-ci.org/atk4/core.png?branch=develop)](https://travis-ci.org/atk4/core)
+[![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
+[![Test Coverage](https://codeclimate.com/github/atk4/core/badges/coverage.svg)](https://codeclimate.com/github/atk4/core/coverage)
+[![Issue Count](https://codeclimate.com/github/atk4/core/badges/issue_count.svg)](https://codeclimate.com/github/atk4/core)
 
 
 ## Introducing the concept
