@@ -23,6 +23,8 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $m->hasMethod('test');
 
         $m->removeMethod('test');
+
+        $m->test();
     }
 
 }
