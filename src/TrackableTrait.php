@@ -9,8 +9,11 @@ namespace atk4\core;
  */
 trait TrackableTrait {
 
+    public $_trackableTrait = true;
+
     public $name;
     public $short_name;
+    public $owner;
 
     function getDesiredName(){
         return get_class($this);
