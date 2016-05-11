@@ -1,17 +1,19 @@
 <?php
 
+use atk4\core;
+
 class Object {
-    use AppScopeTrait;
-    use ContainerTrait;
-    use DebugTrait;
-    use DynamicMethodTrait;
-    use HookTrait;
-    use InitializerTrait;
-    use ModelableTrait;
-    use QuickExceptionTrait;
-    use SessionTrait;
-    use TrackableTrait;
-    use FactoryTrait;
+    use core\AppScopeTrait;
+    use core\ContainerTrait;
+    use core\DebugTrait;
+    use core\DynamicMethodTrait;
+    use core\HookTrait;
+    use core\InitializerTrait;
+    use core\ModelableTrait;
+    use core\QuickExceptionTrait;
+    use core\SessionTrait;
+    use core\TrackableTrait;
+    use core\FactoryTrait;
 
     function add($class, $args = null) {
 

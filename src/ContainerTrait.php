@@ -2,7 +2,7 @@
 
 namespace atk4\core;
 
-trait Container {
+trait ContainerTrait {
 
     protected $elements;
 

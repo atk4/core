@@ -1,9 +1,9 @@
 {
-    "name": "atk4/data",
+    "name": "atk4/core",
     "type": "library",
-    "description": "Agile Data - Database access abstraction framework",
-    "keywords": ["framework", "orm", "query", "active record", "sql", "builder", "nosql", "mongodb", "mysql", "postgresql"],
-    "homepage": "https://github.com/atk4/data",
+    "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
+    "keywords": ["php", "framework", "trains", "agile toolkit"],
+    "homepage": "https://github.com/atk4/core",
     "license": "MIT",
     "authors": [
         {
@@ -13,17 +13,16 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "atk4/dsql": "*"
+        "php": ">=5.5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "codeclimate/php-test-reporter": "*"
     },
     "autoload": {
-        "psr-4": {"atk4\\data\\":"src/"}
+        "psr-4": {"atk4\\core\\":"src/"}
     },
     "autoload-dev": {
-        "psr-4": {"atk4\\data\\tests\\":"tests/"}
+        "psr-4": {"atk4\\core\\tests\\":"tests/"}
     }
 }
