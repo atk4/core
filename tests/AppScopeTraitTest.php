@@ -22,4 +22,5 @@ class AppScopeTraitTest extends \PHPUnit_Framework_TestCase
 }
 
 class AppScopeMock {
+    use AppScopeTrait;
 }
