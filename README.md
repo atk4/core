@@ -7,24 +7,6 @@
 [![Test Coverage](https://codeclimate.com/github/core/data/badges/coverage.svg)](https://codeclimate.com/github/core/data/coverage)
 [![Issue Count](https://codeclimate.com/github/core/data/badges/issue_count.svg)](https://codeclimate.com/github/core/data)
 
-The key design concepts and the reason why we created Agile Data are:
-
- - Agile Data is simple to learn. We have designed our framework with aim to educate developers with
-   2+ years of experience on how to properly design application logic.
-
- - We introduce fresh concepts - DataSet and Action, that result in a more efficient ways to
-   interact with non-trivial databases (databases with some query language support).
- 
- - Separation of Business Logic and Persistence. We do not allow your database schema to dictate your
-   business logic design.
-
- - Major Databases are supported (SQL and NoSQL) and our framework will automatically use
-   features of the database (expressions, sub-queries, multi-row operation) if available.
-
- - Extensibility. Our core concept is extended through with Joins, SQL Expressions and Sub-Selects,
-   Calculated fields, Validation, REST proxies, Caches, etc.
-
- - Great for UI Frameworks. Agile Data integrates very well with compatible UI layer / widgets.
 
 ## Introducing the concept
 
