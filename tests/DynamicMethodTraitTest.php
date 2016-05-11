@@ -17,6 +17,12 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     {
         $m = new DynamicMethodMock();
         $m->addMethod('test', function(){ return 'ok'; });
+
+        $m->tryCall('test');
+
+        $m->hasMethod('test');
+
+        $m->removeMethod('test');
     }
 
 }
