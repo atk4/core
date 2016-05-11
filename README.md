@@ -12,31 +12,28 @@
 
 Implement your base classes of your framework by using some of the traits. Make your framework more lightweigth and elegant. Multiple parts of your framework will be able to interact easily.
 
-Our other design guidelines:
-
- - write short and easy-to-read, standard-compliant code with high code-climate score.
- - unit-test our own code with minimum of 95% code coverage.
- - add code through pull requests and discuss them before merging.
- - never break APIs in minor releases.
- - support composer but include minimum dependencies.
- - be friendly with all higher-level frameworks.
- - avoid database query latency/overheads, pre-fetching or lazy loading.
- - do not duplicate the code (e.g. in vendor drivers)
- - use MIT License
+ - Run-time tree (containers, add() method)
+ - Initializers (calling init() method)
+ - Factory (specifying class name by string)
+ - Dynamic Methods (addMethod())
+ - Hooks (addHook())
+ - Modelable (setModel())
+ - Quick Exception (context-aware exception() method)
+ - App Scope ($object->app)
+ - Session (memorize() and recall())
+ - Debug (log(), warn(), debug())
  
-## Sample Code
+## Documentation and Sample Code
 
 See http://atk4-core.readthedocs.io/
 
-
 ## Current Status
 
-Initial development
+Initial development (pre-alpha)
 
 ## Roadmap
 
 ```
-0.1   Implement basic outline, CI, Code Climate and initial docs
 0.2   Implement ConainerTrait, Trackable, Initializer and AppScope
 0.3   Implement Debug
 0.4   Implement Factory
@@ -49,6 +46,7 @@ Initial development
 
 ## Past Updates
 
+* 11 May: Released 0.1
 * 11 May: Finished basic docs
 * 27 Apr: Initial Commit
 
