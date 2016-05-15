@@ -32,7 +32,7 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
     {
         $m = new ContainerMock();
         $m->add(new TrackableMock());
-        $m->add(new TrackableMock());
+        $anon = $m->add(new TrackableMock());
         $m->add(new TrackableMock(), 'foo bar');
         $m->add(new TrackableMock(), '123');
         $m->add(new TrackableMock(), 'false');
@@ -40,6 +40,37 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, (boolean)$m->hasElement('foo bar'));
         $this->assertEquals(true, (boolean)$m->hasElement('123'));
         $this->assertEquals(true, (boolean)$m->hasElement('false'));
+        $this->assertEquals(5, $m->getElementCount());
+
+
+        $m->getElement('foo bar')->destroy();
+        $this->assertEquals(4, $m->getElementCount());
+        $anon->destroy();
+        $this->assertEquals(3, $m->getElementCount());
+    }
+
+    public function testLongNames()
+    {
+        $app = new ContainerAppMock();
+        $app->app = $app;
+        $app->max_name_length=30;
+        $m = $app->add(new ContainerAppMock(), 'quick-brouwn-fox');
+        $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
+        $m = $m->add(new ContainerAppMock(), 'then-they-go-out-for-a-pint');
+        $m = $m->add(new ContainerAppMock(), 'eat-a-stake');
+        $x=$m->add(new ContainerAppMock(), 'with');
+        $x=$m->add(new ContainerAppMock(), 'a');
+        $x=$m->add(new ContainerAppMock(), 'mint');
+
+        $this->assertEquals(
+            '_quick-brouwn-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake', 
+            $m->unshortenName($this)
+        );
+
+        $this->assertLessThan(5, count($app->unique_hashes));
+        $this->assertGreaterThan(2, count($app->unique_hashes));
+
+        $m->removeElement($x);
     }
 
     /**
@@ -65,8 +96,14 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
 class ContainerMock {
     use core\ContainerTrait;
 
-    function add($obj, $args = []) {
+    function add($obj, $args = [])
+    {
         return $this->_add_Container($obj, $args);
+    }
+
+    function getElementCount()
+    {
+        return count($this->elements);
     }
 }
 
@@ -81,4 +118,25 @@ class InitializerMock {
 class ContainerAppMock {
     use core\ContainerTrait;
     use core\AppScopeTrait;
+    function add($obj, $args = [])
+    {
+        return $this->_add_Container($obj, $args);
+    }
+    function unshortenName()
+    {
+        $n = $this->name;
+
+        $d = array_flip($this->app->unique_hashes);
+
+        for($x=1; $x < 100; $x++) {
+            @list($l,$r) = explode('__',$n);
+
+            if(!$r){
+                return $l;
+            }
+
+            $l = $d[$l];
+            $n = $l.$r;
+        }
+    }
 }

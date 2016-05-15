@@ -62,9 +62,13 @@ trait ContainerTrait {
             ]);
         }
 
+        if(isset($this->_appScope)) {
+            $element->app = $this->app;
+        }
         $element->owner = $this;
         $element->short_name = $args[0];
         $element->name = $this->_shorten($this->name.'_'.$element->short_name);
+
 
         if(isset($element->_trackableTrait)) {
             $this->elements[$element->short_name] = $element;
@@ -77,7 +81,52 @@ trait ContainerTrait {
         return $element;
     }
 
-    protected function _shorten () {
+    /**
+     * Remove child element if it exists.
+     *
+     * @param string $short_name short name of the element
+     *
+     * @return $this
+     */
+    public function removeElement($short_name)
+    {
+
+        if (is_object($short_name)) {
+            $short_name = $short_name->short_name;
+        }
+        unset($this->elements[$short_name]);
+        return $this;
+    }
+
+    /**
+     * Method used internally for shortening object names.
+     *
+     * @param string $desired Desired name of new object.
+     *
+     * @return string Shortened name of new object.
+     */
+    protected function _shorten ($desired) {
+        if (
+            isset($this->_appScope) &&
+            $this->app->max_name_length &&
+            strlen($desired) > $this->app->max_name_length
+        ) {
+            // $len is the amount to chomp. It must divide
+            // by max_name_length, so that we keep chomping
+            // by consistent amounts
+            $len = strlen($desired);
+            $len -= ($len % $this->app->max_name_length);
+
+            $key = substr($desired, 0, $len);
+            $rest = substr($desired, $len);
+
+            if (!isset($this->app->unique_hashes[$key])) {
+                $this->app->unique_hashes[$key] = dechex(crc32($key));
+            }
+            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+        };
+
+        return $desired;
     }
 
     /**
