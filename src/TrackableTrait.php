@@ -20,6 +20,11 @@ trait TrackableTrait {
     }
 
     function destroy(){
-        unset($this->owner->elements[$this->short_name]);
+        if (
+            isset($this->owner) &&
+            $this->owner->_containerTrait
+        ) {
+            $this->owner->removeElement($this->short_name);
+        }
     }
 }
