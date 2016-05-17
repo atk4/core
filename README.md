@@ -1,6 +1,6 @@
 # Agile Core - Trait collection for PHP frameworks
 
-[![Join the chat at https://gitter.im/atk4/core](https://badges.gitter.im/atk4/core.svg)](https://gitter.im/atk4/core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/atk4/data](https://badges.gitter.im/atk4/data.svg)](https://gitter.im/atk4/data?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Agile Core is a collection of PHP Traits for designing object-oriented frameworks**
 
