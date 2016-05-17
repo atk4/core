@@ -89,18 +89,16 @@ trait ContainerTrait {
             $element->app = $this->app;
         }
 
-
-        // TODO: im not sure if this should be here
-        $element->owner = $this;
-        $element->short_name = $args[0];
-        $element->name = $this->_shorten($this->name.'_'.$element->short_name);
-
-
         if(isset($element->_trackableTrait)) {
+
+            $element->owner = $this;
+            $element->short_name = $args[0];
+            $element->name = $this->_shorten($this->name.'_'.$element->short_name);
+
             $this->elements[$element->short_name] = $element;
         } else {
             // dont store extra reference to models and controlers
-            // for purposes of better garbage collection
+            // for purposes of better garbage collection.
             $this->elements[$element->short_name] = true;
         }
         
