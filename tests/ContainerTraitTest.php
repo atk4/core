@@ -40,7 +40,7 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, (boolean)$m->hasElement('foo bar'));
         $this->assertEquals(true, (boolean)$m->hasElement('123'));
         $this->assertEquals(true, (boolean)$m->hasElement('false'));
-        $this->assertEquals(3, $m->getElementCount());
+        $this->assertEquals(5, $m->getElementCount());
 
 
         $m->getElement('foo bar')->destroy();
