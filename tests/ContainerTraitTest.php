@@ -118,6 +118,7 @@ class InitializerMock {
 class ContainerAppMock {
     use core\ContainerTrait;
     use core\AppScopeTrait;
+    use core\TrackableTrait;
     function add($obj, $args = [])
     {
         return $this->_add_Container($obj, $args);

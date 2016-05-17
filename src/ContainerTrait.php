@@ -89,10 +89,12 @@ trait ContainerTrait {
             $element->app = $this->app;
         }
 
+        $element->owner = $this;
+        $element->short_name = $args[0];
+
+
         if(isset($element->_trackableTrait)) {
 
-            $element->owner = $this;
-            $element->short_name = $args[0];
             $element->name = $this->_shorten($this->name.'_'.$element->short_name);
 
             $this->elements[$element->short_name] = $element;
