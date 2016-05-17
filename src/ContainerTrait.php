@@ -2,12 +2,33 @@
 
 namespace atk4\core;
 
+/**
+ * This trait makes it possible for you to add child objects
+ * into your object.
+ */
 trait ContainerTrait {
 
-    public $name;
-
+    /**
+     * Check this property to see if ContainerTrait is present
+     * in the object
+     *
+     * @var string
+     */
     public $_containerTrait = true;
 
+    /**
+     * Unique object name
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * short_name => object hash of children objects. If the child is not
+     * trackable, then object will be set to "true" (to avoid extra reference)
+     *
+     * @var array
+     */
     protected $elements;
 
     private $_element_name_counts = array();
@@ -16,9 +37,6 @@ trait ContainerTrait {
         $postfix = @++$this->_element_name_counts[$desired];
 
         return $desired.($postfix > 1 ? ('_'.$postfix) : '');
-    }
-
-    protected function _unique() {
     }
 
     /**
@@ -44,6 +62,11 @@ trait ContainerTrait {
 
             // element has a name already
             $args[0]=$element->short_name;
+        } elseif (isset($element->_trackableTrait)) {
+
+            // ask element on his preferred name, then make it unique.
+            $cn = $element->getDesiredName();
+            $args[0] = $this->_unique_element($cn);
         } else {
 
             // generate name based on the class
@@ -62,9 +85,12 @@ trait ContainerTrait {
             ]);
         }
 
-        if(isset($this->_appScope)) {
+        if(isset($this->_appScope) && isset($element->_appScope)) {
             $element->app = $this->app;
         }
+
+
+        // TODO: im not sure if this should be here
         $element->owner = $this;
         $element->short_name = $args[0];
         $element->name = $this->_shorten($this->name.'_'.$element->short_name);
