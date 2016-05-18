@@ -91,15 +91,20 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 123);
     }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testException3()
+    {
+        $m = new ContainerMock();
+        $m->add('hello', 123);
+    }
 }
 
 class ContainerMock {
     use core\ContainerTrait;
 
-    function add($obj, $args = [])
-    {
-        return $this->_add_Container($obj, $args);
-    }
 
     function getElementCount()
     {
