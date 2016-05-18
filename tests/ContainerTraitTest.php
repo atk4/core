@@ -71,6 +71,8 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThan(2, count($app->unique_hashes));
 
         $m->removeElement($x);
+
+        $this->assertEquals(2, $m->getElementCount());
     }
 
     /**
@@ -124,9 +126,9 @@ class ContainerAppMock {
     use core\ContainerTrait;
     use core\AppScopeTrait;
     use core\TrackableTrait;
-    function add($obj, $args = [])
+    function getElementCount()
     {
-        return $this->_add_Container($obj, $args);
+        return count($this->elements);
     }
     function unshortenName()
     {
