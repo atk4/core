@@ -32,7 +32,7 @@ trait ContainerTrait {
     protected $elements;
 
     private $_element_name_counts = array();
-    public function _unique_element($desired = null)
+    public function _unique_element($desired)
     {
         $postfix = @++$this->_element_name_counts[$desired];
 
@@ -65,6 +65,10 @@ trait ContainerTrait {
      */
     protected function _add_Container($element, $args = [])
     {
+        if(!is_object($element)) {
+            throw new Exception(['Only objects may be added into containers','arg'=>$element]);
+        }
+
         // Normalize the arguments, bring name out
         if (is_string($args)) {
 
@@ -73,7 +77,7 @@ trait ContainerTrait {
         } elseif (!is_array($args)) {
 
             throw new Exception(['Second argument must be array','arg2'=>$args]);
-        } elseif (is_array($args) && isset($args['name'])) {
+        } elseif (isset($args['name'])) {
 
             // passed as ['name'=>'foo'];
             $args[0]=$args['name'];
@@ -154,7 +158,7 @@ trait ContainerTrait {
     protected function _shorten ($desired) {
         if (
             isset($this->_appScopeTrait) &&
-            $this->app->max_name_length &&
+            isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
             // $len is the amount to chomp. It must divide
