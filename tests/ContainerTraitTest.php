@@ -31,6 +31,8 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
     public function testUniqueNames()
     {
         $m = new ContainerMock();
+
+        // two anonymous children should get unique names asigned.
         $m->add(new TrackableMock());
         $anon = $m->add(new TrackableMock());
         $m->add(new TrackableMock(), 'foo bar');
@@ -78,6 +80,35 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $m->getElementCount());
     }
 
+    public function testLongNames2()
+    {
+        $app = new ContainerAppMock();
+        $app->app = $app;
+        $app->max_name_length=30;
+        $app->name = 'my-app-name-is-pretty-long';
+
+        $max_len = 0;
+        $min_len_v = '';
+        $min_len = 99;
+        $max_len_v = '';
+
+        for($x=1; $x<100; $x++) {
+            $sh = str_repeat('x', $x);
+            $m = $app->add(new ContainerAppMock(), $sh);
+            if(strlen($m->name)>$max_len) {
+                $max_len = strlen($m->name);
+                $max_len_v = $m->name;
+            }
+            if(strlen($m->name)<$min_len) {
+                $min_len = strlen($m->name);
+                $min_len_v = $m->name;
+            }
+        }
+
+        $this->assertGreaterThanOrEqual(15, $min_len); // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
+        $this->assertLessThanOrEqual($app->max_name_length, $max_len); // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
+    }
+
     /**
      * @expectedException     Exception
      */
@@ -86,6 +117,20 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 'foo');
         $m->add(new TrackableMock(), 'foo');
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testExceptionShortName()
+    {
+        $m1 = new ContainerMock();
+        $m2 = new ContainerMock();
+        $m1foo = $m1->add(new TrackableMock(), 'foo');
+        $m2foo = $m2->add(new TrackableMock(), 'foo');
+
+        // will carry on short name and run into collision.
+        $m2->add($m1foo);
     }
 
     /**

@@ -34,6 +34,8 @@ trait AppScopeTrait {
      * if AppScopeTrait is used, $app property is set and has a
      * max_name_length defined.
      *
+     * Minimum is 20
+     *
      * See http://stackoverflow.com/a/9399615/1466341 for more info.
      *
      * @var int

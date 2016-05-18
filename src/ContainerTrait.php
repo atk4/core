@@ -157,14 +157,18 @@ trait ContainerTrait {
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
-            // $len is the amount to chomp. It must divide
-            // by max_name_length, so that we keep chomping
-            // by consistent amounts
-            $len = strlen($desired)-15;
-            $len -= ($len % $this->app->max_name_length)+5;
 
-            $key = substr($desired, 0, $len);
-            $rest = substr($desired, $len);
+            /**
+             * Basic rules: hash is 10 character long (8+2 for separator)
+             * We need at least 5 characters on the right side. Total must not exceed
+             * max_name_length. First chop will be max-10, then chop size will increase by
+             * max-15
+             */
+            $len = strlen($desired);
+            $left = $len - ($len-10) % ($this->app->max_name_length - 15) - 5;
+
+            $key = substr($desired, 0, $left);
+            $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
                 $this->app->unique_hashes[$key] = dechex(crc32($key));
