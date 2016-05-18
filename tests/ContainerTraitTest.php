@@ -73,6 +73,9 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m->removeElement($x);
 
         $this->assertEquals(2, $m->getElementCount());
+        $m->add(new \StdClass());
+
+        $this->assertEquals(2, $m->getElementCount());
     }
 
     /**

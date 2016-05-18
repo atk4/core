@@ -65,8 +65,18 @@ trait ContainerTrait {
      */
     protected function _add_Container($element, $args = [])
     {
-        if(!is_object($element)) {
+        if (!is_object($element)) {
             throw new Exception(['Only objects may be added into containers','arg'=>$element]);
+        }
+
+        // Carry on reference to application if we have appScopeTraits set
+        if(isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
+            $element->app = $this->app;
+        }
+
+        // If element is not trackable, then we don't need to do anything with it
+        if (!isset($element->_trackableTrait)) {
+            return $element;
         }
 
         // Normalize the arguments, bring name out
@@ -109,24 +119,10 @@ trait ContainerTrait {
             ]);
         }
 
-        if(isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
-            $element->app = $this->app;
-        }
-
         $element->owner = $this;
         $element->short_name = $args[0];
-
-
-        if(isset($element->_trackableTrait)) {
-
-            $element->name = $this->_shorten($this->name.'_'.$element->short_name);
-
-            $this->elements[$element->short_name] = $element;
-        } else {
-            // dont store extra reference to models and controlers
-            // for purposes of better garbage collection.
-            $this->elements[$element->short_name] = true;
-        }
+        $element->name = $this->_shorten($this->name.'_'.$element->short_name);
+        $this->elements[$element->short_name] = $element;
         
         return $element;
     }
