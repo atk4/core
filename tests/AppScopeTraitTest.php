@@ -22,12 +22,28 @@ class AppScopeTraitTest extends \PHPUnit_Framework_TestCase
 
         $c = $m->add(new Child1());
         $this->assertEquals('myapp', $c->app);
+
+        $c = $m->add(new Child2());
+        $this->assertEquals(false, isset($c->app));
+
+        $m = new AppScopeMock2();
+
+        $c = $m->add(new Child1());
+        $this->assertEquals(false, isset($c->app));
     }
 
 }
 
 class AppScopeMock {
     use AppScopeTrait;
+    use ContainerTrait;
+    function add($obj, $args = [])
+    {
+        return $this->_add_Container($obj, $args);
+    }
+}
+
+class AppScopeMock2 {
     use ContainerTrait;
     function add($obj, $args = [])
     {
