@@ -164,8 +164,8 @@ trait ContainerTrait {
             // $len is the amount to chomp. It must divide
             // by max_name_length, so that we keep chomping
             // by consistent amounts
-            $len = strlen($desired);
-            $len -= ($len % $this->app->max_name_length);
+            $len = strlen($desired)-15;
+            $len -= ($len % $this->app->max_name_length)+5;
 
             $key = substr($desired, 0, $len);
             $rest = substr($desired, $len);
