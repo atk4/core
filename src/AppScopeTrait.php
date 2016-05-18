@@ -4,7 +4,7 @@ namespace atk4\core;
 
 trait AppScopeTrait {
 
-    public $_appScope = true;
+    public $_appScopeTrait = true;
 
     /**
      * Always points to current Application
@@ -14,21 +14,18 @@ trait AppScopeTrait {
     public $app;
 
     /**
-     * Object in Agile Toolkit contain $name property which is derrived from
-     * the owher object and keeps extending as you add objects deeper into
-     * run-time tree. Sometimes that may generate long names. Long names are
-     * difficult to read, they increase HTML output size but most importantly
-     * they may be restricted by security extensions such as SUHOSIN.
+     * When using mechanism for ContainerTrait, they inherit name of the
+     * parent to generate unique name for a child. In a framework it makes
+     * sense if you have a unique identifiers for all the objects because
+     * this enables you to use them as session keys, get arguments, etc.
      *
-     * Agile Toolkit implements a mechanism which will replace common beginning
-     * of objects with an abbreviation thus keeping object name length under
-     * control. This variable defines the maximum length of the object's $name.
-     * Be mindful that some objects will concatinate theri name with fields,
-     * so the maximum letgth of GET argument names can exceed this value by
-     * the length of your field.
+     * Unfortunatelly if those keys become too long it may be a problem,
+     * so ContainerTrait contains a mechanism for auto-shortening the
+     * name based around max_name_length. The mechanism does only work
+     * if AppScopeTrait is used, $app property is set and has a
+     * max_name_length defined.
      *
-     * We recommend you to increase SUHOSIN get limits if you encounter any
-     * problems. Set this value to "false" to turn off name shortening.
+     * See http://stackoverflow.com/a/9399615/1466341 for more info.
      *
      * @var int
      */
@@ -37,7 +34,10 @@ trait AppScopeTrait {
     /**
      * As more names are shortened, the substituted part is being placed into
      * this hash and the value contains the new key. This helps to avoid creating
-     * many sequential prefixes for the same character sequenece.
+     * many sequential prefixes for the same character sequenece. Those
+     * hashes can also be used to re-build the long name of the object, but
+     * ths functionality is not essential and excluded from traits. You
+     * can find it in a test suite.
      *
      * @var array
      */

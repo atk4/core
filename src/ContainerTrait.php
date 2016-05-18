@@ -85,7 +85,7 @@ trait ContainerTrait {
             ]);
         }
 
-        if(isset($this->_appScope) && isset($element->_appScope)) {
+        if(isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
             $element->app = $this->app;
         }
 
@@ -133,7 +133,7 @@ trait ContainerTrait {
      */
     protected function _shorten ($desired) {
         if (
-            isset($this->_appScope) &&
+            isset($this->_appScopeTrait) &&
             $this->app->max_name_length &&
             strlen($desired) > $this->app->max_name_length
         ) {
