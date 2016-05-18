@@ -40,6 +40,26 @@ trait ContainerTrait {
     }
 
     /**
+     * If you are using ContainerTrait only, then you can safely
+     * use this add() method. If you are also using factory, or
+     * initializer then redefine add() and call
+     * _add_Container, _add_Factory, 
+     */
+    function add($obj, $args = [])
+    {
+        if (isset($this->_factoryTrait)) {
+            // Factory allows us to pass string-type objects
+            $obj = $this->_add_Factory($obj, $args);
+        }
+        $obj = $this->_add_Container($obj, $args);
+
+        if (isset($obj->_initializerTrait)) {
+            $obj->init();
+        }
+        return $obj;
+    }
+
+    /**
      * Extension to add() method which will perform linking of
      * the object with the current class.
      */
