@@ -8,8 +8,27 @@ namespace atk4\core;
  * automatically when initialized through add().
  */
 trait InitializerTrait {
+
+
+    /**
+     * Check this property to see if InitializerTrait is present
+     * in the object
+     *
+     * @var string
+     */
+    public $_initializerTrait = true;
+
+
+    /**
+     * To make sure you have called parent::init() properly.
+     *
+     * @var boolean
+     */
     public $_initialized = false;
 
+    /**
+     * Initialize object. Always call parent::init(). Do not call directly.
+     */
     function init(){
         $this->_initialized = true;
     }
