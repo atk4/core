@@ -4,6 +4,8 @@ namespace atk4\core;
 
 trait HookTrait {
 
+    public $_hookTrait = true;
+
     /**
      * Contains information about configured hooks (callbacks)
      */
