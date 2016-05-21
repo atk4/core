@@ -4,20 +4,147 @@ namespace atk4\core;
 
 trait DynamicMethodTrait {
 
-    function __call($fx, $args){
+    public function __call($method, $arguments)
+    {
+        if (($ret = $this->tryCall($method, $arguments))) {
+            return $ret[0];
+        }
+
+        throw new Exception(
+            ['Method '.$method.' is not defined for this object',
+            'class'=>get_class($this),
+            'method'=>$method,
+            'arguments'=>$arguments
+        ]);
     }
 
-    function tryCall() {
+    function tryCall($method, $arguments) {
+        if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$method, $arguments)) {
+            return $ret;
+        }
+
+        if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
+            array_unshift($arguments, $this);
+            if (($ret = $this->app->hook('global-method-'.$method, $arguments))) {
+                return $ret;
+            }
+        }
     }
 
-    function addMethod($fx, $callable) {
+    /**
+     * Add new method for this object.
+     *
+     * @param string|array $name     Name of new method of $this object
+     * @param callable     $callable Callback
+     *
+     * @return $this
+     */
+    public function addMethod($name, $callable)
+    {
+        if (!isset($this->_hookTrait)) {
+            throw new Exception(['Object must use hookTrait for Dynamic Methods to work']);
+        }
+
+        if (is_string($name) && strpos($name, ',') !== false) {
+            $name = explode(',', $name);
+        }
+        if (is_array($name)) {
+            foreach ($name as $h) {
+                $this->addMethod($h, $callable);
+            }
+
+            return $this;
+        }
+        if (is_object($callable) && !is_callable($callable)) {
+            $callable = array($callable, $name);
+        }
+        if ($this->hasMethod($name)) {
+            throw new Exception(['Registering method twice','name'=>$name]);
+        }
+        $this->addHook('method-'.$name, $callable);
+
+        return $this;
     }
 
-    function hasMethod() {
+    /**
+     * Return if this object has specified method (either native or dynamic).
+     *
+     * @param string $name Name of the method
+     *
+     * @return bool
+     */
+    public function hasMethod($name)
+    {
+        return method_exists($this, $name)
+            || $this->hasHook('method-'.$name)
+            || (
+                isset($this->_appScopeTrait) &&
+                isset($this->app->_hookTrait) &&
+                $this->app->hasHook('global-method-'.$name)
+            );
     }
 
+    /**
+     * Remove dynamically registered method.
+     *
+     * @param string $name Name of the method
+     *
+     * @return $this
+     */
+    public function removeMethod($name)
+    {
+        $this->removeHook('method-'.$name);
 
-    function removeMethod() {
+        return $this;
+    }
+
+    /**
+     * Agile Toolkit objects allow method injection. This is quite similar
+     * to technique used in JavaScript:.
+     *
+     *     obj.test = function() { .. }
+     *
+     * All non-existant method calls on all Agile Toolkit objects will be
+     * tried against local table of registered methods and then against
+     * global registered methods.
+     *
+     * addGlobalmethod allows you to register a globally-recognized for all
+     * agile toolkit object. PHP is not particularly fast about executing
+     * methods like that, but this technique can be used for adding
+     * backward-compatibility or debugging, etc.
+     *
+     * @see AbstractObject::hasMethod()
+     * @see AbstractObject::__call()
+     *
+     * @param string   $name     Name of the method
+     * @param callable $callable Calls your function($object, $arg1, $arg2)
+     */
+    public function addGlobalMethod($name, $callable)
+    {
+        if (!isset($this->_appScopeTrait) || (!isset($this->app->_hookTrait))) {
+            throw new Exception(['You need appScope and app/hook traits, see docs']);
+        }
+
+        if ($this->hasGlobalMethod($name)) {
+            throw new Exception(['Registering global method twice', 'name'=>$name]);
+        }
+
+        $this->app->addHook('global-method-'.$name, $callable);
+    }
+
+    /**
+     * Return if this global method exists
+     *
+     * @param string $name Name of the method
+     *
+     * @return bool
+     */
+    public function hasGlobalMethod($name)
+    {
+        return 
+            isset($this->_appScopeTrait) &&
+            isset($this->app->_hookTrait) &&
+            $this->app->hasHook('global-method-'.$name);
     }
 }
 
