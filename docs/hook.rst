@@ -170,3 +170,10 @@ prevent other call-backs from being executed::
 breakHook method is implemented by throwing a special exception
 that is then caught inside hook() method.
 
+Checking if hook has callbacks
+==============================
+
+.. php:method:: hookHasCallbacks()
+
+This method will return true if at least one callback has been
+set for the hook.
