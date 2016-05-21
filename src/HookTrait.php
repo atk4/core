@@ -100,6 +100,14 @@ trait HookTrait {
     }
 
     /**
+     * Returns true if at least one callback is defined for this hook
+     */
+    public function hookHasCallbacks($hook_spot)
+    {
+        return isset($this->hooks[$hook_spot]);
+    }
+
+    /**
      * Execute all callables assigned to $hook_spot.
      *
      * @param string $hook_spot Hook identifier
