@@ -2,6 +2,7 @@
 
 **Agile Core is a collection of PHP Traits for designing object-oriented frameworks**
 
+[![Join the chat at https://gitter.im/atk4/data](https://badges.gitter.im/atk4/data.svg)](https://gitter.im/atk4/data?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/atk4/core.png?branch=develop)](https://travis-ci.org/atk4/core)
 [![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
 [![Test Coverage](https://codeclimate.com/github/atk4/core/badges/coverage.svg)](https://codeclimate.com/github/atk4/core/coverage)
@@ -34,18 +35,17 @@ Initial development (pre-alpha)
 ## Roadmap
 
 ```
-0.2   Implement ConainerTrait, Trackable, Initializer and AppScope
-0.3   Implement Debug
-0.4   Implement Factory
-0.5   Implement Hooks and Dynamic methods
-0.6   Implement QuickException
 1.0   First Stable Release.
-1.1   Implement Sessions
-1.2   Implement Renderable and Template
+1.1   Implement Debug
+1.2   Implement Factory
+1.3   Implement QuickException
+1.4   Implement Sessions
+1.5   Implement Renderable and Template
 ```
 
 ## Past Updates
 
+* 21 May: Released 1.0: Implemented ContainerTrait, Trackable, Initializer, AppScope, Hooks, DynamicMethod
 * 11 May: Released 0.1
 * 11 May: Finished basic docs
 * 27 Apr: Initial Commit

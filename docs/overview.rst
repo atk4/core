@@ -74,7 +74,7 @@ Dynamic Methods
 Adds ability to add methods into objects dynamically. That's like a "trait"
 feature of a PHP, but implemented in run-time::
 
-    $object->addMethod('test', function($o, $args){ echo 'hello, '.$args[0]; } 
+    $object->addMethod('test', function($o, $args){ echo 'hello, '.$args[0]; } );
     $object->test('world');
 
 There are also methods for removing and checking if methods exists, so::

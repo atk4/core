@@ -1,0 +1,169 @@
+==========================
+Run-Time Tree (Containers)
+==========================
+
+There are three relevant traits in the Container mechanics. Your "container"
+object should implement :php:trait:`ContainerTrait` and your child objects
+should implement :php:trait:`TrackableTrait` (if not, the $owner/$elements
+links will not be established)
+
+If both parent and child implement :php:trait:`AppScope` then the property
+of :php:attr:`AppScope::app` will be copied from parent to the child also.
+
+If your child implements :php:trait:`InitializerTrait` then the method will
+also be invoked after linking is done.
+
+.. php:trait:: ContainerTrait
+
+When you want your framework to look after relationships between objects by
+implementing containers, you can use :php:trait:`ContainerTrait`. Example::
+
+    class MyContainer extends OtherClass {
+        use atk4\core\ContainerTrait;
+
+        function add($obq, $args = []) {
+            return $this->_add_Container($obj, $args);
+        }
+    }
+
+    class MyItem  {
+        use atk4\core\TrackableTrait;
+    }
+
+Now the instances of MyClass can be added to one another and can keep track::
+
+    $parent = new MyContainer();
+    $parent->name = 'foo';
+    $parent->add(new MyItem(), 'child1');
+    $parent->add(new MyItem());
+    
+    echo $parent->getElement('child1')->name;
+    // foo_child1
+
+    if ($parent->hasElement('child1')) {
+        $parent->removeElement('child1');
+    }
+
+    $parent->each(function($child) {
+        $child->doSomething();
+    });
+.. php:attr:: name
+
+    Name of the container. Child names will be derived from the parent.
+
+.. php:attr:: elements
+
+    Contains a list of objects that have been "added" into the current
+    container. The key is a "shot_name" of the child. The actual link to
+    the element will be only present if child uses trait "TrackableTrait",
+    otherwise the value of array key will be "true".
+
+.. php:meth:: _addContainer($element, $args)
+
+    Add element into container. Normally you should create a method
+    add() inside your class that will execute this method. Because 
+    multiple traits will want to contribute to your add() method,
+    you should see sample implementation in :php:class:`Object::add`.
+
+    Your minimum code should be::
+
+        function add($obj, $args = [])
+        {
+            return $this->_add_Container($obj, $args);
+        }
+
+    $args be in few forms::
+    
+        $args = ['child_name'];
+        $args = 'child_name';
+        $args = ['child_name', 'db'=>$mydb];
+        $args = ['name'=>'child_name'];  // obsolete, backward-compatible
+
+    Method will return the object. Will throw exception if child with same
+    name already exist.
+
+.. php:meth:: removeElement($short_name)
+
+    Will remove element from $elements. You can pass either short_name
+    or the object itself. This will be called if :php:meth:`TrackableTrait::destroy`
+    is called.
+
+.. php:meth:: _shorten($desired)
+
+    Given the desired $name, this method will attempt to shorten the length
+    of your children. The reason for shortening a name is to impose reasonable
+    limits on overly long names. Name can be used as key in the GET argument
+    or form field, so for a longer names they will be shortened. 
+
+    This method will only be used if current object has :php:trait:`AppScope`,
+    since the application is responsible for keeping shortenings.
+
+.. php:meth:: getElement($short_name)
+
+    Given a short-name of the element, will return the object. Throws exception
+    if object with such short_name does not exist.
+
+.. php:meth:: hasElement($short_name)
+
+    Given a short-name of the element, will return the object. If object with
+    such short_name does not exist, will return false instead.
+
+
+
+Internal Methods
+================
+
+.. php:meth:: _unique_element
+
+    Internal method to create unique name for an element.
+
+
+
+You will be able to use :php:meth:`ContainerTrait::getElement()` to access
+elements inside container::
+
+    $object->add(new AnoterObject(), 'test');
+    $another_object = $object->getElement('test');
+
+If you additionally use :php:trait:`TrackableTrait` then your objects
+also receive unique "name". From example above:
+
+* $object->name == "app_object_4"
+* $another_object->name == "app_object_4_test"
+
+
+
+.. php:trait:: TrackableTrait
+
+    Trackable trait implements a few fields for the object that will maintain it's
+    relationship with the owner (parent).
+
+.. php:attr:: owner
+
+    Will point to object which has add()ed this object. If multiple objects have
+    added this object, then this will point to the most recent one.
+
+.. php:attr:: name
+
+    When name is set for container then all children will derrive their
+    name off the parent.
+
+    * Parent: foo
+    * Child:  foo_child1
+
+    The name will be unique within this container.
+
+.. php:attr:: short_name
+
+    When you add item into the owner, the "short_name" will 
+
+.. php:meth:: getDesiredName
+
+    Normally object will try to be named after it's class, if the name is omitted.
+    You can override this method to implement a different mechanics.
+
+.. php:meth:: destroy
+
+    If object owners is set, then it will remove object from it's elements reducing
+    number of links to the object. Normally PHP's garbage collector should remove
+    object as soon as number of links is zero.
