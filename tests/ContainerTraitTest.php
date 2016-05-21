@@ -152,22 +152,9 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class ContainerMock {
-    use core\ContainerTrait;
-
-
-    function getElementCount()
-    {
-        return count($this->elements);
-    }
-}
 
 class TrackableMock {
     use core\TrackableTrait;
-}
-
-class InitializerMock {
-    use core\InitializerTrait;
 }
 
 class ContainerAppMock {
