@@ -127,11 +127,11 @@ trait HookTrait {
                     krsort($this->hooks[$hook_spot]); // lower priority is called sooner
                     $hook_backup = $this->hooks[$hook_spot];
                     while ($_data = array_pop($this->hooks[$hook_spot])) {
-                        foreach ($_data as $prio => &$data) {
+                        foreach ($_data as &$data) {
 
                             $return[] = call_user_func_array(
                                 $data[0],
-                                $zz = array_merge(
+                                array_merge(
                                     array($this),
                                     $arg,
                                     $data[1]
