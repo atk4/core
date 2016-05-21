@@ -2,34 +2,213 @@
 
 namespace atk4\core;
 
+/**
+ * This trait makes it possible for you to add child objects
+ * into your object.
+ */
 trait ContainerTrait {
 
+    /**
+     * Check this property to see if ContainerTrait is present
+     * in the object
+     *
+     * @var string
+     */
+    public $_containerTrait = true;
+
+    /**
+     * Unique object name
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * short_name => object hash of children objects. If the child is not
+     * trackable, then object will be set to "true" (to avoid extra reference)
+     *
+     * @var array
+     */
     protected $elements;
 
     private $_element_name_counts = array();
-    public function _unique_element($desired = null)
+    public function _unique_element($desired)
     {
         $postfix = @++$this->_element_name_counts[$desired];
 
         return $desired.($postfix > 1 ? ('_'.$postfix) : '');
     }
 
-    protected function _unique() {
+    /**
+     * If you are using ContainerTrait only, then you can safely
+     * use this add() method. If you are also using factory, or
+     * initializer then redefine add() and call
+     * _add_Container, _add_Factory, 
+     */
+    function add($obj, $args = [])
+    {
+        if (isset($this->_factoryTrait)) {
+            // Factory allows us to pass string-type objects
+            $obj = $this->_add_Factory($obj, $args);
+        }
+        $obj = $this->_add_Container($obj, $args);
+
+        if (isset($obj->_initializerTrait)) {
+            $obj->init();
+        }
+        return $obj;
     }
 
     /**
-     * Extension to add() method which will perform container tracking
+     * Extension to add() method which will perform linking of
+     * the object with the current class.
      */
-    protected function _add_Container() {
+    protected function _add_Container($element, $args = [])
+    {
+        if (!is_object($element)) {
+            throw new Exception(['Only objects may be added into containers','arg'=>$element]);
+        }
+
+        // Carry on reference to application if we have appScopeTraits set
+        if(isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
+            $element->app = $this->app;
+        }
+
+        // If element is not trackable, then we don't need to do anything with it
+        if (!isset($element->_trackableTrait)) {
+            return $element;
+        }
+
+        // Normalize the arguments, bring name out
+        if (is_string($args)) {
+
+            // passed as string
+            $args=[$args];
+        } elseif (!is_array($args)) {
+
+            throw new Exception(['Second argument must be array','arg2'=>$args]);
+        } elseif (isset($args['name'])) {
+
+            // passed as ['name'=>'foo'];
+            $args[0]=$args['name'];
+            unset($args['name']);
+        } elseif (isset($element->short_name)) {
+
+            // element has a name already
+            $args[0]=$element->short_name;
+        } elseif (isset($element->_trackableTrait)) {
+
+            // ask element on his preferred name, then make it unique.
+            $cn = $element->getDesiredName();
+            $args[0] = $this->_unique_element($cn);
+        } else {
+
+            // generate name based on the class
+            $cn = str_replace('\\', '_', strtolower(get_class($element)));
+            $args[0] = $this->_unique_element($cn);
+        }
+
+        // Maybe element already exists
+        if (isset($this->elements[$args[0]])) {
+            throw new Exception([
+                'Element with requested name already exists',
+                'element'=>$element,
+                'name'=>$args[0],
+                'this'=>$this,
+                'arg2'=>$args
+            ]);
+        }
+
+        $element->owner = $this;
+        $element->short_name = $args[0];
+        $element->name = $this->_shorten($this->name.'_'.$element->short_name);
+        $this->elements[$element->short_name] = $element;
+        
+        return $element;
     }
 
-    protected function _shorten () {
+    /**
+     * Remove child element if it exists.
+     *
+     * @param string $short_name short name of the element
+     *
+     * @return $this
+     */
+    public function removeElement($short_name)
+    {
+
+        if (is_object($short_name)) {
+            $short_name = $short_name->short_name;
+        }
+        unset($this->elements[$short_name]);
+        return $this;
     }
 
-    function getElement() {
+    /**
+     * Method used internally for shortening object names.
+     *
+     * @param string $desired Desired name of new object.
+     *
+     * @return string Shortened name of new object.
+     */
+    protected function _shorten ($desired) {
+        if (
+            isset($this->_appScopeTrait) &&
+            isset($this->app->max_name_length) &&
+            strlen($desired) > $this->app->max_name_length
+        ) {
+
+            /**
+             * Basic rules: hash is 10 character long (8+2 for separator)
+             * We need at least 5 characters on the right side. Total must not exceed
+             * max_name_length. First chop will be max-10, then chop size will increase by
+             * max-15
+             */
+            $len = strlen($desired);
+            $left = $len - ($len-10) % ($this->app->max_name_length - 15) - 5;
+
+            $key = substr($desired, 0, $left);
+            $rest = substr($desired, $left);
+
+            if (!isset($this->app->unique_hashes[$key])) {
+                $this->app->unique_hashes[$key] = dechex(crc32($key));
+            }
+            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+        };
+
+        return $desired;
     }
 
-    function hasElement() {
+    /**
+     * Find child element by its short name. Use in chaining.
+     * Exception if not found.
+     *
+     * @param string $short_name Short name of the child element
+     *
+     * @return AbstractObject
+     */
+    function getElement($short_name) {
+        if (!isset($this->elements[$short_name])) {
+            throw new Exception([
+                'Child element not found',
+                'element'=>$short_name
+            ]);
+        }
+
+        return $this->elements[$short_name];
     }
 
+    /**
+     * Find child element. Use in condition.
+     *
+     * @param string $short_name Short name of the child element
+     *
+     * @return AbstractObject|bool
+     */
+    public function hasElement($short_name)
+    {
+        return isset($this->elements[$short_name])
+            ? $this->elements[$short_name]
+            : false;
+    }
 }
