@@ -76,11 +76,11 @@ trait DynamicMethodTrait {
     public function hasMethod($name)
     {
         return method_exists($this, $name)
-            || $this->hasHook('method-'.$name)
+            || $this->hookHasCallbacks('method-'.$name)
             || (
                 isset($this->_appScopeTrait) &&
                 isset($this->app->_hookTrait) &&
-                $this->app->hasHook('global-method-'.$name)
+                $this->app->hookHasCallbacks('global-method-'.$name)
             );
     }
 
@@ -144,7 +144,7 @@ trait DynamicMethodTrait {
         return 
             isset($this->_appScopeTrait) &&
             isset($this->app->_hookTrait) &&
-            $this->app->hasHook('global-method-'.$name);
+            $this->app->hookHasCallbacks('global-method-'.$name);
     }
 }
 
