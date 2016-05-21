@@ -26,16 +26,15 @@ Implement your base classes of your framework by using some of the traits. Make 
  
 ## Documentation and Sample Code
 
-See http://atk4-core.readthedocs.io/
+See http://agile-core.readthedocs.io/
 
 ## Current Status
 
-Initial development (pre-alpha)
+Stable (BETA1)
 
 ## Roadmap
 
 ```
-1.0   First Stable Release.
 1.1   Implement Debug
 1.2   Implement Factory
 1.3   Implement QuickException
