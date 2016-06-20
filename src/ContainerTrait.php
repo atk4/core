@@ -29,7 +29,7 @@ trait ContainerTrait {
      *
      * @var array
      */
-    protected $elements;
+    public $elements;
 
     private $_element_name_counts = array();
     public function _unique_element($desired)
