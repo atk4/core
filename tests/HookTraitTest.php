@@ -163,6 +163,36 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    public function testReferences() {
+        $obj = new HookMock();
+
+        $inc = function($obj, &$a) { 
+            $a++;
+        };
+
+        $obj->addHook('inc', $inc);
+        $v = 1;
+        $a = [&$v];
+        $obj->hook('inc', $a);
+
+        $this->assertEquals([2], $a);
+
+
+        $obj = new HookMock();
+
+        $inc = function($obj, &$a) { 
+            $a++;
+        };
+
+        $v = 1;
+        $obj->addHook('inc', $inc);
+        $obj->hook('inc', [&$v]);
+
+        $this->assertEquals(2, $v);
+    }
+
+
+
     public function testDefaultMethod() {
         $obj = new HookMock();
         $obj->addHook('myCallback', $obj);

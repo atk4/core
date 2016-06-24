@@ -19,7 +19,7 @@ class Exception extends \Exception
     public function __construct(
         $message = "",
         $code = 0,
-        \Throwable $previous = null
+        \Exception $previous = null
     ) {
         if (is_array($message)) {
             // message contain additional parameters
@@ -28,6 +28,112 @@ class Exception extends \Exception
         }
 
         parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * Output exception message using color sequences
+     *
+     * <exceptoin name>: <string>
+     * <info>
+     *
+     * trace
+     *
+     * --
+     * <triggered by>
+     */
+    public function getColorfulText()
+    {
+
+        $output = "\033[1;31m--[ Agile Toolkit Exception ]---------------------------\n";
+        $output .= get_class($this).": \033[47m".$this->getMessage()."\033[0;31m".
+            ($this->getCode() ? ' [code: '.$this->getCode().']' : '');
+
+        foreach($this->params as $key=>$val) {
+            $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
+            $output .= "\n".$key.": ".$this->toString($val);
+        }
+
+        $output .= "\n\033[0mStack Trace: ";
+
+        $in_atk = true;
+        $escape_frame = false;
+
+        foreach($this->getTrace() as $i=>$call) {
+            if (!isset($call['file'])) {
+                break;
+            }
+
+            if (
+                $in_atk &&
+                strpos($call['file'], '/data/src/') === false && 
+                strpos($call['file'], '/core/src/') === false &&
+                strpos($call['file'], '/dsql/src/') === false
+            ) {
+                $escape_frame = true;
+                $in_atk = false;
+
+            }
+
+
+            $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
+
+            $line = str_pad($call['line'], 4, ' ', STR_PAD_LEFT);
+
+            $output .= "\n\033[0;34m".$file."\033[0m";
+            $output .= ":\033[0;31m".$call['line']."\033[0m";
+
+            if (isset($call['object'])) {
+                $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
+                $output .= " - \033[0;32m".$name."\033[0m";
+            }
+
+            $output .= " \033[0;32m";
+
+            if (isset($call['class'])) {
+                $output .= $call['class'].'::';
+            }
+
+            if ($escape_frame) {
+                $output .= "\033[0,31m".$call['function'];
+                $escape_frame = false;
+
+                $args = [];
+                foreach($call['args'] as $arg) {
+                    $args[] = $this->toString($arg);
+                }
+
+                $output .= "\n".str_repeat(' ', 20)."\033[0,31m(".join(', ', $args);
+
+            } else {
+                $output .= "\033[0,33m".$call['function'].'(';
+            }
+
+            
+            $output .= ')';
+
+
+        }
+
+        // next print params
+
+        $output .= "\n\033[1;31m--------------------------------------------------------\n";
+        return $output."\033[0m";
+    }
+
+    /**
+     * Safely converts some value to string
+     */
+    function toString($val)
+    {
+        if (is_object($val)) {
+            if (isset($val->_trackableTrait)) {
+                return get_class($val).' ('.$val->name.')';
+            }
+
+            return 'Object '.get_class($val);
+        }
+
+        return json_encode($val);
     }
 
     /**
