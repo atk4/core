@@ -170,6 +170,20 @@ prevent other call-backs from being executed::
 breakHook method is implemented by throwing a special exception
 that is then caught inside hook() method.
 
+Using references in hooks
+=========================
+
+In some cases you want hook to change certain value. For example
+when model value is set it may call normalization hook (methods
+will change $value)::
+
+    function set($field, $value) {
+        $this->hook('normalize', [&$value]);
+        $this->data[$field] = $value;
+    }
+
+    $m->addHook('normalize', function(&$a) { $a = trim($a); });
+
 Checking if hook has callbacks
 ==============================
 
