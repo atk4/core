@@ -196,6 +196,7 @@ trait ContainerTrait {
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Child element not found',
+                'parent'=>$this,
                 'element'=>$short_name
             ]);
         }

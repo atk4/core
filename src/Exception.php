@@ -112,9 +112,16 @@ class Exception extends \Exception
 
         }
 
+        if ($p= $this->getPrevious()) {
+            $output .= "\n\033[0mCaused by Previous Exception:\n";
+            $output .= "\033[1;31m".get_class($p).": ".$p->getMessage()."\033[0;31m".
+                ($p->getCode() ? ' [code: '.$p->getCode().']' : '');
+        }
+
         // next print params
 
         $output .= "\n\033[1;31m--------------------------------------------------------\n";
+
         return $output."\033[0m";
     }
 
