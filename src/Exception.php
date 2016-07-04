@@ -60,10 +60,8 @@ class Exception extends \Exception
 
         foreach($this->getTrace() as $i=>$call) {
             if (!isset($call['file'])) {
-                break;
-            }
-
-            if (
+                $call['file'] = '';
+            } elseif (
                 $in_atk &&
                 strpos($call['file'], '/data/src/') === false && 
                 strpos($call['file'], '/core/src/') === false &&
@@ -80,7 +78,7 @@ class Exception extends \Exception
             $line = str_pad($call['line'], 4, ' ', STR_PAD_LEFT);
 
             $output .= "\n\033[0;34m".$file."\033[0m";
-            $output .= ":\033[0;31m".$call['line']."\033[0m";
+            $output .= ":\033[0;31m".$line."\033[0m";
 
             if (isset($call['object'])) {
                 $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
