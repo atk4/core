@@ -49,7 +49,7 @@ trait ContainerTrait {
     {
         if (isset($this->_factoryTrait)) {
             // Factory allows us to pass string-type objects
-            $obj = $this->factory($obj, $args);
+            $obj = $this->factory($this->normalizeClassName($obj), $args);
         }
         $obj = $this->_add_Container($obj, $args);
 
