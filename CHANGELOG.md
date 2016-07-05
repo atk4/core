@@ -1,3 +1,11 @@
+## 1.0.3
+
+* Minor cleanups, exception will now show previous exception
+
+## 1.0.2
+
+* Added FactoryTrait
+* FactoryTrait has normalizeClassName method
 
 ## 1.0.1
 
