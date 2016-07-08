@@ -132,12 +132,12 @@ trait ContainerTrait
 
         unset($args[0]);
         unset($args['name']);
-        foreach($args as $key=>$arg){
-            if($arg!==null) {
-                $element->$key=$arg;
+        foreach ($args as $key => $arg) {
+            if ($arg !== null) {
+                $element->$key = $arg;
             }
         }
-        
+
         return $element;
     }
 

@@ -1,24 +1,27 @@
 <?php
+
 namespace atk4\core;
 
-trait FactoryTrait {
-
+trait FactoryTrait
+{
     public $_factoryTrait = true;
 
     /**
-     * Determine class name, call constructor
+     * Determine class name, call constructor.
      */
-    function factory($object, $defaults = []) {
+    public function factory($object, $defaults = [])
+    {
         if (is_object($object)) {
             return $object;
         }
         if (!is_string($object)) {
             throw new Exception([
                 'Factory needs object or string',
-                'arg'=>$object,
-                'defaults'=>$defaults,
+                'arg'      => $object,
+                'defaults' => $defaults,
             ]);
         }
+
         return new $object($defaults);
     }
 
