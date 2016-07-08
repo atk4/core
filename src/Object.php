@@ -10,7 +10,6 @@ class Object
     use core\DynamicMethodTrait;
     use core\HookTrait;
     use core\InitializerTrait;
-    use core\ModelableTrait;
     use core\QuickExceptionTrait;
     use core\SessionTrait;
     use core\TrackableTrait;
