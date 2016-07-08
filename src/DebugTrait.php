@@ -2,10 +2,12 @@
 
 namespace atk4\core;
 
-trait DebugTrait {
-    public $debug=false;
+trait DebugTrait
+{
+    public $debug = false;
 
-    function debug(){
-        $this->debug=true;
+    public function debug()
+    {
+        $this->debug = true;
     }
 }

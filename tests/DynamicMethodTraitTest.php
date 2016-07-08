@@ -1,24 +1,25 @@
 <?php
+
 namespace atk4\core\tests;
 
+use atk4\core\AppScopeTrait;
 use atk4\core\DynamicMethodTrait;
 use atk4\core\HookTrait;
-use atk4\core\AppScopeTrait;
 
 /**
  * @coversDefaultClass \atk4\data\Model
  */
 class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * Test constructor
-     *
+     * Test constructor.
      */
     public function testConstruct()
     {
         $m = new DynamicMethodMock();
-        $m->addMethod('test', function(){ return 'world'; });
+        $m->addMethod('test', function () {
+            return 'world';
+        });
 
         $this->assertEquals(true, $m->hasMethod('test'));
 
@@ -29,9 +30,11 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     public function testArguments()
     {
         $m = new DynamicMethodMock();
-        $m->addMethod('sum', function($m, $a, $b){ return $a+$b; });
+        $m->addMethod('sum', function ($m, $a, $b) {
+            return $a + $b;
+        });
 
-        $res = $m->sum(3,5);
+        $res = $m->sum(3, 5);
         $this->assertEquals(8, $res);
     }
 
@@ -41,8 +44,12 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     public function testDoubleMethod()
     {
         $m = new DynamicMethodMock();
-        $m->addMethod('sum', function($m, $a, $b){ return $a+$b; });
-        $m->addMethod('sum', function($m, $a, $b){ return $a+$b; });
+        $m->addMethod('sum', function ($m, $a, $b) {
+            return $a + $b;
+        });
+        $m->addMethod('sum', function ($m, $a, $b) {
+            return $a + $b;
+        });
     }
 
     public function testGlobalMethods()
@@ -55,25 +62,29 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $m2 = new GlobalMethodObjectMock();
         $m2->app = $app;
 
-        $m->addGlobalMethod('sum', function($m, $obj, $a, $b){ return $a+$b; });
+        $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
+            return $a + $b;
+        });
         $this->assertEquals(true, $m->hasGlobalMethod('sum'));
 
-        $res = $m2->sum(3,5);
+        $res = $m2->sum(3, 5);
         $this->assertEquals(8, $res);
     }
-
 }
 
-class DynamicMethodMock {
+class DynamicMethodMock
+{
     use HookTrait;
     use DynamicMethodTrait;
 }
 
-class GlobalMethodObjectMock {
+class GlobalMethodObjectMock
+{
     use AppScopeTrait;
     use DynamicMethodTrait;
 }
 
-class GlobalMethodAppMock {
+class GlobalMethodAppMock
+{
     use HookTrait;
 }

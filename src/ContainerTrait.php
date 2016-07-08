@@ -6,18 +6,18 @@ namespace atk4\core;
  * This trait makes it possible for you to add child objects
  * into your object.
  */
-trait ContainerTrait {
-
+trait ContainerTrait
+{
     /**
      * Check this property to see if ContainerTrait is present
-     * in the object
+     * in the object.
      *
      * @var string
      */
     public $_containerTrait = true;
 
     /**
-     * Unique object name
+     * Unique object name.
      *
      * @var string
      */
@@ -25,13 +25,14 @@ trait ContainerTrait {
 
     /**
      * short_name => object hash of children objects. If the child is not
-     * trackable, then object will be set to "true" (to avoid extra reference)
+     * trackable, then object will be set to "true" (to avoid extra reference).
      *
      * @var array
      */
     public $elements;
 
-    private $_element_name_counts = array();
+    private $_element_name_counts = [];
+
     public function _unique_element($desired)
     {
         $postfix = @++$this->_element_name_counts[$desired];
@@ -43,9 +44,9 @@ trait ContainerTrait {
      * If you are using ContainerTrait only, then you can safely
      * use this add() method. If you are also using factory, or
      * initializer then redefine add() and call
-     * _add_Container, _add_Factory, 
+     * _add_Container, _add_Factory,.
      */
-    function add($obj, $args = [])
+    public function add($obj, $args = [])
     {
         if (isset($this->_factoryTrait)) {
             // Factory allows us to pass string-type objects
@@ -61,6 +62,7 @@ trait ContainerTrait {
                 ]);
             }
         }
+
         return $obj;
     }
 
@@ -71,11 +73,11 @@ trait ContainerTrait {
     protected function _add_Container($element, $args = [])
     {
         if (!is_object($element)) {
-            throw new Exception(['Only objects may be added into containers','arg'=>$element]);
+            throw new Exception(['Only objects may be added into containers', 'arg' => $element]);
         }
 
         // Carry on reference to application if we have appScopeTraits set
-        if(isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
+        if (isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
             $element->app = $this->app;
         }
 
@@ -88,19 +90,18 @@ trait ContainerTrait {
         if (is_string($args)) {
 
             // passed as string
-            $args=[$args];
+            $args = [$args];
         } elseif (!is_array($args)) {
-
-            throw new Exception(['Second argument must be array','arg2'=>$args]);
+            throw new Exception(['Second argument must be array', 'arg2' => $args]);
         } elseif (isset($args['name'])) {
 
             // passed as ['name'=>'foo'];
-            $args[0]=$args['name'];
+            $args[0] = $args['name'];
             unset($args['name']);
         } elseif (isset($element->short_name)) {
 
             // element has a name already
-            $args[0]=$element->short_name;
+            $args[0] = $element->short_name;
         } elseif (isset($element->_trackableTrait)) {
 
             // ask element on his preferred name, then make it unique.
@@ -117,10 +118,10 @@ trait ContainerTrait {
         if (isset($this->elements[$args[0]])) {
             throw new Exception([
                 'Element with requested name already exists',
-                'element'=>$element,
-                'name'=>$args[0],
-                'this'=>$this,
-                'arg2'=>$args
+                'element' => $element,
+                'name'    => $args[0],
+                'this'    => $this,
+                'arg2'    => $args,
             ]);
         }
 
@@ -128,6 +129,14 @@ trait ContainerTrait {
         $element->short_name = $args[0];
         $element->name = $this->_shorten($this->name.'_'.$element->short_name);
         $this->elements[$element->short_name] = $element;
+
+        unset($args[0]);
+        unset($args['name']);
+        foreach($args as $key=>$arg){
+            if($arg!==null) {
+                $element->$key=$arg;
+            }
+        }
         
         return $element;
     }
@@ -141,11 +150,11 @@ trait ContainerTrait {
      */
     public function removeElement($short_name)
     {
-
         if (is_object($short_name)) {
             $short_name = $short_name->short_name;
         }
         unset($this->elements[$short_name]);
+
         return $this;
     }
 
@@ -156,21 +165,22 @@ trait ContainerTrait {
      *
      * @return string Shortened name of new object.
      */
-    protected function _shorten ($desired) {
+    protected function _shorten($desired)
+    {
         if (
             isset($this->_appScopeTrait) &&
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
 
-            /**
+            /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed
              * max_name_length. First chop will be max-10, then chop size will increase by
              * max-15
              */
             $len = strlen($desired);
-            $left = $len - ($len-10) % ($this->app->max_name_length - 15) - 5;
+            $left = $len - ($len - 10) % ($this->app->max_name_length - 15) - 5;
 
             $key = substr($desired, 0, $left);
             $rest = substr($desired, $left);
@@ -179,7 +189,7 @@ trait ContainerTrait {
                 $this->app->unique_hashes[$key] = dechex(crc32($key));
             }
             $desired = $this->app->unique_hashes[$key].'__'.$rest;
-        };
+        }
 
         return $desired;
     }
@@ -192,12 +202,13 @@ trait ContainerTrait {
      *
      * @return AbstractObject
      */
-    function getElement($short_name) {
+    public function getElement($short_name)
+    {
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Child element not found',
-                'parent'=>$this,
-                'element'=>$short_name
+                'parent'  => $this,
+                'element' => $short_name,
             ]);
         }
 

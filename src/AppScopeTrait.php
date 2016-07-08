@@ -2,7 +2,6 @@
 
 namespace atk4\core;
 
-
 /**
  * Typical software design will create the application scope. Most frameworks
  * relies on "static" properties, methods and classes. This does puts some
@@ -11,12 +10,12 @@ namespace atk4\core;
  * App Scope will pass the 'app' property into all the object that you're
  * adding, so that you know for sure which application you work with::
  */
-trait AppScopeTrait {
-
+trait AppScopeTrait
+{
     public $_appScopeTrait = true;
 
     /**
-     * Always points to current Application
+     * Always points to current Application.
      *
      * @var App_CLI
      */
@@ -52,5 +51,5 @@ trait AppScopeTrait {
      *
      * @var array
      */
-    public $unique_hashes = array();
+    public $unique_hashes = [];
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace atk4\core\tests;
 
 use atk4\core;
@@ -8,10 +9,8 @@ use atk4\core;
  */
 class ContainerTraitTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * Test constructor
-     *
+     * Test constructor.
      */
     public function testBasic()
     {
@@ -39,9 +38,9 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m->add(new TrackableMock(), '123');
         $m->add(new TrackableMock(), 'false');
 
-        $this->assertEquals(true, (boolean)$m->hasElement('foo bar'));
-        $this->assertEquals(true, (boolean)$m->hasElement('123'));
-        $this->assertEquals(true, (boolean)$m->hasElement('false'));
+        $this->assertEquals(true, (bool) $m->hasElement('foo bar'));
+        $this->assertEquals(true, (bool) $m->hasElement('123'));
+        $this->assertEquals(true, (bool) $m->hasElement('false'));
         $this->assertEquals(5, $m->getElementCount());
 
 
@@ -55,17 +54,17 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
     {
         $app = new ContainerAppMock();
         $app->app = $app;
-        $app->max_name_length=30;
+        $app->max_name_length = 30;
         $m = $app->add(new ContainerAppMock(), 'quick-brouwn-fox');
         $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
         $m = $m->add(new ContainerAppMock(), 'then-they-go-out-for-a-pint');
         $m = $m->add(new ContainerAppMock(), 'eat-a-stake');
-        $x=$m->add(new ContainerAppMock(), 'with');
-        $x=$m->add(new ContainerAppMock(), 'a');
-        $x=$m->add(new ContainerAppMock(), 'mint');
+        $x = $m->add(new ContainerAppMock(), 'with');
+        $x = $m->add(new ContainerAppMock(), 'a');
+        $x = $m->add(new ContainerAppMock(), 'mint');
 
         $this->assertEquals(
-            '_quick-brouwn-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake', 
+            '_quick-brouwn-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake',
             $m->unshortenName($this)
         );
 
@@ -84,7 +83,7 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
     {
         $app = new ContainerAppMock();
         $app->app = $app;
-        $app->max_name_length=30;
+        $app->max_name_length = 30;
         $app->name = 'my-app-name-is-pretty-long';
 
         $max_len = 0;
@@ -92,14 +91,14 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $min_len = 99;
         $max_len_v = '';
 
-        for($x=1; $x<100; $x++) {
+        for ($x = 1; $x < 100; $x++) {
             $sh = str_repeat('x', $x);
             $m = $app->add(new ContainerAppMock(), $sh);
-            if(strlen($m->name)>$max_len) {
+            if (strlen($m->name) > $max_len) {
                 $max_len = strlen($m->name);
                 $max_len_v = $m->name;
             }
-            if(strlen($m->name)<$min_len) {
+            if (strlen($m->name) < $min_len) {
                 $min_len = strlen($m->name);
                 $min_len_v = $m->name;
             }
@@ -153,28 +152,32 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
 }
 
 
-class TrackableMock {
+class TrackableMock
+{
     use core\TrackableTrait;
 }
 
-class ContainerAppMock {
+class ContainerAppMock
+{
     use core\ContainerTrait;
     use core\AppScopeTrait;
     use core\TrackableTrait;
-    function getElementCount()
+
+    public function getElementCount()
     {
         return count($this->elements);
     }
-    function unshortenName()
+
+    public function unshortenName()
     {
         $n = $this->name;
 
         $d = array_flip($this->app->unique_hashes);
 
-        for($x=1; $x < 100; $x++) {
-            @list($l,$r) = explode('__',$n);
+        for ($x = 1; $x < 100; $x++) {
+            @list($l, $r) = explode('__', $n);
 
-            if(!$r){
+            if (!$r) {
                 return $l;
             }
 

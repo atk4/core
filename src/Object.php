@@ -2,7 +2,8 @@
 
 use atk4\core;
 
-class Object {
+class Object
+{
     use core\AppScopeTrait;
     use core\ContainerTrait;
     use core\DebugTrait;
@@ -15,7 +16,8 @@ class Object {
     use core\TrackableTrait;
     use core\FactoryTrait;
 
-    function add($class, $args = null) {
+    public function add($class, $args = null)
+    {
 
         // Perform necessary loading and conver to object
         $object = $this->factory($class, $args);

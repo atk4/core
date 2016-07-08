@@ -12,6 +12,13 @@ trait FactoryTrait {
         if (is_object($object)) {
             return $object;
         }
+        if (!is_string($object)) {
+            throw new Exception([
+                'Factory needs object or string',
+                'arg'=>$object,
+                'defaults'=>$defaults,
+            ]);
+        }
         return new $object($defaults);
     }
 
@@ -46,5 +53,4 @@ trait FactoryTrait {
 
         return $name;
     }
-
 }

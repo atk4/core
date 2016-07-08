@@ -2,8 +2,8 @@
 
 namespace atk4\core;
 
-trait DynamicMethodTrait {
-
+trait DynamicMethodTrait
+{
     public function __call($method, $arguments)
     {
         if (($ret = $this->tryCall($method, $arguments))) {
@@ -12,13 +12,14 @@ trait DynamicMethodTrait {
 
         throw new Exception(
             ['Method '.$method.' is not defined for this object',
-            'class'=>get_class($this),
-            'method'=>$method,
-            'arguments'=>$arguments
+            'class'     => get_class($this),
+            'method'    => $method,
+            'arguments' => $arguments,
         ]);
     }
 
-    function tryCall($method, $arguments) {
+    public function tryCall($method, $arguments)
+    {
         if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$method, $arguments)) {
             return $ret;
         }
@@ -56,10 +57,10 @@ trait DynamicMethodTrait {
             return $this;
         }
         if (is_object($callable) && !is_callable($callable)) {
-            $callable = array($callable, $name);
+            $callable = [$callable, $name];
         }
         if ($this->hasMethod($name)) {
-            throw new Exception(['Registering method twice','name'=>$name]);
+            throw new Exception(['Registering method twice', 'name' => $name]);
         }
         $this->addHook('method-'.$name, $callable);
 
@@ -126,14 +127,14 @@ trait DynamicMethodTrait {
         }
 
         if ($this->hasGlobalMethod($name)) {
-            throw new Exception(['Registering global method twice', 'name'=>$name]);
+            throw new Exception(['Registering global method twice', 'name' => $name]);
         }
 
         $this->app->addHook('global-method-'.$name, $callable);
     }
 
     /**
-     * Return if this global method exists
+     * Return if this global method exists.
      *
      * @param string $name Name of the method
      *
@@ -141,10 +142,9 @@ trait DynamicMethodTrait {
      */
     public function hasGlobalMethod($name)
     {
-        return 
+        return
             isset($this->_appScopeTrait) &&
             isset($this->app->_hookTrait) &&
             $this->app->hookHasCallbacks('global-method-'.$name);
     }
 }
-

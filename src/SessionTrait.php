@@ -2,16 +2,21 @@
 
 namespace atk4\core;
 
-trait SessionTrait {
-    function memorize(){
+trait SessionTrait
+{
+    public function memorize()
+    {
     }
 
-    function earn() {
+    public function earn()
+    {
     }
 
-    function recall(){
+    public function recall()
+    {
     }
 
-    function forget() {
+    public function forget()
+    {
     }
 }

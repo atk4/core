@@ -2,17 +2,15 @@
 
 namespace atk4\core;
 
-
 /**
  * Object with this trait will have it's init() method executed
  * automatically when initialized through add().
  */
-trait InitializerTrait {
-
-
+trait InitializerTrait
+{
     /**
      * Check this property to see if InitializerTrait is present
-     * in the object
+     * in the object.
      *
      * @var string
      */
@@ -22,14 +20,15 @@ trait InitializerTrait {
     /**
      * To make sure you have called parent::init() properly.
      *
-     * @var boolean
+     * @var bool
      */
     public $_initialized = false;
 
     /**
      * Initialize object. Always call parent::init(). Do not call directly.
      */
-    function init(){
+    public function init()
+    {
         $this->_initialized = true;
     }
 }

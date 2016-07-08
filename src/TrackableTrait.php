@@ -7,32 +7,32 @@ namespace atk4\core;
  * then container will keep track of it. This method can also
  * specify desired name of the object.
  */
-trait TrackableTrait {
-
+trait TrackableTrait
+{
     /**
      * Check this property to see if TrackableTrait is present
-     * in the object
+     * in the object.
      *
      * @var string
      */
     public $_trackableTrait = true;
 
     /**
-     * Link to object into which we added this object
+     * Link to object into which we added this object.
      *
      * @var AbstractObject
      */
     public $owner;
 
     /**
-     * Unique object name
+     * Unique object name.
      *
      * @var string
      */
     public $name;
 
     /**
-     * Name of the object in owner's element array
+     * Name of the object in owner's element array.
      *
      * @var string
      */
@@ -40,9 +40,10 @@ trait TrackableTrait {
 
     /**
      * If name of the object is ommitted then it's natuarlly to name them
-     * after the class. You can specify a different naming pattern though
+     * after the class. You can specify a different naming pattern though.
      */
-    function getDesiredName(){
+    public function getDesiredName()
+    {
         return str_replace('\\', '_', strtolower(get_class($this)));
     }
 
@@ -50,7 +51,8 @@ trait TrackableTrait {
      * Removes object from parent, so that PHP's Garbage Collector can
      * dispose of it.
      */
-    function destroy(){
+    public function destroy()
+    {
         if (
             isset($this->owner) &&
             $this->owner->_containerTrait
