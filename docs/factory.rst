@@ -7,6 +7,9 @@ Factory Trait
 Introduction
 ============
 
+    This trait can be used to dynamically create new objects by their class
+    names. It also contains method for class name normalization.
+
 Properties
 ==========
 
@@ -17,13 +20,14 @@ Methods
 
 .. php:meth:: factory($object, $defaults = [])
 
-    Determine class name, call constructor.
+    Creates and returns new object.
+    If object is passed as $object parameter, then same object is returned.
 
 .. php:meth:: normalizeClassName($name, $prefix = null)
 
     First normalize class name, then add specified prefix to
     class name if it's passed and not already added.
-    Class name can have namespaces and they are treated prefectly.
+    Class name can contain namespace.
     
     If object is passed as $name parameter, then same object is returned.
     
