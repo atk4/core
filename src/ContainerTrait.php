@@ -35,9 +35,14 @@ trait ContainerTrait
 
     public function _unique_element($desired)
     {
-        $postfix = @++$this->_element_name_counts[$desired];
+        if (!isset($this->_element_name_counts[$desired])) {
+            $this->_element_name_counts[$desired] = 1;
+            $postfix = '';
+        } else {
+            $postfix = '_'.(++$this->_element_name_counts[$desired]);
+        }
 
-        return $desired.($postfix > 1 ? ('_'.$postfix) : '');
+        return $desired.$postfix;
     }
 
     /**
