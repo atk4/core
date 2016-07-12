@@ -64,6 +64,10 @@ Now the instances of MyItem can be added to instances of MyContainer and can kee
     $parent->each(function($child) {
         $child->doSomething();
     });
+
+Properties
+----------
+
 .. php:attr:: name
 
     Name of the container. Child names will be derived from the parent.
@@ -74,6 +78,15 @@ Now the instances of MyItem can be added to instances of MyContainer and can kee
     container. The key is a "shot_name" of the child. The actual link to
     the element will be only present if child uses trait "TrackableTrait",
     otherwise the value of array key will be "true".
+
+Methods
+-------
+
+.. php:meth:: add($obj, $args = [])
+
+    If you are using ContainerTrait only, then you can safely use this add()
+    method. If you are also using factory, or initializer then redefine add()
+    and call _add_Container, _add_Factory,.
 
 .. php:meth:: _addContainer($element, $args)
 
@@ -139,6 +152,9 @@ Trackable Trait
     Trackable trait implements a few fields for the object that will maintain it's
     relationship with the owner (parent).
 
+Properties
+----------
+
 .. php:attr:: owner
 
     Will point to object which has add()ed this object. If multiple objects have
@@ -158,6 +174,9 @@ Trackable Trait
 
     When you add item into the owner, the "short_name" will contain short name of
     this item.
+
+Methods
+-------
 
 .. php:meth:: getDesiredName
 

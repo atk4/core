@@ -22,7 +22,7 @@ trait AppScopeTrait
     /**
      * Always points to current Application.
      *
-     * @var object
+     * @var Object
      */
     public $app;
 
