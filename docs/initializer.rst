@@ -34,7 +34,7 @@ Declare a object class in your framework::
         }
     }
 
-.. php:method: init
+.. php:method:: init()
 
 A blank init method that should be called. This will detect the problems
 when init() methods of some of your base classes has not been executed and

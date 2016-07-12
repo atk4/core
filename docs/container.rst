@@ -13,6 +13,18 @@ of :php:attr:`AppScopeTrait::app` will be copied from parent to the child also.
 If your child implements :php:trait:`InitializerTrait` then the method
 :php:meth:`InitializerTrait::init` will also be invoked after linking is done.
 
+You will be able to use :php:meth:`ContainerTrait::getElement()` to access
+elements inside container::
+
+    $object->add(new AnoterObject(), 'test');
+    $another_object = $object->getElement('test');
+
+If you additionally use :php:trait:`TrackableTrait` then your objects
+also receive unique "name". From example above:
+
+* $object->name == "app_object_4"
+* $another_object->name == "app_object_4_test"
+
 
 
 Container Trait
@@ -113,28 +125,9 @@ Now the instances of MyItem can be added to instances of MyContainer and can kee
     Given a short-name of the element, will return the object. If object with
     such short_name does not exist, will return false instead.
 
-
-
-Internal Methods
-================
-
 .. php:meth:: _unique_element
 
     Internal method to create unique name for an element.
-
-
-
-You will be able to use :php:meth:`ContainerTrait::getElement()` to access
-elements inside container::
-
-    $object->add(new AnoterObject(), 'test');
-    $another_object = $object->getElement('test');
-
-If you additionally use :php:trait:`TrackableTrait` then your objects
-also receive unique "name". From example above:
-
-* $object->name == "app_object_4"
-* $another_object->name == "app_object_4_test"
 
 
 

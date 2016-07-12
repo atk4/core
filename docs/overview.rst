@@ -50,8 +50,8 @@ your new object is integrated into the environment, if you use
 Factory
 =======
 
-Normally you can only add existing objects into your run-time tree. Factory
-trait will allow you to specify the class name::
+Normally you can only add existing objects into your run-time tree.
+:php:trait:`FactoryTrait` will allow you to specify the class name::
 
     $object->add('OtherObject');
 
@@ -71,8 +71,8 @@ You can specify namespaces with backslash or regular slash::
 Dynamic Methods
 ===============
 
-Adds ability to add methods into objects dynamically. That's like a "trait"
-feature of a PHP, but implemented in run-time::
+:php:trait:`DynamicMethodTrait` adds ability to add methods into objects dynamically.
+That's like a "trait" feature of a PHP, but implemented in run-time::
 
     $object->addMethod('test', function($o, $args){ echo 'hello, '.$args[0]; } );
     $object->test('world');
@@ -91,7 +91,7 @@ There are also methods for removing and checking if methods exists, so::
 Hooks
 =====
 
-Adds and trigger hooks for objects::
+:php:trait:`HookTrait` adds and trigger hooks for objects::
 
     $object->addHook('test', function($o){ echo 'hello'; }
     $object->addHook('test', function($o){ echo 'world'; }
@@ -110,7 +110,7 @@ Views are generic presentation widgets that can gain some insight into your
 data through the Model declaration.
 
 
-Modelable trait allows you to associate object with a Model::
+:php:trait:`ModelableTrait` allows you to associate object with a Model::
 
     $form->setModel('Order');
 
@@ -123,7 +123,8 @@ Quick Exception
 
 When you are throwing exception somewhere in your logic, you have to collect
 enough information about the context. Sometimes it's easier to let your
-framework do it for you::
+framework do it for you. Add :php:trait:`QuickExceptionTrait` and you can
+throw exceptions like this::
 
     throw $object->exception(['Incorrect foo value', 'foo'=>$bar]);
 
@@ -148,8 +149,9 @@ Typical software design will create the application scope. Most frameworks
 relies on "static" properties, methods and classes. This puts some
 limitations on your implementation (you can't have multiple applications).
 
-App Scope will pass the 'app' property into all objects that you're
-adding, so that you know for sure which application you work with::
+:php:trait:`AppScopeTrait` will pass the 'app' property into all objects
+that you're adding, so that you know for sure which application you work
+with::
 
     $object1->add('Object2');
 
@@ -170,11 +172,11 @@ Session
 
 When application is executed in environment, some objects of the applications
 may want to "record their state" in session scope. Technically this could
-be routed through the data source in the application that handles the session
+be routed through the data source in the application that handles the session,
 but PHP has a wonderful support for $_SESSION already.
 
-Session trait makes it possible for objects to have unique data-store
-inside a session. 
+:php:trait:`SessionTrait` makes it possible for objects to have unique
+data-store inside a session. 
 
 This feature can be used by Views / Widgets that needs session info.
 
@@ -192,7 +194,7 @@ property.
 DebugTrait
 ==========
 
-This allows your objects to execute::
+:php:trait:`DebugTrait` allows your objects to execute::
 
     $object->debug();
     $object->log('something happened');
@@ -200,4 +202,3 @@ This allows your objects to execute::
 
 The debug will only be collected if the debug mode is turned on, otherwise
 calls to log() and warn() will be ignored.
-
