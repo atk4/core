@@ -50,12 +50,12 @@ your new object is integrated into the environment, if you use
 Factory
 =======
 
-Normally you can only add exsiting objects into your run-time tree. Factory
+Normally you can only add existing objects into your run-time tree. Factory
 trait will allow you to specify the class name::
 
     $object->add('OtherObject');
 
-This will also enable similar features for Modelable objects::
+This will also enable similar features for `Modelable objects`::
 
     $object->setModel('MyModel');
     // same as
@@ -76,12 +76,16 @@ feature of a PHP, but implemented in run-time::
 
     $object->addMethod('test', function($o, $args){ echo 'hello, '.$args[0]; } );
     $object->test('world');
+    // outputs: hello, world
 
 There are also methods for removing and checking if methods exists, so::
 
     method_exists($object, 'test');
-    // should use now
+    // now should use
     $object->hasMethod('test');
+
+    // and this way you can remove method
+    $object->removeMethod('test');
 
 
 Hooks
@@ -93,6 +97,7 @@ Adds and trigger hooks for objects::
     $object->addHook('test', function($o){ echo 'world'; }
 
     $object->hook('test');
+    // outputs: helloworld
 
 
 Modelable Objects
@@ -116,7 +121,7 @@ Modelable trait allows you to associate object with a Model::
 Quick Exception
 ===============
 
-When you are throwing exceptinon somewhere in your logic, you have to collect
+When you are throwing exception somewhere in your logic, you have to collect
 enough information about the context. Sometimes it's easier to let your
 framework do it for you::
 
@@ -140,10 +145,10 @@ App Scope
 =========
 
 Typical software design will create the application scope. Most frameworks
-relies on "static" properties, methods and classes. This does puts some
+relies on "static" properties, methods and classes. This puts some
 limitations on your implementation (you can't have multiple applications).
 
-App Scope will pass the 'app' property into all the object that you're
+App Scope will pass the 'app' property into all objects that you're
 adding, so that you know for sure which application you work with::
 
     $object1->add('Object2');
@@ -171,7 +176,7 @@ but PHP has a wonderful support for $_SESSION already.
 Session trait makes it possible for objects to have unique data-store
 inside a session. 
 
-This feature would me used by Views / Widgets that needs session info.
+This feature can be used by Views / Widgets that needs session info.
 
 Syntax::
 
