@@ -12,7 +12,7 @@ trait TrackableTrait
     /**
      * Check this property to see if trait is present in the object.
      *
-     * @var string
+     * @var bool
      */
     public $_trackableTrait = true;
 
