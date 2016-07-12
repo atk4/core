@@ -2,20 +2,37 @@
 Run-Time Tree (Containers)
 ==========================
 
-There are three relevant traits in the Container mechanics. Your "container"
+There are two relevant traits in the Container mechanics. Your "container"
 object should implement :php:trait:`ContainerTrait` and your child objects
 should implement :php:trait:`TrackableTrait` (if not, the $owner/$elements
 links will not be established)
 
-If both parent and child implement :php:trait:`AppScope` then the property
-of :php:attr:`AppScope::app` will be copied from parent to the child also.
+If both parent and child implement :php:trait:`AppScopeTrait` then the property
+of :php:attr:`AppScopeTrait::app` will be copied from parent to the child also.
 
-If your child implements :php:trait:`InitializerTrait` then the method will
-also be invoked after linking is done.
+If your child implements :php:trait:`InitializerTrait` then the method
+:php:meth:`InitializerTrait::init` will also be invoked after linking is done.
+
+You will be able to use :php:meth:`ContainerTrait::getElement()` to access
+elements inside container::
+
+    $object->add(new AnoterObject(), 'test');
+    $another_object = $object->getElement('test');
+
+If you additionally use :php:trait:`TrackableTrait` then your objects
+also receive unique "name". From example above:
+
+* $object->name == "app_object_4"
+* $another_object->name == "app_object_4_test"
+
+
+
+Container Trait
+===============
 
 .. php:trait:: ContainerTrait
 
-When you want your framework to look after relationships between objects by
+If you want your framework to keep track of relationships between objects by
 implementing containers, you can use :php:trait:`ContainerTrait`. Example::
 
     class MyContainer extends OtherClass {
@@ -30,7 +47,7 @@ implementing containers, you can use :php:trait:`ContainerTrait`. Example::
         use atk4\core\TrackableTrait;
     }
 
-Now the instances of MyClass can be added to one another and can keep track::
+Now the instances of MyItem can be added to instances of MyContainer and can keep track::
 
     $parent = new MyContainer();
     $parent->name = 'foo';
@@ -108,30 +125,14 @@ Now the instances of MyClass can be added to one another and can keep track::
     Given a short-name of the element, will return the object. If object with
     such short_name does not exist, will return false instead.
 
-
-
-Internal Methods
-================
-
 .. php:meth:: _unique_element
 
     Internal method to create unique name for an element.
 
 
 
-You will be able to use :php:meth:`ContainerTrait::getElement()` to access
-elements inside container::
-
-    $object->add(new AnoterObject(), 'test');
-    $another_object = $object->getElement('test');
-
-If you additionally use :php:trait:`TrackableTrait` then your objects
-also receive unique "name". From example above:
-
-* $object->name == "app_object_4"
-* $another_object->name == "app_object_4_test"
-
-
+Trackable Trait
+===============
 
 .. php:trait:: TrackableTrait
 
@@ -155,7 +156,8 @@ also receive unique "name". From example above:
 
 .. php:attr:: short_name
 
-    When you add item into the owner, the "short_name" will 
+    When you add item into the owner, the "short_name" will contain short name of
+    this item.
 
 .. php:meth:: getDesiredName
 
@@ -164,6 +166,6 @@ also receive unique "name". From example above:
 
 .. php:meth:: destroy
 
-    If object owners is set, then it will remove object from it's elements reducing
-    number of links to the object. Normally PHP's garbage collector should remove
-    object as soon as number of links is zero.
+    If object owner is set, then this will remove object from it's owner elements
+    reducing number of links to the object. Normally PHP's garbage collector should
+    remove object as soon as number of links is zero.

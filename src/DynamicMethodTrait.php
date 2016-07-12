@@ -4,18 +4,25 @@ namespace atk4\core;
 
 trait DynamicMethodTrait
 {
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var bool
+     */
+    public $_dynamicMethodTrait = true;
+
     public function __call($method, $arguments)
     {
         if (($ret = $this->tryCall($method, $arguments))) {
             return $ret[0];
         }
 
-        throw new Exception(
-            ['Method '.$method.' is not defined for this object',
-            'class'     => get_class($this),
-            'method'    => $method,
-            'arguments' => $arguments,
-        ]);
+        throw new Exception([
+            'Method '.$method.' is not defined for this object',
+                'class'     => get_class($this),
+                'method'    => $method,
+                'arguments' => $arguments,
+            ]);
     }
 
     public function tryCall($method, $arguments)

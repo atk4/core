@@ -10,10 +10,9 @@ namespace atk4\core;
 trait TrackableTrait
 {
     /**
-     * Check this property to see if TrackableTrait is present
-     * in the object.
+     * Check this property to see if trait is present in the object.
      *
-     * @var string
+     * @var bool
      */
     public $_trackableTrait = true;
 
@@ -39,7 +38,7 @@ trait TrackableTrait
     public $short_name;
 
     /**
-     * If name of the object is ommitted then it's natuarlly to name them
+     * If name of the object is ommitted then it's naturally to name them
      * after the class. You can specify a different naming pattern though.
      */
     public function getDesiredName()

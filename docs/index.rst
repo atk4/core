@@ -1,5 +1,5 @@
 
-Agile Data Documentation
+Agile Core Documentation
 ========================
 
 Contents:
@@ -8,16 +8,13 @@ Contents:
     :maxdepth: 3
 
     overview
-    quickstart
-    design
     container
-    appscope
-    debug
-    factory
-    hook
     initializer
+    factory
+    dynamicmethod
+    hook
     modelable
-    exception
+    quickexception
+    appscope
     session
-    trackable
-
+    debug

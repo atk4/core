@@ -17,8 +17,7 @@ class Object
 
     public function add($class, $args = null)
     {
-
-        // Perform necessary loading and conver to object
+        // Perform necessary loading and convert to object
         $object = $this->factory($class, $args);
 
         if ($object instanceof TrackableTrait) {

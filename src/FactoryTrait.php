@@ -4,6 +4,11 @@ namespace atk4\core;
 
 trait FactoryTrait
 {
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var bool
+     */
     public $_factoryTrait = true;
 
     /**
