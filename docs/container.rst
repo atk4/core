@@ -2,20 +2,25 @@
 Run-Time Tree (Containers)
 ==========================
 
-There are three relevant traits in the Container mechanics. Your "container"
+There are two relevant traits in the Container mechanics. Your "container"
 object should implement :php:trait:`ContainerTrait` and your child objects
 should implement :php:trait:`TrackableTrait` (if not, the $owner/$elements
 links will not be established)
 
-If both parent and child implement :php:trait:`AppScope` then the property
-of :php:attr:`AppScope::app` will be copied from parent to the child also.
+If both parent and child implement :php:trait:`AppScopeTrait` then the property
+of :php:attr:`AppScopeTrait::app` will be copied from parent to the child also.
 
-If your child implements :php:trait:`InitializerTrait` then the method will
-also be invoked after linking is done.
+If your child implements :php:trait:`InitializerTrait` then the method
+:php:meth:`InitializerTrait::init` will also be invoked after linking is done.
+
+
+
+Container Trait
+===============
 
 .. php:trait:: ContainerTrait
 
-When you want your framework to look after relationships between objects by
+If you want your framework to keep track of relationships between objects by
 implementing containers, you can use :php:trait:`ContainerTrait`. Example::
 
     class MyContainer extends OtherClass {
@@ -30,7 +35,7 @@ implementing containers, you can use :php:trait:`ContainerTrait`. Example::
         use atk4\core\TrackableTrait;
     }
 
-Now the instances of MyClass can be added to one another and can keep track::
+Now the instances of MyItem can be added to instances of MyContainer and can keep track::
 
     $parent = new MyContainer();
     $parent->name = 'foo';
@@ -133,6 +138,9 @@ also receive unique "name". From example above:
 
 
 
+Trackable Trait
+===============
+
 .. php:trait:: TrackableTrait
 
     Trackable trait implements a few fields for the object that will maintain it's
@@ -155,7 +163,8 @@ also receive unique "name". From example above:
 
 .. php:attr:: short_name
 
-    When you add item into the owner, the "short_name" will 
+    When you add item into the owner, the "short_name" will contain short name of
+    this item.
 
 .. php:meth:: getDesiredName
 
@@ -164,6 +173,6 @@ also receive unique "name". From example above:
 
 .. php:meth:: destroy
 
-    If object owners is set, then it will remove object from it's elements reducing
-    number of links to the object. Normally PHP's garbage collector should remove
-    object as soon as number of links is zero.
+    If object owner is set, then this will remove object from it's owner elements
+    reducing number of links to the object. Normally PHP's garbage collector should
+    remove object as soon as number of links is zero.

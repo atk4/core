@@ -12,6 +12,11 @@ namespace atk4\core;
  */
 trait AppScopeTrait
 {
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var string
+     */
     public $_appScopeTrait = true;
 
     /**

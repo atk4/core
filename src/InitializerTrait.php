@@ -9,8 +9,7 @@ namespace atk4\core;
 trait InitializerTrait
 {
     /**
-     * Check this property to see if InitializerTrait is present
-     * in the object.
+     * Check this property to see if trait is present in the object.
      *
      * @var string
      */

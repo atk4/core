@@ -10,8 +10,7 @@ namespace atk4\core;
 trait TrackableTrait
 {
     /**
-     * Check this property to see if TrackableTrait is present
-     * in the object.
+     * Check this property to see if trait is present in the object.
      *
      * @var string
      */
