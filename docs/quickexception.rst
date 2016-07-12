@@ -7,6 +7,8 @@ Quick Exception Trait
 Introduction
 ============
 
+    not yet implemented
+
 Properties
 ==========
 

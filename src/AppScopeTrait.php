@@ -22,7 +22,7 @@ trait AppScopeTrait
     /**
      * Always points to current Application.
      *
-     * @var App_CLI
+     * @var object
      */
     public $app;
 
@@ -51,7 +51,7 @@ trait AppScopeTrait
      * this hash and the value contains the new key. This helps to avoid creating
      * many sequential prefixes for the same character sequenece. Those
      * hashes can also be used to re-build the long name of the object, but
-     * ths functionality is not essential and excluded from traits. You
+     * this functionality is not essential and excluded from traits. You
      * can find it in a test suite.
      *
      * @var array

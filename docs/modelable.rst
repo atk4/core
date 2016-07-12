@@ -7,6 +7,8 @@ Modelable Trait
 Introduction
 ============
 
+    not yet implemented
+
 Properties
 ==========
 

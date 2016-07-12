@@ -7,6 +7,8 @@ Debug Trait
 Introduction
 ============
 
+    not yet implemented
+
 Properties
 ==========
 

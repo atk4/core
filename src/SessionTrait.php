@@ -15,7 +15,7 @@ trait SessionTrait
     {
     }
 
-    public function earn()
+    public function learn()
     {
     }
 
