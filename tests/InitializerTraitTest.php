@@ -4,6 +4,9 @@ namespace atk4\core\tests;
 
 use atk4\core;
 
+/**
+ * @coversDefaultClass \atk4\core\InitializerTrait
+ */
 class InitializerTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,6 +30,7 @@ class InitializerTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
+// @codingStandardsIgnoreStart
 class ContainerMock2
 {
     use core\ContainerTrait;
@@ -57,3 +61,4 @@ class BrokenInitializerMock extends _InitializerMock
         // do not call parent
     }
 }
+// @codingStandardsIgnoreEnd

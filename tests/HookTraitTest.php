@@ -5,7 +5,7 @@ namespace atk4\core\tests;
 use atk4\core\HookTrait;
 
 /**
- * @coversDefaultClass \atk4\data\Model
+ * @coversDefaultClass \atk4\core\HookTrait
  */
 class HookTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -226,6 +226,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
+// @codingStandardsIgnoreStart
 class HookMock
 {
     use HookTrait;
@@ -237,3 +238,4 @@ class HookMock
         $this->result++;
     }
 }
+// @codingStandardsIgnoreEnd

@@ -7,7 +7,7 @@ use atk4\core\DynamicMethodTrait;
 use atk4\core\HookTrait;
 
 /**
- * @coversDefaultClass \atk4\data\Model
+ * @coversDefaultClass \atk4\core\DynamicMethodTrait
  */
 class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,6 +72,7 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
+// @codingStandardsIgnoreStart
 class DynamicMethodMock
 {
     use HookTrait;
@@ -88,3 +89,4 @@ class GlobalMethodAppMock
 {
     use HookTrait;
 }
+// @codingStandardsIgnoreEnd
