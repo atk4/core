@@ -17,9 +17,9 @@ trait TrackableTrait
     public $_trackableTrait = true;
 
     /**
-     * Link to object into which we added this object.
+     * Link to (parent) object into which we added this object.
      *
-     * @var AbstractObject
+     * @var object
      */
     public $owner;
 
@@ -40,6 +40,8 @@ trait TrackableTrait
     /**
      * If name of the object is ommitted then it's naturally to name them
      * after the class. You can specify a different naming pattern though.
+     *
+     * @return string
      */
     public function getDesiredName()
     {

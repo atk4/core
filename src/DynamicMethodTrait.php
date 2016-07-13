@@ -2,6 +2,10 @@
 
 namespace atk4\core;
 
+/**
+ * This trait makes it possible for you to add dynamic methods
+ * into your object.
+ */
 trait DynamicMethodTrait
 {
     /**
@@ -11,20 +15,35 @@ trait DynamicMethodTrait
      */
     public $_dynamicMethodTrait = true;
 
+    /**
+     * Magic method - tries to call dynamic method and throws exception if
+     * this was not possible.
+     *
+     * @param string $name      Name of the method
+     * @param array  $arguments Array of arguments to pass to this method
+     */
     public function __call($method, $arguments)
     {
-        if (($ret = $this->tryCall($method, $arguments))) {
+        if ($ret = $this->tryCall($method, $arguments)) {
             return $ret[0];
         }
 
         throw new Exception([
-            'Method '.$method.' is not defined for this object',
+            'Method is not defined for this object',
                 'class'     => get_class($this),
                 'method'    => $method,
                 'arguments' => $arguments,
             ]);
     }
 
+    /**
+     * Tries to call dynamic method.
+     *
+     * @param string $name      Name of the method
+     * @param array  $arguments Array of arguments to pass to this method
+     *
+     * @return mixed|null
+     */
     public function tryCall($method, $arguments)
     {
         if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$method, $arguments)) {
@@ -33,7 +52,7 @@ trait DynamicMethodTrait
 
         if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
             array_unshift($arguments, $this);
-            if (($ret = $this->app->hook('global-method-'.$method, $arguments))) {
+            if ($ret = $this->app->hook('global-method-'.$method, $arguments)) {
                 return $ret;
             }
         }
@@ -116,21 +135,21 @@ trait DynamicMethodTrait
      * tried against local table of registered methods and then against
      * global registered methods.
      *
-     * addGlobalmethod allows you to register a globally-recognized for all
-     * agile toolkit object. PHP is not particularly fast about executing
+     * addGlobalMethod allows you to register a globally-recognized method for
+     * all Agile Toolkit objects. PHP is not particularly fast about executing
      * methods like that, but this technique can be used for adding
      * backward-compatibility or debugging, etc.
      *
-     * @see AbstractObject::hasMethod()
-     * @see AbstractObject::__call()
+     * @see self::hasMethod()
+     * @see self::__call()
      *
      * @param string   $name     Name of the method
      * @param callable $callable Calls your function($object, $arg1, $arg2)
      */
     public function addGlobalMethod($name, $callable)
     {
-        if (!isset($this->_appScopeTrait) || (!isset($this->app->_hookTrait))) {
-            throw new Exception(['You need appScope and app/hook traits, see docs']);
+        if (!isset($this->_appScopeTrait) || !isset($this->app->_hookTrait)) {
+            throw new Exception(['You need AppScopeTrait and HookTrait traits, see docs']);
         }
 
         if ($this->hasGlobalMethod($name)) {
@@ -141,7 +160,7 @@ trait DynamicMethodTrait
     }
 
     /**
-     * Return if this global method exists.
+     * Return true if such global method exists.
      *
      * @param string $name Name of the method
      *
