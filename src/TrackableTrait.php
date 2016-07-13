@@ -9,6 +9,8 @@ namespace atk4\core;
  */
 trait TrackableTrait
 {
+    use ObjectTrait;
+
     /**
      * Check this property to see if trait is present in the object.
      *
@@ -22,13 +24,6 @@ trait TrackableTrait
      * @var object
      */
     public $owner;
-
-    /**
-     * Unique object name.
-     *
-     * @var string
-     */
-    public $name;
 
     /**
      * Name of the object in owner's element array.

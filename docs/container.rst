@@ -27,13 +27,35 @@ also receive unique "name". From example above:
 
 
 
+Object Trait
+============
+
+.. php:trait:: ObjectTrait
+
+    Object trait only implements ability to set name of object. It's used in
+    :php:trait:`ContainerTrait` and :php:trait:`TrackableTrait`.
+
+Properties
+----------
+
+.. php:attr:: name
+
+    Name of the object.
+
+Methods
+-------
+
+    None
+
+
+
 Container Trait
 ===============
 
 .. php:trait:: ContainerTrait
 
-If you want your framework to keep track of relationships between objects by
-implementing containers, you can use :php:trait:`ContainerTrait`. Example::
+    If you want your framework to keep track of relationships between objects by
+    implementing containers, you can use :php:trait:`ContainerTrait`. Example::
 
     class MyContainer extends OtherClass {
         use atk4\core\ContainerTrait;
@@ -47,7 +69,7 @@ implementing containers, you can use :php:trait:`ContainerTrait`. Example::
         use atk4\core\TrackableTrait;
     }
 
-Now the instances of MyItem can be added to instances of MyContainer and can keep track::
+    Now the instances of MyItem can be added to instances of MyContainer and can keep track::
 
     $parent = new MyContainer();
     $parent->name = 'foo';
@@ -65,12 +87,10 @@ Now the instances of MyItem can be added to instances of MyContainer and can kee
         $child->doSomething();
     });
 
+Child object names will be derived from the parent name.
+
 Properties
 ----------
-
-.. php:attr:: name
-
-    Name of the container. Child names will be derived from the parent.
 
 .. php:attr:: elements
 
@@ -149,8 +169,16 @@ Trackable Trait
 
 .. php:trait:: TrackableTrait
 
-    Trackable trait implements a few fields for the object that will maintain it's
-    relationship with the owner (parent).
+    Trackable trait implements a few fields for the object that will maintain
+    it's relationship with the owner (parent).
+
+    When name is set for container, then all children will derive their names
+    of the parent.
+
+    * Parent: foo
+    * Child:  foo_child1
+
+    The name will be unique within this container.
 
 Properties
 ----------
@@ -159,16 +187,6 @@ Properties
 
     Will point to object which has add()ed this object. If multiple objects have
     added this object, then this will point to the most recent one.
-
-.. php:attr:: name
-
-    When name is set for container then all children will derrive their
-    name off the parent.
-
-    * Parent: foo
-    * Child:  foo_child1
-
-    The name will be unique within this container.
 
 .. php:attr:: short_name
 

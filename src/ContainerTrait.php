@@ -8,19 +8,14 @@ namespace atk4\core;
  */
 trait ContainerTrait
 {
+    use ObjectTrait;
+
     /**
      * Check this property to see if trait is present in the object.
      *
      * @var bool
      */
     public $_containerTrait = true;
-
-    /**
-     * Unique object name.
-     *
-     * @var string
-     */
-    public $name;
 
     /**
      * short_name => object hash of children objects. If the child is not
