@@ -6,6 +6,7 @@ use atk4\core;
 
 class ContainerMock
 {
+    use core\NameTrait;
     use core\ContainerTrait;
 
     public function getElementCount()
