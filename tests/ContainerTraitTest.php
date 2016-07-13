@@ -122,13 +122,6 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m2 = $m->add(new TrackableMock(), ['name' => 'foo', 'test' => 'ok']);
         $this->assertEquals(true, (bool) $m->hasElement('foo'));
         $this->assertEquals('ok', $m2->test);
-
-        /*
-        // no TrackableTrait and no name passed - generate it
-        $m = new ContainerMock();
-        $m2 = $m->add(new \StdClass());
-        $this->assertEquals('???', $m2->name);
-        */
     }
 
     /**

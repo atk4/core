@@ -116,18 +116,11 @@ trait ContainerTrait
 
             // element has a name already
             $args[0] = $element->short_name;
-        } elseif (isset($element->_trackableTrait)) {
+        } else {
 
             // ask element on his preferred name, then make it unique.
             $cn = $element->getDesiredName();
             $args[0] = $this->_unique_element($cn);
-        } else {
-
-            /* BUG: THESE LINES ARE NEVER EXECUTED, BECAUSE IF THERE IS NO TRACKABLE TRAIT, THEN WE ALREADY EXITED METHOD!
-            // generate name based on the class
-            $cn = str_replace('\\', '_', strtolower(get_class($element)));
-            $args[0] = $this->_unique_element($cn);
-            */
         }
 
         // Maybe element already exists
