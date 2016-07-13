@@ -27,13 +27,16 @@ also receive unique "name". From example above:
 
 
 
-Object Trait
+Name Trait
 ============
 
 .. php:trait:: ObjectTrait
 
-    Object trait only implements ability to set name of object. It's used in
-    :php:trait:`ContainerTrait` and :php:trait:`TrackableTrait`.
+    Name trait only adds the 'name' property. Normally you don't have to use it
+    because :php:trait:`TrackableTrait` automatically inherits this trait. Due to
+    issues with PHP5 if both Container and Trackable are using NameTrait and then
+    both applied on the object, the clash results in "strict warning". To avoid this,
+    only apply 'NameTrait' on Containers if you are NOT using 'TrackableTrait'.
 
 Properties
 ----------

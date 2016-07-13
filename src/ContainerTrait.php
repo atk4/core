@@ -8,8 +8,6 @@ namespace atk4\core;
  */
 trait ContainerTrait
 {
-    use ObjectTrait;
-
     /**
      * Check this property to see if trait is present in the object.
      *

@@ -5,6 +5,7 @@ namespace atk4\core\tests;
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
 use atk4\core\TrackableTrait;
+use atk4\core\NameTrait;
 
 /**
  * @coversDefaultClass \atk4\data\Model
@@ -36,6 +37,7 @@ class AppScopeMock
 {
     use AppScopeTrait;
     use ContainerTrait;
+    use NameTrait;
 
     public function add($obj, $args = [])
     {

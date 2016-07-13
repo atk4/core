@@ -9,7 +9,7 @@ namespace atk4\core;
  */
 trait TrackableTrait
 {
-    use ObjectTrait;
+    use NameTrait;
 
     /**
      * Check this property to see if trait is present in the object.
