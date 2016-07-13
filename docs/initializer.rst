@@ -4,11 +4,14 @@ Initializer Trait
 
 .. php:trait:: InitializerTrait
 
+Introduction
+============
+
 With our traits objects now become linked with the "owner" and the "app".
 Initializer trait allows you to define a method that would be called after
 object is linked up into the environment.
 
-Declare a object class in yoru framework::
+Declare a object class in your framework::
 
     class FormField {
         use AppScopeTrait;
@@ -34,14 +37,24 @@ Declare a object class in yoru framework::
         }
     }
 
-.. php:method: init
+Properties
+==========
 
-A blank init method that should be called. This will detect the problems
-when init() methods of some of your base class is not been executed and
-prevents from some serious mistakes.
+.. php:attr:: _initialized
 
-If you wish to use tre traits class and extend it, you can use this in
-your base class::
+    Internal property to make sure you have called parent::init() properly.
+
+Methods
+=======
+
+.. php:method:: init()
+
+    A blank init method that should be called. This will detect the problems
+    when init() methods of some of your base classes has not been executed
+    and prevents from some serious mistakes.
+
+    If you wish to use traits class and extend it, you can use this in your
+    base class::
 
     class FormField {
         use AppScopeTrait;

@@ -4,10 +4,21 @@ namespace atk4\core;
 
 trait FactoryTrait
 {
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var bool
+     */
     public $_factoryTrait = true;
 
     /**
-     * Determine class name, call constructor.
+     * Creates and returns new object.
+     * If object is passed as $object parameter, then same object is returned.
+     *
+     * @param object|string $object
+     * @param array         $defaults
+     *
+     * @return object
      */
     public function factory($object, $defaults = [])
     {
@@ -17,10 +28,12 @@ trait FactoryTrait
         if (!is_string($object)) {
             throw new Exception([
                 'Factory needs object or string',
-                'arg'      => $object,
+                'object'   => $object,
                 'defaults' => $defaults,
             ]);
         }
+
+        $object = $this->normalizeClassName($object);
 
         return new $object($defaults);
     }
@@ -28,7 +41,7 @@ trait FactoryTrait
     /**
      * First normalize class name, then add specified prefix to
      * class name if it's passed and not already added.
-     * Class name can have namespaces and they are treated prefectly.
+     * Class name can contain namespace.
      *
      * If object is passed as $name parameter, then same object is returned.
      *

@@ -9,10 +9,9 @@ namespace atk4\core;
 trait ContainerTrait
 {
     /**
-     * Check this property to see if ContainerTrait is present
-     * in the object.
+     * Check this property to see if trait is present in the object.
      *
-     * @var string
+     * @var bool
      */
     public $_containerTrait = true;
 
