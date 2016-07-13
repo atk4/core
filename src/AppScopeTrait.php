@@ -2,7 +2,6 @@
 
 namespace atk4\core;
 
-
 /**
  * Typical software design will create the application scope. Most frameworks
  * relies on "static" properties, methods and classes. This does puts some
@@ -11,14 +10,19 @@ namespace atk4\core;
  * App Scope will pass the 'app' property into all the object that you're
  * adding, so that you know for sure which application you work with::
  */
-trait AppScopeTrait {
-
+trait AppScopeTrait
+{
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var bool
+     */
     public $_appScopeTrait = true;
 
     /**
-     * Always points to current Application
+     * Always points to current Application.
      *
-     * @var App_CLI
+     * @var object
      */
     public $app;
 
@@ -47,10 +51,10 @@ trait AppScopeTrait {
      * this hash and the value contains the new key. This helps to avoid creating
      * many sequential prefixes for the same character sequenece. Those
      * hashes can also be used to re-build the long name of the object, but
-     * ths functionality is not essential and excluded from traits. You
+     * this functionality is not essential and excluded from traits. You
      * can find it in a test suite.
      *
      * @var array
      */
-    public $unique_hashes = array();
+    public $unique_hashes = [];
 }

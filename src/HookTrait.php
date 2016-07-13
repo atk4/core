@@ -2,17 +2,22 @@
 
 namespace atk4\core;
 
-trait HookTrait {
-
+trait HookTrait
+{
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var bool
+     */
     public $_hookTrait = true;
 
     /**
-     * Contains information about configured hooks (callbacks)
+     * Contains information about configured hooks (callbacks).
      */
     protected $hooks = [];
 
     /**
-     * Add another callback to be executed during hook($hook_spot);
+     * Add another callback to be executed during hook($hook_spot);.
      *
      * If priority is negative, then hooks will be executed in reverse order.
      *
@@ -30,13 +35,13 @@ trait HookTrait {
         if (is_null($arguments)) {
             $arguments = [];
         } elseif (!is_array($arguments)) {
-            throw new Exception(['Incorrect arguments for addHook','args'=>$arguments]);
+            throw new Exception(['Incorrect arguments for addHook', 'args' => $arguments]);
         }
         if (is_null($priority)) {
             $priority = 5;
         }
 
-        // multiple hooks can be linked 
+        // multiple hooks can be linked
         if (is_string($hook_spot) && strpos($hook_spot, ',') !== false) {
             $hook_spot = explode(',', $hook_spot);
         }
@@ -44,6 +49,7 @@ trait HookTrait {
             foreach ($hook_spot as $h) {
                 $this->addHook($h, $callable, $arguments, $priority);
             }
+
             return $this;
         }
 
@@ -56,20 +62,20 @@ trait HookTrait {
                 ) {
                     throw new Exception([
                         '$callable should be a valid callback',
-                        'callable'=>$callable
+                        'callable' => $callable,
                     ]);
                 }
                 if (!method_exists($callable, $hook_spot)) {
                     throw new Exception([
                         '$callable should be a valid callback',
-                        'callable'=>$callable
+                        'callable' => $callable,
                     ]);
                 }
-                $callable = array($callable, $hook_spot);
+                $callable = [$callable, $hook_spot];
             } else {
                 throw new Exception([
                     '$callable should be a valid callback',
-                    'callable'=>$callable
+                    'callable' => $callable,
                 ]);
             }
         }
@@ -78,10 +84,10 @@ trait HookTrait {
             $this->hooks[$hook_spot][$priority] = [];
         }
 
-        if ($priority>=0) {
-            $this->hooks[$hook_spot][$priority][] = array($callable, $arguments);
-        }else{
-            array_unshift($this->hooks[$hook_spot][$priority], array($callable, $arguments));
+        if ($priority >= 0) {
+            $this->hooks[$hook_spot][$priority][] = [$callable, $arguments];
+        } else {
+            array_unshift($this->hooks[$hook_spot][$priority], [$callable, $arguments]);
         }
 
         return $this;
@@ -102,7 +108,7 @@ trait HookTrait {
     }
 
     /**
-     * Returns true if at least one callback is defined for this hook
+     * Returns true if at least one callback is defined for this hook.
      */
     public function hookHasCallbacks($hook_spot)
     {
@@ -119,17 +125,16 @@ trait HookTrait {
      */
     public function hook($hook_spot, $arg = null)
     {
-
         if (is_null($arg)) {
             $arg = [];
         } elseif (!is_array($arg)) {
             throw new Exception([
                 'Arguments for callbacks should be passed as array',
-                'arg'=>$arg
+                'arg' => $arg,
             ]);
         }
 
-        $return = array();
+        $return = [];
 
         try {
             if (isset($this->hooks[$hook_spot])) {
@@ -138,11 +143,10 @@ trait HookTrait {
                     $hook_backup = $this->hooks[$hook_spot];
                     while ($_data = array_pop($this->hooks[$hook_spot])) {
                         foreach ($_data as &$data) {
-
                             $return[] = call_user_func_array(
                                 $data[0],
                                 array_merge(
-                                    array($this),
+                                    [$this],
                                     $arg,
                                     $data[1]
                                 )

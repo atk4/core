@@ -1,4 +1,5 @@
 <?php
+
 namespace atk4\core\tests;
 
 use atk4\core\HookTrait;
@@ -8,17 +9,15 @@ use atk4\core\HookTrait;
  */
 class HookTraitTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * Test constructor
-     *
+     * Test constructor.
      */
     public function testBasic()
     {
         $m = new HookMock();
         $result = 0;
 
-        $m->addHook('test1', function()use(&$result) {
+        $m->addHook('test1', function () use (&$result) {
             $result++;
         });
 
@@ -28,18 +27,18 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $m->hook('test1');
         $this->assertEquals(2, $result);
     }
+
     public function testAdvanced()
     {
-
         $m = new HookMock();
         $result = 20;
 
-        $m->addHook('test1', function()use(&$result) {
+        $m->addHook('test1', function () use (&$result) {
             $result++;
         });
 
-        $m->addHook('test1', function()use(&$result) {
-            $result=0;
+        $m->addHook('test1', function () use (&$result) {
+            $result = 0;
         }, null, 1);
 
 
@@ -52,7 +51,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $m = new HookMock();
         $result = 0;
 
-        $m->addHook(['test1,test2','test3'], function()use(&$result) {
+        $m->addHook(['test1,test2', 'test3'], function () use (&$result) {
             $result++;
         });
 
@@ -71,16 +70,19 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, $result);
     }
 
-    private $result=0;
-    public function test($obj=null, $inc=1){
+    private $result = 0;
+
+    public function test($obj = null, $inc = 1)
+    {
         if (is_null($obj)) {
             // because phpunit tries to execute this method
             return;
         }
-        $this->result+=$inc;
+        $this->result += $inc;
     }
 
-    public function testCallable(){
+    public function testCallable()
+    {
         $m = new HookMock();
         $this->result = 0;
 
@@ -89,40 +91,62 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $this->result);
 
-        $m->hook('test',[5]);
+        $m->hook('test', [5]);
         $this->assertEquals(6, $this->result);
     }
 
-    public function testOrder() {
+    public function testOrder()
+    {
         $m = new HookMock();
-        $m->addHook('spot', function(){ return 3; }, null, -1);
-        $m->addHook('spot', function(){ return 2; }, null, -5);
-        $m->addHook('spot', function(){ return 1; }, null, -5);
+        $m->addHook('spot', function () {
+            return 3;
+        }, null, -1);
+        $m->addHook('spot', function () {
+            return 2;
+        }, null, -5);
+        $m->addHook('spot', function () {
+            return 1;
+        }, null, -5);
 
-        $m->addHook('spot', function(){ return 4; }, null, 0);
-        $m->addHook('spot', function(){ return 5; }, null, 0);
+        $m->addHook('spot', function () {
+            return 4;
+        }, null, 0);
+        $m->addHook('spot', function () {
+            return 5;
+        }, null, 0);
 
-        $m->addHook('spot', function(){ return 10; }, null, 1000);
+        $m->addHook('spot', function () {
+            return 10;
+        }, null, 1000);
 
-        $m->addHook('spot', function(){ return 6; }, null, 2);
-        $m->addHook('spot', function(){ return 7; }, null, 5);
-        $m->addHook('spot', function(){ return 8; });
-        $m->addHook('spot', function(){ return 9; }, null, 5);
+        $m->addHook('spot', function () {
+            return 6;
+        }, null, 2);
+        $m->addHook('spot', function () {
+            return 7;
+        }, null, 5);
+        $m->addHook('spot', function () {
+            return 8;
+        });
+        $m->addHook('spot', function () {
+            return 9;
+        }, null, 5);
 
-        $ret=$m->hook('spot');
+        $ret = $m->hook('spot');
 
-        $this->assertEquals([1,2,3,4,5,6,7,8,9,10], $ret);
+        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $ret);
     }
 
-    public function testMulti() {
+    public function testMulti()
+    {
         $obj = new HookMock();
 
-        $mul = function($obj, $a, $b) { 
-            return $a*$b;
+        $mul = function ($obj, $a, $b) {
+            return $a * $b;
         };
 
-        $add = function($obj, $a, $b) { 
-            return $a+$b;
+        $add = function ($obj, $a, $b) {
+            return $a + $b;
         };
 
         $obj->addHook('test', $mul);
@@ -135,18 +159,19 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([9, 6], $res2);
     }
 
-    public function testArgs() {
+    public function testArgs()
+    {
         $obj = new HookMock();
 
-        $mul = function($obj, $a, $b) { 
-            return $a*$b;
+        $mul = function ($obj, $a, $b) {
+            return $a * $b;
         };
 
-        $add = function($obj, $a, $b) { 
-            return $a+$b;
+        $add = function ($obj, $a, $b) {
+            return $a + $b;
         };
 
-        $pow = function($obj, $a, $b, $power) {
+        $pow = function ($obj, $a, $b, $power) {
             return pow($a, $power) + pow($b, $power);
         };
 
@@ -160,13 +185,13 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $res2 = $obj->hook('test', [2, 3]);
         $this->assertEquals([6, 5, 13, 2315], $res2);
-
     }
 
-    public function testReferences() {
+    public function testReferences()
+    {
         $obj = new HookMock();
 
-        $inc = function($obj, &$a) { 
+        $inc = function ($obj, &$a) {
             $a++;
         };
 
@@ -180,7 +205,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $obj = new HookMock();
 
-        $inc = function($obj, &$a) { 
+        $inc = function ($obj, &$a) {
             $a++;
         };
 
@@ -191,9 +216,8 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $v);
     }
 
-
-
-    public function testDefaultMethod() {
+    public function testDefaultMethod()
+    {
         $obj = new HookMock();
         $obj->addHook('myCallback', $obj);
         $obj->hook('myCallback');
@@ -202,13 +226,14 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class HookMock {
+class HookMock
+{
     use HookTrait;
 
     public $result = 0;
 
-    function myCallback($obj) {
+    public function myCallback($obj)
+    {
         $this->result++;
     }
 }
-

@@ -1,14 +1,13 @@
 <?php
+
 namespace atk4\core\tests;
 
 use atk4\core;
 
 class InitializerTraitTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
-     * Test constructor
-     *
+     * Test constructor.
      */
     public function testBasic()
     {
@@ -28,20 +27,22 @@ class InitializerTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-class ContainerMock2 {
+class ContainerMock2
+{
     use core\ContainerTrait;
-
 }
 
-class _InitializerMock {
+class _InitializerMock
+{
     use core\InitializerTrait;
 }
 
-class InitializerMock extends _InitializerMock {
-
+class InitializerMock extends _InitializerMock
+{
     public $result = false;
 
-    function init() {
+    public function init()
+    {
         parent::init();
 
         $this->result = true;
@@ -49,9 +50,10 @@ class InitializerMock extends _InitializerMock {
 }
 
 
-class BrokenInitializerMock extends _InitializerMock {
-    function init() {
+class BrokenInitializerMock extends _InitializerMock
+{
+    public function init()
+    {
         // do not call parent
-
     }
 }

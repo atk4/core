@@ -1,12 +1,15 @@
 <?php
+
 namespace atk4\core\tests;
 
 use atk4\core;
 
-class ContainerMock {
+class ContainerMock
+{
+    use core\NameTrait;
     use core\ContainerTrait;
 
-    function getElementCount()
+    public function getElementCount()
     {
         return count($this->elements);
     }

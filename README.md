@@ -3,7 +3,7 @@
 **Agile Core is a collection of PHP Traits for designing object-oriented frameworks**
 
 [![Gitter](https://img.shields.io/gitter/room/atk4/data.svg?maxAge=2592000)](https://gitter.im/atk4/dataset?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Documentation Status](https://readthedocs.org/projects/agile-core/badge/?version=latest)](http://agile-core.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/agile-core/badge/?version=develop)](http://agile-core.readthedocs.io/en/develop/?badge=develop)
 [![License](https://poser.pugx.org/atk4/core/license)](https://packagist.org/packages/atk4/core)
 [![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)](https://packagist.org/packages/atk4/core)
 [![Build Status](https://travis-ci.org/atk4/core.png?branch=develop)](https://travis-ci.org/atk4/core)

@@ -2,22 +2,22 @@
 
 use atk4\core;
 
-class Object {
+class Object
+{
     use core\AppScopeTrait;
     use core\ContainerTrait;
     use core\DebugTrait;
     use core\DynamicMethodTrait;
     use core\HookTrait;
     use core\InitializerTrait;
-    use core\ModelableTrait;
     use core\QuickExceptionTrait;
     use core\SessionTrait;
     use core\TrackableTrait;
     use core\FactoryTrait;
 
-    function add($class, $args = null) {
-
-        // Perform necessary loading and conver to object
+    public function add($class, $args = null)
+    {
+        // Perform necessary loading and convert to object
         $object = $this->factory($class, $args);
 
         if ($object instanceof TrackableTrait) {

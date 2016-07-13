@@ -2,16 +2,28 @@
 
 namespace atk4\core;
 
-trait SessionTrait {
-    function memorize(){
+trait SessionTrait
+{
+    /**
+     * Check this property to see if trait is present in the object.
+     *
+     * @var bool
+     */
+    public $_sessionTrait = true;
+
+    public function memorize()
+    {
     }
 
-    function earn() {
+    public function learn()
+    {
     }
 
-    function recall(){
+    public function recall()
+    {
     }
 
-    function forget() {
+    public function forget()
+    {
     }
 }
