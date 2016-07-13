@@ -4,8 +4,8 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
-use atk4\core\TrackableTrait;
 use atk4\core\NameTrait;
+use atk4\core\TrackableTrait;
 
 /**
  * @coversDefaultClass \atk4\data\Model
