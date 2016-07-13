@@ -19,8 +19,8 @@ trait DynamicMethodTrait
      * Magic method - tries to call dynamic method and throws exception if
      * this was not possible.
      *
-     * @param string $name Name of the method
-     * @param array $arguments Array of arguments to pass to this method
+     * @param string $name      Name of the method
+     * @param array  $arguments Array of arguments to pass to this method
      */
     public function __call($method, $arguments)
     {
@@ -39,8 +39,8 @@ trait DynamicMethodTrait
     /**
      * Tries to call dynamic method.
      *
-     * @param string $name Name of the method
-     * @param array $arguments Array of arguments to pass to this method
+     * @param string $name      Name of the method
+     * @param array  $arguments Array of arguments to pass to this method
      *
      * @return mixed|null
      */

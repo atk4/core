@@ -16,7 +16,7 @@ trait FactoryTrait
      * If object is passed as $object parameter, then same object is returned.
      *
      * @param object|string $object
-     * @param array $defaults
+     * @param array         $defaults
      *
      * @return object
      */

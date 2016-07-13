@@ -12,7 +12,7 @@ trait QuickExceptionTrait
     public $_quickExceptionTrait = true;
 
     /**
-     * Default exception class name
+     * Default exception class name.
      *
      * @var string
      */

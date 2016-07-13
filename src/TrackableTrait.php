@@ -19,7 +19,7 @@ trait TrackableTrait
     /**
      * Link to (parent) object into which we added this object.
      *
-     * @var Object
+     * @var object
      */
     public $owner;
 
