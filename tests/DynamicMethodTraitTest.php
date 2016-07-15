@@ -103,7 +103,7 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
 
         // callable as object
         $m->addMethod('getLastErrors', new \DateTime);
-        $this->assertEquals([], $m->getLastErrors);
+        $this->assertEquals([], $m->getLastErrors());
 
     }
 
