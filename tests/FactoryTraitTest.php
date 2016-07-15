@@ -17,7 +17,7 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $m = new FactoryMock();
 
         // pass object
-        $m1 = new FactorMock();
+        $m1 = new FactoryMock();
         $m2 = $m->factory($m1);
         $this->assertEquals($m1, $m2);
         
