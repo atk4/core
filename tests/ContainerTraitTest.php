@@ -5,7 +5,7 @@ namespace atk4\core\tests;
 use atk4\core;
 
 /**
- * @coversDefaultClass \atk4\data\Model
+ * @coversDefaultClass \atk4\core\ContainerTrait
  */
 class ContainerTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,7 +55,7 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $app = new ContainerAppMock();
         $app->app = $app;
         $app->max_name_length = 30;
-        $m = $app->add(new ContainerAppMock(), 'quick-brouwn-fox');
+        $m = $app->add(new ContainerAppMock(), 'quick-brown-fox');
         $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
         $m = $m->add(new ContainerAppMock(), 'then-they-go-out-for-a-pint');
         $m = $m->add(new ContainerAppMock(), 'eat-a-stake');
@@ -64,7 +64,7 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $x = $m->add(new ContainerAppMock(), 'mint');
 
         $this->assertEquals(
-            '_quick-brouwn-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake',
+            '_quick-brown-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake',
             $m->unshortenName($this)
         );
 
@@ -108,6 +108,22 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual($app->max_name_length, $max_len); // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
     }
 
+    public function testFactoryMock()
+    {
+        $m = new ContainerFactoryMock();
+        $m2 = $m->add('atk4/core/tests/ContainerMock');
+        $this->assertEquals('atk4\core\tests\ContainerMock', get_class($m2));
+    }
+
+    public function testArgs()
+    {
+        // passing name with array key 'name'
+        $m = new ContainerMock();
+        $m2 = $m->add(new TrackableMock(), ['name' => 'foo', 'test' => 'ok']);
+        $this->assertEquals(true, (bool) $m->hasElement('foo'));
+        $this->assertEquals('ok', $m2->test);
+    }
+
     /**
      * @expectedException     Exception
      */
@@ -149,12 +165,28 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m = new ContainerMock();
         $m->add('hello', 123);
     }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testException4()
+    {
+        $m = new ContainerMock();
+        $el = $m->getElement('dont_exist');
+    }
 }
 
 
+// @codingStandardsIgnoreStart
 class TrackableMock
 {
     use core\TrackableTrait;
+}
+class ContainerFactoryMock
+{
+    use core\NameTrait;
+    use core\ContainerTrait;
+    use core\FactoryTrait;
 }
 
 class ContainerAppMock
@@ -186,3 +218,4 @@ class ContainerAppMock
         }
     }
 }
+// @codingStandardsIgnoreEnd

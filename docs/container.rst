@@ -33,10 +33,12 @@ Name Trait
 .. php:trait:: ObjectTrait
 
     Name trait only adds the 'name' property. Normally you don't have to use it
-    because :php:trait:`TrackableTrait` automatically inherits this trait. Due to
-    issues with PHP5 if both Container and Trackable are using NameTrait and then
-    both applied on the object, the clash results in "strict warning". To avoid this,
-    only apply 'NameTrait' on Containers if you are NOT using 'TrackableTrait'.
+    because :php:trait:`TrackableTrait` automatically inherits this trait.
+    Due to issues with PHP5 if both :php:trait:`ContainerTrait` and
+    :php:trait:`TrackableTrait` are using :php:trait:`NameTrait` and then
+    both applied on the object, the clash results in "strict warning".
+    To avoid this, apply :php:trait:`NameTrait` on Containers only if you are
+    NOT using :php:trait:`TrackableTrait`.
 
 Properties
 ----------

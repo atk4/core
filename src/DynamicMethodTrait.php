@@ -68,6 +68,7 @@ trait DynamicMethodTrait
      */
     public function addMethod($name, $callable)
     {
+        // HookTrait is mandatory
         if (!isset($this->_hookTrait)) {
             throw new Exception(['Object must use hookTrait for Dynamic Methods to work']);
         }
@@ -85,6 +86,7 @@ trait DynamicMethodTrait
         if (is_object($callable) && !is_callable($callable)) {
             $callable = [$callable, $name];
         }
+
         if ($this->hasMethod($name)) {
             throw new Exception(['Registering method twice', 'name' => $name]);
         }
@@ -103,12 +105,8 @@ trait DynamicMethodTrait
     public function hasMethod($name)
     {
         return method_exists($this, $name)
-            || $this->hookHasCallbacks('method-'.$name)
-            || (
-                isset($this->_appScopeTrait) &&
-                isset($this->app->_hookTrait) &&
-                $this->app->hookHasCallbacks('global-method-'.$name)
-            );
+            || (isset($this->_hookTrait) && $this->hookHasCallbacks('method-'.$name))
+            || $this->hasGlobalMethod($name);
     }
 
     /**
@@ -120,7 +118,9 @@ trait DynamicMethodTrait
      */
     public function removeMethod($name)
     {
-        $this->removeHook('method-'.$name);
+        if (isset($this->_hookTrait)) {
+            $this->removeHook('method-'.$name);
+        }
 
         return $this;
     }
@@ -148,6 +148,7 @@ trait DynamicMethodTrait
      */
     public function addGlobalMethod($name, $callable)
     {
+        // AppScopeTrait and HookTrait for app are mandatory
         if (!isset($this->_appScopeTrait) || !isset($this->app->_hookTrait)) {
             throw new Exception(['You need AppScopeTrait and HookTrait traits, see docs']);
         }
@@ -155,7 +156,6 @@ trait DynamicMethodTrait
         if ($this->hasGlobalMethod($name)) {
             throw new Exception(['Registering global method twice', 'name' => $name]);
         }
-
         $this->app->addHook('global-method-'.$name, $callable);
     }
 
@@ -172,5 +172,21 @@ trait DynamicMethodTrait
             isset($this->_appScopeTrait) &&
             isset($this->app->_hookTrait) &&
             $this->app->hookHasCallbacks('global-method-'.$name);
+    }
+
+    /**
+     * Remove dynamically registered global method.
+     *
+     * @param string $name Name of the method
+     *
+     * @return $this
+     */
+    public function removeGlobalMethod($name)
+    {
+        if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
+            $this->app->removeHook('global-method-'.$name);
+        }
+
+        return $this;
     }
 }

@@ -8,7 +8,7 @@ use atk4\core\NameTrait;
 use atk4\core\TrackableTrait;
 
 /**
- * @coversDefaultClass \atk4\data\Model
+ * @coversDefaultClass \atk4\core\AppScopeTrait
  */
 class AppScopeTraitTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,6 +33,7 @@ class AppScopeTraitTest extends \PHPUnit_Framework_TestCase
     }
 }
 
+// @codingStandardsIgnoreStart
 class AppScopeMock
 {
     use AppScopeTrait;
@@ -64,3 +65,4 @@ class Child2
 {
     use TrackableTrait;
 }
+// @codingStandardsIgnoreEnd
