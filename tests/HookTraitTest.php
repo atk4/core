@@ -5,10 +5,21 @@ namespace atk4\core\tests;
 use atk4\core\HookTrait;
 
 /**
- * @coversDefaultClass \atk4\data\Model
+ * @coversDefaultClass \atk4\core\HookTrait
  */
 class HookTraitTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException     Exception
+     */
+    public function testException1()
+    {
+        $m = new HookMock();
+        $m->addHook('test1', function () use (&$result) {
+            $result++;
+        }, 'incorrect_argument');
+    }
+
     /**
      * Test constructor.
      */
@@ -93,6 +104,47 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $m->hook('test', [5]);
         $this->assertEquals(6, $this->result);
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testCallableException1()
+    {
+        // not existing method
+        $m = new HookMock();
+        $m->addHook('unknown_method', $this);
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testCallableException2()
+    {
+        // not existing dynamic method
+        $m = new HookWithDynamicMethodMock();
+        $m->addHook('unknown_method', $this);
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testCallableException3()
+    {
+        // wrong 2nd argument
+        $m = new HookMock();
+        $m->addHook('unknown_method', $this);
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testHookException1()
+    {
+        // wrong 2nd argument
+        $m = new HookMock();
+        $m->addHook('test', $this);
+        $m->hook('test', 'wrong_parameter');
     }
 
     public function testOrder()
@@ -224,8 +276,30 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $obj->result);
     }
+
+    public function testBreakHook()
+    {
+        $m = new HookMock();
+        $m->result = 0;
+
+        $inc = function ($obj) {
+            $obj->result++;
+            if ($obj->result == 2) {
+                $obj->breakHook('stop');
+            }
+        };
+
+        $m->addHook('inc', $inc);
+        $m->addHook('inc', $inc);
+        $m->addHook('inc', $inc);
+
+        $ret = $m->hook('inc');
+        $this->assertEquals(2, $m->result);
+        $this->assertEquals('stop', $ret);
+    }
 }
 
+// @codingStandardsIgnoreStart
 class HookMock
 {
     use HookTrait;
@@ -237,3 +311,8 @@ class HookMock
         $this->result++;
     }
 }
+class HookWithDynamicMethodMock extends HookMock
+{
+    use \atk4\core\DynamicMethodTrait;
+}
+// @codingStandardsIgnoreEnd

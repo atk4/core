@@ -25,6 +25,13 @@ trait ContainerTrait
 
     private $_element_name_counts = [];
 
+    /**
+     * Returns unique element name based on desired name.
+     *
+     * @param string $desired
+     *
+     * @return string
+     */
     public function _unique_element($desired)
     {
         if (!isset($this->_element_name_counts[$desired])) {
@@ -42,6 +49,11 @@ trait ContainerTrait
      * use this add() method. If you are also using factory, or
      * initializer then redefine add() and call
      * _add_Container, _add_Factory,.
+     *
+     * @param object|string $obj
+     * @param array|string  $args
+     *
+     * @return object
      */
     public function add($obj, $args = [])
     {
@@ -66,6 +78,11 @@ trait ContainerTrait
     /**
      * Extension to add() method which will perform linking of
      * the object with the current class.
+     *
+     * @param object       $element
+     * @param array|string $args
+     *
+     * @return object
      */
     protected function _add_Container($element, $args = [])
     {
@@ -99,15 +116,10 @@ trait ContainerTrait
 
             // element has a name already
             $args[0] = $element->short_name;
-        } elseif (isset($element->_trackableTrait)) {
+        } else {
 
             // ask element on his preferred name, then make it unique.
             $cn = $element->getDesiredName();
-            $args[0] = $this->_unique_element($cn);
-        } else {
-
-            // generate name based on the class
-            $cn = str_replace('\\', '_', strtolower(get_class($element)));
             $args[0] = $this->_unique_element($cn);
         }
 
@@ -197,7 +209,7 @@ trait ContainerTrait
      *
      * @param string $short_name Short name of the child element
      *
-     * @return AbstractObject
+     * @return object
      */
     public function getElement($short_name)
     {
@@ -217,7 +229,7 @@ trait ContainerTrait
      *
      * @param string $short_name Short name of the child element
      *
-     * @return AbstractObject|bool
+     * @return object|bool
      */
     public function hasElement($short_name)
     {
