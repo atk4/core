@@ -84,12 +84,14 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(8, $res);
 
         // method name as CSV
+        $m = new DynamicMethodMock();
         $m->addMethod(['min,less'], function ($m, $a, $b) {
             return min($a, $b);
         });
         $res = $m->min(3, 5);
         $this->assertEquals(3, $res);
 
+        $m = new DynamicMethodMock();
         $m->addMethod(['min, less'], function ($m, $a, $b) {
             return min($a, $b);
         });
@@ -97,6 +99,7 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $res);
 
         // method name as array
+        $m = new DynamicMethodMock();
         $m->addMethod(['min', 'less'], function ($m, $a, $b) {
             return min($a, $b);
         });
@@ -106,6 +109,7 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $res);
 
         // callable as object
+        $m = new DynamicMethodMock();
         $m->addMethod('getElementCount', new ContainerMock());
         $this->assertEquals(0, $m->getElementCount());
     }

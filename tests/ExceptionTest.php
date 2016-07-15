@@ -32,7 +32,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('"abc"', $ret);
 
         $ret = $m->toString(new \StdClass());
-        $this->assertEquals('Object StdClass', $ret);
+        $this->assertEquals('Object stdClass', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
