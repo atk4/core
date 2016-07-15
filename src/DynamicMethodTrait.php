@@ -76,7 +76,7 @@ trait DynamicMethodTrait
         if (is_string($name) && strpos($name, ',') !== false) {
             $name = array_map('trim', explode(',', $name));
         }
-        
+
         if (is_array($name)) {
             foreach ($name as $h) {
                 $this->addMethod($h, $callable);
@@ -92,7 +92,7 @@ trait DynamicMethodTrait
         if ($this->hasMethod($name)) {
             throw new Exception(['Registering method twice', 'name' => $name]);
         }
-        
+
         $this->addHook('method-'.$name, $callable);
 
         return $this;
