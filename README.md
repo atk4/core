@@ -1,6 +1,6 @@
-# Agile Core - Trait collection for PHP frameworks
+# Agile Core
 
-**Agile Core is a collection of PHP Traits for designing object-oriented frameworks**
+**Collection of PHP Traits for designing object-oriented frameworks.**
 
 Code Quality:
 
@@ -39,7 +39,7 @@ composer require atk4/core
 
 ## Sample Use
 
-Containers:
+By giving "ContainerTrait" to your "parent" class and "TrackableTrait" to all possible children of your "parent", you can instantly implement ability to create hierarcies. This is useful if you're defining named elements such as "fields" inside a "form". Automatic name detection, tracking, removal of elements, iterating through elements and more.
 
 ```
 class MyParentObject {
@@ -59,7 +59,7 @@ $parent->add(new MyChildClass(), 'foo-bar');
 var_dump( $parent->getElement('foo-bar') );
 ```
 
-Hooks:
+Hook trait allow you to define "hooks" in your object. By calling addHook() you can register call-backs which will be executed when hook() is next called. Hooks support arguments, priorities, early termination and other useful featutres.
 
 ```
 class MyClass {
@@ -83,7 +83,7 @@ $c->addHook('afterWork', function() {
 $c->doWork();
 ```
 
-Dynamic Methods:
+With dynamic methods you can utilise `__call` method in collaboration with internal hook system to dynamically add methods inside your object. Dynamic methods behave just like a regular ones, but you can register them during run-time. Your code can check for existence of methods (static or dynamic), add remove local or global methods:
 
 ```
 class MyClass {
@@ -101,7 +101,9 @@ $c->addMethod('mymethod', function($c, $a, $b){
 echo $c->mymethod(2,3)."\n";
 ```
 
-Core Exception:
+Core Exception adds essential ability for Exception to register additional information than can consist of variables. This can also be used for localizing your exceptions or ability to show more / less information depending on your debug level. Exception comes with a getColorfulText() that uses colorful console output to display your error nicely:
+
+![exception demo](docs/exception-demo.png)
 
 ```
 use atk4\core\Exception;
