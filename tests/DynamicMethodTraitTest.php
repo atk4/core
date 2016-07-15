@@ -60,26 +60,6 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException     Exception
-     */
-    public function testException4()
-    {
-        // can't check method without HookTrait
-        $m = new DynamicMethodWithoutHookMock();
-        $m->hasMethod('sum');
-    }
-
-    /**
-     * @expectedException     Exception
-     */
-    public function testException5()
-    {
-        // can't remove method without HookTrait
-        $m = new DynamicMethodWithoutHookMock();
-        $m->removeMethod('sum');
-    }
-
-    /**
      * Test arguments.
      */
     public function testArguments()
@@ -102,8 +82,8 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $res);
 
         // callable as object
-        $m->addMethod('getLastErrors', new \DateTime);
-        $this->assertEquals([], $m->getLastErrors());
+        $m->addMethod('getName', new \DateTimeZone('Europe/London'));
+        $this->assertEquals('Europe/London', $m->getName());
 
     }
 
