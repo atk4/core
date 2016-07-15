@@ -280,11 +280,11 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     public function testBreakHook()
     {
         $m = new HookMock();
-        $result = 0;
+        $m->result = 0;
 
-        $inc = function ($obj, &$result) {
-            $result++;
-            if ($result == 2) {
+        $inc = function ($obj) {
+            $obj->result++;
+            if ($obj->result == 2) {
                 $obj->breakHook('stop');
             }
         };
@@ -294,7 +294,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $m->addHook('inc', $inc);
 
         $ret = $m->hook('inc');
-        $this->assertEquals(2, $result);
+        $this->assertEquals(2, $m->result);
         $this->assertEquals('stop', $ret);
     }
 }
