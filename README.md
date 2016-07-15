@@ -151,6 +151,14 @@ Output:
 
 Full documentation is available at [agile-core.readthedocs.io](http://agile-core.readthedocs.io/)
 
+## Agile Toolkit
+
+Agile Core is part of [Agile Toolkit - PHP UI Framework](http://agiletoolkit.org). If you like
+this project, you should also look into:
+
+ - [DSQL](https://github.com/atk4/dsql) - [![GitHub release](https://img.shields.io/github/release/atk4/dsql.svg?maxAge=2592000)]()
+ - [Agile Core](https://github.com/atk4/core) - [![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)]()
+
 
 ## Planned Features
 
