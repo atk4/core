@@ -313,6 +313,6 @@ class HookMock
 }
 class HookWithDynamicMethodMock extends HookMock
 {
-    use atk4\core\DynamicMethodTrait;
+    use \atk4\core\DynamicMethodTrait;
 }
 // @codingStandardsIgnoreEnd
