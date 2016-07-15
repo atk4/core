@@ -10,7 +10,7 @@ use atk4\core\SessionTrait;
 class SessionTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test exception()
+     * Test constructor.
      */
     public function testConstructor()
     {

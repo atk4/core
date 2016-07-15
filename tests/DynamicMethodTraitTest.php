@@ -82,13 +82,13 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $res);
 
         // callable as object
-        $m->addMethod('getElementCount', new ContainerMock);
+        $m->addMethod('getElementCount', new ContainerMock());
         $this->assertEquals(0, $m->getElementCount());
 
     }
 
     /**
-     * Can add, check and remove methods
+     * Can add, check and remove methods.
      */
     public function testWithoutHookTrait()
     {
@@ -113,7 +113,7 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test removing dynamic method
+     * Test removing dynamic method.
      */
     public function testRemoveMethod()
     {
@@ -138,7 +138,7 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test adding, checking, removing global method
+     * Test adding, checking, removing global method.
      */
     public function testGlobalMethods()
     {
@@ -160,7 +160,6 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
 
         $m->removeGlobalMethod('sum');
         $this->assertEquals(false, $m2->hasGlobalMethod('sum'));
-
     }
 
     /**

@@ -10,7 +10,7 @@ use atk4\core\QuickExceptionTrait;
 class QuickExceptionTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test exception()
+     * Test constructor.
      */
     public function testConstructor()
     {

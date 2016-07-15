@@ -14,7 +14,7 @@ trait DebugTrait
     public $debug = false;
 
     /**
-     * Switch on/off debug state
+     * Switch on/off debug state.
      *
      * @param bool $enable
      *

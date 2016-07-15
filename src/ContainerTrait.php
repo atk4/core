@@ -79,8 +79,8 @@ trait ContainerTrait
      * Extension to add() method which will perform linking of
      * the object with the current class.
      *
-     * @param object        $element
-     * @param array|string  $args
+     * @param object       $element
+     * @param array|string $args
      *
      * @return object
      */

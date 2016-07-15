@@ -10,7 +10,7 @@ use atk4\core\FactoryTrait;
 class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test factory()
+     * Test factory().
      */
     public function testFactory()
     {
@@ -20,21 +20,21 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $m1 = new FactoryMock();
         $m2 = $m->factory($m1);
         $this->assertEquals($m1, $m2);
-        
+
         // pass classname
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
         $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
     }
 
     /**
-     * Test normalizeClassName()
+     * Test normalizeClassName().
      */
     public function testNormalize()
     {
         $m = new FactoryMock();
 
         // parameter as object
-        $class = $m->normalizeClassName(new FactoryMock);
+        $class = $m->normalizeClassName(new FactoryMock());
         $this->assertEquals(true, is_object($class));
 
         // parameter as simple string

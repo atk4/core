@@ -10,20 +10,20 @@ use atk4\core\DebugTrait;
 class DebugTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test debug()
+     * Test debug().
      */
     public function testDebug()
     {
         $m = new DebugMock();
 
         $this->assertEquals(false, $m->debug);
-        
+
         $m->debug();
         $this->assertEquals(true, $m->debug);
 
         $m->debug(false);
         $this->assertEquals(false, $m->debug);
-        
+
         $m->debug(true);
         $this->assertEquals(true, $m->debug);
 
