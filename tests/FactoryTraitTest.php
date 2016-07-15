@@ -22,10 +22,6 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($m1, $m2);
         
         // pass classname
-        $m1 = $m->factory('FactoryMock');
-        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
-
-        // pass classname with namespace
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
         $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
     }

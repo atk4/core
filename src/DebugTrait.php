@@ -13,8 +13,17 @@ trait DebugTrait
 
     public $debug = false;
 
-    public function debug()
+    /**
+     * Switch on/off debug state
+     *
+     * @param bool $enable
+     *
+     * @return $this
+     */
+    public function debug($enable = true)
     {
-        $this->debug = true;
+        $this->debug = (bool) $enable;
+        
+        return $this;
     }
 }
