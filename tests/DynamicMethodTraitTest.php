@@ -82,8 +82,8 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $res);
 
         // callable as object
-        $m->addMethod('getName', new \DateTimeZone('Europe/London'));
-        $this->assertEquals('Europe/London', $m->getName());
+        $m->addMethod('getElementCount', new ContainerMock);
+        $this->assertEquals(0, $m->getElementCount());
 
     }
 
