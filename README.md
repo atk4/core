@@ -59,6 +59,12 @@ $parent->add(new MyChildClass(), 'foo-bar');
 var_dump( $parent->getElement('foo-bar') );
 ```
 
+
+Output:
+
+![containers](docs/containers.png)
+
+
 Hook trait allows you to use callbacks in your object. By calling `addHook()` you can register callbacks that will be executed when `hook()` is called. Hooks trait supports arguments, priorities, early termination and more.
 
 ```
@@ -83,6 +89,12 @@ $c->addHook('afterWork', function() {
 $c->doWork();
 ```
 
+Output:
+
+![hooks](docs/hooks.png)
+
+
+
 With dynamic methods, you can utilise `__call` method in collaboration with internal hook system to dynamically add methods inside your object. Dynamic methods behave just like regular ones, but you can register them during run-time. Your code can check for existence of methods (static or dynamic), add or remove local or global methods:
 
 ```
@@ -101,9 +113,12 @@ $c->addMethod('mymethod', function($c, $a, $b){
 echo $c->mymethod(2,3)."\n";
 ```
 
-Core Exception adds essential ability for Exception to supply additional information inside exception that can be useful for debugging. This has a great application if you're localizing your exceptions. Exception class comes with a handy `getColorfulText()` method that significantly improves readability of exception text. See documentation for guide on how to integrate with PHPUnit:
+Output:
 
-![exception demo](docs/exception-demo.png)
+![dynamic method](docs/dynamic-method.png)
+
+
+Core Exception adds essential ability for Exception to supply additional information inside exception that can be useful for debugging. This has a great application if you're localizing your exceptions. Exception class comes with a handy `getColorfulText()` method that significantly improves readability of exception text. See documentation for guide on how to integrate with PHPUnit:
 
 ```
 use atk4\core\Exception;
@@ -126,6 +141,13 @@ try {
     echo $e->getColorfulText();
 }
 ```
+
+Output:
+
+![exception demo](docs/exception-demo.png)
+
+
+
 
 Full documentation is available at [agile-core.readthedocs.io](http://agile-core.readthedocs.io/)
 
