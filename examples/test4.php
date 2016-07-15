@@ -1,17 +1,19 @@
 <?php
-require'.../vendor/autoload.php';
+
+require '.../vendor/autoload.php';
 
 use atk4\core\Exception;
 
-function faulty($test) {
-    if ($test>5) {
+function faulty($test)
+{
+    if ($test > 5) {
         throw new Exception([
             'Test value is too high',
-            'test'=>$test
+            'test' => $test,
         ]);
     }
 
-    return faulty($test+1);
+    return faulty($test + 1);
 }
 
 
