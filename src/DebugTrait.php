@@ -23,7 +23,7 @@ trait DebugTrait
     public function debug($enable = true)
     {
         $this->debug = (bool) $enable;
-        
+
         return $this;
     }
 }

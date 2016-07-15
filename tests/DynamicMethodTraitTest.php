@@ -84,7 +84,6 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         // callable as object
         $m->addMethod('getElementCount', new ContainerMock());
         $this->assertEquals(0, $m->getElementCount());
-
     }
 
     /**
