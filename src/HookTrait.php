@@ -13,6 +13,8 @@ trait HookTrait
 
     /**
      * Contains information about configured hooks (callbacks).
+     *
+     * @var array
      */
     protected $hooks = [];
 
@@ -56,20 +58,20 @@ trait HookTrait
         // short for addHook('test', $this); to call $this->test();
         if (!is_callable($callable)) {
             if (is_object($callable)) {
-                if (
-                    isset($callable->_dynamicMethodTrait) &&
-                    !$callable->hasMethod($hook_spot)
-                ) {
-                    throw new Exception([
-                        '$callable should be a valid callback',
-                        'callable' => $callable,
-                    ]);
-                }
-                if (!method_exists($callable, $hook_spot)) {
-                    throw new Exception([
-                        '$callable should be a valid callback',
-                        'callable' => $callable,
-                    ]);
+                if (isset($callable->_dynamicMethodTrait)) {
+                    if (!$callable->hasMethod($hook_spot)) {
+                        throw new Exception([
+                            '$callable should be a valid callback',
+                            'callable' => $callable,
+                        ]);
+                    }
+                } else {
+                    if (!method_exists($callable, $hook_spot)) {
+                        throw new Exception([
+                            '$callable should be a valid callback',
+                            'callable' => $callable,
+                        ]);
+                    }
                 }
                 $callable = [$callable, $hook_spot];
             } else {
@@ -109,6 +111,10 @@ trait HookTrait
 
     /**
      * Returns true if at least one callback is defined for this hook.
+     *
+     * @param string $hook_spot Hook identifier
+     *
+     * @return bool
      */
     public function hookHasCallbacks($hook_spot)
     {
@@ -137,30 +143,33 @@ trait HookTrait
         $return = [];
 
         try {
-            if (isset($this->hooks[$hook_spot])) {
-                if (is_array($this->hooks[$hook_spot])) {
-                    krsort($this->hooks[$hook_spot]); // lower priority is called sooner
-                    $hook_backup = $this->hooks[$hook_spot];
-                    while ($_data = array_pop($this->hooks[$hook_spot])) {
-                        foreach ($_data as &$data) {
-                            $return[] = call_user_func_array(
-                                $data[0],
-                                array_merge(
-                                    [$this],
-                                    $arg,
-                                    $data[1]
-                                )
-                            );
-                        }
+            if (
+                isset($this->hooks[$hook_spot])
+                && is_array($this->hooks[$hook_spot])
+            ) {
+                krsort($this->hooks[$hook_spot]); // lower priority is called sooner
+                $hook_backup = $this->hooks[$hook_spot];
+                while ($_data = array_pop($this->hooks[$hook_spot])) {
+                    foreach ($_data as &$data) {
+                        $return[] = call_user_func_array(
+                            $data[0],
+                            array_merge(
+                                [$this],
+                                $arg,
+                                $data[1]
+                            )
+                        );
                     }
-
-                    $this->hooks[$hook_spot] = $hook_backup;
                 }
+
+                $this->hooks[$hook_spot] = $hook_backup;
             }
-        } catch (Exception_Hook $e) {
+        } catch (Exception $e) {
             $this->hooks[$hook_spot] = $hook_backup;
 
-            return $e->return_value;
+            return isset($e->getParams()['return_value'])
+                ? $e->getParams()['return_value']
+                : null;
         }
 
         return $return;
@@ -168,15 +177,13 @@ trait HookTrait
 
     /**
      * When called from inside a hook callable, will stop execution of other
-     * callables on same hook. The passed argument will be returned by the
+     * callables on the same hook. The passed argument will be returned by the
      * hook method.
      *
      * @param mixed $return What would hook() return?
      */
     public function breakHook($return)
     {
-        $e = $this->exception(null, 'Hook');
-        $e->return_value = $return;
-        throw $e;
+        throw new Exception([null, 'return_value' => $return]);
     }
 }
