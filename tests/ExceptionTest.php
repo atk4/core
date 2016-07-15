@@ -34,15 +34,15 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         $ret = $m->toString(new \StdClass());
         $this->assertEquals('Object StdClass', $ret);
 
-        $a = new TrackableMock();
+        $a = new TrackableMock2();
         $a->name = 'foo';
         $ret = $m->toString($a);
-        $this->assertEquals('atk4\core\tests\TrackableMock (foo)', $ret);
+        $this->assertEquals('atk4\core\tests\TrackableMock2 (foo)', $ret);
     }
 }
 
 // @codingStandardsIgnoreStart
-class TrackableMock
+class TrackableMock2
 {
     use TrackableTrait;
 }
