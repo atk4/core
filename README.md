@@ -39,7 +39,7 @@ composer require atk4/core
 
 ## Sample Use
 
-By giving "ContainerTrait" to your "parent" class and "TrackableTrait" to all possible children of your "parent", you can instantly implement the ability to create hierarchies. This is useful if you're defining named elements such as "fields" inside a "form". Automatic name detection, tracking, removal of elements, iterating through elements and more.
+By giving "ContainerTrait" to your "parent" class and "TrackableTrait" to all possible children of your "parent", you can instantly implement the ability to create hierarchies. This is useful if you're defining named elements such as "fields" inside a "form". Traits implement automatic name detection, tracking, removal of elements, iterating through elements and more.
 
 ```
 class MyParentObject {
@@ -59,7 +59,7 @@ $parent->add(new MyChildClass(), 'foo-bar');
 var_dump( $parent->getElement('foo-bar') );
 ```
 
-Hook trait allows you to define "hooks" in your object. By calling addHook() you can register callbacks which will be executed when hook() is next called. Hooks support arguments, priorities, early termination and other useful features.
+Hook trait allows you to use callbacks in your object. By calling `addHook()` you can register callbacks that will be executed when `hook()` is called. Hooks trait supports arguments, priorities, early termination and more.
 
 ```
 class MyClass {
@@ -83,7 +83,7 @@ $c->addHook('afterWork', function() {
 $c->doWork();
 ```
 
-With dynamic methods, you can utilise `__call` method in collaboration with internal hook system to dynamically add methods inside your object. Dynamic methods behave just like regular ones, but you can register them during run-time. Your code can check for existence of methods (static or dynamic), add remove local or global methods:
+With dynamic methods, you can utilise `__call` method in collaboration with internal hook system to dynamically add methods inside your object. Dynamic methods behave just like regular ones, but you can register them during run-time. Your code can check for existence of methods (static or dynamic), add or remove local or global methods:
 
 ```
 class MyClass {
@@ -101,7 +101,7 @@ $c->addMethod('mymethod', function($c, $a, $b){
 echo $c->mymethod(2,3)."\n";
 ```
 
-Core Exception adds essential ability for Exception to register additional information than can consist of variables. This can also be used for localizing your exceptions or ability to show more / less information depending on your debug level. Exception comes with a getColorfulText() that uses colorful console output to display your error nicely:
+Core Exception adds essential ability for Exception to supply additional information inside exception that can be useful for debugging. This has a great application if you're localizing your exceptions. Exception class comes with a handy `getColorfulText()` method that significantly improves readability of exception text. See documentation for guide on how to integrate with PHPUnit:
 
 ![exception demo](docs/exception-demo.png)
 
@@ -127,7 +127,7 @@ try {
 }
 ```
 
-For full documentation: [http://agile-core.readthedocs.io/](http://agile-core.readthedocs.io/)
+Full documentation is available at [agile-core.readthedocs.io](http://agile-core.readthedocs.io/)
 
 
 ## Planned Features
