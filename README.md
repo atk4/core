@@ -22,10 +22,10 @@ Stats:
 [![License](https://poser.pugx.org/atk4/core/license)](https://packagist.org/packages/atk4/core)
 [![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)](https://packagist.org/packages/atk4/core)
 
-Working on your own framework? Here you can find some useful and ligthweight traits for your code:
+Working on your own framework? Here you can find some useful and lightweight traits for your code:
 
  - Containers: Implements Parent/Child relations between your objects
- - Hooks: Create hooks and register call-backs with priorities and arguments
+ - Hooks: Create hooks and register callbacks with priorities and arguments
  - Initializers: Automatically execute init() method of your object
  - Dynamic Methods: Add methods dynamically into existing objects
  - Factory: Specify class name as a string
@@ -39,7 +39,7 @@ composer require atk4/core
 
 ## Sample Use
 
-By giving "ContainerTrait" to your "parent" class and "TrackableTrait" to all possible children of your "parent", you can instantly implement ability to create hierarcies. This is useful if you're defining named elements such as "fields" inside a "form". Automatic name detection, tracking, removal of elements, iterating through elements and more.
+By giving "ContainerTrait" to your "parent" class and "TrackableTrait" to all possible children of your "parent", you can instantly implement the ability to create hierarchies. This is useful if you're defining named elements such as "fields" inside a "form". Automatic name detection, tracking, removal of elements, iterating through elements and more.
 
 ```
 class MyParentObject {
@@ -59,7 +59,7 @@ $parent->add(new MyChildClass(), 'foo-bar');
 var_dump( $parent->getElement('foo-bar') );
 ```
 
-Hook trait allow you to define "hooks" in your object. By calling addHook() you can register call-backs which will be executed when hook() is next called. Hooks support arguments, priorities, early termination and other useful featutres.
+Hook trait allows you to define "hooks" in your object. By calling addHook() you can register callbacks which will be executed when hook() is next called. Hooks support arguments, priorities, early termination and other useful features.
 
 ```
 class MyClass {
@@ -83,7 +83,7 @@ $c->addHook('afterWork', function() {
 $c->doWork();
 ```
 
-With dynamic methods you can utilise `__call` method in collaboration with internal hook system to dynamically add methods inside your object. Dynamic methods behave just like a regular ones, but you can register them during run-time. Your code can check for existence of methods (static or dynamic), add remove local or global methods:
+With dynamic methods, you can utilise `__call` method in collaboration with internal hook system to dynamically add methods inside your object. Dynamic methods behave just like regular ones, but you can register them during run-time. Your code can check for existence of methods (static or dynamic), add remove local or global methods:
 
 ```
 class MyClass {
@@ -145,4 +145,3 @@ For full documentation: [http://agile-core.readthedocs.io/](http://agile-core.re
 * 11 May: Released 0.1
 * 11 May: Finished basic docs
 * 27 Apr: Initial Commit
-
