@@ -21,6 +21,8 @@ class SessionTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $m->learn());
         $this->assertEquals(null, $m->recall());
         $this->assertEquals(null, $m->forget());
+
+        $this->markTestIncomplete();
     }
 }
 
