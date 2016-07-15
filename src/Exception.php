@@ -35,7 +35,7 @@ class Exception extends \Exception
     /**
      * Output exception message using color sequences.
      *
-     * <exceptoin name>: <string>
+     * <exception name>: <string>
      * <info>
      *
      * trace

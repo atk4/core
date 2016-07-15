@@ -60,6 +60,17 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException     Exception
+     */
+    public function testException4()
+    {
+        // can't call method without HookTrait or AppScope+Hook traits
+        $m = new GlobalMethodObjectMock();
+        $m->app = new GlobalMethodAppMock();
+        $m->unknownMethod();
+    }
+
+    /**
      * Test arguments.
      */
     public function testArguments()
@@ -71,6 +82,19 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
         });
         $res = $m->sum(3, 5);
         $this->assertEquals(8, $res);
+
+        // method name as CSV
+        $m->addMethod(['min,less'], function ($m, $a, $b) {
+            return min($a, $b);
+        });
+        $res = $m->min(3, 5);
+        $this->assertEquals(3, $res);
+
+        $m->addMethod(['min, less'], function ($m, $a, $b) {
+            return min($a, $b);
+        });
+        $res = $m->less(5, 3);
+        $this->assertEquals(3, $res);
 
         // method name as array
         $m->addMethod(['min', 'less'], function ($m, $a, $b) {
@@ -167,6 +191,8 @@ class DynamicMethodTraitTest extends \PHPUnit_Framework_TestCase
     public function testDoubleGlobalMethodException()
     {
         $m = new GlobalMethodObjectMock();
+        $m->app = new GlobalMethodAppMock();
+
         $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
             return $a + $b;
         });
