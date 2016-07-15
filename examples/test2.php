@@ -1,8 +1,10 @@
 <?php
-require'../vendor/autoload.php';
+
+require '../vendor/autoload.php';
 
 
-class MyClass {
+class MyClass
+{
     use \atk4\core\HookTrait;
 
     public function doWork()
@@ -17,8 +19,7 @@ class MyClass {
 
 
 $c = new MyClass();
-$c->addHook('afterWork', function() { 
-    echo "HOOKed on work\n"; 
+$c->addHook('afterWork', function () {
+    echo "HOOKed on work\n";
 });
 $c->doWork();
-
