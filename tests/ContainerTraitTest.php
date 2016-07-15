@@ -111,8 +111,8 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
     public function testFactoryMock()
     {
         $m = new ContainerFactoryMock();
-        $m2 = $m->add('atk4/core/ContainerMock');
-        $this->assertEquals('atk4\core\ContainerMock', get_class($m2));
+        $m2 = $m->add('atk4/core/tests/ContainerMock');
+        $this->assertEquals('atk4\core\tests\ContainerMock', get_class($m2));
     }
 
     public function testArgs()
