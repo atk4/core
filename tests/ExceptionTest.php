@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core\Exception;
+use atk4\core\TrackableTrait;
 
 /**
  * @coversDefaultClass \atk4\core\Exception
