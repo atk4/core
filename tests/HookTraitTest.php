@@ -104,6 +104,10 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $m->hook('test', [5]);
         $this->assertEquals(6, $this->result);
+        
+        // 
+        $m = new HookWithDynamicMethodMock();
+        $m->addHook('foo', $m);
     }
 
     /**
@@ -133,7 +137,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     {
         // wrong 2nd argument
         $m = new HookMock();
-        $m->addHook('unknown_method', $m);
+        $m->addHook('unknown_method', 'incorrect_param');
     }
 
     /**
@@ -314,5 +318,9 @@ class HookMock
 class HookWithDynamicMethodMock extends HookMock
 {
     use \atk4\core\DynamicMethodTrait;
+    
+    public function foo()
+    {
+    }
 }
 // @codingStandardsIgnoreEnd
