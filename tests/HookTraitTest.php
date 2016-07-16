@@ -113,7 +113,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     {
         // not existing method
         $m = new HookMock();
-        $m->addHook('unknown_method', $this);
+        $m->addHook('unknown_method', $m);
     }
 
     /**
@@ -123,7 +123,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     {
         // not existing dynamic method
         $m = new HookWithDynamicMethodMock();
-        $m->addHook('unknown_method', $this);
+        $m->addHook('unknown_method', $m);
     }
 
     /**
@@ -133,7 +133,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
     {
         // wrong 2nd argument
         $m = new HookMock();
-        $m->addHook('unknown_method', $this);
+        $m->addHook('unknown_method', $m);
     }
 
     /**
