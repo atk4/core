@@ -104,8 +104,8 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
         $m->hook('test', [5]);
         $this->assertEquals(6, $this->result);
-        
-        // 
+
+        // Existing method - foo
         $m = new HookWithDynamicMethodMock();
         $m->addHook('foo', $m);
     }
