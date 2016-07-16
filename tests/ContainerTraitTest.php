@@ -104,8 +104,10 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $this->assertGreaterThanOrEqual(15, $min_len); // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        $this->assertLessThanOrEqual($app->max_name_length, $max_len); // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
+        // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
+        $this->assertGreaterThanOrEqual(15, $min_len);
+        // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
+        $this->assertLessThanOrEqual($app->max_name_length, $max_len);
     }
 
     public function testFactoryMock()
