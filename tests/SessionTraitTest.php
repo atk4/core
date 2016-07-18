@@ -59,7 +59,7 @@ class SessionTraitTest extends \PHPUnit_Framework_TestCase
         // value as object
         $o = new \StdClass;
         $m->memorize('foo', $o);
-        $this->assertEquals($o, $_SESSION['s'][$m->name]['foo']);
+        $this->assertEquals($o, $_SESSION['o'][$m->name]['foo']);
 
         $m->destroySession();
     }
