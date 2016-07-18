@@ -124,7 +124,7 @@ trait SessionTrait
         return $_SESSION[$this->session_key][$this->name][$key];
     }
 
-   /**
+    /**
      * Forget session data for arg $key. If $key is omitted will forget all
      * associated session data.
      *

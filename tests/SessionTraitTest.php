@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\SessionTrait;
 use atk4\core\NameTrait;
+use atk4\core\SessionTrait;
 
 /**
  * @coversDefaultClass \atk4\core\SessionTrait
@@ -45,7 +45,7 @@ class SessionTraitTest extends \PHPUnit_Framework_TestCase
         // value as string
         $m->memorize('foo', 'bar');
         $this->assertEquals('bar', $_SESSION['o'][$m->name]['foo']);
-        
+
         // value as null
         $m->memorize('foo', null);
         $this->assertEquals(null, $_SESSION['o'][$m->name]['foo']);
@@ -57,7 +57,7 @@ class SessionTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $_SESSION['o'][$m->name]['foo']);
 
         // value as object
-        $o = new \StdClass;
+        $o = new \StdClass();
         $m->memorize('foo', $o);
         $this->assertEquals($o, $_SESSION['o'][$m->name]['foo']);
 
