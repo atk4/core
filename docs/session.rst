@@ -4,6 +4,9 @@ Session Trait
 
 .. php:trait:: SessionTrait
 
+
+.. warning:: SESSIONS WILL BE REMOVED FROM Agile core IN THE FUTURE.
+
 Introduction
 ============
 
