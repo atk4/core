@@ -13,8 +13,4 @@ Contents:
     factory
     dynamicmethod
     hook
-    modelable
-    quickexception
     appscope
-    session
-    debug
