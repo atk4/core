@@ -62,37 +62,37 @@ Container Trait
     If you want your framework to keep track of relationships between objects by
     implementing containers, you can use :php:trait:`ContainerTrait`. Example::
 
-    class MyContainer extends OtherClass {
-        use atk4\core\ContainerTrait;
+        class MyContainer extends OtherClass {
+            use atk4\core\ContainerTrait;
 
-        function add($obq, $args = []) {
-            return $this->_add_Container($obj, $args);
+            function add($obq, $args = []) {
+                return $this->_add_Container($obj, $args);
+            }
         }
-    }
 
-    class MyItem  {
-        use atk4\core\TrackableTrait;
-    }
+        class MyItem  {
+            use atk4\core\TrackableTrait;
+        }
 
-    Now the instances of MyItem can be added to instances of MyContainer and can keep track::
+        Now the instances of MyItem can be added to instances of MyContainer and can keep track::
 
-    $parent = new MyContainer();
-    $parent->name = 'foo';
-    $parent->add(new MyItem(), 'child1');
-    $parent->add(new MyItem());
-    
-    echo $parent->getElement('child1')->name;
-    // foo_child1
+        $parent = new MyContainer();
+        $parent->name = 'foo';
+        $parent->add(new MyItem(), 'child1');
+        $parent->add(new MyItem());
+        
+        echo $parent->getElement('child1')->name;
+        // foo_child1
 
-    if ($parent->hasElement('child1')) {
-        $parent->removeElement('child1');
-    }
+        if ($parent->hasElement('child1')) {
+            $parent->removeElement('child1');
+        }
 
-    $parent->each(function($child) {
-        $child->doSomething();
-    });
+        $parent->each(function($child) {
+            $child->doSomething();
+        });
 
-Child object names will be derived from the parent name.
+    Child object names will be derived from the parent name.
 
 Properties
 ----------
