@@ -29,8 +29,6 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
         $m->debug(false)->debug('switch on');
         $this->assertEquals(true, $m->debug);
-
-        $this->markTestIncomplete();
     }
 }
 

@@ -164,12 +164,10 @@ trait HookTrait
 
                 $this->hooks[$hook_spot] = $hook_backup;
             }
-        } catch (Exception $e) {
+        } catch (HookBreaker $e) {
             $this->hooks[$hook_spot] = $hook_backup;
 
-            return isset($e->getParams()['return_value'])
-                ? $e->getParams()['return_value']
-                : null;
+            return $e->return_value;
         }
 
         return $return;
@@ -184,6 +182,6 @@ trait HookTrait
      */
     public function breakHook($return)
     {
-        throw new Exception([null, 'return_value' => $return]);
+        throw new HookBreaker($return);
     }
 }
