@@ -301,6 +301,22 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $m->result);
         $this->assertEquals('stop', $ret);
     }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testExceptionInHook()
+    {
+        $m = new HookMock();
+        $m->result = 0;
+
+        $inc = function ($obj) {
+            throw new \atk4\core\Exception(['stuff went wrong']);
+        };
+
+        $m->addHook('inc', $inc);
+        $ret = $m->hook('inc');
+    }
 }
 
 // @codingStandardsIgnoreStart
