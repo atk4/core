@@ -14,7 +14,8 @@ class HookBreaker extends \Exception
 {
     public $return_value = null;
 
-    function __construct($rv) {
+    public function __construct($rv)
+    {
         $this->return_value = $rv;
     }
 }
