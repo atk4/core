@@ -16,7 +16,6 @@ trait DebugTrait
     protected function isDebugEnabled()
     {
         if ($this->debug === false || $this->debug === true) {
-
             return $this;
         }
 
@@ -35,6 +34,7 @@ trait DebugTrait
         if (is_bool($msg)) {
             // using this to switch on/off the debug for this object
             $this->debug = $msg;
+
             return $this;
         }
 
