@@ -16,6 +16,7 @@ trait DebugTrait
     protected function isDebugEnabled()
     {
         if ($this->debug === false || $this->debug === true) {
+
             return $this;
         }
 
