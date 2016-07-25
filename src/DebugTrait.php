@@ -38,7 +38,6 @@ trait DebugTrait
         }
 
         if ($this->isDebugEnabled()) {
-
             if (
                 (isset($this->app->_dynamicMethodTrait) && $this->app->hasMethod('outputDebug')) ||
                 method_exists($this->app, 'outputDebug')
@@ -47,7 +46,6 @@ trait DebugTrait
             } else {
                 fwrite(STDERR, '['.get_class($this)."]: $msg\n");
             }
-
         }
 
         return $this;
@@ -67,16 +65,14 @@ trait DebugTrait
 
 
             if (isset($this->_prev_bt[$trace]) && array_diff($this->_prev_bt[$trace], $bt)) {
-
                 $d1 = array_diff($this->_prev_bt[$trace], $bt);
                 $d2 = array_diff($bt, $this->_prev_bt[$trace]);
 
-                $this->debug("Call path for ".$trace." has diverged (was ".implode(', ', $d1).", now ".implode(', ', $d2).")\n");
+                $this->debug('Call path for '.$trace.' has diverged (was '.implode(', ', $d1).', now '.implode(', ', $d2).")\n");
             }
 
 
             $this->_prev_bt[$trace] = $bt;
-
         }
     }
 }
