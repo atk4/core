@@ -40,8 +40,8 @@ trait DebugTrait
 
         if ($this->isDebugEnabled()) {
             if (
-                (isset($this->app->_dynamicMethodTrait) && $this->app->hasMethod('outputDebug')) ||
-                method_exists($this->app, 'outputDebug')
+                isset($this->app) && ((isset($this->app->_dynamicMethodTrait) && $this->app->hasMethod('outputDebug')) ||
+                method_exists($this->app, 'outputDebug'))
             ) {
                 $this->app->outputDebug($msg, $extra_info);
             } else {
