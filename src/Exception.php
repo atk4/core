@@ -18,6 +18,13 @@ class Exception extends \Exception
      */
     private $params = [];
 
+    /**
+     * Constructor.
+     *
+     * @param string     $message
+     * @param int        $code
+     * @param \Exception $previous
+     */
     public function __construct(
         $message = '',
         $code = 0,
@@ -42,6 +49,8 @@ class Exception extends \Exception
      *
      * --
      * <triggered by>
+     *
+     * @return string
      */
     public function getColorfulText()
     {
@@ -124,6 +133,10 @@ class Exception extends \Exception
 
     /**
      * Safely converts some value to string.
+     *
+     * @param mixed $val
+     *
+     * @return string
      */
     public function toString($val)
     {
@@ -140,6 +153,8 @@ class Exception extends \Exception
 
     /**
      * Follow the getter-style of PHP Exception.
+     *
+     * @return array
      */
     public function getParams()
     {
@@ -148,6 +163,11 @@ class Exception extends \Exception
 
     /**
      * Augment existing exception with more info.
+     *
+     * @param string $param
+     * @param mixed  $value
+     *
+     * @return $this
      */
     public function addMoreInfo($param, $value)
     {
