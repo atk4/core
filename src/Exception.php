@@ -147,11 +147,12 @@ class Exception extends \Exception
     }
 
     /**
-     * Augment existing exception with more info
+     * Augment existing exception with more info.
      */
-    function addMoreInfo($param, $value)
+    public function addMoreInfo($param, $value)
     {
         $this->params[$param] = $value;
+
         return $this;
     }
 }
