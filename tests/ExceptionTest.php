@@ -20,6 +20,14 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         // params
         $this->assertEquals(['a1' => 111, 'a2' => 222], $m->getParams());
 
+
+        $m = new Exception('TestIt');
+        $m->addMoreInfo('a1', 222);
+        $m->addMoreInfo('a2', 333);
+
+        // params
+        $this->assertEquals(['a1' => 222, 'a2' => 333], $m->getParams());
+
         // get colorful text
         $ret = $m->getColorfulText();
         $this->assertRegExp('/TestIt/', $ret);
