@@ -1,3 +1,27 @@
+## 1.1.4
+
+Improved DebugTrait:
+
+ - added debugTraceChange
+ - added better integration with app scope
+ - added exception::addMoreInfo
+ - added documentation for Exception
+
+## 1.1.3
+
+Added draft implementation for Session trait. Minor cleanups.
+
+## 1.1.2
+
+Mostly new tests and improvements in documentation.
+
+## 1.1.1
+
+Focus on adding documentation for existing features, improving comments
+and adding examples. 
+* src/Object is removed as it wasn't used anywhere.
+* added lots of test-scripts
+
 ## 1.1.0
 
 If any of your objects use ContainerTrait without TrackableTrait, you may need to update

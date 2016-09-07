@@ -8,6 +8,7 @@ Contents:
     :maxdepth: 3
 
     overview
+    exception
     container
     initializer
     factory
