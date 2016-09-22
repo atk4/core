@@ -8,11 +8,15 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
     {
         try {
             return parent::runBare();
-        } catch (\atk4\core\Exception $e) {
-            throw new \atk4\core\PHPUnit_AgileExceptionWrapper($e->getMessage(), 0, $e);
+        } catch (Exception $e) {
+            throw new PHPUnit_AgileExceptionWrapper($e->getMessage(), 0, $e);
         }
     }
 
+    /**
+     * NOTE: this method must only be used for low-level functionality, not
+     * for general test-scripts
+     */
     public function callProtected($obj, $name, array $args = [])
     {
         $class = new \ReflectionClass($obj);
@@ -22,6 +26,10 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
         return $method->invokeArgs($obj, $args);
     }
 
+    /**
+     * NOTE: this method must only be used for low-level functionality, not
+     * for general test-scripts
+     */
     public function getProtected($obj, $name)
     {
         $class = new \ReflectionClass($obj);
