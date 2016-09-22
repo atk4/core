@@ -1,8 +1,8 @@
 <?php
 
-namespace atk4\data\tests;
+namespace atk4\core;
 
-class AgileExceptionWrapper extends \PHPUnit_Framework_Exception
+class PHPUnit_AgileExceptionWrapper extends \PHPUnit_Framework_Exception
 {
     public $previous;
 
