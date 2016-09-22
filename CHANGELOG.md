@@ -1,3 +1,7 @@
+## 1.1.6
+
+Added some support files for PHPUnit
+
 ## 1.1.4
 
 Improved DebugTrait:
