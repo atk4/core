@@ -18,6 +18,8 @@ class Exception extends \Exception
      */
     private $params = [];
 
+    public $trace2; // because PHP's use of final() sucks!
+
     /**
      * Constructor.
      *
@@ -37,6 +39,12 @@ class Exception extends \Exception
         }
 
         parent::__construct($message, $code, $previous);
+        $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+    }
+
+    function getMyTrace() 
+    {
+        return $this->trace2;
     }
 
     /**
