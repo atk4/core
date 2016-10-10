@@ -42,7 +42,7 @@ class Exception extends \Exception
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
     }
 
-    function getMyTrace() 
+    public function getMyTrace()
     {
         return $this->trace2;
     }

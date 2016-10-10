@@ -15,7 +15,7 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * NOTE: this method must only be used for low-level functionality, not
-     * for general test-scripts
+     * for general test-scripts.
      */
     public function callProtected($obj, $name, array $args = [])
     {
@@ -28,7 +28,7 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * NOTE: this method must only be used for low-level functionality, not
-     * for general test-scripts
+     * for general test-scripts.
      */
     public function getProtected($obj, $name)
     {
