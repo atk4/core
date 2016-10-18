@@ -1,7 +1,8 @@
 <?php
+
 namespace atk4\core;
 
-/**
+/*
  * Extend Psysh to display ATK Exceptions nicely by adding into
  * ~/.config/psysh/config.php
  *
@@ -12,23 +13,23 @@ namespace atk4\core;
  * include '/path/to/atk4/core/PsyshE.php';
  *
  * If Agile Exception is thrown, you can get a nice output
- * by typing 
+ * by typing
  *
  * >>> e
  *
  */
 
-use Psy\Context;
 use Psy\Command\TraceCommand;
+use Psy\Context;
 use Psy\ContextAware;
 use Psy\Output\ShellOutput;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PsyshE extends TraceCommand implements ContextAware {
+class PsyshE extends TraceCommand implements ContextAware
+{
     protected $context;
+
     public function setContext(Context $context)
     {
         $this->context = $context;
@@ -65,5 +66,4 @@ HELP
         });
          */
     }
-
 }
