@@ -12,6 +12,9 @@
         </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+              <file>./src/PsyshE.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <testsuites>
