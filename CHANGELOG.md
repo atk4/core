@@ -1,3 +1,9 @@
+## 1.1.7
+
+Added some support files for Psysh (e command) #29
+Improve debug backtrace by including object references #28
+implement addMoreInfo for exceptions #27
+
 ## 1.1.6
 
 Added some support files for PHPUnit
