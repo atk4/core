@@ -43,7 +43,6 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, (bool) $m->hasElement('false'));
         $this->assertEquals(5, $m->getElementCount());
 
-
         $m->getElement('foo bar')->destroy();
         $this->assertEquals(4, $m->getElementCount());
         $anon->destroy();
@@ -177,7 +176,6 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $el = $m->getElement('dont_exist');
     }
 }
-
 
 // @codingStandardsIgnoreStart
 class TrackableMock

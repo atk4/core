@@ -20,7 +20,6 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         // params
         $this->assertEquals(['a1' => 111, 'a2' => 222], $m->getParams());
 
-
         $m = new Exception('TestIt');
         $m->addMoreInfo('a1', 222);
         $m->addMoreInfo('a2', 333);

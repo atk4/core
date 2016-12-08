@@ -15,7 +15,6 @@ trait InitializerTrait
      */
     public $_initializerTrait = true;
 
-
     /**
      * To make sure you have called parent::init() properly.
      *
