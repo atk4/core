@@ -21,7 +21,7 @@ trait ContainerTrait
      *
      * @var array
      */
-    public $elements;
+    public $elements = [];
 
     private $_element_name_counts = [];
 
