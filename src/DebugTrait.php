@@ -64,14 +64,12 @@ trait DebugTrait
                 }
             }
 
-
             if (isset($this->_prev_bt[$trace]) && array_diff($this->_prev_bt[$trace], $bt)) {
                 $d1 = array_diff($this->_prev_bt[$trace], $bt);
                 $d2 = array_diff($bt, $this->_prev_bt[$trace]);
 
                 $this->debug('Call path for '.$trace.' has diverged (was '.implode(', ', $d1).', now '.implode(', ', $d2).")\n");
             }
-
 
             $this->_prev_bt[$trace] = $bt;
         }
