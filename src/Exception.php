@@ -89,7 +89,6 @@ class Exception extends \Exception
                 $in_atk = false;
             }
 
-
             $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
 
             $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
@@ -121,7 +120,6 @@ class Exception extends \Exception
             } else {
                 $output .= "\033[0,33m".$call['function'].'(';
             }
-
 
             $output .= ')';
         }

@@ -7,12 +7,10 @@ class MyParentObject
     use \atk4\core\ContainerTrait;
 }
 
-
 class MyChildClass
 {
     use \atk4\core\TrackableTrait;
 }
-
 
 $parent = new MyParentObject();
 
