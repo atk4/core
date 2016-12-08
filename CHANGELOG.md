@@ -1,3 +1,7 @@
+## 1.1.8
+
+Fixed minor bug, for objects that have no elements at all
+
 ## 1.1.7
 
 Added some support files for Psysh (e command) #29
