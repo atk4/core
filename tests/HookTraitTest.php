@@ -52,7 +52,6 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
             $result = 0;
         }, null, 1);
 
-
         $m->hook('test1'); // zero will be executed first, then increment
         $this->assertEquals(1, $result);
     }
@@ -257,7 +256,6 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $obj->hook('inc', $a);
 
         $this->assertEquals([2], $a);
-
 
         $obj = new HookMock();
 

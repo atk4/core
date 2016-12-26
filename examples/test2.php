@@ -2,7 +2,6 @@
 
 require '../vendor/autoload.php';
 
-
 class MyClass
 {
     use \atk4\core\HookTrait;
@@ -16,7 +15,6 @@ class MyClass
         $this->hook('afterWork');
     }
 }
-
 
 $c = new MyClass();
 $c->addHook('afterWork', function () {

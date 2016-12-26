@@ -16,7 +16,6 @@ function faulty($test)
     return faulty($test + 1);
 }
 
-
 try {
     faulty(1);
 } catch (Exception $e) {

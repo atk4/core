@@ -53,7 +53,6 @@ class InitializerMock extends _InitializerMock
     }
 }
 
-
 class BrokenInitializerMock extends _InitializerMock
 {
     public function init()
