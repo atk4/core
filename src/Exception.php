@@ -146,7 +146,7 @@ class Exception extends \Exception
      */
     public function toString($val)
     {
-        if (is_object($val)) {
+        if (is_object($val) && !$val instanceof \Closure) {
             if (isset($val->_trackableTrait)) {
                 return get_class($val).' ('.$val->name.')';
             }
