@@ -22,7 +22,7 @@ trait AppScopeTrait
     /**
      * Always points to current Application.
      *
-     * @var object
+     * @var \atk4\ui\App
      */
     public $app;
 

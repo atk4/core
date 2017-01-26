@@ -107,6 +107,11 @@ trait ContainerTrait
             $args = [$args];
         } elseif (!is_array($args)) {
             throw new Exception(['Second argument must be array', 'arg2' => $args]);
+        } elseif (isset($args['desired_name'])) {
+
+            // passed as ['desired_name'=>'foo'];
+            $args[0] = $this->_unique_element($args['desired_name']);
+            unset($args['desired_name']);
         } elseif (isset($args['name'])) {
 
             // passed as ['name'=>'foo'];
@@ -115,7 +120,7 @@ trait ContainerTrait
         } elseif (isset($element->short_name)) {
 
             // element has a name already
-            $args[0] = $element->short_name;
+            $args[0] = $this->_unique_element($element->short_name);
         } else {
 
             // ask element on his preferred name, then make it unique.

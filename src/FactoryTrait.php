@@ -58,6 +58,16 @@ trait FactoryTrait
             return $name;
         }
 
+        if (isset($this->_appScopeTrait) && $this->app) {
+            if (method_exists($this->app, 'normalizeClassName')) {
+                $name = $this->app->normalizeClassName($name, $prefix);
+            }
+
+            if (!is_string($name)) {
+                return $name;
+            }
+        }
+
         $name = str_replace('/', '\\', $name);
         if ($prefix !== null) {
             $class = ltrim(strrchr($name, '\\'), '\\') ?: $name;
