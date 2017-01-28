@@ -25,6 +25,21 @@ trait FactoryTrait
         if (is_object($object)) {
             return $object;
         }
+
+        if (is_array($object)) {
+            if (!isset($object[0])) {
+                throw new Exception([
+                    'Object factory definition must use ["class name", "x"=>"y"] form',
+                    'object'   => $object,
+                    'defaults' => $defaults,
+                ]);
+            }
+            $tmp = $object[0];
+            unset($object[0]);
+
+            $defaults = array_merge($object, $defaults);
+            $object = $tmp;
+        }
         if (!is_string($object)) {
             throw new Exception([
                 'Factory needs object or string',
@@ -52,6 +67,11 @@ trait FactoryTrait
      */
     public function normalizeClassName($name, $prefix = null)
     {
+        if (is_array($name) && isset($name[0])) {
+            $name[0] = $this->normalizeClassName($name[0]);
+            return $name;
+        }
+
         if (!is_string($name)) {
             return $name;
         }
