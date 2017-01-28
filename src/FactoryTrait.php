@@ -69,6 +69,7 @@ trait FactoryTrait
     {
         if (is_array($name) && isset($name[0])) {
             $name[0] = $this->normalizeClassName($name[0]);
+
             return $name;
         }
 
