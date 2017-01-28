@@ -139,7 +139,7 @@ class Exception extends \Exception
 
     /**
      * Output exception message using HTML block and Semantic UI formatting. It's your job
-     * to put it inside boilerplate HTML and output, e.g:
+     * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $l = new \atk4\ui\App();
      *   $l->initLayout('Centered');
@@ -152,7 +152,7 @@ class Exception extends \Exception
     public function getHTML()
     {
         $output = '<div class="ui negative icon message"><i class="warning sign icon"></i><div class="content"><div class="header">Fatal Error</div>';
-        $output .= get_class($this).": ".$this->getMessage().
+        $output .= get_class($this).': '.$this->getMessage().
             ($this->getCode() ? ' <div class="ui small yellow label">Code<div class="detail">'.$this->getCode().'</div></div>' : '');
         $output .= '</div>'; // content
         $output .= '</div>';
@@ -164,12 +164,11 @@ class Exception extends \Exception
 
             foreach ($this->params as $key => $val) {
                 $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
-                $output .= "<li><b>".$key.'</b>: '.$this->toString($val).'</li>';
+                $output .= '<li><b>'.$key.'</b>: '.$this->toString($val).'</li>';
             }
 
             $output .= '</ul>';
             $output .= '</div>';
-
         }
 
         $output .= '<div class="ui top attached segment">';
@@ -197,12 +196,12 @@ class Exception extends \Exception
 
             $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
 
-            if($escape_frame) {
+            if ($escape_frame) {
                 $output .= "<tr class='negative'><td>".$file;
-            }else {
-                $output .= "<tr><td>".$file;
+            } else {
+                $output .= '<tr><td>'.$file;
             }
-            $output .= ":".$line."</td><td>";
+            $output .= ':'.$line.'</td><td>';
 
             if (isset($call['object'])) {
                 $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
@@ -211,7 +210,7 @@ class Exception extends \Exception
                 $output .= '-';
             }
 
-            $output .= "</td><td>";
+            $output .= '</td><td>';
 
             if (isset($call['class'])) {
                 $output .= $call['class'].'::';
@@ -237,7 +236,6 @@ class Exception extends \Exception
         $output .= '</tbody></table>';
         $output .= '</div>';
 
-
         if ($p = $this->getPrevious()) {
             $output .= '<div class="ui top attached segment">';
             $output .= '<div class="ui top attached label">Caused by Previous Exception:</div>';
@@ -249,7 +247,7 @@ class Exception extends \Exception
                 //($p->getCode() ? ' [code: '.$p->getCode().']' : '');
 
                 $output .= '<div class="ui negative icon message"><i class="warning sign icon"></i><div class="content"><div class="header">Fatal Error</div>';
-                $output .= get_class($p).": ".$p->getMessage().
+                $output .= get_class($p).': '.$p->getMessage().
                     ($p->getCode() ? ' <div class="ui small yellow label">Code<div class="detail">'.$p->getCode().'</div></div>' : '');
                 $output .= '</div>'; // content
                 $output .= '</div>';
