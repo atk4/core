@@ -138,6 +138,130 @@ class Exception extends \Exception
     }
 
     /**
+     * Output exception message using HTML block and Semantic UI formatting. It's your job
+     * to put it inside boilerplate HTML and output, e.g:
+     *
+     *   $l = new \atk4\ui\App();
+     *   $l->initLayout('Centered');
+     *   $l->layout->template->setHTML('Content', $e->getHTML());
+     *   $l->run();
+     *   exit;
+     *
+     * @return string
+     */
+    public function getHTML()
+    {
+        $output = '<div class="ui negative icon message"><i class="warning sign icon"></i><div class="content"><div class="header">Fatal Error</div>';
+        $output .= get_class($this).": ".$this->getMessage().
+            ($this->getCode() ? ' <div class="ui small yellow label">Code<div class="detail">'.$this->getCode().'</div></div>' : '');
+        $output .= '</div>'; // content
+        $output .= '</div>';
+
+        if ($this->params) {
+            $output .= '<div class="ui top attached segment">';
+            $output .= '<div class="ui top attached label">Exception Parameters</div>';
+            $output .= '<ul class="list">';
+
+            foreach ($this->params as $key => $val) {
+                $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
+                $output .= "<li><b>".$key.'</b>: '.$this->toString($val).'</li>';
+            }
+
+            $output .= '</ul>';
+            $output .= '</div>';
+
+        }
+
+        $output .= '<div class="ui top attached segment">';
+        $output .= '<div class="ui top attached label">Stack Trace</div>';
+        $output .= '<table class="ui very compact small selectable table">';
+        $output .= '<thead><tr><th>File</th><th>Object</th><th>Method</th></tr></thead><tbody>';
+
+        $in_atk = true;
+        $escape_frame = false;
+
+        foreach ($this->getTrace() as $i => $call) {
+            if (!isset($call['file'])) {
+                $call['file'] = '';
+            } elseif (
+                $in_atk &&
+                strpos($call['file'], '/data/src/') === false &&
+                strpos($call['file'], '/core/src/') === false &&
+                strpos($call['file'], '/dsql/src/') === false
+            ) {
+                $escape_frame = true;
+                $in_atk = false;
+            }
+
+            $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
+
+            $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
+
+            if($escape_frame) {
+                $output .= "<tr class='negative'><td>".$file;
+            }else {
+                $output .= "<tr><td>".$file;
+            }
+            $output .= ":".$line."</td><td>";
+
+            if (isset($call['object'])) {
+                $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
+                $output .= $name;
+            } else {
+                $output .= '-';
+            }
+
+            $output .= "</td><td>";
+
+            if (isset($call['class'])) {
+                $output .= $call['class'].'::';
+            }
+
+            if ($escape_frame) {
+                $output .= $call['function'];
+                $escape_frame = false;
+
+                $args = [];
+                foreach ($call['args'] as $arg) {
+                    $args[] = $this->toString($arg);
+                }
+
+                $output .= "</td></tr><tr class='negative'><td colspan=2></td><td> (".str_repeat(' ', 20).implode(', ', $args).')';
+            } else {
+                $output .= $call['function'].'()';
+            }
+
+            $output .= '</td></tr>';
+        }
+
+        $output .= '</tbody></table>';
+        $output .= '</div>';
+
+
+        if ($p = $this->getPrevious()) {
+            $output .= '<div class="ui top attached segment">';
+            $output .= '<div class="ui top attached label">Caused by Previous Exception:</div>';
+
+            if ($p instanceof \atk4\core\Exception) {
+                $output .= $p->getHTML();
+            } else {
+                //$output .= "\033[1;31m".get_class($p).': '.$p->getMessage()."\033[0;31m".
+                //($p->getCode() ? ' [code: '.$p->getCode().']' : '');
+
+                $output .= '<div class="ui negative icon message"><i class="warning sign icon"></i><div class="content"><div class="header">Fatal Error</div>';
+                $output .= get_class($p).": ".$p->getMessage().
+                    ($p->getCode() ? ' <div class="ui small yellow label">Code<div class="detail">'.$p->getCode().'</div></div>' : '');
+                $output .= '</div>'; // content
+                $output .= '</div>';
+            }
+
+            $output .= '</div>';
+        }
+
+        return $output;
+    }
+
+    /**
      * Safely converts some value to string.
      *
      * @param mixed $val
