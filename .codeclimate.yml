@@ -39,7 +39,9 @@ engines:
         enabled: false
       CleanCode/ElseExpression:
         enabled: false
-      Design/LongMethod: # sometimes we have longer methods than 100 rows - that is OK
+      Design/LongMethod:         # sometimes we have longer methods than 100 rows
+        enabled: false
+      ControversialSuperglobals: # we use $_SESSION superglobal
         enabled: false
   radon:
     enabled: true
