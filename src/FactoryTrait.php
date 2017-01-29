@@ -15,8 +15,8 @@ trait FactoryTrait
      * Creates and returns new object.
      * If object is passed as $object parameter, then same object is returned.
      *
-     * @param object|string $object
-     * @param array         $defaults
+     * @param mixed $object
+     * @param array $defaults
      *
      * @return object
      */
@@ -34,12 +34,12 @@ trait FactoryTrait
                     'defaults' => $defaults,
                 ]);
             }
-            $tmp = $object[0];
+            $class = $object[0];
             unset($object[0]);
 
-            $defaults = array_merge($object, $defaults);
-            $object = $tmp;
+            return $this->factory($class, array_merge($object, $defaults));
         }
+        
         if (!is_string($object)) {
             throw new Exception([
                 'Factory needs object or string',
