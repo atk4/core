@@ -30,7 +30,7 @@ trait TrackableTrait
      *
      * @var string
      */
-    public $short_name;
+    public $short_name = null;
 
     /**
      * If name of the object is ommitted then it's naturally to name them

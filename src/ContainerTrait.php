@@ -50,8 +50,8 @@ trait ContainerTrait
      * initializer then redefine add() and call
      * _add_Container, _add_Factory,.
      *
-     * @param object|string $obj
-     * @param array|string  $args
+     * @param mixed        $obj
+     * @param array|string $args
      *
      * @return object
      */
@@ -59,7 +59,7 @@ trait ContainerTrait
     {
         if (isset($this->_factoryTrait)) {
             // Factory allows us to pass string-type objects
-            $obj = $this->factory($this->normalizeClassName($obj), $args);
+            $obj = $this->factory($obj, $args);
         }
         $obj = $this->_add_Container($obj, $args);
 
@@ -107,6 +107,11 @@ trait ContainerTrait
             $args = [$args];
         } elseif (!is_array($args)) {
             throw new Exception(['Second argument must be array', 'arg2' => $args]);
+        } elseif (isset($args['desired_name'])) {
+
+            // passed as ['desired_name'=>'foo'];
+            $args[0] = $this->_unique_element($args['desired_name']);
+            unset($args['desired_name']);
         } elseif (isset($args['name'])) {
 
             // passed as ['name'=>'foo'];
@@ -115,7 +120,7 @@ trait ContainerTrait
         } elseif (isset($element->short_name)) {
 
             // element has a name already
-            $args[0] = $element->short_name;
+            $args[0] = $this->_unique_element($element->short_name);
         } else {
 
             // ask element on his preferred name, then make it unique.
