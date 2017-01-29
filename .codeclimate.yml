@@ -39,7 +39,8 @@ engines:
         enabled: false
       CleanCode/ElseExpression:
         enabled: false
-
+      Design/LongMethod: # sometimes we have longer methods than 100 rows - that is OK
+        enabled: false
   radon:
     enabled: true
 ratings:
