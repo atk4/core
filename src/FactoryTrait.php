@@ -15,8 +15,8 @@ trait FactoryTrait
      * Creates and returns new object.
      * If object is passed as $object parameter, then same object is returned.
      *
-     * @param object|string $object
-     * @param array         $defaults
+     * @param mixed $object
+     * @param array $defaults
      *
      * @return object
      */
@@ -29,17 +29,17 @@ trait FactoryTrait
         if (is_array($object)) {
             if (!isset($object[0])) {
                 throw new Exception([
-                    'Object factory definition must use ["class name", "x"=>"y"] form',
+                    'Object factory definition must use ["class name or object", "x"=>"y"] form',
                     'object'   => $object,
                     'defaults' => $defaults,
                 ]);
             }
-            $tmp = $object[0];
+            $class = $object[0];
             unset($object[0]);
 
-            $defaults = array_merge($object, $defaults);
-            $object = $tmp;
+            return $this->factory($class, array_merge($object, $defaults));
         }
+
         if (!is_string($object)) {
             throw new Exception([
                 'Factory needs object or string',
@@ -47,6 +47,8 @@ trait FactoryTrait
                 'defaults' => $defaults,
             ]);
         }
+
+        $object = $this->normalizeClassName($object);
 
         return new $object($defaults);
     }
@@ -60,8 +62,8 @@ trait FactoryTrait
      *
      * Example: normalizeClassName('User','Model') == 'Model_User';
      *
-     * @param string|object $name   Name of class or object
-     * @param string        $prefix Optional prefix for class name
+     * @param mixed  $name   Name of class or object
+     * @param string $prefix Optional prefix for class name
      *
      * @return string|object Full, normalized class name or received object
      */
@@ -73,18 +75,16 @@ trait FactoryTrait
             return $name;
         }
 
-        if (!is_string($name)) {
-            return $name;
+        if (
+            is_string($name)
+            && isset($this->_appScopeTrait, $this->app)
+            && method_exists($this->app, 'normalizeClassName')
+        ) {
+            $name = $this->app->normalizeClassName($name, $prefix);
         }
 
-        if (isset($this->_appScopeTrait) && $this->app) {
-            if (method_exists($this->app, 'normalizeClassName')) {
-                $name = $this->app->normalizeClassName($name, $prefix);
-            }
-
-            if (!is_string($name)) {
-                return $name;
-            }
+        if (!is_string($name)) {
+            return $name;
         }
 
         $name = str_replace('/', '\\', $name);
