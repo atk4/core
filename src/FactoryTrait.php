@@ -39,7 +39,7 @@ trait FactoryTrait
 
             return $this->factory($class, array_merge($object, $defaults));
         }
-        
+
         if (!is_string($object)) {
             throw new Exception([
                 'Factory needs object or string',
