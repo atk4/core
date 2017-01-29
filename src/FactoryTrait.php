@@ -29,7 +29,7 @@ trait FactoryTrait
         if (is_array($object)) {
             if (!isset($object[0])) {
                 throw new Exception([
-                    'Object factory definition must use ["class name", "x"=>"y"] form',
+                    'Object factory definition must use ["class name or object", "x"=>"y"] form',
                     'object'   => $object,
                     'defaults' => $defaults,
                 ]);
@@ -60,8 +60,8 @@ trait FactoryTrait
      *
      * Example: normalizeClassName('User','Model') == 'Model_User';
      *
-     * @param string|object $name   Name of class or object
-     * @param string        $prefix Optional prefix for class name
+     * @param mixed  $name   Name of class or object
+     * @param string $prefix Optional prefix for class name
      *
      * @return string|object Full, normalized class name or received object
      */
@@ -73,18 +73,16 @@ trait FactoryTrait
             return $name;
         }
 
-        if (!is_string($name)) {
-            return $name;
+        if (
+            is_string($name)
+            && isset($this->_appScopeTrait, $this->app)
+            && method_exists($this->app, 'normalizeClassName')
+        ) {
+            $name = $this->app->normalizeClassName($name, $prefix);
         }
 
-        if (isset($this->_appScopeTrait) && $this->app) {
-            if (method_exists($this->app, 'normalizeClassName')) {
-                $name = $this->app->normalizeClassName($name, $prefix);
-            }
-
-            if (!is_string($name)) {
-                return $name;
-            }
+        if (!is_string($name)) {
+            return $name;
         }
 
         $name = str_replace('/', '\\', $name);
