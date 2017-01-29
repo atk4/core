@@ -50,8 +50,8 @@ trait ContainerTrait
      * initializer then redefine add() and call
      * _add_Container, _add_Factory,.
      *
-     * @param object|string $obj
-     * @param array|string  $args
+     * @param mixed        $obj
+     * @param array|string $args
      *
      * @return object
      */
@@ -59,7 +59,7 @@ trait ContainerTrait
     {
         if (isset($this->_factoryTrait)) {
             // Factory allows us to pass string-type objects
-            $obj = $this->factory($this->normalizeClassName($obj), $args);
+            $obj = $this->factory($obj, $args);
         }
         $obj = $this->_add_Container($obj, $args);
 
