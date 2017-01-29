@@ -48,6 +48,8 @@ trait FactoryTrait
             ]);
         }
 
+        $object = $this->normalizeClassName($object);
+        
         return new $object($defaults);
     }
 
