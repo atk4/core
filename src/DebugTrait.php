@@ -11,8 +11,14 @@ trait DebugTrait
      */
     public $_debugTrait = true;
 
+    /** @var bool Is debug enabled? */
     public $debug = null;
 
+    /**
+     * Returns true if debug mode is enabled.
+     *
+     * @return bool
+     */
     protected function isDebugEnabled()
     {
         if ($this->debug === false || $this->debug === true) {
@@ -25,7 +31,8 @@ trait DebugTrait
     /**
      * Send some info to debug stream.
      *
-     * @param bool $enable
+     * @param bool  $msg
+     * @param array $extra_info
      *
      * @return $this
      */
@@ -40,8 +47,11 @@ trait DebugTrait
 
         if ($this->isDebugEnabled()) {
             if (
-                isset($this->app) && ((isset($this->app->_dynamicMethodTrait) && $this->app->hasMethod('outputDebug')) ||
-                method_exists($this->app, 'outputDebug'))
+                isset($this->app)
+                && (
+                    (isset($this->app->_dynamicMethodTrait) && $this->app->hasMethod('outputDebug'))
+                    || method_exists($this->app, 'outputDebug')
+                )
             ) {
                 $this->app->outputDebug($msg, $extra_info);
             } else {

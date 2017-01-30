@@ -76,7 +76,7 @@ class Exception extends \Exception
         $in_atk = true;
         $escape_frame = false;
 
-        foreach ($this->getTrace() as $i => $call) {
+        foreach ($this->getTrace() as $call) {
             if (!isset($call['file'])) {
                 $call['file'] = '';
             } elseif (
@@ -179,7 +179,7 @@ class Exception extends \Exception
         $in_atk = true;
         $escape_frame = false;
 
-        foreach ($this->getTrace() as $i => $call) {
+        foreach ($this->getTrace() as $call) {
             if (!isset($call['file'])) {
                 $call['file'] = '';
             } elseif (
