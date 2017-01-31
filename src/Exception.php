@@ -164,7 +164,7 @@ class Exception extends \Exception
 
             foreach ($this->params as $key => $val) {
                 $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
-                $output .= '<li><b>'.$key.'</b>: '.$this->toString($val).'</li>';
+                $output .= '<li><b>'.htmlentities($key).'</b>: '.htmlentities($this->toString($val)).'</li>';
             }
 
             $output .= '</ul>';
