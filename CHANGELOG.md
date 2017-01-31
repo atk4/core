@@ -1,12 +1,20 @@
 ## 1.1.8
 
+ - Added Exception::getHTML(), similar to getColofulException but for
+   HTML output
+ - Improved handling of unique elements with "desired_name" property
+ - Will route 'normalizeClassName' to your application now
+ - Various type-hinting improvements and making IDEs happier
+
+## 1.1.8
+
 Fixed minor bug, for objects that have no elements at all
 
 ## 1.1.7
 
-Added some support files for Psysh (e command) #29
-Improve debug backtrace by including object references #28
-implement addMoreInfo for exceptions #27
+ - Added some support files for Psysh (e command) #29
+ - Improve debug backtrace by including object references #28
+ - implement addMoreInfo for exceptions #27
 
 ## 1.1.6
 
