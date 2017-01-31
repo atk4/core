@@ -30,7 +30,7 @@ trait TrackableTrait
      *
      * @var string
      */
-    public $short_name;
+    public $short_name = null;
 
     /**
      * If name of the object is ommitted then it's naturally to name them
@@ -40,7 +40,7 @@ trait TrackableTrait
      */
     public function getDesiredName()
     {
-        return str_replace('\\', '_', strtolower(get_class($this)));
+        return preg_replace('/.*\\\\/', '', strtolower(get_class($this)));
     }
 
     /**

@@ -69,13 +69,37 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Object factory definition must use ["class name", "x"=>"y"] form.
+     *
      * @expectedException     Exception
      */
     public function testException1()
     {
         // wrong 1st parameter
         $m = new FactoryMock();
-        $m->factory(['wrong_parameter']);
+        $m->factory(['wrong_parameter' => 'qwerty']);
+    }
+
+    /**
+     * Test factory parameters.
+     */
+    public function testParameters()
+    {
+        $m = new FactoryMock();
+
+        // as class name
+        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
+
+        $m1 = $m->factory(['atk4\core\tests\FactoryMock']);
+        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
+
+        // as object
+        $m2 = $m->factory($m1);
+        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m2));
+
+        $m2 = $m->factory([$m1]);
+        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m2));
     }
 }
 

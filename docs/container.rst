@@ -206,6 +206,10 @@ Methods
     Normally object will try to be named after it's class, if the name is omitted.
     You can override this method to implement a different mechanics.
 
+    If you pass 'desired_name'=>'heh' to a constructor, then it will affect the
+    preferred name returned by this method. Unlike 'name'=>'heh' it won't fail
+    if another element with this name exists, but will add '_2' postfix.
+
 .. php:meth:: destroy
 
     If object owner is set, then this will remove object from it's owner elements

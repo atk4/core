@@ -32,3 +32,15 @@ Methods
     If object is passed as $name parameter, then same object is returned.
     
     Example:: normalizeClassName('User','Model') == 'Model_User';
+
+    If object also has an "AppScopeTrait" and if your application object contains
+    a method 'normalizeClassName' then we will execute that. A typical use would 
+    be if your application defines various routes how to route strings into
+    class names permitting this syntax::
+
+        $obj = $this->add('MyClass');
+
+
+    Application's normalizeClassName can prepend namespace which will then be
+    passed into factory() method for instatination.
+
