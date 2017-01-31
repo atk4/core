@@ -69,5 +69,12 @@ for user to see. This will include the error, params and backtrace. The
 code will also make an attempt to locate and highlight the code that have
 caused the problem.
 
+.. php:method:: getColorfulText()
+
+Will return nice HTML-formatted exception that will rely on a presence of
+Semantic UI. This will include the error, params and backtrace. The
+code will also make an attempt to locate and highlight the code that have
+caused the problem.
+
 .. image:: exception-demo.png
 
