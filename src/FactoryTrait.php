@@ -78,9 +78,9 @@ trait FactoryTrait
         if (
             is_string($name)
             && isset($this->_appScopeTrait, $this->app)
-            && method_exists($this->app, 'normalizeClassName')
+            && method_exists($this->app, 'normalizeClassNameApp')
         ) {
-            $name = $this->app->normalizeClassName($name, $prefix);
+            $name = $this->app->normalizeClassNameApp($name, $prefix);
         }
 
         if (!is_string($name)) {
