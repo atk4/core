@@ -1,3 +1,8 @@
+## 1.1.10
+
+ - prevent looping by calling normalizeClass in the API that may also
+   implement factory trait and cause a loop
+
 ## 1.1.8
 
  - Added Exception::getHTML(), similar to getColofulException but for
