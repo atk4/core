@@ -46,12 +46,16 @@ Since the exception is backwards compatible, it will contain message, code
 and previous exception as any normal PHP excetpion would, but to get the
 parameters you would need to use:
 
-
 .. php:method:: getParams()
 
     Return array that lists all params collected by exception.
 
 Some param values may be objects.
+
+.. php:method:: setMessage($message)
+
+    Change message (subject) of a current exception. Primary use is for
+localization purposes.
 
 
 Output Formatting
