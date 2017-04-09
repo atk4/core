@@ -18,6 +18,7 @@ class Exception extends \Exception
      */
     private $params = [];
 
+    /** @var array */
     public $trace2; // because PHP's use of final() sucks!
 
     /**
@@ -45,6 +46,10 @@ class Exception extends \Exception
     /**
      * Change message (subject) of a current exception. Primary use is
      * for localization purposes.
+     *
+     * @param string $message
+     *
+     * @return $this
      */
     public function setMessage($message)
     {
@@ -53,6 +58,11 @@ class Exception extends \Exception
         return $this;
     }
 
+    /**
+     * Return trace array.
+     *
+     * @return array
+     */
     public function getMyTrace()
     {
         return $this->trace2;
