@@ -42,6 +42,16 @@ class Exception extends \Exception
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
     }
 
+    /**
+     * Change message (subject) of a current exception. Primary use is
+     * for localization purposes.
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+        return $this;
+    }
+
     public function getMyTrace()
     {
         return $this->trace2;
