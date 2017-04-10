@@ -1,3 +1,10 @@
+## 1.1.12
+
+ - $exception->setMessage() is now possible. Can be useful to alter error message when we re-throwing it or for localization.
+ - factory($object, $defaults) now works consistently with factory($string, $defaults)
+ - adding some object into multiple containers won't execute init() again.
+ - added release script
+
 ## 1.1.11
 
 - Display object with the exception dump. #38 

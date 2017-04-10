@@ -23,6 +23,10 @@ trait FactoryTrait
     public function factory($object, $defaults = [])
     {
         if (is_object($object)) {
+            foreach ($defaults as $key=>$value) {
+                $object->$key = $value;
+            }
+
             return $object;
         }
 
