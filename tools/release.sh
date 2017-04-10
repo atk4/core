@@ -25,4 +25,4 @@ git log --pretty=full $prev_version... | grep '#[0-9]*' | sed 's/#\([0-9]*\)/\1/
     ghi --color show $i | head -50
 done 
 
-open "https://github.com/atk4/data/compare/$prev_version...develop"
+open "https://github.com/atk4/core/compare/$prev_version...develop"
