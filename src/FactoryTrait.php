@@ -22,9 +22,34 @@ trait FactoryTrait
      */
     public function factory($object, $defaults = [])
     {
+        if ($defaults === null) {
+            $defaults = [];
+        }
+
         if (is_object($object)) {
-            foreach ($defaults as $key=>$value) {
-                $object->$key = $value;
+
+            // If some defaults are passed, set them up
+            if (is_array($defaults)) {
+                foreach ($defaults as $key=>$value) {
+                    if ($value === null) {
+                        continue;
+                    }
+
+                    if ($key === 'desired_name') {
+                        continue;
+                    }
+
+                    if (!property_exists($object, $key)) {
+                        throw new Exception(['Property does not exist', 'object'=>$object, 'proprety'=>$key]);
+                    }
+
+                    if (is_array($object->$key) && is_array($value)) {
+                        $object->$key = array_merge($object->$key, $value);
+                        continue;
+                    }
+
+                    $object->$key = $value;
+                }
             }
 
             return $object;
@@ -46,7 +71,7 @@ trait FactoryTrait
 
         if (!is_string($object)) {
             throw new Exception([
-                'Factory needs object or string',
+                'Factory arguments are incorrect',
                 'object'   => $object,
                 'defaults' => $defaults,
             ]);
