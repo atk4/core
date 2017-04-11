@@ -100,33 +100,33 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 
         $m2 = $m->factory([$m1]);
         $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m2));
-        
+
         // as class name with parameters
-        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>'XXX','b'=>'YYY']);
+        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>'XXX', 'b'=>'YYY']);
         $this->assertEquals('XXX', $m1->a);
         $this->assertEquals('YYY', $m1->b);
         $this->assertEquals(null, $m1->c);
-        
-        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>null,'b'=>'YYY','c'=>'ZZZ']);
+
+        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>null, 'b'=>'YYY', 'c'=>'ZZZ']);
         $this->assertEquals('AAA', $m1->a);
         $this->assertEquals('YYY', $m1->b);
         $this->assertEquals('ZZZ', $m1->c);
 
         // as object with parameters
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
-        $m2 = $m->factory($m1, ['a'=>'XXX','b'=>'YYY']);
+        $m2 = $m->factory($m1, ['a'=>'XXX', 'b'=>'YYY']);
         $this->assertEquals('XXX', $m2->a);
         $this->assertEquals('YYY', $m2->b);
         $this->assertEquals(null, $m2->c);
-        
+
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
-        $m2 = $m->factory($m1, ['a'=>null,'b'=>'YYY','c'=>'ZZZ']);
+        $m2 = $m->factory($m1, ['a'=>null, 'b'=>'YYY', 'c'=>'ZZZ']);
         $this->assertEquals('AAA', $m2->a);
         $this->assertEquals('YYY', $m2->b);
         $this->assertEquals('ZZZ', $m2->c);
 
         $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>null, 'b'=>'YYY', 'c'=>'SSS']);
-        $m2 = $m->factory($m1, ['a'=>'XXX','b'=>null,'c'=>'ZZZ']);
+        $m2 = $m->factory($m1, ['a'=>'XXX', 'b'=>null, 'c'=>'ZZZ']);
         $this->assertEquals('XXX', $m2->a);
         $this->assertEquals('YYY', $m2->b);
         $this->assertEquals('ZZZ', $m2->c);
@@ -164,7 +164,7 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 class FactoryMock
 {
     use FactoryTrait;
-    
+
     public $a = 'AAA';
     public $b = 'BBB';
     public $c;
