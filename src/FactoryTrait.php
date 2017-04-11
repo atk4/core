@@ -65,7 +65,7 @@ trait FactoryTrait
 
         $object = $this->normalizeClassName($object);
 
-        return new $object($defaults);
+        return $this->factory(new $object(), $defaults);
     }
 
     /**
