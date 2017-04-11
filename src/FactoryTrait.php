@@ -24,7 +24,9 @@ trait FactoryTrait
     {
         if (is_object($object)) {
             foreach ($defaults as $key=>$value) {
-                $object->$key = $value;
+                if ($value !== null) {
+                    $object->$key = $value;
+                }
             }
 
             return $object;
