@@ -24,6 +24,15 @@ trait FactoryTrait
     {
         if (is_object($object)) {
             foreach ($defaults as $key=>$value) {
+                if (!is_numeric($key) && !property_exists($object, $key)) {
+                    throw new Exception([
+                        'Object does not have property defined',
+                        'object'   => $object,
+                        'defaults' => $defaults,
+                        'property' => $key,
+                    ]);
+                }
+
                 if ($value !== null) {
                     $object->$key = $value;
                 }
