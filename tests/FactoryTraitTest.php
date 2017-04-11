@@ -100,6 +100,63 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 
         $m2 = $m->factory([$m1]);
         $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m2));
+        
+        // as class name with parameters
+        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>'XXX','b'=>'YYY']);
+        $this->assertEquals('XXX', $m1->a);
+        $this->assertEquals('YYY', $m1->b);
+        $this->assertEquals(null, $m1->c);
+        
+        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>null,'b'=>'YYY','c'=>'ZZZ']);
+        $this->assertEquals('AAA', $m1->a);
+        $this->assertEquals('YYY', $m1->b);
+        $this->assertEquals('ZZZ', $m1->c);
+
+        // as object with parameters
+        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        $m2 = $m->factory($m1, ['a'=>'XXX','b'=>'YYY']);
+        $this->assertEquals('XXX', $m2->a);
+        $this->assertEquals('YYY', $m2->b);
+        $this->assertEquals(null, $m2->c);
+        
+        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        $m2 = $m->factory($m1, ['a'=>null,'b'=>'YYY','c'=>'ZZZ']);
+        $this->assertEquals('AAA', $m2->a);
+        $this->assertEquals('YYY', $m2->b);
+        $this->assertEquals('ZZZ', $m2->c);
+
+        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['a'=>null, 'b'=>'YYY', 'c'=>'SSS']);
+        $m2 = $m->factory($m1, ['a'=>'XXX','b'=>null,'c'=>'ZZZ']);
+        $this->assertEquals('XXX', $m2->a);
+        $this->assertEquals('YYY', $m2->b);
+        $this->assertEquals('ZZZ', $m2->c);
+    }
+
+    /**
+     * Object factory can not add not defined properties.
+     * Receive as class name.
+     *
+     * @expectedException     Exception
+     */
+    public function testParametersException1()
+    {
+        // wrong property in 2nd parameter
+        $m = new FactoryMock();
+        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['not_exist'=>'test']);
+    }
+
+    /**
+     * Object factory can not add not defined properties.
+     * Receive as object.
+     *
+     * @expectedException     Exception
+     */
+    public function testParametersException2()
+    {
+        // wrong property in 2nd parameter
+        $m = new FactoryMock();
+        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        $m2 = $m->factory($m1, ['not_exist'=>'test']);
     }
 }
 
@@ -107,5 +164,9 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 class FactoryMock
 {
     use FactoryTrait;
+    
+    public $a = 'AAA';
+    public $b = 'BBB';
+    public $c;
 }
 // @codingStandardsIgnoreEnd
