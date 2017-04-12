@@ -1,3 +1,7 @@
+## 1.2.1
+
+Remove exception for undefined property defaults, see #46
+
 ## 1.2.0
 
 This release becomes more strict about undefined properties and what you pass as a second argument
