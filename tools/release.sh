@@ -58,7 +58,7 @@ read junk
 git commit -m "Added release notes for $version" CHANGELOG.md || echo "but its ok"
 merge_tag=$(git rev-parse HEAD)
 
-git commit -m "Set up stable dependencies for $version" composer.json
+git commit -m "Set up stable dependencies for $version" composer.json || echo "which is fine"
 
 git tag $version
 git push origin release/$version

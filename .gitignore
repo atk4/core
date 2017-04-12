@@ -1,4 +1,5 @@
 docs/build
 /build
 /vendor
+/composer.lock
 .DS_Store
