@@ -15,3 +15,4 @@ Contents:
     dynamicmethod
     hook
     appscope
+    di
