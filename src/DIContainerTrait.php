@@ -71,7 +71,7 @@ trait DIContainerTrait
      * @param mixed $value
      * @param bool  $strict
      */
-    public function setMissingProperty($key, $value, $strict = false)
+    protected function setMissingProperty($key, $value, $strict = false)
     {
         if ($strict) {
             throw new Exception([
