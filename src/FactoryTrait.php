@@ -28,26 +28,11 @@ trait FactoryTrait
 
         if (is_object($object)) {
 
-            // If some defaults are passed, set them up
-            if (is_array($defaults)) {
-                foreach ($defaults as $key=>$value) {
-                    if ($value === null) {
-                        continue;
-                    }
 
-                    if (!property_exists($object, $key)) {
-                        continue;
-                        // silently ignore unsupported defaults
-                        // throw new Exception(['Property does not exist', 'object'=>$object, 'property'=>$key]);
-                    }
-
-                    if (is_array($object->$key) && is_array($value)) {
-                        $object->$key = array_merge($object->$key, $value);
-                        continue;
-                    }
-
-                    $object->$key = $value;
-                }
+            // If object implements DIContainerTrait we can inject some
+            // of the properties without causing harm
+            if (is_array($defaults) && isset($object->_DIContainerTrait)) {
+                $object->setProperties($defaults);
             }
 
             return $object;
