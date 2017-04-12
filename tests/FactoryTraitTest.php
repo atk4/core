@@ -136,7 +136,7 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
      * Object factory can not add not defined properties.
      * Receive as class name.
      *
-     * @expectedException     Exception
+     * IMPORANT: this no longer throws exception, see https://github.com/atk4/core/issues/46
      */
     public function testParametersException1()
     {
@@ -149,7 +149,7 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
      * Object factory can not add not defined properties.
      * Receive as object.
      *
-     * @expectedException     Exception
+     * IMPORANT: this no longer throws exception, see https://github.com/atk4/core/issues/46
      */
     public function testParametersException2()
     {
