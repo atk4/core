@@ -1,3 +1,7 @@
+## 1.1.13
+
+ - Clean up and enhance usage of factory methods
+
 ## 1.1.12
 
  - $exception->setMessage() is now possible. Can be useful to alter error message when we re-throwing it or for localization.
