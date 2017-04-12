@@ -40,7 +40,7 @@ trait FactoryTrait
                     }
 
                     if (!property_exists($object, $key)) {
-                        throw new Exception(['Property does not exist', 'object'=>$object, 'proprety'=>$key]);
+                        throw new Exception(['Property does not exist', 'object'=>$object, 'property'=>$key]);
                     }
 
                     if (is_array($object->$key) && is_array($value)) {
