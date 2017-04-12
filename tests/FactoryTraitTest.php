@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\FactoryTrait;
 use atk4\core\DIContainerTrait;
+use atk4\core\FactoryTrait;
 
 /**
  * @coversDefaultClass \atk4\core\FactoryTrait

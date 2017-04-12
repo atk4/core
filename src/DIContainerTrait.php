@@ -4,7 +4,7 @@ namespace atk4\core;
 
 /**
  * A class with this trait will have setProperties() method that can
- * be passed list of default properties. 
+ * be passed list of default properties.
  *
  * $view->setProperties(['ui' => 'segment']);
  *
@@ -39,14 +39,13 @@ trait DIContainerTrait
 
     /**
      * Call from __construct() to initialize the properties allowing
-     * developer to pass Dependency Inector Container
+     * developer to pass Dependency Inector Container.
      *
      * @param array $properties
-     * @param boolean $stric - should we raise exceptions?
+     * @param bool  $stric      - should we raise exceptions?
      */
     public function setProperties($properties = [], $strict = false)
     {
-
         if ($properties === null) {
             $properties = [];
         }
@@ -68,10 +67,10 @@ trait DIContainerTrait
     {
         if ($strict) {
             throw new Exception([
-                'Property for specified default is not defined', 
-                'object'=>$this, 
-                'property'=>$key,
-                'value'=>$value
+                'Property for specified default is not defined',
+                'object'  => $this,
+                'property'=> $key,
+                'value'   => $value,
             ]);
         }
     }

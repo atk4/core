@@ -28,7 +28,6 @@ trait FactoryTrait
 
         if (is_object($object)) {
 
-
             // If object implements DIContainerTrait we can inject some
             // of the properties without causing harm
             if (is_array($defaults) && isset($object->_DIContainerTrait)) {
