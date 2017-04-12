@@ -81,7 +81,7 @@ trait DIContainerTrait
                 'value'   => $value,
             ]);
         }
-        
+
         $this->key = $value;
     }
 }
