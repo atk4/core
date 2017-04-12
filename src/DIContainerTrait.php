@@ -75,7 +75,7 @@ trait DIContainerTrait
     {
         if ($strict) {
             throw new Exception([
-                'Property for specified default is not defined',
+                'Property for specified object is not defined',
                 'object'  => $this,
                 'property'=> $key,
                 'value'   => $value,
