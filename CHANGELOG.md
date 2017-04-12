@@ -1,8 +1,7 @@
-## 1.1.13
+## 1.2.0
 
- - Clean up and enhance usage of factory methods
-
-## 1.1.12
+This release becomes more strict about undefined properties and what you pass as a second argument
+to the add methods. If you upgrade you might get some errors but those are easy to fix
 
  - $exception->setMessage() is now possible. Can be useful to alter error message when we re-throwing it or for localization.
  - factory($object, $defaults) now works consistently with factory($string, $defaults)
