@@ -35,12 +35,10 @@ trait FactoryTrait
                         continue;
                     }
 
-                    if ($key === 'desired_name') {
-                        continue;
-                    }
-
                     if (!property_exists($object, $key)) {
-                        throw new Exception(['Property does not exist', 'object'=>$object, 'property'=>$key]);
+                        continue;
+                        // silently ignore unsupported defaults
+                        // throw new Exception(['Property does not exist', 'object'=>$object, 'property'=>$key]);
                     }
 
                     if (is_array($object->$key) && is_array($value)) {
