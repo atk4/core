@@ -1,3 +1,7 @@
+## 1.2.2
+
+Added DIContainerTrait and documented
+
 ## 1.2.1
 
 Remove exception for undefined property defaults, see #46
