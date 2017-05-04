@@ -64,7 +64,9 @@ trait ContainerTrait
         $obj = $this->_add_Container($obj, $args);
 
         if (isset($obj->_initializerTrait)) {
-            $obj->init();
+            if (!$obj->_initialized) {
+                $obj->init();
+            }
             if (!$obj->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
