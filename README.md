@@ -30,9 +30,6 @@ http://agile-core.readthedocs.io/
 
 ## Community and Support
 
-Resources and Community:
-
-[![Documentation Status](https://readthedocs.org/projects/agile-core/badge/?version=develop)](http://agile-core.readthedocs.io/en/develop/?badge=develop)
 [![Gitter](https://img.shields.io/gitter/room/atk4/data.svg?maxAge=2592000)](https://gitter.im/atk4/dataset?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Stack Overlfow Community](https://img.shields.io/stackexchange/stackoverflow/t/atk4.svg?maxAge=2592000)](http://stackoverflow.com/questions/ask?tags=atk4)
 [![Discord User forum](https://img.shields.io/badge/discord-User_Forum-green.svg)](https://forum.agiletoolkit.org/c/44)
