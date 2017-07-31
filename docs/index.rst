@@ -7,6 +7,11 @@ Agile Core is a collection of PHP Traits for designing object-oriented framework
 The main purpose for this project is to work as a foundation for [Agile UI](https://github.com/atk4/ui) and [Agile Data](https://github.com/atk4/data),
 but you are welcome to use some or all traits elsewhere.
 
+.. toctree::
+   :hidden:
+
+   self
+
 Object Containers
 =================
 

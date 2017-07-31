@@ -1,6 +1,6 @@
-==========================
-Run-Time Tree (Containers)
-==========================
+==========
+Containers
+==========
 
 There are two relevant traits in the Container mechanics. Your "container"
 object should implement :php:trait:`ContainerTrait` and your child objects
