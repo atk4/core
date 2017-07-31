@@ -56,21 +56,21 @@ Methods
     If you wish to use traits class and extend it, you can use this in your
     base class::
 
-    class FormField {
-        use AppScopeTrait;
-        use TrackableTrait;
-        use InitializerTrait {
-            init as _init
-        }
+        class FormField {
+            use AppScopeTrait;
+            use TrackableTrait;
+            use InitializerTrait {
+                init as _init
+            }
 
-        public $value = null;
+            public $value = null;
 
-        function init() {
-            $this->_init();   // call init of InitializerTrait
+            function init() {
+                $this->_init();   // call init of InitializerTrait
 
-            if($_POST[$this->name) {
-                $this->value = $_POST[$this->name];
+                if($_POST[$this->name) {
+                    $this->value = $_POST[$this->name];
+                }
             }
         }
-    }
 

@@ -55,7 +55,7 @@ Some param values may be objects.
 .. php:method:: setMessage($message)
 
     Change message (subject) of a current exception. Primary use is for
-localization purposes.
+    localization purposes.
 
 
 Output Formatting

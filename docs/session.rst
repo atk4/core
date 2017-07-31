@@ -22,26 +22,26 @@ Properties
 Methods
 =======
 
-.. php:meth:: startSession($options = [])
+.. php:method:: startSession($options = [])
 
     Create new session.
 
-.. php:meth:: destroySession()
+.. php:method:: destroySession()
 
     Destroy existing session.
 
-.. php:meth:: memorize($key, $value)
+.. php:method:: memorize($key, $value)
 
     Remember data in object-relevant session data.
 
-.. php:meth:: learn($key, $default = null)
+.. php:method:: learn($key, $default = null)
 
     Similar to memorize, but if value for key exist, will return it.
 
-.. php:meth:: recall($key, $default = null)
+.. php:method:: recall($key, $default = null)
 
     Returns session data for this object. If not previously set, then $default is returned.
 
-.. php:meth:: forget($key = null)
+.. php:method:: forget($key = null)
 
     Forget session data for arg $key. If $key is omitted will forget all associated session data.

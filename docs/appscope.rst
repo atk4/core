@@ -12,7 +12,7 @@ relies on "static" properties, methods and classes. This does puts some
 limitations on your implementation (you can't have multiple applications).
 
 App Scope will pass the 'app' property into all the object that you're
-adding, so that you know for sure which application you work with::
+adding, so that you know for sure which application you work with.
 
 Properties
 ==========

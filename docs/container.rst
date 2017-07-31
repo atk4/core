@@ -107,13 +107,13 @@ Properties
 Methods
 -------
 
-.. php:meth:: add($obj, $args = [])
+.. php:method:: add($obj, $args = [])
 
     If you are using ContainerTrait only, then you can safely use this add()
     method. If you are also using factory, or initializer then redefine add()
     and call _add_Container, _add_Factory,.
 
-.. php:meth:: _addContainer($element, $args)
+.. php:method:: _addContainer($element, $args)
 
     Add element into container. Normally you should create a method
     add() inside your class that will execute this method. Because 
@@ -137,13 +137,13 @@ Methods
     Method will return the object. Will throw exception if child with same
     name already exist.
 
-.. php:meth:: removeElement($short_name)
+.. php:method:: removeElement($short_name)
 
     Will remove element from $elements. You can pass either short_name
     or the object itself. This will be called if :php:meth:`TrackableTrait::destroy`
     is called.
 
-.. php:meth:: _shorten($desired)
+.. php:method:: _shorten($desired)
 
     Given the desired $name, this method will attempt to shorten the length
     of your children. The reason for shortening a name is to impose reasonable
@@ -153,17 +153,17 @@ Methods
     This method will only be used if current object has :php:trait:`AppScope`,
     since the application is responsible for keeping shortenings.
 
-.. php:meth:: getElement($short_name)
+.. php:method:: getElement($short_name)
 
     Given a short-name of the element, will return the object. Throws exception
     if object with such short_name does not exist.
 
-.. php:meth:: hasElement($short_name)
+.. php:method:: hasElement($short_name)
 
     Given a short-name of the element, will return the object. If object with
     such short_name does not exist, will return false instead.
 
-.. php:meth:: _unique_element
+.. php:method:: _unique_element
 
     Internal method to create unique name for an element.
 
@@ -201,7 +201,7 @@ Properties
 Methods
 -------
 
-.. php:meth:: getDesiredName
+.. php:method:: getDesiredName
 
     Normally object will try to be named after it's class, if the name is omitted.
     You can override this method to implement a different mechanics.
@@ -210,7 +210,7 @@ Methods
     preferred name returned by this method. Unlike 'name'=>'heh' it won't fail
     if another element with this name exists, but will add '_2' postfix.
 
-.. php:meth:: destroy
+.. php:method:: destroy
 
     If object owner is set, then this will remove object from it's owner elements
     reducing number of links to the object. Normally PHP's garbage collector should

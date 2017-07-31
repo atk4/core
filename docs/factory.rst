@@ -18,12 +18,12 @@ Properties
 Methods
 =======
 
-.. php:meth:: factory($object, $defaults = [])
+.. php:method:: factory($object, $defaults = [])
 
     Creates and returns new object.
     If object is passed as $object parameter, then same object is returned.
 
-.. php:meth:: normalizeClassName($name, $prefix = null)
+.. php:method:: normalizeClassName($name, $prefix = null)
 
     First normalize class name, then add specified prefix to
     class name if it's passed and not already added.
