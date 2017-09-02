@@ -19,7 +19,7 @@ trait FactoryTrait
      * Argument $defaults has the same effect as the seed, but allows you to separate
      * out initialization for convenience, e.g. factory(['Button', 'label']); is same as
      * factory('Button', ['label']). Second argument may not affect the class, so it's
-     * safer. 
+     * safer.
      *
      * @param mixed $seed
      * @param array $defaults
@@ -47,11 +47,12 @@ trait FactoryTrait
         $arguments = array_merge($arguments1, $arguments2);
 
         $injection = array_filter(
-            array_merge($defaults, $seed), 
-            function($o) { return !is_numeric($o); }, 
+            array_merge($defaults, $seed),
+            function ($o) {
+                return !is_numeric($o);
+            },
             ARRAY_FILTER_USE_KEY
         );
-
 
         // If object is passed to us, we can ignore arguments, but we need to inject defaults
         if (is_object($object)) {
@@ -61,8 +62,8 @@ trait FactoryTrait
                 } else {
                     throw new Exception([
                         'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                        'object'=>$object,
-                        'injection'=>$injection
+                        'object'   => $object,
+                        'injection'=> $injection,
                     ]);
                 }
             }
@@ -70,13 +71,12 @@ trait FactoryTrait
             return $object;
         }
 
-
         $class = $this->normalizeClassName($object);
 
         if (!$class) {
             throw new Exception([
                 'Class name was not specified by the seed',
-                'seed'=>$seed
+                'seed'=> $seed,
             ]);
         }
 
@@ -88,10 +88,10 @@ trait FactoryTrait
             } else {
                 throw new Exception([
                     'factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait',
-                    'object'=>$object,
-                    'class'=>$class,
-                    'seed'=>$seed,
-                    'injection'=>$injection
+                    'object'   => $object,
+                    'class'    => $class,
+                    'seed'     => $seed,
+                    'injection'=> $injection,
                 ]);
             }
         }

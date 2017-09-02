@@ -64,7 +64,7 @@ trait DIContainerTrait
 
     /**
      * Sets object property.
-     * Throws exception
+     * Throws exception.
      *
      * @param mixed $key
      * @param mixed $value
