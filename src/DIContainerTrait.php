@@ -42,9 +42,8 @@ trait DIContainerTrait
      * developer to pass Dependency Injector Container.
      *
      * @param array $properties
-     * @param bool  $strict     - should we raise exceptions?
      */
-    public function setDefaults($properties = [], $strict = false)
+    public function setDefaults($properties = [])
     {
         if ($properties === null) {
             $properties = [];
@@ -58,30 +57,26 @@ trait DIContainerTrait
                     $this->$key = $val;
                 }
             } else {
-                $this->setMissingProperty($key, $val, $strict);
+                $this->setMissingProperty($key, $val);
             }
         }
     }
 
     /**
      * Sets object property.
-     * Throws exception if $strict.
+     * Throws exception
      *
      * @param mixed $key
      * @param mixed $value
      * @param bool  $strict
      */
-    protected function setMissingProperty($key, $value, $strict = false)
+    protected function setMissingProperty($key, $value)
     {
-        if ($strict) {
-            throw new Exception([
-                'Property for specified object is not defined',
-                'object'  => $this,
-                'property'=> $key,
-                'value'   => $value,
-            ]);
-        }
-
-        $this->key = $value;
+        throw new Exception([
+            'Property for specified object is not defined',
+            'object'  => $this,
+            'property'=> $key,
+            'value'   => $value,
+        ]);
     }
 }
