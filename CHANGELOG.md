@@ -1,3 +1,27 @@
+# 1.3
+
+This release refactors factory() to use a more predictable and consistent form:
+
+Previously:
+
+
+``` php
+$app->add(['Button', 'this is label']); 
+```
+
+It was unclear on how the label is handled at all. The new behaviour will perform:
+
+``` php
+$button = new Button('this is label');
+```
+
+And further extensions to the argument scan be implemented through variable arguments on a constructor. This is also much more consistent with:
+
+``` php
+$app->add(new Button('this is label'));
+```
+
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
