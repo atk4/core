@@ -10,10 +10,11 @@ use atk4\core\FactoryTrait;
  */
 class SeedTest extends \PHPUnit_Framework_TestCase
 {
-    /**
+    /*
      * Test constructor.
      */
     use FactoryTrait;
+
     public function testBasic()
     {
         $s1 = $this->factory('atk4/core/tests/SeedTestMock');
@@ -73,7 +74,6 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'xxx'=>'bar', 'world']);
     }
 
-
     /**
      * @expectedException     Exception
      */
@@ -83,19 +83,19 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-
-class SeedTestMock {
-
+class SeedTestMock
+{
     public $args = null;
     public $foo = null;
     public $baz = 0;
 
-    function __construct(...$args) {
+    public function __construct(...$args)
+    {
         $this->args = $args;
     }
-
 }
 
-class SeedDITestMock extends SeedTestMock {
+class SeedDITestMock extends SeedTestMock
+{
     use DIContainerTrait;
 }
