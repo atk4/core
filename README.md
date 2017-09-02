@@ -6,6 +6,7 @@
 [![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
 [![StyleCI](https://styleci.io/repos/57242416/shield)](https://styleci.io/repos/57242416)
 [![Test Coverage](https://codeclimate.com/github/atk4/core/badges/coverage.svg)](https://codeclimate.com/github/atk4/core/coverage)
+[![Coverage Status](https://coveralls.io/repos/github/atk4/core/badge.svg)](https://coveralls.io/github/atk4/core)
 [![Issue Count](https://codeclimate.com/github/atk4/core/badges/issue_count.svg)](https://codeclimate.com/github/atk4/core)
 
 [![License](https://poser.pugx.org/atk4/core/license)](https://packagist.org/packages/atk4/core)

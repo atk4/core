@@ -12,56 +12,91 @@ trait FactoryTrait
     public $_factoryTrait = true;
 
     /**
-     * Creates and returns new object.
-     * If object is passed as $object parameter, then same object is returned.
+     * Given a Seed (see doc) as a first argument, will create object of a corresponding
+     * class, call constructor with numerical arguments of a seed and inject key/value
+     * arguments.
      *
-     * @param mixed $object
+     * Argument $defaults has the same effect as the seed, but allows you to separate
+     * out initialization for convenience, e.g. factory(['Button', 'label']); is same as
+     * factory('Button', ['label']). Second argument may not affect the class, so it's
+     * safer.
+     *
+     * @param mixed $seed
      * @param array $defaults
      *
      * @return object
      */
-    public function factory($object, $defaults = [])
+    public function factory($seed, $defaults = [])
     {
         if ($defaults === null) {
             $defaults = [];
         }
 
-        if (is_object($object)) {
+        if (!$seed) {
+            throw new Exception(['Incorrect seed given, try [\'ClassName\']', 'seed'=>$seed]);
+        }
 
-            // If object implements DIContainerTrait we can inject some
-            // of the properties without causing harm
-            if (is_array($defaults) && isset($object->_DIContainerTrait)) {
-                $object->setDefaults($defaults);
+        if (!is_array($seed)) {
+            $seed = [$seed];
+        }
+
+        $arguments1 = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY);
+        $arguments2 = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY);
+
+        $object = array_shift($arguments1);
+        $arguments = array_merge($arguments1, $arguments2);
+
+        $injection = array_filter(
+            array_merge($defaults, $seed),
+            function ($o) {
+                return !is_numeric($o);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+        // If object is passed to us, we can ignore arguments, but we need to inject defaults
+        if (is_object($object)) {
+            if ($injection) {
+                if (isset($object->_DIContainerTrait)) {
+                    $object->setDefaults($injection);
+                } else {
+                    throw new Exception([
+                        'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
+                        'object'   => $object,
+                        'injection'=> $injection,
+                    ]);
+                }
             }
 
             return $object;
         }
 
-        if (is_array($object)) {
-            if (!isset($object[0])) {
-                throw new Exception([
-                    'Object factory definition must use ["class name or object", "x"=>"y"] form',
-                    'object'   => $object,
-                    'defaults' => $defaults,
-                ]);
-            }
-            $class = $object[0];
-            unset($object[0]);
+        $class = $this->normalizeClassName($object);
 
-            return $this->factory($class, array_merge($object, $defaults));
-        }
-
-        if (!is_string($object)) {
+        if (!$class) {
             throw new Exception([
-                'Factory arguments are incorrect',
-                'object'   => $object,
-                'defaults' => $defaults,
+                'Class name was not specified by the seed',
+                'seed'=> $seed,
             ]);
         }
 
-        $object = $this->normalizeClassName($object);
+        $object = new $class(...$arguments);
 
-        return $this->factory(new $object(), $defaults);
+        if ($injection) {
+            if (isset($object->_DIContainerTrait)) {
+                $object->setDefaults($injection);
+            } else {
+                throw new Exception([
+                    'factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait',
+                    'object'   => $object,
+                    'class'    => $class,
+                    'seed'     => $seed,
+                    'injection'=> $injection,
+                ]);
+            }
+        }
+
+        return $object;
     }
 
     /**
