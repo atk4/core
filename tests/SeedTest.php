@@ -58,6 +58,17 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $s1->baz);
     }
 
+    public function testMerge()
+    {
+        $s1 = $this->factory([new SeedDITestMock(), 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
+        $this->assertEquals(['red'], $s1->foo);
+
+        $o = new SeedDITestMock();
+        $o->foo = ['xx'];
+        $s1 = $this->factory([$o, 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
+        $this->assertEquals(['xx', 'red'], $s1->foo);
+    }
+
     /**
      * @expectedException     Exception
      */
