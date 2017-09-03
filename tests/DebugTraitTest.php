@@ -3,7 +3,6 @@
 namespace atk4\core\tests;
 
 use atk4\core\DebugTrait;
-use Psr\Log\LoggerInterface;
 
 /**
  * @coversDefaultClass \atk4\core\DebugTrait
@@ -70,13 +69,14 @@ class DebugMock
     use DebugTrait;
 }
 
-class DebugAppMock Implements \Psr\Log\LoggerInterface
+class DebugAppMock implements \Psr\Log\LoggerInterface
 {
     use \Psr\Log\LoggerTrait;
 
     public $log;
 
-    public function log($level, $message, array $context = []) {
+    public function log($level, $message, array $context = [])
+    {
         $this->log = [$level, $message, $context];
     }
 }
