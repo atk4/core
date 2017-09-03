@@ -72,7 +72,7 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testLog2()
     {
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         $app = new DebugAppMock();
 
@@ -82,7 +82,6 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['warning', 'debug test3', []], $app->log);
     }
-
 
     public function testMessage1()
     {
@@ -94,7 +93,7 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testMessage2()
     {
-        $this->expectOutputString("");
+        $this->expectOutputString('');
         $app = new DebugAppMock();
 
         $m = new DebugMock();
@@ -106,7 +105,7 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testMessage3()
     {
-        $this->expectOutputString("");
+        $this->expectOutputString('');
         $app = new DebugAppMock2();
 
         $m = new DebugMock();
@@ -124,7 +123,7 @@ class DebugMock
         _echo_stderr as __echo_stderr;
     }
 
-    protected function _echo_stderr($message) 
+    protected function _echo_stderr($message)
     {
         echo $message;
     }
@@ -140,16 +139,16 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     {
         $this->log = [$level, $message, $context];
     }
-
 }
 
 class DebugAppMock2 implements \atk4\core\AppUserNotificationInterface
 {
     public $message;
-    public function userNotification($message, array $context = []) {
+
+    public function userNotification($message, array $context = [])
+    {
         $this->message = [$message, $context];
     }
 }
-
 
 // @codingStandardsIgnoreEnd

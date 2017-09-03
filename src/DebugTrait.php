@@ -17,11 +17,10 @@ trait DebugTrait
     /**
      * Outputs message to STDERR.
      */
-    protected function _echo_stderr($message) 
+    protected function _echo_stderr($message)
     {
         fwrite(STDERR, $message);
     }
-
 
     /**
      * Send some info to debug stream.
@@ -51,9 +50,8 @@ trait DebugTrait
         return $this;
     }
 
-
     /**
-     * Output log
+     * Output log.
      *
      * @param bool  $message
      * @param array $context
@@ -72,7 +70,7 @@ trait DebugTrait
     }
 
     /**
-     * Output message that needs to be acknowledged by application user. Make sure 
+     * Output message that needs to be acknowledged by application user. Make sure
      * that $context does not contain any sensitive information.
      *
      * @param bool  $message
@@ -92,10 +90,6 @@ trait DebugTrait
 
         return $this;
     }
-
-
-
-
 
     public $_prev_bt = [];
 

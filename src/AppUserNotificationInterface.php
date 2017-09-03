@@ -16,5 +16,4 @@ interface AppUserNotificationInterface
      * displayed to user.
      */
     public function userNotification($message, array $context = []);
-
 }
