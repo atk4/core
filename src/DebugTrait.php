@@ -16,6 +16,7 @@ trait DebugTrait
 
     /**
      * Outputs message to STDERR.
+     *
      * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
      */
     protected function _echo_stderr($message)
@@ -122,7 +123,7 @@ trait DebugTrait
     }
 
     /**
-     * Helps debugTraceChange
+     * Helps debugTraceChange.
      */
     public $_prev_bt = [];
 }

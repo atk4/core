@@ -115,7 +115,8 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['hello user', []], $app->message);
     }
 
-    protected function triggerDebugTraceChange($o, $label) {
+    protected function triggerDebugTraceChange($o, $label)
+    {
         $o->debugTraceChange($label);
     }
 
@@ -137,18 +138,17 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, count($matches));
         $this->assertEquals($matches[1], $matches[3]);
 
-        $this->assertEquals($matches[2]+1, $matches[4]);
+        $this->assertEquals($matches[2] + 1, $matches[4]);
 
         $app->log = null;
 
-        for ($i = 1; $i<5; $i++) {
+        for ($i = 1; $i < 5; $i++) {
             $this->triggerDebugTraceChange($m, 'test2'); // difference is 1 line between calls
         }
 
         // No changes in the trace change detected
         $this->assertNull($app->log);
     }
-
 }
 
 // @codingStandardsIgnoreStart
