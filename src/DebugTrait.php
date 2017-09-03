@@ -16,6 +16,7 @@ trait DebugTrait
 
     /**
      * Outputs message to STDERR.
+     * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
      */
     protected function _echo_stderr($message)
     {
@@ -91,26 +92,37 @@ trait DebugTrait
         return $this;
     }
 
-    public $_prev_bt = [];
-
+    /**
+     * Method designed to intercept one of the hardest-to-debug situations within Agile Toolkit.
+     *
+     * Suppose you define a hook and the hook needs to be called only once, but somehow it is
+     * being called multiple times. You want to know where and how those calls come through.
+     *
+     * Place debugTraceChange inside your hook and give unique $trace identifier. If the method
+     * is invoked through different call paths, this debug info will be logged. Do not leave
+     * this method in production code.
+     */
     public function debugTraceChange($trace = 'default')
     {
-        if ($this->isDebugEnabled()) {
-            $bt = [];
-            foreach (debug_backtrace() as $line) {
-                if (isset($line['file'])) {
-                    $bt[] = $line['file'].':'.$line['line'];
-                }
+        $bt = [];
+        foreach (debug_backtrace() as $line) {
+            if (isset($line['file'])) {
+                $bt[] = $line['file'].':'.$line['line'];
             }
-
-            if (isset($this->_prev_bt[$trace]) && array_diff($this->_prev_bt[$trace], $bt)) {
-                $d1 = array_diff($this->_prev_bt[$trace], $bt);
-                $d2 = array_diff($bt, $this->_prev_bt[$trace]);
-
-                $this->debug('Call path for '.$trace.' has diverged (was '.implode(', ', $d1).', now '.implode(', ', $d2).")\n");
-            }
-
-            $this->_prev_bt[$trace] = $bt;
         }
+
+        if (isset($this->_prev_bt[$trace]) && array_diff($this->_prev_bt[$trace], $bt)) {
+            $d1 = array_diff($this->_prev_bt[$trace], $bt);
+            $d2 = array_diff($bt, $this->_prev_bt[$trace]);
+
+            $this->log('debug', 'Call path for '.$trace.' has diverged (was '.implode(', ', $d1).', now '.implode(', ', $d2).")\n");
+        }
+
+        $this->_prev_bt[$trace] = $bt;
     }
+
+    /**
+     * Helps debugTraceChange
+     */
+    public $_prev_bt = [];
 }
