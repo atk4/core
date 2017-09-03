@@ -61,12 +61,73 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['debug', 'debug test2', []], $app->log);
     }
+
+    public function testLog1()
+    {
+        $this->expectOutputString("debug test3\n");
+
+        $m = new DebugMock();
+        $m->log('warning', 'debug test3');
+    }
+
+    public function testLog2()
+    {
+        $this->expectOutputString("");
+
+        $app = new DebugAppMock();
+
+        $m = new DebugMock();
+        $m->app = $app;
+        $m->log('warning', 'debug test3');
+
+        $this->assertEquals(['warning', 'debug test3', []], $app->log);
+    }
+
+
+    public function testMessage1()
+    {
+        $this->expectOutputString("Could not notify user about: hello user\n");
+
+        $m = new DebugMock();
+        $m->userMessage('hello user');
+    }
+
+    public function testMessage2()
+    {
+        $this->expectOutputString("");
+        $app = new DebugAppMock();
+
+        $m = new DebugMock();
+        $m->app = $app;
+        $m->userMessage('hello user');
+
+        $this->assertEquals(['warning', 'Could not notify user about: hello user', []], $app->log);
+    }
+
+    public function testMessage3()
+    {
+        $this->expectOutputString("");
+        $app = new DebugAppMock2();
+
+        $m = new DebugMock();
+        $m->app = $app;
+        $m->userMessage('hello user');
+
+        $this->assertEquals(['hello user', []], $app->message);
+    }
 }
 
 // @codingStandardsIgnoreStart
 class DebugMock
 {
-    use DebugTrait;
+    use DebugTrait {
+        _echo_stderr as __echo_stderr;
+    }
+
+    protected function _echo_stderr($message) 
+    {
+        echo $message;
+    }
 }
 
 class DebugAppMock implements \Psr\Log\LoggerInterface
@@ -79,5 +140,16 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     {
         $this->log = [$level, $message, $context];
     }
+
 }
+
+class DebugAppMock2 implements \atk4\core\AppUserNotificationInterface
+{
+    public $message;
+    public function userNotification($message, array $context = []) {
+        $this->message = [$message, $context];
+    }
+}
+
+
 // @codingStandardsIgnoreEnd

@@ -72,7 +72,6 @@ if your application implements ``AppUserNotificationInterface``, then
 ``$app->userNotification($message, array $context = [])`` will be executed, which is resposible
 for caching messages, relaying it to user and collecting acknowledgements.
 
-
 debugTraceChange
 ----------------
 

@@ -15,32 +15,87 @@ trait DebugTrait
     public $debug = null;
 
     /**
+     * Outputs message to STDERR.
+     */
+    protected function _echo_stderr($message) 
+    {
+        fwrite(STDERR, $message);
+    }
+
+
+    /**
      * Send some info to debug stream.
      *
-     * @param bool  $msg
+     * @param bool  $message
      * @param array $context
      *
      * @return $this
      */
-    public function debug($msg = true, $context = [])
+    public function debug($message = true, $context = [])
     {
-        if (is_bool($msg)) {
+        if (is_bool($message)) {
             // using this to switch on/off the debug for this object
-            $this->debug = $msg;
+            $this->debug = $message;
 
             return $this;
         }
 
         if ($this->debug) {
             if (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
-                $this->app->log('debug', $msg, $context);
+                $this->app->log('debug', $message, $context);
             } else {
-                echo '['.get_class($this)."]: $msg\n";
+                $this->_echo_stderr('['.get_class($this)."]: $message\n");
             }
         }
 
         return $this;
     }
+
+
+    /**
+     * Output log
+     *
+     * @param bool  $message
+     * @param array $context
+     *
+     * @return $this
+     */
+    public function log($level, $message, $context = [])
+    {
+        if (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
+            $this->app->log($level, $message, $context);
+        } else {
+            $this->_echo_stderr("$message\n");
+        }
+
+        return $this;
+    }
+
+    /**
+     * Output message that needs to be acknowledged by application user. Make sure 
+     * that $context does not contain any sensitive information.
+     *
+     * @param bool  $message
+     * @param array $context
+     *
+     * @return $this
+     */
+    public function userMessage($message, $context = [])
+    {
+        if (isset($this->app) && $this->app instanceof \atk4\core\AppUserNotificationInterface) {
+            $this->app->userNotification($message, $context);
+        } elseif (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
+            $this->app->log('warning', 'Could not notify user about: '.$message, $context);
+        } else {
+            $this->_echo_stderr("Could not notify user about: $message\n");
+        }
+
+        return $this;
+    }
+
+
+
+
 
     public $_prev_bt = [];
 
