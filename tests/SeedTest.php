@@ -30,6 +30,15 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($s1->args);
     }
 
+    public function testInjection()
+    {
+        $s1 = $this->factory(new SeedDITestMock(), null);
+        $this->assertNotEquals('bar', $s1->foo);
+
+        $s1 = $this->factory(new SeedDITestMock(), ['foo'=>'bar']);
+        $this->assertEquals('bar', $s1->foo);
+    }
+
     public function testArguments()
     {
         $s1 = $this->factory(['atk4/core/tests/SeedTestMock', 'hello']);
@@ -67,6 +76,14 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $o->foo = ['xx'];
         $s1 = $this->factory([$o, 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
         $this->assertEquals(['xx', 'red'], $s1->foo);
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testSeedMustBe()
+    {
+        $s1 = $this->factory([], ['atk4/core/tests/SeedTestMock', 'hello']);
     }
 
     /**
