@@ -15,28 +15,14 @@ trait DebugTrait
     public $debug = null;
 
     /**
-     * Returns true if debug mode is enabled.
-     *
-     * @return bool
-     */
-    protected function isDebugEnabled()
-    {
-        if ($this->debug === false || $this->debug === true) {
-            return $this;
-        }
-
-        return isset($this->app) && isset($this->app->debug) && $this->app->debug;
-    }
-
-    /**
      * Send some info to debug stream.
      *
      * @param bool  $msg
-     * @param array $extra_info
+     * @param array $context
      *
      * @return $this
      */
-    public function debug($msg = true, $extra_info = [])
+    public function debug($msg = true, $context = [])
     {
         if (is_bool($msg)) {
             // using this to switch on/off the debug for this object
@@ -45,17 +31,11 @@ trait DebugTrait
             return $this;
         }
 
-        if ($this->isDebugEnabled()) {
-            if (
-                isset($this->app)
-                && (
-                    (isset($this->app->_dynamicMethodTrait) && $this->app->hasMethod('outputDebug'))
-                    || method_exists($this->app, 'outputDebug')
-                )
-            ) {
-                $this->app->outputDebug($msg, $extra_info);
+        if ($this->debug) {
+            if (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
+                $this->app->log('debug', $msg, $context);
             } else {
-                fwrite(STDERR, '['.get_class($this)."]: $msg\n");
+                echo '['.get_class($this)."]: $msg\n";
             }
         }
 
