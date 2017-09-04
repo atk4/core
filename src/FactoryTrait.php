@@ -23,7 +23,7 @@ trait FactoryTrait
      *
      * @param mixed  $seed
      * @param array  $defaults
-     * @param string $prefix Optional prefix for class name
+     * @param string $prefix   Optional prefix for class name
      *
      * @return object
      */
@@ -133,7 +133,6 @@ trait FactoryTrait
 
         // Add prefix only if name doesn't start with / and name doesn't contain \\
         if ($name[0] != '/' && strpos($name, '\\') === false && $prefix) {
-
             $name = $prefix.'/'.$name;
         }
 
