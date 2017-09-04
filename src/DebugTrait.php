@@ -14,10 +14,15 @@ trait DebugTrait
     /** @var bool Is debug enabled? */
     public $debug = null;
 
+    /** @var array Helps debugTraceChange. */
+    protected $_prev_bt = [];
+
     /**
      * Outputs message to STDERR.
      *
      * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
+     *
+     * @param string $message
      */
     protected function _echo_stderr($message)
     {
@@ -27,20 +32,21 @@ trait DebugTrait
     /**
      * Send some info to debug stream.
      *
-     * @param bool  $message
-     * @param array $context
+     * @param bool|string $message
+     * @param array       $context
      *
      * @return $this
      */
     public function debug($message = true, $context = [])
     {
+        // using this to switch on/off the debug for this object
         if (is_bool($message)) {
-            // using this to switch on/off the debug for this object
             $this->debug = $message;
 
             return $this;
         }
 
+        // if debug is enabled, then log it
         if ($this->debug) {
             if (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
                 $this->app->log('debug', $message, $context);
@@ -53,10 +59,11 @@ trait DebugTrait
     }
 
     /**
-     * Output log.
+     * Output log message.
      *
-     * @param bool  $message
-     * @param array $context
+     * @param string $level
+     * @param string $message
+     * @param array  $context
      *
      * @return $this
      */
@@ -75,8 +82,8 @@ trait DebugTrait
      * Output message that needs to be acknowledged by application user. Make sure
      * that $context does not contain any sensitive information.
      *
-     * @param bool  $message
-     * @param array $context
+     * @param string $message
+     * @param array  $context
      *
      * @return $this
      */
@@ -100,8 +107,11 @@ trait DebugTrait
      * being called multiple times. You want to know where and how those calls come through.
      *
      * Place debugTraceChange inside your hook and give unique $trace identifier. If the method
-     * is invoked through different call paths, this debug info will be logged. Do not leave
-     * this method in production code.
+     * is invoked through different call paths, this debug info will be logged.
+     *
+     * Do not leave this method in production code !!!
+     *
+     * @param string $trace
      */
     public function debugTraceChange($trace = 'default')
     {
@@ -121,9 +131,4 @@ trait DebugTrait
 
         $this->_prev_bt[$trace] = $bt;
     }
-
-    /**
-     * Helps debugTraceChange.
-     */
-    public $_prev_bt = [];
 }

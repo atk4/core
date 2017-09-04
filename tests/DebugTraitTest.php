@@ -134,16 +134,16 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         $matches = [];
         preg_match($pattern, $app->log[1], $matches);
 
+        // Changes detected
         $this->assertTrue(is_array($matches));
         $this->assertEquals(5, count($matches));
         $this->assertEquals($matches[1], $matches[3]);
-
         $this->assertEquals($matches[2] + 1, $matches[4]);
 
         $app->log = null;
 
         for ($i = 1; $i < 5; $i++) {
-            $this->triggerDebugTraceChange($m, 'test2'); // difference is 1 line between calls
+            $this->triggerDebugTraceChange($m, 'test2'); // called from same line all 5 times = no difference
         }
 
         // No changes in the trace change detected

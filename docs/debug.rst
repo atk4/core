@@ -35,16 +35,18 @@ Information logged through debug like this on any object that implements DebugTr
     $this->debug('User {user} created', ['user'=>$user]);
 
 The Application itself can use DebugTrait too and normally should do, making it possible
-to use ``$this->app->debug()``. 
+to use ``$this->app->debug()``.
 
 Various objects may implement DebugTrait and also invoke $this->debug(), but in most
 cases this will simply be ignored right away unless you manually enable debugging
 for the object::
 
-    $obj1->debug(); // enable debugging
+    $obj1->debug();        // enable debugging
+    $obj1->debug(false);   // disable debugging
+    $obj1->debug(true);    // also enables debugging
 
-    $obj1->debug('test1');   // will go to logger
-    $obj2->debug('test2');   // will not go to logger
+    $obj1->debug('test1'); // will go to logger
+    $obj2->debug('test2'); // will not go to logger because debug is not enabled for this object
 
 Executing debug will look for ``$this->app`` link and if the application implements
 ``Psr\Log\LoggerInterface``, then ``$this->app->log()`` will be called using LogLevel DEBUG.
