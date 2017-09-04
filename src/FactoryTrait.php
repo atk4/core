@@ -119,7 +119,6 @@ trait FactoryTrait
      */
     public function normalizeClassName($name, $prefix = null)
     {
-
         if (!$name) {
             if (
                 isset($this->_appScopeTrait, $this->app)
@@ -138,8 +137,8 @@ trait FactoryTrait
         }
 
         if (
-            $name[0] != '/' 
-            && strpos($name, '\\') === false 
+            $name[0] != '/'
+            && strpos($name, '\\') === false
             && isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
         ) {

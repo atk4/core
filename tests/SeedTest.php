@@ -115,10 +115,10 @@ class SeedDITestMock extends SeedTestMock
     use DIContainerTrait;
 }
 
-class SeedAppPrefixMock 
+class SeedAppPrefixMock
 {
-    function normalizeClassNameApp($name, $prefix)
+    public function normalizeClassNameApp($name, $prefix)
     {
-        var_Dump($name, $prefix);
+        var_dump($name, $prefix);
     }
 }
