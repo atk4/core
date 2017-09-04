@@ -21,8 +21,9 @@ trait FactoryTrait
      * factory('Button', ['label']). Second argument may not affect the class, so it's
      * safer.
      *
-     * @param mixed $seed
-     * @param array $defaults
+     * @param mixed  $seed
+     * @param array  $defaults
+     * @param string $prefix Optional prefix for class name
      *
      * @return object
      */
@@ -102,7 +103,7 @@ trait FactoryTrait
     /**
      * First normalize class name, then add specified prefix to
      * class name. Finally if $app is defined, and has method
-     * `normalizeClassNameApp` it will also gets a chance to
+     * `normalizeClassNameApp` it will also get a chance to
      * add prefix.
      *
      * Rule observed: If first character of class, or prefix is
@@ -130,8 +131,8 @@ trait FactoryTrait
             return $name;
         }
 
+        // Add prefix only if name doesn't start with / and name doesn't contain \\
         if ($name[0] != '/' && strpos($name, '\\') === false && $prefix) {
-            // Add prefix
 
             $name = $prefix.'/'.$name;
         }

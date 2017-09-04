@@ -13,7 +13,8 @@ names. It also contains method for class name normalization.
 .. php:method:: factory($seed, $defaults = [])
 
 Creates and returns new object. If object is passed as $seed parameter,
-then same object is returned.
+then same object is returned, but you can change some properties of this object by using
+$defaults array.
 
 Seed
 ====
@@ -33,7 +34,7 @@ e.g. ``Action`` may have to be configured individually.
 On top of that, there are also namespaces to consider and quite often you would want to use
 \3rdparty\bootstrap\Button() instead of default button.
 
-Agile Core implements a mechanic to make that possible through using factory() method and
+Agile Core implements a mechanism to make that possible through using factory() method and
 specifying a seed argument::
 
     $button = $this->factory(['Button', 'Label', 'icon'=>['book'], 'action'=>new Action(..)]);
@@ -52,14 +53,14 @@ Any other numeric arguments will be passed as constructor arguments::
 
     $button = $this->factory(['Button', 'My Label', 'red', 'big']);
 
-    // results in 
+    // results in
 
     new Button('My Label', 'red', 'big');
 
 Finally any named values inside seed array will be assigned to class properties by using
-:php:meth:`DIContainerTrait::setDefaults`. 
+:php:meth:`DIContainerTrait::setDefaults`.
 
-Factory uses `array_shift` to to separate class definition from other components.
+Factory uses `array_shift` to separate class definition from other components.
 
 Factory Defaults
 ----------------
@@ -79,10 +80,10 @@ Precedence
 
 When both seed and defaults are used, then values inside "seed" will have precedence:
 
- - for named arguments any value specified in "seed" will fully override identical valke from "default"
- - for constructor argumens, the values specified in "seed" will be passed first, and "defaults" will go after.
+ - for named arguments any value specified in "seed" will fully override identical value from "defaults"
+ - for constructor arguments, the values specified in "seed" will be passed first, and "defaults" will go after.
 
-For arguments that are arrays (e.g. $view->class) value in seed will override value in default and then will
+For arguments that are arrays (e.g. $view->class) value in seed will override value in "defaults" and then will
 be merged with existing property value::
 
     class RedButton extends Button {
@@ -96,8 +97,8 @@ be merged with existing property value::
 Namespace
 =========
 
-You might have noticed, that seeds do not specify namespace. This is because factroy relies on $app
-to normalize your class name. 
+You might have noticed, that seeds do not specify namespace. This is because factory relies on $app
+to normalize your class name.
 
 .. php:method:: normalizeClassName($name, $prefix = null)
 
@@ -171,7 +172,7 @@ Use with add()
 ==============
 
 :php:meth:`ContainerTrait::add()` will allow first argument to be Seed but only
-if the object also uses FactoryTrait. This exactly the case for Agile UI / View
+if the object also uses FactoryTrait. This is exactly the case for Agile UI / View
 objects, so you can supply seed to add::
 
     $view->add(['Button', 'class'=>['red']]);
