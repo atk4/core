@@ -43,6 +43,21 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $s1->foo);
     }
 
+    public function testPrefix()
+    {
+        // prefix could be fully specified (global)
+        $s1 = $this->factory('SeedTestMock', ['hello'], '/atk4/core/tests');
+        $this->assertEquals(['hello'], $s1->args);
+
+        // specifying prefix yourself will override, but only if you start with slash
+        $s1 = $this->factory('/atk4/core/tests/SeedTestMock', ['hello'], '/atk4/core/tests');
+        $this->assertEquals(['hello'], $s1->args);
+
+        // without slash, prefixes add up
+        $s1 = $this->factory('tests/SeedTestMock', ['hello'], '/atk4/core');
+        $this->assertEquals(['hello'], $s1->args);
+    }
+
     public function testDefaults()
     {
         $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world'], ['more', 'baz'=>'', 'args']);
@@ -98,4 +113,12 @@ class SeedTestMock
 class SeedDITestMock extends SeedTestMock
 {
     use DIContainerTrait;
+}
+
+class SeedAppPrefixMock 
+{
+    function normalizeClassNameApp($name, $prefix)
+    {
+        var_Dump($name, $prefix);
+    }
 }
