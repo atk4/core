@@ -73,6 +73,8 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['hello', 'world', 'more', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
         $this->assertEquals('', $s1->baz);
+
+        $s1->setDefaults(null);
     }
 
     public function testDefaultsObject()
