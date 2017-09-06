@@ -60,7 +60,6 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $m = new \Exception('Classic Exception');
 
-
         $m = new Exception('atk4 exception', null, $m);
         $m->setMessage('bumbum');
 
@@ -73,7 +72,6 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/Classic/', $ret);
         $this->assertRegExp('/bumbum/', $ret);
     }
-
 }
 
 // @codingStandardsIgnoreStart
