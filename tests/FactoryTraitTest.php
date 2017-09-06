@@ -2,6 +2,7 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
 
@@ -34,10 +35,6 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
     {
         $m = new FactoryMock();
 
-        // parameter as object
-        $class = $m->normalizeClassName(new FactoryMock());
-        $this->assertEquals(true, is_object($class));
-
         // parameter as simple string
         $class = $m->normalizeClassName('MyClass');
         $this->assertEquals('MyClass', $class);
@@ -49,24 +46,35 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $class = $m->normalizeClassName('a/b\MyClass');
         $this->assertEquals('a\b\MyClass', $class);
 
-        $class = $m->normalizeClassName('a/b/MyClass');
-        $this->assertEquals('a\b\MyClass', $class);
+        $class = $m->normalizeClassName('a/b/MyClass', 'Prefix');
+        $this->assertEquals('Prefix\a\b\MyClass', $class);
 
-        // with prefix
+        $class = $m->normalizeClassName('/a/b/MyClass', 'Prefix');
+        $this->assertEquals('\a\b\MyClass', $class);
+
+        $class = $m->normalizeClassName('\a\b\MyClass', 'Prefix');
+        $this->assertEquals('\a\b\MyClass', $class);
+
+        $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
+        $this->assertEquals('Prefix\a\b\MyClass', $class);
+
+        // With Application Prefixing
+        $m = new FactoryAppScopeMock();
+        $m->app = new FactoryTestAppMock();
         $class = $m->normalizeClassName('MyClass', 'model');
-        $this->assertEquals('Model_MyClass', $class);
+        $this->assertEquals('atk4\test\model\MyClass', $class);
 
-        $class = $m->normalizeClassName('a\b\MyClass', 'model');
-        $this->assertEquals('a\b\Model_MyClass', $class);
+        $class = $m->normalizeClassName('/MyClass', 'model');
+        $this->assertEquals('\MyClass', $class);
 
-        $class = $m->normalizeClassName('a\b\My_Class', 'model');
-        $this->assertEquals('a\b\Model_My_Class', $class);
+        $class = $m->normalizeClassName('MyClass', '/model');
+        $this->assertEquals('\model\MyClass', $class);
 
-        $class = $m->normalizeClassName('a\b\Model_MyClass', 'model');
-        $this->assertEquals('a\b\Model_MyClass', $class);
+        $class = $m->normalizeClassName('MyClass', null);
+        $this->assertEquals('atk4\test\MyClass', $class);
 
-        $class = $m->normalizeClassName('a\b\model_MyClass', 'model');
-        $this->assertEquals('a\b\Model_model_MyClass', $class);
+        $class = $m->normalizeClassName(null, null);
+        $this->assertEquals('atk4\test\View', $class);
     }
 
     /**
@@ -178,5 +186,22 @@ class FactoryDIMock
     public $a = 'AAA';
     public $b = 'BBB';
     public $c;
+}
+class FactoryAppScopeMock
+{
+    use AppScopeTrait;
+    use FactoryTrait;
+}
+
+class FactoryTestAppMock
+{
+    public function normalizeClassNameApp($name)
+    {
+        if (!$name) {
+            $name = 'View';
+        }
+
+        return 'atk4\test\\'.$name;
+    }
 }
 // @codingStandardsIgnoreEnd

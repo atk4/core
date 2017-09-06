@@ -21,12 +21,13 @@ trait FactoryTrait
      * factory('Button', ['label']). Second argument may not affect the class, so it's
      * safer.
      *
-     * @param mixed $seed
-     * @param array $defaults
+     * @param mixed  $seed
+     * @param array  $defaults
+     * @param string $prefix   Optional prefix for class name
      *
      * @return object
      */
-    public function factory($seed, $defaults = [])
+    public function factory($seed, $defaults = [], $prefix = null)
     {
         if ($defaults === null) {
             $defaults = [];
@@ -71,7 +72,7 @@ trait FactoryTrait
             return $object;
         }
 
-        $class = $this->normalizeClassName($object);
+        $class = $this->normalizeClassName($object, $prefix);
 
         if (!$class) {
             throw new Exception([
@@ -101,12 +102,16 @@ trait FactoryTrait
 
     /**
      * First normalize class name, then add specified prefix to
-     * class name if it's passed and not already added.
-     * Class name can contain namespace.
+     * class name. Finally if $app is defined, and has method
+     * `normalizeClassNameApp` it will also get a chance to
+     * add prefix.
      *
-     * If object is passed as $name parameter, then same object is returned.
+     * Rule observed: If first character of class, or prefix is
+     * '/' or '\' then no more prefixing is done. Also after all the
+     * prefixing took place, the slashes '/' will be replaced
+     * with '\'.
      *
-     * Example: normalizeClassName('User','Model') == 'Model_User';
+     * Example: normalizeClassName('User', 'Model') == 'Model\User';
      *
      * @param mixed  $name   Name of class or object
      * @param string $prefix Optional prefix for class name
@@ -115,32 +120,32 @@ trait FactoryTrait
      */
     public function normalizeClassName($name, $prefix = null)
     {
-        if (is_array($name) && isset($name[0])) {
-            $name[0] = $this->normalizeClassName($name[0]);
+        if (!$name) {
+            if (
+                isset($this->_appScopeTrait, $this->app)
+                && method_exists($this->app, 'normalizeClassNameApp')
+            ) {
+                $name = $this->app->normalizeClassNameApp($name);
+            }
 
             return $name;
+        }
+
+        // Add prefix only if name doesn't start with / and name doesn't contain \\
+        if ($name[0] != '/' && $name[0] != '\\' && $prefix) {
+            $name = $prefix.'\\'.$name;
         }
 
         if (
-            is_string($name)
+            $name[0] != '/'
+            && $name[0] != '\\'
             && isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
         ) {
-            $name = $this->app->normalizeClassNameApp($name, $prefix);
-        }
-
-        if (!is_string($name)) {
-            return $name;
+            $name = $this->app->normalizeClassNameApp($name);
         }
 
         $name = str_replace('/', '\\', $name);
-        if ($prefix !== null) {
-            $class = ltrim(strrchr($name, '\\'), '\\') ?: $name;
-            $prefix = ucfirst($prefix);
-            if (strpos($class, $prefix) !== 0) {
-                $name = preg_replace('|^(.*\\\)?(.*)$|', '\1'.$prefix.'_\2', $name);
-            }
-        }
 
         return $name;
     }
