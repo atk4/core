@@ -5,8 +5,6 @@
 [![Build Status](https://travis-ci.org/atk4/core.png?branch=develop)](https://travis-ci.org/atk4/core)
 [![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
 [![StyleCI](https://styleci.io/repos/57242416/shield)](https://styleci.io/repos/57242416)
-[![Test Coverage](https://codeclimate.com/github/atk4/core/badges/coverage.svg)](https://codeclimate.com/github/atk4/core/coverage)
-[![Coverage Status](https://coveralls.io/repos/github/atk4/core/badge.svg)](https://coveralls.io/github/atk4/core)
 [![codecov](https://codecov.io/gh/atk4/core/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/core)
 [![Issue Count](https://codeclimate.com/github/atk4/core/badges/issue_count.svg)](https://codeclimate.com/github/atk4/core)
 
