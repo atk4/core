@@ -72,6 +72,9 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 
         $class = $m->normalizeClassName('MyClass', null);
         $this->assertEquals('atk4\test\MyClass', $class);
+
+        $class = $m->normalizeClassName(null, null);
+        $this->assertEquals('atk4\test\View', $class);
     }
 
     /**
@@ -194,7 +197,10 @@ class FactoryTestAppMock
 {
     public function normalizeClassNameApp($name)
     {
-        return 'atk4/test/'.$name;
+        if (!$name) {
+            $name = 'View';
+        }
+        return 'atk4\test\\'.$name;
     }
 }
 // @codingStandardsIgnoreEnd
