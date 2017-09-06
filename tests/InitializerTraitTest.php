@@ -28,6 +28,16 @@ class InitializerTraitTest extends \PHPUnit_Framework_TestCase
         $m = new ContainerMock2();
         $m->add(new BrokenInitializerMock());
     }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testInitializedTwice()
+    {
+        $m = new InitializerMock();
+        $m->init();
+        $m->init();
+    }
 }
 
 // @codingStandardsIgnoreStart
