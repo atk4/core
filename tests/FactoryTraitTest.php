@@ -200,6 +200,7 @@ class FactoryTestAppMock
         if (!$name) {
             $name = 'View';
         }
+
         return 'atk4\test\\'.$name;
     }
 }
