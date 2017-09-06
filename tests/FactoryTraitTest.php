@@ -41,34 +41,37 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
 
         // parameter as namespaced string
         $class = $m->normalizeClassName('a\b\MyClass');
-        $this->assertEquals('a\\b\\MyClass', $class);
+        $this->assertEquals('a\b\MyClass', $class);
 
         $class = $m->normalizeClassName('a/b\MyClass');
-        $this->assertEquals('a\\b\\MyClass', $class);
+        $this->assertEquals('a\b\MyClass', $class);
 
         $class = $m->normalizeClassName('a/b/MyClass', 'Prefix');
-        $this->assertEquals('Prefix\\a\\b\\MyClass', $class);
+        $this->assertEquals('Prefix\a\b\MyClass', $class);
 
         $class = $m->normalizeClassName('/a/b/MyClass', 'Prefix');
-        $this->assertEquals('\\a\\b\\MyClass', $class);
+        $this->assertEquals('\a\b\MyClass', $class);
 
-        $class = $m->normalizeClassName('a\\b\\MyClass', 'Prefix');
-        $this->assertEquals('a\\b\\MyClass', $class);
+        $class = $m->normalizeClassName('\a\b\MyClass', 'Prefix');
+        $this->assertEquals('\a\b\MyClass', $class);
+
+        $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
+        $this->assertEquals('Prefix\a\b\MyClass', $class);
 
         // With Application Prefixing
         $m = new FactoryAppScopeMock();
         $m->app = new FactoryTestAppMock();
         $class = $m->normalizeClassName('MyClass', 'model');
-        $this->assertEquals('atk4\\test\\model\\MyClass', $class);
+        $this->assertEquals('atk4\test\model\MyClass', $class);
 
         $class = $m->normalizeClassName('/MyClass', 'model');
-        $this->assertEquals('\\MyClass', $class);
+        $this->assertEquals('\MyClass', $class);
 
         $class = $m->normalizeClassName('MyClass', '/model');
-        $this->assertEquals('\\model\\MyClass', $class);
+        $this->assertEquals('\model\MyClass', $class);
 
         $class = $m->normalizeClassName('MyClass', null);
-        $this->assertEquals('atk4\\test\\MyClass', $class);
+        $this->assertEquals('atk4\test\MyClass', $class);
     }
 
     /**

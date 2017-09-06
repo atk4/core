@@ -107,11 +107,11 @@ trait FactoryTrait
      * add prefix.
      *
      * Rule observed: If first character of class, or prefix is
-     * '/' then no more prefixing is done. Also after all the
+     * '/' or '\' then no more prefixing is done. Also after all the
      * prefixing took place, the slashes '/' will be replaced
-     * with '\\'.
+     * with '\'.
      *
-     * Example: normalizeClassName('User', 'Model') == 'Model\\User';
+     * Example: normalizeClassName('User', 'Model') == 'Model\User';
      *
      * @param mixed  $name   Name of class or object
      * @param string $prefix Optional prefix for class name
@@ -132,13 +132,13 @@ trait FactoryTrait
         }
 
         // Add prefix only if name doesn't start with / and name doesn't contain \\
-        if ($name[0] != '/' && strpos($name, '\\') === false && $prefix) {
-            $name = $prefix.'/'.$name;
+        if ($name[0] != '/' && $name[0] != '\\' && $prefix) {
+            $name = $prefix.'\\'.$name;
         }
 
         if (
             $name[0] != '/'
-            && strpos($name, '\\') === false
+            && $name[0] != '\\'
             && isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
         ) {
