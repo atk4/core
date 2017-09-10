@@ -92,7 +92,6 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
         $s1 = $this->factory([], ['atk4/core/tests/SeedDITestMock', 'test']);
         $this->assertEquals(['test'], $s1->args);
-
     }
 
     public function testDefaultsObject()
@@ -129,7 +128,6 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     {
         $s1 = $this->factory([], ['foo' => 'bar']);
     }
-
 
     /**
      * @expectedException     Exception

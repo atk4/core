@@ -35,7 +35,7 @@ trait FactoryTrait
 
         if (!$seed) {
             $seed = [];
-        } 
+        }
 
         if (!is_array($seed)) {
             $seed = [$seed];
