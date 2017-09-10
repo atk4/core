@@ -111,7 +111,6 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
         $s1 = $this->factory([new SeedDITestMock('x', 'y'), null, 'bar'], [null, 'foo', 'baz']);
         $this->assertEquals(['x', 'y'], $s1->args);
-
     }
 
     /**
