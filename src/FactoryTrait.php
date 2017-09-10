@@ -34,8 +34,8 @@ trait FactoryTrait
         }
 
         if (!$seed) {
-            throw new Exception(['Incorrect seed given, try [\'ClassName\']', 'seed'=>$seed]);
-        }
+            $seed = [];
+        } 
 
         if (!is_array($seed)) {
             $seed = [$seed];

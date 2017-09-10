@@ -84,6 +84,15 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
+
+        $s1 = $this->factory(null, ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']);
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['more', 'more', 'args'], $s1->args);
+        $this->assertEquals('bar', $s1->foo);
+
+        $s1 = $this->factory([], ['atk4/core/tests/SeedDITestMock', 'test']);
+        $this->assertEquals(['test'], $s1->args);
+
     }
 
     public function testDefaultsObject()
@@ -113,12 +122,14 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['x', 'y'], $s1->args);
     }
 
+
     /**
      * @expectedException     Exception
      */
-    public function testSeedMustBe()
+    public function testClassMayNotBeEmpty()
     {
-        $s1 = $this->factory([], ['atk4/core/tests/SeedTestMock', 'hello']);
+        $s1 = $this->factory([''], ['atk4/core/tests/SeedDITestMock', 'test']);
+        $this->assertEquals(['test'], $s1->args);
     }
 
     /**
