@@ -42,7 +42,9 @@ trait FactoryTrait
         }
 
         foreach ($seed as $key=>$value) {
-            $defaults[$key] = $value;
+            if ($value !== null) {
+                $defaults[$key] = $value;
+            }
         }
 
         $arguments = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY);

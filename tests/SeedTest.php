@@ -78,6 +78,14 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $s1->setDefaults(null);
     }
 
+    public function testNull()
+    {
+        $s1 = $this->factory([null, 'foo'=>null, null, 'world'], ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']);
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['more', 'world', 'args'], $s1->args);
+        $this->assertEquals('bar', $s1->foo);
+    }
+
     public function testDefaultsObject()
     {
         $s1 = $this->factory([new SeedDITestMock(), 'foo'=>'bar'], ['baz'=>'', 'foo'=>'default']);
@@ -94,6 +102,16 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $o->foo = ['xx'];
         $s1 = $this->factory([$o, 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
         $this->assertEquals(['xx', 'red'], $s1->foo);
+
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'world'], [null, 'more', 'more', 'args']);
+        $this->assertEquals(['hello', 'world', 'args'], $s1->args);
+
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', null, 'world'], [null, 'more', 'more', 'args']);
+        $this->assertEquals(['more', 'world', 'args'], $s1->args);
+
+        $s1 = $this->factory([new SeedDITestMock('x', 'y'), null, 'bar'], [null, 'foo', 'baz']);
+        $this->assertEquals(['x', 'y'], $s1->args);
+
     }
 
     /**
