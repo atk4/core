@@ -65,23 +65,45 @@ Factory uses `array_shift` to separate class definition from other components.
 Factory Defaults
 ================
 
+Defaults array takes place of $seed if $seed is missing components. $defaults is
+using identical format to seed, but it only can be array.
+
 Array that lacks class is called defaults, e.g.::
 
-    $defaults = ['My Label', 'red', 'big', 'icon'=>'book'];
+    $defaults = ['Label', 'My Label', 'big red', 'icon'=>'book'];
 
 You can pass defaults as second argument to :php:meth:`FactoryTrait::factory()`::
 
     $button = $this->factory(['Button'], $defaults);
 
-Defaults is quite safe and will be often used for example in ``Model->addField($name, $defaults)``
+Executing code above will result in 'Button' class being used with 'My Label' as a caption
+and 'big red' class and 'book' icon.
+
+You may also use ``null`` to skip an argument, for instance in the above example if you wish
+to change the label, but keep the class, use this::
+
+    $label = $this->factory([null, 'Other Label'], $defaults);
+
+Finally, if you pass key/value pair inside seed with a value of ``null`` then default value
+will still be used::
+
+    $label = $this->factory(['icon'=>null], $defaults);
+
+This will result icon=book. If you wish to disable icon, you should use ``false`` value::
+
+    $label = $this->factory(['icon'=>false], $defaults);
+
+With this it's handy to pass icon as an argument and don't worry if the null is used.
 
 Precedence and Usage
 --------------------
 
 When both seed and defaults are used, then values inside "seed" will have precedence:
 
- - for named arguments any value specified in "seed" will fully override identical value from "defaults"
- - for constructor arguments, the values specified in "seed" will be passed first, and "defaults" will go after.
+ - for named arguments any value specified in "seed" will fully override identical value from "defaults",
+   unless if the seed's value is "null".
+ - for constructor arguments, the non-null values specified in "seed" will replace corresponding
+   value from $defaults.
 
 The next example will help you understand the precedence of different argument values. See my description below
 the example::
