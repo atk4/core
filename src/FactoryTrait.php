@@ -41,14 +41,16 @@ trait FactoryTrait
             $seed = [$seed];
         }
 
-        $arguments1 = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY);
-        $arguments2 = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY);
+        foreach ($seed as $key=>$value) {
+            $defaults[$key] = $value;
+        }
 
-        $object = array_shift($arguments1);
-        $arguments = array_merge($arguments1, $arguments2);
+        $arguments = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY);
+
+        $object = array_shift($arguments);
 
         $injection = array_filter(
-            array_merge($defaults, $seed),
+            $defaults,
             function ($o) {
                 return !is_numeric($o);
             },

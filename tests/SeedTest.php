@@ -55,22 +55,23 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     public function testPrefix()
     {
         // prefix could be fully specified (global)
-        $s1 = $this->factory('SeedTestMock', ['hello'], '/atk4/core/tests');
+        $s1 = $this->factory('SeedTestMock', [null, 'hello'], '/atk4/core/tests');
         $this->assertEquals(['hello'], $s1->args);
 
         // specifying prefix yourself will override, but only if you start with slash
-        $s1 = $this->factory('/atk4/core/tests/SeedTestMock', ['hello'], '/atk4/core/tests');
+        $s1 = $this->factory('/atk4/core/tests/SeedTestMock', [null, 'hello'], '/atk4/core/tests');
         $this->assertEquals(['hello'], $s1->args);
 
         // without slash, prefixes add up
-        $s1 = $this->factory('tests/SeedTestMock', ['hello'], '/atk4/core');
+        $s1 = $this->factory('tests/SeedTestMock', [null, 'hello'], '/atk4/core');
         $this->assertEquals(['hello'], $s1->args);
     }
 
     public function testDefaults()
     {
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world'], ['more', 'baz'=>'', 'args']);
-        $this->assertEquals(['hello', 'world', 'more', 'args'], $s1->args);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world'], ['atk4/core/tests/SeedTestMock', 'more', 'baz'=>'', 'more', 'args']);
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['hello', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
         $this->assertEquals('', $s1->baz);
 
@@ -119,12 +120,10 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'xxx'=>'bar', 'world']);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testGiveClassFirst()
     {
         $s1 = $this->factory(['foo'=>'bar'], ['atk4/core/tests/SeedDITestMock']);
+        $this->assertTrue($s1 instanceof SeedDITestMock);
     }
 }
 
