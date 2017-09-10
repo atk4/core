@@ -122,6 +122,14 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['x', 'y'], $s1->args);
     }
 
+    /**
+     * @expectedException     Exception
+     */
+    public function testSeedMustBe()
+    {
+        $s1 = $this->factory([], ['foo' => 'bar']);
+    }
+
 
     /**
      * @expectedException     Exception
