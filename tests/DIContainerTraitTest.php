@@ -17,7 +17,7 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testException1()
     {
-        $m = new FactoryDIMock();
+        $m = new FactoryDIMock2();
         $m->setDefaults([5 => 'qwerty']);
     }
 
@@ -28,7 +28,7 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testException2()
     {
-        $m = new FactoryDIMock();
+        $m = new FactoryDIMock2();
         $m->setDefaults(['not_exist' => 'qwerty']);
     }
 
@@ -37,7 +37,7 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testProperties()
     {
-        $m = new FactoryDIMock();
+        $m = new FactoryDIMock2();
 
         $m->setDefaults(['a' => 'foo', 'c' => 'bar']);
         $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
@@ -48,7 +48,7 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
 }
 
 // @codingStandardsIgnoreStart
-class FactoryDIMock
+class FactoryDIMock2
 {
     use FactoryTrait;
     use DIContainerTrait;
