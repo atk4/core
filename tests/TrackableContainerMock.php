@@ -6,7 +6,6 @@ use atk4\core;
 
 class TrackableContainerMock
 {
-    use core\NameTrait;
     use core\ContainerTrait;
     use core\TrackableTrait;
 
