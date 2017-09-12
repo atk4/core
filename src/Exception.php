@@ -31,7 +31,7 @@ class Exception extends \Exception
     public function __construct(
         $message = '',
         $code = 0,
-        \Exception $previous = null
+        /* \Throwable */ $previous = null
     ) {
         if (is_array($message)) {
             // message contain additional parameters
