@@ -50,6 +50,11 @@ trait DIContainerTrait
         }
 
         foreach ($properties as $key => $val) {
+            // ignore numeric keys
+            if (is_numeric($key)) {
+                continue;
+            }
+
             if (property_exists($this, $key)) {
                 if (is_array($val)) {
                     $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
