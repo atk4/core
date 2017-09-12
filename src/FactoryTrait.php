@@ -47,17 +47,9 @@ trait FactoryTrait
             }
         }
 
-        $arguments = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY);
-
-        $object = array_shift($arguments);
-
-        $injection = array_filter(
-            $defaults,
-            function ($o) {
-                return !is_numeric($o);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
+        $arguments = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
+        $injection = array_diff_key($defaults, $arguments); // with string keys
+        $object = array_shift($arguments); // first numeric key argument is object
 
         // If object is passed to us, we can ignore arguments, but we need to inject defaults
         if (is_object($object)) {
