@@ -50,9 +50,13 @@ trait DIContainerTrait
         }
 
         foreach ($properties as $key => $val) {
-            // ignore numeric keys
             if (is_numeric($key)) {
-                continue;
+                throw new Exception([
+                    'Numeric property names are not allowed',
+                    'object'  => $this,
+                    'property'=> $key,
+                    'value'   => $val,
+                ]);
             }
 
             if (property_exists($this, $key)) {
