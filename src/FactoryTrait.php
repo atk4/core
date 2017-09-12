@@ -31,6 +31,8 @@ trait FactoryTrait
     {
         if ($defaults === null) {
             $defaults = [];
+        } elseif (!is_array($defaults)) {
+            throw new Exception(['Argument $defaults should be array', 'defaults'=>$defaults]);
         }
 
         if (!$seed) {
