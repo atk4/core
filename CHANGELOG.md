@@ -1,25 +1,13 @@
 # 1.3
 
-This release refactors factory() to use a more predictable and consistent form:
+This release refactors FactoryTrait in a way that may not be backwards compatible, so upgrade with care.
 
-Previously:
-
-
-``` php
-$app->add(['Button', 'this is label']); 
-```
-
-It was unclear on how the label is handled at all. The new behaviour will perform:
-
-``` php
-$button = new Button('this is label');
-```
-
-And further extensions to the argument scan be implemented through variable arguments on a constructor. This is also much more consistent with:
-
-``` php
-$app->add(new Button('this is label'));
-```
+ - Implemented a consistent [Seed Support](http://agile-core.readthedocs.io/en/develop/factory.html#seed)
+ - Changed [how "namespaces" prefixing work](http://agile-core.readthedocs.io/en/develop/factory.html#namespace)
+ - Refactored [DebugTrait, now PSR-3 friedly](http://agile-core.readthedocs.io/en/develop/debug.html)
+ - Added [documentation index](http://agile-core.readthedocs.io/en/develop/index.html)
+ - Migrated to CodeCov and achieved 100% test coverage
+ - Added brief [documentation for debugTraceChange](http://agile-core.readthedocs.io/en/develop/debug.html#debugtracechange)
 
 
 ## 1.2.2
