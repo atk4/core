@@ -169,7 +169,7 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Second argument validation factory()
+     * Second argument validation factory().
      *
      * @expectedException     Exception
      */
