@@ -2,7 +2,6 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
 
@@ -34,17 +33,17 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test properties
+     * Test properties.
      */
     public function testProperties()
     {
         $m = new FactoryDIMock();
 
         $m->setDefaults(['a' => 'foo', 'c' => 'bar']);
-        $this->assertEquals([$m->a,$m->b,$m->c], ['foo','BBB','bar']);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
 
         $m->setDefaults(['a' => null, 'c' => false]);
-        $this->assertEquals([$m->a,$m->b,$m->c], ['foo','BBB',false]);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', false]);
     }
 }
 
