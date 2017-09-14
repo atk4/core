@@ -97,7 +97,7 @@ When object is passed, it will take precedence and absorb all named arguments::
     // $obj = new Message('foobar');
     // $obj->setDefaults(['icon'=>'book', 'class'=>['red']);
 
-If multiple objects are specified than early ones take precedence while still absorbing all named arguments.
+If multiple objects are specified then early ones take precedence while still absorbing all named arguments.
 
 Default and Seed objects
 ------------------------
