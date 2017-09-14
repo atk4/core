@@ -40,8 +40,24 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m->setDefaults(['a' => 'foo', 'c' => 'bar']);
         $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
 
+        $m = new FactoryDIMock2();
         $m->setDefaults(['a' => null, 'c' => false]);
-        $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', false]);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+    }
+
+    /**
+     * Test properties.
+     */
+    public function testPropertiesPassively()
+    {
+        $m = new FactoryDIMock2();
+
+        $m->setDefaultsPassively(['a' => 'foo', 'c' => 'bar']);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', 'bar']);
+
+        $m = new FactoryDIMock2();
+        $m->setDefaultsPassively(['a' => null, 'c' => false]);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
     }
 }
 
