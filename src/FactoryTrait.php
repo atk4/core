@@ -12,14 +12,84 @@ trait FactoryTrait
     public $_factoryTrait = true;
 
     /**
+     * Given two seeds (or more) will merge them, prioritizing the first argument.
+     * If object is passed on either of arguments, then it will setDefaults() remaining
+     * arguments, respecting their positioning.
+     *
+     * See full documentation.
+     *
+     * @param array|object|mixed  $seed
+     * @param array|object|mixed  $seed2
+     * @param array               $more_seeds
+     *
+     * @return object|array if at least one seed is an object, will return object
+     */
+    public function mergeSeeds($seed, $seed2, ...$more_seeds) {
+
+        // recursively merge extra seeds
+        if ($more_seeds) {
+            $seed2 = $this->mergeSeeds($seed2, ...$more_seeds);
+        }
+
+        if (is_object($seed)) {
+            if (is_array($seed2)) {
+                // set defaults but don't override existing properties
+                if (isset($seed->_DIContainerTrait)) {
+                    $seed->setDefaultsPassively($seed2);
+                } else {
+                    throw new Exception([
+                        'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
+                        'object'   => $seed,
+                        'injection'=> $seed2,
+                    ]);
+                }
+            }
+            return $seed;
+        }
+
+        if (is_object($seed2)) {
+            // seed is not object, and setDefaults will complain if it's not array
+            if (is_array($seed)) {
+                if (isset($seed2->_DIContainerTrait)) {
+                    $seed2->setDefaults($seed);
+                } else {
+                    throw new Exception([
+                        'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
+                        'object'   => $seed2,
+                        'injection'=> $seed,
+                    ]);
+                }
+            }
+            return $seed2;
+        }
+
+        if (!is_array($seed)) {
+            $seed = [$seed];
+        }
+
+        if (!is_array($seed2)) {
+            $seed2 = [$seed2];
+        }
+
+        // overwrite seed2 with seed
+        foreach ($seed as $key=>$value) {
+            if ($value !== null) {
+                $seed2[$key] = $value;
+            }
+        }
+
+        return $seed2;
+    }
+
+    /**
      * Given a Seed (see doc) as a first argument, will create object of a corresponding
      * class, call constructor with numerical arguments of a seed and inject key/value
      * arguments.
      *
-     * Argument $defaults has the same effect as the seed, but allows you to separate
-     * out initialization for convenience, e.g. factory(['Button', 'label']); is same as
-     * factory('Button', ['label']). Second argument may not affect the class, so it's
-     * safer.
+     * Argument $defaults has the same effect as the seed, but will not contain the class.
+     * Class is always determined by seed, except if you pass object into defaults.
+     *
+     * To learn more about mechanics of factory trait, see documentation
      *
      * @param mixed  $seed
      * @param array  $defaults
@@ -31,8 +101,6 @@ trait FactoryTrait
     {
         if ($defaults === null) {
             $defaults = [];
-        } elseif (!is_array($defaults)) {
-            throw new Exception(['Argument $defaults should be array', 'defaults'=>$defaults]);
         }
 
         if (!$seed) {
@@ -43,43 +111,35 @@ trait FactoryTrait
             $seed = [$seed];
         }
 
-        foreach ($seed as $key=>$value) {
-            if ($value !== null) {
-                $defaults[$key] = $value;
+        if (is_array($defaults)) {
+            array_unshift($defaults, null); // insert argument 0
+        } elseif (!is_object($defaults)) {
+            $defaults = [null, $defaults];
+        }
+        $seed = $this->mergeSeeds($seed, $defaults);
+
+        if (is_object($seed)) {
+            // setDefaults already called
+            return $seed;
+        }
+
+        $object = array_shift($seed); // first numeric key argument is object
+
+        $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
+        $injection = array_diff_key($seed, $arguments); // with string keys
+
+        if (is_string($object)) {
+            $class = $this->normalizeClassName($object, $prefix);
+
+            if (!$class) {
+                throw new Exception([
+                    'Class name was not specified by the seed',
+                    'seed'=> $seed,
+                ]);
             }
+
+            $object = new $class(...$arguments);
         }
-
-        $arguments = array_filter($defaults, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
-        $injection = array_diff_key($defaults, $arguments); // with string keys
-        $object = array_shift($arguments); // first numeric key argument is object
-
-        // If object is passed to us, we can ignore arguments, but we need to inject defaults
-        if (is_object($object)) {
-            if ($injection) {
-                if (isset($object->_DIContainerTrait)) {
-                    $object->setDefaults($injection);
-                } else {
-                    throw new Exception([
-                        'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                        'object'   => $object,
-                        'injection'=> $injection,
-                    ]);
-                }
-            }
-
-            return $object;
-        }
-
-        $class = $this->normalizeClassName($object, $prefix);
-
-        if (!$class) {
-            throw new Exception([
-                'Class name was not specified by the seed',
-                'seed'=> $seed,
-            ]);
-        }
-
-        $object = new $class(...$arguments);
 
         if ($injection) {
             if (isset($object->_DIContainerTrait)) {
@@ -88,7 +148,6 @@ trait FactoryTrait
                 throw new Exception([
                     'factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait',
                     'object'   => $object,
-                    'class'    => $class,
                     'seed'     => $seed,
                     'injection'=> $injection,
                 ]);

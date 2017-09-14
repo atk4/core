@@ -15,6 +15,164 @@ class SeedTest extends \PHPUnit_Framework_TestCase
      */
     use FactoryTrait;
 
+    public function testMerge1()
+    {
+        // string become array
+        $this->assertEquals(
+            ['hello'],
+            $this->mergeSeeds('hello', null)
+        );
+
+        // left-most value is used
+        $this->assertEquals(
+            ['one'],
+            $this->mergeSeeds('one', 'two', 'three', 'four')
+        );
+
+        // nulls are ignored
+        $this->assertEquals(
+            ['two'],
+            $this->mergeSeeds(null, 'two', 'three', 'four')
+        );
+
+        // object takes precedence
+        $o = new SeedDITestMock();
+        $this->assertSame(
+            $o,
+            $this->mergeSeeds(null, 'two', $o, 'four')
+        );
+
+        // if more than one object, leftmost is returned
+        $o1 = new SeedDITestMock();
+        $o2 = new SeedDITestMock();
+        $this->assertSame(
+            $o2,
+            $this->mergeSeeds(null, 'two', $o2, $o1, 'four')
+        );
+    }
+
+    public function testMerge2()
+    {
+        // array argument merging
+        $this->assertEquals(
+            ['a1', 'a2'],
+            $this->mergeSeeds(['a1', 'a2'], null, ['b1', 'b2'])
+        );
+
+        // nulls are ignored
+        $this->assertEquals(
+            ['b1', 'a2', 'c3'],
+            $this->mergeSeeds([null, 'a2', null], 'b1', ['c1', null, 'c3'])
+        );
+
+        // object takes precedence
+        $o = new SeedDITestMock();
+        $this->assertSame(
+            $o,
+            $this->mergeSeeds([null, 'a2', null], 'b1', ['c1', null, 'c3'], $o)
+        );
+
+        // is object is wrapped in array - we dont care
+        $o = new SeedDITestMock();
+        $this->assertEquals(
+            ['b1', 'a2', 'c3'],
+            $this->mergeSeeds([null, 'a2', null], 'b1', ['c1', null, 'c3'], [$o])
+        );
+
+        // we will still return it
+        $o = new SeedDITestMock();
+        $this->assertSame(
+            $o,
+            $this->mergeSeeds([null, 'a2', null], [null, null, 'c3'], [$o])[0]
+        );
+    }
+
+    public function testMerge3()
+    {
+        // key/value support
+        $this->assertEquals(
+            ['a'=>1],
+            $this->mergeSeeds(['a'=>1], ['a'=>2])
+        );
+
+        // values has no special treatment
+        $this->assertEquals(
+            ['a'=>[1]],
+            $this->mergeSeeds(['a'=>[1]], ['a'=>2])
+        );
+
+        // object is injected with values
+        $o = new SeedDITestMock();
+        $oo = $this->mergeSeeds(['foo'=>1], $o);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, 1);
+
+        // even it already has value
+        $o = new SeedDITestMock();
+        $o->foo = 5;
+        $oo = $this->mergeSeeds(['foo'=>1], $o);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, 1);
+
+        // but this way existing value is respected
+        $o = new SeedDITestMock();
+        $o->foo = 5;
+        $oo = $this->mergeSeeds($o, ['foo'=>1]);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, 5);
+    }
+
+    public function testMerge4()
+    {
+        // array values don't overwrite but rather merge
+        $o = new SeedDITestMock();
+        $o->foo = ['red'];
+        $oo = $this->mergeSeeds(['foo'=>['green']], $o);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, ['red', 'green']);
+
+        // still we don't care if they are to the right of the object
+        $o = new SeedDITestMock();
+        $o->foo = ['red'];
+        $oo = $this->mergeSeeds($o, ['foo'=>['green']]);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, ['red']);
+    }
+
+    public function testMerge5()
+    {
+        // works even if more arguments present
+        $o = new SeedDITestMock();
+        $o->foo = ['red'];
+        $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o, ['foo'=>5]);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
+
+        // also without arrays
+        $o = new SeedDITestMock();
+        $o->foo = 'red';
+        $oo = $this->mergeSeeds(['foo'=>'xx'], ['foo'=>'green'], $o, ['foo'=>5]);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, 'xx');
+
+        // and even if multiple objects are found
+        $o = new SeedDITestMock();
+        $o->foo = ['red'];
+        $o2 = new SeedDITestMock();
+        $o2->foo = ['yellow'];
+        $oo = $this->mergeSeeds(['foo'=>['xx']], $o, ['foo'=>['green']], $o2, ['foo'=>['cyan']]);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, ['red', 'xx']);
+    }
+
     public function testBasic()
     {
         $s1 = $this->factory('atk4/core/tests/SeedTestMock');
@@ -55,21 +213,21 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     public function testPrefix()
     {
         // prefix could be fully specified (global)
-        $s1 = $this->factory('SeedTestMock', [null, 'hello'], '/atk4/core/tests');
+        $s1 = $this->factory('SeedTestMock', ['hello'], '/atk4/core/tests');
         $this->assertEquals(['hello'], $s1->args);
 
         // specifying prefix yourself will override, but only if you start with slash
-        $s1 = $this->factory('/atk4/core/tests/SeedTestMock', [null, 'hello'], '/atk4/core/tests');
+        $s1 = $this->factory('/atk4/core/tests/SeedTestMock', ['hello'], '/atk4/core/tests');
         $this->assertEquals(['hello'], $s1->args);
 
         // without slash, prefixes add up
-        $s1 = $this->factory('tests/SeedTestMock', [null, 'hello'], '/atk4/core');
+        $s1 = $this->factory('tests/SeedTestMock', ['hello'], '/atk4/core');
         $this->assertEquals(['hello'], $s1->args);
     }
 
     public function testDefaults()
     {
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world'], ['atk4/core/tests/SeedTestMock', 'more', 'baz'=>'', 'more', 'args']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world'], ['more', 'baz'=>'', 'more', 'args']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['hello', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
@@ -80,17 +238,27 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
     public function testNull()
     {
-        $s1 = $this->factory([null, 'foo'=>null, null, 'world'], ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'foo'=>null, null, 'world'], ['more', 'foo'=>'bar', 'more', 'args']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
 
-        $s1 = $this->factory(null, ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']);
+        $s1 = $this->factory($this->mergeSeeds(['atk4/core/tests/SeedDITestMock', 'foo'=>null, null, 'world'], ['atk4/core/tests/SeedTestMock', 'more', 'foo'=>'bar', 'more', 'args']));
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['more', 'world', 'args'], $s1->args);
+        $this->assertEquals('bar', $s1->foo);
+
+        $s1 = $this->factory($this->mergeSeeds([null, 'foo'=>null, null, 'world'], ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']));
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['more', 'world', 'args'], $s1->args);
+        $this->assertEquals('bar', $s1->foo);
+
+        $s1 = $this->factory($this->mergeSeeds(null, ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']));
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'more', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
 
-        $s1 = $this->factory([], ['atk4/core/tests/SeedDITestMock', 'test']);
+        $s1 = $this->factory($this->mergeSeeds([], ['atk4/core/tests/SeedDITestMock', 'test']));
         $this->assertEquals(['test'], $s1->args);
     }
 
@@ -111,13 +279,13 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $s1 = $this->factory([$o, 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
         $this->assertEquals(['xx', 'red'], $s1->foo);
 
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'world'], [null, 'more', 'more', 'args']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'world'], ['more', 'more', 'args']);
         $this->assertEquals(['hello', 'world', 'args'], $s1->args);
 
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', null, 'world'], [null, 'more', 'more', 'args']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', null, 'world'], ['more', 'more', 'args']);
         $this->assertEquals(['more', 'world', 'args'], $s1->args);
 
-        $s1 = $this->factory([new SeedDITestMock('x', 'y'), null, 'bar'], [null, 'foo', 'baz']);
+        $s1 = $this->factory([new SeedDITestMock('x', 'y'), null, 'bar'], ['foo', 'baz']);
         $this->assertEquals(['x', 'y'], $s1->args);
     }
 
@@ -156,8 +324,16 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
     public function testGiveClassFirst()
     {
-        $s1 = $this->factory(['foo'=>'bar'], ['atk4/core/tests/SeedDITestMock']);
+        $s1 = $this->factory(['foo'=>'bar'], new SeedDITestMock());
         $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals('bar', $s1->foo);
+    }
+
+    public function testStringDefault()
+    {
+        $s1 = $this->factory('atk4/core/tests/SeedDITestMock', 'hello');
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['hello'], $s1->args);
     }
 }
 

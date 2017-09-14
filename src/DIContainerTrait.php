@@ -50,16 +50,34 @@ trait DIContainerTrait
         }
 
         foreach ($properties as $key => $val) {
-            if (is_numeric($key)) {
-                throw new Exception([
-                    'Numeric property names are not allowed',
-                    'object'  => $this,
-                    'property'=> $key,
-                    'value'   => $val,
-                ]);
+            if (!is_numeric($key) && property_exists($this, $key)) {
+                if (is_array($val)) {
+                    $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
+                } elseif ($val !== null) {
+                    $this->$key = $val;
+                }
+            } else {
+                $this->setMissingProperty($key, $val);
             }
+        }
+    }
 
-            if (property_exists($this, $key)) {
+    /**
+     * Same as setDefaults but won't override non-null properties
+     *
+     * @param array $properties
+     */
+    public function setDefaultsPassively($properties = [])
+    {
+        if ($properties === null) {
+            $properties = [];
+        }
+
+        foreach ($properties as $key => $val) {
+            if (!is_numeric($key) && property_exists($this, $key)) {
+                if ($this->$key !== null) {
+                    continue;
+                }
                 if (is_array($val)) {
                     $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
                 } elseif ($val !== null) {
@@ -81,6 +99,11 @@ trait DIContainerTrait
      */
     protected function setMissingProperty($key, $value)
     {
+        // ignore numeric properties by default
+        if (is_numeric($key)) {
+            return;
+        }
+
         throw new Exception([
             'Property for specified object is not defined',
             'object'  => $this,

@@ -11,9 +11,7 @@ use atk4\core\FactoryTrait;
 class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Do not allow numeric property names (array keys).
-     *
-     * @expectedException     Exception
+     * Ignore numeric property names (array keys).
      */
     public function testException1()
     {
