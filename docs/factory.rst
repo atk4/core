@@ -88,7 +88,7 @@ Some examples::
 Seed merging can also be used to merge defaults::
 
     mergeSeeds(['label 1'], ['icon'=>'book']);
-    // results in ['label 2', 'icon'=>'book']
+    // results in ['label 1', 'icon'=>'book']
 
 When object is passed, it will take precedence and absorb all named arguments::
 
@@ -161,7 +161,7 @@ Form::addField and Table::addColumn
 Agile UI is using form field classes from namespace \atk4\ui\FormField\. A default class
 is 'Line' but there are several ways how it can be overriden:
 
- - User can specify ['ui'=>..] property for model's field
+ - User can specify $ui['form'] / $ui['table'] property for model's field
  - User can pass 2nd parameter to addField()
  - Class can be inferred from field type
 
