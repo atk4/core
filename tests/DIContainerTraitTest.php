@@ -59,6 +59,12 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m->setDefaultsPassively(['a' => null, 'c' => false]);
         $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
     }
+
+    public function testPassively()
+    {
+        $m = new FactoryDIMock2();
+        $m->setDefaultsPassively(null);
+    }
 }
 
 // @codingStandardsIgnoreStart
