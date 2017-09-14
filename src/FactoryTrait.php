@@ -18,13 +18,14 @@ trait FactoryTrait
      *
      * See full documentation.
      *
-     * @param array|object|mixed  $seed
-     * @param array|object|mixed  $seed2
-     * @param array               $more_seeds
+     * @param array|object|mixed $seed
+     * @param array|object|mixed $seed2
+     * @param array              $more_seeds
      *
      * @return object|array if at least one seed is an object, will return object
      */
-    public function mergeSeeds($seed, $seed2, ...$more_seeds) {
+    public function mergeSeeds($seed, $seed2, ...$more_seeds)
+    {
 
         // recursively merge extra seeds
         if ($more_seeds) {
@@ -44,6 +45,7 @@ trait FactoryTrait
                     ]);
                 }
             }
+
             return $seed;
         }
 
@@ -60,6 +62,7 @@ trait FactoryTrait
                     ]);
                 }
             }
+
             return $seed2;
         }
 

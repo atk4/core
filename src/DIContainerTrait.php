@@ -63,7 +63,7 @@ trait DIContainerTrait
     }
 
     /**
-     * Same as setDefaults but won't override non-null properties
+     * Same as setDefaults but won't override non-null properties.
      *
      * @param array $properties
      */
