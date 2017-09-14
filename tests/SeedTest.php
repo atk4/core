@@ -173,6 +173,34 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($oo->foo, ['red', 'xx']);
     }
 
+    /**
+     * @expectedException     Exception
+     */
+    public function testMergeFail1()
+    {
+        // works even if more arguments present
+        $o = new SeedTestMock();
+        $o->foo = ['red'];
+        $oo = $this->mergeSeeds($o, ['foo'=>5]);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
+    }
+
+    /**
+     * @expectedException     Exception
+     */
+    public function testMergeFail2()
+    {
+        // works even if more arguments present
+        $o = new SeedTestMock();
+        $o->foo = ['red'];
+        $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o);
+
+        $this->assertSame($o, $oo);
+        $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
+    }
+
     public function testBasic()
     {
         $s1 = $this->factory('atk4/core/tests/SeedTestMock');
@@ -332,6 +360,23 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     public function testStringDefault()
     {
         $s1 = $this->factory('atk4/core/tests/SeedDITestMock', 'hello');
+        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertEquals(['hello'], $s1->args);
+
+        // also OK if it's not a DIContainer object
+        $s1 = $this->factory('atk4/core/tests/SeedTestMock', 'hello');
+        $this->assertTrue($s1 instanceof SeedTestMock);
+        $this->assertEquals(['hello'], $s1->args);
+    }
+
+    /**
+     * Cannot inject in non-DI
+     *
+     * @expectedException     Exception
+     */
+    public function testNonDIInject()
+    {
+        $s1 = $this->factory('atk4/core/tests/SeedTestMock', ['foo'=>'hello']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['hello'], $s1->args);
     }
