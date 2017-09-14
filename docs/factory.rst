@@ -62,11 +62,170 @@ Finally any named values inside seed array will be assigned to class properties 
 
 Factory uses `array_shift` to separate class definition from other components.
 
+Seed Merging
+------------
+
+.. php:method:: mergeSeeds($seed, $seed2, ...)
+
+Two (or more) seeds can be merged resulting in a new seed with some combined properties:
+
+1. Class of a first seed will be selected. If specified as "null" will be picked from next seed.
+2. If string as passed as any of the argument it's considered to be a class
+3. If object is passed as any of the argument, it will be used instead ignoring all classes and numeric arguments.
+   All the key->value pairs will be merged and passed into setDefaults().
+
+Some examples::
+
+    mergeSeeds(['Button', 'Button Label'], ['Message', 'Message label']);
+    // results in ['Button', 'Button Label']
+
+    mergeSeeds([null, 'Button Label'], ['Message', 'Message Label']);
+    // Results in ['Message', 'Button Label']);
+
+    mergeSeeds(['null, 'Label1', 'icon'=>'book'], ['icon'=>'coin', 'Button'], ['class'=>['red']]);
+    // Results in ['Button', 'Label1', 'icon'=>'book', 'class'=>['red']]
+
+Seed merging can also be used to merge defaults::
+
+    mergeSeeds(['label 1'], ['icon'=>'book']);
+    // results in ['label 1', 'icon'=>'book']
+
+When object is passed, it will take precedence and absorb all named arguments::
+
+    mergeSeeds(['null, 'Label1', 'icon'=>'book'], ['icon'=>'coin', 'Button'], new Message('foobar'), ['class'=>['red']]);
+    // result is 
+    // $obj = new Message('foobar');
+    // $obj->setDefaults(['icon'=>'book', 'class'=>['red']);
+
+If multiple objects are specified then early ones take precedence while still absorbing all named arguments.
+
+Default and Seed objects
+------------------------
+
+When object is passed as 2nd argument to factory() it takes precedence over all array-based seeds. If
+1st argument of factory() is also object, then 1st argument object is used::
+
+    factory(['Icon', 'book'], ['pencil']);
+    // book
+
+    factory(['Icon', 'book'], new Icon('pencil')];
+    // pencil
+
+    factory(new Icon('book'), new Icon('pencil')];
+    // book
+
+Usage in frameworks
+===================
+
+There are several ways to use Seed Merging and Agile UI / Agile Data makes use of those patterns
+when possible.
+
+Specify Icon for a Button
+-------------------------
+
+As you may know, Button class has icon property, which may be specified as a string, seed or object::
+
+    $button = $app->add(['Button', 'icon'=>'book']);
+
+Well, to implement the button internally, render method uses this::
+
+    $this->button = $this->factory(['Button'], $this->button);
+
+So the value you specify for the icon will be passed as:
+
+ - string: argument to constructor of `Button()`.
+ - array: arguments for constructors and inject propreties
+ - object: will override return value
+
+Specify Layout
+--------------
+
+The first thing beginners learn about Agile Toolkit is how to specify layout::
+
+    $app = new \atk4\ui\App('Hello World');
+    $app->initLayout('Centered');
+
+The argument for initLayout is passed to factory::
+
+    $this->layout = $this->factory($layout, null, 'Layout');
+
+The value you specify will be treated like this:
+
+ - string: specify a class (prefixed by Layout\)
+ - array: specify a class and allow to pass additional argument or constructor options
+ - object: will override layout
+
+Form::addField and Table::addColumn
+-----------------------------------
+
+Agile UI is using form field classes from namespace \atk4\ui\FormField\. A default class
+is 'Line' but there are several ways how it can be overriden:
+
+ - User can specify $ui['form'] / $ui['table'] property for model's field
+ - User can pass 2nd parameter to addField()
+ - Class can be inferred from field type
+
+Each of the above can specify class name, so with 3 seed sources they need merging::
+
+    $seed = mergeSeeds($decorator, $field->ui, $inferred, ['Line', 'form' => $this]);
+    $decorator = factory($seed, null, 'FormField');
+
+Passing an actual object anywhere will use it instead even if you specify seed.
+
+Specify Form Field 
+
+addField, addButton, etc
+------------------------
+
+Model::addField, Form::addButton, FormLayout::addHeader imply that the class of
+an added object is known so the argument you specify to those methods ends up
+being a factory's $default::
+
+    function addButton($label) {
+        return $this->add(
+            $this->factory(['Button', null, 'secondary'], $label);
+            'Buttons'
+        );
+    }
+
+in this code factory will use a seed with a `null` for label, which means, that
+label will be actually taken from a second argument. This pattetrn enables 3
+ways to use addButton()::
+
+    $form->addButton('click me');
+    // Adds a regular button with specified label, as expected
+
+    $form->addButton(['click me', 'red', 'icon'=>'book']);
+    // Specify class of a button and also icon
+
+    $form->addButton(new MyButton('click me'));
+    // Use an obect specified instead of a button
+
+A same logic can be applied to addField::
+
+    $model->addField('is_vip', ['type'=>'boolean']);
+    // class = Field, type = boolean
+
+    $model->addField('is_vip', ['boolean'])
+    // new Field('boolean'), same result
+
+    $model->addField('is_vip', new MyBoolean());
+    // new MyBoolean()
+
+and the implementation uses factory's default::
+
+    $field = $this->factory($this->_field_class, $arg, '\atk4\data');    
+
+Normally the field class property is a string, which will be used, but
+it can also be array.
+
+
 Factory Defaults
 ================
 
 Defaults array takes place of $seed if $seed is missing components. $defaults is
-using identical format to seed, but it only can be array.
+using identical format to seed, but without the class. If defaults is not an
+array, then it's wrapped into [].
 
 Array that lacks class is called defaults, e.g.::
 

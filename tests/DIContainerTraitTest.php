@@ -11,9 +11,7 @@ use atk4\core\FactoryTrait;
 class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Do not allow numeric property names (array keys).
-     *
-     * @expectedException     Exception
+     * Ignore numeric property names (array keys).
      */
     public function testException1()
     {
@@ -42,8 +40,35 @@ class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m->setDefaults(['a' => 'foo', 'c' => 'bar']);
         $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
 
+        $m = new FactoryDIMock2();
         $m->setDefaults(['a' => null, 'c' => false]);
-        $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', false]);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+    }
+
+    /**
+     * Test properties.
+     */
+    public function testPropertiesPassively()
+    {
+        $m = new FactoryDIMock2();
+
+        $m->setDefaultsPassively(['a' => 'foo', 'c' => 'bar']);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', 'bar']);
+
+        $m = new FactoryDIMock2();
+        $m->setDefaultsPassively(['a' => null, 'c' => false]);
+        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+
+        $m = new FactoryDIMock2();
+        $m->a = ['foo'];
+        $m->setDefaultsPassively(['a' => ['bar']]);
+        $this->assertEquals([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
+    }
+
+    public function testPassively()
+    {
+        $m = new FactoryDIMock2();
+        $m->setDefaultsPassively(null);
     }
 }
 

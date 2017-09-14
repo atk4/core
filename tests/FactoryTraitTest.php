@@ -167,18 +167,6 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
         $m2 = $m->factory($m1, ['not_exist'=>'test']);
     }
-
-    /**
-     * Second argument validation factory().
-     *
-     * @expectedException     Exception
-     */
-    public function testSecondArgumentValidation()
-    {
-        // wrong property in 2nd parameter
-        $m = new FactoryMock();
-        $m1 = $m->factory('atk4\core\tests\FactoryMock', 'blah');
-    }
 }
 
 // @codingStandardsIgnoreStart
