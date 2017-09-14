@@ -370,7 +370,7 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Cannot inject in non-DI
+     * Cannot inject in non-DI.
      *
      * @expectedException     Exception
      */
