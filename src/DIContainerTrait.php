@@ -41,8 +41,8 @@ trait DIContainerTrait
      * Call from __construct() to initialize the properties allowing
      * developer to pass Dependency Injector Container.
      *
-     * @param array   $properties
-     * @param boolean $pasively if true, existing non-null argument values will be kept
+     * @param array $properties
+     * @param bool  $pasively   if true, existing non-null argument values will be kept
      */
     public function setDefaults($properties = [], $passively = false)
     {
