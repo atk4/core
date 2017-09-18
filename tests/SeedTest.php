@@ -317,6 +317,12 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['x', 'y'], $s1->args);
     }
 
+    public function testMerge7()
+    {
+        $s1 = $this->mergeSeeds(new SeedDefTestMock(), ['foo']);
+        $this->assertEquals(null, $s1->def);
+    }
+
     /**
      * @expectedException     Exception
      */
@@ -397,6 +403,19 @@ class SeedTestMock
 class SeedDITestMock extends SeedTestMock
 {
     use DIContainerTrait;
+}
+
+class SeedDefTestMock extends SeedTestMock
+{
+    use DIContainerTrait {
+        setDefaults as _setDefaults;
+    }
+    public $def = null;
+
+    public function setDefaults($def, $passively = false)
+    {
+        $this->def = $def;
+    }
 }
 
 class SeedAppPrefixMock

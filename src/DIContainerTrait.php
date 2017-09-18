@@ -42,8 +42,9 @@ trait DIContainerTrait
      * developer to pass Dependency Injector Container.
      *
      * @param array $properties
+     * @param bool  $pasively   if true, existing non-null argument values will be kept
      */
-    public function setDefaults($properties = [])
+    public function setDefaults($properties = [], $passively = false)
     {
         if ($properties === null) {
             $properties = [];
@@ -51,31 +52,7 @@ trait DIContainerTrait
 
         foreach ($properties as $key => $val) {
             if (!is_numeric($key) && property_exists($this, $key)) {
-                if (is_array($val)) {
-                    $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-                } elseif ($val !== null) {
-                    $this->$key = $val;
-                }
-            } else {
-                $this->setMissingProperty($key, $val);
-            }
-        }
-    }
-
-    /**
-     * Same as setDefaults but won't override non-null properties.
-     *
-     * @param array $properties
-     */
-    public function setDefaultsPassively($properties = [])
-    {
-        if ($properties === null) {
-            $properties = [];
-        }
-
-        foreach ($properties as $key => $val) {
-            if (!is_numeric($key) && property_exists($this, $key)) {
-                if ($this->$key !== null) {
+                if ($passively && $this->$key !== null) {
                     continue;
                 }
                 if (is_array($val)) {
