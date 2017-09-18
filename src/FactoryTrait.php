@@ -35,14 +35,18 @@ trait FactoryTrait
         if (is_object($seed)) {
             if (is_array($seed2)) {
                 // set defaults but don't override existing properties
-                if (isset($seed->_DIContainerTrait)) {
-                    $seed->setDefaultsPassively($seed2);
-                } else {
-                    throw new Exception([
-                        'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                        'object'   => $seed,
-                        'injection'=> $seed2,
-                    ]);
+                $arguments = array_filter($seed2, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
+                $injection = array_diff_key($seed2, $arguments); // with string keys
+                if ($injection) {
+                   if (isset($seed->_DIContainerTrait)) {
+                        $seed->setDefaults($injection, true);
+                    } else {
+                        throw new Exception([
+                            'factory() requested to passively inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
+                            'object'   => $seed,
+                            'injection'=> $injection,
+                        ]);
+                    }
                 }
             }
 
@@ -52,14 +56,18 @@ trait FactoryTrait
         if (is_object($seed2)) {
             // seed is not object, and setDefaults will complain if it's not array
             if (is_array($seed)) {
-                if (isset($seed2->_DIContainerTrait)) {
-                    $seed2->setDefaults($seed);
-                } else {
-                    throw new Exception([
-                        'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                        'object'   => $seed2,
-                        'injection'=> $seed,
-                    ]);
+                $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
+                $injection = array_diff_key($seed, $arguments); // with string keys
+                if ($injection) {
+                    if (isset($seed2->_DIContainerTrait)) {
+                        $seed2->setDefaults($injection);
+                    } else {
+                        throw new Exception([
+                            'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
+                            'object'   => $seed2,
+                            'injection'=> $seed,
+                        ]);
+                    }
                 }
             }
 
