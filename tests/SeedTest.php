@@ -412,7 +412,8 @@ class SeedDefTestMock extends SeedTestMock
     }
     public $def = null;
 
-    function setDefaults($def, $passively = false) {
+    public function setDefaults($def, $passively = false)
+    {
         $this->def = $def;
     }
 }

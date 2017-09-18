@@ -38,7 +38,7 @@ trait FactoryTrait
                 $arguments = array_filter($seed2, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
                 $injection = array_diff_key($seed2, $arguments); // with string keys
                 if ($injection) {
-                   if (isset($seed->_DIContainerTrait)) {
+                    if (isset($seed->_DIContainerTrait)) {
                         $seed->setDefaults($injection, true);
                     } else {
                         throw new Exception([
