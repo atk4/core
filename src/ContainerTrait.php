@@ -209,7 +209,7 @@ trait ContainerTrait
             $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = dechex(crc32($key));
+                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
             }
             $desired = $this->app->unique_hashes[$key].'__'.$rest;
         }
