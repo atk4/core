@@ -16,8 +16,9 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 - Added implementation for [seed mering](http://agile-core.readthedocs.io/en/develop/factory.html#seed-merging)
 - Fix the way how setDefaults treats numeric arguments #63
 
-#### 1.1.2
+#### 1.3.2
 
+- Fixed bug that would prevent random Forms from submitting proprely #64
 
 ## 1.2.2
 
