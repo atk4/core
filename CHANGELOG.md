@@ -20,6 +20,10 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 
 - Fixed bug that would prevent random Forms from submitting proprely #64
 
+#### 1.3.2
+
+- Removed php-coveralls from runtime dependency
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
