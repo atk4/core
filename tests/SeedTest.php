@@ -409,13 +409,13 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test seed property merging
+     * Test seed property merging.
      */
     public function testPropertyMerging()
     {
         $s1 = $this->factory(
-            ['atk4/core/tests/SeedDITestMock', 'foo'=>['Button', 'icon'=>'red']], 
-            ['foo'=>['Label', 'red']]);
+            ['atk4/core/tests/SeedDITestMock', 'foo'=>['Button', 'icon'=>'red']],
+            ['foo'=> ['Label', 'red']]);
 
         $this->assertEquals(['Button', 'icon'=>'red'], $s1->foo);
 
@@ -423,8 +423,6 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(['Message', 'detail'=>'blah'], $s1->foo);
     }
-
-
 }
 
 class SeedTestMock
@@ -454,7 +452,6 @@ class ViewTestMock extends SeedTestMock
     public function setDefaults($properties = [], $passively = false)
     {
         if ($properties['foo']) {
-
             if ($passively) {
                 $this->foo = array_merge($properties['foo'], $this->foo);
             } else {
@@ -462,6 +459,7 @@ class ViewTestMock extends SeedTestMock
             }
             unset($properties['foo']);
         }
+
         return $this->_setDefaults($properties, $passively);
     }
 }
