@@ -128,7 +128,7 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     public function testMerge4()
     {
         // array values don't overwrite but rather merge
-        $o = new SeedDITestMock();
+        $o = new ViewTestMock();
         $o->foo = ['red'];
         $oo = $this->mergeSeeds(['foo'=>['green']], $o);
 
@@ -147,9 +147,9 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     public function testMerge5()
     {
         // works even if more arguments present
-        $o = new SeedDITestMock();
+        $o = new ViewTestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o, ['foo'=>5]);
+        $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
@@ -161,16 +161,37 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, 'xx');
+    }
 
+    public function testMerge5b()
+    {
         // and even if multiple objects are found
-        $o = new SeedDITestMock();
+        $o = new ViewTestMock();
         $o->foo = ['red'];
-        $o2 = new SeedDITestMock();
+        $o2 = new ViewTestMock();
         $o2->foo = ['yellow'];
         $oo = $this->mergeSeeds(['foo'=>['xx']], $o, ['foo'=>['green']], $o2, ['foo'=>['cyan']]);
 
         $this->assertSame($o, $oo);
-        $this->assertEquals($oo->foo, ['red', 'xx']);
+        $this->assertEquals(['red', 'xx'], $oo->foo);
+    }
+
+    public function testMerge6()
+    {
+        $oo = $this->mergeSeeds(['4'=>'four'], ['5'=>'five']);
+        $this->assertEquals($oo, ['4'=>'four', '5'=>'five']);
+
+        $oo = $this->mergeSeeds(['4'=>['four']], ['5'=>['five']]);
+        $this->assertEquals($oo, ['4'=>['four'], '5'=>['five']]);
+
+        $oo = $this->mergeSeeds(['x'=>['four']], ['x'=>['five']]);
+        $this->assertEquals($oo, ['x'=>['four']]);
+
+        $oo = $this->mergeSeeds(['4'=>['four']], ['4'=>['five']]);
+        $this->assertEquals($oo, ['4'=>['four']]);
+
+        $oo = $this->mergeSeeds(['4'=>['200']], ['4'=>['201']]);
+        $this->assertEquals($oo, ['4'=>['200']]);
     }
 
     /**
@@ -302,7 +323,7 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $s1 = $this->factory([new SeedDITestMock(), 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
         $this->assertEquals(['red'], $s1->foo);
 
-        $o = new SeedDITestMock();
+        $o = new ViewTestMock();
         $o->foo = ['xx'];
         $s1 = $this->factory([$o, 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
         $this->assertEquals(['xx', 'red'], $s1->foo);
@@ -386,6 +407,24 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['hello'], $s1->args);
     }
+
+    /**
+     * Test seed property merging
+     */
+    public function testPropertyMerging()
+    {
+        $s1 = $this->factory(
+            ['atk4/core/tests/SeedDITestMock', 'foo'=>['Button', 'icon'=>'red']], 
+            ['foo'=>['Label', 'red']]);
+
+        $this->assertEquals(['Button', 'icon'=>'red'], $s1->foo);
+
+        $s1->setDefaults(['foo'=>['Message', 'detail'=>'blah']]);
+
+        $this->assertEquals(['Message', 'detail'=>'blah'], $s1->foo);
+    }
+
+
 }
 
 class SeedTestMock
@@ -403,6 +442,28 @@ class SeedTestMock
 class SeedDITestMock extends SeedTestMock
 {
     use DIContainerTrait;
+}
+
+class ViewTestMock extends SeedTestMock
+{
+    use DIContainerTrait {
+        setDefaults as _setDefaults;
+    }
+    public $def = null;
+
+    public function setDefaults($properties = [], $passively = false)
+    {
+        if ($properties['foo']) {
+
+            if ($passively) {
+                $this->foo = array_merge($properties['foo'], $this->foo);
+            } else {
+                $this->foo = array_merge($this->foo, $properties['foo']);
+            }
+            unset($properties['foo']);
+        }
+        return $this->_setDefaults($properties, $passively);
+    }
 }
 
 class SeedDefTestMock extends SeedTestMock

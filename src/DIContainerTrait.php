@@ -55,9 +55,8 @@ trait DIContainerTrait
                 if ($passively && $this->$key !== null) {
                     continue;
                 }
-                if (is_array($val)) {
-                    $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-                } elseif ($val !== null) {
+
+                if ($val !== null) {
                     $this->$key = $val;
                 }
             } else {
