@@ -22,7 +22,15 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 
 #### 1.3.2
 
+- Added prefix to seed, was causing atk4/ui/Form to randomly fail, when name is shortened
+
+#### 1.3.3
+
 - Removed php-coveralls from runtime dependency
+
+#### 1.3.4
+
+- Removed special treatment for array property merging #67
 
 ## 1.2.2
 
