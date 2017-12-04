@@ -34,6 +34,12 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/PrevError/', $ret);
         $this->assertRegExp('/333/', $ret);
 
+        // get console HTLM
+        $ret = $m->getHTMLText();
+        $this->assertRegExp('/TestIt/', $ret);
+        $this->assertRegExp('/PrevError/', $ret);
+        $this->assertRegExp('/333/', $ret);
+
         // get colorful text
         $ret = $m->getHTML();
         $this->assertRegExp('/TestIt/', $ret);
