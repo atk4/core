@@ -52,6 +52,7 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('');
 
         $app = new DebugAppMock();
+        $app->logger = $app;
 
         $m = new DebugMock();
         $m->app = $app;
@@ -75,6 +76,7 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('');
 
         $app = new DebugAppMock();
+        $app->logger = $app;
 
         $m = new DebugMock();
         $m->app = $app;
@@ -125,6 +127,7 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         $app = new DebugAppMock();
 
         $m = new DebugMock();
+        $app->logger = $app;
         $m->app = $app;
 
         $this->triggerDebugTraceChange($m, 'test1'); // difference is 1 line between calls
@@ -169,6 +172,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     use \Psr\Log\LoggerTrait;
 
     public $log;
+    public $logger;
 
     public function log($level, $message, array $context = [])
     {
