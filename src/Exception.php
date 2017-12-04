@@ -159,14 +159,14 @@ class Exception extends \Exception
     }
 
     /**
-     * Similar to getColorfulText() but will use raw HTML for outputting colors
+     * Similar to getColorfulText() but will use raw HTML for outputting colors.
      *
      * @return string
      */
     public function getHTMLText()
     {
         $output = "--[ Agile Toolkit Exception ]---------------------------\n";
-        $output .= get_class($this).": <font color='pink'><b>".$this->getMessage()."</b></font>".
+        $output .= get_class($this).": <font color='pink'><b>".$this->getMessage().'</b></font>'.
             ($this->getCode() ? ' [code: '.$this->getCode().']' : '');
 
         foreach ($this->params as $key => $val) {
@@ -196,12 +196,12 @@ class Exception extends \Exception
 
             $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
 
-            $output .= "\n<font color='cyan'>".$file."</font>";
-            $output .= ":<font color='pink'>".$line."</font>";
+            $output .= "\n<font color='cyan'>".$file.'</font>';
+            $output .= ":<font color='pink'>".$line.'</font>';
 
             if (isset($call['object'])) {
                 $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
-                $output .= " - <font color='yellow'>".$name."</font>";
+                $output .= " - <font color='yellow'>".$name.'</font>';
             }
 
             $output .= " <font color='gray'>";
@@ -209,7 +209,7 @@ class Exception extends \Exception
             if (isset($call['class'])) {
                 $output .= $call['class'].'::';
             }
-            $output .='</font>';
+            $output .= '</font>';
 
             if ($escape_frame) {
                 $output .= "<font color='pink'>".$call['function'].'</font>';
@@ -230,7 +230,7 @@ class Exception extends \Exception
 
         if ($p = $this->getPrevious()) {
             $output .= "\n\nCaused by Previous Exception:\n";
-            $output .= get_class($p).": <font color='pink'>".$p->getMessage()."</font>".
+            $output .= get_class($p).": <font color='pink'>".$p->getMessage().'</font>'.
                 ($p->getCode() ? ' [code: '.$p->getCode().']' : '');
         }
 
