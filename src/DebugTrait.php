@@ -48,8 +48,8 @@ trait DebugTrait
 
         // if debug is enabled, then log it
         if ($this->debug) {
-            if (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
-                $this->app->log('debug', $message, $context);
+            if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
+                $this->app->logger->log('debug', $message, $context);
             } else {
                 $this->_echo_stderr('['.get_class($this)."]: $message\n");
             }
@@ -69,8 +69,8 @@ trait DebugTrait
      */
     public function log($level, $message, $context = [])
     {
-        if (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
-            $this->app->log($level, $message, $context);
+        if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
+            $this->app->logger->log($level, $message, $context);
         } else {
             $this->_echo_stderr("$message\n");
         }
