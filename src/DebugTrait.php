@@ -26,7 +26,7 @@ trait DebugTrait
      */
     protected function _echo_stderr($message)
     {
-        fwrite(STDERR, $message);
+        file_put_contents('php://stderr', $message);
     }
 
     /**
