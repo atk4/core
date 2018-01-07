@@ -32,8 +32,8 @@ Name Trait
 
 .. php:trait:: ObjectTrait
 
-    Name trait only adds the 'name' property. Normally you don't have to use it
-    because :php:trait:`TrackableTrait` automatically inherits this trait.
+    Name trait only adds the 'name' property. Normally you don't have to use
+    it because :php:trait:`TrackableTrait` automatically inherits this trait.
     Due to issues with PHP5 if both :php:trait:`ContainerTrait` and
     :php:trait:`TrackableTrait` are using :php:trait:`NameTrait` and then
     both applied on the object, the clash results in "strict warning".
@@ -59,8 +59,9 @@ Container Trait
 
 .. php:trait:: ContainerTrait
 
-    If you want your framework to keep track of relationships between objects by
-    implementing containers, you can use :php:trait:`ContainerTrait`. Example::
+    If you want your framework to keep track of relationships between objects
+    by implementing containers, you can use :php:trait:`ContainerTrait`.
+    Example::
 
         class MyContainer extends OtherClass {
             use atk4\core\ContainerTrait;
@@ -74,13 +75,14 @@ Container Trait
             use atk4\core\TrackableTrait;
         }
 
-        Now the instances of MyItem can be added to instances of MyContainer and can keep track::
+        Now the instances of MyItem can be added to instances of MyContainer
+        and can keep track::
 
         $parent = new MyContainer();
         $parent->name = 'foo';
         $parent->add(new MyItem(), 'child1');
         $parent->add(new MyItem());
-        
+
         echo $parent->getElement('child1')->name;
         // foo_child1
 
@@ -116,7 +118,7 @@ Methods
 .. php:method:: _addContainer($element, $args)
 
     Add element into container. Normally you should create a method
-    add() inside your class that will execute this method. Because 
+    add() inside your class that will execute this method. Because
     multiple traits will want to contribute to your add() method,
     you should see sample implementation in :php:class:`Object::add`.
 
@@ -128,7 +130,7 @@ Methods
         }
 
     $args be in few forms::
-    
+
         $args = ['child_name'];
         $args = 'child_name';
         $args = ['child_name', 'db'=>$mydb];
@@ -148,7 +150,7 @@ Methods
     Given the desired $name, this method will attempt to shorten the length
     of your children. The reason for shortening a name is to impose reasonable
     limits on overly long names. Name can be used as key in the GET argument
-    or form field, so for a longer names they will be shortened. 
+    or form field, so for a longer names they will be shortened.
 
     This method will only be used if current object has :php:trait:`AppScope`,
     since the application is responsible for keeping shortenings.
@@ -190,13 +192,13 @@ Properties
 
 .. php:attr:: owner
 
-    Will point to object which has add()ed this object. If multiple objects have
-    added this object, then this will point to the most recent one.
+    Will point to object which has add()ed this object. If multiple objects
+    have added this object, then this will point to the most recent one.
 
 .. php:attr:: short_name
 
-    When you add item into the owner, the "short_name" will contain short name of
-    this item.
+    When you add item into the owner, the "short_name" will contain short name
+    of this item.
 
 Methods
 -------
@@ -213,5 +215,5 @@ Methods
 .. php:method:: destroy
 
     If object owner is set, then this will remove object from it's owner elements
-    reducing number of links to the object. Normally PHP's garbage collector should
-    remove object as soon as number of links is zero.
+    reducing number of links to the object. Normally PHP's garbage collector
+    should remove object as soon as number of links is zero.

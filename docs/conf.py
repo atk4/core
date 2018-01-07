@@ -102,7 +102,7 @@ highlight_language = 'php'
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# a list of built-in themes.
 html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -130,8 +130,8 @@ html_theme = 'sphinx_rtd_theme'
 #html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
+# relative to this directory. They are copied after the built-in static files,
+# so a file named "default.css" will overwrite the built-in "default.css".
 html_static_path = ['_static']
 
 # Add any extra paths that contain custom files (such as robots.txt or

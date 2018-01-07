@@ -26,7 +26,7 @@ trait SessionTrait
     public function startSession($options = [])
     {
         // all methods use this method to start session, so we better check
-        // NameTrait existance here in one place.
+        // NameTrait existence here in one place.
         if (!isset($this->_nameTrait)) {
             throw new Exception(['Object should have NameTrait applied to use session']);
         }
@@ -125,7 +125,7 @@ trait SessionTrait
     }
 
     /**
-     * Forget session data for arg $key. If $key is omitted will forget all
+     * Forget session data for $key. If $key is omitted will forget all
      * associated session data.
      *
      * @param string $key Optional key of data to forget
