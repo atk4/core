@@ -42,7 +42,7 @@ trait DIContainerTrait
      * developer to pass Dependency Injector Container.
      *
      * @param array $properties
-     * @param bool  $pasively   if true, existing non-null argument values will be kept
+     * @param bool  $passively  if true, existing non-null argument values will be kept
      */
     public function setDefaults($properties = [], $passively = false)
     {
