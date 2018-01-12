@@ -10,7 +10,7 @@ Introduction
 Adds ability to add methods into objects dynamically. That's like a "trait"
 feature of a PHP, but implemented in run-time::
 
-    $object->addMethod('test', function($o, $args){ echo 'hello, '.$args[0]; } );
+    $object->addMethod('test', function($o, $args){ echo 'hello, '.$args[0]; });
     $object->test('world');
 
 Global Methods
@@ -29,8 +29,8 @@ look for globally-registered method inside the application::
 Of course calling test() on the other object afterwards will trigger same
 global method.
 
-If you attempt to register same method multiple times you will receive
-an exception.
+If you attempt to register same method multiple times you will receive an
+exception.
 
 Dynamic Method Arguments
 ========================
@@ -52,7 +52,8 @@ Methods
 
 .. php:method:: tryCall($method, $arguments)
 
-    Tries to call dynamic method, but doesn't throw exception if it is not possible.
+    Tries to call dynamic method, but doesn't throw exception if it is not
+    possible.
 
 .. php:method:: addMethod($name, $callable)
 

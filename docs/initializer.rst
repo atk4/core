@@ -50,11 +50,11 @@ Methods
 .. php:method:: init()
 
     A blank init method that should be called. This will detect the problems
-    when init() methods of some of your base classes has not been executed
-    and prevents from some serious mistakes.
+    when init() methods of some of your base classes has not been executed and
+    prevents from some serious mistakes.
 
-If you wish to use traits class and extend it, you can use this in your
-base class::
+If you wish to use traits class and extend it, you can use this in your base
+class::
 
     class FormField {
         use AppScopeTrait;
@@ -73,4 +73,3 @@ base class::
             }
         }
     }
-

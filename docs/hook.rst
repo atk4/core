@@ -7,17 +7,16 @@ Hook Trait
 Introduction
 ============
 
-HookTrait adds some methods into your class to registering call-backs
-that would be executed by triggering a hook. All hooks are local to
-the object, so if you want to have application-wide hook then use `app`
-property.
+HookTrait adds some methods into your class to registering call-backs that would
+be executed by triggering a hook. All hooks are local to the object, so if you
+want to have application-wide hook then use `app` property.
 
 Hook Spots
 ==========
 
-Hook is described by a string identifier which we call hook-spot, which
-would normally be expressing desired action with prefixes "before" or
-"after if necessary.
+Hook is described by a string identifier which we call hook-spot, which would
+normally be expressing desired action with prefixes "before" or "after if
+necessary.
 
 Some good examples for hook spots are:
 
@@ -29,8 +28,7 @@ The framework or application would typically execute hooks like this::
 
     $obj->hook('spot');
 
-You can register multiple call-backs to be executed for the requested
-`spot`::
+You can register multiple call-backs to be executed for the requested `spot`::
 
     $obj->addHook('spot', function($obj){ echo "Hook 'spot' is called!"; });
 
@@ -45,8 +43,8 @@ callbacks which will be execute in the order that they were added.
 Short way to describe callback method
 =====================================
 
-There is a consise syntax for using $callback by specifying object only.
-In this case a metod with same name as $spot will be used as callback::
+There is a concise syntax for using $callback by specifying object only.
+In this case a method with same name as $spot will be used as callback::
 
     function init() {
         parent::init();
@@ -54,7 +52,7 @@ In this case a metod with same name as $spot will be used as callback::
         $this->addHook('beforeUpdate', $this);
     }
 
-    function beforeUpdate($obj){ 
+    function beforeUpdate($obj){
         // will be called from the hook
     }
 
@@ -62,13 +60,12 @@ In this case a metod with same name as $spot will be used as callback::
 Callback execution order
 ========================
 
-$priority will make hooks execute faster. Default priority is 5, but if
-you add hook with priority 1 it will always be executed before any
-hooks with priority 2, 3, 5 etc.
+$priority will make hooks execute faster. Default priority is 5, but if you add
+hook with priority 1 it will always be executed before any hooks with priority
+2, 3, 5 etc.
 
-Normally hooks are executed in the same order as they are added, however
-if you use negative priority, then hooks will be executed in reverse
-order::
+Normally hooks are executed in the same order as they are added, however if you
+use negative priority, then hooks will be executed in reverse order::
 
     $obj->addHook('spot', third,    null, -1);
 
@@ -88,14 +85,14 @@ order::
 
 .. php:method:: hook($spot, $args = null)
 
-execute all hooks in order. Hooks can also return some values and those
-values will be placed in array and returned by hook()::
+execute all hooks in order. Hooks can also return some values and those values
+will be placed in array and returned by hook()::
 
-    $mul = function($obj, $a, $b) { 
+    $mul = function($obj, $a, $b) {
         return $a*$b;
     };
 
-    $add = function($obj, $a, $b) { 
+    $add = function($obj, $a, $b) {
         return $a+$b;
     };
 
@@ -111,9 +108,8 @@ values will be placed in array and returned by hook()::
 Arguments
 =========
 
-As you see in the code above, we were able to pass some arguments
-into those hooks. There are actually 3 sources that are considered
-for the arguments:
+As you see in the code above, we were able to pass some arguments into those
+hooks. There are actually 3 sources that are considered for the arguments:
 
  - first argument to callbacks is always the $object
  - arguments passed as 3rd argument to addHook() are included
@@ -142,40 +138,38 @@ Breaking Hooks
 
 .. php:method:: breakHook
 
-When this method is called from a call-back then it will cause all
-other callbacks to be skipped. 
+When this method is called from a call-back then it will cause all other
+callbacks to be skipped.
 
-If you pass $return argument then instead of returning all callback
-retutrn values in array the $return will be returned by hook()
-method.
+If you pass $return argument then instead of returning all callback return
+values in array the $return will be returned by hook() method.
 
-If you do not pass $return value (or specify null) then list of
-the values collected so far will be returned
+If you do not pass $return value (or specify null) then list of the values
+collected so far will be returned
 
-Remember that adding breaking hook with a lower priority can 
-prevent other call-backs from being executed::
+Remember that adding breaking hook with a lower priority can prevent other
+call-backs from being executed::
 
 
-    $obj->addHook('test', function($obj){ 
-        $obj->breakHook("break1"); 
+    $obj->addHook('test', function($obj){
+        $obj->breakHook("break1");
     });
 
-    $obj->addHook('test', function($obj){ 
-        $obj->breakHook("break2"); 
+    $obj->addHook('test', function($obj){
+        $obj->breakHook("break2");
     }, null, -5);
 
     $res3 = $obj->hook('test', [4, 4]);
     // res3 = "break2"
 
-breakHook method is implemented by throwing a special exception
-that is then caught inside hook() method.
+breakHook method is implemented by throwing a special exception that is then
+caught inside hook() method.
 
 Using references in hooks
 =========================
 
-In some cases you want hook to change certain value. For example
-when model value is set it may call normalization hook (methods
-will change $value)::
+In some cases you want hook to change certain value. For example when model
+value is set it may call normalization hook (methods will change $value)::
 
     function set($field, $value) {
         $this->hook('normalize', [&$value]);
@@ -189,5 +183,4 @@ Checking if hook has callbacks
 
 .. php:method:: hookHasCallbacks()
 
-This method will return true if at least one callback has been
-set for the hook.
+This method will return true if at least one callback has been set for the hook.

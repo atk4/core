@@ -17,7 +17,8 @@ Properties
 
 .. php:attr:: session_key
 
-    Internal property to make sure that all session data will be stored in one "container" (array key).
+    Internal property to make sure that all session data will be stored in one
+    "container" (array key).
 
 Methods
 =======
@@ -40,8 +41,10 @@ Methods
 
 .. php:method:: recall($key, $default = null)
 
-    Returns session data for this object. If not previously set, then $default is returned.
+    Returns session data for this object. If not previously set, then $default
+    is returned.
 
 .. php:method:: forget($key = null)
 
-    Forget session data for arg $key. If $key is omitted will forget all associated session data.
+    Forget session data for arg $key. If $key is omitted will forget all
+    associated session data.

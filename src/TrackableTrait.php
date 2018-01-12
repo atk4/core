@@ -33,7 +33,7 @@ trait TrackableTrait
     public $short_name = null;
 
     /**
-     * If name of the object is ommitted then it's naturally to name them
+     * If name of the object is omitted then it's naturally to name them
      * after the class. You can specify a different naming pattern though.
      *
      * @return string

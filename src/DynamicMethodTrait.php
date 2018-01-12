@@ -134,7 +134,7 @@ trait DynamicMethodTrait
      *
      *     obj.test = function() { .. }
      *
-     * All non-existant method calls on all Agile Toolkit objects will be
+     * All non-existent method calls on all Agile Toolkit objects will be
      * tried against local table of registered methods and then against
      * global registered methods.
      *
