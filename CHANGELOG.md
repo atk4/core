@@ -32,6 +32,14 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 
 - Removed special treatment for array property merging #67
 
+#### 1.3.5
+
+- Feature/php72 no longer has stderr [\#73](https://github.com/atk4/core/pull/73) ([romaninsh](https://github.com/romaninsh))
+- we require LoggerInterface always [\#72](https://github.com/atk4/core/pull/72) ([DarkSide666](https://github.com/DarkSide666))
+- spellcheck and wrapping :\) [\#71](https://github.com/atk4/core/pull/71) ([DarkSide666](https://github.com/DarkSide666))
+- use $app-\>logger and send errors there rather than app itself [\#70](https://github.com/atk4/core/pull/70) ([romaninsh](https://github.com/romaninsh))
+- Feature/add html console exception output [\#69](https://github.com/atk4/core/pull/69) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
