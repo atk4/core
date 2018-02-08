@@ -84,7 +84,7 @@ trait FactoryTrait
 
         // overwrite seed2 with seed
         foreach ($seed as $key=>$value) {
-            if ($value !== null) {
+            if ($value !== null || in_numeric($key)) {
                 $seed2[$key] = $value;
             }
         }
