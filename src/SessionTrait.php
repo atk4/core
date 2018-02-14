@@ -33,7 +33,9 @@ trait SessionTrait
 
         switch (session_status()) {
             case PHP_SESSION_DISABLED:
+                // @codeCoverageIgnoreStart - impossible to test
                 throw new Exception(['Sessions are disabled on server']);
+                // @codeCoverageIgnoreEnd
                 break;
             case PHP_SESSION_NONE:
                 session_start($options);
@@ -65,7 +67,7 @@ trait SessionTrait
         $this->startSession();
 
         if (is_callable($value)) {
-            $value = call_user_func($value);
+            $value = call_user_func($value, $key);
         }
 
         $_SESSION[$this->session_key][$this->name][$key] = $value;
@@ -88,10 +90,6 @@ trait SessionTrait
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
             || is_null($_SESSION[$this->session_key][$this->name][$key])
         ) {
-            if (is_callable($default)) {
-                $default = call_user_func($default);
-            }
-
             return $this->memorize($key, $default);
         } else {
             return $this->recall($key);
@@ -115,7 +113,7 @@ trait SessionTrait
             || is_null($_SESSION[$this->session_key][$this->name][$key])
         ) {
             if (is_callable($default)) {
-                $default = call_user_func($default);
+                $default = call_user_func($default, $key);
             }
 
             return $default;

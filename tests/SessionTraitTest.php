@@ -83,17 +83,24 @@ class SessionTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
-        $m->learn('foo', function () {
-            return 'bar';
+        $m->learn('foo', function ($key) {
+            return $key.'_bar';
         });
-        $this->assertEquals('bar', $m->recall('foo'));
+        $this->assertEquals('foo_bar', $m->recall('foo'));
 
         $m->learn('foo_2', 'another');
         $this->assertEquals('another', $m->recall('foo_2'));
 
+        $v = $m->recall('foo_3', function ($key) {
+            return $key.'_bar';
+        });
+        $this->assertEquals('foo_3_bar', $v);
+        $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
+
         $m->forget();
         $this->assertEquals('undefined', $m->recall('foo', 'undefined'));
         $this->assertEquals('undefined', $m->recall('foo_2', 'undefined'));
+        $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
     }
 }
 
