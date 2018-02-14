@@ -40,6 +40,10 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 - use $app-\>logger and send errors there rather than app itself [\#70](https://github.com/atk4/core/pull/70) ([romaninsh](https://github.com/romaninsh))
 - Feature/add html console exception output [\#69](https://github.com/atk4/core/pull/69) ([romaninsh](https://github.com/romaninsh))
 
+#### 1.3.6
+
+- Fixed: injecting "null" argument into constructor fails [\#74](https://github.com/atk4/core/issues/74)
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
