@@ -233,6 +233,9 @@ class SeedTest extends \PHPUnit_Framework_TestCase
         $s1 = $this->factory(new SeedTestMock('hello', 'world'));
         $this->assertEquals(['hello', 'world'], $s1->args);
 
+        $s1 = $this->factory(new SeedTestMock(null, 'world'));
+        $this->assertEquals([null, 'world'], $s1->args);
+
         $s1 = $this->factory(['atk4/core/tests/SeedTestMock']);
         $this->assertEmpty($s1->args);
     }
@@ -248,11 +251,16 @@ class SeedTest extends \PHPUnit_Framework_TestCase
 
     public function testArguments()
     {
+        /*
         $s1 = $this->factory(['atk4/core/tests/SeedTestMock', 'hello']);
         $this->assertEquals(['hello'], $s1->args);
 
         $s1 = $this->factory(['atk4/core/tests/SeedTestMock', 'hello', 'world']);
         $this->assertEquals(['hello', 'world'], $s1->args);
+         */
+
+        $s1 = $this->factory(['atk4/core/tests/SeedTestMock', null, 'world']);
+        $this->assertEquals([null, 'world'], $s1->args);
 
         $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world']);
         $this->assertEquals(['hello', 'world'], $s1->args);
@@ -342,6 +350,12 @@ class SeedTest extends \PHPUnit_Framework_TestCase
     {
         $s1 = $this->mergeSeeds(new SeedDefTestMock(), ['foo']);
         $this->assertEquals(null, $s1->def);
+    }
+
+    public function testMerge8()
+    {
+        $s1 = $this->mergeSeeds(['foo', null, 'arg'], []);
+        $this->assertEquals(['foo', null, 'arg'], $s1);
     }
 
     /**
