@@ -26,7 +26,6 @@ trait FactoryTrait
      */
     public function mergeSeeds($seed, $seed2, ...$more_seeds)
     {
-
         // recursively merge extra seeds
         if ($more_seeds) {
             $seed2 = $this->mergeSeeds($seed2, ...$more_seeds);
@@ -84,7 +83,9 @@ trait FactoryTrait
 
         // overwrite seed2 with seed
         foreach ($seed as $key=>$value) {
-            if ($value !== null || is_numeric($key)) {
+            if ($value !== null) {
+                $seed2[$key] = $value;
+            } elseif (is_numeric($key) && !isset($seed2[$key])) {
                 $seed2[$key] = $value;
             }
         }
