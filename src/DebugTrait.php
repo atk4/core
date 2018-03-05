@@ -39,7 +39,7 @@ trait DebugTrait
      *
      * @return $this
      */
-    public function debug($message = true, $context = [])
+    public function debug($message = true, array $context = [])
     {
         // using this to switch on/off the debug for this object
         if (is_bool($message)) {
