@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core\DebugTrait;
+use atk4\core\AppScopeTrait;
 
 /**
  * @coversDefaultClass \atk4\core\DebugTrait
@@ -152,6 +153,38 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
         // No changes in the trace change detected
         $this->assertNull($app->log);
     }
+
+    public function testPSR()
+    {
+
+        $app = new DebugAppMock();
+
+        $m = new PSRMock();
+        $app->logger = $app;
+        $m->app = $app;
+
+
+        $m->info('i', ['x']);
+        $this->assertEquals(['info', 'i', ['x']], $app->log);
+
+        $m->warning('t', ['x']);
+        $this->assertEquals(['warning', 't', ['x']], $app->log);
+
+        $m->emergency('em', ['x', 'y']);
+        $this->assertEquals(['emergency', 'em', ['x', 'y']], $app->log);
+
+        $m->alert('al', ['x']);
+        $this->assertEquals(['alert', 'al', ['x']], $app->log);
+
+        $m->critical('cr', ['x']);
+        $this->assertEquals(['critical', 'cr', ['x']], $app->log);
+
+        $m->error('er', ['x']);
+        $this->assertEquals(['error', 'er', ['x']], $app->log);
+
+        $m->notice('nt', ['x']);
+        $this->assertEquals(['notice', 'nt', ['x']], $app->log);
+    }
 }
 
 // @codingStandardsIgnoreStart
@@ -188,6 +221,12 @@ class DebugAppMock2 implements \atk4\core\AppUserNotificationInterface
     {
         $this->message = [$message, $context];
     }
+}
+
+class PSRmock implements \Psr\Log\LoggerInterface
+{
+    use DebugTrait;
+    use AppScopeTrait;
 }
 
 // @codingStandardsIgnoreEnd
