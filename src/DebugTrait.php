@@ -4,7 +4,7 @@ namespace atk4\core;
 
 use Psr\Log\LogLevel;
 
-trait DebugTrait 
+trait DebugTrait
 {
     /**
      * Check this property to see if trait is present in the object.
@@ -134,8 +134,7 @@ trait DebugTrait
         $this->_prev_bt[$trace] = $bt;
     }
 
-
-    public function emergency($message, array $context = array())
+    public function emergency($message, array $context = [])
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -151,7 +150,7 @@ trait DebugTrait
      *
      * @return void
      */
-    public function alert($message, array $context = array())
+    public function alert($message, array $context = [])
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -166,7 +165,7 @@ trait DebugTrait
      *
      * @return void
      */
-    public function critical($message, array $context = array())
+    public function critical($message, array $context = [])
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -180,7 +179,7 @@ trait DebugTrait
      *
      * @return void
      */
-    public function error($message, array $context = array())
+    public function error($message, array $context = [])
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -196,7 +195,7 @@ trait DebugTrait
      *
      * @return void
      */
-    public function warning($message, array $context = array())
+    public function warning($message, array $context = [])
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
@@ -209,7 +208,7 @@ trait DebugTrait
      *
      * @return void
      */
-    public function notice($message, array $context = array())
+    public function notice($message, array $context = [])
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -224,9 +223,8 @@ trait DebugTrait
      *
      * @return void
      */
-    public function info($message, array $context = array())
+    public function info($message, array $context = [])
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
-
 }

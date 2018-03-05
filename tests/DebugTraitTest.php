@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\DebugTrait;
 use atk4\core\AppScopeTrait;
+use atk4\core\DebugTrait;
 
 /**
  * @coversDefaultClass \atk4\core\DebugTrait
@@ -156,13 +156,11 @@ class DebugTraitTest extends \PHPUnit_Framework_TestCase
 
     public function testPSR()
     {
-
         $app = new DebugAppMock();
 
         $m = new PSRMock();
         $app->logger = $app;
         $m->app = $app;
-
 
         $m->info('i', ['x']);
         $this->assertEquals(['info', 'i', ['x']], $app->log);
