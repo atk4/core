@@ -69,7 +69,7 @@ trait DebugTrait
      *
      * @return $this
      */
-    public function log($level, $message, $context = [])
+    public function log($level, $message, array $context = [])
     {
         if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
             $this->app->logger->log($level, $message, $context);
