@@ -2,6 +2,8 @@
 
 namespace atk4\core;
 
+use Psr\Log\LogLevel;
+
 trait DebugTrait
 {
     /**
@@ -37,7 +39,7 @@ trait DebugTrait
      *
      * @return $this
      */
-    public function debug($message = true, $context = [])
+    public function debug($message = true, array $context = [])
     {
         // using this to switch on/off the debug for this object
         if (is_bool($message)) {
@@ -48,11 +50,10 @@ trait DebugTrait
 
         // if debug is enabled, then log it
         if ($this->debug) {
-            if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
-                $this->app->logger->log('debug', $message, $context);
-            } else {
-                $this->_echo_stderr('['.get_class($this)."]: $message\n");
+            if (!isset($this->app) || !isset($this->app->logger) || !$this->app->logger instanceof \Psr\Log\LoggerInterface) {
+                $message = '['.get_class($this).']: '.$message;
             }
+            $this->log(LogLevel::DEBUG, $message, $context);
         }
 
         return $this;
@@ -67,7 +68,7 @@ trait DebugTrait
      *
      * @return $this
      */
-    public function log($level, $message, $context = [])
+    public function log($level, $message, array $context = [])
     {
         if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
             $this->app->logger->log($level, $message, $context);
@@ -130,5 +131,107 @@ trait DebugTrait
         }
 
         $this->_prev_bt[$trace] = $bt;
+    }
+
+    /**
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function emergency($message, array $context = [])
+    {
+        $this->log(LogLevel::EMERGENCY, $message, $context);
+    }
+
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function alert($message, array $context = [])
+    {
+        $this->log(LogLevel::ALERT, $message, $context);
+    }
+
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function critical($message, array $context = [])
+    {
+        $this->log(LogLevel::CRITICAL, $message, $context);
+    }
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function error($message, array $context = [])
+    {
+        $this->log(LogLevel::ERROR, $message, $context);
+    }
+
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function warning($message, array $context = [])
+    {
+        $this->log(LogLevel::WARNING, $message, $context);
+    }
+
+    /**
+     * Normal but significant events.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function notice($message, array $context = [])
+    {
+        $this->log(LogLevel::NOTICE, $message, $context);
+    }
+
+    /**
+     * Interesting events.
+     *
+     * Example: User logs in, SQL logs.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function info($message, array $context = [])
+    {
+        $this->log(LogLevel::INFO, $message, $context);
     }
 }
