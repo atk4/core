@@ -44,6 +44,12 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 
 - Fixed: injecting "null" argument into constructor fails [\#74](https://github.com/atk4/core/issues/74)
 
+#### 1.3.6
+
+**Merged pull requests:**
+
+- implement PSR3 support in DebugTrait [\#77](https://github.com/atk4/core/pull/77) ([romaninsh](https://github.com/romaninsh))
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
