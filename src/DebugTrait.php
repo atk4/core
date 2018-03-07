@@ -50,11 +50,10 @@ trait DebugTrait
 
         // if debug is enabled, then log it
         if ($this->debug) {
-            if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
-                $this->app->logger->log('debug', $message, $context);
-            } else {
-                $this->_echo_stderr('['.get_class($this)."]: $message\n");
+            if (!isset($this->app) || !isset($this->app->logger) || !$this->app->logger instanceof \Psr\Log\LoggerInterface) {
+                $message = '['.get_class($this)."]: $message\n";
             }
+            $this->log(LogLevel::DEBUG, $message, $context);
         }
 
         return $this;
@@ -134,6 +133,14 @@ trait DebugTrait
         $this->_prev_bt[$trace] = $bt;
     }
 
+    /**
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
     public function emergency($message, array $context = [])
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
