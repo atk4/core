@@ -2,8 +2,16 @@
 
 namespace atk4\core;
 
+/**
+ * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
+ */
 class PHPUnit_AgileResultPrinter extends \PHPUnit_TextUI_ResultPrinter
 {
+    /**
+     * Prints trace info.
+     *
+     * @param \PHPUnit_Framework_TestFailure $defect
+     */
     protected function printDefectTrace(\PHPUnit_Framework_TestFailure $defect)
     {
         $e = $defect->thrownException();
@@ -14,9 +22,7 @@ class PHPUnit_AgileResultPrinter extends \PHPUnit_TextUI_ResultPrinter
 
         $p = $e->getPrevious();
 
-        if (
-            $p instanceof \atk4\core\Exception or
-            $p instanceof \atk4\dsql\Exception) {
+        if ($p instanceof \atk4\core\Exception) {
             $this->write($p->getColorfulText());
         }
     }
