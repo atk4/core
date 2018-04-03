@@ -9,7 +9,7 @@
 [![Issue Count](https://codeclimate.com/github/atk4/core/badges/issue_count.svg)](https://codeclimate.com/github/atk4/core)
 
 [![License](https://poser.pugx.org/atk4/core/license)](https://packagist.org/packages/atk4/core)
-[![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)](https://packagist.org/packages/atk4/core)
+[![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)](CHANGELOG.md)
 
 
 
