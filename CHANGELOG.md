@@ -50,6 +50,23 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 
 - implement PSR3 support in DebugTrait [\#77](https://github.com/atk4/core/pull/77) ([romaninsh](https://github.com/romaninsh))
 
+#### 1.3.7
+
+**Closed issues:**
+
+- Injecting "null" argument into constructor fails [\#74](https://github.com/atk4/core/issues/74)
+
+**Merged pull requests:**
+
+- add more tests [\#76](https://github.com/atk4/core/pull/76) ([DarkSide666](https://github.com/DarkSide666))
+- numeric key seed always should go trough [\#75](https://github.com/atk4/core/pull/75) ([DarkSide666](https://github.com/DarkSide666))
+
+#### 1.3.8
+
+**Merged pull requests:**
+
+- add comments [\#78](https://github.com/atk4/core/pull/78) ([DarkSide666](https://github.com/DarkSide666))
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
