@@ -72,7 +72,7 @@ user to see. This will include the error, parameters and backtrace. The code
 will also make an attempt to locate and highlight the code that have caused the
 problem.
 
-.. php:method:: getColorfulText()
+.. php:method:: getHTMLText()
 
 Will return nice HTML-formatted exception that will rely on a presence of
 Semantic UI. This will include the error, parameters and backtrace. The code
@@ -81,3 +81,47 @@ problem.
 
 .. image:: exception-demo.png
 
+Handling Exceptions in ATK Data and ATK UI
+==========================================
+
+Sometimes you want your exceptions to be displayed nicely. There are several ways:
+
+Try and Catch block
+-------------------
+
+
+If you want, you can wrap your code inside try / catch block::
+
+    try {
+        // some code..
+    } catch (\atk4\core\Exception $e) {
+        // handle exception
+    }
+
+The other option is to use automatic exception catching, (:php:attr:`\atk4\ui\App::catch_exceptions`)
+which will automatically catch any unhandled exception then pass it to :php:meth:`\atk4\ui\App::caughtException()`.
+
+If you do not instantiate App, or set it up without automatic exception catching::
+
+    $app = new \atk4\ui\App(['catch_exceptions' = false]);
+
+then you might want to output message details yourself.
+
+Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHTMLText`::
+
+    try {
+        // some code..
+    } catch (\atk4\core\Exception $e) {
+        echo $e->getColorfulText();
+    } catch (\Exception $e) {
+        echo $e->getMessage();
+    }
+
+Finally if you don't want ANSII output, you can also do::
+
+    echo strip_tags($e->getHTMLText());
+
+Although it's not advisable to output anything else other than the Message to user (in production),
+you can get values of additional parameters through::
+
+    $e->getParams();
