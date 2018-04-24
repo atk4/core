@@ -1,0 +1,2 @@
+ignore:
+  - "src/PHPUnit_SQLTestCase.php" # quite hard to test
