@@ -182,10 +182,10 @@ trait FactoryTrait
      *
      * Example: normalizeClassName('User', 'Model') == 'Model\User';
      *
-     * @param mixed  $name   Name of class or object
+     * @param string $name   Name of class
      * @param string $prefix Optional prefix for class name
      *
-     * @return string|object Full, normalized class name or received object
+     * @return string Full, normalized class name
      */
     public function normalizeClassName($name, $prefix = null)
     {
