@@ -17,6 +17,9 @@
               <file>src/PHPUnit_AgileResultPrinter.php</file>
               <file>src/PHPUnit_AgileExceptionWrapper.php</file>
               <file>src/PHPUnit_AgileTestCase.php</file>
+              <file>src/PHPUnit7_AgileResultPrinter.php</file>
+              <file>src/PHPUnit7_AgileExceptionWrapper.php</file>
+              <file>src/PHPUnit7_AgileTestCase.php</file>
             </exclude>
         </whitelist>
     </filter>
