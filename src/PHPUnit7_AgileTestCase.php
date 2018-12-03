@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PHPUnit7_AgileTestCase extends TestCase
 {
-    function runBare(): void
+    public function runBare(): void
     {
         try {
             parent::runBare();
