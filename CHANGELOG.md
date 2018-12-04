@@ -67,6 +67,10 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
 
 - add comments [\#78](https://github.com/atk4/core/pull/78) ([DarkSide666](https://github.com/DarkSide666))
 
+#### 1.3.9
+
+- added support PHPUnit 7+
+
 ## 1.2.2
 
 Added DIContainerTrait and documented
