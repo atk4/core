@@ -58,4 +58,12 @@ class PHPUnit7_AgileTestCase extends TestCase
 
         return $method->getValue($obj);
     }
+
+    /**
+     * Fake test. Otherwise Travis gives warning that there are no tests in here.
+     */
+    public function testFake()
+    {
+        $this->assertTrue(true);
+    }
 }
