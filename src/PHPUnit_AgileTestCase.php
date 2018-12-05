@@ -61,7 +61,7 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
 
         return $method->getValue($obj);
     }
-    
+
     /**
      * Fake test. Otherwise Travis gives warning that there are no tests in here.
      */
