@@ -5,7 +5,6 @@ namespace atk4\core\tests;
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
-
 use atk4\core\HookBreaker as HB;
 
 /**
