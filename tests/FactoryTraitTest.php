@@ -5,6 +5,7 @@ namespace atk4\core\tests;
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
+use atk4\core\HookBreaker as HB;
 
 /**
  * @coversDefaultClass \atk4\core\FactoryTrait
@@ -58,6 +59,9 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
         $this->assertEquals('Prefix\a\b\MyClass', $class);
 
+        $class = $m->normalizeClassName(\atk\data\Persistence::class, 'Prefix');
+        $this->assertEquals('Prefix\atk\data\Persistence', $class);
+
         // With Application Prefixing
         $m = new FactoryAppScopeMock();
         $m->app = new FactoryTestAppMock();
@@ -99,6 +103,15 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         // as class name
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
         $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
+
+        $m1 = $m->factory(\atk4\core\tests\FactoryMock::class);
+        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
+
+        $m1 = $m->factory(FactoryMock::class);
+        $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
+
+        $m1 = $m->factory(HB::class, ['ok']);
+        $this->assertEquals('atk4\core\HookBreaker', get_class($m1));
 
         $m1 = $m->factory(['atk4\core\tests\FactoryMock']);
         $this->assertEquals('atk4\core\tests\FactoryMock', get_class($m1));
