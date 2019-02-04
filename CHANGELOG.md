@@ -10,6 +10,7 @@ This release refactors FactoryTrait in a way that may not be backwards compatibl
  - Added [documentation index](http://agile-core.readthedocs.io/en/develop/index.html)
  - Migrated to CodeCov and achieved 100% test coverage
  - Added brief [documentation for debugTraceChange](http://agile-core.readthedocs.io/en/develop/debug.html#debugtracechange)
+ - Introducde support for PHPUnit 7+
 
 ### Minor releases (in reverse order)
 
