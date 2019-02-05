@@ -77,7 +77,7 @@ trait ContainerTrait
             if (!$obj->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'obj'=>$obj,
+                    'obj'=> $obj,
                 ]);
             }
         }
