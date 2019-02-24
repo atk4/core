@@ -57,7 +57,8 @@ trait ConfigTrait
 
             switch (strtolower($format)) {
                 case 'php':
-                    require $file;
+                    $config = null;
+                    require $file; // fills $config variable
                     $this->config = $config;
                     break;
 
