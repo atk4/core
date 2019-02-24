@@ -75,6 +75,15 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->assertEquals($c, $this->getProtected($m, 'config'));
     }
 
+    /**
+     * @expectedException Exception
+     */
+    public function testFileReadException()
+    {
+        $m = new ConfigMock();
+        $m->readConfig('unknown_file.php');
+    }
+
     public function testSetGetConfig()
     {
         $a = [
@@ -92,6 +101,7 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
                     'one' => 'more',
                     'two' => 'another',
                 ],
+                'foo'  => 'bar',
             ],
             'name' => 'John',
         ];
@@ -103,11 +113,12 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
         $m->setConfig('num', 789);       // overwrite
         $m->setConfig('name', 'John');   // add
         $m->setConfig([
-            'obj'         => null,             // overwrite
-            'arr/txt'     => 'qwerty',         // overwrite
-            'arr/name'    => 'Jane',           // add
+            'obj'         => null,          // overwrite
+            'arr/txt'     => 'qwerty',      // overwrite
+            'arr/name'    => 'Jane',        // add
             'arr/sub/one' => 'more',        // add in deep structure
             'arr/sub/two' => 'another',     // add one more in deep structure
+            'arr'         => ['foo'=>'bar'],// merge arrays
         ]);
         $this->assertEquals($a, $this->getProtected($m, 'config'));
 
