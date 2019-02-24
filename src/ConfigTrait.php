@@ -45,22 +45,22 @@ trait ConfigTrait
     public function readConfig($files = ['config.php'], $format = 'php')
     {
         $this->config = [];
-    
+
         if (!is_array($files)) {
             $files = [$files];
         }
-    
+
         foreach ($files as $file) {
             if (!is_readable($file)) {
                 throw new Exception(['Can not read config file', 'file' => $file, 'format' => $format]);
             }
-        
+
             switch (strtolower($format)) {
                 case 'php':
                     require_once $file;
                     $this->config = $config;
                     break;
-        
+
                 case 'php-inline':
                     $this->config = require_once $file;
                     break;
@@ -74,14 +74,14 @@ trait ConfigTrait
                 case 'yaml':
                     $config = yaml_parse_file($file);
                     var_dump($config);
-                    
+
                     // @todo Implement and test this properly
-                    
+
                     $this->config = $config;
                     break;
             }
         }
-    
+
         return $this;
     }
 
@@ -101,7 +101,7 @@ trait ConfigTrait
 
         foreach ($paths as $path) {
             $pos = $this->_lookupConfigElement($path, true);
-            
+
             if (is_array($pos) && !empty($pos) && is_array($value)) {
                 // special treatment for arrays - merge them
                 $pos = array_merge($pos, $value);
@@ -110,10 +110,10 @@ trait ConfigTrait
                 $pos = $value;
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * Get configuration element.
      *
@@ -125,12 +125,12 @@ trait ConfigTrait
     public function getConfig($path, $default_value = null)
     {
         $pos = $this->_lookupConfigElement($path, false);
-        
+
         // path element don't exist - return default value
         if ($pos === false) {
             return $default_value;
         }
-        
+
         // need to clone this otherwise we will get reference to element and that can get us into trouble
         return clone $pos;
     }
@@ -157,10 +157,10 @@ trait ConfigTrait
             if (!array_key_exists($el, $pos) && !$create_elements) {
                 return false;
             }
-            
+
             $pos = &$pos[$el];
         }
-    
+
         return $pos;
     }
 }
