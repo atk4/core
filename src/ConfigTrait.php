@@ -57,27 +57,23 @@ trait ConfigTrait
 
             switch (strtolower($format)) {
                 case 'php':
-                    require_once $file;
+                    require $file;
                     $this->config = $config;
                     break;
 
                 case 'php-inline':
-                    $this->config = require_once $file;
+                    $this->config = require $file;
                     break;
 
                 case 'json':
-                    $config = require_once $file;
-                    $config = json_decode($config, true);
-                    $this->config = $config;
+                    $this->config = json_decode(file_get_contents($file), true);
                     break;
 
                 case 'yaml':
-                    $config = yaml_parse_file($file);
-                    var_dump($config);
-
-                    // @todo Implement and test this properly
-
-                    $this->config = $config;
+                    if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
+                        throw new Exception(['You need Symfony\Yaml repository if you want to parse YAML files']);
+                    }
+                    $this->config = \Symfony\Component\Yaml\Yaml::parseFile($file);
                     break;
             }
         }
@@ -99,8 +95,8 @@ trait ConfigTrait
             $paths = [$paths => $value];
         }
 
-        foreach ($paths as $path) {
-            $pos = $this->_lookupConfigElement($path, true);
+        foreach ($paths as $path=>$value) {
+            $pos = &$this->_lookupConfigElement($path, true);
 
             if (is_array($pos) && !empty($pos) && is_array($value)) {
                 // special treatment for arrays - merge them
@@ -124,15 +120,14 @@ trait ConfigTrait
      */
     public function getConfig($path, $default_value = null)
     {
-        $pos = $this->_lookupConfigElement($path, false);
+        $pos = &$this->_lookupConfigElement($path, false);
 
         // path element don't exist - return default value
         if ($pos === false) {
             return $default_value;
         }
 
-        // need to clone this otherwise we will get reference to element and that can get us into trouble
-        return clone $pos;
+        return $pos;
     }
 
     /**
@@ -144,10 +139,10 @@ trait ConfigTrait
      * @return &pos|false Pointer to element in $this->config or false is element don't exist and $create_elements===false
      *                    Returns false if element don't exist and $create_elements===false
      */
-    protected function _lookupConfigElement($path, $create_elements = false)
+    protected function &_lookupConfigElement($path, $create_elements = false)
     {
         $path = explode('/', $path);
-        $pos = &$this->config;
+        $pos =& $this->config;
         foreach ($path as $el) {
             // create empty element if it doesn't exist
             if (!array_key_exists($el, $pos) && $create_elements) {
@@ -155,10 +150,12 @@ trait ConfigTrait
             }
             // if it still doesn't exist, then just return false (no error)
             if (!array_key_exists($el, $pos) && !$create_elements) {
-                return false;
+                // trick to return false because we need reference here
+                $false = false;
+                return $false;
             }
 
-            $pos = &$pos[$el];
+            $pos =& $pos[$el];
         }
 
         return $pos;

@@ -1,0 +1,12 @@
+{
+    "num":  123,
+    "txt":  "foo",
+    "bool": true,
+    "obj":  {},
+    "arr":  {
+        "num":  456,
+        "txt":  "bar",
+        "bool": true,
+        "obj":  {}
+    }
+}
