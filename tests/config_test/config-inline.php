@@ -1,4 +1,5 @@
 <?php
+
 return [
     'num'  => 123,
     'txt'  => 'foo',

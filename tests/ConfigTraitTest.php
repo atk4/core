@@ -9,7 +9,7 @@ use atk4\core\ConfigTrait;
  */
 class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
 {
-    public $dir = __DIR__ . '/config_test/';
+    public $dir = __DIR__.'/config_test/';
 
     /**
      * Test file reader.
@@ -57,22 +57,22 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
         // default config
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config.php', 'php');
-        $this->assertEquals($a, $this->getProtected($m,'config'));
+        $this->assertEquals($a, $this->getProtected($m, 'config'));
 
         // inline config
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config-inline.php', 'php-inline');
-        $this->assertEquals($a, $this->getProtected($m,'config'));
+        $this->assertEquals($a, $this->getProtected($m, 'config'));
 
         // json config
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config.json', 'json');
-        $this->assertEquals($b, $this->getProtected($m,'config'));
+        $this->assertEquals($b, $this->getProtected($m, 'config'));
 
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config.yml', 'yaml');
-        $this->assertEquals($c, $this->getProtected($m,'config'));
+        $this->assertEquals($c, $this->getProtected($m, 'config'));
     }
 
     public function testSetGetConfig()
@@ -103,13 +103,13 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
         $m->setConfig('num', 789);       // overwrite
         $m->setConfig('name', 'John');   // add
         $m->setConfig([
-            'obj'      => null,             // overwrite
-            'arr/txt'  => 'qwerty',         // overwrite
-            'arr/name' => 'Jane',           // add
+            'obj'         => null,             // overwrite
+            'arr/txt'     => 'qwerty',         // overwrite
+            'arr/name'    => 'Jane',           // add
             'arr/sub/one' => 'more',        // add in deep structure
             'arr/sub/two' => 'another',     // add one more in deep structure
         ]);
-        $this->assertEquals($a, $this->getProtected($m,'config'));
+        $this->assertEquals($a, $this->getProtected($m, 'config'));
 
         // test getConfig
         $this->assertEquals(789, $m->getConfig('num'));

@@ -142,7 +142,7 @@ trait ConfigTrait
     protected function &_lookupConfigElement($path, $create_elements = false)
     {
         $path = explode('/', $path);
-        $pos =& $this->config;
+        $pos = &$this->config;
         foreach ($path as $el) {
             // create empty element if it doesn't exist
             if (!array_key_exists($el, $pos) && $create_elements) {
@@ -152,10 +152,11 @@ trait ConfigTrait
             if (!array_key_exists($el, $pos) && !$create_elements) {
                 // trick to return false because we need reference here
                 $false = false;
+
                 return $false;
             }
 
-            $pos =& $pos[$el];
+            $pos = &$pos[$el];
         }
 
         return $pos;
