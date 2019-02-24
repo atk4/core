@@ -71,12 +71,12 @@ trait ConfigTrait
                     break;
 
                 case 'yaml':
-                    // @codingStandardsIgnoreStart
+                    // @codeCoverageIgnoreStart
                     if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
                         throw new Exception(['You need Symfony\Yaml repository if you want to parse YAML files']);
                     }
                     $this->config = \Symfony\Component\Yaml\Yaml::parseFile($file);
-                    // @codingStandardsIgnoreEnd
+                    // @codeCoverageIgnoreEnd
                     break;
             }
         }
