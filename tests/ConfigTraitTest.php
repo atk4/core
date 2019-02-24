@@ -118,7 +118,7 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
             'arr/name'    => 'Jane',        // add
             'arr/sub/one' => 'more',        // add in deep structure
             'arr/sub/two' => 'another',     // add one more in deep structure
-            'arr'         => ['foo'=>'bar'],// merge arrays
+            'arr'         => ['foo'=>'bar'], // merge arrays
         ]);
         $this->assertEquals($a, $this->getProtected($m, 'config'));
 
