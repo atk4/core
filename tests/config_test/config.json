@@ -2,11 +2,13 @@
     "num":  123,
     "txt":  "foo",
     "bool": true,
-    "obj":  {},
-    "arr":  {
+    "obj":  {
         "num":  456,
         "txt":  "bar",
-        "bool": true,
-        "obj":  {}
-    }
+        "bool": true
+    },
+    "arr": [
+        {"one": "one", "another": "another"},
+        {"two": "two"}
+    ]
 }

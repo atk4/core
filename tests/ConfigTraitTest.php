@@ -34,12 +34,14 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
             'num'  => 123,
             'txt'  => 'foo',
             'bool' => true,
-            'obj'  => [],
-            'arr'  => [
+            'obj'  => [
                 'num'  => 456,
                 'txt'  => 'bar',
                 'bool' => true,
-                'obj'  => [],
+            ],
+            'arr' => [
+                ['one'  => 'one', 'another' => 'another'],
+                ['two'  => 'two'],
             ],
         ];
         // for yaml
@@ -47,10 +49,14 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
             'num'  => 123,
             'txt'  => 'foo',
             'bool' => true,
-            'arr'  => [
+            'obj'  => [
                 'num'  => 456,
                 'txt'  => 'bar',
                 'bool' => true,
+            ],
+            'arr' => [
+                ['one'  => 'one', 'another' => 'another'],
+                ['two'  => 'two'],
             ],
         ];
 
@@ -72,6 +78,7 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config.yml', 'yaml');
+//var_dump($this->getProtected($m, 'config'));
         $this->assertEquals($c, $this->getProtected($m, 'config'));
     }
 
