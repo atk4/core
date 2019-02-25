@@ -78,7 +78,7 @@ class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config.yml', 'yaml');
-//var_dump($this->getProtected($m, 'config'));
+        //var_dump($this->getProtected($m, 'config'));
         $this->assertEquals($c, $this->getProtected($m, 'config'));
     }
 
