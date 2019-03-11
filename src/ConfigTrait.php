@@ -26,7 +26,7 @@ trait ConfigTrait
      *
      * @var array
      */
-    protected $config;
+    protected $config = [];
 
     /**
      * Read config file or files and store it in $config property.
@@ -80,7 +80,7 @@ trait ConfigTrait
                     break;
             }
             
-            $this->config = array_merge($this->config, $tempConfig);
+            $this->config = array_merge_recursive($this->config, $tempConfig);
         }
     
         return $this;
