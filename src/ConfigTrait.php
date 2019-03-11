@@ -52,9 +52,9 @@ trait ConfigTrait
             if (!is_readable($file)) {
                 throw new Exception(['Can not read config file', 'file' => $file, 'format' => $format]);
             }
-    
+
             $tempConfig = [];
-            
+
             switch (strtolower($format)) {
                 case 'php':
                     $config = null;
@@ -79,10 +79,10 @@ trait ConfigTrait
                     // @codeCoverageIgnoreEnd
                     break;
             }
-            
+
             $this->config = array_merge_recursive($this->config, $tempConfig);
         }
-    
+
         return $this;
     }
 
