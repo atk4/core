@@ -44,8 +44,6 @@ trait ConfigTrait
      */
     public function readConfig($files = ['config.php'], $format = 'php')
     {
-        $this->config = [];
-
         if (!is_array($files)) {
             $files = [$files];
         }
@@ -54,20 +52,22 @@ trait ConfigTrait
             if (!is_readable($file)) {
                 throw new Exception(['Can not read config file', 'file' => $file, 'format' => $format]);
             }
-
+    
+            $tempConfig = [];
+            
             switch (strtolower($format)) {
                 case 'php':
                     $config = null;
                     require $file; // fills $config variable
-                    $this->config = $config;
+                    $tempConfig = $config;
                     break;
 
                 case 'php-inline':
-                    $this->config = require $file;
+                    $tempConfig = require $file;
                     break;
 
                 case 'json':
-                    $this->config = json_decode(file_get_contents($file), true);
+                    $tempConfig = json_decode(file_get_contents($file), true);
                     break;
 
                 case 'yaml':
@@ -75,12 +75,14 @@ trait ConfigTrait
                     if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
                         throw new Exception(['You need Symfony\Yaml repository if you want to parse YAML files']);
                     }
-                    $this->config = \Symfony\Component\Yaml\Yaml::parseFile($file);
+                    $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
                     // @codeCoverageIgnoreEnd
                     break;
             }
+            
+            $this->config = array_merge($this->config, $tempConfig);
         }
-
+    
         return $this;
     }
 
