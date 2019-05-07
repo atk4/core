@@ -62,6 +62,9 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $class = $m->normalizeClassName(\atk\data\Persistence::class, 'Prefix');
         $this->assertEquals('Prefix\atk\data\Persistence', $class);
 
+        $class = $m->normalizeClassName(HB::class);
+        $this->assertEquals('atk4\core\HookBreaker', $class);
+
         // With Application Prefixing
         $m = new FactoryAppScopeMock();
         $m->app = new FactoryTestAppMock();

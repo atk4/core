@@ -4,3 +4,4 @@ docs/build
 /composer.lock
 .DS_Store
 .github*
+/.idea
