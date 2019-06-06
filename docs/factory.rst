@@ -69,13 +69,13 @@ classes defined in global namespace::
    class TestLayout {
    }
 
-   $app->setLayout(Test::class);
-   // same as $app->setLayout('Test');
+   $app->setLayout(TestLayout::class);
+   // same as $app->setLayout('TestLayout');
 
-In this case, the call to normalizeClassName would proceed to prefix 'Test' layout
+In this case, the call to normalizeClassName would proceed to prefix 'TestLayout' layout
 into `\atk4\ui\Layout\Test`.
 
-The solution in this case is to use `$app->setLayout('\Test')`
+The solution in this case is to use `$app->setLayout('\TestLayout')`
 
 Name Resoluion Safety
 ---------------------
