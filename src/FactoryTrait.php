@@ -2,6 +2,8 @@
 
 namespace atk4\core;
 
+use atk4\ui\Form;
+
 trait FactoryTrait
 {
     /**
@@ -175,12 +177,20 @@ trait FactoryTrait
      * `normalizeClassNameApp` it will also get a chance to
      * add prefix.
      *
-     * Rule observed: If first character of class, or prefix is
-     * '/' or '\' then no more prefixing is done. Also after all the
-     * prefixing took place, the slashes '/' will be replaced
-     * with '\'.
+     * Rules observed, in order:
+     *  - If class contains "\" prefixing is never done.
+     *  - If class starts with "." then prefixing is always done.
+     *  - If class (with prefix) exists, do prefix.
+     *  - don't prefix otherwise.
      *
      * Example: normalizeClassName('User', 'Model') == 'Model\User';
+     * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # or as per "use"
+     * Example: normalizeClassName('Test/User', 'Model') == 'Model\Test\User';
+     * Example: normalizeClassName('./User', 'Model') == 'Model\User';
+     * Example: normalizeClassName('User', 'Model') == 'Model\User'; # if exists, 'User' otherwise
+     *
+     * # If used without namespace:
+     * Example: normalizeClassName(User::class, 'Model') == 'Model\User'; # if exists, 'User' otherwise
      *
      * @param string $name   Name of class
      * @param string $prefix Optional prefix for class name
@@ -189,21 +199,29 @@ trait FactoryTrait
      */
     public function normalizeClassName($name, $prefix = null)
     {
-        if (!$name) {
-            if (
-                isset($this->_appScopeTrait, $this->app)
-                && method_exists($this->app, 'normalizeClassNameApp')
-            ) {
-                $name = $this->app->normalizeClassNameApp($name);
-            }
+        # If App has "normalizeClassName" (obsolete now), use it instead
+        if (
+            isset($this->_appScopeTrait, $this->app)
+            && method_exists($this->app, 'normalizeClassNameApp')
+        ) {
+            $result = $this->app->normalizeClassNameApp($name, $prefix);
 
+            if (!is_null($result)) {
+                return $result;
+            }
+        }
+
+        # Rule 1: if "\" is present, don't prefix
+        if (strpos($name, '\'') !== false) {
             return $name;
         }
 
-        // Add prefix only if name doesn't start with / and name doesn't contain \\
-        if ($name[0] != '/' && $name[0] != '\\' && $prefix) {
+        # Rule 2: if starts with "." always prefix
+        if ($name[0] == '.' && $prefix) {
             $name = $prefix.'\\'.$name;
         }
+
+
 
         if (
             $name[0] != '/'
