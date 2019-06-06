@@ -2,8 +2,6 @@
 
 namespace atk4\core;
 
-use atk4\ui\Form;
-
 trait FactoryTrait
 {
     /**
@@ -199,7 +197,7 @@ trait FactoryTrait
      */
     public function normalizeClassName($name, $prefix = null)
     {
-        # If App has "normalizeClassName" (obsolete now), use it instead
+        // If App has "normalizeClassName" (obsolete now), use it instead
         if (
             isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
@@ -211,17 +209,15 @@ trait FactoryTrait
             }
         }
 
-        # Rule 1: if "\" is present, don't prefix
+        // Rule 1: if "\" is present, don't prefix
         if (strpos($name, '\'') !== false) {
             return $name;
         }
 
-        # Rule 2: if starts with "." always prefix
+        // Rule 2: if starts with "." always prefix
         if ($name[0] == '.' && $prefix) {
             $name = $prefix.'\\'.$name;
         }
-
-
 
         if (
             $name[0] != '/'
