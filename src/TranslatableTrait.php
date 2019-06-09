@@ -67,7 +67,6 @@ trait TranslatableTrait
             } else {
                 $translated_args[] = $this->__($sub_string, $sub_args);
             }
-
         }
 
         return call_user_func_array('sprintf', $translated_args);

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace atk4\core;
-
 
 interface TranslatorInterface
 {
