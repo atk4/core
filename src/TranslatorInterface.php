@@ -21,7 +21,7 @@ interface TranslatorInterface
     public function getFallback(): string;
 
     /**
-     * called to set the language.
+     * Set the language and fallback.
      *
      * @param string $ISOCode         Current Language
      * @param string $fallbackISOCode Fallback language in case of missing translations
@@ -44,6 +44,7 @@ interface TranslatorInterface
      * @param string $string
      *
      * @throws Exception
+     *
      * @return string
      */
     public function translate(string $string): string;
@@ -55,6 +56,7 @@ interface TranslatorInterface
      * @param        $number
      *
      * @throws Exception
+     *
      * @return string
      */
     public function translate_plural(string $string, $number): string;

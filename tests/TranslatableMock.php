@@ -2,10 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\Exception;
 use atk4\core\TranslatableTrait;
 use atk4\core\Translator;
-use atk4\core\TranslatorInterface;
 
 class TranslatableMock
 {
@@ -25,14 +23,11 @@ class TranslatableMock
         'single: %s, zero: %s, singular : %s, plural : %s' => 'translated : zero: %s, singular : %s, plural : %s',
     ];
 
-    /**
-     * @Given /^I am on "testTranslatable"/
-     */
     public function __construct()
     {
         $this->translator = new Translator();
 
-        foreach ($this->translation as $key => $args)  {
+        foreach ($this->translation as $key => $args) {
             if (!is_array($args)) {
                 $args = [$args];
             }

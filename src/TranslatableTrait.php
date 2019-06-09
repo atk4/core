@@ -18,7 +18,8 @@ trait TranslatableTrait
     protected $translator;
 
     /**
-     * Set Translator
+     * Set Translator.
+     *
      * @TODO should be setted internally or leave it public and leave it definable via Defaults?
      *
      * @param TranslatorInterface $translator
@@ -31,8 +32,9 @@ trait TranslatableTrait
      * @param string $string
      * @param mixed  ...$args
      *
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public function __(string $string, ...$args)
     {

@@ -7,36 +7,37 @@ final class Translator implements TranslatorInterface
     use ConfigTrait;
 
     /**
-     * Array where Translation will be stored
+     * Array where Translation will be stored.
      *
      * @TODO can be used directly config???
+     *
      * @var array
      */
     private $translation = [];
 
     /**
-     * ISOCode of the main language
+     * ISOCode of the main language.
      *
      * @var string
      */
     private $language;
 
     /**
-     * ISOCode of the fallback language
+     * ISOCode of the fallback language.
      * @var string
      */
     private $fallback;
 
     /**
      * Path where all translation are stored
-     * Can be null because translation can be add at runtime
+     * Can be null because translation can be add at runtime.
      *
      * @var string|null
      */
     private $translation_path;
 
     /**
-     * Format for ConfigTrait to read translations
+     * Format for ConfigTrait to read translations.
      *
      * @var string
      */
@@ -56,16 +57,16 @@ final class Translator implements TranslatorInterface
      * Translator constructor.
      *
      * @param string|null $translation_path root path of translations
-     * @param string $format
+     * @param string      $format           format for ConfigTrait loader
      */
     public function __construct(string $translation_path = null, string $format = 'php-inline')
     {
-        $this->translation_path   = $translation_path;
+        $this->translation_path = $translation_path;
         $this->translation_format = $format;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function set(string $ISOCode, string $fallbackISOCode = null)
     {
@@ -108,7 +109,7 @@ final class Translator implements TranslatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function addOne(string $string, array $translations)
     {
@@ -120,7 +121,7 @@ final class Translator implements TranslatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function translate(string $string): string
     {
@@ -128,7 +129,7 @@ final class Translator implements TranslatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function translate_plural(string $string, $number): string
     {
