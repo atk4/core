@@ -153,7 +153,7 @@ final class Translator implements TranslatorInterface
         }
 
         if ($number > 1) {
-            $number = min($number, array_key_last($trans));
+            $number = min($number, max(array_keys($trans)));
         }
 
         return $this->translation[$string][(int)$number] ?? $string;
