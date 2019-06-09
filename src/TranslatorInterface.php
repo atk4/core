@@ -7,7 +7,21 @@ namespace atk4\core;
 interface TranslatorInterface
 {
     /**
-     * called to set the language
+     * Get ISOCode of Main Language.
+     *
+     * @return string
+     */
+    public function getLanguage(): string;
+
+    /**
+     * Get ISOCode of Fallback Language.
+     *
+     * @return string
+     */
+    public function getFallback(): string;
+
+    /**
+     * called to set the language.
      *
      * @param string $ISOCode         Current Language
      * @param string $fallbackISOCode Fallback language in case of missing translations
@@ -15,7 +29,7 @@ interface TranslatorInterface
     public function set(string $ISOCode, string $fallbackISOCode);
 
     /**
-     * Add translation of a specific string
+     * Add a translation.
      *
      * @param                   $string
      * @param array<int,string> $translations (int) is the plural count | (string) is translation
@@ -25,20 +39,22 @@ interface TranslatorInterface
     public function addOne(string $string, array $translations);
 
     /**
-     * Return translation of string
+     * Return translation of string.
      *
      * @param string $string
      *
+     * @throws Exception
      * @return string
      */
     public function translate(string $string): string;
 
     /**
-     * Return translation of string in plural form for $number <> 1
+     * Return translation of string in plural form for $number <> 1.
      *
      * @param string $string
      * @param        $number
      *
+     * @throws Exception
      * @return string
      */
     public function translate_plural(string $string, $number): string;

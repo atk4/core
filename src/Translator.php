@@ -1,32 +1,53 @@
 <?php
 
-
 namespace atk4\core;
-
 
 final class Translator implements TranslatorInterface
 {
     use ConfigTrait;
 
+    /**
+     * Array where Translation will be stored
+     *
+     * @TODO can be used directly config???
+     * @var array
+     */
     private $translation = [];
 
-    /** @var string */
+    /**
+     * ISOCode of the main language
+     *
+     * @var string
+     */
     private $language;
 
-    /** @var string */
+    /**
+     * ISOCode of the fallback language
+     * @var string
+     */
     private $fallback;
 
-    /** @var string|null */
+    /**
+     * Path where all translation are stored
+     * Can be null because translation can be add at runtime
+     *
+     * @var string|null
+     */
     private $translation_path;
-    /** @var string */
+
+    /**
+     * Format for ConfigTrait to read translations
+     *
+     * @var string
+     */
     private $translation_format;
 
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
 
-    public function getFallback()
+    public function getFallback(): string
     {
         return $this->fallback;
     }
@@ -44,12 +65,7 @@ final class Translator implements TranslatorInterface
     }
 
     /**
-     * called to set the language
-     *
-     * @param string $ISOCode         Current Language
-     * @param string|null $fallbackISOCode Fallback language in case of missing translations
-     *
-     * @throws Exception
+     * @inheritDoc
      */
     public function set(string $ISOCode, string $fallbackISOCode = null)
     {
@@ -58,15 +74,13 @@ final class Translator implements TranslatorInterface
         $this->fallback = $fallbackISOCode ?? $this->language;
 
         // if no base path is specified don't load
-        if(!$this->translation_path)
-        {
+        if (!$this->translation_path) {
             return;
         }
 
         $ext = 'php';
 
-        switch($this->translation_format)
-        {
+        switch ($this->translation_format) {
             case 'php':
             case 'php-inline':
                 //$ext = 'php';
@@ -82,24 +96,19 @@ final class Translator implements TranslatorInterface
         }
 
         $language_files = [
-            $this->translation_path . DIRECTORY_SEPARATOR . $this->language . '.' . $ext,
-            $this->translation_path . DIRECTORY_SEPARATOR . $this->fallback . '.' . $ext
+            $this->translation_path.DIRECTORY_SEPARATOR.$this->language . '.' . $ext,
+            $this->translation_path.DIRECTORY_SEPARATOR.$this->fallback . '.' . $ext,
         ];
 
         $language_files = array_unique($language_files);
 
-        $this->readConfig($language_files,$this->translation_format);
+        $this->readConfig($language_files, $this->translation_format);
 
         $this->translation = $this->config;
     }
 
     /**
-     * Add translation of a specific string
-     *
-     * @param                   $string
-     * @param array<int,string> $translations (int) is the plural count | (string) is translation
-     *
-     * @throws Exception
+     * @inheritDoc
      */
     public function addOne(string $string, array $translations)
     {
@@ -111,12 +120,7 @@ final class Translator implements TranslatorInterface
     }
 
     /**
-     * Return translation of string
-     *
-     * @param string $string
-     *
-     * @return string
-     * @throws Exception
+     * @inheritDoc
      */
     public function translate(string $string): string
     {
@@ -124,13 +128,7 @@ final class Translator implements TranslatorInterface
     }
 
     /**
-     * Return translation of string in plural form for $number <> 1
-     *
-     * @param string $string
-     * @param        $number
-     *
-     * @return string
-     * @throws Exception
+     * @inheritDoc
      */
     public function translate_plural(string $string, $number): string
     {
@@ -147,8 +145,7 @@ final class Translator implements TranslatorInterface
             throw new Exception('Translation is present but is empty');
         }
 
-        if(count($trans) === 1)
-        {
+        if (count($trans) === 1) {
             return current($this->translation[$string]);
         }
 
