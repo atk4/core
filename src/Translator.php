@@ -24,6 +24,7 @@ final class Translator implements TranslatorInterface
 
     /**
      * ISOCode of the fallback language.
+     *
      * @var string
      */
     private $fallback;
@@ -97,8 +98,8 @@ final class Translator implements TranslatorInterface
         }
 
         $language_files = [
-            $this->translation_path.DIRECTORY_SEPARATOR.$this->language . '.' . $ext,
-            $this->translation_path.DIRECTORY_SEPARATOR.$this->fallback . '.' . $ext,
+            $this->translation_path.DIRECTORY_SEPARATOR.$this->language.'.'.$ext,
+            $this->translation_path.DIRECTORY_SEPARATOR.$this->fallback.'.'.$ext,
         ];
 
         $language_files = array_unique($language_files);
@@ -154,6 +155,6 @@ final class Translator implements TranslatorInterface
             $number = min($number, max(array_keys($trans)));
         }
 
-        return $this->translation[$string][(int)$number] ?? $string;
+        return $this->translation[$string][(int) $number] ?? $string;
     }
 }

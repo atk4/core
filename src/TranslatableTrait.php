@@ -28,7 +28,10 @@ trait TranslatableTrait
     {
         $this->translator = $translator;
     }
+
     /**
+     * Translate a string.
+     *
      * @param string $string
      * @param mixed  ...$args
      *
