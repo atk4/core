@@ -214,7 +214,6 @@ class FactoryTestAppMock
         if ($prefix == 'atk4\test') {
             return 'atk4\mytest\\'.$name;
         }
-
     }
 }
 // @codingStandardsIgnoreEnd

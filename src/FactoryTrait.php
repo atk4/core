@@ -213,19 +213,20 @@ trait FactoryTrait
         if ($name[0] == '.' && $prefix) {
             $name = $prefix.'\\'.substr($name, 1);
             $name = str_replace('/', '\\', $name);
+
             return $name;
         }
 
         // Rule 2: if "\" is present, don't prefix
         if (strpos($name, '\\') !== false) {
             $name = str_replace('/', '\\', $name);
+
             return $name;
         }
 
         if ($name[0] !== '/' && $prefix) {
             $name = $prefix.'\\'.$name;
         }
-
 
         $name = str_replace('/', '\\', $name);
 
