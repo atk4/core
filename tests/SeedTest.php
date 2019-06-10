@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core\DIContainerTrait;
+use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -195,12 +196,10 @@ class SeedTest extends TestCase
         $this->assertEquals($oo, ['4'=>['200']]);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testMergeFail1()
     {
         // works even if more arguments present
+        $this->expectException(Exception::class);
         $o = new SeedTestMock();
         $o->foo = ['red'];
         $oo = $this->mergeSeeds($o, ['foo'=>5]);
@@ -209,12 +208,10 @@ class SeedTest extends TestCase
         $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testMergeFail2()
     {
         // works even if more arguments present
+        $this->expectException(Exception::class);
         $o = new SeedTestMock();
         $o->foo = ['red'];
         $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o);
@@ -359,36 +356,28 @@ class SeedTest extends TestCase
         $this->assertEquals(['foo', null, 'arg'], $s1);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testSeedMustBe()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory([], ['foo' => 'bar']);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testClassMayNotBeEmpty()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory([''], ['atk4/core/tests/SeedDITestMock', 'test']);
         $this->assertEquals(['test'], $s1->args);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testMystBeDI()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory(['atk4/core/tests/SeedTestMock', 'hello', 'foo'=>'bar', 'world']);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testMustHaveProperty()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'xxx'=>'bar', 'world']);
     }
 
@@ -413,11 +402,10 @@ class SeedTest extends TestCase
 
     /**
      * Cannot inject in non-DI.
-     *
-     * @expectedException     Exception
      */
     public function testNonDIInject()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory('atk4/core/tests/SeedTestMock', ['foo'=>'hello']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['hello'], $s1->args);

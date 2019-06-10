@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core\ConfigTrait;
+use atk4\core\Exception;
 
 /**
  * @coversDefaultClass \atk4\core\ConfigTrait
@@ -82,11 +83,9 @@ class ConfigTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
         $this->assertEquals($c, $this->getProtected($m, 'config'));
     }
 
-    /**
-     * @expectedException Exception
-     */
     public function testFileReadException()
     {
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig('unknown_file.php');
     }

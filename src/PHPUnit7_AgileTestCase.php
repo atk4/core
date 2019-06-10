@@ -14,7 +14,11 @@ class PHPUnit7_AgileTestCase extends TestCase
         try {
             parent::runBare();
         } catch (\Exception $e) {
-            throw new PHPUnit7_AgileExceptionWrapper($e->getMessage(), 0, $e);
+            if ($e instanceof \atk4\core\Exception) {
+                throw new PHPUnit7_AgileExceptionWrapper($e->getMessage(), 0, $e);
+            } else {
+                throw $e;
+            }
         }
     }
 
@@ -26,9 +30,10 @@ class PHPUnit7_AgileTestCase extends TestCase
      *
      * @param object $obj
      * @param string $name
-     * @param array  $args
+     * @param array $args
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function callProtected($obj, $name, array $args = [])
     {
@@ -49,6 +54,7 @@ class PHPUnit7_AgileTestCase extends TestCase
      * @param string $name
      *
      * @return mixed
+     * @throws \ReflectionException
      */
     public function getProtected($obj, $name)
     {

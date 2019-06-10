@@ -4,6 +4,7 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
+use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use atk4\core\HookBreaker as HB;
 use PHPUnit\Framework\TestCase;
@@ -84,12 +85,11 @@ class FactoryTraitTest extends TestCase
 
     /**
      * Object factory definition must use ["class name", "x"=>"y"] form.
-     *
-     * @expectedException     Exception
      */
     public function testException1()
     {
         // wrong 1st parameter
+        $this->expectException(Exception::class);
         $m = new FactoryMock();
         $m->factory(['wrong_parameter' => 'qwerty']);
     }
@@ -158,12 +158,11 @@ class FactoryTraitTest extends TestCase
     /**
      * Object factory can not add not defined properties.
      * Receive as class name.
-     *
-     * @expectedException     Exception
      */
     public function testParametersException1()
     {
         // wrong property in 2nd parameter
+        $this->expectException(Exception::class);
         $m = new FactoryMock();
         $m1 = $m->factory('atk4\core\tests\FactoryMock', ['not_exist'=>'test']);
     }
@@ -171,12 +170,11 @@ class FactoryTraitTest extends TestCase
     /**
      * Object factory can not add not defined properties.
      * Receive as object.
-     *
-     * @expectedException     Exception
      */
     public function testParametersException2()
     {
         // wrong property in 2nd parameter
+        $this->expectException(Exception::class);
         $m = new FactoryMock();
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
         $m2 = $m->factory($m1, ['not_exist'=>'test']);

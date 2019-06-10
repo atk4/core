@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core;
+use atk4\core\Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,20 +22,16 @@ class InitializerTraitTest extends TestCase
         $this->assertEquals(true, $i->result);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testInitializerNotCalled()
     {
+        $this->expectException(Exception::class);
         $m = new ContainerMock2();
         $m->add(new BrokenInitializerMock());
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testInitializedTwice()
     {
+        $this->expectException(Exception::class);
         $m = new InitializerMock();
         $m->init();
         $m->init();

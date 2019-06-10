@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core\DIContainerTrait;
+use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -18,15 +19,15 @@ class DIContainerTraitTest extends TestCase
     {
         $m = new FactoryDIMock2();
         $m->setDefaults([5 => 'qwerty']);
+        $this->assertTrue(true);
     }
 
     /**
      * Do not allow non existant property names (array keys).
-     *
-     * @expectedException     Exception
      */
     public function testException2()
     {
+        $this->expectException(Exception::class);
         $m = new FactoryDIMock2();
         $m->setDefaults(['not_exist' => 'qwerty']);
     }
@@ -70,6 +71,7 @@ class DIContainerTraitTest extends TestCase
     {
         $m = new FactoryDIMock2();
         $m->setDefaults(null, true);
+        $this->assertTrue(true);
     }
 }
 
