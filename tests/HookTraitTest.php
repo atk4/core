@@ -138,8 +138,8 @@ class HookTraitTest extends TestCase
         // wrong 2nd argument
         $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->addHook('test', $this);
-        $m->hook('test', 'wrong_parameter');
+        $m->addHook('tst', $this);
+        $m->hook('tst', 'wrong_parameter');
     }
 
     public function testOrder()

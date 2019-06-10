@@ -176,8 +176,8 @@ trait FactoryTrait
      * add prefix.
      *
      * Rules observed, in order:
-     *  - If class contains "\" prefixing is never done.
      *  - If class starts with "." then prefixing is always done.
+     *  - If class contains "\" prefixing is never done.
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *

@@ -125,9 +125,10 @@ trait HookTrait
      * Execute all callables assigned to $hook_spot.
      *
      * @param string $hook_spot Hook identifier
-     * @param array  $arg       Additional arguments to callables
+     * @param array $arg Additional arguments to callables
      *
      * @return mixed Array of responses or value specified to breakHook
+     * @throws Exception
      */
     public function hook($hook_spot, $arg = null)
     {
@@ -179,6 +180,7 @@ trait HookTrait
      * hook method.
      *
      * @param mixed $return What would hook() return?
+     * @throws HookBreaker
      */
     public function breakHook($return)
     {
