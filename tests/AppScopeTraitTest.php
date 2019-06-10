@@ -6,11 +6,12 @@ use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
 use atk4\core\NameTrait;
 use atk4\core\TrackableTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\AppScopeTrait
  */
-class AppScopeTraitTest extends \PHPUnit_Framework_TestCase
+class AppScopeTraitTest extends TestCase
 {
     /**
      * Test constructor.

@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php" stderr="true" printerClass="atk4\core\PHPUnit_AgileResultPrinter">
+<phpunit bootstrap="vendor/autoload.php" stderr="true">
     <php>
         <var name="DB_DSN" value="sqlite::memory:" />
         <var name="DB_USER" value="travis" />
@@ -6,10 +6,6 @@
         <var name="DB_DBNAME" value="dsql_test" />
     </php>
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor</directory>
-            <directory suffix=".php">./examples</directory>
-        </blacklist>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
             <exclude>

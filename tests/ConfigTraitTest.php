@@ -7,7 +7,7 @@ use atk4\core\ConfigTrait;
 /**
  * @coversDefaultClass \atk4\core\ConfigTrait
  */
-class ConfigTraitTest extends \atk4\core\PHPUnit_AgileTestCase
+class ConfigTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 {
     public $dir = __DIR__.'/config_test/';
 

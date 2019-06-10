@@ -4,11 +4,12 @@ namespace atk4\core\tests;
 
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\FactoryTrait
  */
-class SeedTest extends \PHPUnit_Framework_TestCase
+class SeedTest extends TestCase
 {
     /*
      * Test constructor.

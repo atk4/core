@@ -4,11 +4,12 @@ namespace atk4\core\tests;
 
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\DIContainerTrait
  */
-class DIContainerTraitTest extends \PHPUnit_Framework_TestCase
+class DIContainerTraitTest extends TestCase
 {
     /**
      * Ignore numeric property names (array keys).

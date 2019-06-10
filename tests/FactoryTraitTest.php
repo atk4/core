@@ -6,11 +6,12 @@ use atk4\core\AppScopeTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
 use atk4\core\HookBreaker as HB;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\FactoryTrait
  */
-class FactoryTraitTest extends \PHPUnit_Framework_TestCase
+class FactoryTraitTest extends TestCase
 {
     /**
      * Test factory().
@@ -57,31 +58,28 @@ class FactoryTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\a\b\MyClass', $class);
 
         $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
-        $this->assertEquals('Prefix\a\b\MyClass', $class);
+        $this->assertEquals('a\b\MyClass', $class);
 
         $class = $m->normalizeClassName(\atk\data\Persistence::class, 'Prefix');
-        $this->assertEquals('Prefix\atk\data\Persistence', $class);
+        $this->assertEquals('atk\data\Persistence', $class);
 
         $class = $m->normalizeClassName(HB::class);
         $this->assertEquals('atk4\core\HookBreaker', $class);
 
+        $class = $m->normalizeClassName(\Datetime::class, 'Prefix');
+        $this->assertEquals('Prefix\Datetime', $class);
+
+        $class = $m->normalizeClassName('.Datetime', 'Prefix');
+        $this->assertEquals('Prefix\Datetime', $class);
+
+        $class = $m->normalizeClassName('.Date\Time', 'Prefix');
+        $this->assertEquals('Prefix\Date\Time', $class);
+
         // With Application Prefixing
         $m = new FactoryAppScopeMock();
         $m->app = new FactoryTestAppMock();
-        $class = $m->normalizeClassName('MyClass', 'model');
-        $this->assertEquals('atk4\test\model\MyClass', $class);
-
-        $class = $m->normalizeClassName('/MyClass', 'model');
-        $this->assertEquals('\MyClass', $class);
-
-        $class = $m->normalizeClassName('MyClass', '/model');
-        $this->assertEquals('\model\MyClass', $class);
-
-        $class = $m->normalizeClassName('MyClass', null);
-        $this->assertEquals('atk4\test\MyClass', $class);
-
-        $class = $m->normalizeClassName(null, null);
-        $this->assertEquals('atk4\test\View', $class);
+        $class = $m->normalizeClassName('MyClass', 'atk4\test');
+        $this->assertEquals('atk4\mytest\MyClass', $class);
     }
 
     /**
@@ -211,13 +209,12 @@ class FactoryAppScopeMock
 
 class FactoryTestAppMock
 {
-    public function normalizeClassNameApp($name)
+    public function normalizeClassNameApp($name, $prefix)
     {
-        if (!$name) {
-            $name = 'View';
+        if ($prefix == 'atk4\test') {
+            return 'atk4\mytest\\'.$name;
         }
 
-        return 'atk4\test\\'.$name;
     }
 }
 // @codingStandardsIgnoreEnd

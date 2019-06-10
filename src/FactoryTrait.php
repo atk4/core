@@ -209,24 +209,23 @@ trait FactoryTrait
             }
         }
 
-        // Rule 1: if "\" is present, don't prefix
-        if (strpos($name, '\'') !== false) {
+        // Rule 1: if starts with "." always prefix
+        if ($name[0] == '.' && $prefix) {
+            $name = $prefix.'\\'.substr($name, 1);
+            $name = str_replace('/', '\\', $name);
             return $name;
         }
 
-        // Rule 2: if starts with "." always prefix
-        if ($name[0] == '.' && $prefix) {
+        // Rule 2: if "\" is present, don't prefix
+        if (strpos($name, '\\') !== false) {
+            $name = str_replace('/', '\\', $name);
+            return $name;
+        }
+
+        if ($name[0] !== '/' && $prefix) {
             $name = $prefix.'\\'.$name;
         }
 
-        if (
-            $name[0] != '/'
-            && $name[0] != '\\'
-            && isset($this->_appScopeTrait, $this->app)
-            && method_exists($this->app, 'normalizeClassNameApp')
-        ) {
-            $name = $this->app->normalizeClassNameApp($name);
-        }
 
         $name = str_replace('/', '\\', $name);
 
