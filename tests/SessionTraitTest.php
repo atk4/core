@@ -4,11 +4,12 @@ namespace atk4\core\tests;
 
 use atk4\core\NameTrait;
 use atk4\core\SessionTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\SessionTrait
  */
-class SessionTraitTest extends \PHPUnit_Framework_TestCase
+class SessionTraitTest extends TestCase
 {
     /**
      * @expectedException     Exception

@@ -3,11 +3,12 @@
 namespace atk4\core\tests;
 
 use atk4\core\QuickExceptionTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\QuickExceptionTrait
  */
-class QuickExceptionTraitTest extends \PHPUnit_Framework_TestCase
+class QuickExceptionTraitTest extends TestCase
 {
     /**
      * Test constructor.

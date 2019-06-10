@@ -3,11 +3,12 @@
 namespace atk4\core\tests;
 
 use atk4\core;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\InitializerTrait
  */
-class InitializerTraitTest extends \PHPUnit_Framework_TestCase
+class InitializerTraitTest extends TestCase
 {
     /**
      * Test constructor.

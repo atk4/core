@@ -3,11 +3,12 @@
 namespace atk4\core\tests;
 
 use atk4\core\HookTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\HookTrait
  */
-class HookTraitTest extends \PHPUnit_Framework_TestCase
+class HookTraitTest extends TestCase
 {
     /**
      * @expectedException     Exception
