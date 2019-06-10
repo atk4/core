@@ -2,20 +2,20 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\Exception;
 use atk4\core\NameTrait;
 use atk4\core\SessionTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\SessionTrait
  */
-class SessionTraitTest extends \PHPUnit_Framework_TestCase
+class SessionTraitTest extends TestCase
 {
-    /**
-     * @expectedException     Exception
-     */
     public function testException1()
     {
         // when try to start session without NameTrait
+        $this->expectException(Exception::class);
         $m = new SessionWithoutNameMock();
         $m->startSession();
     }

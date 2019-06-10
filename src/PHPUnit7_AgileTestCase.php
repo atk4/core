@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core;
 
 use PHPUnit\Framework\TestCase;
@@ -14,7 +16,11 @@ class PHPUnit7_AgileTestCase extends TestCase
         try {
             parent::runBare();
         } catch (\Exception $e) {
-            throw new PHPUnit7_AgileExceptionWrapper($e->getMessage(), 0, $e);
+            if ($e instanceof \atk4\core\Exception) {
+                throw new PHPUnit7_AgileExceptionWrapper($e->getMessage(), 0, $e);
+            } else {
+                throw $e;
+            }
         }
     }
 
@@ -27,6 +33,8 @@ class PHPUnit7_AgileTestCase extends TestCase
      * @param object $obj
      * @param string $name
      * @param array  $args
+     *
+     * @throws \ReflectionException
      *
      * @return mixed
      */
@@ -47,6 +55,8 @@ class PHPUnit7_AgileTestCase extends TestCase
      *
      * @param object $obj
      * @param string $name
+     *
+     * @throws \ReflectionException
      *
      * @return mixed
      */
