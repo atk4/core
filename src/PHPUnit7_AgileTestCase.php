@@ -30,10 +30,11 @@ class PHPUnit7_AgileTestCase extends TestCase
      *
      * @param object $obj
      * @param string $name
-     * @param array $args
+     * @param array  $args
+     *
+     * @throws \ReflectionException
      *
      * @return mixed
-     * @throws \ReflectionException
      */
     public function callProtected($obj, $name, array $args = [])
     {
@@ -53,8 +54,9 @@ class PHPUnit7_AgileTestCase extends TestCase
      * @param object $obj
      * @param string $name
      *
-     * @return mixed
      * @throws \ReflectionException
+     *
+     * @return mixed
      */
     public function getProtected($obj, $name)
     {
