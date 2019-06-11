@@ -1,5 +1,14 @@
 # Change Log
 
+# 2.0
+
+Version 2.0 may introduce several changes that may require change in the frameworks that use it:
+ - Namespace resolution works differently, facilitating support for MyClass::class better
+ - Translation traits added [TODO]
+ - Support for PHP 5.6 and PHP 7.0 dropped
+ - Upgraded to PHPUnit 8 as the default test-suite
+
+
 # 1.3
 
 This release refactors FactoryTrait in a way that may not be backwards compatible, so upgrade with care.
