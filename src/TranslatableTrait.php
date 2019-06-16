@@ -19,13 +19,14 @@ trait TranslatableTrait
      *
      * @param string $message the text to translate
      * @param int    $count   the counter used to evaluate the plural
+     * @param string $context
      *
      * @return string
      */
-    public function _(string $message, int $count = 1): string
+    public function _(string $message, int $count = 1, string $context = 'atk4'): string
     {
         if (isset($this->app) && method_exists($this->app, '_')) {
-            return $this->app->_($message, $count, 'atk4');
+            return $this->app->_($message, $count, $context);
         }
 
         return $message;
