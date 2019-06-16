@@ -2,14 +2,12 @@
 
 namespace atk4\core;
 
-final class Translator implements TranslatorInterface
+class Translator implements TranslatorInterface
 {
     use ConfigTrait;
 
     /**
      * Array where Translation will be stored.
-     *
-     * @TODO can be used directly config???
      *
      * @var array
      */
@@ -68,6 +66,7 @@ final class Translator implements TranslatorInterface
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
     public function set(string $ISOCode, string $fallbackISOCode = null)
     {
@@ -112,34 +111,27 @@ final class Translator implements TranslatorInterface
     /**
      * {@inheritdoc}
      */
-    public function addOne(string $string, array $translations)
+    public function addOne(string $string, array $translations, string $domain = 'atk4')
     {
         if (array_key_exists($string, $this->translation)) {
             throw new Exception('Translation already exists');
         }
 
-        $this->translation[$string] = $translations;
+        $this->translation[$domain][$string] = $translations;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function translate(string $string): string
+    public function translate(string $message, int $count = 1, ?string $context = NULL): string
     {
-        return $this->translate_plural($string, 1);
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function translate_plural(string $string, $number): string
-    {
         // check presence of key
-        $trans = $this->translation[$string] ?? false;
+        $trans = $this->translation[$context][$message] ?? false;
 
         // if not present return string
         if (false === $trans) {
-            return $string;
+            return $message;
         }
 
         // if present but empty raise exception
@@ -148,13 +140,13 @@ final class Translator implements TranslatorInterface
         }
 
         if (count($trans) === 1) {
-            return current($this->translation[$string]);
+            return current($this->translation[$context][$message]);
         }
 
-        if ($number > 1) {
-            $number = min($number, max(array_keys($trans)));
+        if ($count > 1) {
+            $count = min($count, max(array_keys($trans)));
         }
 
-        return $this->translation[$string][(int) $number] ?? $string;
+        return $this->translation[$context][$message][(int) $count] ?? $message;
     }
 }
