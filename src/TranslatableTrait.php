@@ -14,61 +14,41 @@ trait TranslatableTrait
      */
     public $_translatableTrait = true;
 
-    /** @var TranslatorInterface */
-    protected $translator;
-
     /**
-     * Set Translator.
+     * Get the translation of a message in the correct plural form
      *
-     * @TODO should be setted internally or leave it public and leave it definable via Defaults?
-     *
-     * @param TranslatorInterface $translator
-     */
-    public function setTranslator(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * Translate a string.
-     *
-     * @param string $string
-     * @param mixed  ...$args
-     *
-     * @throws Exception
+     * @param string $message the text to translate
+     * @param int    $count   the counter used to evaluate the plural
      *
      * @return string
      */
-    public function __(string $string, ...$args)
+    public function _(string $message, int $count = 1)
     {
-        $count_args = count($args);
-        // translation : simple case
-        if (0 === $count_args) {
-            return $this->translator->translate($string);
+        if (isset($this->app) && method_exists($this->app, '_')) {
+            return $this->app->_($message, $count ?? 1);
         }
 
-        // translation : plural case
-        if (1 === count($args) && is_numeric($args[0])) {
-            return $this->translator->translate_plural($string, $args[0]);
+        return $message;
+    }
+
+    /**
+     * Get the translation of a message in the correct plural form
+     *
+     * @param string   $message the text to translate
+     * @param string   $domain  the context domain if exists
+     * @param int|null $count   the counter used to evaluate the plural
+     *
+     * @return string
+     */
+    public function _d(string $message, string $domain = 'atk4', int $count = 1)
+    {
+        if (isset($this->app) && method_exists($this->app, '_d')) {
+            return $this->app->_d($message, $domain, $count);
         }
 
-        $translated_args = [];
-        $translated_args[] = $this->translator->translate($string);
-        foreach ($args as $sub_args) {
-            if (!is_array($sub_args)) {
-                $sub_args = [$sub_args];
-            }
-
-            $sub_string = $sub_args[0];
-            $sub_args = $sub_args[1] ?? false;
-
-            if (!$sub_args) {
-                $translated_args[] = $this->__($sub_string);
-            } else {
-                $translated_args[] = $this->__($sub_string, $sub_args);
-            }
-        }
-
-        return call_user_func_array('sprintf', $translated_args);
+        return $message;
     }
 }
+
+//
+// $this->_m('test %s %s', null, ['test','testing',['test',null,['test']]])
