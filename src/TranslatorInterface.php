@@ -5,57 +5,23 @@ namespace atk4\core;
 interface TranslatorInterface
 {
     /**
-     * Get ISOCode of Main Language.
+     * Get the translation of a message
+     *
+     * @param  string      $message The text to translate
+     * @param  string|null $context The context if exists
      *
      * @return string
      */
-    public function getLanguage(): string;
+    public function translate(string $message, ?string $context) :string;
 
     /**
-     * Get ISOCode of Fallback Language.
+     * Get the translation of a message in the correct plural form
+     *
+     * @param  integer     $count   The counter used to evaluate the plural
+     * @param  string      $message The text to translate (in singular)
+     * @param  string|null $context The context if exists
      *
      * @return string
      */
-    public function getFallback(): string;
-
-    /**
-     * Set the language and fallback.
-     *
-     * @param string $ISOCode         Current Language
-     * @param string $fallbackISOCode Fallback language in case of missing translations
-     */
-    public function set(string $ISOCode, string $fallbackISOCode);
-
-    /**
-     * Add a translation.
-     *
-     * @param                   $string
-     * @param array<int,string> $translations (int) is the plural count | (string) is translation
-     *
-     * @throws Exception
-     */
-    public function addOne(string $string, array $translations);
-
-    /**
-     * Return translation of string.
-     *
-     * @param string $string
-     *
-     * @throws Exception
-     *
-     * @return string
-     */
-    public function translate(string $string): string;
-
-    /**
-     * Return translation of string in plural form for $number <> 1.
-     *
-     * @param string $string
-     * @param        $number
-     *
-     * @throws Exception
-     *
-     * @return string
-     */
-    public function translate_plural(string $string, $number): string;
+    public function translatePlural(int $count, string $message, ?string $context) :string;
 }
