@@ -12,6 +12,7 @@ class MultiContainerTraitTest extends TestCase
 {
     /**
      * Test constructor.
+     *
      * @throws core\Exception
      */
     public function testBasic()
@@ -22,7 +23,6 @@ class MultiContainerTraitTest extends TestCase
 
             $this->assertNotEmpty($m->hasField('name'));
 
-
             $m->addField('surname', ['CustomFieldMock']);
 
             $this->assertEquals(CustomFieldMock::class, get_class($m->hasField('surname')));
@@ -32,8 +32,8 @@ class MultiContainerTraitTest extends TestCase
             $this->assertEmpty($m->hasField('name'));
         } catch (core\Exception $e) {
             echo $e->getColorfulText();
+
             throw $e;
         }
     }
-
 }

@@ -14,8 +14,10 @@ class MultiContainerMock
     /**
      * @param $name
      * @param $seed
-     * @return mixed|object
+     *
      * @throws core\Exception
+     *
+     * @return mixed|object
      */
     public function addField($name, $seed = null)
     {
@@ -33,10 +35,13 @@ class MultiContainerMock
 
     /**
      * @param $name
-     * @return mixed
+     *
      * @throws core\Exception
+     *
+     * @return mixed
      */
-    public function getField($name) {
+    public function getField($name)
+    {
         return $this->_getFomCollection($name, 'fields');
     }
 
