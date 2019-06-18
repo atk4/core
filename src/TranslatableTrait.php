@@ -17,36 +17,36 @@ trait TranslatableTrait
     /**
      * Get the translation of a message in the correct plural form
      *
-     * @param string $message the text to translate
+     * @param string $string  the text to translate
      * @param int    $count   the counter used to evaluate the plural
-     * @param string $context
+     * @param string $context the context domain if exists
      *
      * @return string
      */
-    public function _(string $message, int $count = 1, string $context = 'atk4'): string
+    public function _(string $string, int $count = 1, string $context = 'atk4'): string
     {
         if (isset($this->app) && method_exists($this->app, '_')) {
-            return $this->app->_($message, $count, $context);
+            return $this->app->_($string, $count, $context);
         }
 
-        return $message;
+        return $string;
     }
 
     /**
      * Get the translation of a message in the correct plural form with contaxt domain
      *
-     * @param string $message the text to translate
+     * @param string $string  the text to translate
      * @param string $context the context domain if exists
      * @param int    $count   the counter used to evaluate the plural
      *
      * @return string
      */
-    public function _d(string $message, string $context = 'atk4', int $count = 1): string
+    public function _d(string $string, string $context = 'atk4', int $count = 1): string
     {
         if (isset($this->app) && method_exists($this->app, '_')) {
-            return $this->app->_($message, $count, $context);
+            return $this->app->_($string, $count, $context);
         }
 
-        return $message;
+        return $string;
     }
 }

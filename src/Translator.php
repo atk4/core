@@ -7,84 +7,75 @@ class Translator implements TranslatorInterface
     use ConfigTrait;
 
     /**
-     * Array where Translation will be stored.
-     *
-     * @var array
-     */
-    private $translation = [];
-
-    /**
      * ISOCode of the main language.
      *
      * @var string
      */
-    private $language;
+    public $language;
 
     /**
      * ISOCode of the fallback language.
      *
      * @var string
      */
-    private $fallback;
+    public $fallback;
 
     /**
-     * Path where all translation are stored
-     * Can be null because translation can be add at runtime.
+     * Array where Translation will be stored.
      *
-     * @var string|null
+     * @var array
      */
-    private $translation_path;
+    protected $translations = [];
 
     /**
-     * Format for ConfigTrait to read translations.
+     * Raise exception if format of translation is not correct
      *
-     * @var string
+     * @var bool
      */
-    private $translation_format;
-
-    public function getLanguage(): string
-    {
-        return $this->language;
-    }
-
-    public function getFallback(): string
-    {
-        return $this->fallback;
-    }
+    public $raise_bad_format_exception = false;
 
     /**
-     * Translator constructor.
+     * Set primary language ISO Code
      *
-     * @param string|null $translation_path root path of translations
-     * @param string      $format           format for ConfigTrait loader
+     * @param string      $language
+     *
+     * @param string|null $fallback
+     *
+     * @return string
      */
-    public function __construct(string $translation_path = null, string $format = 'php-inline')
+    public function setLanguage(string $language,?string $fallback = null)
     {
-        $this->translation_path = $translation_path;
-        $this->translation_format = $format;
+        $this->language = $language;
+        $this->fallback = $fallback ?? false;
     }
 
     /**
-     * {@inheritdoc}
+     * Add one string and his translated plural forms to a domain context
+     *
+     * @param string $string        string to be translated
+     * @param array  $translations  plural forms translation
+     * @param string $context       the context domain if exists
+     *
      * @throws Exception
      */
-    public function set(string $ISOCode, string $fallbackISOCode = null)
+    public function addOne(string $string, array $translations, string $context = 'atk4')
     {
-        $this->language = $ISOCode;
-
-        $this->fallback = $fallbackISOCode ?? $this->language;
-
-        // if no base path is specified don't load
-        if (!$this->translation_path) {
-            return;
+        if (array_key_exists($string, $this->translations)) {
+            throw new \atk4\core\Exception('Translation already exists');
         }
 
-        $ext = 'php';
+        $this->translations[$context][$string] = $translations;
+    }
 
-        switch ($this->translation_format) {
+    public function addFromFolder(string $path, string $format = 'php-inline')
+    {
+        $ext = false;
+        // if Translation ext is not recognized throw exception
+        switch ($format) {
+
             case 'php':
             case 'php-inline':
-                //$ext = 'php';
+                $ext = 'php';
                 break;
 
             case 'json':
@@ -92,61 +83,76 @@ class Translator implements TranslatorInterface
                 break;
 
             case 'yaml':
-                $ext = 'yaml';
+                $ext = 'yml';
                 break;
         }
 
-        $language_files = [
-            $this->translation_path.DIRECTORY_SEPARATOR.$this->language.'.'.$ext,
-            $this->translation_path.DIRECTORY_SEPARATOR.$this->fallback.'.'.$ext,
-        ];
+        $fallback = [];
 
-        $language_files = array_unique($language_files);
+        $language = $this->getTranslationsFromFile($path.DIRECTORY_SEPARATOR.$this->language.'.'.$ext ,$format);
 
-        $this->readConfig($language_files, $this->translation_format);
-
-        $this->translation = $this->config;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addOne(string $string, array $translations, string $domain = 'atk4')
-    {
-        if (array_key_exists($string, $this->translation)) {
-            throw new Exception('Translation already exists');
+        if($this->fallback)
+        {
+            $fallback = $this->getTranslationsFromFile($path.DIRECTORY_SEPARATOR.$this->fallback.'.'.$ext ,$format);
         }
 
-        $this->translation[$domain][$string] = $translations;
+        $this->translations  = array_replace_recursive($this->translations, $fallback, $language);
+    }
+
+    private function getTranslationsFromFile(string $file, string $format)
+    {
+        // need to check here for existence
+        // to exclude exception for existence in ConfigTrait
+        if(!file_exists($file))
+        {
+            return [];
+        }
+
+        $this->readConfig($file, $format);
+        $translations = $this->config;
+
+        // empty stored config
+        $this->config = [];
+
+        return $translations;
     }
 
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
-    public function translate(string $message, int $count = 1, ?string $context = NULL): string
+    public function translate(string $string, ?int $count = 1, ?string $context = NULL): string
     {
-
-        // check presence of key
-        $trans = $this->translation[$context][$message] ?? false;
+        // check presence of string
+        $trans = $this->translations[$context][$string] ?? false;
 
         // if not present return string
         if (false === $trans) {
-            return $message;
+            return $string;
         }
 
-        // if present but empty raise exception
+        // this a sort of lazy check of consistency
+        // check is here to avoid checking of every string when loading translation files
         if (empty($trans)) {
-            throw new Exception('Translation is present but is empty');
+            if($this->raise_bad_format_exception) {
+                throw new \atk4\core\Exception('Translation is present but is empty');
+            }
+            return $string;
+        }
+
+        // if declared without plurals as string -> normalize to single array
+        if (is_string($trans)) {
+            return $trans;
         }
 
         if (count($trans) === 1) {
-            return current($this->translation[$context][$message]);
+            return current($trans);
         }
 
         if ($count > 1) {
             $count = min($count, max(array_keys($trans)));
         }
 
-        return $this->translation[$context][$message][(int) $count] ?? $message;
+        return $trans[(int) $count] ?? $string;
     }
 }
