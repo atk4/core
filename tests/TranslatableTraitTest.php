@@ -2,62 +2,75 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AppScopeTrait;
+use atk4\core\TranslatableTrait;
+use atk4\core\Translator;
+
 class TranslatableTraitTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var TranslatableMock */
-    public $translatableMock;
+    /** @var TranslatableTraitMock */
+    public $mock;
 
     public function setUp()
     {
-        $this->translatableMock = new TranslatableMock();
+        $this->mock = new TranslatableTraitMock();
     }
 
-    public function testStraight()
+    public function dataProvider()
     {
-        $trans = $this->translatableMock->_('string without counter');
-        $this->assertEquals('string without counter translated', $trans);
+        return [['string to test','string to test']];
     }
 
-    public function testSingular()
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param $input    input string to test
+     * @param $output   excepted output
+     */
+    public function testMethod_($input, $output)
     {
-        $trans = $this->translatableMock->_('string not translated simple');
-        $this->assertEquals('string translated', $trans);
+        $trans = $this->mock->_($input);
+        $this->assertEquals($output, $trans);
     }
 
-    public function testSingularNotExists()
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param $input    input string to test
+     * @param $output   excepted output
+     */
+    public function testMethodWithCounter_($input, $output)
     {
-        $trans = $this->translatableMock->_('string not exists');
-        $this->assertEquals('string not exists', $trans);
+        $trans = $this->mock->_($input, 0);
+        $this->assertEquals($output, $trans);
     }
 
-    public function testPlurals0()
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param $input    input string to test
+     * @param $output   excepted output
+     */
+    public function testMethod_d($input, $output)
     {
-        $trans = $this->translatableMock->_('string not translated with plurals', 0);
-        $this->assertEquals('string translated zero', $trans);
+        $trans = $this->mock->_d($input, 'atk4');
+        $this->assertEquals($output, $trans);
     }
 
-    public function testPlurals1()
+    /**
+     * @dataProvider dataProvider
+     *
+     * @param $input    input string to test
+     * @param $output   excepted output
+     */
+    public function testMethodWithCounter_d($input, $output)
     {
-        $trans = $this->translatableMock->_('string not translated with plurals', 1);
-        $this->assertEquals('string translated singular', $trans);
+        $trans = $this->mock->_d($input, 'atk4', 0);
+        $this->assertEquals($output, $trans);
     }
+}
 
-    public function testPlurals2()
-    {
-        $trans = $this->translatableMock->_('string not translated with plurals', 2);
-        $this->assertEquals('string translated plural', $trans);
-    }
 
-    public function testPluralsBiggerThanMaxPlurals()
-    {
-        $trans = $this->translatableMock->_('string not translated with plurals', 300);
-        $this->assertEquals('string translated plural', $trans);
-    }
-
-    // EXCEPTION
-    public function testTranslationKeyPresentButEmpty()
-    {
-        $this->expectException(\atk4\core\Exception::class);
-        $trans = $this->translatableMock->_('string with exception', 2);
-    }
+class TranslatableTraitMock {
+    use TranslatableTrait;
 }

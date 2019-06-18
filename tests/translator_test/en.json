@@ -1,0 +1,16 @@
+{
+    "atk4": {
+        "string without counter": [
+            "string without counter translated"
+        ],
+        "string not translated simple": {
+            "1": "string translated"
+        },
+        "string not translated with plurals": [
+            "string translated zero",
+            "string translated singular",
+            "string translated plural"
+        ],
+        "string with exception array empty": []
+    }
+}
