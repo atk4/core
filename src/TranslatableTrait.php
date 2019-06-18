@@ -15,9 +15,9 @@ trait TranslatableTrait
     public $_translatableTrait = true;
 
     /**
-     * Get the translation of a message in the correct plural form
+     * Get the translation of a message in the correct plural form.
      *
-     * @param string $string  the text to translate
+     * @param string $string  the string to be translated
      * @param int    $count   the counter used to evaluate the plural
      *
      * @return string
@@ -32,10 +32,10 @@ trait TranslatableTrait
     }
 
     /**
-     * Get the translation of a message in the correct plural form with contaxt domain
+     * Get the translation of a message in the correct plural form with context domain.
      *
      * @param string $context the context domain if exists
-     * @param string $string  the text to translate
+     * @param string $string  the string to be translated
      * @param int    $count   the counter used to evaluate the plural
      *
      * @return string
@@ -52,8 +52,10 @@ trait TranslatableTrait
     /**
      * Helper to sprintf a string.
      *
-     * @param string        $string
-     * @param array<array>  $args
+     * _m = multi
+     *
+     * @param string        $string     a string to be translated with sprintf occurence
+     * @param array<array>  $args       an array of array containing args to be translated using methods _ and _d
      *
      * @return string
      */
@@ -67,11 +69,13 @@ trait TranslatableTrait
     }
 
     /**
-     * Helper to sprintf a string.
+     * Helper to sprintf a string with domain context.
      *
-     * @param string $context
-     * @param string $string
-     * @param mixed  ...$args
+     * _md = multiWithDomain
+     *
+     * @param string        $context    the context domain
+     * @param string        $string     the string to be translated
+     * @param array<array>  $args       an array of array containing args to be translated using methods _ and _d
      *
      * @return string
      */
@@ -84,7 +88,13 @@ trait TranslatableTrait
         return sprintf(...$translated_args);
     }
 
-    private function _processTranslatedArray(&$translated_args, $args)
+    /**
+     * Process the arguments for sprintf helper.
+     *
+     * @param array         $translated_args    reference to translated args in methods _m and _md
+     * @param array<array>  $args               an array of array containing args to be translated using methods _ and _d
+     */
+    private function _processTranslatedArray(array &$translated_args, array $args)
     {
         foreach ($args as $sub_args) {
 

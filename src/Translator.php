@@ -67,6 +67,14 @@ class Translator implements TranslatorInterface
         $this->translations[$context][$string] = $translations;
     }
 
+    /**
+     * Add a translation from a folder with a specific format.
+     *
+     * @param string $path      full path to translation files
+     * @param string $format    ConfigTrait format can be : php | php-inline | json | yaml
+     *
+     * @throws Exception
+     */
     public function addFromFolder(string $path, string $format = 'php-inline')
     {
         $ext = false;
@@ -99,7 +107,14 @@ class Translator implements TranslatorInterface
         $this->translations  = array_replace_recursive($this->translations, $fallback, $language);
     }
 
-    private function getTranslationsFromFile(string $file, string $format)
+    /**
+     * @param string $file      full path to file
+     * @param string $format    ConfigTrait format
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function getTranslationsFromFile(string $file, string $format) : array
     {
         // need to check here for existence
         // to exclude exception for existence in ConfigTrait
@@ -119,6 +134,7 @@ class Translator implements TranslatorInterface
 
     /**
      * {@inheritdoc}
+     *
      * @throws Exception
      */
     public function translate(string $string, ?int $count = 1, ?string $context = NULL): string

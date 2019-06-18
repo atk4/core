@@ -305,7 +305,6 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('altro dominio | no-plurale: frase senza contatore, forma zero: frase forma plurale zero, forma singolare : frase forma plurale uno, forma plurale : frase forma plurale due',
             $trans);
 
-
         // test other multi with context domains
         $trans = $mock->_md('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s', [
             ['string without counter'],
@@ -315,6 +314,23 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
         ]);
         $this->assertEquals('altro dominio | no-plurale: frase senza contatore, forma zero: altro dominio frase forma plurale zero, forma singolare : frase forma plurale uno, forma plurale : altro dominio frase forma plurale due',
             $trans);
+
+        $excepted = sprintf($mock->_d('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s'),
+            $mock->_('string without counter'),
+            $mock->_d('other-domain', 'string not translated with plurals', 0),
+            $mock->_d('atk4', 'string not translated with plurals', 1),
+            $mock->_d('other-domain', 'string not translated with plurals', 2)
+        );
+
+        // test other multi with context domains
+        $trans = $mock->_md('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s', [
+            ['string without counter'],
+            ['other-domain', 'string not translated with plurals', 0],
+            ['atk4', 'string not translated with plurals', 1],
+            ['other-domain', 'string not translated with plurals', 2]
+        ]);
+
+        $this->assertEquals($excepted,$trans);
     }
 }
 
