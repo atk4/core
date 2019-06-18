@@ -38,10 +38,10 @@ class Translator implements TranslatorInterface
      * @param string      $language Primary Language
      * @param string|null $fallback Fallback Language
      */
-    public function __construct(string $language, string $fallback = 'en')
+    public function __construct(string $language, ?string $fallback = 'en')
     {
         $this->language = $language;
-        $this->fallback = $fallback;
+        $this->fallback = $fallback ?? false;
     }
 
     /**

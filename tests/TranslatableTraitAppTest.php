@@ -59,7 +59,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 
     public function getTranslatorForRuntimeAdd()
     {
-        $translator = new Translator();
+        $translator = new Translator('en','en');
         foreach (self::$translations_runtime_add as $string => $translations) {
             $translator->addOne($string, $translations);
         }
@@ -68,8 +68,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 
     public function getTranslatorForConfigPHPInline($use_fallback = false)
     {
-        $translator = new Translator();
-        $translator->setLanguage('en-inline', !$use_fallback ? NULL : 'en-inline');
+        $translator = new Translator('en-inline', !$use_fallback ? NULL : 'en-inline');
         $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
 
         return $translator;
@@ -77,8 +76,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 
     public function getTranslatorForConfigPHP($use_fallback = false)
     {
-        $translator = new Translator();
-        $translator->setLanguage('en', !$use_fallback ? NULL : 'en');
+        $translator = new Translator('en', !$use_fallback ? NULL : 'en');
         $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php');
 
         return $translator;
@@ -87,8 +85,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
     public function getTranslatorForConfigJSON($use_fallback = false)
     {
 
-        $translator = new Translator();
-        $translator->setLanguage('en', !$use_fallback ? NULL : 'en');
+        $translator = new Translator('en', !$use_fallback ? NULL : 'en');
         $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'json');
 
         return $translator;
@@ -96,8 +93,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 
     public function getTranslatorForConfigYAML($use_fallback = false)
     {
-        $translator = new Translator();
-        $translator->setLanguage('en', !$use_fallback ? NULL : 'en');
+        $translator = new Translator('en', !$use_fallback ? NULL : 'en');
         $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'yaml');
 
         return $translator;
@@ -240,8 +236,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 
     public function getTranslatableChildWithFallback()
     {
-        $translator = new Translator();
-        $translator->setLanguage('it-inline', 'en-inline');
+        $translator = new Translator('it-inline', 'en-inline');
         $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
 
         return $this->getTransalatableChild($translator);
