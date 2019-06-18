@@ -11,14 +11,14 @@ class Translator implements TranslatorInterface
      *
      * @var string
      */
-    public $language;
+    protected $language;
 
     /**
      * ISOCode of the fallback language.
      *
      * @var string
      */
-    public $fallback;
+    protected $fallback;
 
     /**
      * Array where Translation will be stored.
@@ -35,26 +35,41 @@ class Translator implements TranslatorInterface
     public $raise_bad_format_exception = false;
 
     /**
-     * Set primary language ISO Code
-     *
-     * @param string      $language
-     *
-     * @param string|null $fallback
+     * @param string      $language Primary Language
+     * @param string|null $fallback Fallback Language
+     */
+    public function __construct(string $language, string $fallback = 'en')
+    {
+        $this->language = $language;
+        $this->fallback = $fallback;
+    }
+
+    /**
+     * Get Primary Language
      *
      * @return string
      */
-    public function setLanguage(string $language,?string $fallback = null)
+    public function getLanguage(): string
     {
-        $this->language = $language;
-        $this->fallback = $fallback ?? false;
+        return $this->language;
+    }
+
+    /**
+     * Get Fallback Language
+     *
+     * @return string
+     */
+    public function getFallback(): string
+    {
+        return $this->fallback;
     }
 
     /**
      * Add one string and his translated plural forms to a domain context
      *
-     * @param string $string        string to be translated
-     * @param array  $translations  plural forms translation
-     * @param string $context       the context domain if exists
+     * @param string $string       string to be translated
+     * @param array  $translations plural forms translation
+     * @param string $context      the context domain if exists
      *
      * @throws Exception
      */
@@ -70,8 +85,8 @@ class Translator implements TranslatorInterface
     /**
      * Add a translation from a folder with a specific format.
      *
-     * @param string $path      full path to translation files
-     * @param string $format    ConfigTrait format can be : php | php-inline | json | yaml
+     * @param string $path   full path to translation files
+     * @param string $format ConfigTrait format can be : php | php-inline | json | yaml
      *
      * @throws Exception
      */
@@ -97,29 +112,28 @@ class Translator implements TranslatorInterface
 
         $fallback = [];
 
-        $language = $this->getTranslationsFromFile($path.DIRECTORY_SEPARATOR.$this->language.'.'.$ext ,$format);
+        $language = $this->getTranslationsFromFile($path . DIRECTORY_SEPARATOR . $this->language . '.' . $ext, $format);
 
-        if($this->fallback)
-        {
-            $fallback = $this->getTranslationsFromFile($path.DIRECTORY_SEPARATOR.$this->fallback.'.'.$ext ,$format);
+        if ($this->fallback) {
+            $fallback = $this->getTranslationsFromFile($path . DIRECTORY_SEPARATOR . $this->fallback . '.' . $ext,
+                $format);
         }
 
-        $this->translations  = array_replace_recursive($this->translations, $fallback, $language);
+        $this->translations = array_replace_recursive($this->translations, $fallback, $language);
     }
 
     /**
-     * @param string $file      full path to file
-     * @param string $format    ConfigTrait format
+     * @param string $file   full path to file
+     * @param string $format ConfigTrait format
      *
      * @return array
      * @throws Exception
      */
-    private function getTranslationsFromFile(string $file, string $format) : array
+    private function getTranslationsFromFile(string $file, string $format): array
     {
         // need to check here for existence
         // to exclude exception for existence in ConfigTrait
-        if(!file_exists($file))
-        {
+        if (!file_exists($file)) {
             return [];
         }
 
@@ -150,7 +164,7 @@ class Translator implements TranslatorInterface
         // this a sort of lazy check of consistency
         // check is here to avoid checking of every string when loading translation files
         if (empty($trans)) {
-            if($this->raise_bad_format_exception) {
+            if ($this->raise_bad_format_exception) {
                 throw new \atk4\core\Exception('Translation is present but is empty');
             }
             return $string;
@@ -169,6 +183,6 @@ class Translator implements TranslatorInterface
             $count = min($count, max(array_keys($trans)));
         }
 
-        return $trans[(int) $count] ?? $string;
+        return $trans[(int)$count] ?? $string;
     }
 }
