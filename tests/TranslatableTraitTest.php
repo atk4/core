@@ -53,7 +53,7 @@ class TranslatableTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testMethod_d($input, $output)
     {
-        $trans = $this->mock->_d($input, 'atk4');
+        $trans = $this->mock->_d('atk4', $input);
         $this->assertEquals($output, $trans);
     }
 
@@ -65,7 +65,7 @@ class TranslatableTraitTest extends \PHPUnit_Framework_TestCase
      */
     public function testMethodWithCounter_d($input, $output)
     {
-        $trans = $this->mock->_d($input, 'atk4', 0);
+        $trans = $this->mock->_d('atk4', $input, 0);
         $this->assertEquals($output, $trans);
     }
 }

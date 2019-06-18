@@ -4,19 +4,16 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
-use atk4\core\PHPUnit7_AgileTestCase;
+use atk4\core\Exception;
 use atk4\core\TranslatableTrait;
 use atk4\core\Translator;
+use PHPUnit_Framework_TestCase;
 
-class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
+class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 {
-    public $appMock;
-    public $translatableChildMock;
-    public $skip_case_string_empty = true;
-
     public static $translations_runtime_add = [
-        'string without counter'       => ['string without counter translated'],
-        'string not translated simple' => [
+        'string without counter'             => ['string without counter translated'],
+        'string not translated simple'       => [
             1 => 'string translated',
         ],
         'string not translated with plurals' => [
@@ -24,8 +21,11 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
             1 => 'string translated singular',
             2 => 'string translated plural',
         ],
-        'string with exception array empty'                            => []
+        'string with exception array empty'  => []
     ];
+    public $appMock;
+    public $translatableChildMock;
+    public $skip_case_string_empty = true;
 
     public function objectTranslatorProvider()
     {
@@ -50,7 +50,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
     {
         $translatableChildMock = new ChildTranslatableMock();
 
-        $appMock = new AppTranslatableMock();
+        $appMock             = new AppTranslatableMock();
         $appMock->translator = $translator;
         $appMock->add($translatableChildMock);
 
@@ -60,8 +60,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
     public function getTranslatorForRuntimeAdd()
     {
         $translator = new Translator();
-        foreach(self::$translations_runtime_add as $string => $translations)
-        {
+        foreach (self::$translations_runtime_add as $string => $translations) {
             $translator->addOne($string, $translations);
         }
         return $translator;
@@ -70,8 +69,8 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
     public function getTranslatorForConfigPHPInline($use_fallback = false)
     {
         $translator = new Translator();
-        $translator->setLanguage('en-inline',!$use_fallback ? null : 'en-inline');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test','php-inline');
+        $translator->setLanguage('en-inline', !$use_fallback ? NULL : 'en-inline');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
 
         return $translator;
     }
@@ -79,8 +78,8 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
     public function getTranslatorForConfigPHP($use_fallback = false)
     {
         $translator = new Translator();
-        $translator->setLanguage('en',!$use_fallback ? null : 'en');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test','php');
+        $translator->setLanguage('en', !$use_fallback ? NULL : 'en');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php');
 
         return $translator;
     }
@@ -89,8 +88,8 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
     {
 
         $translator = new Translator();
-        $translator->setLanguage('en',!$use_fallback ? null : 'en');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test','json');
+        $translator->setLanguage('en', !$use_fallback ? NULL : 'en');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'json');
 
         return $translator;
     }
@@ -98,14 +97,15 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
     public function getTranslatorForConfigYAML($use_fallback = false)
     {
         $translator = new Translator();
-        $translator->setLanguage('en',!$use_fallback ? null : 'en');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test','yaml');
+        $translator->setLanguage('en', !$use_fallback ? NULL : 'en');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'yaml');
 
         return $translator;
     }
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testSingularFormNoCounter($translatableChild)
@@ -116,6 +116,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testSingularForm($translatableChild)
@@ -126,6 +127,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testSingularFormNotExists($translatableChild)
@@ -136,6 +138,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testPluralFormWithCounterZero($translatableChild)
@@ -146,6 +149,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testPluralFormWithCounterOne($translatableChild)
@@ -156,6 +160,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testPluralFormWithCounterTwo($translatableChild)
@@ -166,6 +171,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testPluralsBiggerThanMaxPluralForm($translatableChild)
@@ -178,6 +184,7 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
      * Test for string not found and return original string
      *
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testExceptionBadFormatEmptyString_noException($translatableChild)
@@ -190,25 +197,26 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
      * this can happens only using ConfigTraitLoading
      *
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testExceptionBadFormatEmptyString($translatableChild)
     {
         // check if it was used the ConfigTrait
-        if(empty($translatableChild->app->translator->config))
-        {
+        if (empty($translatableChild->app->translator->config)) {
             return;
         }
 
-        $this->expectException(\atk4\core\Exception::class);
+        $this->expectException(Exception::class);
         $translatableChild->app->translator->raise_bad_format_exception = true;
         $translatableChild->_('string with exception string empty');
     }
 
     /**
-     * @expectedException \atk4\core\Exception
+     * @expectedException Exception
      *
      * @dataProvider objectTranslatorProvider
+     *
      * @param $translatableChild
      */
     public function testExceptionBadFormatEmptyArray(ChildTranslatableMock $translatableChild)
@@ -219,21 +227,99 @@ class TranslatableTraitAppTest extends \PHPUnit_Framework_TestCase
 
     public function testFallbackLanguage()
     {
-        $translator = new Translator();
-        $translator->setLanguage('it-inline','en-inline');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test','php-inline');
+        $mock = $this->getTranslatableChildWithFallback();
 
-        $mock = $this->getTransalatableChild($translator);
-
-        // test for translation
-        $trans = $mock->_('string fallback test');
-        $this->assertEquals('fallback to en',$trans);
+        // test for italian translation
+        $trans = $mock->_('string not translated with plurals', 1);
+        $this->assertEquals('frase forma plurale uno', $trans);
 
         // test fallback
+        $trans = $mock->_('string fallback test');
+        $this->assertEquals('fallback to en', $trans);
+    }
+
+    public function getTranslatableChildWithFallback()
+    {
+        $translator = new Translator();
+        $translator->setLanguage('it-inline', 'en-inline');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
+
+        return $this->getTransalatableChild($translator);
+    }
+
+    public function testDifferentDomain()
+    {
+        $mock = $this->getTranslatableChildWithFallback();
+
+        // test without domain italian translation
+        $trans = $mock->_('string without counter');
+        $this->assertEquals('frase senza contatore', $trans);
+
+        // test with domain for italian translation
+        $trans = $mock->_d('atk4', 'string without counter');
+        $this->assertEquals('frase senza contatore', $trans);
+
+        // test other domain without counter for italian translation
+        $trans = $mock->_d('other-domain', 'string without counter');
+        $this->assertEquals('altro dominio stessa stringa', $trans);
+
+        // test other domain with counter for italian translation
+        $trans = $mock->_d('other-domain', 'string without counter', 1);
+        $this->assertEquals('altro dominio stessa stringa', $trans);
+    }
+
+    public function testMultiTranslation()
+    {
+        $mock = $this->getTranslatableChildWithFallback();
+
+        // test other multi without context domain
+        $trans = $mock->_m('no-counter: %s, zero: %s, singular : %s, plural : %s', [
+            ['string without counter'],
+            ['string not translated with plurals', 0],
+            ['string not translated with plurals', 1],
+            ['string not translated with plurals', 2]
+        ]);
+
+        $this->assertEquals('no-plurale: frase senza contatore, forma zero: frase forma plurale zero, forma singolare : frase forma plurale uno, forma plurale : frase forma plurale due',
+            $trans);
+
+        // test other multi with context domains
+        $trans = $mock->_md('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s', [
+            ['string without counter'],
+            ['string not translated with plurals', 0],
+            ['string not translated with plurals', 1],
+            ['string not translated with plurals', 2]
+        ]);
+
+        $this->assertEquals('altro dominio | no-plurale: frase senza contatore, forma zero: frase forma plurale zero, forma singolare : frase forma plurale uno, forma plurale : frase forma plurale due',
+            $trans);
+
+        // test other multi with context domains
+        $trans = $mock->_md('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s', [
+            ['string without counter'],
+            ['string not translated with plurals', 0],
+            ['string not translated with plurals', 1],
+            ['string not translated with plurals', 2]
+        ]);
+
+        $this->assertEquals('altro dominio | no-plurale: frase senza contatore, forma zero: frase forma plurale zero, forma singolare : frase forma plurale uno, forma plurale : frase forma plurale due',
+            $trans);
+
+
+        // test other multi with context domains
+        $trans = $mock->_md('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s', [
+            ['string without counter'],
+            ['other-domain', 'string not translated with plurals', 0],
+            ['atk4', 'string not translated with plurals', 1],
+            ['other-domain', 'string not translated with plurals', 2]
+        ]);
+        $this->assertEquals('altro dominio | no-plurale: frase senza contatore, forma zero: altro dominio frase forma plurale zero, forma singolare : frase forma plurale uno, forma plurale : altro dominio frase forma plurale due',
+            $trans);
     }
 }
 
-class AppTranslatableMock {
+class AppTranslatableMock
+{
 
     use AppScopeTrait;
     use ContainerTrait;
@@ -252,7 +338,8 @@ class AppTranslatableMock {
 }
 
 
-class ChildTranslatableMock {
+class ChildTranslatableMock
+{
     use AppScopeTrait;
     use TranslatableTrait;
 }
