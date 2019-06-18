@@ -12,6 +12,10 @@ return  [
             2 => 'string translated plural',
         ],
         'string with exception array empty'                            => [],
-        'string fallback test'  => 'fallback to en'
+        'string fallback test'  => 'fallback to en',
+        'no-counter: %s, zero: %s, singular : %s, plural : %s'  => 'translated - no-counter: %s, zero: %s, singular : %s, plural : %s'
+    ],
+    'other-domain' => [
+        'string without counter'    => ['other domain string without counter translated']
     ]
 ];
