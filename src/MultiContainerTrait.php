@@ -25,16 +25,16 @@ trait MultiContainerTrait
      *     return $this->_addIntoCollection($name, $field, 'fields');
      * }
      *
-     * @param $name string Name that can be used to reference object
-     * @param $object mixed New element to add
-     * @param $collection string String corresponding to the name of the property
-     * @return $obect
+     * @param string $name Name that can be used to reference object
+     * @param object $object New element to add
+     * @param string $collection string String corresponding to the name of the property
+     * @return object|mixed $obect
      * @throws Exception
      */
 
     function _addIntoCollection(string $name, object $object, string $collection) {
 
-        if (!$collection || !isset($this->$collection) || !is_array($this->$collection)) {
+        if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw new Exception([
                 'Name of collection is specified incorrectly',
                 'parent'=>$this,
@@ -67,11 +67,26 @@ trait MultiContainerTrait
             $object->app = $this->app;
         }
 
+        // Calculate long "name" but only if both are trackables
         if (isset($object->_trackableTrait)) {
             $object->short_name = $name;
-            $object->name = $this->
+            $object->owner = $this;
+            if (isset($this->_trackableTrait)) {
+                $object->name = $this->_shortern_ml($this->name.'-'.$collection.'_'.$name);
+            }
         }
 
+        if (isset($object->_initializerTrait)) {
+            if (!$object->_initialized) {
+                $object->init();
+            }
+            if (!$object->_initialized) {
+                throw new Exception([
+                    'You should call parent::init() when you override initializer',
+                    'object'=> $object,
+                ]);
+            }
+        }
 
         return $object;
     }
@@ -105,4 +120,40 @@ trait MultiContainerTrait
         return $this->{$collection}[$name];
     }
 
+    /**
+     * Method used internally for shortening object names
+     * Identical implementation to ContainerTrait::_shortern
+     *
+     * @param string $desired Desired name of new object.
+     *
+     * @return string Shortened name of new object.
+     */
+    protected function _shorten_ml($desired)
+    {
+        if (
+            isset($this->_appScopeTrait) &&
+            isset($this->app->max_name_length) &&
+            strlen($desired) > $this->app->max_name_length
+        ) {
+
+            /*
+             * Basic rules: hash is 10 character long (8+2 for separator)
+             * We need at least 5 characters on the right side. Total must not exceed
+             * max_name_length. First chop will be max-10, then chop size will increase by
+             * max-15
+             */
+            $len = strlen($desired);
+            $left = $len - ($len - 10) % ($this->app->max_name_length - 15) - 5;
+
+            $key = substr($desired, 0, $left);
+            $rest = substr($desired, $left);
+
+            if (!isset($this->app->unique_hashes[$key])) {
+                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
+            }
+            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+        }
+
+        return $desired;
+    }
 }

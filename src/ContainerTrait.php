@@ -50,10 +50,11 @@ trait ContainerTrait
      * initializer then redefine add() and call
      * _add_Container, _add_Factory,.
      *
-     * @param mixed        $obj
+     * @param mixed $obj
      * @param array|string $args
      *
      * @return object
+     * @throws Exception
      */
     public function add($obj, $args = [])
     {
@@ -89,10 +90,11 @@ trait ContainerTrait
      * Extension to add() method which will perform linking of
      * the object with the current class.
      *
-     * @param object       $element
+     * @param object $element
      * @param array|string $args
      *
      * @return object
+     * @throws Exception
      */
     protected function _add_Container($element, $args = [])
     {
@@ -171,12 +173,22 @@ trait ContainerTrait
      * @param string $short_name short name of the element
      *
      * @return $this
+     * @throws Exception
      */
     public function removeElement($short_name)
     {
         if (is_object($short_name)) {
             $short_name = $short_name->short_name;
         }
+
+        if (!isset($this->elements[$short_name])) {
+            throw new Exception([
+                'Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..',
+                'parent'=>$this,
+                'name'=>$short_name
+            ]);
+        }
+
         unset($this->elements[$short_name]);
 
         return $this;
@@ -225,6 +237,7 @@ trait ContainerTrait
      * @param string $short_name Short name of the child element
      *
      * @return object
+     * @throws Exception
      */
     public function getElement($short_name)
     {
