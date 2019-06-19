@@ -88,10 +88,11 @@ trait MultiContainerTrait
     }
 
     /**
-     * Removes element from specified collection
+     * Removes element from specified collection.
      *
      * @param string $name
      * @param string $collection
+     *
      * @throws Exception
      */
     public function _removeFromCollection(string $name, string $collection)
@@ -99,19 +100,20 @@ trait MultiContainerTrait
         if ($this->_hasInCollection($name, $collection) === false) {
             throw new Exception([
                 'Element by this name is NOT in the collection, cannot remove',
-                'parent'=>$this,
-                'collection'=>$collection,
-                'name'=>$name
+                'parent'    => $this,
+                'collection'=> $collection,
+                'name'      => $name,
             ]);
         }
         unset($this->{$collection}[$name]);
     }
 
     /**
-     * Returns object from collection or false if object is not found
+     * Returns object from collection or false if object is not found.
      *
      * @param string $name
      * @param string $collection
+     *
      * @return object|false
      */
     public function _hasInCollection(string $name, string $collection)
