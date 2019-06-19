@@ -87,11 +87,33 @@ trait MultiContainerTrait
         return $object;
     }
 
+    /**
+     * Removes element from specified collection
+     *
+     * @param string $name
+     * @param string $collection
+     * @throws Exception
+     */
     public function _removeFromCollection(string $name, string $collection)
     {
+        if ($this->_hasInCollection($name, $collection) === false) {
+            throw new Exception([
+                'Element by this name is NOT in the collection, cannot remove',
+                'parent'=>$this,
+                'collection'=>$collection,
+                'name'=>$name
+            ]);
+        }
         unset($this->{$collection}[$name]);
     }
 
+    /**
+     * Returns object from collection or false if object is not found
+     *
+     * @param string $name
+     * @param string $collection
+     * @return object|false
+     */
     public function _hasInCollection(string $name, string $collection)
     {
         return $this->{$collection}[$name] ?? false;
@@ -107,7 +129,7 @@ trait MultiContainerTrait
      */
     public function _getFomCollection(string $name, string $collection)
     {
-        if (!isset($this->{$collection}[$name])) {
+        if (false === ($object = $this->_hasInCollection($name, $collection))) {
             throw new Exception([
                 'Element is not found in collection',
                 'collection'=> $collection,
@@ -116,7 +138,7 @@ trait MultiContainerTrait
             ]);
         }
 
-        return $this->{$collection}[$name];
+        return $object;
     }
 
     /**
