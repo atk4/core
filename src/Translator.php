@@ -2,6 +2,8 @@
 
 namespace atk4\core;
 
+use phpDocumentor\Reflection\Types\Boolean;
+
 class Translator implements TranslatorInterface
 {
     use ConfigTrait;
@@ -16,9 +18,9 @@ class Translator implements TranslatorInterface
     /**
      * ISOCode of the fallback language.
      *
-     * @var string
+     * @var string|null
      */
-    protected $fallback;
+    protected $fallback = 'en';
 
     /**
      * Array where Translation will be stored.
@@ -38,10 +40,10 @@ class Translator implements TranslatorInterface
      * @param string      $language Primary Language
      * @param string|null $fallback Fallback Language
      */
-    public function __construct(string $language, ?string $fallback = 'en')
+    public function __construct(string $language, ?string $fallback = null)
     {
         $this->language = $language;
-        $this->fallback = $fallback ?? false;
+        $this->fallback = $fallback ?? $this->fallback;
     }
 
     /**
@@ -70,16 +72,25 @@ class Translator implements TranslatorInterface
      * @param string $string       string to be translated
      * @param array  $translations plural forms translation
      * @param string $context      the context domain if exists
+     * @param bool   $replace      replace translation if exists
      *
      * @throws Exception
      */
-    public function addOne(string $string, array $translations, string $context = 'atk4')
+    public function addOne(string $string, array $translations, string $context = 'atk4', bool $replace = false)
     {
-        if (array_key_exists($string, $this->translations)) {
+        if ($replace) {
+            $this->translations[$context][$string] = $translations;
+            return;
+        }
+
+        $trans_context_string = $this->translations[$context][$string] ?? null;
+
+        if($trans_context_string)
+        {
             throw new \atk4\core\Exception('Translation already exists');
         }
 
-        $this->translations[$context][$string] = $translations;
+        $this->addOne($string, $translations, $context, true);
     }
 
     /**
@@ -112,11 +123,17 @@ class Translator implements TranslatorInterface
 
         $fallback = [];
 
-        $language = $this->getTranslationsFromFile($path . DIRECTORY_SEPARATOR . $this->language . '.' . $ext, $format);
+        $language = $this->getTranslationsFromFile(
+            $path . DIRECTORY_SEPARATOR . $this->language . '.' . $ext,
+            $format
+        );
 
-        if ($this->fallback) {
-            $fallback = $this->getTranslationsFromFile($path . DIRECTORY_SEPARATOR . $this->fallback . '.' . $ext,
-                $format);
+        if ($this->fallback !== $this->language) {
+
+            $fallback = $this->getTranslationsFromFile(
+                $path . DIRECTORY_SEPARATOR . $this->fallback . '.' . $ext,
+                $format
+            );
         }
 
         $this->translations = array_replace_recursive($this->translations, $fallback, $language);
