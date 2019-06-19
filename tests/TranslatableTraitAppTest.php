@@ -11,219 +11,218 @@ use PHPUnit_Framework_TestCase;
 
 class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 {
-    public static $translations_runtime_add = [
-        'string without counter'             => ['string without counter translated'],
-        'string not translated simple'       => [
-            1 => 'string translated',
-        ],
-        'string not translated with plurals' => [
-            0 => 'string translated zero',
-            1 => 'string translated singular',
-            2 => 'string translated plural',
-        ],
-        'string with exception array empty'  => []
-    ];
-    public $appMock;
-    public $translatableChildMock;
-    public $skip_case_string_empty = true;
-
-    public function objectTranslatorProvider()
+    /**
+     * Get Child Object with TranslatableTrait
+     *
+     * @param Translator $translator
+     *
+     * @return ChildTranslatableMock
+     * @throws Exception
+     */
+    private function getTranslatableChild(Translator $translator)
     {
-        return [
-            [$this->getTransalatableChild($this->getTranslatorForRuntimeAdd())],
-
-            // with no fallback language
-            [$this->getTransalatableChild($this->getTranslatorForConfigPHPInline(false))],
-            [$this->getTransalatableChild($this->getTranslatorForConfigPHP(false))],
-            [$this->getTransalatableChild($this->getTranslatorForConfigJSON(false))],
-            [$this->getTransalatableChild($this->getTranslatorForConfigYAML(false))],
-
-            // with fallback
-            [$this->getTransalatableChild($this->getTranslatorForConfigPHPInline())],
-            [$this->getTransalatableChild($this->getTranslatorForConfigPHP())],
-            [$this->getTransalatableChild($this->getTranslatorForConfigJSON())],
-            [$this->getTransalatableChild($this->getTranslatorForConfigYAML())]
-        ];
-    }
-
-    public function getTransalatableChild($translator)
-    {
-        $translatableChildMock = new ChildTranslatableMock();
+        $translatableChild = new ChildTranslatableMock();
 
         $appMock             = new AppTranslatableMock();
         $appMock->translator = $translator;
-        $appMock->add($translatableChildMock);
+        $appMock->add($translatableChild);
 
-        return $translatableChildMock;
+        return $translatableChild;
     }
 
-    public function getTranslatorForRuntimeAdd()
+    /**
+     * Get Translator Class
+     *
+     * @param string      $format
+     * @param string      $language
+     * @param string|null $fallback
+     *
+     * @return Translator
+     * @throws Exception
+     */
+    private function getTranslator(string $format, string $language, ?string $fallback = NULL): Translator
     {
-        $translator = new Translator('en','en');
-        foreach (self::$translations_runtime_add as $string => $translations) {
-            $translator->addOne($string, $translations);
-        }
-        return $translator;
-    }
-
-    public function getTranslatorForConfigPHPInline($use_fallback = false)
-    {
-        $translator = new Translator('en-inline', !$use_fallback ? NULL : 'en-inline');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
-
-        return $translator;
-    }
-
-    public function getTranslatorForConfigPHP($use_fallback = false)
-    {
-        $translator = new Translator('en', !$use_fallback ? NULL : 'en');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php');
-
-        return $translator;
-    }
-
-    public function getTranslatorForConfigJSON($use_fallback = false)
-    {
-
-        $translator = new Translator('en', !$use_fallback ? NULL : 'en');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'json');
-
-        return $translator;
-    }
-
-    public function getTranslatorForConfigYAML($use_fallback = false)
-    {
-        $translator = new Translator('en', !$use_fallback ? NULL : 'en');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'yaml');
+        $translator = new Translator($language, $fallback);
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', $format);
 
         return $translator;
     }
 
     /**
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
+     * Test method Translator->addOne ( runtime addition of translations )
      */
-    public function testSingularFormNoCounter($translatableChild)
+    public function testAddOne()
     {
-        $trans = $translatableChild->_('string without counter');
+        $translations = [
+            'string without counter'                               => ['string without counter translated'],
+            'string not translated simple'                         => [
+                1 => 'string translated',
+            ],
+            'string not translated with plurals'                   => [
+                0 => 'string translated zero',
+                1 => 'string translated singular',
+                2 => 'string translated plural',
+            ],
+            'string with exception array empty'                    => [],
+            'string fallback test'                                 => ['fallback to en'],
+            'no-counter: %s, zero: %s, singular : %s, plural : %s' => ['translated - no-counter: %s, zero: %s, singular : %s, plural : %s']
+        ];
+
+        $translator = new Translator('it', 'en');
+
+        foreach ($translations as $string => $translation) {
+            $translator->addOne($string, $translation);
+        }
+
+        $mock = $this->getTranslatableChild($translator);
+
+        // against translation without plural forms
+        $trans = $mock->_('string without counter');
         $this->assertEquals('string without counter translated', $trans);
-    }
 
-    /**
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testSingularForm($translatableChild)
-    {
-        $trans = $translatableChild->_('string not translated simple');
-        $this->assertEquals('string translated', $trans);
-    }
+        // against translation without plural forms asking for plural that not exists
+        $trans = $mock->_('string without counter', 2);
+        $this->assertEquals('string without counter translated', $trans);
 
-    /**
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testSingularFormNotExists($translatableChild)
-    {
-        $trans = $translatableChild->_('string not exists');
-        $this->assertEquals('string not exists', $trans);
-    }
-
-    /**
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testPluralFormWithCounterZero($translatableChild)
-    {
-        $trans = $translatableChild->_('string not translated with plurals', 0);
-        $this->assertEquals('string translated zero', $trans);
-    }
-
-    /**
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testPluralFormWithCounterOne($translatableChild)
-    {
-        $trans = $translatableChild->_('string not translated with plurals', 1);
+        // against translation with plural form without counter
+        $trans = $mock->_('string not translated with plurals');
         $this->assertEquals('string translated singular', $trans);
-    }
 
-    /**
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testPluralFormWithCounterTwo($translatableChild)
-    {
-        $trans = $translatableChild->_('string not translated with plurals', 2);
+        // against translation with plural form with counter
+        $trans = $mock->_('string not translated with plurals', 1);
+        $this->assertEquals('string translated singular', $trans);
+
+        // against translation with plural form with counter 0 = zero form
+        $trans = $mock->_('string not translated with plurals', 0);
+        $this->assertEquals('string translated zero', $trans);
+
+        // against translation with plural form with counter 2 = first plural form
+        $trans = $mock->_('string not translated with plurals', 2);
+        $this->assertEquals('string translated plural', $trans);
+
+        // against translation with plural form with counter greater than available plural forms
+        $trans = $mock->_('string not translated with plurals', 200);
         $this->assertEquals('string translated plural', $trans);
     }
 
     /**
-     * @dataProvider objectTranslatorProvider
+     * Test method Translator->addOne for :
+     * raising Exception when adding an already defined translation
      *
-     * @param $translatableChild
+     * @expectedException \atk4\core\Exception
      */
-    public function testPluralsBiggerThanMaxPluralForm($translatableChild)
+    public function testExceptionAddOne_ifStringExists()
     {
-        $trans = $translatableChild->_('string not translated with plurals', 300);
-        $this->assertEquals('string translated plural', $trans);
-    }
+        $translations = [
+            'string without counter'                               => ['string without counter translated'],
+            'string not translated simple'                         => [
+                1 => 'string translated',
+            ],
+            'string not translated with plurals'                   => [
+                0 => 'string translated zero',
+                1 => 'string translated singular',
+                2 => 'string translated plural',
+            ],
+            'string with exception array empty'                    => [],
+            'string fallback test'                                 => ['fallback to en'],
+            'no-counter: %s, zero: %s, singular : %s, plural : %s' => ['translated - no-counter: %s, zero: %s, singular : %s, plural : %s']
+        ];
 
-    /**
-     * Test for string not found and return original string
-     *
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testExceptionBadFormatEmptyString_noException($translatableChild)
-    {
-        $trans = $translatableChild->_('string with exception');
-        $this->assertEquals('string with exception', $trans);
-    }
+        $translator = new Translator('it', 'en');
 
-    /**
-     * this can happens only using ConfigTraitLoading
-     *
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
-     */
-    public function testExceptionBadFormatEmptyString($translatableChild)
-    {
-        // check if it was used the ConfigTrait
-        if (empty($translatableChild->app->translator->config)) {
-            return;
+        foreach ($translations as $string => $translation) {
+            $translator->addOne($string, $translation);
         }
 
-        $this->expectException(Exception::class);
-        $translatableChild->app->translator->raise_bad_format_exception = true;
-        $translatableChild->_('string with exception string empty');
+        //this will throw an exception
+        $translator->addOne('string without counter', ['string without counter translated']);
     }
 
     /**
-     * @expectedException Exception
-     *
-     * @dataProvider objectTranslatorProvider
-     *
-     * @param $translatableChild
+     * Test method Translator->addOne for :
+     * NOT raising Exception when adding an already defined translation
+     * using argument $replace = true
      */
-    public function testExceptionBadFormatEmptyArray(ChildTranslatableMock $translatableChild)
+    public function testExceptionAddOne_NotRaise()
     {
-        $translatableChild->app->translator->raise_bad_format_exception = true;
-        $translatableChild->_('string with exception array empty');
+        $translations = [
+            'string without counter'                               => ['string without counter translated'],
+            'string not translated simple'                         => [
+                1 => 'string translated',
+            ],
+            'string not translated with plurals'                   => [
+                0 => 'string translated zero',
+                1 => 'string translated singular',
+                2 => 'string translated plural',
+            ],
+            'string with exception array empty'                    => [],
+            'string fallback test'                                 => ['fallback to en'],
+            'no-counter: %s, zero: %s, singular : %s, plural : %s' => ['translated - no-counter: %s, zero: %s, singular : %s, plural : %s']
+        ];
+
+        $translator = new Translator('it', 'en');
+
+        foreach ($translations as $string => $translation) {
+            $translator->addOne($string, $translation);
+        }
+
+        //this will throw an exception
+        $translator->addOne('string without counter', ['string without counter translated'], 'atk4', true);
+    }
+
+    /**
+     * Test Loading of translations
+     */
+    public function testLoadFromFolder()
+    {
+        $excepted = require __DIR__ . DIRECTORY_SEPARATOR . 'translator_test' . DIRECTORY_SEPARATOR . 'en-inline.php';
+
+        $translator = $this->getTranslator('php', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        foreach ($excepted as $domain => $domains) {
+            foreach ($domains as $string => $trans) {
+                if (!empty($trans) && is_array($trans)) {
+                    $trans = $trans[1] ?? $trans[0];
+
+                    $result = $mock->_d($domain, $string);
+                    $this->assertEquals($trans, $result);
+                }
+            }
+        }
+    }
+
+    /**
+     * Test Loading of translations with fallback
+     */
+    public function testLoadFromFolderWithFallback()
+    {
+        $primary  = require __DIR__ . DIRECTORY_SEPARATOR . 'translator_test' . DIRECTORY_SEPARATOR . 'en-inline.php';
+        $fallback = require __DIR__ . DIRECTORY_SEPARATOR . 'translator_test' . DIRECTORY_SEPARATOR . 'it-inline.php';
+
+        $excepted = array_replace_recursive($fallback, $primary);
+
+        $translator = $this->getTranslator('php', 'en', 'it');
+        $mock       = $this->getTranslatableChild($translator);
+
+        foreach ($excepted as $domain => $domains) {
+            foreach ($domains as $string => $trans) {
+                if (!empty($trans) && is_array($trans)) {
+                    $trans = $trans[1] ?? $trans[0];
+
+                    $result = $mock->_d($domain, $string);
+                    $this->assertEquals($trans, $result);
+                }
+            }
+        }
     }
 
     public function testFallbackLanguage()
     {
-        $mock = $this->getTranslatableChildWithFallback();
+        $translator = new Translator('it-inline', 'en-inline');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
+
+        $mock = $this->getTranslatableChild($translator);
 
         // test for italian translation
         $trans = $mock->_('string not translated with plurals', 1);
@@ -234,17 +233,103 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('fallback to en', $trans);
     }
 
-    public function getTranslatableChildWithFallback()
+    /**
+     * Test Loading of translations - Json format
+     */
+    public function testLoadFromFolder_JSON()
     {
-        $translator = new Translator('it-inline', 'en-inline');
-        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php-inline');
+        $excepted = require __DIR__ . DIRECTORY_SEPARATOR . 'translator_test' . DIRECTORY_SEPARATOR . 'en-inline.php';
 
-        return $this->getTransalatableChild($translator);
+        $translator = $this->getTranslator('json', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        foreach ($excepted as $domain => $domains) {
+            foreach ($domains as $string => $trans) {
+                if (!empty($trans) && is_array($trans)) {
+                    $trans = $trans[1] ?? $trans[0];
+
+                    $result = $mock->_d($domain, $string);
+                    $this->assertEquals($trans, $result);
+                }
+            }
+        }
+    }
+
+    /**
+     * Test Loading of translations - Yaml format
+     */
+    public function testLoadFromFolder_YAML()
+    {
+
+        $excepted = require __DIR__ . DIRECTORY_SEPARATOR . 'translator_test' . DIRECTORY_SEPARATOR . 'en-inline.php';
+
+        $translator = $this->getTranslator('yaml', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        foreach ($excepted as $domain => $domains) {
+            foreach ($domains as $string => $trans) {
+                if (!empty($trans) && is_array($trans)) {
+                    $trans = $trans[1] ?? $trans[0];
+
+                    $result = $mock->_d($domain, $string);
+                    $this->assertEquals($trans, $result);
+                }
+            }
+        }
+    }
+
+    /**
+     * @expectedException \atk4\core\Exception
+     */
+    public function testExceptionBadFormatEmptyString()
+    {
+        $translator = $this->getTranslator('php', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        $mock->app->translator->raise_bad_format_exception = true;
+
+        // this call raise exception
+        $mock->_('string with exception string empty');
+    }
+
+    public function testExceptionBadFormatEmptyString_NotRaise()
+    {
+        $translator = $this->getTranslator('php', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        $trans = $mock->_('string with exception string empty');
+        $this->assertEquals('string with exception string empty', $trans);
+    }
+
+    /**
+     * @expectedException \atk4\core\Exception
+     */
+    public function testExceptionBadFormatEmptyArray()
+    {
+        $translator = $this->getTranslator('php', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        $mock->app->translator->raise_bad_format_exception = true;
+
+        // this call raise exception
+        $mock->_('string with exception array empty');
+    }
+
+    public function testExceptionBadFormatEmptyArray_NotRaise()
+    {
+        $translator = $this->getTranslator('php', 'en');
+        $mock       = $this->getTranslatableChild($translator);
+
+        $trans = $mock->_('string with exception array empty');
+        $this->assertEquals('string with exception array empty', $trans);
     }
 
     public function testDifferentDomain()
     {
-        $mock = $this->getTranslatableChildWithFallback();
+        $translator = new Translator('it', 'en');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php');
+
+        $mock = $this->getTranslatableChild($translator);
 
         // test without domain italian translation
         $trans = $mock->_('string without counter');
@@ -265,7 +350,10 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
 
     public function testMultiTranslation()
     {
-        $mock = $this->getTranslatableChildWithFallback();
+        $translator = new Translator('it', 'en');
+        $translator->addFromFolder(__DIR__ . DIRECTORY_SEPARATOR . 'translator_test', 'php');
+
+        $mock = $this->getTranslatableChild($translator);
 
         // test other multi without context domain
         $trans = $mock->_m('no-counter: %s, zero: %s, singular : %s, plural : %s', [
@@ -311,11 +399,9 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
             $trans);
 
         $excepted = sprintf($mock->_d('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s'),
-            $mock->_('string without counter'),
-            $mock->_d('other-domain', 'string not translated with plurals', 0),
+            $mock->_('string without counter'), $mock->_d('other-domain', 'string not translated with plurals', 0),
             $mock->_d('atk4', 'string not translated with plurals', 1),
-            $mock->_d('other-domain', 'string not translated with plurals', 2)
-        );
+            $mock->_d('other-domain', 'string not translated with plurals', 2));
 
         // test other multi with context domains
         $trans = $mock->_md('other-domain', 'no-counter: %s, zero: %s, singular : %s, plural : %s', [
@@ -325,7 +411,7 @@ class TranslatableTraitAppTest extends PHPUnit_Framework_TestCase
             ['other-domain', 'string not translated with plurals', 2]
         ]);
 
-        $this->assertEquals($excepted,$trans);
+        $this->assertEquals($excepted, $trans);
     }
 }
 
