@@ -1,8 +1,6 @@
 <?php
 
-
 namespace atk4\core;
-
 
 /**
  * This trait makes it possible for you to add child objects
@@ -15,9 +13,8 @@ namespace atk4\core;
  */
 trait MultiContainerTrait
 {
-
     /**
-     * Use this method trait like this:
+     * Use this method trait like this:.
      *
      * function addField($name, $definition) {
      *     $field = $this->factory($definition, [], '\atk4\data\Field');
@@ -25,40 +22,39 @@ trait MultiContainerTrait
      *     return $this->_addIntoCollection($name, $field, 'fields');
      * }
      *
-     * @param string $name Name that can be used to reference object
-     * @param object $object New element to add
+     * @param string $name       Name that can be used to reference object
+     * @param object $object     New element to add
      * @param string $collection string String corresponding to the name of the property
-     * @return object|mixed $obect
+     *
      * @throws Exception
+     *
+     * @return object|mixed $obect
      */
-
-    function _addIntoCollection(string $name, object $object, string $collection) {
-
+    public function _addIntoCollection(string $name, object $object, string $collection)
+    {
         if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw new Exception([
                 'Name of collection is specified incorrectly',
-                'parent'=>$this,
-                'collection'=>$collection
+                'parent'    => $this,
+                'collection'=> $collection,
             ]);
-
         }
 
         if (!$name) {
             throw new Exception([
                 'Object must be given a name when adding into this',
-                'child'=>$object,
-                'parent'=>$this,
-                'collection'=>$collection
+                'child'     => $object,
+                'parent'    => $this,
+                'collection'=> $collection,
             ]);
         }
 
         if (isset($this->{$collection}[$name])) {
             throw new Exception([
                 'Object with requested name already exist in collection',
-                'name'=>$name,
-                'collection'=>$collection,
+                'name'      => $name,
+                'collection'=> $collection,
                 ]);
-
         }
         $this->{$collection}[$name] = $object;
 
@@ -91,29 +87,32 @@ trait MultiContainerTrait
         return $object;
     }
 
-    function _removeFromCollection(string $name, string $collection) {
-
+    public function _removeFromCollection(string $name, string $collection)
+    {
         unset($this->{$collection}[$name]);
     }
 
-    function _hasInCollection(string $name, string $collection) {
+    public function _hasInCollection(string $name, string $collection)
+    {
         return $this->{$collection}[$name] ?? false;
     }
 
     /**
      * @param string $name
      * @param string $collection
-     * @return object
+     *
      * @throws Exception
+     *
+     * @return object
      */
-    function _getFomCollection(string $name, string $collection)
+    public function _getFomCollection(string $name, string $collection)
     {
         if (!isset($this->{$collection}[$name])) {
             throw new Exception([
                 'Element is not found in collection',
-                'collection'=>$collection,
-                'name'=>$name,
-                'this'=>$this
+                'collection'=> $collection,
+                'name'      => $name,
+                'this'      => $this,
             ]);
         }
 
@@ -122,7 +121,7 @@ trait MultiContainerTrait
 
     /**
      * Method used internally for shortening object names
-     * Identical implementation to ContainerTrait::_shortern
+     * Identical implementation to ContainerTrait::_shortern.
      *
      * @param string $desired Desired name of new object.
      *
