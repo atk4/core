@@ -103,8 +103,8 @@ trait DefinerTrait
         if (!($element instanceof $Type)) {
             throw new Exception([
                 'Type of returned instance is not of type : '.$Type,
-                'Type'        => $Type,
-                'ElementType' => get_class($element),
+                'Type'    => $Type,
+                'Element' => $element,
             ]);
         }
     }
