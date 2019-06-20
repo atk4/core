@@ -41,6 +41,7 @@ trait ConfigTrait
      * @param string       $format Optional format for config files
      *
      * @return $this
+     * @throws Exception
      */
     public function readConfig($files = ['config.php'], $format = 'php')
     {
@@ -78,6 +79,15 @@ trait ConfigTrait
                     $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
                     // @codeCoverageIgnoreEnd
                     break;
+            }
+
+            if(!is_array($tempConfig))
+            {
+                throw new Exception([
+                    'File was read but has a bad format',
+                    'file' => $file,
+                    'format' => $format
+                ]);
             }
 
             $this->config = array_merge_recursive($this->config, $tempConfig);
