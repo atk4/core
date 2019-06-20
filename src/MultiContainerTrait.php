@@ -183,12 +183,3 @@ trait MultiContainerTrait
         return $desired;
     }
 }
-
-/**
- * Adds support for apptrait and trackable.
- */
-class MultiContainerMockWithApp extends MultiContainerMock
-{
-    use TrackableTrait;
-    use AppScopeTrait;
-}

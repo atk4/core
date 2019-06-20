@@ -45,7 +45,7 @@ class MultiContainerTraitTest extends TestCase
     public function testBasicWithApp()
     {
         try {
-            $m = new core\MultiContainerMockWithApp();
+            $m = new MultiContainerMockWithApp();
             $m->app = new class() {
                 public $name = 'app';
                 public $max_name_length = 20;
@@ -136,4 +136,15 @@ class MultiContainerTraitTest extends TestCase
             }
         });
     }
+}
+
+
+/**
+ * Adds support for apptrait and trackable.
+ */
+class MultiContainerMockWithApp extends MultiContainerMock
+{
+    use core\TrackableTrait;
+    use core\AppScopeTrait;
+    use core\FactoryTrait;
 }
