@@ -3,11 +3,12 @@
 set -e
 
 product='core'
+head=legacy/v1
 
 
-check=$(git symbolic-ref HEAD | cut -d / -f3)
-if [ $check != "develop" ]; then
-    echo "Must be on develop branch"
+check=$(git symbolic-ref HEAD | cut -d / -f3-)
+if [ $check != "$head" ]; then
+    echo "Must be on $head branch"
     exit -1
 fi
 
@@ -22,7 +23,7 @@ echo "Which version we are releasing: "
 read version
 
 function finish {
-  git checkout develop
+  git checkout $head
   git branch -D release/$version
   git checkout composer.json
 }
@@ -47,7 +48,7 @@ git log --pretty=full $prev_version... | grep '#[0-9]*' | sed 's/.*#\([0-9]*\).*
     ghi --color show $i | head -50
 done
 
-open "https://github.com/atk4/$product/compare/$prev_version...develop"
+open "https://github.com/atk4/$product/compare/$prev_version...$head"
 
 composer update
 ./vendor/phpunit/phpunit/phpunit  --no-coverage
@@ -64,7 +65,7 @@ git tag $version
 git push origin release/$version
 git push --tags
 
-git checkout develop
+git checkout $head
 git merge $merge_tag --no-edit
 git push
 

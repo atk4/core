@@ -151,7 +151,7 @@ class Exception extends \Exception
             $output .= "\n\033[0mCaused by Previous Exception:\n";
             $output .= "\033[1;31m".get_class($p).': '.$p->getMessage()."\033[0;31m".
                 ($p->getCode() ? ' [code: '.$p->getCode().']' : '');
-            if ($p instanceof \atk4\core\Exception) {
+            if ($p instanceof self) {
                 $output .= "\n+".str_replace("\n", "\n| ", $p->getColorfulText());
             }
         }
@@ -349,7 +349,7 @@ class Exception extends \Exception
             $output .= '<div class="ui top attached segment">';
             $output .= '<div class="ui top attached label">Caused by Previous Exception:</div>';
 
-            if ($p instanceof \atk4\core\Exception) {
+            if ($p instanceof self) {
                 $output .= $p->getHTML();
             } else {
                 //$output .= "\033[1;31m".get_class($p).': '.$p->getMessage()."\033[0;31m".
