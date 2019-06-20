@@ -2,8 +2,6 @@
 
 namespace atk4\core;
 
-use atk4\core\tests\MultiContainerMock;
-
 /**
  * This trait makes it possible for you to add child objects
  * into your object, but unlike "ContainerTrait" you can use

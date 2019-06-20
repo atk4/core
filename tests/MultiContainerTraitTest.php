@@ -138,7 +138,6 @@ class MultiContainerTraitTest extends TestCase
     }
 }
 
-
 /**
  * Adds support for apptrait and trackable.
  */
