@@ -130,6 +130,7 @@ class MultiContainerTraitTest extends TestCase
             use core\DIContainerTrait;
             use core\InitializerTrait;
             public $name;
+
             public function init()
             {
             }
