@@ -375,7 +375,7 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function toString($val)
+    public function toString($val) : string
     {
         if (is_object($val) && !$val instanceof \Closure) {
             if (isset($val->_trackableTrait)) {
@@ -385,7 +385,7 @@ class Exception extends \Exception
             return 'Object '.get_class($val);
         }
 
-        return json_encode($val);
+        return (string) json_encode($val);
     }
 
     /**
