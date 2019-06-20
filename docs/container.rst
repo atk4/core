@@ -30,7 +30,7 @@ also receive unique "name". From example above:
 Name Trait
 ============
 
-.. php:trait:: ObjectTrait
+.. php:trait:: NameTrait
 
     Name trait only adds the 'name' property. Normally you don't have to use
     it because :php:trait:`TrackableTrait` automatically inherits this trait.
@@ -52,6 +52,89 @@ Methods
 
     None
 
+MultiContainerTrait
+===================
+
+.. php:trait:: MultiContainerTrait
+
+    This trait makes it possible for you to add child objects
+    into your object, but unlike "ContainerTrait" you can use
+    multiple collections stored as different array properties.
+ 
+    This class does not offer automatic naming, so if you try
+    to add another element with same name, it will result in
+    exception.
+
+Example::
+
+    class Form
+    {
+        use core\MultiContainerTrait;
+        use core\FactoryTrait;
+
+        protected $fields = [];
+
+        public function addField($name, $seed = null)
+        {
+            $seed = $this->mergeSeeds($seed, ['FieldMock']);
+
+            $field = $this->factory($seed, ['name'=>$name], '\atk4\core\tests');
+
+            return $this->_addIntoCollection($name, $field, 'fields');
+        }
+
+        public function hasField($name)
+        {
+            return $this->_hasInCollection($name, 'fields');
+        }
+
+        public function getField($name)
+        {
+            return $this->_getFromCollection($name, 'fields');
+        }
+
+        public function removeField($name)
+        {
+            $this->_removeFromCollection($name, 'fields');
+        }
+    }
+
+Methods
+-------
+
+.. php:method:: _addIntoCollection(string $name, object $object, string $collection)
+
+    Adds a new element into collection::
+
+        function addField($name, $definition) {
+            $field = $this->factory($definition, [], '\atk4\data\Field');
+            return $this->_addIntoCollection($name, $field, 'fields');
+        }
+
+    Factory usage is optional but would allow you to pass seed into addField()
+
+
+.. php:method:: _removeFromCollection(string $name, string $collection)
+
+    Remove element with a given name from collection.
+
+.. php:method:: _hasInCollection(string $name, string $collection)
+
+    Return object if it exits in collection and false otherwise
+
+.. php:method:: _getFromCollection(string $name, string $collection)o    
+
+    Same as _hasInCollection but throws exception if element is not found
+
+.. php:method:: _shorten_ml($desired)
+
+    Implements name shortening
+
+Shortening is identical to :php:meth::`ContainerTrait::_shorten`.
+
+Your object can this train together with ContainerTrait. As per June 2019
+ATK maintainers agreed to gradually refactor ATK Data to use MultiContainerTrait
+for fields, relations, actions.
 
 
 Container Trait

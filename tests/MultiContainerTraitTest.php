@@ -57,6 +57,7 @@ class MultiContainerTraitTest extends TestCase
             $this->assertEquals('app', $surname->app->name);
 
             $this->assertEquals('form-fields_surname', $surname->name);
+            $this->assertSame($surname->owner, $m);
 
             $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', ['CustomFieldMock']);
             $this->assertLessThan(21, strlen($long->name));
