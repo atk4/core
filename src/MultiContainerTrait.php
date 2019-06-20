@@ -2,6 +2,8 @@
 
 namespace atk4\core;
 
+use atk4\core\tests\MultiContainerMock;
+
 /**
  * This trait makes it possible for you to add child objects
  * into your object, but unlike "ContainerTrait" you can use
@@ -68,7 +70,7 @@ trait MultiContainerTrait
             $object->short_name = $name;
             $object->owner = $this;
             if (isset($this->_trackableTrait)) {
-                $object->name = $this->_shortern_ml($this->name.'-'.$collection.'_'.$name);
+                $object->name = $this->_shorten_ml($this->name.'-'.$collection.'_'.$name);
             }
         }
 
@@ -180,4 +182,12 @@ trait MultiContainerTrait
 
         return $desired;
     }
+}
+
+/**
+ * Adds support for apptrait and trackable
+ */
+class MultiContainerMockWithApp extends MultiContainerMock {
+    use TrackableTrait;
+    use AppScopeTrait;
 }

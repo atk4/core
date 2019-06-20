@@ -38,6 +38,35 @@ class MultiContainerTraitTest extends TestCase
     }
 
     /**
+     * Test Trackable and AppScope
+     *
+     * @throws core\Exception
+     */
+    public function testBasicWithApp()
+    {
+        try {
+
+            $m = new core\MultiContainerMockWithApp();
+            $m->app = new class { public $name = 'app'; public $max_name_length=20; };
+            $m->name='form';
+
+            $surname = $m->addField('surname', ['CustomFieldMock']);
+
+            $this->assertEquals('app', $surname->app->name);
+
+            $this->assertEquals('form-fields_surname', $surname->name);
+
+            $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', ['CustomFieldMock']);
+            $this->assertLessThan(21, strlen($long->name));
+
+        } catch (core\Exception $e) {
+            echo $e->getColorfulText();
+
+            throw $e;
+        }
+    }
+
+    /**
      * Bad collection name.
      */
     public function testException1()
@@ -86,5 +115,15 @@ class MultiContainerTraitTest extends TestCase
         $this->expectException(core\Exception::class);
         $m = new MultiContainerMock();
         $m->_getFromCollection('dont_exist', 'fields'); // do not exist
+    }
+
+    /**
+     * Can not get non existant object.
+     */
+    public function testException6()
+    {
+        $this->expectException(core\Exception::class);
+        $m = new MultiContainerMock();
+        $m->addField('test', new class  { use core\DIContainerTrait; use core\InitializerTrait; public $name; function init() { } });
     }
 }
