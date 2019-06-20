@@ -44,7 +44,7 @@ class MultiContainerTraitTest extends TestCase
     {
         $this->expectException(core\Exception::class);
         $m = new MultiContainerMock();
-        $m->_addIntoCollection('foo', new class(), ''); // empty collection name
+        $m->_addIntoCollection('foo', (object)[], ''); // empty collection name
     }
     /**
      * Bad object name.
@@ -53,7 +53,7 @@ class MultiContainerTraitTest extends TestCase
     {
         $this->expectException(core\Exception::class);
         $m = new MultiContainerMock();
-        $m->_addIntoCollection('', new class(), 'fields'); // empty object name
+        $m->_addIntoCollection('', (object)[], 'fields'); // empty object name
     }
     /**
      * Already existing object.
@@ -62,8 +62,8 @@ class MultiContainerTraitTest extends TestCase
     {
         $this->expectException(core\Exception::class);
         $m = new MultiContainerMock();
-        $m->_addIntoCollection('foo', new class(), 'fields');
-        $m->_addIntoCollection('foo', new class(), 'fields'); // already exists
+        $m->_addIntoCollection('foo', (object)[], 'fields');
+        $m->_addIntoCollection('foo', (object)[], 'fields'); // already exists
     }
     /**
      * Can not remove non existant object.
