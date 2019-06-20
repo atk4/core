@@ -171,7 +171,7 @@ class Exception extends \Exception
     public function getHTMLText()
     {
         $output = "--[ Agile Toolkit Exception ]---------------------------\n";
-        $output .= get_class($this).": <font color='pink'><b>".$this->getMessage().'</b></font>'.
+        $output .= get_class($this).": <span color='pink'><b>".$this->getMessage().'</b></span>'.
             ($this->getCode() ? ' [code: '.$this->getCode().']' : '');
 
         foreach ($this->params as $key => $val) {
@@ -201,15 +201,15 @@ class Exception extends \Exception
 
             $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
 
-            $output .= "\n<font color='cyan'>".$file.'</font>';
-            $output .= ":<font color='pink'>".$line.'</font>';
+            $output .= "\n<span color='cyan'>".$file.'</span>';
+            $output .= ":<span color='pink'>".$line.'</span>';
 
             if (isset($call['object'])) {
                 $name = (!isset($call['object']->name)) ? get_class($call['object']) : $call['object']->name;
-                $output .= " - <font color='yellow'>".$name.'</font>';
+                $output .= " - <span color='yellow'>".$name.'</span>';
             }
 
-            $output .= " <font color='gray'>";
+            $output .= " <span color='gray'>";
 
             if (isset($call['class'])) {
                 $output .= $call['class'].'::';
@@ -217,7 +217,7 @@ class Exception extends \Exception
             $output .= '</font>';
 
             if ($escape_frame) {
-                $output .= "<font color='pink'>".$call['function'].'</font>';
+                $output .= "<span color='pink'>".$call['function'].'</span>';
                 $escape_frame = false;
 
                 $args = [];
@@ -225,9 +225,9 @@ class Exception extends \Exception
                     $args[] = $this->toString($arg);
                 }
 
-                $output .= "\n".str_repeat(' ', 20)."<font color='pink'>(".implode(', ', $args);
+                $output .= "\n".str_repeat(' ', 20)."<span color='pink'>(".implode(', ', $args);
             } else {
-                $output .= "<font color='gray'>".$call['function'].'(';
+                $output .= "<span color='gray'>".$call['function'].'(';
             }
 
             $output .= ')</font>';
@@ -235,7 +235,7 @@ class Exception extends \Exception
 
         if ($p = $this->getPrevious()) {
             $output .= "\n\nCaused by Previous Exception:\n";
-            $output .= get_class($p).": <font color='pink'>".$p->getMessage().'</font>'.
+            $output .= get_class($p).": <span color='pink'>".$p->getMessage().'</span>'.
                 ($p->getCode() ? ' [code: '.$p->getCode().']' : '');
         }
 
