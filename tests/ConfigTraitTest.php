@@ -83,11 +83,22 @@ class ConfigTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
         $this->assertEquals($c, $this->getProtected($m, 'config'));
     }
 
+    /**
+     * @expectedException \atk4\core\Exception
+     */
     public function testFileReadException()
     {
-        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig('unknown_file.php');
+    }
+
+    /**
+     * @expectedException \atk4\core\Exception
+     */
+    public function testFileBadFormatException()
+    {
+        $m = new ConfigMock();
+        $m->readConfig($this->dir.'config_bad_format.php');
     }
 
     public function testSetGetConfig()
