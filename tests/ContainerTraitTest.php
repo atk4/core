@@ -184,7 +184,7 @@ class ContainerTraitTest extends TestCase
     {
         $this->expectException(core\Exception::class);
         $m = new ContainerMock();
-        $m->removetElement('dont_exist');
+        $m->removeElement('dont_exist');
     }
 }
 
