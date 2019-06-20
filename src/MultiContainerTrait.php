@@ -129,9 +129,10 @@ trait MultiContainerTrait
      *
      * @return object
      */
-    public function _getFomCollection(string $name, string $collection)
+    public function _getFromCollection(string $name, string $collection)
     {
-        if (false === ($object = $this->_hasInCollection($name, $collection))) {
+        $object = $this->_hasInCollection($name, $collection);
+        if (false === $object) {
             throw new Exception([
                 'Element is not found in collection',
                 'collection'=> $collection,
