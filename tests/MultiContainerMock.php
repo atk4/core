@@ -42,7 +42,7 @@ class MultiContainerMock
      */
     public function getField($name)
     {
-        return $this->_getFomCollection($name, 'fields');
+        return $this->_getFromCollection($name, 'fields');
     }
 
     public function removeField($name)
