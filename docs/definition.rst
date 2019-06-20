@@ -148,6 +148,24 @@ in file MyApp.php ::
 No further changes where needed, but all new keyword and whole definition of object is in the configuration file,
 and with only one line you can get the object and use it
 
+Definition\Factory & Definition\Instance
+----------------------------------------
+Both are used as a Callback Class which define a callable in the single constructor argument.
+Instance have an extra static method as a shortcut for instance definition that don't need further configuration ::
+
+    public static function fromClassName(string $classname, ...$constructArguments) :Instance
+
+Example : ::
+
+    $config['MyClass'] = new Instance(function(iDefiner $c) {
+        return new MyClass($myArg0, $myArg1, $myArg2)
+    });
+
+the above code is the same as : ::
+
+    $config['MyClass'] = Instance::fromClassName('MyClass',$myArg0, $myArg1, $myArg2);
+
+
 Conclusion on usage
 -------------------
 
