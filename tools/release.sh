@@ -3,7 +3,7 @@
 set -e
 
 product='core'
-head=legacy/v1
+head=develop
 
 
 check=$(git symbolic-ref HEAD | cut -d / -f3-)
