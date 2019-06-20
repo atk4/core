@@ -38,17 +38,19 @@ class MultiContainerTraitTest extends TestCase
     }
 
     /**
-     * Test Trackable and AppScope
+     * Test Trackable and AppScope.
      *
      * @throws core\Exception
      */
     public function testBasicWithApp()
     {
         try {
-
             $m = new core\MultiContainerMockWithApp();
-            $m->app = new class { public $name = 'app'; public $max_name_length=20; };
-            $m->name='form';
+            $m->app = new class() {
+                public $name = 'app';
+                public $max_name_length = 20;
+            };
+            $m->name = 'form';
 
             $surname = $m->addField('surname', ['CustomFieldMock']);
 
@@ -58,7 +60,6 @@ class MultiContainerTraitTest extends TestCase
 
             $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', ['CustomFieldMock']);
             $this->assertLessThan(21, strlen($long->name));
-
         } catch (core\Exception $e) {
             echo $e->getColorfulText();
 
@@ -124,6 +125,13 @@ class MultiContainerTraitTest extends TestCase
     {
         $this->expectException(core\Exception::class);
         $m = new MultiContainerMock();
-        $m->addField('test', new class  { use core\DIContainerTrait; use core\InitializerTrait; public $name; function init() { } });
+        $m->addField('test', new class() {
+            use core\DIContainerTrait;
+            use core\InitializerTrait;
+            public $name;
+            public function init()
+            {
+            }
+        });
     }
 }
