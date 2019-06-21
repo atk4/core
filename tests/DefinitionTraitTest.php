@@ -21,7 +21,7 @@ class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     /**
      * this will throw an exception if there is some error in loading.
      */
-    public function setUp()
+    public function setUp() : void
     {
         $app = new DefinerMock();
         $app->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php','php-inline');
