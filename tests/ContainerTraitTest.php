@@ -3,11 +3,12 @@
 namespace atk4\core\tests;
 
 use atk4\core;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\ContainerTrait
  */
-class ContainerTraitTest extends \PHPUnit_Framework_TestCase
+class ContainerTraitTest extends TestCase
 {
     /**
      * Test constructor.
@@ -129,11 +130,9 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ok', $m2->test);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testExceptionExists()
     {
+        $this->expectException(core\Exception::class);
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 'foo');
         $m->add(new TrackableMock(), 'foo');
@@ -148,11 +147,9 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($m->hasElement('foo'));
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testExceptionShortName()
     {
+        $this->expectException(core\Exception::class);
         $m1 = new ContainerMock();
         $m2 = new ContainerMock();
         $m1foo = $m1->add(new TrackableMock(), 'foo');
@@ -162,31 +159,32 @@ class ContainerTraitTest extends \PHPUnit_Framework_TestCase
         $m2->add($m1foo);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testExceptionArg2()
     {
+        $this->expectException(core\Exception::class);
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 123);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testException3()
     {
+        $this->expectException(core\Exception::class);
         $m = new ContainerMock();
         $m->add('hello', 123);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testException4()
     {
+        $this->expectException(core\Exception::class);
         $m = new ContainerMock();
         $el = $m->getElement('dont_exist');
+    }
+
+    public function testException5()
+    {
+        $this->expectException(core\Exception::class);
+        $m = new ContainerMock();
+        $m->removeElement('dont_exist');
     }
 }
 

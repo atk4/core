@@ -3,11 +3,13 @@
 namespace atk4\core\tests;
 
 use atk4\core;
+use atk4\core\Exception;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\InitializerTrait
  */
-class InitializerTraitTest extends \PHPUnit_Framework_TestCase
+class InitializerTraitTest extends TestCase
 {
     /**
      * Test constructor.
@@ -20,20 +22,16 @@ class InitializerTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $i->result);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testInitializerNotCalled()
     {
+        $this->expectException(Exception::class);
         $m = new ContainerMock2();
         $m->add(new BrokenInitializerMock());
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testInitializedTwice()
     {
+        $this->expectException(Exception::class);
         $m = new InitializerMock();
         $m->init();
         $m->init();

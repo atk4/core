@@ -4,11 +4,12 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\DebugTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\DebugTrait
  */
-class DebugTraitTest extends \PHPUnit_Framework_TestCase
+class DebugTraitTest extends TestCase
 {
     /**
      * Test debug().

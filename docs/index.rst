@@ -29,16 +29,43 @@ using containers:
  - Model object containing Field objects
  - Application containing controllers
 
-Unlike PHP Array, containers offer number of advantages when one object need to
-contain other object(s):
+The natural solution to the problem is to create array like this::
 
- - Execute some method when you add new element into container.
- - Automatically assign unique names to elements.
- - Associate element property with container :php:meth:`TrackableTrait::owner`.
- - Allowing adding by omitting class name.
+   public $fields = [];
 
-To assign container properties to any object in your framework, use
-:php:trait:`ContainerTrait`::
+After that you would need to create code for adding objects into container, removing,
+verify their existence etc.
+
+:php:trait:`MultiContainerTrait` implements several handy methods which can be used
+to create necessary methods with minimum code footprint::
+
+   class Form {
+       use MultiContainerTrait;
+
+       public $fields = [];
+
+       public function addField($name, $seed = null)
+       {
+           $seed = $this->mergeSeeds($seed, ['FieldMock']);
+
+           $field = $this->factory($seed, ['name'=>$name], '\atk4\ui\FormField');
+
+           return $this->_addIntoCollection($name, $field, 'fields');
+       }
+
+       // hasField, getField, removeField also can be added, see further docs.
+   }
+
+Traits add multiple checks to prevert collisions between existing objects, call 
+init() method, carry over $app and set $owner properties and calculate 'name'
+by combining it with the parent.
+
+MultiContainerTrait only supports named object - you may not omit the name, however
+a more older implementation of :php:trait:`ContainerTrait` is used primarily
+for tracking Render Tree in ATK UI where name is optional and a unique name
+is guaranteed.
+
+When $container is using :php:trait:`ContainerTrait`, this would be a typical code::
 
     $child = $container->add(new ChildClass());
 

@@ -2,18 +2,18 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\Exception;
 use atk4\core\HookTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\HookTrait
  */
-class HookTraitTest extends \PHPUnit_Framework_TestCase
+class HookTraitTest extends TestCase
 {
-    /**
-     * @expectedException     Exception
-     */
     public function testException1()
     {
+        $this->expectException(Exception::class);
         $m = new HookMock();
         $m->addHook('test1', function () use (&$result) {
             $result++;
@@ -82,7 +82,7 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
 
     private $result = 0;
 
-    public function test($obj = null, $inc = 1)
+    public function tst($obj = null, $inc = 1)
     {
         if (is_null($obj)) {
             // because phpunit tries to execute this method
@@ -96,12 +96,12 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $m = new HookMock();
         $this->result = 0;
 
-        $m->addHook('test', $this);
-        $m->hook('test');
+        $m->addHook('tst', $this);
+        $m->hook('tst');
 
         $this->assertEquals(1, $this->result);
 
-        $m->hook('test', [5]);
+        $m->hook('tst', [5]);
         $this->assertEquals(6, $this->result);
 
         // Existing method - foo
@@ -109,45 +109,37 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $m->addHook('foo', $m);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testCallableException1()
     {
-        // not existing method
+        // unknown method
+        $this->expectException(Exception::class);
         $m = new HookMock();
         $m->addHook('unknown_method', $m);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testCallableException2()
     {
         // not existing dynamic method
+        $this->expectException(Exception::class);
         $m = new HookWithDynamicMethodMock();
         $m->addHook('unknown_method', $m);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testCallableException3()
     {
         // wrong 2nd argument
+        $this->expectException(Exception::class);
         $m = new HookMock();
         $m->addHook('unknown_method', 'incorrect_param');
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testHookException1()
     {
         // wrong 2nd argument
+        $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->addHook('test', $this);
-        $m->hook('test', 'wrong_parameter');
+        $m->addHook('tst', $this);
+        $m->hook('tst', 'wrong_parameter');
     }
 
     public function testOrder()
@@ -300,11 +292,9 @@ class HookTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('stop', $ret);
     }
 
-    /**
-     * @expectedException     Exception
-     */
     public function testExceptionInHook()
     {
+        $this->expectException(Exception::class);
         $m = new HookMock();
         $m->result = 0;
 

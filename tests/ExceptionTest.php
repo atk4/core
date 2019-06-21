@@ -4,11 +4,12 @@ namespace atk4\core\tests;
 
 use atk4\core\Exception;
 use atk4\core\TrackableTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\Exception
  */
-class ExceptionTest extends \PHPUnit_Framework_TestCase
+class ExceptionTest extends TestCase
 {
     /**
      * Test getColorfulText() and toString().
