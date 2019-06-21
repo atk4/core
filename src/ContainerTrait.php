@@ -53,6 +53,8 @@ trait ContainerTrait
      * @param mixed        $obj
      * @param array|string $args
      *
+     * @throws Exception
+     *
      * @return object
      */
     public function add($obj, $args = [])
@@ -91,6 +93,8 @@ trait ContainerTrait
      *
      * @param object       $element
      * @param array|string $args
+     *
+     * @throws Exception
      *
      * @return object
      */
@@ -170,6 +174,8 @@ trait ContainerTrait
      *
      * @param string $short_name short name of the element
      *
+     * @throws Exception
+     *
      * @return $this
      */
     public function removeElement($short_name)
@@ -177,6 +183,15 @@ trait ContainerTrait
         if (is_object($short_name)) {
             $short_name = $short_name->short_name;
         }
+
+        if (!isset($this->elements[$short_name])) {
+            throw new Exception([
+                'Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..',
+                'parent'=> $this,
+                'name'  => $short_name,
+            ]);
+        }
+
         unset($this->elements[$short_name]);
 
         return $this;
@@ -223,6 +238,8 @@ trait ContainerTrait
      * Exception if not found.
      *
      * @param string $short_name Short name of the child element
+     *
+     * @throws Exception
      *
      * @return object
      */
