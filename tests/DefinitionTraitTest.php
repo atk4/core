@@ -7,11 +7,12 @@ use atk4\core\ContainerTrait;
 use atk4\core\DefinerTrait;
 use atk4\core\Definition\iDefiner;
 use atk4\core\DefinitionTrait;
-use PHPUnit\Framework\TestCase;
+use atk4\core\Exception;
+
 /**
- * @coversDefaultClass \atk4\core\DefinerTrait
+ * @coversDefaultClass  \atk4\core\DefinitionTrait
  */
-class DefinerTraitTest extends TestCase
+class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 {
     public $dir = __DIR__.'/definer_test/';
 
@@ -22,8 +23,11 @@ class DefinerTraitTest extends TestCase
      */
     public function setUp()
     {
-        $this->mock = new DefinerMock();
-        $this->mock->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php','php-inline');
+        $app = new DefinerMock();
+        $app->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php','php-inline');
+
+        $this->mock = new DefinitionChildMock();
+        $app->add($this->mock);
     }
 
     public function testGetDefinition()
@@ -39,18 +43,51 @@ class DefinerTraitTest extends TestCase
         // test for default if not exists
         $result = $this->mock->getDefinition('MyLogger', new \Psr\Log\NullLogger());
         $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
+
+        // test for default if not exists with typecheck
+        $result = $this->mock->getDefinition(\Psr\Log\NullLogger::class, new \Psr\Log\NullLogger(), true);
+        $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
     }
 
     /**
-     * @expectedException \atk4\core\Exception
+     * Test Exception when element not exists
      */
-    public function testGetDefinition_exception()
+    public function testGetDefinitionExceptionNotExists()
     {
+        $this->expectException(Exception::class);
+        // test with Type check, will throw exception if fails
+        $this->mock->getDefinition('NotExists');
+    }
+
+    /**
+     * Test Exception when :
+     *  - check_type is enabled
+     *  - check if $path is a non existent FQCN = throw exception
+     */
+    public function testGetDefinitionException()
+    {
+        $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
         $this->mock->getDefinition('NotValidFQCNForTypeCheck',null,true);
     }
 
-    public function testDefinitionBehaviour()
+    /**
+     * Test Exception when :
+     *  - check_type is enabled
+     *  - check if $path exists FQCN
+     *  - return type is not equal to get_class($path) = throw exception
+     */
+    public function testGetDefinitionException2()
+    {
+        $this->expectException(Exception::class);
+        // test with Type check, will throw exception if fails
+        $this->mock->getDefinition(\DateTime::class,null,true);
+    }
+
+    /**
+     * Test Instance and Factory Behaviour
+     */
+    public function testGetDefinition2()
     {
         /** @var DefinerInstanceMock $instance */
         $instance = $this->mock->getDefinition(DefinerInstanceMock::class);
@@ -78,7 +115,10 @@ class DefinerTraitTest extends TestCase
         $this->assertEquals(0,$factory->count);
     }
 
-    public function testDefinitionViaStaticMethod()
+    /**
+     * Test via static method
+     */
+    public function testGetDefinition3()
     {
         /** @var DefinerMultipleArgumentMock $obj */
         $obj = $this->mock->getDefinition('TestStaticMethodInstance');
@@ -89,28 +129,20 @@ class DefinerTraitTest extends TestCase
         $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
     }
 
-    public function testCallsFromAddChild()
+    /**
+     * Test Exception when element not exists
+     */
+    public function testGetDefinitionExceptionNoApp()
     {
-        $child = new DefinitionChildMock();
-        $this->mock->add($child);
+        $this->mock = new DefinitionChildMock();
 
-        /** @var DefinerInstanceMock $instance */
-        $instance = $child->getDefinition(DefinerInstanceMock::class);
-        $this->assertEquals(0,$instance->count);
-        $instance->increment();
-        $this->assertEquals(1,$instance->count);
-
-        // call again must give the same instance
-        $instance = $child->getDefinition(DefinerInstanceMock::class);
-        $instance->increment();
-        $this->assertEquals(2,$instance->count);
-
-        // test for default if not exists
-        $result = $child->getDefinition('MyLogger', new \Psr\Log\NullLogger());
-        $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
+        $this->expectException(Exception::class);
+        // test with Type check, will throw exception if fails
+        $this->mock->getDefinition('NotExists');
     }
 }
 
+// @codingStandardsIgnoreStart
 class DefinerMock implements iDefiner {
     use DefinerTrait;
     use AppScopeTrait;
@@ -156,3 +188,4 @@ class DefinerMultipleArgumentMock {
         $this->c = $c;
     }
 }
+// @codingStandardsIgnoreEnd

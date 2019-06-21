@@ -26,9 +26,11 @@ trait DefinerTrait
     {
         $element = $this->getConfig($path, $default_value);
 
-        // if not a iDependency return element
-        if (!($element instanceof iDefinition)) {
-            return $element;
+        // normalize getConfig return ( if not found getConfig return false not null)
+        // if no $element => set to default
+        if (false === $element || null === $element)
+        {
+            $element = $default_value;
         }
 
         if ($check_type) {
@@ -44,12 +46,6 @@ trait DefinerTrait
         // further calls => create a new object
         if ($element instanceof Factory) {
             $element = $element->process($this);
-
-            if ($check_type) {
-                $this->checkTypeElement($path, $element);
-            }
-
-            return $element;
         }
 
         // if is a Instance
@@ -60,17 +56,19 @@ trait DefinerTrait
         // further calls => get the already created object from config elements
         if ($element instanceof Instance) {
             $element = $element->process($this);
-
-            if ($check_type) {
-                $this->checkTypeElement($path, $element);
-            }
-
             $this->setConfig($path, $element);
+        }
 
+        if ($check_type) {
+            $this->checkTypeElement($path, $element);
+        }
+
+        if (null !== $element)
+        {
             return $element;
         }
 
-        throw new Exception('ConfigDI Dependency not found');
+        throw new Exception('Config Definition not found');
     }
 
     /**
@@ -100,7 +98,7 @@ trait DefinerTrait
      */
     private function checkTypeElement(string $Type, $element): void
     {
-        if (!($element instanceof $Type)) {
+        if (!is_a($element,$Type) || null === $element) {
             throw new Exception([
                 'Type of returned instance is not of type : '.$Type,
                 'Type'    => $Type,

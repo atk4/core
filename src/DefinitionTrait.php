@@ -19,16 +19,16 @@ trait DefinitionTrait
      */
     public function getDefinition(string $path, $default_value = NULL, bool $check_type = false)
     {
+        // if an app is defined, call the definer method
         if (isset($this->app)) {
 
-            $app = $this->app;
-
-            if ($app instanceof iDefiner) {
+            if (($app = $this->app) instanceof iDefiner) {
                 /** @var iDefiner $app */
                 return $app->getDefinition($path, $default_value, $check_type);
             }
         }
 
+        // if execute this, something went wrong
         throw new Exception([
             'App is not a iDefiner implementation, cannot use getDefinition',
             'path'          => $path,

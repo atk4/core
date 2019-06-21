@@ -20,7 +20,7 @@ return [
         return new DefinerFactoryMock();
     }),
     'TestStaticMethodInstance' => Instance::fromClassName(DefinerMultipleArgumentMock::class, 1, 2, 3),
-    'TestStaticMethodFactory'  => Instance::fromClassName(DefinerMultipleArgumentMock::class, 1, 2, 3),
+    'TestStaticMethodFactory'  => Factory::fromClassName(DefinerMultipleArgumentMock::class, 1, 2, 3),
     'NotValidFQCNForTypeCheck' => new Instance(function (iDefiner $c) {
         return new NullLogger();
     }),
