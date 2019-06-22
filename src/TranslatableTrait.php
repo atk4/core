@@ -109,6 +109,11 @@ trait TranslatableTrait
         return $this->translator instanceof TranslatorInterface;
     }
 
+    /**
+     * Return if this object will delegate translations to AppScope
+     *
+     * @return bool
+     */
     protected function hasTranslatorInAppScope()
     {
         return isset($this->app) && $this->app !== $this && method_exists($this->app, '_');
