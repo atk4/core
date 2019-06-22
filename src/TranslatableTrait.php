@@ -99,9 +99,14 @@ trait TranslatableTrait
         return $translator->trans($id, $parameters, $domain, $locale);
     }
 
+    /**
+     * Return if Translation will be delegated to his own translator
+     *
+     * @return bool
+     */
     protected function hasTranslator()
     {
-        return isset($this->translator) && $this->translator instanceof TranslatorInterface;
+        return $this->translator instanceof TranslatorInterface;
     }
 
     protected function hasTranslatorInAppScope()
