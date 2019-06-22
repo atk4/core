@@ -110,7 +110,7 @@ trait TranslatableTrait
     }
 
     /**
-     * Return if this object will delegate translations to AppScope
+     * Return if this object will delegate translations to AppScope.
      *
      * @return bool
      */

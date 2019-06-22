@@ -89,14 +89,14 @@ class TranslatableTraitTest extends TestCase
     }
 
     /**
-     * Test that Translation will be delegated to the right object
+     * Test that Translation will be delegated to the right object.
      */
     public function testConditionalBehaviourWithoutTranslator()
     {
         // WITHOUT Translator :: use internal implementation
 
         /**
-         * App without Translator
+         * App without Translator.
          */
         $mock = $this->getMockCaseApp();
         // App will not use own translator
@@ -105,7 +105,7 @@ class TranslatableTraitTest extends TestCase
         $this->assertFalse($mock->hasTranslatorInAppScope());
 
         /**
-         * Child of AppScope without Translator
+         * Child of AppScope without Translator.
          */
         $mock = $this->getMockCaseAppChild();
         // Child will not use own Translator
@@ -118,7 +118,7 @@ class TranslatableTraitTest extends TestCase
         $this->assertFalse($mock->app->hasTranslator());
 
         /**
-         * Standalone implementation without Translator
+         * Standalone implementation without Translator.
          */
         $mock = $this->getMockCaseNoATK();
         // Object without Translator
@@ -128,12 +128,12 @@ class TranslatableTraitTest extends TestCase
     }
 
     /**
-     * Test that Translation will be delegated to the right object
+     * Test that Translation will be delegated to the right object.
      */
     public function testConditionalBehaviourWithTranslator()
     {
         /**
-         * App with Translator
+         * App with Translator.
          */
         $mock = $this->getMockCaseApp($this->getTranslatorMock());
         // App will use own Translator
@@ -142,7 +142,7 @@ class TranslatableTraitTest extends TestCase
         $this->assertFalse($mock->hasTranslatorInAppScope());
 
         /**
-         * Child of AppScope with Translator
+         * Child of AppScope with Translator.
          */
         $mock = $this->getMockCaseAppChild($this->getTranslatorMock());
         // Child will not use own Translator
@@ -155,7 +155,7 @@ class TranslatableTraitTest extends TestCase
         $this->assertTrue($mock->app->hasTranslator());
 
         /**
-         * Standalone implementation with Translator
+         * Standalone implementation with Translator.
          */
         $mock = $this->getMockCaseNoATK($this->getTranslatorMock());
         // Child will use own Translator
