@@ -20,7 +20,7 @@ trait TranslatableTrait
     /**
      * @var TranslatorInterface
      */
-    protected $translator;
+    private $translator;
 
     public function setTranslator(TranslatorInterface $translator)
     {
