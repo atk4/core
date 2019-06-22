@@ -138,7 +138,6 @@ class TranslatableTraitTest extends TestCase
 
         $app = $this->getMockCaseNoATK($this->getTranslatorMock());
         $this->assertEquals($expected, $app->_($id, ['%count%' => $number]));
-
     }
 
     /**
