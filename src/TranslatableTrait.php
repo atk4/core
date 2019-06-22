@@ -79,21 +79,19 @@ trait TranslatableTrait
      */
     public function _($id, array $parameters = [], $domain = null, $locale = null) :string
     {
-        // !!! Check for translator must be first to avoid infinite loop on when $this === $this->app
-        // check if there is a translator which implements Symfony TranslatorInterface
-        // case "we are NOT in atk4/ui"
+
+        // case if is child which use AppScope + TranslatableTrait
+        if (isset($this->app) && $this->app !== $this && method_exists($this->app, '_')) {
+            return $this->app->_($id, $parameters, $domain, $locale);
+        }
+
+        // case if use TranslatableTrait
         if (isset($this->translator) && $this->translator instanceof TranslatorInterface) {
             return $this->translator->trans($id, $parameters, $domain, $locale);
         }
 
-        // check if there is method _ in $this->app
-        // case "we are in atk4/ui" AppScope + Container
-        if (isset($this->app) && method_exists($this->app, '_') && $this->app !== $this) {
-            return $this->app->_($id, $parameters, $domain, $locale);
-        }
-
-        // if translator is not present use the the trait from Symfony
-        // to replicate internal library functionality
+        // FALLBACK : Replicate internal library functionality
+        // if not use TranslatableTrait and is not a Child of App which use TranslatableTrait
         $translator = new class() implements TranslatorInterface {
             use TranslatorTrait;
         };
