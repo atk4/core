@@ -73,9 +73,9 @@ trait TranslatableTrait
      * @param string|null $domain     The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
-     * @return string The translated string
-     *
      * @throws \InvalidArgumentException If the locale contains invalid characters
+     *
+     * @return string The translated string
      */
     public function _($id, array $parameters = [], $domain = null, $locale = null) :string
     {

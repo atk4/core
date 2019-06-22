@@ -31,15 +31,16 @@ class TranslatableTraitTest extends TestCase
             {
                 $this->app = $this;
 
-                if(null !== $translator)
+                if (null !== $translator) {
                     $this->setTranslator($translator);
+                }
             }
         };
 
         return $app;
     }
 
-    private function getMockCaseAppChild($translator=null)
+    private function getMockCaseAppChild($translator = null)
     {
         $app = $this->getMockCaseApp($translator);
 
@@ -61,8 +62,9 @@ class TranslatableTraitTest extends TestCase
 
             public function __construct($translator)
             {
-                if(null !== $translator)
+                if (null !== $translator) {
                     $this->setTranslator($translator);
+                }
             }
         };
     }
@@ -78,7 +80,7 @@ class TranslatableTraitTest extends TestCase
         };
 
         $mock->setTranslator($this->getTranslatorMock());
-        $this->assertTrue(is_a($mock->getTranslator(),TranslatorInterface::class));
+        $this->assertTrue(is_a($mock->getTranslator(), TranslatorInterface::class));
     }
 
     /**
