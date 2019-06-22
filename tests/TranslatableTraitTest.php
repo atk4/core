@@ -22,7 +22,6 @@ class TranslatableTraitTest extends TestCase
     private function getMockCaseApp($translator = null)
     {
         $app = new class($translator) {
-
             use AppScopeTrait;
             use ContainerTrait;
             use TranslatableTrait;
@@ -57,7 +56,6 @@ class TranslatableTraitTest extends TestCase
     private function getMockCaseNoATK($translator = null)
     {
         return new class($translator) {
-
             use TranslatableTrait;
 
             public function __construct($translator)
@@ -75,7 +73,6 @@ class TranslatableTraitTest extends TestCase
     public function testSetTranslator()
     {
         $mock = new class() {
-
             use TranslatableTrait;
         };
 
