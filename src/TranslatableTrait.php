@@ -100,7 +100,7 @@ trait TranslatableTrait
     }
 
     /**
-     * Return if Translation will be delegated to his own translator
+     * Return if this object will delegate translations to his own object Translator.
      *
      * @return bool
      */
