@@ -79,13 +79,13 @@ trait TranslatableTrait
      */
     public function _($id, array $parameters = [], $domain = null, $locale = null) :string
     {
-
-        // case if is child which use AppScope + TranslatableTrait
+        // case if is child Object which use AppScopeTrait + TranslatableTrait
+        // that was already add to an Object which use AppScopeTrait + ContainerTrait + TranslatableTrait
         if (isset($this->app) && $this->app !== $this && method_exists($this->app, '_')) {
             return $this->app->_($id, $parameters, $domain, $locale);
         }
 
-        // case if use TranslatableTrait
+        // case if use TranslatableTrait and translator is defined
         if (isset($this->translator) && $this->translator instanceof TranslatorInterface) {
             return $this->translator->trans($id, $parameters, $domain, $locale);
         }
