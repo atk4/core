@@ -81,12 +81,12 @@ trait TranslatableTrait
     {
         // case if is child Object which use AppScopeTrait + TranslatableTrait
         // that was already add to an Object which use AppScopeTrait + ContainerTrait + TranslatableTrait
-        if (isset($this->app) && $this->app !== $this && method_exists($this->app, '_')) {
+        if ($this->hasTranslatorInAppScope()) {
             return $this->app->_($id, $parameters, $domain, $locale);
         }
 
         // case if use TranslatableTrait and translator is defined
-        if (isset($this->translator) && $this->translator instanceof TranslatorInterface) {
+        if ($this->hasTranslator()) {
             return $this->translator->trans($id, $parameters, $domain, $locale);
         }
 
@@ -97,5 +97,15 @@ trait TranslatableTrait
         };
 
         return $translator->trans($id, $parameters, $domain, $locale);
+    }
+
+    protected function hasTranslator()
+    {
+        return isset($this->translator) && $this->translator instanceof TranslatorInterface;
+    }
+
+    protected function hasTranslatorInAppScope()
+    {
+        return isset($this->app) && $this->app !== $this && method_exists($this->app, '_');
     }
 }
