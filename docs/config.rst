@@ -45,7 +45,7 @@ Configuration is declared in a variable $config
         ]
     ];
 
-php-line
+php-inline
 ---
 Configuration is defined as a return statement
 
