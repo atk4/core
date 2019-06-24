@@ -16,7 +16,7 @@
         "php": ">=7.2.0",
         "psr/log": "~1.0",
         "ext-json": "*",
-        "symfony/translation": "^4.3"
+        "symfony/contracts": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
