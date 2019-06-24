@@ -32,11 +32,12 @@ abstract class AbstractDefinition
      * ShortHand for classes that need only to call Constructor.
      *
      * @param string $classname             Name of the class to be instantiated
-     * @param mixed  ...$constructArguments    Arguments for the __construct method
+     * @param mixed  ...$constructArguments Arguments for the __construct method
      *
      * @return static
      */
-    public static function fromClassName(string $classname, ...$constructArguments) :self {
+    public static function fromClassName(string $classname, ...$constructArguments) :self
+    {
         return new static(function(iDefiner $c) use ($classname, $constructArguments) {
             return new $classname(...$constructArguments);
         });

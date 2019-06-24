@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace atk4\core;
@@ -17,21 +18,21 @@ trait ServiceLocatorTrait
      * @param string     $fqcn           Fully Qualified Class Name
      * @param mixed|null $default_object Object to be used as default
      *
+     * @throws Exception
+     *
      * @return mixed
-     *@throws Exception
      */
     public function getService(string $fqcn, $default_object = null)
     {
         if (isset($this->app) && $this->app !== $this && ($app = $this->app) instanceof iDefiner) {
-            /** @var iDefiner $app */
+            /* @var iDefiner $app */
             return $app->getService($fqcn, $default_object);
         }
 
-        if (!($this instanceof iDefiner))
-        {
+        if (!($this instanceof iDefiner)) {
             throw new Exception([
                 'You need to implement iDefiner in this object or in $this->app',
-                'object' => $this
+                'object' => $this,
             ]);
         }
 
@@ -41,8 +42,7 @@ trait ServiceLocatorTrait
 
         // normalize getConfig return ( if not found getConfig return false not null)
         // if no $element => set to default
-        if (false === $element || null === $element)
-        {
+        if (false === $element || null === $element) {
             $element = $default_object;
         }
 
@@ -82,7 +82,7 @@ trait ServiceLocatorTrait
     {
         if (!class_exists($Type) && !interface_exists($Type)) {
             throw new Exception([
-                'Type for checking definition element not exists : ' . $Type,
+                'Type for checking definition element not exists : '.$Type,
                 'Type' => $Type,
             ]);
         }

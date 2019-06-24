@@ -4,9 +4,9 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
+use atk4\core\Exception;
 use atk4\core\ServiceDefinition\iDefiner;
 use atk4\core\ServiceLocatorTrait;
-use atk4\core\Exception;
 
 /**
  * @coversDefaultClass  \atk4\core\ServiceLocatorTrait
@@ -17,13 +17,14 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 
     /** @var ServiceChildMock */
     public $mock;
+
     /**
      * this will throw an exception if there is some error in loading.
      */
     public function setUp() : void
     {
         $app = new AppServiceMock();
-        $app->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php','php-inline');
+        $app->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php', 'php-inline');
 
         $this->mock = new ServiceChildMock();
         $app->add($this->mock);
@@ -48,7 +49,7 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     }
 
     /**
-     * Test Exception when element not exists
+     * Test Exception when element not exists.
      *
      * @throws Exception
      */
@@ -62,7 +63,7 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     /**
      * Test Exception when :
      *  - check_type is enabled
-     *  - check if $path is a non existent FQCN = throw exception
+     *  - check if $path is a non existent FQCN = throw exception.
      *
      * @throws Exception
      */
@@ -70,14 +71,14 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     {
         $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
-        $this->mock->getService('NotValidFQCNForTypeCheck',null);
+        $this->mock->getService('NotValidFQCNForTypeCheck', null);
     }
 
     /**
      * Test Exception when :
      *  - check_type is enabled
      *  - check if $path exists FQCN
-     *  - return type is not equal to get_class($path) = throw exception
+     *  - return type is not equal to get_class($path) = throw exception.
      *
      * @throws Exception
      */
@@ -85,11 +86,11 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     {
         $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
-        $this->mock->getService(\DateTime::class,null);
+        $this->mock->getService(\DateTime::class, null);
     }
 
     /**
-     * Test Instance and Factory Behaviour
+     * Test Instance and Factory Behaviour.
      *
      * @throws Exception
      */
@@ -97,46 +98,46 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     {
         /** @var ServiceInstanceMock $instance */
         $instance = $this->mock->getService(ServiceInstanceMock::class);
-        $this->assertEquals(0,$instance->count);
+        $this->assertEquals(0, $instance->count);
         $instance->increment();
-        $this->assertEquals(1,$instance->count);
+        $this->assertEquals(1, $instance->count);
 
         // call again must give the same instance
         $instance = $this->mock->getService(ServiceInstanceMock::class);
         $instance->increment();
-        $this->assertEquals(2,$instance->count);
+        $this->assertEquals(2, $instance->count);
 
         $instance = $this->mock->getService(ServiceInstanceMock::class);
         $instance->increment();
-        $this->assertEquals(3,$instance->count);
+        $this->assertEquals(3, $instance->count);
 
         /** @var ServiceFactoryMock $factory */
         $factory = $this->mock->getService(ServiceFactoryMock::class);
-        $this->assertEquals(0,$factory->count);
+        $this->assertEquals(0, $factory->count);
         $factory->increment();
-        $this->assertEquals(1,$factory->count);
+        $this->assertEquals(1, $factory->count);
 
         // call again must giuve a new instance
         $factory = $this->mock->getService(ServiceFactoryMock::class);
-        $this->assertEquals(0,$factory->count);
+        $this->assertEquals(0, $factory->count);
     }
 
     /**
-     * Test via static method
+     * Test via static method.
      */
     public function testGetService3()
     {
         /** @var ServiceMultipleArgumentMock $obj */
         $obj = $this->mock->getService(InstanceServiceMultipleArgumentMock::class);
-        $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
+        $this->assertEquals([1, 2, 3],[$obj->a, $obj->b, $obj->c]);
 
         /** @var ServiceMultipleArgumentMock $obj */
         $obj = $this->mock->getService(FactoryServiceMultipleArgumentMock::class);
-        $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
+        $this->assertEquals([1, 2, 3],[$obj->a, $obj->b, $obj->c]);
     }
 
     /**
-     * Test Exception when element not exists
+     * Test Exception when element not exists.
      */
     public function testGetServiceExceptionNoApp()
     {
@@ -149,7 +150,8 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 }
 
 // @codingStandardsIgnoreStart
-class AppServiceMock implements iDefiner {
+class AppServiceMock implements iDefiner
+{
     use AppScopeTrait;
     use ContainerTrait;
     use ServiceLocatorTrait;
@@ -163,13 +165,14 @@ class AppServiceMock implements iDefiner {
     }
 }
 
-class ServiceChildMock {
+class ServiceChildMock
+{
     use AppScopeTrait;
     use ServiceLocatorTrait;
 }
 
-class ServiceInstanceMock {
-
+class ServiceInstanceMock
+{
    public $count = 0;
 
    public function increment()
@@ -178,16 +181,18 @@ class ServiceInstanceMock {
    }
 }
 
-class ServiceFactoryMock extends ServiceInstanceMock {
+class ServiceFactoryMock extends ServiceInstanceMock
+{
 }
 
-class ServiceMultipleArgumentMock {
+class ServiceMultipleArgumentMock
+{
 
     public $a = 0;
     public $b = 0;
     public $c = 0;
 
-    public function __construct($a,$b,$c)
+    public function __construct($a, $b, $c)
     {
         $this->a = $a;
         $this->b = $b;
@@ -195,6 +200,9 @@ class ServiceMultipleArgumentMock {
     }
 }
 
-class InstanceServiceMultipleArgumentMock extends ServiceMultipleArgumentMock {}
-class FactoryServiceMultipleArgumentMock extends ServiceMultipleArgumentMock {}
+class InstanceServiceMultipleArgumentMock extends ServiceMultipleArgumentMock
+{}
+
+class FactoryServiceMultipleArgumentMock extends ServiceMultipleArgumentMock
+{}
 // @codingStandardsIgnoreEnd

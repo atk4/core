@@ -21,9 +21,9 @@ return [
     ServiceFactoryMock::class  => new Factory(function (iDefiner $c) {
         return new ServiceFactoryMock();
     }),
-    InstanceServiceMultipleArgumentMock::class => Instance::fromClassName(InstanceServiceMultipleArgumentMock::class, 1, 2, 3),
-    FactoryServiceMultipleArgumentMock::class => Factory::fromClassName(FactoryServiceMultipleArgumentMock::class, 1, 2, 3),
-    'NotValidFQCNForTypeCheck' => new Instance(function (iDefiner $c) {
+    InstanceServiceMultipleArgumentMock::class => Instance::fromClassName(InstanceServiceMultipleArgumentMock::class,  1, 2, 3),
+    FactoryServiceMultipleArgumentMock::class  => Factory::fromClassName(FactoryServiceMultipleArgumentMock::class, 1, 2, 3),
+    'NotValidFQCNForTypeCheck'                 => new Instance(function (iDefiner $c) {
         return new NullLogger();
     }),
 ];
