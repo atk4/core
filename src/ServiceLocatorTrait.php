@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace atk4\core;
 
-use atk4\core\Definition\Factory;
-use atk4\core\Definition\iDefiner;
-use atk4\core\Definition\Instance;
+use atk4\core\ServiceDefinition\Factory;
+use atk4\core\ServiceDefinition\iDefiner;
+use atk4\core\ServiceDefinition\Instance;
 
 trait ServiceLocatorTrait
 {
@@ -14,35 +14,37 @@ trait ServiceLocatorTrait
     /**
      * Get Config Element or iDependency Object.
      *
-     * @param string     $fqcn
-     * @param mixed|null $default_value
+     * @param string     $fqcn           Fully Qualified Class Name
+     * @param mixed|null $default_object Object to be used as default
      *
-     * @throws Exception
      * @return mixed
+     *@throws Exception
      */
-    public function getDefinition(string $fqcn, $default_value = null)
+    public function getService(string $fqcn, $default_object = null)
     {
         if (isset($this->app) && $this->app !== $this && ($app = $this->app) instanceof iDefiner) {
             /** @var iDefiner $app */
-            return $app->getDefinition($fqcn, $default_value);
+            return $app->getService($fqcn, $default_object);
         }
 
-        if (!($this instanceof iDefiner)) {
-            throw new Exception('ServiceLocatorTrait');
+        if (!($this instanceof iDefiner))
+        {
+            throw new Exception([
+                'You need to implement iDefiner in this object or in $this->app',
+                'object' => $this
+            ]);
         }
 
-        $element = $this->getConfig($fqcn, $default_value);
+        $this->checkTypeExists($fqcn);
+
+        $element = $this->getConfig($fqcn, $default_object);
 
         // normalize getConfig return ( if not found getConfig return false not null)
         // if no $element => set to default
         if (false === $element || null === $element)
         {
-            $element = $default_value;
+            $element = $default_object;
         }
-
-        $this->checkTypeExists($fqcn);
-
-        /* @var iDefiner $this */
 
         // if is a Factory
         // call Factory->process
@@ -80,7 +82,7 @@ trait ServiceLocatorTrait
     {
         if (!class_exists($Type) && !interface_exists($Type)) {
             throw new Exception([
-                'Type for checking definition element not exists : '.$Type,
+                'Type for checking definition element not exists : ' . $Type,
                 'Type' => $Type,
             ]);
         }
@@ -98,7 +100,7 @@ trait ServiceLocatorTrait
     {
         if (!is_a($element,$Type) || null === $element) {
             throw new Exception([
-                'Type of returned instance is not of type : '.$Type,
+                'Type of returned instance is not of type : ' . $Type,
                 'Type'    => $Type,
                 'Element' => $element,
             ]);

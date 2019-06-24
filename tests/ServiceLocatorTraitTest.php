@@ -4,7 +4,7 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
-use atk4\core\Definition\iDefiner;
+use atk4\core\ServiceDefinition\iDefiner;
 use atk4\core\ServiceLocatorTrait;
 use atk4\core\Exception;
 
@@ -13,61 +13,64 @@ use atk4\core\Exception;
  */
 class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 {
-    public $dir = __DIR__.'/definer_test/';
+    public $dir = __DIR__.'/servicelocator_test/';
 
-    /** @var iDefiner */
+    /** @var ServiceChildMock */
     public $mock;
     /**
      * this will throw an exception if there is some error in loading.
      */
     public function setUp() : void
     {
-        $app = new AppDefinitionMock();
+        $app = new AppServiceMock();
         $app->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php','php-inline');
 
-        $this->mock = new DefinitionChildMock();
+        $this->mock = new ServiceChildMock();
         $app->add($this->mock);
     }
 
-    public function testGetDefinition()
+    /**
+     * @throws Exception
+     */
+    public function testGetService()
     {
         // test instance
-        $result = $this->mock->getDefinition(\Psr\Log\LoggerInterface::class);
+        $result = $this->mock->getService(\Psr\Log\LoggerInterface::class);
         $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
 
         // test factory
-        $result = $this->mock->getDefinition(DefinitionFactoryMock::class);
-        $this->assertEquals(DefinitionFactoryMock::class, get_class($result));
-
-        // test for default if not exists
-        $result = $this->mock->getDefinition('MyLogger', new \Psr\Log\NullLogger());
-        $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
+        $result = $this->mock->getService(ServiceFactoryMock::class);
+        $this->assertEquals(ServiceFactoryMock::class, get_class($result));
 
         // test for default if not exists with typecheck
-        $result = $this->mock->getDefinition(\Psr\Log\NullLogger::class, new \Psr\Log\NullLogger(), true);
+        $result = $this->mock->getService(\Psr\Log\NullLogger::class, new \Psr\Log\NullLogger());
         $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
     }
 
     /**
      * Test Exception when element not exists
+     *
+     * @throws Exception
      */
-    public function testGetDefinitionExceptionNotExists()
+    public function testGetServiceExceptionNotExists()
     {
         $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
-        $this->mock->getDefinition('NotExists');
+        $this->mock->getService('NotExists');
     }
 
     /**
      * Test Exception when :
      *  - check_type is enabled
      *  - check if $path is a non existent FQCN = throw exception
+     *
+     * @throws Exception
      */
-    public function testGetDefinitionException()
+    public function testGetServiceException()
     {
         $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
-        $this->mock->getDefinition('NotValidFQCNForTypeCheck',null,true);
+        $this->mock->getService('NotValidFQCNForTypeCheck',null);
     }
 
     /**
@@ -75,74 +78,78 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
      *  - check_type is enabled
      *  - check if $path exists FQCN
      *  - return type is not equal to get_class($path) = throw exception
+     *
+     * @throws Exception
      */
-    public function testGetDefinitionException2()
+    public function testGetServiceException2()
     {
         $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
-        $this->mock->getDefinition(\DateTime::class,null,true);
+        $this->mock->getService(\DateTime::class,null);
     }
 
     /**
      * Test Instance and Factory Behaviour
+     *
+     * @throws Exception
      */
-    public function testGetDefinition2()
+    public function testGetService2()
     {
-        /** @var DefinitionInstanceMock $instance */
-        $instance = $this->mock->getDefinition(DefinitionInstanceMock::class);
+        /** @var ServiceInstanceMock $instance */
+        $instance = $this->mock->getService(ServiceInstanceMock::class);
         $this->assertEquals(0,$instance->count);
         $instance->increment();
         $this->assertEquals(1,$instance->count);
 
         // call again must give the same instance
-        $instance = $this->mock->getDefinition(DefinitionInstanceMock::class);
+        $instance = $this->mock->getService(ServiceInstanceMock::class);
         $instance->increment();
         $this->assertEquals(2,$instance->count);
 
-        $instance = $this->mock->getDefinition(DefinitionInstanceMock::class);
+        $instance = $this->mock->getService(ServiceInstanceMock::class);
         $instance->increment();
         $this->assertEquals(3,$instance->count);
 
-        /** @var DefinitionFactoryMock $factory */
-        $factory = $this->mock->getDefinition(DefinitionFactoryMock::class);
+        /** @var ServiceFactoryMock $factory */
+        $factory = $this->mock->getService(ServiceFactoryMock::class);
         $this->assertEquals(0,$factory->count);
         $factory->increment();
         $this->assertEquals(1,$factory->count);
 
         // call again must giuve a new instance
-        $factory = $this->mock->getDefinition(DefinitionFactoryMock::class);
+        $factory = $this->mock->getService(ServiceFactoryMock::class);
         $this->assertEquals(0,$factory->count);
     }
 
     /**
      * Test via static method
      */
-    public function testGetDefinition3()
+    public function testGetService3()
     {
-        /** @var DefinitionMultipleArgumentMock $obj */
-        $obj = $this->mock->getDefinition('TestStaticMethodInstance');
+        /** @var ServiceMultipleArgumentMock $obj */
+        $obj = $this->mock->getService(InstanceServiceMultipleArgumentMock::class);
         $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
 
-        /** @var DefinitionMultipleArgumentMock $obj */
-        $obj = $this->mock->getDefinition('TestStaticMethodFactory');
+        /** @var ServiceMultipleArgumentMock $obj */
+        $obj = $this->mock->getService(FactoryServiceMultipleArgumentMock::class);
         $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
     }
 
     /**
      * Test Exception when element not exists
      */
-    public function testGetDefinitionExceptionNoApp()
+    public function testGetServiceExceptionNoApp()
     {
-        $this->mock = new DefinitionChildMock();
+        $this->mock = new ServiceChildMock();
 
         $this->expectException(Exception::class);
         // test with Type check, will throw exception if fails
-        $this->mock->getDefinition('NotExists');
+        $this->mock->getService('NotExists');
     }
 }
 
 // @codingStandardsIgnoreStart
-class AppDefinitionMock implements iDefiner {
+class AppServiceMock implements iDefiner {
     use AppScopeTrait;
     use ContainerTrait;
     use ServiceLocatorTrait;
@@ -156,12 +163,12 @@ class AppDefinitionMock implements iDefiner {
     }
 }
 
-class DefinitionChildMock {
+class ServiceChildMock {
     use AppScopeTrait;
     use ServiceLocatorTrait;
 }
 
-class DefinitionInstanceMock {
+class ServiceInstanceMock {
 
    public $count = 0;
 
@@ -171,10 +178,10 @@ class DefinitionInstanceMock {
    }
 }
 
-class DefinitionFactoryMock extends DefinitionInstanceMock {
+class ServiceFactoryMock extends ServiceInstanceMock {
 }
 
-class DefinitionMultipleArgumentMock {
+class ServiceMultipleArgumentMock {
 
     public $a = 0;
     public $b = 0;
@@ -187,4 +194,7 @@ class DefinitionMultipleArgumentMock {
         $this->c = $c;
     }
 }
+
+class InstanceServiceMultipleArgumentMock extends ServiceMultipleArgumentMock {}
+class FactoryServiceMultipleArgumentMock extends ServiceMultipleArgumentMock {}
 // @codingStandardsIgnoreEnd
