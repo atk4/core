@@ -5,26 +5,33 @@ namespace atk4\core;
 
 use atk4\core\Definition\Factory;
 use atk4\core\Definition\iDefiner;
-use atk4\core\Definition\iDefinition;
 use atk4\core\Definition\Instance;
 
-trait DefinerTrait
+trait ServiceLocatorTrait
 {
     use ConfigTrait;
 
     /**
      * Get Config Element or iDependency Object.
      *
-     * @param string     $path
+     * @param string     $fqcn
      * @param mixed|null $default_value
-     * @param bool       $check_type
      *
      * @throws Exception
      * @return mixed
      */
-    public function getDefinition(string $path, $default_value = null, bool $check_type = false)
+    public function getDefinition(string $fqcn, $default_value = null)
     {
-        $element = $this->getConfig($path, $default_value);
+        if (isset($this->app) && $this->app !== $this && ($app = $this->app) instanceof iDefiner) {
+            /** @var iDefiner $app */
+            return $app->getDefinition($fqcn, $default_value);
+        }
+
+        if (!($this instanceof iDefiner)) {
+            throw new Exception('ServiceLocatorTrait');
+        }
+
+        $element = $this->getConfig($fqcn, $default_value);
 
         // normalize getConfig return ( if not found getConfig return false not null)
         // if no $element => set to default
@@ -33,9 +40,7 @@ trait DefinerTrait
             $element = $default_value;
         }
 
-        if ($check_type) {
-            $this->checkTypeExists($path);
-        }
+        $this->checkTypeExists($fqcn);
 
         /* @var iDefiner $this */
 
@@ -56,19 +61,12 @@ trait DefinerTrait
         // further calls => get the already created object from config elements
         if ($element instanceof Instance) {
             $element = $element->process($this);
-            $this->setConfig($path, $element);
+            $this->setConfig($fqcn, $element);
         }
 
-        if ($check_type) {
-            $this->checkTypeElement($path, $element);
-        }
+        $this->checkTypeElement($fqcn, $element);
 
-        if (null !== $element)
-        {
-            return $element;
-        }
-
-        throw new Exception('Config Definition not found');
+        return $element;
     }
 
     /**

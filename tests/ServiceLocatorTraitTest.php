@@ -4,15 +4,14 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
-use atk4\core\DefinerTrait;
 use atk4\core\Definition\iDefiner;
-use atk4\core\DefinitionTrait;
+use atk4\core\ServiceLocatorTrait;
 use atk4\core\Exception;
 
 /**
- * @coversDefaultClass  \atk4\core\DefinitionTrait
+ * @coversDefaultClass  \atk4\core\ServiceLocatorTrait
  */
-class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
+class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 {
     public $dir = __DIR__.'/definer_test/';
 
@@ -23,7 +22,7 @@ class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
      */
     public function setUp() : void
     {
-        $app = new DefinerMock();
+        $app = new AppDefinitionMock();
         $app->readConfig($this->dir.DIRECTORY_SEPARATOR.'config.php','php-inline');
 
         $this->mock = new DefinitionChildMock();
@@ -37,8 +36,8 @@ class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
         $this->assertEquals(\Psr\Log\NullLogger::class, get_class($result));
 
         // test factory
-        $result = $this->mock->getDefinition(DefinerFactoryMock::class);
-        $this->assertEquals(DefinerFactoryMock::class, get_class($result));
+        $result = $this->mock->getDefinition(DefinitionFactoryMock::class);
+        $this->assertEquals(DefinitionFactoryMock::class, get_class($result));
 
         // test for default if not exists
         $result = $this->mock->getDefinition('MyLogger', new \Psr\Log\NullLogger());
@@ -89,29 +88,29 @@ class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
      */
     public function testGetDefinition2()
     {
-        /** @var DefinerInstanceMock $instance */
-        $instance = $this->mock->getDefinition(DefinerInstanceMock::class);
+        /** @var DefinitionInstanceMock $instance */
+        $instance = $this->mock->getDefinition(DefinitionInstanceMock::class);
         $this->assertEquals(0,$instance->count);
         $instance->increment();
         $this->assertEquals(1,$instance->count);
 
         // call again must give the same instance
-        $instance = $this->mock->getDefinition(DefinerInstanceMock::class);
+        $instance = $this->mock->getDefinition(DefinitionInstanceMock::class);
         $instance->increment();
         $this->assertEquals(2,$instance->count);
 
-        $instance = $this->mock->getDefinition(DefinerInstanceMock::class);
+        $instance = $this->mock->getDefinition(DefinitionInstanceMock::class);
         $instance->increment();
         $this->assertEquals(3,$instance->count);
 
-        /** @var DefinerFactoryMock $factory */
-        $factory = $this->mock->getDefinition(DefinerFactoryMock::class);
+        /** @var DefinitionFactoryMock $factory */
+        $factory = $this->mock->getDefinition(DefinitionFactoryMock::class);
         $this->assertEquals(0,$factory->count);
         $factory->increment();
         $this->assertEquals(1,$factory->count);
 
         // call again must giuve a new instance
-        $factory = $this->mock->getDefinition(DefinerFactoryMock::class);
+        $factory = $this->mock->getDefinition(DefinitionFactoryMock::class);
         $this->assertEquals(0,$factory->count);
     }
 
@@ -120,11 +119,11 @@ class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
      */
     public function testGetDefinition3()
     {
-        /** @var DefinerMultipleArgumentMock $obj */
+        /** @var DefinitionMultipleArgumentMock $obj */
         $obj = $this->mock->getDefinition('TestStaticMethodInstance');
         $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
 
-        /** @var DefinerMultipleArgumentMock $obj */
+        /** @var DefinitionMultipleArgumentMock $obj */
         $obj = $this->mock->getDefinition('TestStaticMethodFactory');
         $this->assertEquals([1,2,3],[$obj->a,$obj->b,$obj->c]);
     }
@@ -143,10 +142,10 @@ class DefinitionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
 }
 
 // @codingStandardsIgnoreStart
-class DefinerMock implements iDefiner {
-    use DefinerTrait;
+class AppDefinitionMock implements iDefiner {
     use AppScopeTrait;
     use ContainerTrait;
+    use ServiceLocatorTrait;
 
     /**
      * DefinerMock constructor.
@@ -159,10 +158,10 @@ class DefinerMock implements iDefiner {
 
 class DefinitionChildMock {
     use AppScopeTrait;
-    use DefinitionTrait;
+    use ServiceLocatorTrait;
 }
 
-class DefinerInstanceMock {
+class DefinitionInstanceMock {
 
    public $count = 0;
 
@@ -172,10 +171,10 @@ class DefinerInstanceMock {
    }
 }
 
-class DefinerFactoryMock extends DefinerInstanceMock {
+class DefinitionFactoryMock extends DefinitionInstanceMock {
 }
 
-class DefinerMultipleArgumentMock {
+class DefinitionMultipleArgumentMock {
 
     public $a = 0;
     public $b = 0;
