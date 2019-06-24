@@ -129,11 +129,11 @@ class ServiceLocatorTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
     {
         /** @var ServiceMultipleArgumentMock $obj */
         $obj = $this->mock->getService(InstanceServiceMultipleArgumentMock::class);
-        $this->assertEquals([1, 2, 3],[$obj->a, $obj->b, $obj->c]);
+        $this->assertEquals([1, 2, 3], [$obj->a, $obj->b, $obj->c]);
 
         /** @var ServiceMultipleArgumentMock $obj */
         $obj = $this->mock->getService(FactoryServiceMultipleArgumentMock::class);
-        $this->assertEquals([1, 2, 3],[$obj->a, $obj->b, $obj->c]);
+        $this->assertEquals([1, 2, 3], [$obj->a, $obj->b, $obj->c]);
     }
 
     /**
@@ -173,12 +173,12 @@ class ServiceChildMock
 
 class ServiceInstanceMock
 {
-   public $count = 0;
+    public $count = 0;
 
-   public function increment()
-   {
+    public function increment()
+    {
        $this->count++;
-   }
+    }
 }
 
 class ServiceFactoryMock extends ServiceInstanceMock
@@ -187,7 +187,6 @@ class ServiceFactoryMock extends ServiceInstanceMock
 
 class ServiceMultipleArgumentMock
 {
-
     public $a = 0;
     public $b = 0;
     public $c = 0;
@@ -201,8 +200,10 @@ class ServiceMultipleArgumentMock
 }
 
 class InstanceServiceMultipleArgumentMock extends ServiceMultipleArgumentMock
-{}
+{
+}
 
 class FactoryServiceMultipleArgumentMock extends ServiceMultipleArgumentMock
-{}
+{
+}
 // @codingStandardsIgnoreEnd

@@ -15,6 +15,7 @@ interface iDefiner
      * @param mixed|null $default_object Object to be used as default
      *
      * @throws Exception
+     *
      * @return mixed
      */
     public function getService(string $fqcn, $default_object = null);

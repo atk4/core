@@ -38,7 +38,7 @@ abstract class AbstractDefinition
      */
     public static function fromClassName(string $classname, ...$constructArguments) :self
     {
-        return new static(function(iDefiner $c) use ($classname, $constructArguments) {
+        return new static(function (iDefiner $c) use ($classname, $constructArguments) {
             return new $classname(...$constructArguments);
         });
     }

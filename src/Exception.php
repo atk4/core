@@ -26,9 +26,9 @@ class Exception extends \Exception
     /**
      * Constructor.
      *
-     * @param string|array     $message
-     * @param int              $code
-     * @param Throwable        $previous
+     * @param string|array $message
+     * @param int          $code
+     * @param Throwable    $previous
      */
     public function __construct(
         $message = '',
@@ -380,6 +380,7 @@ class Exception extends \Exception
         if (is_object($val) && !$val instanceof \Closure) {
             if (isset($val->_trackableTrait)) {
                 $name = isset($val->name) ? $val->name : '';
+
                 return get_class($val).' ('.$name.')';
             }
 

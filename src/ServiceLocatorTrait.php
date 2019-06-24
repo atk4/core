@@ -98,9 +98,9 @@ trait ServiceLocatorTrait
      */
     private function checkTypeElement(string $Type, $element): void
     {
-        if (!is_a($element,$Type) || null === $element) {
+        if (!is_a($element, $Type) || null === $element) {
             throw new Exception([
-                'Type of returned instance is not of type : ' . $Type,
+                'Type of returned instance is not of type : '.$Type,
                 'Type'    => $Type,
                 'Element' => $element,
             ]);
