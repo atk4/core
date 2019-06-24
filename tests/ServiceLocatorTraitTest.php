@@ -177,7 +177,7 @@ class ServiceInstanceMock
 
     public function increment()
     {
-       $this->count++;
+        $this->count++;
     }
 }
 
