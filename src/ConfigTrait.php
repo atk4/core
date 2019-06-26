@@ -42,7 +42,7 @@ trait ConfigTrait
      *
      * @throws Exception
      *
-     * @return $this     
+     * @return $this
      */
     public function readConfig($files = ['config.php'], $format = 'php')
     {
