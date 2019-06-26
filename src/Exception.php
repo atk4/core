@@ -26,9 +26,9 @@ class Exception extends \Exception
     /**
      * Constructor.
      *
-     * @param string|array     $message
-     * @param int              $code
-     * @param Throwable        $previous
+     * @param string|array $message
+     * @param int          $code
+     * @param Throwable    $previous
      */
     public function __construct(
         $message = '',
