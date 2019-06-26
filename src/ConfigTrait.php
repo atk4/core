@@ -40,8 +40,9 @@ trait ConfigTrait
      * @param string|array $files  One or more filenames
      * @param string       $format Optional format for config files
      *
-     * @return $this
      * @throws Exception
+     *
+     * @return $this     
      */
     public function readConfig($files = ['config.php'], $format = 'php')
     {
@@ -81,12 +82,11 @@ trait ConfigTrait
                     break;
             }
 
-            if(!is_array($tempConfig))
-            {
+            if (!is_array($tempConfig)) {
                 throw new Exception([
                     'File was read but has a bad format',
-                    'file' => $file,
-                    'format' => $format
+                    'file'   => $file,
+                    'format' => $format,
                 ]);
             }
 
