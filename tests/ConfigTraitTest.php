@@ -3,7 +3,6 @@
 namespace atk4\core\tests;
 
 use atk4\core\ConfigTrait;
-use atk4\core\Exception;
 
 /**
  * @coversDefaultClass \atk4\core\ConfigTrait
