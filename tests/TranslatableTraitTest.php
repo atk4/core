@@ -29,6 +29,7 @@ class TranslatableTraitTest extends TestCase
     public function testTranslatableTraitWithApp($excepted, $message, $parameters)
     {
         $app  = new AppScopeMock();
+        $app->app = $app;
         $mock = new TranslatableMock();
 
         $app->add($mock);
