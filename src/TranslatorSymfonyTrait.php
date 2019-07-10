@@ -14,19 +14,10 @@ trait TranslatorSymfonyTrait
      * @param TranslatorInterface $translator
      *
      * @return TranslatorInterface
-     * @throws Exception
      */
-    public function setTranslator($translator)
+    public function setTranslator(TranslatorInterface $translator)
     {
-        if ($translator instanceof TranslatorInterface) {
-
-            return $this->translator = $translator;
-        }
-
-        throw new Exception([
-            'Translator must implements TranslatorInterface',
-            'translator' => $translator
-        ]);
+        return $this->translator = $translator;
     }
 
     /**
