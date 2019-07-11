@@ -118,6 +118,9 @@ trait CollectionTrait
     {
         foreach ($this->{$collection} as &$object) {
             $object = clone $object;
+            if (isset($object->owner)) {
+                $object->owner = $this;
+            }
         }
     }
 
