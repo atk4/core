@@ -28,18 +28,18 @@ trait TranslatorSymfonyTrait
      * @param string|null $domain     The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
-     * @return string The translated string
      * @throws InvalidArgumentException If the locale contains invalid characters
      * @throws Exception
      *
+     * @return string The translated string
      */
     public function _(
         string $message,
-        ?array $parameters = NULL,
-        ?string $domain = NULL,
-        ?string $locale = NULL
+        ?array $parameters = null,
+        ?string $domain = null,
+        ?string $locale = null
     ): string {
-        if ($this->translator === NULL) {
+        if ($this->translator === null) {
             throw new Exception('Translator for TranslatorSymfonyTrait must be defined with setTranslator');
         }
 

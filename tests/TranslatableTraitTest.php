@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class TranslatableTraitTest extends TestCase
 {
     /**
-     * Basic test for usage in ATK without external translator
+     * Basic test for usage in ATK without external translator.
      *
      * @dataProvider getTransSimpleTest
      */
@@ -22,13 +22,13 @@ class TranslatableTraitTest extends TestCase
     }
 
     /**
-     * Basic test for usage in ATK with App without external translator
+     * Basic test for usage in ATK with App without external translator.
      *
      * @dataProvider getTransSimpleTest
      */
     public function testTranslatableTraitWithApp($excepted, $message, $parameters)
     {
-        $app  = new AppScopeMock();
+        $app = new AppScopeMock();
         $app->app = $app;
         $mock = new TranslatableMock();
 

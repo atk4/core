@@ -1,12 +1,7 @@
 <?php
 
-
 namespace atk4\core\tests;
 
-
-use atk4\core\AppScopeTrait;
-use atk4\core\ContainerTrait;
-use atk4\core\TranslatableTrait;
 use atk4\core\TranslatorSymfonyTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -23,12 +18,12 @@ class TranslatorSymfonyTraitTest extends TestCase
         $app->setTranslator(new TranslatorSymfony());
 
         $result = $mock->_($message, $params);
-        $this->assertEquals($excepted,$result);
+        $this->assertEquals($excepted, $result);
     }
 
     /**
-    * @dataProvider getTransSimpleTest
-    */
+     * @dataProvider getTransSimpleTest
+     */
     public function testTransSimple($excepted, $message, $counter)
     {
         $this->methodTranslate($excepted, $message, $counter);
@@ -43,7 +38,7 @@ class TranslatorSymfonyTraitTest extends TestCase
         $app->setTranslator(new TranslatorSymfony());
 
         $result = $mock->_($message, ['%count%' => $counter]);
-        $this->assertEquals($excepted,$result);
+        $this->assertEquals($excepted, $result);
     }
 
     /**
@@ -61,7 +56,6 @@ class TranslatorSymfonyTraitTest extends TestCase
     {
         $this->methodTranslatePlurals($excepted, $message, $counter);
     }
-
 
     public function getTransSimpleTest()
     {
@@ -168,16 +162,17 @@ class TranslatorSymfonyTraitTest extends TestCase
     }
 }
 
-
-class AppScopeTranslatorSymfonyMock extends AppScopeMock {
+class AppScopeTranslatorSymfonyMock extends AppScopeMock
+{
     use TranslatorSymfonyTrait;
 
     public function __construct()
     {
         $this->app = $this;
     }
-};
+}
 
-class TranslatorSymfony implements TranslatorInterface {
+class TranslatorSymfony implements TranslatorInterface
+{
     use TranslatorTrait;
 }
