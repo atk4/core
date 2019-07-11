@@ -52,10 +52,10 @@ Methods
 
     None
 
-MultiContainerTrait
+CollectionTrait
 ===================
 
-.. php:trait:: MultiContainerTrait
+.. php:trait:: CollectionTrait
 
     This trait makes it possible for you to add child objects
     into your object, but unlike "ContainerTrait" you can use
@@ -69,7 +69,7 @@ Example::
 
     class Form
     {
-        use core\MultiContainerTrait;
+        use core\CollectionTrait;
         use core\FactoryTrait;
 
         protected $fields = [];
@@ -133,7 +133,7 @@ Methods
 Shortening is identical to :php:meth::`ContainerTrait::_shorten`.
 
 Your object can this train together with ContainerTrait. As per June 2019
-ATK maintainers agreed to gradually refactor ATK Data to use MultiContainerTrait
+ATK maintainers agreed to gradually refactor ATK Data to use CollectionTrait
 for fields, relations, actions.
 
 
