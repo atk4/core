@@ -110,13 +110,13 @@ trait CollectionTrait
 
     /**
      * Call this on collections after cloning object. This will clone all collection
-     * elements (which are objects)
+     * elements (which are objects).
      *
      * @param string $collection to be cloned
      */
     public function _cloneCollection(string $collection)
     {
-        foreach($this->{$collection} as &$object) {
+        foreach ($this->{$collection} as &$object) {
             $object = clone $object;
         }
     }
