@@ -6,7 +6,8 @@ use atk4\core\TranslatableTrait;
 
 require '../vendor/autoload.php';
 
-class App {
+class App
+{
     use AppScopeTrait;
     use ContainerTrait;
 
@@ -33,11 +34,11 @@ var_dump($child->_('there is one apple|there are %count% apples', ['%count%' => 
 var_dump($child->_('there is one apple|there are %count% apples', ['%count%' => 2]));
 
 var_dump($child->_('there is one %counted_name%|there are %count% %counted_name%', [
-    '%count%' => 2,
-    '%counted_name%' => $child->_('apple|apples', ['%count%' => 2])
+    '%count%'        => 2,
+    '%counted_name%' => $child->_('apple|apples', ['%count%' => 2]),
 ]));
 
 var_dump($child->_('there is one %counted_name%|there are %count% %counted_name%', [
-    '%count%' => 1,
-    '%counted_name%' => $child->_('apple|apples', ['%count%' => 1])
+    '%count%'        => 1,
+    '%counted_name%' => $child->_('apple|apples', ['%count%' => 1]),
 ]));
