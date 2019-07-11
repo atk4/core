@@ -21,7 +21,8 @@
         "phpunit/phpunit": "*",
         "symfony/yaml": "~2.1|~3.0|~4.0",
         "satooshi/php-coveralls": "^1.0",
-        "codeclimate/php-test-reporter": "*"
+        "codeclimate/php-test-reporter": "*",
+        "symfony/contracts": "^1.1"
     },
     "suggest": {
         "symfony/yaml": "~2.1|~3.0|~4.0"
