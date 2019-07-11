@@ -24,7 +24,7 @@ trait TranslatableTrait
      *
      * @return string The translated string
      */
-    public function _($message, ?array $parameters = NULL, ?string $domain = NULL, ?string $locale = NULL): string
+    public function _($message, ?array $parameters = null, ?string $domain = null, ?string $locale = null): string
     {
         if (isset($this->app) && method_exists($this->app, '_')) {
             return $this->app->_($message, $parameters, $domain, $locale);
@@ -35,35 +35,32 @@ trait TranslatableTrait
             return $message;
         }
 
-        if(isset($parameters['%count%']))
-        {
+        if (isset($parameters['%count%'])) {
             return $this->processMessagePlural($message, $parameters);
         }
 
         return $this->processMessage($message, $parameters);
     }
 
-    protected function processMessage(string $message, ?array $parameters = NULL): string
+    protected function processMessage(string $message, ?array $parameters = null): string
     {
         return str_replace(array_keys($parameters), array_values($parameters), $message);
     }
 
-    protected function processMessagePlural(string $message, ?array $parameters = NULL): string
+    protected function processMessagePlural(string $message, ?array $parameters = null): string
     {
-        $message = explode('|',$message);
+        $message = explode('|', $message);
 
-        if(count($message) === 1)
-        {
+        if (count($message) === 1) {
             return $this->processMessage($message[0], $parameters);
         }
 
         $counter = (int) $parameters['%count%'] - 1;
 
-        if($counter !== 0)
-        {
+        if ($counter !== 0) {
             $counter = 1;
         }
 
-        return $this->processMessage($message[$counter],$parameters);
+        return $this->processMessage($message[$counter], $parameters);
     }
 }
