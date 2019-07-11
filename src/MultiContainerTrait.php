@@ -49,7 +49,7 @@ trait MultiContainerTrait
             ]);
         }
 
-        if (isset($this->{$collection}[$name])) {
+        if ($this->_hasInCollection($name, $collection) !== false) {
             throw new Exception([
                 'Object with requested name already exist in collection',
                 'name'      => $name,
