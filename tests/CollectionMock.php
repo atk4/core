@@ -4,9 +4,9 @@ namespace atk4\core\tests;
 
 use atk4\core;
 
-class MultiContainerMock
+class CollectionMock
 {
-    use core\MultiContainerTrait;
+    use core\CollectionTrait;
     use core\FactoryTrait;
 
     protected $fields = [];

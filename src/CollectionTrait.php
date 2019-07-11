@@ -11,7 +11,7 @@ namespace atk4\core;
  * to add another element with same name, it will result in
  * exception.
  */
-trait MultiContainerTrait
+trait CollectionTrait
 {
     /**
      * Use this method trait like this:.
@@ -106,6 +106,19 @@ trait MultiContainerTrait
             ]);
         }
         unset($this->{$collection}[$name]);
+    }
+
+    /**
+     * Call this on collections after cloning object. This will clone all collection
+     * elements (which are objects).
+     *
+     * @param string $collection to be cloned
+     */
+    public function _cloneCollection(string $collection)
+    {
+        foreach ($this->{$collection} as &$object) {
+            $object = clone $object;
+        }
     }
 
     /**
