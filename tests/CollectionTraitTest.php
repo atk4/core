@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @coversDefaultClass \atk4\core\ContainerTrait
  */
-class MultiContainerTraitTest extends TestCase
+class CollectionTraitTest extends TestCase
 {
     /**
      * Test constructor.
@@ -18,7 +18,7 @@ class MultiContainerTraitTest extends TestCase
     public function testBasic()
     {
         try {
-            $m = new MultiContainerMock();
+            $m = new CollectionMock();
             $m->addField('name');
 
             $this->assertNotEmpty($m->hasField('name'));
@@ -45,7 +45,7 @@ class MultiContainerTraitTest extends TestCase
     public function testBasicWithApp()
     {
         try {
-            $m = new MultiContainerMockWithApp();
+            $m = new CollectionMockWithApp();
             $m->app = new class() {
                 public $name = 'app';
                 public $max_name_length = 20;
@@ -74,7 +74,7 @@ class MultiContainerTraitTest extends TestCase
     public function testException1()
     {
         $this->expectException(core\Exception::class);
-        $m = new MultiContainerMock();
+        $m = new CollectionMock();
         $m->_addIntoCollection('foo', (object) [], ''); // empty collection name
     }
 
@@ -84,7 +84,7 @@ class MultiContainerTraitTest extends TestCase
     public function testException2()
     {
         $this->expectException(core\Exception::class);
-        $m = new MultiContainerMock();
+        $m = new CollectionMock();
         $m->_addIntoCollection('', (object) [], 'fields'); // empty object name
     }
 
@@ -94,7 +94,7 @@ class MultiContainerTraitTest extends TestCase
     public function testException3()
     {
         $this->expectException(core\Exception::class);
-        $m = new MultiContainerMock();
+        $m = new CollectionMock();
         $m->_addIntoCollection('foo', (object) [], 'fields');
         $m->_addIntoCollection('foo', (object) [], 'fields'); // already exists
     }
@@ -105,7 +105,7 @@ class MultiContainerTraitTest extends TestCase
     public function testException4()
     {
         $this->expectException(core\Exception::class);
-        $m = new MultiContainerMock();
+        $m = new CollectionMock();
         $m->_removeFromCollection('dont_exist', 'fields'); // do not exist
     }
 
@@ -115,7 +115,7 @@ class MultiContainerTraitTest extends TestCase
     public function testException5()
     {
         $this->expectException(core\Exception::class);
-        $m = new MultiContainerMock();
+        $m = new CollectionMock();
         $m->_getFromCollection('dont_exist', 'fields'); // do not exist
     }
 
@@ -125,7 +125,7 @@ class MultiContainerTraitTest extends TestCase
     public function testException6()
     {
         $this->expectException(core\Exception::class);
-        $m = new MultiContainerMock();
+        $m = new CollectionMock();
         $m->addField('test', new class() {
             use core\DIContainerTrait;
             use core\InitializerTrait;
@@ -141,7 +141,7 @@ class MultiContainerTraitTest extends TestCase
 /**
  * Adds support for apptrait and trackable.
  */
-class MultiContainerMockWithApp extends MultiContainerMock
+class CollectionMockWithApp extends CollectionMock
 {
     use core\TrackableTrait;
     use core\AppScopeTrait;
