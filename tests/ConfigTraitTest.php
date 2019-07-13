@@ -147,7 +147,7 @@ class ConfigTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
         $m = new ConfigMock();
         $m->readConfig($this->dir.'config.php', 'php');
         $excepted = $m->getConfig('arr/num/notExists');
-        $this->assertEquals(null,$excepted);
+        $this->assertEquals(null, $excepted);
     }
 }
 
