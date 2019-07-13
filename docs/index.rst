@@ -36,11 +36,11 @@ The natural solution to the problem is to create array like this::
 After that you would need to create code for adding objects into container, removing,
 verify their existence etc.
 
-:php:trait:`MultiContainerTrait` implements several handy methods which can be used
+:php:trait:`CollectionTrait` implements several handy methods which can be used
 to create necessary methods with minimum code footprint::
 
    class Form {
-       use MultiContainerTrait;
+       use CollectionTrait;
 
        public $fields = [];
 
@@ -60,7 +60,7 @@ Traits add multiple checks to prevert collisions between existing objects, call
 init() method, carry over $app and set $owner properties and calculate 'name'
 by combining it with the parent.
 
-MultiContainerTrait only supports named object - you may not omit the name, however
+CollectionTrait only supports named object - you may not omit the name, however
 a more older implementation of :php:trait:`ContainerTrait` is used primarily
 for tracking Render Tree in ATK UI where name is optional and a unique name
 is guaranteed.
