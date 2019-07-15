@@ -156,18 +156,25 @@ trait ConfigTrait
      */
     protected function &_lookupConfigElement($path, $create_elements = false)
     {
+        // trick to return false because we need reference here
+        $false = false;
+
         $path = explode('/', $path);
         $pos = &$this->config;
         foreach ($path as $el) {
+
+            // need to return if not is array
+            // before call array_key_exists and throw error
+            if (!is_array($pos)) {
+                return $false;
+            }
+
             // create empty element if it doesn't exist
             if (!array_key_exists($el, $pos) && $create_elements) {
                 $pos[$el] = [];
             }
             // if it still doesn't exist, then just return false (no error)
             if (!array_key_exists($el, $pos) && !$create_elements) {
-                // trick to return false because we need reference here
-                $false = false;
-
                 return $false;
             }
 
