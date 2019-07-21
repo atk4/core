@@ -114,7 +114,7 @@ class Exception extends \Exception
 
             $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
 
-            $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
+            $line = str_pad($call['line'] ?? '', 4, ' ', STR_PAD_LEFT);
 
             $output .= "\n\033[0;34m".$file."\033[0m";
             $output .= ":\033[0;31m".$line."\033[0m";
@@ -199,7 +199,7 @@ class Exception extends \Exception
 
             $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
 
-            $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
+            $line = str_pad($call['line'] ?? '', 4, ' ', STR_PAD_LEFT);
 
             $output .= "\n<span color='cyan'>".$file.'</span>';
             $output .= ":<span color='pink'>".$line.'</span>';
@@ -303,7 +303,7 @@ class Exception extends \Exception
 
             $file = str_pad(substr($call['file'], -40), 40, ' ', STR_PAD_LEFT);
 
-            $line = str_pad(@$call['line'], 4, ' ', STR_PAD_LEFT);
+            $line = str_pad($call['line'] ?? '', 4, ' ', STR_PAD_LEFT);
 
             if ($escape_frame) {
                 $output .= "<tr class='negative'><td>".$file;
