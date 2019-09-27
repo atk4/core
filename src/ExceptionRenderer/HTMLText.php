@@ -15,10 +15,10 @@ class HTMLText extends RendererAbstract
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->exception->getMessage(),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, <<<HTML
+        $this->output .= $this->replaceTokens($tokens, <<<'HTML'
 --[ {TITLE} ]---------------------------
 {CLASS}: <span color='pink'><b>{MESSAGE}</b></span> {CODE}
 
@@ -71,7 +71,7 @@ HTML
 
     protected function processStackTrace(): void
     {
-        $this->output .= <<<HTML
+        $this->output .= <<<'HTML'
 
 <span style="color:sandybrown">Stack Trace:</span>
 
@@ -82,33 +82,32 @@ HTML;
 
     protected function processStackTraceInternal(): void
     {
-        $text = <<<HTML
+        $text = <<<'HTML'
 <span color='cyan'>{FILE}</span>:<span color='pink'>{LINE}</span>{OBJECT} <span color='gray'>{CLASS}<span style="color:{FUNCTION_COLOR}">{FUNCTION}<span style='color:pink'>{FUNCTION_ARGS}</span></span>
 
 HTML;
 
-        $in_atk       = true;
+        $in_atk = true;
         $escape_frame = false;
         $tokens_trace = [];
-        $trace        = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count  = count($trace);
+        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
+        $trace_count = count($trace);
         foreach ($trace as $index => $call) {
-
             $call = $this->parseCallTraceObject($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
-                $in_atk       = false;
+                $in_atk = false;
             }
 
-            $tokens_trace['{FILE}']   = $call['file_formatted'];
-            $tokens_trace['{LINE}']   = $call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = $call['object'] !== null ? " - <span style='color:yellow'>" . $call['object_formatted'] . '</span>' : '';
-            $tokens_trace['{CLASS}']  = $call['class'] !== null ? $call['class'] . '::' : '';
+            $tokens_trace['{FILE}'] = $call['file_formatted'];
+            $tokens_trace['{LINE}'] = $call['line_formatted'];
+            $tokens_trace['{OBJECT}'] = $call['object'] !== null ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
+            $tokens_trace['{CLASS}'] = $call['class'] !== null ? $call['class'].'::' : '';
 
             $tokens_trace['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
-            $tokens_trace['{FUNCTION}']       = $call['function'];
-            $tokens_trace['{FUNCTION_ARGS}']  = '()';
+            $tokens_trace['{FUNCTION}'] = $call['function'];
+            $tokens_trace['{FUNCTION_ARGS}'] = '()';
 
             if ($escape_frame) {
                 $escape_frame = false;
@@ -131,7 +130,7 @@ HTML;
             return;
         }
 
-        $this->output .= PHP_EOL . 'Caused by Previous Exception:' . PHP_EOL;
+        $this->output .= PHP_EOL.'Caused by Previous Exception:'.PHP_EOL;
 
         $this->output .= (string) (new static($this->exception->getPrevious()));
     }

@@ -103,7 +103,8 @@ abstract class RendererAbstract
     {
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception) . ' Error';
+            : static::getClassShortName($this->exception).' Error';
+
         return $title;
     }
 
@@ -115,6 +116,7 @@ abstract class RendererAbstract
         $class = $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
+
         return $class;
     }
 }

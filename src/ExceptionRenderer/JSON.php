@@ -20,7 +20,6 @@ class JSON extends RendererAbstract
 
     protected function processHeader(): void
     {
-
         $title = $this->getExceptionTitle();
         $class = $this->getExceptionName();
 
