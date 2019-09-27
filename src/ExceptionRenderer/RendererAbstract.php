@@ -81,11 +81,10 @@ abstract class RendererAbstract
     public static function toSafeString($val): string
     {
         if (is_object($val) && !$val instanceof \Closure) {
-            if (isset($val->_trackableTrait)) {
-                return get_class($val).' ('.$val->name.')';
-            }
 
-            return 'Object '.get_class($val);
+            return isset($val->_trackableTrait)
+                ? get_class($val).' ('.$val->name.')'
+                : 'Object '.get_class($val);
         }
 
         return (string) json_encode($val);
@@ -101,11 +100,9 @@ abstract class RendererAbstract
      */
     protected function getExceptionTitle(): string
     {
-        $title = $this->is_atk_exception
+        return $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
             : static::getClassShortName($this->exception).' Error';
-
-        return $title;
     }
 
     /**
@@ -113,10 +110,8 @@ abstract class RendererAbstract
      */
     protected function getExceptionName(): string
     {
-        $class = $this->is_atk_exception
+        return $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
-
-        return $class;
     }
 }
