@@ -78,6 +78,7 @@ HTML;
     protected function processStackTrace(): void
     {
         $this->output .= <<<HTML
+
 <span style="color:sandybrown">Stack Trace:</span>
 
 HTML;
