@@ -95,4 +95,26 @@ abstract class RendererAbstract
     {
         return preg_replace('/.*\\\\/', '', get_class($exception));
     }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionTitle(): string
+    {
+        $title = $this->is_atk_exception
+            ? $this->exception->getCustomExceptionTitle()
+            : static::getClassShortName($this->exception) . ' Error';
+        return $title;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getExceptionName(): string
+    {
+        $class = $this->is_atk_exception
+            ? $this->exception->getCustomExceptionName()
+            : get_class($this->exception);
+        return $class;
+    }
 }

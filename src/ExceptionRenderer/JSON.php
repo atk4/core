@@ -20,13 +20,9 @@ class JSON extends RendererAbstract
 
     protected function processHeader(): void
     {
-        $title = $this->is_atk_exception
-            ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception).' Error';
 
-        $class = $this->is_atk_exception
-            ? $this->exception->getCustomExceptionName()
-            : get_class($this->exception);
+        $title = $this->getExceptionTitle();
+        $class = $this->getExceptionName();
 
         $this->json['code'] = $this->exception->getCode();
         $this->json['message'] = $this->exception->getMessage();
