@@ -206,11 +206,7 @@ class Exception extends \Exception
      */
     public function getCustomExceptionName(): string
     {
-        if ($this->custom_exception_name) {
-            return $this->custom_exception_name;
-        }
-
-        return get_class($this);
+        return $this->custom_exception_name ?? get_class($this);
     }
 
     /**
