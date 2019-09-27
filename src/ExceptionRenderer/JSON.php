@@ -22,16 +22,16 @@ class JSON extends RendererAbstract
     {
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception) . ' Error';
+            : static::getClassShortName($this->exception).' Error';
 
         $class = $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
 
-        $this->json['code']    = $this->exception->getCode();
+        $this->json['code'] = $this->exception->getCode();
         $this->json['message'] = $this->exception->getMessage();
-        $this->json['title']   = $title;
-        $this->json['class']   = $class;
+        $this->json['title'] = $title;
+        $this->json['class'] = $class;
     }
 
     protected function processParams(): void
@@ -72,7 +72,7 @@ class JSON extends RendererAbstract
 
     protected function processStackTrace(): void
     {
-        $this->output .= <<<HTML
+        $this->output .= <<<'HTML'
 <span style="color:sandybrown">Stack Trace:</span>
 
 HTML;
@@ -82,17 +82,17 @@ HTML;
 
     protected function processStackTraceInternal(): void
     {
-        $in_atk       = true;
+        $in_atk = true;
         $escape_frame = false;
         $tokens_trace = [];
-        $trace        = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count  = count($trace);
+        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
+        $trace_count = count($trace);
         foreach ($trace as $index => $call) {
             $call = $this->parseCallTraceObject($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
-                $in_atk       = false;
+                $in_atk = false;
             }
 
             if ($escape_frame) {
@@ -117,7 +117,7 @@ HTML;
         }
 
         $previous = new static($this->exception->getPrevious());
-        $text     = (string)$previous; // need to trigger processAll;
+        $text = (string) $previous; // need to trigger processAll;
 
         $this->json['previous'] = $previous->json;
     }
@@ -137,6 +137,7 @@ HTML;
     public function __toString(): string
     {
         $this->processAll();
-        return (string)json_encode($this->json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        return (string) json_encode($this->json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 }

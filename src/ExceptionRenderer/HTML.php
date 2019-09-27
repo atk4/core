@@ -21,7 +21,7 @@ class HTML extends RendererAbstract
 
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception) . ' Error';
+            : static::getClassShortName($this->exception).' Error';
 
         $class = $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
@@ -31,7 +31,7 @@ class HTML extends RendererAbstract
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->exception->getMessage(),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
         ];
 
         $this->output .= $this->replaceTokens($tokens, $text);
@@ -57,7 +57,7 @@ class HTML extends RendererAbstract
             </div>
         ';
 
-        $tokens     = [
+        $tokens = [
             '{PARAMS}' => '',
         ];
         $text_inner = '<div class="ui segment"><b>{KEY}</b>:{VAL}</div>';
@@ -97,7 +97,7 @@ class HTML extends RendererAbstract
             </div>
         ';
 
-        $tokens     = [
+        $tokens = [
             '{SOLUTIONS}' => '',
         ];
         $text_inner = '<div class="ui segment">{VAL}</div>';
@@ -136,31 +136,29 @@ class HTML extends RendererAbstract
             </tr>
         ';
 
-        $in_atk       = true;
+        $in_atk = true;
         $escape_frame = false;
         $tokens_trace = [];
-        $trace        = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count  = count($trace);
+        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
+        $trace_count = count($trace);
         foreach ($trace as $index => $call) {
-
             $call = $this->parseCallTraceObject($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
-                $in_atk       = false;
+                $in_atk = false;
             }
 
-            $tokens_trace['{INDEX}']     = $trace_count - $index;
-            $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'] . ':' . $call['line_formatted'];
-            $tokens_trace['{OBJECT}']    = $call['object'] !== false ? $call['object_formatted'] : '-';
-            $tokens_trace['{CLASS}']     = $call['class'] !== false ? $call['class'] . '::' : '';
+            $tokens_trace['{INDEX}'] = $trace_count - $index;
+            $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
+            $tokens_trace['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
+            $tokens_trace['{CLASS}'] = $call['class'] !== false ? $call['class'].'::' : '';
             $tokens_trace['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
-            $tokens_trace['{FUNCTION}']      = $call['function'];
+            $tokens_trace['{FUNCTION}'] = $call['function'];
             $tokens_trace['{FUNCTION_ARGS}'] = '()</td>';
 
             if ($escape_frame) {
-
                 $escape_frame = false;
 
                 $args = [];
@@ -174,7 +172,7 @@ class HTML extends RendererAbstract
                         </tr>
                         <tr class='negative'>
                             <td colspan=3></td>
-                            <td> (" . str_repeat(' ', 20) . implode(', ', $args) . ') </td>
+                            <td> (".str_repeat(' ', 20).implode(', ', $args).') </td>
                         </tr>
                         ';
                 }
@@ -196,6 +194,6 @@ class HTML extends RendererAbstract
             </div>
         ';
 
-        $this->output .= (string)(new HTML($this->exception->getPrevious()));
+        $this->output .= (string) (new self($this->exception->getPrevious()));
     }
 }

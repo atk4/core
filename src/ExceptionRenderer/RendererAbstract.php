@@ -17,7 +17,7 @@ abstract class RendererAbstract
 
     public function __construct($exception)
     {
-        $this->exception        = $exception;
+        $this->exception = $exception;
         $this->is_atk_exception = $exception instanceof Exception;
     }
 
@@ -57,19 +57,19 @@ abstract class RendererAbstract
     protected function parseCallTraceObject($call): array
     {
         $parsed = [
-            'line'     => $call['line'] ?? '',
-            'file'     => $call['file'] ?? '',
-            'class'    => $call['class'] ?? null,
-            'object'   => $call['object'] ?? null,
-            'function' => $call['function'] ?? null,
-            'args'     => $call['args'] ?? [],
+            'line'             => $call['line'] ?? '',
+            'file'             => $call['file'] ?? '',
+            'class'            => $call['class'] ?? null,
+            'object'           => $call['object'] ?? null,
+            'function'         => $call['function'] ?? null,
+            'args'             => $call['args'] ?? [],
             'object_formatted' => null,
-            'file_formatted' => null,
-            'line_formatted' => null,
+            'file_formatted'   => null,
+            'line_formatted'   => null,
         ];
 
-        $parsed['file_formatted']   = str_pad(substr($parsed['file'], -40), 40, ' ', STR_PAD_LEFT);
-        $parsed['line_formatted']   = str_pad($parsed['line'] ?? '', 4, ' ', STR_PAD_LEFT);
+        $parsed['file_formatted'] = str_pad(substr($parsed['file'], -40), 40, ' ', STR_PAD_LEFT);
+        $parsed['line_formatted'] = str_pad($parsed['line'] ?? '', 4, ' ', STR_PAD_LEFT);
 
         if (null !== $parsed['object']) {
             $parsed['object_formatted'] = $parsed['object']->name ?? get_class($parsed['object']);
@@ -82,13 +82,13 @@ abstract class RendererAbstract
     {
         if (is_object($val) && !$val instanceof \Closure) {
             if (isset($val->_trackableTrait)) {
-                return get_class($val) . ' (' . $val->name . ')';
+                return get_class($val).' ('.$val->name.')';
             }
 
-            return 'Object ' . get_class($val);
+            return 'Object '.get_class($val);
         }
 
-        return (string)json_encode($val);
+        return (string) json_encode($val);
     }
 
     protected static function getClassShortName(\Throwable $exception): string

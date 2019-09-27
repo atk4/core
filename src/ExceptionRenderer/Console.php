@@ -15,7 +15,7 @@ TEXT;
 
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception) . ' Error';
+            : static::getClassShortName($this->exception).' Error';
 
         $class = $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
@@ -25,7 +25,7 @@ TEXT;
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->exception->getMessage(),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
         ];
 
         $this->output .= $this->replaceTokens($tokens, $text);
@@ -46,7 +46,7 @@ TEXT;
 
         foreach ($exception->getParams() as $key => $val) {
             $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
-            $this->output .= PHP_EOL . "\e[91m" . $key . ': ' . static::toSafeString($val) . "\e[0m";
+            $this->output .= PHP_EOL."\e[91m".$key.': '.static::toSafeString($val)."\e[0m";
         }
     }
 
@@ -64,7 +64,7 @@ TEXT;
         }
 
         foreach ($exception->getSolutions() as $key => $val) {
-            $this->output.= PHP_EOL . "\e[92mSolution: ".$val."\e[0m";
+            $this->output .= PHP_EOL."\e[92mSolution: ".$val."\e[0m";
         }
     }
 
@@ -86,38 +86,36 @@ TEXT;
 
 TEXT;
 
-        $in_atk       = true;
+        $in_atk = true;
         $escape_frame = false;
         $tokens = [];
-        $trace        = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count  = count($trace);
+        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
+        $trace_count = count($trace);
         foreach ($trace as $index => $call) {
-
             $call = $this->parseCallTraceObject($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
-                $in_atk       = false;
+                $in_atk = false;
             }
 
-
-            $tokens['{FILE}']   = $call['file_formatted'];
-            $tokens['{LINE}']   = $call['line_formatted'];
-            $tokens['{OBJECT}'] = $call['object_formatted'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
-            $tokens['{CLASS}']  = $call['class'] !== null ? "\e[0;32m" . $call['class'] . "::\e[0m" : '';
+            $tokens['{FILE}'] = $call['file_formatted'];
+            $tokens['{LINE}'] = $call['line_formatted'];
+            $tokens['{OBJECT}'] = $call['object_formatted'] !== null ? " - \e[0;32m".$call['object_formatted']."\e[0m" : '';
+            $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m".$call['class']."::\e[0m" : '';
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
-            $tokens['{FUNCTION}']       = $call['function'];
-            $tokens['{FUNCTION_ARGS}']  = '()';
+            $tokens['{FUNCTION}'] = $call['function'];
+            $tokens['{FUNCTION_ARGS}'] = '()';
 
             if ($escape_frame) {
                 $escape_frame = false;
-                $args         = [];
+                $args = [];
                 foreach ($call['args'] as $arg) {
                     $args[] = static::toSafeString($arg);
                 }
 
-                $tokens['{FUNCTION_ARGS}'] = PHP_EOL . str_repeat(' ', 40) . "\e[0;31m(" . implode(', ', $args).')';
+                $tokens['{FUNCTION_ARGS}'] = PHP_EOL.str_repeat(' ', 40)."\e[0;31m(".implode(', ', $args).')';
             }
 
             $this->output .= $this->replaceTokens($tokens, $text);

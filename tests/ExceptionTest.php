@@ -117,7 +117,7 @@ class ExceptionTest extends TestCase
     public function testCustomName()
     {
         $m = new ExceptionCustomName([
-            'Exception with custom name'
+            'Exception with custom name',
         ]);
 
         $ret = $m->getColorfulText();
