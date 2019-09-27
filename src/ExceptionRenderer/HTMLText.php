@@ -8,12 +8,6 @@ class HTMLText extends RendererAbstract
 {
     protected function processHeader(): void
     {
-        $text = <<<HTML
---[ {TITLE} ]---------------------------
-{CLASS}: <span color='pink'><b>{MESSAGE}</b></span> {CODE}
-
-HTML;
-
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
             : static::getClassShortName($this->exception) . ' Error';
@@ -29,7 +23,12 @@ HTML;
             '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, $text);
+        $this->output .= $this->replaceTokens($tokens, <<<HTML
+--[ {TITLE} ]---------------------------
+{CLASS}: <span color='pink'><b>{MESSAGE}</b></span> {CODE}
+
+HTML
+);
     }
 
     protected function processParams(): void

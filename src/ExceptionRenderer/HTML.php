@@ -8,17 +8,6 @@ class HTML extends RendererAbstract
 {
     protected function processHeader(): void
     {
-        $text = '
-            <div class="ui negative icon message">
-                <i class="warning sign icon"></i>
-                <div class="content">
-                    <div class="header">{TITLE}</div>
-                    {CLASS} {CODE}
-                    {MESSAGE}
-                </div>
-            </div>
-        ';
-
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
             : static::getClassShortName($this->exception) . ' Error';
@@ -34,7 +23,16 @@ class HTML extends RendererAbstract
             '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, $text);
+        $this->output .= $this->replaceTokens($tokens, '
+            <div class="ui negative icon message">
+                <i class="warning sign icon"></i>
+                <div class="content">
+                    <div class="header">{TITLE}</div>
+                    {CLASS} {CODE}
+                    {MESSAGE}
+                </div>
+            </div>
+        ');
     }
 
     protected function processParams(): void

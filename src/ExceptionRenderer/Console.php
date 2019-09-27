@@ -8,11 +8,6 @@ class Console extends RendererAbstract
 {
     protected function processHeader(): void
     {
-        $text = <<<TEXT
-\e[1;41m--[ {TITLE} ]\e[0m
-{CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
-TEXT;
-
         $title = $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
             : static::getClassShortName($this->exception) . ' Error';
@@ -28,7 +23,11 @@ TEXT;
             '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, $text);
+        $this->output .= $this->replaceTokens($tokens, <<<TEXT
+\e[1;41m--[ {TITLE} ]\e[0m
+{CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
+TEXT
+);
     }
 
     protected function processParams(): void
