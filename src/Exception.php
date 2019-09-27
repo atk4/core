@@ -51,7 +51,7 @@ class Exception extends \Exception
         if (is_array($message)) {
             // message contain additional parameters
             $this->params = $message;
-            $message      = array_shift($this->params);
+            $message = array_shift($this->params);
         }
 
         parent::__construct($message, $code, $previous);
@@ -130,6 +130,7 @@ class Exception extends \Exception
 
     /**
      * Return exception in JSON Format.
+     *
      * @return string
      */
     public function getJSON() : string
@@ -199,7 +200,7 @@ class Exception extends \Exception
     }
 
     /**
-     * Get the custom Exception name, if defined in $custom_exception_name
+     * Get the custom Exception name, if defined in $custom_exception_name.
      *
      * @return string
      */
@@ -213,7 +214,7 @@ class Exception extends \Exception
     }
 
     /**
-     * Get the custom Exception title, if defined in $custom_exception_title
+     * Get the custom Exception title, if defined in $custom_exception_title.
      *
      * @return string
      */
