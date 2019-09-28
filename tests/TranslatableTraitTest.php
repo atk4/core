@@ -2,7 +2,6 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AppScopeTrait;
 use atk4\core\TranslatableTrait;
 use atk4\core\Translator\Translator;
 use atk4\data\Persistence;
@@ -12,7 +11,7 @@ class TranslatableTraitTest extends TestCase
 {
     public function getMock()
     {
-        return new class {
+        return new class() {
             use TranslatableTrait;
         };
     }

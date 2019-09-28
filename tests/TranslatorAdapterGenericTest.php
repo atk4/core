@@ -8,7 +8,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 {
     public function getTranslatableMock()
     {
-        return new class {
+        return new class() {
             use TranslatableTrait;
         };
     }

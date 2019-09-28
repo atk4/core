@@ -7,7 +7,7 @@ use atk4\core\Translator\Adapter\Generic;
 
 /**
  * Translator is a bridge
- * -
+ * -.
  */
 class Translator
 {
@@ -18,12 +18,14 @@ class Translator
     private $adapter;
 
     protected $default_context = 'atk';
-    protected $default_locale  = 'en';
+    protected $default_locale = 'en';
 
     /**
      * Singleton no public constructor.
      */
-    protected function __construct() {}
+    protected function __construct()
+    {
+    }
 
     /**
      * @param string $locale
@@ -52,10 +54,12 @@ class Translator
     /**
      * No clone.
      */
-    protected function __clone() {}
+    protected function __clone()
+    {
+    }
 
     /**
-     * No serialize
+     * No serialize.
      *
      * @throws Exception
      */
@@ -69,15 +73,15 @@ class Translator
      */
     public static function instance() : self
     {
-        if(null !== self::$instance) {
+        if (null !== self::$instance) {
             return self::$instance;
         }
 
-        return self::$instance = new static;
+        return self::$instance = new static();
     }
 
     /**
-     * Set the Translator Adapter. ( one time )
+     * Set the Translator Adapter. ( one time ).
      *
      * @param iTranslatorAdapter $translator
      *
@@ -91,14 +95,13 @@ class Translator
     }
 
     /**
-     * Adapter cannot be changed at runtime
+     * Adapter cannot be changed at runtime.
      *
      * @return iTranslatorAdapter
      */
     protected function getAdapter() : iTranslatorAdapter
     {
-        if(null !== $this->adapter)
-        {
+        if (null !== $this->adapter) {
             return $this->adapter;
         }
 
@@ -110,7 +113,7 @@ class Translator
      *
      * @param string      $message    The message to be translated
      * @param array       $parameters Array of parameters used to translate message
-     * @param string|null $context     The domain for the message or null to use the default
+     * @param string|null $context    The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
      * @return string The translated string

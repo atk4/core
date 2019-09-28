@@ -81,7 +81,6 @@ abstract class RendererAbstract
     public static function toSafeString($val): string
     {
         if (is_object($val) && !$val instanceof \Closure) {
-
             return isset($val->_trackableTrait)
                 ? get_class($val).' ('.$val->name.')'
                 : 'Object '.get_class($val);

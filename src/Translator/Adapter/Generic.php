@@ -17,14 +17,13 @@ class Generic implements iTranslatorAdapter
     protected $definitions = [];
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function _(string $message, array $parameters = [], ?string $context = null, ?string $locale = null): string
     {
         $definition = $this->getDefinition($message, $context, $locale);
 
-        if(null === $definition)
-        {
+        if (null === $definition) {
             return $message;
         }
 
@@ -41,15 +40,14 @@ class Generic implements iTranslatorAdapter
      * Return translated string.
      * if parameters is not empty will replace tokens.
      *
-     * @param array|string     $definition
-     * @param array|null $parameters
+     * @param array|string $definition
+     * @param array|null   $parameters
      *
      * @return string
      */
     protected function processMessage($definition, array $parameters = []): string
     {
-        foreach($parameters as $key => $val)
-        {
+        foreach ($parameters as $key => $val) {
             $definition = str_replace('{{'.$key.'}}', $val, $definition);
         }
 
@@ -58,8 +56,8 @@ class Generic implements iTranslatorAdapter
 
     /**
      * @param array|string $definition A string of definitions separated by |
-     * @param array  $parameters An array of parameters
-     * @param int    $count      Requested plural form
+     * @param array        $parameters An array of parameters
+     * @param int          $count      Requested plural form
      *
      * @return string
      */
@@ -67,8 +65,7 @@ class Generic implements iTranslatorAdapter
     {
         $definitions_forms = is_array($definition) ? $definition : explode('|', $definition);
 
-        switch($count)
-        {
+        switch ($count) {
             case 0:
                 $definition = $definitions_forms['zero'] ?? $definitions_forms[0] ?? null;
                 break;
@@ -95,17 +92,16 @@ class Generic implements iTranslatorAdapter
     protected function loadDefinitions(string $locale)
     {
         if (class_exists('\atk4\data\Locale')) {
-
             $path = Locale::getPath();
 
-            $this->readConfig($path.$locale.'/atk.php','php-inline');
+            $this->readConfig($path.$locale.'/atk.php', 'php-inline');
 
             $this->definitions = array_replace_recursive(
                 $this->definitions,
                 [
                     $locale => [
-                        'atk' => $this->config
-                    ]
+                        'atk' => $this->config,
+                    ],
                 ]);
 
             $this->config = [];
