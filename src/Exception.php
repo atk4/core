@@ -19,6 +19,8 @@ use Throwable;
  */
 class Exception extends \Exception
 {
+    use TranslatableTrait;
+
     protected $custom_exception_title = 'Critical Error';
 
     /** @var string The name of the Exception for custom naming */
@@ -53,6 +55,8 @@ class Exception extends \Exception
             $this->params = $message;
             $message = array_shift($this->params);
         }
+
+        $message = $this->_($message);
 
         parent::__construct($message, $code, $previous);
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
