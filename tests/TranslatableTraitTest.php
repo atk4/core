@@ -4,58 +4,28 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\TranslatableTrait;
+use atk4\core\Translator\Translator;
+use atk4\data\Persistence;
 use PHPUnit\Framework\TestCase;
 
 class TranslatableTraitTest extends TestCase
 {
-    /**
-     * Basic test for usage in ATK without external translator.
-     *
-     * @dataProvider getTransSimpleTest
-     */
-    public function testTranslatableTrait($excepted, $message, $parameters)
+    public function getMock()
     {
-        $mock = new TranslatableMock();
-
-        $result = $mock->_($message, $parameters);
-        $this->assertEquals($excepted, $result);
+        return new class {
+            use TranslatableTrait;
+        };
     }
 
-    /**
-     * Basic test for usage in ATK with App without external translator.
-     *
-     * @dataProvider getTransSimpleTest
-     */
-    public function testTranslatableTraitWithApp($excepted, $message, $parameters)
+    public function testTranslatableTrait()
     {
-        $app = new AppScopeMock();
-        $app->app = $app;
-        $mock = new TranslatableMock();
+        $trans = Translator::instance();
+        $trans->setDefaultLocale('ru');
 
-        $app->add($mock);
-
-        $result = $mock->_($message, $parameters);
-        $this->assertEquals($excepted, $result);
+        try {
+            Persistence::connect('error:error');
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
     }
-
-    public function getTransSimpleTest()
-    {
-        return [
-            // simple string to string
-            ['ATK4 is great!', 'ATK4 is great!', []],
-            // simple substitution
-            ['ATK4 is awesome!', 'ATK4 is %what%!', ['%what%' => 'awesome']],
-            ['There is one apple', 'There is one apple', ['%count%' => 1]], // just to cover a specific case
-            // PoFile compatible with counter format : one|more
-            ['There are 0 apples', 'There is one apple|There are %count% apples', ['%count%' => 0]],
-            ['There is one apple', 'There is one apple|There are %count% apples', ['%count%' => 1]],
-            ['There are 2 apples', 'There is one apple|There are %count% apples', ['%count%' => 2]],
-        ];
-    }
-}
-
-class TranslatableMock
-{
-    use AppScopeTrait;
-    use TranslatableTrait;
 }
