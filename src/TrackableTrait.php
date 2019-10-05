@@ -54,6 +54,10 @@ trait TrackableTrait
             $this->owner->_containerTrait
         ) {
             $this->owner->removeElement($this->short_name);
+            $this->owner = null;
+            if (isset($this->app)) {
+                $this->app = null;
+            }
         }
     }
 }
