@@ -25,7 +25,7 @@ class TranslatableTraitTest extends TestCase
         try {
             Persistence::connect('error:error');
         } catch (\Throwable $e) {
-            echo $e->getMessage();
+            $this->assertEquals('Невозможно определить постоянство драйвера из DSN',$e->getMessage());
         }
     }
 }
