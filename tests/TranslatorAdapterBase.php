@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace atk4\core\tests;
 
@@ -36,7 +36,7 @@ abstract class TranslatorAdapterBase extends TestCase
     ];
     */
 
-    public function testBase()
+    public function testBase(): void
     {
         $message = 'Field requires array for defaults';
 
@@ -44,7 +44,7 @@ abstract class TranslatorAdapterBase extends TestCase
         $this->assertEquals($message, $actual);
     }
 
-    public function testSubstitution()
+    public function testSubstitution(): void
     {
         $message = 'Unable to serialize field value on load';
 
@@ -52,7 +52,7 @@ abstract class TranslatorAdapterBase extends TestCase
         $this->assertEquals('Unable to serialize field value on load (field_name)', $actual);
     }
 
-    public function testPluralZero()
+    public function testPluralZero(): void
     {
         $message = 'Test with plural';
 
@@ -60,7 +60,7 @@ abstract class TranslatorAdapterBase extends TestCase
         $this->assertEquals('Test zero', $actual);
     }
 
-    public function testPluralBig()
+    public function testPluralBig(): void
     {
         $message = 'Test with plural';
 
@@ -68,7 +68,7 @@ abstract class TranslatorAdapterBase extends TestCase
         $this->assertEquals('Test sono 50', $actual);
     }
 
-    public function testPluralOne()
+    public function testPluralOne(): void
     {
         $message = 'Test with plural';
 
