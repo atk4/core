@@ -135,6 +135,33 @@ class ExceptionTest extends TestCase
         $ret = $m->getJSON();
         $this->assertRegExp('/CustomNameException/', $ret);
     }
+
+    /**
+     *
+     */
+    public function testExceptionFallback()
+    {
+        $m = new ExceptionTestThrowError(['test']);
+        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test',$m->getHTML());
+        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test',$m->getHTMLText());
+        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test',$m->getColorfulText());
+        $this->assertEquals(
+            json_encode(
+                [
+                    "success"  => false,
+                    "code"     => 0,
+                    "message"  => "test",
+                    "title"    => "atk4\\core\\tests\\ExceptionTestThrowError",
+                    "class"    => "atk4\\core\\tests\\ExceptionTestThrowError",
+                    "params"   => [],
+                    "solution" => [],
+                    "trace"    => [],
+                    "previous" => [],
+                ],
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+            ), $m->getJSON()
+        );
+    }
 }
 
 // @codingStandardsIgnoreStart
@@ -148,5 +175,15 @@ class TrackableMock2
 class ExceptionCustomName extends Exception
 {
     protected $custom_exception_name = 'CustomNameException';
+}
+// @codingStandardsIgnoreEnd
+
+// @codingStandardsIgnoreStart
+class ExceptionTestThrowError extends Exception
+{
+    public function getCustomExceptionName(): string
+    {
+        throw new \Exception('just to cover __string');
+    }
 }
 // @codingStandardsIgnoreEnd
