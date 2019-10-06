@@ -2,7 +2,6 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AppScopeTrait;
 use atk4\core\Exception;
 use atk4\core\TranslatableTrait;
 use atk4\core\Translator\ITranslatorAdapter;
@@ -14,7 +13,7 @@ class TranslatableTraitTest extends TestCase
 {
     public function getMock()
     {
-        return new class {
+        return new class() {
             use TranslatableTrait;
         };
     }
@@ -27,9 +26,9 @@ class TranslatableTraitTest extends TestCase
         try {
             Persistence::connect('error:error');
         } catch (\Throwable $e) {
-            /** @var $e Exception */
+            /* @var $e Exception */
             $e->translate();
-            $this->assertEquals('Невозможно определить постоянство драйвера из DSN',$e->getMessage());
+            $this->assertEquals('Невозможно определить постоянство драйвера из DSN', $e->getMessage());
         }
     }
 
@@ -41,9 +40,8 @@ class TranslatableTraitTest extends TestCase
         try {
             Persistence::connect('error:error');
         } catch (\Throwable $e) {
-            /** @var $e Exception */
-            $e->translate(new class implements ITranslatorAdapter {
-
+            /* @var $e Exception */
+            $e->translate(new class() implements ITranslatorAdapter {
                 public function _(string $message,
                     array $parameters = [],
                     ?string $domain = null,
@@ -52,7 +50,7 @@ class TranslatableTraitTest extends TestCase
                     return 'external translator';
                 }
             });
-            $this->assertEquals('external translator',$e->getMessage());
+            $this->assertEquals('external translator', $e->getMessage());
         }
     }
 }

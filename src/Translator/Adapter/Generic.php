@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\Translator\Adapter;
 
@@ -131,10 +133,10 @@ class Generic implements ITranslatorAdapter
     /**
      * Set or Replace a single definition within a domain.
      *
-     * @param string $key
-     * @param string|array  $definition
-     * @param string $locale
-     * @param string $domain
+     * @param string       $key
+     * @param string|array $definition
+     * @param string       $locale
+     * @param string       $domain
      *
      * @return $this
      */
@@ -142,8 +144,7 @@ class Generic implements ITranslatorAdapter
     {
         $this->loadDefinitionATK($locale); // need to be called before manual add
 
-        if(is_string($definition))
-        {
+        if (is_string($definition)) {
             $definition = [$definition];
         }
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -55,7 +57,7 @@ class HTML extends RendererAbstract
         ];
         $text_inner = '<div class="ui segment"><b>{KEY}</b>:{VAL}</div>';
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad((string)$key, 19, ' ', STR_PAD_LEFT);
+            $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
             $val = htmlentities(static::toSafeString($val));
 

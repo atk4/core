@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -41,7 +43,7 @@ TEXT
         }
 
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad((string)$key, 19, ' ', STR_PAD_LEFT);
+            $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $this->output .= PHP_EOL."\e[91m".$key.': '.static::toSafeString($val)."\e[0m";
         }
     }

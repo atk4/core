@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 // vim:ts=4:sw=4:et:fdm=marker
 
@@ -102,7 +104,7 @@ class Exception extends \Exception
      */
     public function getColorfulText()
     {
-        return (string)new Console($this);
+        return (string) new Console($this);
     }
 
     /**
@@ -112,7 +114,7 @@ class Exception extends \Exception
      */
     public function getHTMLText()
     {
-        return (string)new HTMLText($this);
+        return (string) new HTMLText($this);
     }
 
     /**
@@ -129,7 +131,7 @@ class Exception extends \Exception
      */
     public function getHTML()
     {
-        return (string)new HTML($this);
+        return (string) new HTML($this);
     }
 
     /**
@@ -139,7 +141,7 @@ class Exception extends \Exception
      */
     public function getJSON(): string
     {
-        return (string)new JSON($this);
+        return (string) new JSON($this);
     }
 
     /**

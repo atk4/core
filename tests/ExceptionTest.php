@@ -136,27 +136,24 @@ class ExceptionTest extends TestCase
         $this->assertRegExp('/CustomNameException/', $ret);
     }
 
-    /**
-     *
-     */
     public function testExceptionFallback()
     {
         $m = new ExceptionTestThrowError(['test']);
-        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test',$m->getHTML());
-        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test',$m->getHTMLText());
-        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test',$m->getColorfulText());
+        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test', $m->getHTML());
+        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test', $m->getHTMLText());
+        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error:test', $m->getColorfulText());
         $this->assertEquals(
             json_encode(
                 [
-                    "success"  => false,
-                    "code"     => 0,
-                    "message"  => "test",
-                    "title"    => "atk4\\core\\tests\\ExceptionTestThrowError",
-                    "class"    => "atk4\\core\\tests\\ExceptionTestThrowError",
-                    "params"   => [],
-                    "solution" => [],
-                    "trace"    => [],
-                    "previous" => [],
+                    'success'  => false,
+                    'code'     => 0,
+                    'message'  => 'test',
+                    'title'    => 'atk4\\core\\tests\\ExceptionTestThrowError',
+                    'class'    => 'atk4\\core\\tests\\ExceptionTestThrowError',
+                    'params'   => [],
+                    'solution' => [],
+                    'trace'    => [],
+                    'previous' => [],
                 ],
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
             ), $m->getJSON()
