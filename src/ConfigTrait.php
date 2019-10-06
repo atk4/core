@@ -50,6 +50,7 @@ trait ConfigTrait
             $files = [$files];
         }
 
+        $configs = [];
         foreach ($files as $file) {
             if (!is_readable($file)) {
                 throw new Exception(['Can not read config file', 'file' => $file, 'format' => $format]);
@@ -90,8 +91,10 @@ trait ConfigTrait
                 ]);
             }
 
-            $this->config = array_merge_recursive($this->config, $tempConfig);
+            $configs[] = $tempConfig;
         }
+
+        $this->config = array_merge_recursive($this->config, ...$configs);
 
         return $this;
     }
