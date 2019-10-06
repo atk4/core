@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 // vim:ts=4:sw=4:et:fdm=marker
 
@@ -9,6 +9,8 @@ use atk4\core\ExceptionRenderer\HTML;
 use atk4\core\ExceptionRenderer\HTMLText;
 use atk4\core\ExceptionRenderer\JSON;
 use atk4\core\ExceptionRenderer\RendererAbstract;
+use atk4\core\Translator\ITranslatorAdapter;
+use atk4\core\Translator\Translator;
 use Throwable;
 
 /**
@@ -47,7 +49,7 @@ class Exception extends \Exception
      */
     public function __construct(
         $message = '',
-        $code = 0,
+        ?int $code = null,
         Throwable $previous = null
     ) {
         if (is_array($message)) {
@@ -56,9 +58,7 @@ class Exception extends \Exception
             $message = array_shift($this->params);
         }
 
-        $message = $this->_($message);
-
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code ?? 0, $previous);
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
     }
 
@@ -102,7 +102,7 @@ class Exception extends \Exception
      */
     public function getColorfulText()
     {
-        return (string) new Console($this);
+        return (string)new Console($this);
     }
 
     /**
@@ -112,7 +112,7 @@ class Exception extends \Exception
      */
     public function getHTMLText()
     {
-        return (string) new HTMLText($this);
+        return (string)new HTMLText($this);
     }
 
     /**
@@ -129,7 +129,7 @@ class Exception extends \Exception
      */
     public function getHTML()
     {
-        return (string) new HTML($this);
+        return (string)new HTML($this);
     }
 
     /**
@@ -137,9 +137,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getJSON() : string
+    public function getJSON(): string
     {
-        return (string) new JSON($this);
+        return (string)new JSON($this);
     }
 
     /**
@@ -221,5 +221,15 @@ class Exception extends \Exception
     public function getCustomExceptionTitle(): string
     {
         return $this->custom_exception_title;
+    }
+
+    /**
+     * Translate the Exception using the adapter or Translator.
+     *
+     * @param ITranslatorAdapter|null $adapter
+     */
+    public function translate(?ITranslatorAdapter $adapter = null): void
+    {
+        $this->message = null !== $adapter ? $adapter->_($this->message) : Translator::instance()->_($this->message);
     }
 }

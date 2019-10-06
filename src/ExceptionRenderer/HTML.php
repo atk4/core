@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -39,7 +39,7 @@ class HTML extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getParams()) === 0) {
+        if (0 === count($exception->getParams())) {
             return;
         }
 
@@ -55,7 +55,7 @@ class HTML extends RendererAbstract
         ];
         $text_inner = '<div class="ui segment"><b>{KEY}</b>:{VAL}</div>';
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
+            $key = str_pad((string)$key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
             $val = htmlentities(static::toSafeString($val));
 
@@ -63,7 +63,8 @@ class HTML extends RendererAbstract
                 [
                     '{KEY}' => $key,
                     '{VAL}' => $val,
-                ], $text_inner
+                ],
+                $text_inner
             );
         }
 
@@ -79,7 +80,7 @@ class HTML extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getSolutions()) === 0) {
+        if (0 === count($exception->getSolutions())) {
             return;
         }
 
@@ -144,8 +145,8 @@ class HTML extends RendererAbstract
 
             $tokens_trace['{INDEX}'] = $trace_count - $index;
             $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
-            $tokens_trace['{CLASS}'] = $call['class'] !== false ? $call['class'].'::' : '';
+            $tokens_trace['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
+            $tokens_trace['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
             $tokens_trace['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens_trace['{FUNCTION}'] = $call['function'];

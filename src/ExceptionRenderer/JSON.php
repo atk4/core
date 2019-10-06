@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -38,7 +38,7 @@ class JSON extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getParams()) === 0) {
+        if (0 === count($exception->getParams())) {
             return;
         }
 
@@ -56,7 +56,7 @@ class JSON extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getSolutions()) === 0) {
+        if (0 === count($exception->getSolutions())) {
             return;
         }
 
@@ -131,7 +131,22 @@ HTML;
 
     public function __toString(): string
     {
-        $this->processAll();
+        try {
+            $this->processAll();
+
+        } catch(\Throwable $e) {
+            $this->json = [
+                'success'  => false,
+                'code'     => $this->exception->getCode(),
+                'message'  => $this->exception->getMessage(),
+                'title'    => get_class($this->exception),
+                'class'    => get_class($this->exception),
+                'params'   => [],
+                'solution' => [],
+                'trace'    => [],
+                'previous' => [],
+            ];
+        }
 
         return (string) json_encode($this->json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }

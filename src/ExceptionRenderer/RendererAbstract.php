@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -44,9 +44,13 @@ abstract class RendererAbstract
 
     public function __toString(): string
     {
-        $this->processAll();
+        try {
+            $this->processAll();
 
-        return $this->output;
+            return $this->output;
+        } catch(\Throwable $e) {
+            return get_class($this->exception) . ' [' . $this->exception->getCode() . '] Error:' . $this->exception->getMessage();
+        }
     }
 
     protected function replaceTokens(array $tokens, string $text): string
@@ -57,8 +61,8 @@ abstract class RendererAbstract
     protected function parseCallTraceObject($call): array
     {
         $parsed = [
-            'line'             => $call['line'] ?? '',
-            'file'             => $call['file'] ?? '',
+            'line'             => (string) ($call['line'] ?? ''),
+            'file'             => (string) ($call['file'] ?? ''),
             'class'            => $call['class'] ?? null,
             'object'           => $call['object'] ?? null,
             'function'         => $call['function'] ?? null,
@@ -81,7 +85,6 @@ abstract class RendererAbstract
     public static function toSafeString($val): string
     {
         if (is_object($val) && !$val instanceof \Closure) {
-
             return isset($val->_trackableTrait)
                 ? get_class($val).' ('.$val->name.')'
                 : 'Object '.get_class($val);
