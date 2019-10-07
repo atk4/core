@@ -63,7 +63,7 @@ trait TrackableTrait
             ) {
                 $this->app = null;
             }
-            
+
             // GC : remove reference to owner
             $this->owner = null;
         }
