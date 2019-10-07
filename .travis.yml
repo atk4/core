@@ -13,7 +13,6 @@ cache:
 
 before_script:
     - composer self-update
-    - composer diagnose
     - composer install --no-ansi
     - mkdir -p build/logs
 
