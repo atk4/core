@@ -108,7 +108,7 @@ class Exception extends \Exception
      */
     public function getColorfulText(): string
     {
-        return (string)new Console($this, $this->adapter);
+        return (string) new Console($this, $this->adapter);
     }
 
     /**
@@ -118,7 +118,7 @@ class Exception extends \Exception
      */
     public function getHTMLText(): string
     {
-        return (string)new HTMLText($this, $this->adapter);
+        return (string) new HTMLText($this, $this->adapter);
     }
 
     /**
@@ -135,7 +135,7 @@ class Exception extends \Exception
      */
     public function getHTML(): string
     {
-        return (string)new HTML($this, $this->adapter);
+        return (string) new HTML($this, $this->adapter);
     }
 
     /**
@@ -145,7 +145,7 @@ class Exception extends \Exception
      */
     public function getJSON(): string
     {
-        return (string)new JSON($this, $this->adapter);
+        return (string) new JSON($this, $this->adapter);
     }
 
     /**

@@ -140,6 +140,7 @@ class Translator
 
     /**
      * Get the adapter.
+     *
      * @TODO should remain private?
      *
      * @return ITranslatorAdapter
