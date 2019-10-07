@@ -10,15 +10,8 @@ use atk4\core\Translator\Translator;
 use atk4\data\Persistence;
 use PHPUnit\Framework\TestCase;
 
-class TranslatableTraitTest extends TestCase
+class LocalizationTest extends TestCase
 {
-    public function getMock()
-    {
-        return new class {
-            use TranslatableTrait;
-        };
-    }
-
     public function testTranslatableTrait()
     {
         $trans = Translator::instance();
