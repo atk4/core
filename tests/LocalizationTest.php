@@ -53,7 +53,8 @@ class LocalizationTest extends TestCase
             Persistence::connect('error:error');
         } catch (\Throwable $e) {
             /* @var $e Exception */
-            $e->translate(new class() implements ITranslatorAdapter {
+            // emulate an external translator already configured
+            $e->setTranslatorAdapter(new class() implements ITranslatorAdapter {
                 public function _(string $message,
                     array $parameters = [],
                     ?string $domain = null,
@@ -62,7 +63,10 @@ class LocalizationTest extends TestCase
                     return 'external translator';
                 }
             });
-            $this->assertEquals('external translator', $e->getMessage());
+            $this->assertRegExp('/external translator/', $e->getHTML());
+            $this->assertRegExp('/external translator/', $e->getHTMLText());
+            $this->assertRegExp('/external translator/', $e->getColorfulText());
+            $this->assertRegExp('/external translator/', $e->getJSON());
         }
     }
 }
