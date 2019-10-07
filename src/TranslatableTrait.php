@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\core;
 
-use atk4\core\Translator\ITranslatorAdapter;
 use atk4\core\Translator\Translator;
 
 /**

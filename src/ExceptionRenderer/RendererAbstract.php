@@ -133,8 +133,7 @@ abstract class RendererAbstract
     public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         return $this->adapter
-            ? $this->adapter->_($message,$parameters,$domain,$locale)
-            : Translator::instance()->_($message,$parameters,$domain,$locale)
-            ;
+            ? $this->adapter->_($message, $parameters, $domain, $locale)
+            : Translator::instance()->_($message, $parameters, $domain, $locale);
     }
 }
