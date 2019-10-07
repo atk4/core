@@ -26,9 +26,6 @@
         "symfony/contracts": "^1.1",
         "atk4/data": "dev-develop"
     },
-    "replace": {
-        "atk4/core": "self.version"
-    },
     "suggest": {
         "symfony/yaml": "~2.1|~3.0|~4.0"
     },
