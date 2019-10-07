@@ -31,6 +31,14 @@ class AppScopeTraitTest extends TestCase
 
         $c = $m->add(new Child1());
         $this->assertEquals(false, isset($c->app));
+
+        // test for GC
+        $m = new AppScopeMock();
+        $m->app = $m;
+        $m->add($child = new Child3());
+        $child->destroy();
+        $this->assertNull($child->app);
+        $this->assertNull($child->owner);
     }
 }
 
@@ -64,6 +72,12 @@ class Child1
 
 class Child2
 {
+    use TrackableTrait;
+}
+
+class Child3
+{
+    use AppScopeTrait;
     use TrackableTrait;
 }
 // @codingStandardsIgnoreEnd
