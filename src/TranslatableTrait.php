@@ -19,9 +19,6 @@ trait TranslatableTrait
      */
     public $_translatableTrait = true;
 
-    /** @var ITranslatorAdapter */
-    protected $translator;
-
     /**
      * Translates the given message.
      *

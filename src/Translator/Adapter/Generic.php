@@ -23,7 +23,7 @@ class Generic implements ITranslatorAdapter
      */
     public function _(string $message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
-        $definition = $this->getDefinition($message, $domain, $locale);
+        $definition = $this->getDefinition($message, $domain ?? 'atk', $locale ?? 'en');
 
         if (null === $definition) {
             return $message;
@@ -140,7 +140,7 @@ class Generic implements ITranslatorAdapter
      *
      * @return $this
      */
-    public function setDefinitionSingle(string $key, $definition, string $locale, string $domain = 'atk')
+    public function setDefinitionSingle(string $key, $definition, string $locale = 'en', string $domain = 'atk')
     {
         $this->loadDefinitionATK($locale); // need to be called before manual add
 

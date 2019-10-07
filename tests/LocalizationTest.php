@@ -3,6 +3,7 @@
 namespace atk4\core\tests;
 
 use atk4\core\Exception;
+use atk4\core\Translator\Adapter\Generic;
 use atk4\core\Translator\ITranslatorAdapter;
 use atk4\core\Translator\Translator;
 use atk4\data\Persistence;
@@ -19,8 +20,27 @@ class LocalizationTest extends TestCase
             Persistence::connect('error:error');
         } catch (\Throwable $e) {
             /* @var $e Exception */
-            $e->translate();
-            $this->assertEquals('Невозможно определить постоянство драйвера из DSN', $e->getMessage());
+            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getHTML());
+            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getHTMLText());
+            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getColorfulText());
+            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getJSON());
+        }
+    }
+
+    public function testTranslatableTrait2()
+    {
+        $adapter = new Generic();
+        $adapter->setDefinitionSingle('Unable to determine persistence driver from DSN','message is translated','en','atk');
+
+        try {
+            Persistence::connect('error:error');
+        } catch (\Throwable $e) {
+            /* @var $e Exception */
+            $e->setTranslatorAdapter($adapter);
+            $this->assertRegExp('/message is translated/', $e->getHTML());
+            $this->assertRegExp('/message is translated/', $e->getHTMLText());
+            $this->assertRegExp('/message is translated/', $e->getColorfulText());
+            $this->assertRegExp('/message is translated/', $e->getJSON());
         }
     }
 

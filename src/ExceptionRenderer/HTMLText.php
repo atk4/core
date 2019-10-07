@@ -16,7 +16,7 @@ class HTMLText extends RendererAbstract
         $tokens = [
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
-            '{MESSAGE}' => $this->exception->getMessage(),
+            '{MESSAGE}' => $this->_($this->exception->getMessage()),
             '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
         ];
 

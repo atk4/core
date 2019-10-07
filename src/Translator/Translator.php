@@ -140,10 +140,11 @@ class Translator
 
     /**
      * Get the adapter.
+     * @TODO should remain private?
      *
      * @return ITranslatorAdapter
      */
-    public function getAdapter(): ITranslatorAdapter
+    private function getAdapter(): ITranslatorAdapter
     {
         if (null === $this->adapter) {
             $this->adapter = new Generic();

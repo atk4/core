@@ -26,7 +26,7 @@ class JSON extends RendererAbstract
         $class = $this->getExceptionName();
 
         $this->json['code'] = $this->exception->getCode();
-        $this->json['message'] = $this->exception->getMessage();
+        $this->json['message'] = $this->_($this->exception->getMessage());
         $this->json['title'] = $title;
         $this->json['class'] = $class;
     }
@@ -136,16 +136,24 @@ HTML;
         try {
             $this->processAll();
         } catch (\Throwable $e) {
+            // fallback if error occur
             $this->json = [
                 'success'  => false,
                 'code'     => $this->exception->getCode(),
-                'message'  => $this->exception->getMessage(),
+                'message'  => 'Error during JSON renderer : ' . $this->exception->getMessage(),
+                // avoid translation
+                //'message'  => $this->_($this->exception->getMessage()),
                 'title'    => get_class($this->exception),
                 'class'    => get_class($this->exception),
                 'params'   => [],
                 'solution' => [],
                 'trace'    => [],
-                'previous' => [],
+                'previous' => [
+                    'title'    => get_class($e),
+                    'class'    => get_class($e),
+                    'code'     => $e->getCode(),
+                    'message'  => $e->getMessage(),
+                ],
             ];
         }
 

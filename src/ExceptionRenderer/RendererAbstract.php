@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
+use atk4\core\TranslatableTrait;
+use atk4\core\Translator\ITranslatorAdapter;
+use atk4\core\Translator\Translator;
 
 abstract class RendererAbstract
 {
+    use TranslatableTrait;
+
     /** @var \Throwable */
     public $exception;
 
@@ -17,8 +22,12 @@ abstract class RendererAbstract
     /** @var bool */
     public $is_atk_exception = false;
 
-    public function __construct($exception)
+    /** @var ITranslatorAdapter|null */
+    public $adapter;
+
+    public function __construct($exception, ?ITranslatorAdapter $adapter = null)
     {
+        $this->adapter = $adapter;
         $this->exception = $exception;
         $this->is_atk_exception = $exception instanceof Exception;
     }
@@ -51,7 +60,8 @@ abstract class RendererAbstract
 
             return $this->output;
         } catch (\Throwable $e) {
-            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->exception->getMessage();
+            // fallback if Exception occur in renderer
+            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->_($this->exception->getMessage());
         }
     }
 
@@ -118,5 +128,13 @@ abstract class RendererAbstract
         return $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
+    }
+
+    public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    {
+        return $this->adapter
+            ? $this->adapter->_($message,$parameters,$domain,$locale)
+            : Translator::instance()->_($message,$parameters,$domain,$locale)
+            ;
     }
 }

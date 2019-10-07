@@ -23,8 +23,10 @@ use Throwable;
  */
 class Exception extends \Exception
 {
-    use TranslatableTrait;
+    /** @var array */
+    public $params = [];
 
+    /** @var string */
     protected $custom_exception_title = 'Critical Error';
 
     /** @var string The name of the Exception for custom naming */
@@ -33,14 +35,16 @@ class Exception extends \Exception
     /**
      * Most exceptions would be a cause by some other exception, Agile
      * Core will encapsulate them and allow you to access them anyway.
+     *
+     * @var array
      */
-    private $params = [];
-
-    /** @var array */
-    public $trace2; // because PHP's use of final() sucks!
+    private $trace2; // because PHP's use of final() sucks!
 
     /** @var string[] */
     private $solutions = []; // store solutions
+
+    /** @var ITranslatorAdapter */
+    private $adapter;
 
     /**
      * Constructor.
@@ -102,9 +106,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getColorfulText()
+    public function getColorfulText(): string
     {
-        return (string) new Console($this);
+        return (string)new Console($this, $this->adapter);
     }
 
     /**
@@ -112,9 +116,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getHTMLText()
+    public function getHTMLText(): string
     {
-        return (string) new HTMLText($this);
+        return (string)new HTMLText($this, $this->adapter);
     }
 
     /**
@@ -129,9 +133,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getHTML()
+    public function getHTML(): string
     {
-        return (string) new HTML($this);
+        return (string)new HTML($this, $this->adapter);
     }
 
     /**
@@ -141,7 +145,7 @@ class Exception extends \Exception
      */
     public function getJSON(): string
     {
-        return (string) new JSON($this);
+        return (string)new JSON($this, $this->adapter);
     }
 
     /**
@@ -226,12 +230,16 @@ class Exception extends \Exception
     }
 
     /**
-     * Translate the Exception using the adapter or Translator.
+     * Set Custom Translator adapter.
      *
      * @param ITranslatorAdapter|null $adapter
+     *
+     * @return Exception
      */
-    public function translate(?ITranslatorAdapter $adapter = null): void
+    public function setTranslatorAdapter(?ITranslatorAdapter $adapter = null): self
     {
-        $this->message = null !== $adapter ? $adapter->_($this->message) : Translator::instance()->_($this->message);
+        $this->adapter = $adapter;
+
+        return $this;
     }
 }
