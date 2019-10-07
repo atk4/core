@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\Translator;
 
@@ -102,6 +104,7 @@ class Translator
      * No serialize.
      *
      * @codeCoverageIgnore
+     *
      * @throws Exception
      */
     public function __wakeup(): void

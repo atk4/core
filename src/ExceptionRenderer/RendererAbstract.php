@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -48,8 +50,8 @@ abstract class RendererAbstract
             $this->processAll();
 
             return $this->output;
-        } catch(\Throwable $e) {
-            return get_class($this->exception) . ' [' . $this->exception->getCode() . '] Error:' . $this->exception->getMessage();
+        } catch (\Throwable $e) {
+            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->exception->getMessage();
         }
     }
 

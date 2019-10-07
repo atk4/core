@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\ExceptionRenderer;
 
@@ -133,8 +135,7 @@ HTML;
     {
         try {
             $this->processAll();
-
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             $this->json = [
                 'success'  => false,
                 'code'     => $this->exception->getCode(),

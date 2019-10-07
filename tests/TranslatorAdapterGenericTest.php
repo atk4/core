@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace atk4\core\tests;
 
@@ -59,7 +61,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         $adapter = new Generic();
 
         /* just to cover method addDefinitionFromFile*/
-        $adapter->addDefinitionFromFile(Locale::getPath() . '/en/atk.php', 'en', 'atk', 'php-inline');
+        $adapter->addDefinitionFromFile(Locale::getPath().'/en/atk.php', 'en', 'atk', 'php-inline');
 
         $adapter->setDefinitionSingle('test', 'custom definition', 'en', 'other');
 
@@ -95,7 +97,6 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'default_locale' => 'en',
         ]);
 
-
         $adapter->setDefinitionSingle('test', [
             'zero'  => 'is empty',
             'one'   => 'is one',
@@ -118,7 +119,6 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'default_locale' => 'en',
         ]);
 
-
         $adapter->setDefinitionSingle('test', [
             'one'   => 'is one',
             'other' => 'is {{count}}',
@@ -139,7 +139,6 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
-
 
         $adapter->setDefinitionSingle('test', [
             'other' => 'is {{count}}',
