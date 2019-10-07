@@ -24,7 +24,7 @@
         "satooshi/php-coveralls": "^1.0",
         "codeclimate/php-test-reporter": "*",
         "symfony/contracts": "^1.1",
-        "atk4/data": "dev-develop"
+        "atk4/data": "dev-develop@dev"
     },
     "suggest": {
         "symfony/yaml": "~2.1|~3.0|~4.0"
