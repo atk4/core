@@ -136,6 +136,24 @@ class CollectionTraitTest extends TestCase
             }
         });
     }
+
+    public function testClone()
+    {
+        try {
+            $m = new CollectionMock();
+            $m->addField('name');
+            $m->addField('surname', ['CustomFieldMock']);
+
+            $c = clone $m;
+            $this->assertNotEmpty($c->hasField('name'));
+            $this->assertEquals(CustomFieldMock::class, get_class($c->hasField('surname')));
+            $this->assertTrue($c->getField('surname')->var);
+        } catch (core\Exception $e) {
+            echo $e->getColorfulText();
+
+            throw $e;
+        }
+    }
 }
 
 /**

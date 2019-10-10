@@ -160,6 +160,18 @@ class TranslatorSymfonyTraitTest extends TestCase
             ['', '||', 1],
         ];
     }
+
+    public function testException()
+    {
+        $this->expectException(\atk4\core\Exception::class);
+
+        $app = new AppScopeTranslatorSymfonyMock();
+        $mock = new TranslatableMock();
+
+        $app->add($mock);
+
+        $result = $mock->_('trigger_exception');
+    }
 }
 
 class AppScopeTranslatorSymfonyMock extends AppScopeMock

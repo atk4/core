@@ -45,6 +45,7 @@ class TranslatableTraitTest extends TestCase
             ['ATK4 is great!', 'ATK4 is great!', []],
             // simple substitution
             ['ATK4 is awesome!', 'ATK4 is %what%!', ['%what%' => 'awesome']],
+            ['There is one apple', 'There is one apple', ['%count%' => 1]], // just to cover a specific case
             // PoFile compatible with counter format : one|more
             ['There are 0 apples', 'There is one apple|There are %count% apples', ['%count%' => 0]],
             ['There is one apple', 'There is one apple|There are %count% apples', ['%count%' => 1]],
