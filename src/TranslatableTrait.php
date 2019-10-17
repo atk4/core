@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core;
+
+use atk4\core\Translator\Translator;
 
 /**
  * If a class use this trait, string can be translated calling method translate.
@@ -19,48 +23,18 @@ trait TranslatableTrait
      *
      * @param string      $message    The message to be translated
      * @param array       $parameters Array of parameters used to translate message
-     * @param string|null $domain     The domain for the message or null to use the default
+     * @param string|null $context    The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
      * @return string The translated string
      */
-    public function _($message, ?array $parameters = null, ?string $domain = null, ?string $locale = null): string
+    public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
+        // if App is present
         if (isset($this->app) && method_exists($this->app, '_')) {
             return $this->app->_($message, $parameters, $domain, $locale);
         }
 
-        // if simple case string to string
-        if (!$parameters) {
-            return $message;
-        }
-
-        if (isset($parameters['%count%'])) {
-            return $this->processMessagePlural($message, $parameters);
-        }
-
-        return $this->processMessage($message, $parameters);
-    }
-
-    protected function processMessage(string $message, ?array $parameters = null): string
-    {
-        return str_replace(array_keys($parameters), array_values($parameters), $message);
-    }
-
-    protected function processMessagePlural(string $message, ?array $parameters = null): string
-    {
-        $message = explode('|', $message);
-
-        if (count($message) === 1) {
-            return $this->processMessage($message[0], $parameters);
-        }
-
-        $counter = (int) $parameters['%count%'] - 1;
-
-        if ($counter !== 0) {
-            $counter = 1;
-        }
-
-        return $this->processMessage($message[$counter], $parameters);
+        return Translator::instance()->_($message, $parameters, $domain, $locale);
     }
 }

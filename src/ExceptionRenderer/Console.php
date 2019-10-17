@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
@@ -14,11 +16,13 @@ class Console extends RendererAbstract
         $tokens = [
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
-            '{MESSAGE}' => $this->exception->getMessage(),
+            '{MESSAGE}' => $this->_($this->exception->getMessage()),
             '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, <<<TEXT
+        $this->output .= $this->replaceTokens(
+            $tokens,
+            <<<TEXT
 \e[1;41m--[ {TITLE} ]\e[0m
 {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
 TEXT
@@ -34,12 +38,12 @@ TEXT
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getParams()) === 0) {
+        if (0 === count($exception->getParams())) {
             return;
         }
 
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
+            $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $this->output .= PHP_EOL."\e[91m".$key.': '.static::toSafeString($val)."\e[0m";
         }
     }
@@ -53,7 +57,7 @@ TEXT
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getSolutions()) === 0) {
+        if (0 === count($exception->getSolutions())) {
             return;
         }
 
@@ -95,8 +99,8 @@ TEXT;
 
             $tokens['{FILE}'] = $call['file_formatted'];
             $tokens['{LINE}'] = $call['line_formatted'];
-            $tokens['{OBJECT}'] = $call['object_formatted'] !== null ? " - \e[0;32m".$call['object_formatted']."\e[0m" : '';
-            $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m".$call['class']."::\e[0m" : '';
+            $tokens['{OBJECT}'] = null !== $call['object_formatted'] ? " - \e[0;32m".$call['object_formatted']."\e[0m" : '';
+            $tokens['{CLASS}'] = null !== $call['class'] ? "\e[0;32m".$call['class']."::\e[0m" : '';
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];

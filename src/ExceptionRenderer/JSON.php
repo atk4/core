@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
@@ -24,7 +26,7 @@ class JSON extends RendererAbstract
         $class = $this->getExceptionName();
 
         $this->json['code'] = $this->exception->getCode();
-        $this->json['message'] = $this->exception->getMessage();
+        $this->json['message'] = $this->_($this->exception->getMessage());
         $this->json['title'] = $title;
         $this->json['class'] = $class;
     }
@@ -38,7 +40,7 @@ class JSON extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getParams()) === 0) {
+        if (0 === count($exception->getParams())) {
             return;
         }
 
@@ -56,7 +58,7 @@ class JSON extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getSolutions()) === 0) {
+        if (0 === count($exception->getSolutions())) {
             return;
         }
 
@@ -131,7 +133,29 @@ HTML;
 
     public function __toString(): string
     {
-        $this->processAll();
+        try {
+            $this->processAll();
+        } catch (\Throwable $e) {
+            // fallback if error occur
+            $this->json = [
+                'success'  => false,
+                'code'     => $this->exception->getCode(),
+                'message'  => 'Error during JSON renderer : '.$this->exception->getMessage(),
+                // avoid translation
+                //'message'  => $this->_($this->exception->getMessage()),
+                'title'    => get_class($this->exception),
+                'class'    => get_class($this->exception),
+                'params'   => [],
+                'solution' => [],
+                'trace'    => [],
+                'previous' => [
+                    'title'    => get_class($e),
+                    'class'    => get_class($e),
+                    'code'     => $e->getCode(),
+                    'message'  => $e->getMessage(),
+                ],
+            ];
+        }
 
         return (string) json_encode($this->json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }

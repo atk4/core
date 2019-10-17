@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // vim:ts=4:sw=4:et:fdm=marker
 
 namespace atk4\core;
@@ -9,6 +11,8 @@ use atk4\core\ExceptionRenderer\HTML;
 use atk4\core\ExceptionRenderer\HTMLText;
 use atk4\core\ExceptionRenderer\JSON;
 use atk4\core\ExceptionRenderer\RendererAbstract;
+use atk4\core\Translator\ITranslatorAdapter;
+use atk4\core\Translator\Translator;
 use Throwable;
 
 /**
@@ -19,6 +23,10 @@ use Throwable;
  */
 class Exception extends \Exception
 {
+    /** @var array */
+    public $params = [];
+
+    /** @var string */
     protected $custom_exception_title = 'Critical Error';
 
     /** @var string The name of the Exception for custom naming */
@@ -27,14 +35,16 @@ class Exception extends \Exception
     /**
      * Most exceptions would be a cause by some other exception, Agile
      * Core will encapsulate them and allow you to access them anyway.
+     *
+     * @var array
      */
-    private $params = [];
-
-    /** @var array */
-    public $trace2; // because PHP's use of final() sucks!
+    private $trace2; // because PHP's use of final() sucks!
 
     /** @var string[] */
     private $solutions = []; // store solutions
+
+    /** @var ITranslatorAdapter */
+    private $adapter;
 
     /**
      * Constructor.
@@ -45,7 +55,7 @@ class Exception extends \Exception
      */
     public function __construct(
         $message = '',
-        $code = 0,
+        ?int $code = null,
         Throwable $previous = null
     ) {
         if (is_array($message)) {
@@ -54,7 +64,7 @@ class Exception extends \Exception
             $message = array_shift($this->params);
         }
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code ?? 0, $previous);
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
     }
 
@@ -96,9 +106,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getColorfulText()
+    public function getColorfulText(): string
     {
-        return (string) new Console($this);
+        return (string) new Console($this, $this->adapter);
     }
 
     /**
@@ -106,9 +116,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getHTMLText()
+    public function getHTMLText(): string
     {
-        return (string) new HTMLText($this);
+        return (string) new HTMLText($this, $this->adapter);
     }
 
     /**
@@ -123,9 +133,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getHTML()
+    public function getHTML(): string
     {
-        return (string) new HTML($this);
+        return (string) new HTML($this, $this->adapter);
     }
 
     /**
@@ -133,9 +143,9 @@ class Exception extends \Exception
      *
      * @return string
      */
-    public function getJSON() : string
+    public function getJSON(): string
     {
-        return (string) new JSON($this);
+        return (string) new JSON($this, $this->adapter);
     }
 
     /**
@@ -217,5 +227,19 @@ class Exception extends \Exception
     public function getCustomExceptionTitle(): string
     {
         return $this->custom_exception_title;
+    }
+
+    /**
+     * Set Custom Translator adapter.
+     *
+     * @param ITranslatorAdapter|null $adapter
+     *
+     * @return Exception
+     */
+    public function setTranslatorAdapter(?ITranslatorAdapter $adapter = null): self
+    {
+        $this->adapter = $adapter;
+
+        return $this;
     }
 }

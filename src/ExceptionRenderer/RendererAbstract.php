@@ -1,11 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
+use atk4\core\TranslatableTrait;
+use atk4\core\Translator\ITranslatorAdapter;
+use atk4\core\Translator\Translator;
 
 abstract class RendererAbstract
 {
+    use TranslatableTrait;
+
     /** @var \Throwable */
     public $exception;
 
@@ -15,8 +22,12 @@ abstract class RendererAbstract
     /** @var bool */
     public $is_atk_exception = false;
 
-    public function __construct($exception)
+    /** @var ITranslatorAdapter|null */
+    public $adapter;
+
+    public function __construct($exception, ?ITranslatorAdapter $adapter = null)
     {
+        $this->adapter = $adapter;
         $this->exception = $exception;
         $this->is_atk_exception = $exception instanceof Exception;
     }
@@ -44,9 +55,14 @@ abstract class RendererAbstract
 
     public function __toString(): string
     {
-        $this->processAll();
+        try {
+            $this->processAll();
 
-        return $this->output;
+            return $this->output;
+        } catch (\Throwable $e) {
+            // fallback if Exception occur in renderer
+            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->_($this->exception->getMessage());
+        }
     }
 
     protected function replaceTokens(array $tokens, string $text): string
@@ -57,8 +73,8 @@ abstract class RendererAbstract
     protected function parseCallTraceObject($call): array
     {
         $parsed = [
-            'line'             => $call['line'] ?? '',
-            'file'             => $call['file'] ?? '',
+            'line'             => (string) ($call['line'] ?? ''),
+            'file'             => (string) ($call['file'] ?? ''),
             'class'            => $call['class'] ?? null,
             'object'           => $call['object'] ?? null,
             'function'         => $call['function'] ?? null,
@@ -112,5 +128,12 @@ abstract class RendererAbstract
         return $this->is_atk_exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
+    }
+
+    public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    {
+        return $this->adapter
+            ? $this->adapter->_($message, $parameters, $domain, $locale)
+            : Translator::instance()->_($message, $parameters, $domain, $locale);
     }
 }

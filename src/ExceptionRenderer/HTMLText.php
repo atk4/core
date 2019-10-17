@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
@@ -14,11 +16,13 @@ class HTMLText extends RendererAbstract
         $tokens = [
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
-            '{MESSAGE}' => $this->exception->getMessage(),
+            '{MESSAGE}' => $this->_($this->exception->getMessage()),
             '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, <<<'HTML'
+        $this->output .= $this->replaceTokens(
+            $tokens,
+            <<<'HTML'
 --[ {TITLE} ]---------------------------
 {CLASS}: <span color='pink'><b>{MESSAGE}</b></span> {CODE}
 
@@ -35,14 +39,14 @@ HTML
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getParams()) === 0) {
+        if (0 === count($exception->getParams())) {
             return;
         }
 
         $this->output .= PHP_EOL.'<span style="color:cyan;">Exception params: </span>';
 
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad($key, 19, ' ', STR_PAD_LEFT);
+            $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
             $val = htmlentities(static::toSafeString($val));
 
@@ -59,7 +63,7 @@ HTML
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getSolutions()) === 0) {
+        if (0 === count($exception->getSolutions())) {
             return;
         }
 
@@ -102,8 +106,8 @@ HTML;
 
             $tokens_trace['{FILE}'] = $call['file_formatted'];
             $tokens_trace['{LINE}'] = $call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = $call['object'] !== null ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
-            $tokens_trace['{CLASS}'] = $call['class'] !== null ? $call['class'].'::' : '';
+            $tokens_trace['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
+            $tokens_trace['{CLASS}'] = null !== $call['class'] ? $call['class'].'::' : '';
 
             $tokens_trace['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
             $tokens_trace['{FUNCTION}'] = $call['function'];
