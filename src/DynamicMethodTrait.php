@@ -22,14 +22,14 @@ trait DynamicMethodTrait
      * @param string $name      Name of the method
      * @param array  $arguments Array of arguments to pass to this method
      */
-    public function __call($method, $arguments)
+    public function __call(string $method, $arguments)
     {
         if ($ret = $this->tryCall($method, $arguments)) {
             return $ret[0];
         }
 
         throw new Exception([
-            'Method is not defined for this object',
+            'Method '.$method.' is not defined for this object',
                 'class'     => get_class($this),
                 'method'    => $method,
                 'arguments' => $arguments,
