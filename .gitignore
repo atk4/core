@@ -5,3 +5,4 @@ docs/build
 .DS_Store
 #.github*
 /.idea
+.phpunit.result.cache
