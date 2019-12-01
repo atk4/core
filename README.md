@@ -2,14 +2,11 @@
 
 **Collection of PHP Traits for designing object-oriented frameworks.**
 
-[![Build Status](https://travis-ci.org/atk4/core.png?branch=develop)](https://travis-ci.org/atk4/core)
+![Build](https://github.com/atk4/core/workflows/Unit%20Testing/badge.svg)
 [![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
 [![StyleCI](https://styleci.io/repos/57242416/shield)](https://styleci.io/repos/57242416)
 [![CodeCov](https://codecov.io/gh/atk4/core/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/core)
 [![Test Coverage](https://codeclimate.com/github/atk4/core/badges/coverage.svg)](https://codeclimate.com/github/atk4/core/coverage)
-[![Issue Count](https://codeclimate.com/github/atk4/core/badges/issue_count.svg)](https://codeclimate.com/github/atk4/core)
-
-[![License](https://poser.pugx.org/atk4/core/license)](https://packagist.org/packages/atk4/core)
 [![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)](CHANGELOG.md)
 
 
