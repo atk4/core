@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       # need this to trick composer
+      - run: php --version
       - run: "git branch develop; git checkout develop"
       - name: Get Composer Cache Directory
         id: composer-cache
