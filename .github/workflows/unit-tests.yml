@@ -1,7 +1,10 @@
 name: Unit Testing
 
 on:
-  pull_request
+  pull_request: *
+  push:
+    - master
+    - develop
 
 jobs:
   unit-test:
