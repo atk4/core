@@ -39,6 +39,7 @@ jobs:
         run: vendor/bin/phpunit --configuration phpunit.xml --coverage-text
 
       - uses: codecov/codecov-action@v1
+        if: matrix.php == 'latest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: build/logs/clover.xml
