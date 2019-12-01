@@ -6,6 +6,7 @@
     "homepage": "https://github.com/atk4/core",
     "license": "MIT",
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Romans Malinovskis",
