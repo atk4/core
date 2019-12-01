@@ -11,7 +11,7 @@ jobs:
       image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
     strategy:
       matrix:
-        php: ['7.2', '7.3', 'latest']
+        php: ['7.2', 'latest']
     steps:
       - uses: actions/checkout@v1
       # need this to trick composer
