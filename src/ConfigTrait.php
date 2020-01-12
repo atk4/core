@@ -94,7 +94,7 @@ trait ConfigTrait
             $configs[] = $tempConfig;
         }
 
-        $this->config = array_merge_recursive($this->config, ...$configs);
+        $this->config = array_replace_recursive($this->config, ...$configs);
 
         return $this;
     }
