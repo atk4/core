@@ -54,7 +54,7 @@ trait CollectionTrait
                 'Object with requested name already exist in collection',
                 'name'      => $name,
                 'collection'=> $collection,
-                ]);
+            ]);
         }
         $this->{$collection}[$name] = $object;
 

@@ -30,10 +30,10 @@ trait DynamicMethodTrait
 
         throw new Exception([
             'Method '.$method.' is not defined for this object',
-                'class'     => get_class($this),
-                'method'    => $method,
-                'arguments' => $arguments,
-            ]);
+            'class'     => get_class($this),
+            'method'    => $method,
+            'arguments' => $arguments,
+        ]);
     }
 
     /**
