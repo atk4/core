@@ -116,12 +116,12 @@ class ExceptionTest extends TestCase
         $ret = $m->getJSON();
         $this->assertRegExp('/One Solution/', $ret);
     }
+
     public function testSolution2(): void
     {
-
         $m = new Exception([
             'Exception with solution',
-            'solutions' => '1st Solution'
+            'solutions' => '1st Solution',
         ]);
 
         $ret = $m->getColorfulText();
@@ -131,8 +131,8 @@ class ExceptionTest extends TestCase
             'Exception with solution',
             'solutions' => [
                 '1st Solution',
-                '2nd Solution'
-            ]
+                '2nd Solution',
+            ],
         ]);
 
         $ret = $m->getColorfulText();
