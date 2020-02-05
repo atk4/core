@@ -2,6 +2,10 @@
 
 namespace atk4\core;
 
+/**
+ * @deprecated use Utils::toReadableCaption instead
+ *
+ */
 trait ReadableCaptionTrait
 {
     /**
@@ -10,21 +14,12 @@ trait ReadableCaptionTrait
      * This will translate 'this\\ _isNASA_MyBigBull shit_123\Foo'
      * into 'This Is NASA My Big Bull Shit 123 Foo'
      *
-     * @param string $s
+     * @param string $string
      *
      * @return string
      */
-    public function readableCaption($s)
+    public function readableCaption($string)
     {
-        //$s = 'this\\ _isNASA_MyBigBull shit_123\Foo';
-
-        // first remove not allowed characters and uppercase words
-        $s = ucwords(preg_replace('/[^a-z0-9]+/i', ' ', $s));
-
-        // and then run regex to split camelcased words too
-        $s = array_map('trim', preg_split('/^[^A-Z\d]+\K|[A-Z\d][^A-Z\d]+\K/', $s, -1, PREG_SPLIT_NO_EMPTY));
-        $s = implode(' ', $s);
-
-        return $s;
+        return Utils::toReadableCaption($string);
     }
 }

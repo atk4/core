@@ -2,7 +2,11 @@
 
 namespace atk4\core;
 
+/**
+ * @deprecated use HasCollection instead.
+ *
+ */
 trait MultiContainerTrait
 {
-    use CollectionTrait;
+    use Concerns\HasCollections;
 }

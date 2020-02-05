@@ -2,26 +2,21 @@
 
 namespace atk4\core;
 
+/**
+ * @deprecated use CanThrowQuickException instead
+ *
+ */
 trait QuickExceptionTrait
 {
+    use Concerns\CanThrowQuickException;
+    
     /**
      * Check this property to see if trait is present in the object.
      *
      * @var bool
+     * 
+     * @deprecated use automated trait detection with CanCheckTraits
+     * 
      */
     public $_quickExceptionTrait = true;
-
-    /**
-     * Default exception class name.
-     *
-     * @var string
-     */
-    public $default_exception = 'atk4\core\Exception';
-
-    /**
-     * Calls exception.
-     */
-    public function exception()
-    {
-    }
 }

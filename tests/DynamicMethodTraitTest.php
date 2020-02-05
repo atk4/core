@@ -47,16 +47,6 @@ class DynamicMethodTraitTest extends TestCase
 
     public function testException3()
     {
-        // can't add method without HookTrait
-        $this->expectException(Exception::class);
-        $m = new DynamicMethodWithoutHookMock();
-        $m->addMethod('sum', function ($m, $a, $b) {
-            return $a + $b;
-        });
-    }
-
-    public function testException4()
-    {
         // can't call method without HookTrait or AppScope+Hook traits
         $this->expectException(Exception::class);
         $m = new GlobalMethodObjectMock();

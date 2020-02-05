@@ -3,33 +3,19 @@
 namespace atk4\core;
 
 /**
- * Object with this trait will have it's init() method executed
- * automatically when initialized through add().
+ * @deprecated use CanInitialize instead. 
  */
 trait InitializerTrait
 {
+    use Concerns\CanInitialize;
+    
     /**
      * Check this property to see if trait is present in the object.
      *
      * @var bool
+     * 
+     * @deprecated use automated trait detection with CanCheckTraits
+     * 
      */
     public $_initializerTrait = true;
-
-    /**
-     * To make sure you have called parent::init() properly.
-     *
-     * @var bool
-     */
-    public $_initialized = false;
-
-    /**
-     * Initialize object. Always call parent::init(). Do not call directly.
-     */
-    public function init()
-    {
-        if ($this->_initialized) {
-            throw new Exception(['Attempting to initialize twice', 'this'=>$this]);
-        }
-        $this->_initialized = true;
-    }
 }
