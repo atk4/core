@@ -43,7 +43,7 @@ trait FactoryTrait
                         throw new Exception([
                             'factory() requested to passively inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
                             'object'   => $seed,
-                            'injection'=> $injection,
+                            'injection' => $injection,
                         ]);
                     }
                 }
@@ -64,7 +64,7 @@ trait FactoryTrait
                         throw new Exception([
                             'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
                             'object'   => $seed2,
-                            'injection'=> $seed,
+                            'injection' => $seed,
                         ]);
                     }
                 }
@@ -82,7 +82,7 @@ trait FactoryTrait
         }
 
         // overwrite seed2 with seed
-        foreach ($seed as $key=>$value) {
+        foreach ($seed as $key => $value) {
             if ($value !== null) {
                 $seed2[$key] = $value;
             } elseif (is_numeric($key) && !isset($seed2[$key])) {
@@ -146,7 +146,7 @@ trait FactoryTrait
             if (!$class) {
                 throw new Exception([
                     'Class name was not specified by the seed',
-                    'seed'=> $seed,
+                    'seed' => $seed,
                 ]);
             }
 
@@ -161,7 +161,7 @@ trait FactoryTrait
                     'factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait',
                     'object'   => $object,
                     'seed'     => $seed,
-                    'injection'=> $injection,
+                    'injection' => $injection,
                 ]);
             }
         }
@@ -211,7 +211,7 @@ trait FactoryTrait
 
         // Rule 1: if starts with "." always prefix
         if ($name && $name[0] == '.' && $prefix) {
-            $name = $prefix.'\\'.substr($name, 1);
+            $name = $prefix . '\\' . substr($name, 1);
             $name = str_replace('/', '\\', $name);
 
             return $name;
@@ -225,7 +225,7 @@ trait FactoryTrait
         }
 
         if ($name && $name[0] !== '/' && $prefix) {
-            $name = $prefix.'\\'.$name;
+            $name = $prefix . '\\' . $name;
         }
 
         $name = str_replace('/', '\\', $name);

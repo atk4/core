@@ -17,7 +17,7 @@ class HTML extends RendererAbstract
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->_($this->exception->getMessage()),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
         $this->output .= $this->replaceTokens($tokens, '
@@ -146,9 +146,9 @@ class HTML extends RendererAbstract
             }
 
             $tokens_trace['{INDEX}'] = $trace_count - $index;
-            $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
+            $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'] . ':' . $call['line_formatted'];
             $tokens_trace['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
-            $tokens_trace['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
+            $tokens_trace['{CLASS}'] = false !== $call['class'] ? $call['class'] . '::' : '';
             $tokens_trace['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens_trace['{FUNCTION}'] = $call['function'];
@@ -168,7 +168,7 @@ class HTML extends RendererAbstract
                         </tr>
                         <tr class='negative'>
                             <td colspan=3></td>
-                            <td> (".str_repeat(' ', 20).implode(', ', $args).') </td>
+                            <td> (" . str_repeat(' ', 20) . implode(', ', $args) . ') </td>
                         </tr>
                         ';
                 }

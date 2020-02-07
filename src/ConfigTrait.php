@@ -113,7 +113,7 @@ trait ConfigTrait
             $paths = [$paths => $value];
         }
 
-        foreach ($paths as $path=>$value) {
+        foreach ($paths as $path => $value) {
             $pos = &$this->_lookupConfigElement($path, true);
 
             if (is_array($pos) && !empty($pos) && is_array($value)) {
@@ -165,7 +165,6 @@ trait ConfigTrait
         $path = explode('/', $path);
         $pos = &$this->config;
         foreach ($path as $el) {
-
             // need to return if not is array
             // before call array_key_exists and throw error
             if (!is_array($pos)) {

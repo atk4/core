@@ -93,19 +93,19 @@ class SeedTest extends TestCase
     {
         // key/value support
         $this->assertEquals(
-            ['a'=>1],
-            $this->mergeSeeds(['a'=>1], ['a'=>2])
+            ['a' => 1],
+            $this->mergeSeeds(['a' => 1], ['a' => 2])
         );
 
         // values has no special treatment
         $this->assertEquals(
-            ['a'=>[1]],
-            $this->mergeSeeds(['a'=>[1]], ['a'=>2])
+            ['a' => [1]],
+            $this->mergeSeeds(['a' => [1]], ['a' => 2])
         );
 
         // object is injected with values
         $o = new SeedDITestMock();
-        $oo = $this->mergeSeeds(['foo'=>1], $o);
+        $oo = $this->mergeSeeds(['foo' => 1], $o);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, 1);
@@ -113,7 +113,7 @@ class SeedTest extends TestCase
         // even it already has value
         $o = new SeedDITestMock();
         $o->foo = 5;
-        $oo = $this->mergeSeeds(['foo'=>1], $o);
+        $oo = $this->mergeSeeds(['foo' => 1], $o);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, 1);
@@ -121,7 +121,7 @@ class SeedTest extends TestCase
         // but this way existing value is respected
         $o = new SeedDITestMock();
         $o->foo = 5;
-        $oo = $this->mergeSeeds($o, ['foo'=>1]);
+        $oo = $this->mergeSeeds($o, ['foo' => 1]);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, 5);
@@ -132,7 +132,7 @@ class SeedTest extends TestCase
         // array values don't overwrite but rather merge
         $o = new ViewTestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds(['foo'=>['green']], $o);
+        $oo = $this->mergeSeeds(['foo' => ['green']], $o);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, ['red', 'green']);
@@ -140,7 +140,7 @@ class SeedTest extends TestCase
         // still we don't care if they are to the right of the object
         $o = new SeedDITestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds($o, ['foo'=>['green']]);
+        $oo = $this->mergeSeeds($o, ['foo' => ['green']]);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, ['red']);
@@ -151,7 +151,7 @@ class SeedTest extends TestCase
         // works even if more arguments present
         $o = new ViewTestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o);
+        $oo = $this->mergeSeeds(['foo' => ['xx']], ['foo' => ['green']], $o);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
@@ -159,7 +159,7 @@ class SeedTest extends TestCase
         // also without arrays
         $o = new SeedDITestMock();
         $o->foo = 'red';
-        $oo = $this->mergeSeeds(['foo'=>'xx'], ['foo'=>'green'], $o, ['foo'=>5]);
+        $oo = $this->mergeSeeds(['foo' => 'xx'], ['foo' => 'green'], $o, ['foo' => 5]);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, 'xx');
@@ -172,7 +172,7 @@ class SeedTest extends TestCase
         $o->foo = ['red'];
         $o2 = new ViewTestMock();
         $o2->foo = ['yellow'];
-        $oo = $this->mergeSeeds(['foo'=>['xx']], $o, ['foo'=>['green']], $o2, ['foo'=>['cyan']]);
+        $oo = $this->mergeSeeds(['foo' => ['xx']], $o, ['foo' => ['green']], $o2, ['foo' => ['cyan']]);
 
         $this->assertSame($o, $oo);
         $this->assertEquals(['red', 'xx'], $oo->foo);
@@ -180,20 +180,20 @@ class SeedTest extends TestCase
 
     public function testMerge6()
     {
-        $oo = $this->mergeSeeds(['4'=>'four'], ['5'=>'five']);
-        $this->assertEquals($oo, ['4'=>'four', '5'=>'five']);
+        $oo = $this->mergeSeeds(['4' => 'four'], ['5' => 'five']);
+        $this->assertEquals($oo, ['4' => 'four', '5' => 'five']);
 
-        $oo = $this->mergeSeeds(['4'=>['four']], ['5'=>['five']]);
-        $this->assertEquals($oo, ['4'=>['four'], '5'=>['five']]);
+        $oo = $this->mergeSeeds(['4' => ['four']], ['5' => ['five']]);
+        $this->assertEquals($oo, ['4' => ['four'], '5' => ['five']]);
 
-        $oo = $this->mergeSeeds(['x'=>['four']], ['x'=>['five']]);
-        $this->assertEquals($oo, ['x'=>['four']]);
+        $oo = $this->mergeSeeds(['x' => ['four']], ['x' => ['five']]);
+        $this->assertEquals($oo, ['x' => ['four']]);
 
-        $oo = $this->mergeSeeds(['4'=>['four']], ['4'=>['five']]);
-        $this->assertEquals($oo, ['4'=>['four']]);
+        $oo = $this->mergeSeeds(['4' => ['four']], ['4' => ['five']]);
+        $this->assertEquals($oo, ['4' => ['four']]);
 
-        $oo = $this->mergeSeeds(['4'=>['200']], ['4'=>['201']]);
-        $this->assertEquals($oo, ['4'=>['200']]);
+        $oo = $this->mergeSeeds(['4' => ['200']], ['4' => ['201']]);
+        $this->assertEquals($oo, ['4' => ['200']]);
     }
 
     public function testMergeFail1()
@@ -202,7 +202,7 @@ class SeedTest extends TestCase
         $this->expectException(Exception::class);
         $o = new SeedTestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds($o, ['foo'=>5]);
+        $oo = $this->mergeSeeds($o, ['foo' => 5]);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
@@ -214,7 +214,7 @@ class SeedTest extends TestCase
         $this->expectException(Exception::class);
         $o = new SeedTestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds(['foo'=>['xx']], ['foo'=>['green']], $o);
+        $oo = $this->mergeSeeds(['foo' => ['xx']], ['foo' => ['green']], $o);
 
         $this->assertSame($o, $oo);
         $this->assertEquals($oo->foo, ['red', 'green', 'xx']);
@@ -243,7 +243,7 @@ class SeedTest extends TestCase
         $s1 = $this->factory(new SeedDITestMock(), null);
         $this->assertNotEquals('bar', $s1->foo);
 
-        $s1 = $this->factory(new SeedDITestMock(), ['foo'=>'bar']);
+        $s1 = $this->factory(new SeedDITestMock(), ['foo' => 'bar']);
         $this->assertEquals('bar', $s1->foo);
     }
 
@@ -260,7 +260,7 @@ class SeedTest extends TestCase
         $s1 = $this->factory(['atk4/core/tests/SeedTestMock', null, 'world']);
         $this->assertEquals([null, 'world'], $s1->args);
 
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo' => 'bar', 'world']);
         $this->assertEquals(['hello', 'world'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
     }
@@ -282,7 +282,7 @@ class SeedTest extends TestCase
 
     public function testDefaults()
     {
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo'=>'bar', 'world'], ['more', 'baz'=>'', 'more', 'args']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'foo' => 'bar', 'world'], ['more', 'baz' => '', 'more', 'args']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['hello', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
@@ -293,22 +293,22 @@ class SeedTest extends TestCase
 
     public function testNull()
     {
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'foo'=>null, null, 'world'], ['more', 'foo'=>'bar', 'more', 'args']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'foo' => null, null, 'world'], ['more', 'foo' => 'bar', 'more', 'args']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds(['atk4/core/tests/SeedDITestMock', 'foo'=>null, null, 'world'], ['atk4/core/tests/SeedTestMock', 'more', 'foo'=>'bar', 'more', 'args']));
+        $s1 = $this->factory($this->mergeSeeds(['atk4/core/tests/SeedDITestMock', 'foo' => null, null, 'world'], ['atk4/core/tests/SeedTestMock', 'more', 'foo' => 'bar', 'more', 'args']));
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds([null, 'foo'=>null, null, 'world'], ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']));
+        $s1 = $this->factory($this->mergeSeeds([null, 'foo' => null, null, 'world'], ['atk4/core/tests/SeedDITestMock', 'more', 'foo' => 'bar', 'more', 'args']));
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'world', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds(null, ['atk4/core/tests/SeedDITestMock', 'more', 'foo'=>'bar', 'more', 'args']));
+        $s1 = $this->factory($this->mergeSeeds(null, ['atk4/core/tests/SeedDITestMock', 'more', 'foo' => 'bar', 'more', 'args']));
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['more', 'more', 'args'], $s1->args);
         $this->assertEquals('bar', $s1->foo);
@@ -319,19 +319,19 @@ class SeedTest extends TestCase
 
     public function testDefaultsObject()
     {
-        $s1 = $this->factory([new SeedDITestMock(), 'foo'=>'bar'], ['baz'=>'', 'foo'=>'default']);
+        $s1 = $this->factory([new SeedDITestMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
         $this->assertEquals('bar', $s1->foo);
         $this->assertEquals('', $s1->baz);
     }
 
     public function testMerge()
     {
-        $s1 = $this->factory([new SeedDITestMock(), 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
+        $s1 = $this->factory([new SeedDITestMock(), 'foo' => ['red']], ['foo' => ['big'], 'foo' => 'default']);
         $this->assertEquals(['red'], $s1->foo);
 
         $o = new ViewTestMock();
         $o->foo = ['xx'];
-        $s1 = $this->factory([$o, 'foo'=>['red']], ['foo'=>['big'], 'foo'=>'default']);
+        $s1 = $this->factory([$o, 'foo' => ['red']], ['foo' => ['big'], 'foo' => 'default']);
         $this->assertEquals(['xx', 'red'], $s1->foo);
 
         $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'world'], ['more', 'more', 'args']);
@@ -372,18 +372,18 @@ class SeedTest extends TestCase
     public function testMystBeDI()
     {
         $this->expectException(Exception::class);
-        $s1 = $this->factory(['atk4/core/tests/SeedTestMock', 'hello', 'foo'=>'bar', 'world']);
+        $s1 = $this->factory(['atk4/core/tests/SeedTestMock', 'hello', 'foo' => 'bar', 'world']);
     }
 
     public function testMustHaveProperty()
     {
         $this->expectException(Exception::class);
-        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'xxx'=>'bar', 'world']);
+        $s1 = $this->factory(['atk4/core/tests/SeedDITestMock', 'hello', 'xxx' => 'bar', 'world']);
     }
 
     public function testGiveClassFirst()
     {
-        $s1 = $this->factory(['foo'=>'bar'], new SeedDITestMock());
+        $s1 = $this->factory(['foo' => 'bar'], new SeedDITestMock());
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals('bar', $s1->foo);
     }
@@ -406,7 +406,7 @@ class SeedTest extends TestCase
     public function testNonDIInject()
     {
         $this->expectException(Exception::class);
-        $s1 = $this->factory('atk4/core/tests/SeedTestMock', ['foo'=>'hello']);
+        $s1 = $this->factory('atk4/core/tests/SeedTestMock', ['foo' => 'hello']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertEquals(['hello'], $s1->args);
     }
@@ -417,14 +417,15 @@ class SeedTest extends TestCase
     public function testPropertyMerging()
     {
         $s1 = $this->factory(
-            ['atk4/core/tests/SeedDITestMock', 'foo'=>['Button', 'icon'=>'red']],
-            ['foo'=> ['Label', 'red']]);
+            ['atk4/core/tests/SeedDITestMock', 'foo' => ['Button', 'icon' => 'red']],
+            ['foo' => ['Label', 'red']]
+        );
 
-        $this->assertEquals(['Button', 'icon'=>'red'], $s1->foo);
+        $this->assertEquals(['Button', 'icon' => 'red'], $s1->foo);
 
-        $s1->setDefaults(['foo'=>['Message', 'detail'=>'blah']]);
+        $s1->setDefaults(['foo' => ['Message', 'detail' => 'blah']]);
 
-        $this->assertEquals(['Message', 'detail'=>'blah'], $s1->foo);
+        $this->assertEquals(['Message', 'detail' => 'blah'], $s1->foo);
     }
 }
 
@@ -450,6 +451,7 @@ class ViewTestMock extends SeedTestMock
     use DIContainerTrait {
         setDefaults as _setDefaults;
     }
+
     public $def = null;
 
     public function setDefaults($properties = [], $passively = false)
@@ -472,6 +474,7 @@ class SeedDefTestMock extends SeedTestMock
     use DIContainerTrait {
         setDefaults as _setDefaults;
     }
+
     public $def = null;
 
     public function setDefaults($def, $passively = false)

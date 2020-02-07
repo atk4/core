@@ -46,7 +46,7 @@ class Generic implements ITranslatorAdapter
     protected function processMessage($definition, array $parameters = []): string
     {
         foreach ($parameters as $key => $val) {
-            $definition = str_replace('{{'.$key.'}}', $val, $definition);
+            $definition = str_replace('{{' . $key . '}}', $val, $definition);
         }
 
         return $definition;
@@ -98,7 +98,7 @@ class Generic implements ITranslatorAdapter
 
         if (class_exists('\atk4\data\Locale')) {
             $path = Locale::getPath();
-            $this->addDefinitionFromFile($path.$locale.'/atk.php', $locale, 'atk', 'php-inline');
+            $this->addDefinitionFromFile($path . $locale . '/atk.php', $locale, 'atk', 'php-inline');
         }
     }
 

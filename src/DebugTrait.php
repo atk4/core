@@ -51,7 +51,7 @@ trait DebugTrait
         // if debug is enabled, then log it
         if ($this->debug) {
             if (!isset($this->app) || !isset($this->app->logger) || !$this->app->logger instanceof \Psr\Log\LoggerInterface) {
-                $message = '['.get_class($this).']: '.$message;
+                $message = '[' . get_class($this) . ']: ' . $message;
             }
             $this->log(LogLevel::DEBUG, $message, $context);
         }
@@ -93,7 +93,7 @@ trait DebugTrait
         if (isset($this->app) && $this->app instanceof \atk4\core\AppUserNotificationInterface) {
             $this->app->userNotification($message, $context);
         } elseif (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
-            $this->app->log('warning', 'Could not notify user about: '.$message, $context);
+            $this->app->log('warning', 'Could not notify user about: ' . $message, $context);
         } else {
             $this->_echo_stderr("Could not notify user about: $message\n");
         }
@@ -119,7 +119,7 @@ trait DebugTrait
         $bt = [];
         foreach (debug_backtrace() as $line) {
             if (isset($line['file'])) {
-                $bt[] = $line['file'].':'.$line['line'];
+                $bt[] = $line['file'] . ':' . $line['line'];
             }
         }
 
@@ -127,7 +127,7 @@ trait DebugTrait
             $d1 = array_diff($this->_prev_bt[$trace], $bt);
             $d2 = array_diff($bt, $this->_prev_bt[$trace]);
 
-            $this->log('debug', 'Call path for '.$trace.' has diverged (was '.implode(', ', $d1).', now '.implode(', ', $d2).")\n");
+            $this->log('debug', 'Call path for ' . $trace . ' has diverged (was ' . implode(', ', $d1) . ', now ' . implode(', ', $d2) . ")\n");
         }
 
         $this->_prev_bt[$trace] = $bt;

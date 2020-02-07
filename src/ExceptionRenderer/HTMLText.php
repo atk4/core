@@ -17,7 +17,7 @@ class HTMLText extends RendererAbstract
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->_($this->exception->getMessage()),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
         $this->output .= $this->replaceTokens(
@@ -27,7 +27,7 @@ class HTMLText extends RendererAbstract
 {CLASS}: <span color='pink'><b>{MESSAGE}</b></span> {CODE}
 
 HTML
-);
+        );
     }
 
     protected function processParams(): void
@@ -43,14 +43,14 @@ HTML
             return;
         }
 
-        $this->output .= PHP_EOL.'<span style="color:cyan;">Exception params: </span>';
+        $this->output .= PHP_EOL . '<span style="color:cyan;">Exception params: </span>';
 
         foreach ($exception->getParams() as $key => $val) {
             $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
             $val = htmlentities(static::toSafeString($val));
 
-            $this->output .= PHP_EOL.' - '.$key.': '.$val;
+            $this->output .= PHP_EOL . ' - ' . $key . ': ' . $val;
         }
     }
 
@@ -67,9 +67,9 @@ HTML
             return;
         }
 
-        $this->output .= PHP_EOL.PHP_EOL.'<span style="color:lightgreen">Suggested solutions</span>:';
+        $this->output .= PHP_EOL . PHP_EOL . '<span style="color:lightgreen">Suggested solutions</span>:';
         foreach ($exception->getSolutions() as $key => $val) {
-            $this->output .= PHP_EOL.' - '.htmlentities($val);
+            $this->output .= PHP_EOL . ' - ' . htmlentities($val);
         }
     }
 
@@ -106,8 +106,8 @@ HTML;
 
             $tokens_trace['{FILE}'] = $call['file_formatted'];
             $tokens_trace['{LINE}'] = $call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
-            $tokens_trace['{CLASS}'] = null !== $call['class'] ? $call['class'].'::' : '';
+            $tokens_trace['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>" . $call['object_formatted'] . '</span>' : '';
+            $tokens_trace['{CLASS}'] = null !== $call['class'] ? $call['class'] . '::' : '';
 
             $tokens_trace['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
             $tokens_trace['{FUNCTION}'] = $call['function'];
@@ -121,7 +121,7 @@ HTML;
                     $args[] = static::toSafeString($arg);
                 }
 
-                $tokens_trace['{FUNCTION_ARGS}'] = PHP_EOL.str_repeat(' ', 40).'('.implode(', ', $args).')';
+                $tokens_trace['{FUNCTION_ARGS}'] = PHP_EOL . str_repeat(' ', 40) . '(' . implode(', ', $args) . ')';
             }
 
             $this->output .= $this->replaceTokens($tokens_trace, $text);
@@ -134,7 +134,7 @@ HTML;
             return;
         }
 
-        $this->output .= PHP_EOL.'Caused by Previous Exception:'.PHP_EOL;
+        $this->output .= PHP_EOL . 'Caused by Previous Exception:' . PHP_EOL;
 
         $this->output .= (string) (new static($this->exception->getPrevious()));
     }

@@ -61,7 +61,7 @@ abstract class RendererAbstract
             return $this->output;
         } catch (\Throwable $e) {
             // fallback if Exception occur in renderer
-            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->_($this->exception->getMessage());
+            return get_class($this->exception) . ' [' . $this->exception->getCode() . '] Error:' . $this->_($this->exception->getMessage());
         }
     }
 
@@ -98,8 +98,8 @@ abstract class RendererAbstract
     {
         if (is_object($val) && !$val instanceof \Closure) {
             return isset($val->_trackableTrait)
-                ? get_class($val).' ('.$val->name.')'
-                : 'Object '.get_class($val);
+                ? get_class($val) . ' (' . $val->name . ')'
+                : 'Object ' . get_class($val);
         }
 
         return (string) json_encode($val);
@@ -117,7 +117,7 @@ abstract class RendererAbstract
     {
         return $this->is_atk_exception
             ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception).' Error';
+            : static::getClassShortName($this->exception) . ' Error';
     }
 
     /**

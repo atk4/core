@@ -46,7 +46,7 @@ class CollectionTraitTest extends TestCase
     {
         try {
             $m = new CollectionMockWithApp();
-            $m->app = new class() {
+            $m->app = new class () {
                 public $name = 'app';
                 public $max_name_length = 20;
             };
@@ -126,9 +126,10 @@ class CollectionTraitTest extends TestCase
     {
         $this->expectException(core\Exception::class);
         $m = new CollectionMock();
-        $m->addField('test', new class() {
+        $m->addField('test', new class () {
             use core\DIContainerTrait;
             use core\InitializerTrait;
+
             public $name;
 
             public function init()

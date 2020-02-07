@@ -14,7 +14,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 {
     public function getTranslatableMock()
     {
-        return new class() {
+        return new class () {
             use TranslatableTrait;
         };
     }
@@ -61,7 +61,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         $adapter = new Generic();
 
         /* just to cover method addDefinitionFromFile*/
-        $adapter->addDefinitionFromFile(Locale::getPath().'/en/atk.php', 'en', 'atk', 'php-inline');
+        $adapter->addDefinitionFromFile(Locale::getPath() . '/en/atk.php', 'en', 'atk', 'php-inline');
 
         $adapter->setDefinitionSingle('test', 'custom definition', 'en', 'other');
 
@@ -103,9 +103,9 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is empty', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertEquals('is empty', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertEquals('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
     public function testAdapterPlurals_notFullDefinition(): void
@@ -124,9 +124,9 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertEquals('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
     public function testAdapterPlurals_Singular(): void
@@ -144,8 +144,8 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is 1', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertEquals('is 1', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 }

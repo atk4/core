@@ -38,10 +38,10 @@ trait ContainerTrait
             $this->_element_name_counts[$desired] = 1;
             $postfix = '';
         } else {
-            $postfix = '_'.(++$this->_element_name_counts[$desired]);
+            $postfix = '_' . (++$this->_element_name_counts[$desired]);
         }
 
-        return $desired.$postfix;
+        return $desired . $postfix;
     }
 
     /**
@@ -79,7 +79,7 @@ trait ContainerTrait
             if (!$obj->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'obj'=> $obj,
+                    'obj' => $obj,
                 ]);
             }
         }
@@ -116,27 +116,22 @@ trait ContainerTrait
 
         // Normalize the arguments, bring name out
         if (is_string($args)) {
-
             // passed as string
             $args = [$args];
         } elseif (!is_array($args) && !is_null($args)) {
             throw new Exception(['Second argument must be array', 'arg2' => $args]);
         } elseif (isset($args['desired_name'])) {
-
             // passed as ['desired_name'=>'foo'];
             $args[0] = $this->_unique_element($args['desired_name']);
             unset($args['desired_name']);
         } elseif (isset($args['name'])) {
-
             // passed as ['name'=>'foo'];
             $args[0] = $args['name'];
             unset($args['name']);
         } elseif (isset($element->short_name)) {
-
             // element has a name already
             $args[0] = $this->_unique_element($element->short_name);
         } else {
-
             // ask element on his preferred name, then make it unique.
             $cn = $element->getDesiredName();
             $args[0] = $this->_unique_element($cn);
@@ -155,7 +150,7 @@ trait ContainerTrait
 
         $element->owner = $this;
         $element->short_name = $args[0];
-        $element->name = $this->_shorten($this->name.'_'.$element->short_name);
+        $element->name = $this->_shorten($this->name . '_' . $element->short_name);
         $this->elements[$element->short_name] = $element;
 
         unset($args[0]);
@@ -187,7 +182,7 @@ trait ContainerTrait
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..',
-                'parent'=> $this,
+                'parent' => $this,
                 'name'  => $short_name,
             ]);
         }
@@ -211,7 +206,6 @@ trait ContainerTrait
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
-
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed
@@ -225,9 +219,9 @@ trait ContainerTrait
             $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
+                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
             }
-            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
         }
 
         return $desired;

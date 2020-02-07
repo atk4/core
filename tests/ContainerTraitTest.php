@@ -141,8 +141,8 @@ class ContainerTraitTest extends TestCase
     public function testDesiredName()
     {
         $m = new ContainerMock();
-        $m->add(new TrackableMock(), ['desired_name'=>'foo']);
-        $m->add(new TrackableMock(), ['desired_name'=>'foo']);
+        $m->add(new TrackableMock(), ['desired_name' => 'foo']);
+        $m->add(new TrackableMock(), ['desired_name' => 'foo']);
 
         $this->assertNotEmpty($m->hasElement('foo'));
     }

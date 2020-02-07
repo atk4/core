@@ -36,7 +36,7 @@ trait CollectionTrait
             throw new Exception([
                 'Name of collection is specified incorrectly',
                 'parent'    => $this,
-                'collection'=> $collection,
+                'collection' => $collection,
             ]);
         }
 
@@ -45,7 +45,7 @@ trait CollectionTrait
                 'Object must be given a name when adding into this',
                 'child'     => $object,
                 'parent'    => $this,
-                'collection'=> $collection,
+                'collection' => $collection,
             ]);
         }
 
@@ -53,7 +53,7 @@ trait CollectionTrait
             throw new Exception([
                 'Object with requested name already exist in collection',
                 'name'      => $name,
-                'collection'=> $collection,
+                'collection' => $collection,
             ]);
         }
         $this->{$collection}[$name] = $object;
@@ -68,7 +68,7 @@ trait CollectionTrait
             $object->short_name = $name;
             $object->owner = $this;
             if (isset($this->_trackableTrait)) {
-                $object->name = $this->_shorten_ml($this->name.'-'.$collection.'_'.$name);
+                $object->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
             }
         }
 
@@ -79,7 +79,7 @@ trait CollectionTrait
             if (!$object->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'object'=> $object,
+                    'object' => $object,
                 ]);
             }
         }
@@ -101,7 +101,7 @@ trait CollectionTrait
             throw new Exception([
                 'Element by this name is NOT in the collection, cannot remove',
                 'parent'    => $this,
-                'collection'=> $collection,
+                'collection' => $collection,
                 'name'      => $name,
             ]);
         }
@@ -151,7 +151,7 @@ trait CollectionTrait
         if (false === $object) {
             throw new Exception([
                 'Element is not found in collection',
-                'collection'=> $collection,
+                'collection' => $collection,
                 'name'      => $name,
                 'this'      => $this,
             ]);
@@ -175,7 +175,6 @@ trait CollectionTrait
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
-
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed
@@ -189,9 +188,9 @@ trait CollectionTrait
             $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
+                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
             }
-            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
         }
 
         return $desired;

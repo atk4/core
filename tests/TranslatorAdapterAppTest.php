@@ -10,11 +10,11 @@ class TranslatorAdapterAppTest extends TranslatorAdapterBase
 {
     public function getTranslatableMock()
     {
-        $app = new class() {
+        $app = new class () {
             use TranslatableTrait;
         };
 
-        $mock = new class() {
+        $mock = new class () {
             use TranslatableTrait;
         };
 
