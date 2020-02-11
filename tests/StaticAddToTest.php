@@ -1,6 +1,7 @@
 <?php
 
 namespace atk4\core\tests;
+
 use atk4\core\ContainerTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
@@ -9,21 +10,24 @@ use atk4\core\TrackableTrait;
 use PHPUnit\Framework\TestCase;
 
 // @codingStandardsIgnoreStart
-class StdSAT extends \StdClass {
+class StdSAT extends \StdClass
+{
     use StaticAddToTrait;
 }
 
-class ContainerFactoryMockSAT {
+class ContainerFactoryMockSAT
+{
     use ContainerTrait;
     use FactoryTrait;
 }
 
-class TrackableMockSAT {
+class TrackableMockSAT
+{
     use TrackableTrait;
     use StaticAddToTrait;
 }
-class DIMockSAT {
-
+class DIMockSAT
+{
     use FactoryTrait;
     use DIContainerTrait;
     use StaticAddToTrait;
@@ -33,8 +37,8 @@ class DIMockSAT {
     public $c;
 }
 
-class DIConstructorMockSAT {
-
+class DIConstructorMockSAT
+{
     use FactoryTrait;
     use DIContainerTrait;
     use StaticAddToTrait;
@@ -43,7 +47,7 @@ class DIConstructorMockSAT {
     public $b = 'BBB';
     public $c;
 
-    function __construct($name)
+    public function __construct($name)
     {
         $this->c = $name;
     }
@@ -81,9 +85,9 @@ class StaticAddToTest extends TestCase
         TrackableMockSAT::addTo($m, [], '123');
         TrackableMockSAT::addTo($m, [], 'false');
 
-        $this->assertEquals(true, (bool)$m->hasElement('foo bar'));
-        $this->assertEquals(true, (bool)$m->hasElement('123'));
-        $this->assertEquals(true, (bool)$m->hasElement('false'));
+        $this->assertEquals(true, (bool) $m->hasElement('foo bar'));
+        $this->assertEquals(true, (bool) $m->hasElement('123'));
+        $this->assertEquals(true, (bool) $m->hasElement('false'));
         $this->assertEquals(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
@@ -91,7 +95,6 @@ class StaticAddToTest extends TestCase
         $anon->destroy();
         $this->assertEquals(3, $m->getElementCount());
     }
-
 
     public function testFactoryMock()
     {
@@ -101,11 +104,9 @@ class StaticAddToTest extends TestCase
         $this->assertEquals('YYY', $m1->b);
         $this->assertEquals(null, $m1->c);
 
-
         $m2 = DIConstructorMockSAT::addTo($m, ['a'=>'XXX', 'John', 'b'=>'YYY']);
         $this->assertEquals('XXX', $m2->a);
         $this->assertEquals('YYY', $m2->b);
         $this->assertEquals('John', $m2->c);
     }
 }
-
