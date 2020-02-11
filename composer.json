@@ -1,42 +1,51 @@
 {
-    "name": "atk4/core",
-    "type": "library",
-    "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
-    "keywords": ["php", "framework", "trains", "agile toolkit"],
-    "homepage": "https://github.com/atk4/core",
-    "license": "MIT",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Romans Malinovskis",
-            "email": "romans@agiletoolkit.org",
-            "homepage": "https://nearly.guru/"
-        }
-    ],
-    "require": {
-        "php": ">=7.2.0",
-        "psr/log": "~1.0",
-        "ext-json": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*",
-        "symfony/yaml": "~2.1|~3.0|~4.0",
-        "satooshi/php-coveralls": "^1.0",
-        "codeclimate/php-test-reporter": "*",
-        "symfony/contracts": "^1.1",
-        "atk4/data": "dev-develop"
-    },
-    "replace": {
-        "atk4/core": "self.version"
-    },
-    "suggest": {
-        "symfony/yaml": "~2.1|~3.0|~4.0"
-    },
-    "autoload": {
-        "psr-4": {"atk4\\core\\":"src/"}
-    },
-    "autoload-dev": {
-        "psr-4": {"atk4\\core\\tests\\":"tests/"}
+  "name": "atk4/core",
+  "type": "library",
+  "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
+  "keywords": [
+    "php",
+    "framework",
+    "traits",
+    "agile toolkit"
+  ],
+  "homepage": "https://github.com/atk4/core",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Romans Malinovskis",
+      "email": "romans@agiletoolkit.org",
+      "homepage": "https://nearly.guru/"
     }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "psr/log": "~1.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "symfony/yaml": "~2.1|~3.0|~4.0",
+    "satooshi/php-coveralls": "^1.0",
+    "codeclimate/php-test-reporter": "*",
+    "symfony/contracts": "^1.1",
+    "atk4/data": "^2.0"
+  },
+  "replace": {
+    "atk4/core": "self.version"
+  },
+  "suggest": {
+    "symfony/yaml": "~2.1|~3.0|~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "atk4\\core\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "atk4\\core\\tests\\": "tests/"
+    }
+  }
 }
