@@ -134,8 +134,8 @@ and triggering callbacks::
 
     $object = new AnyClass();
 
-    $object->addHook('test', function($o){ echo 'hello'; }
-    $object->addHook('test', function($o){ echo 'world'; }
+    $object->onHook('test', function($o){ echo 'hello'; }
+    $object->onHook('test', function($o){ echo 'world'; }
 
     $object->hook('test');
     // outputs: helloworld
