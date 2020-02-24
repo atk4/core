@@ -19,7 +19,7 @@ trait DynamicMethodTrait
      * Magic method - tries to call dynamic method and throws exception if
      * this was not possible.
      *
-     * @param string $name      Name of the method
+     * @param string $name Name of the method
      * @param array  $args Array of arguments to pass to this method
      */
     public function __call(string $method, $args)
@@ -32,14 +32,14 @@ trait DynamicMethodTrait
             'Method '.$method.' is not defined for this object',
             'class'     => get_class($this),
             'method'    => $method,
-            'args' => $args,
+            'args'      => $args,
         ]);
     }
 
     /**
      * Tries to call dynamic method.
      *
-     * @param string $name      Name of the method
+     * @param string $name Name of the method
      * @param array  $args Array of arguments to pass to this method
      *
      * @return mixed|null
@@ -61,8 +61,8 @@ trait DynamicMethodTrait
     /**
      * Add new method for this object.
      *
-     * @param string|array $name     Name of new method of $this object
-     * @param callable     $fx Callback
+     * @param string|array $name Name of new method of $this object
+     * @param callable     $fx   Callback
      *
      * @return $this
      */
@@ -146,8 +146,8 @@ trait DynamicMethodTrait
      * @see self::hasMethod()
      * @see self::__call()
      *
-     * @param string   $name     Name of the method
-     * @param callable $fx Calls your function($object, $arg1, $arg2)
+     * @param string   $name Name of the method
+     * @param callable $fx   Calls your function($object, $arg1, $arg2)
      */
     public function addGlobalMethod($name, $fx)
     {
