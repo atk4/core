@@ -10,6 +10,7 @@ RUN pip install  pip==9.0.1 wheel==0.29.0 \
 ADD . .
 
 RUN make html
+#RUN cp -R images build/html/images
 
 FROM  nginx:latest
 

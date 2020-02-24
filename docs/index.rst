@@ -20,7 +20,7 @@ Object Containers
 .. figure:: images/containers.png
    :scale: 50 %
 
-Within your application / framework you can quite often have requirement for
+Within your application or framework you can quite often have requirement for
 using containers:
 
  - Form containing fields
@@ -273,3 +273,4 @@ Others
 
     debug
     session
+    docs
