@@ -32,9 +32,9 @@ trait HookTrait
      * If priority is negative, then hooks will be executed in reverse order.
      *
      * @param string          $hookSpot Hook identifier to bind on
-     * @param object|callable $fx  Will be called on hook()
-     * @param array           $args Arguments are passed to $callable
-     * @param int             $priority  Lower priority is called sooner
+     * @param object|callable $fx       Will be called on hook()
+     * @param array           $args     Arguments are passed to $callable
+     * @param int             $priority Lower priority is called sooner
      *
      * @return $this
      */
@@ -133,7 +133,7 @@ trait HookTrait
      * Execute all callables assigned to $hook_spot.
      *
      * @param string $hookSpot Hook identifier
-     * @param array  $args       Additional arguments to callables
+     * @param array  $args     Additional arguments to callables
      *
      * @throws Exception
      *
