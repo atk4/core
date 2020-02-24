@@ -19,77 +19,85 @@ trait HookTrait
     protected $hooks = [];
 
     /**
+     * @deprecated use onHook instead
+     */
+    public function addHook($hookSpot, $fx, $args = null, $priority = null)
+    {
+        return $this->onHook(...func_get_args());
+    }
+
+    /**
      * Add another callback to be executed during hook($hook_spot);.
      *
      * If priority is negative, then hooks will be executed in reverse order.
      *
-     * @param string          $hook_spot Hook identifier to bind on
-     * @param object|callable $callable  Will be called on hook()
-     * @param array           $arguments Arguments are passed to $callable
-     * @param int             $priority  Lower priority is called sooner
+     * @param string          $hookSpot Hook identifier to bind on
+     * @param object|callable $fx       Will be called on hook()
+     * @param array           $args     Arguments are passed to $callable
+     * @param int             $priority Lower priority is called sooner
      *
      * @return $this
      */
-    public function addHook($hook_spot, $callable, $arguments = null, $priority = null)
+    public function onHook($hookSpot, $fx, $args = null, $priority = null)
     {
 
         // Set defaults
-        if (is_null($arguments)) {
-            $arguments = [];
-        } elseif (!is_array($arguments)) {
-            throw new Exception(['Incorrect arguments for addHook', 'args' => $arguments]);
+        if (is_null($args)) {
+            $args = [];
+        } elseif (!is_array($args)) {
+            throw new Exception(['Incorrect arguments for onHook', 'args' => $args]);
         }
         if (is_null($priority)) {
             $priority = 5;
         }
 
         // multiple hooks can be linked
-        if (is_string($hook_spot) && strpos($hook_spot, ',') !== false) {
-            $hook_spot = explode(',', $hook_spot);
+        if (is_string($hookSpot) && strpos($hookSpot, ',') !== false) {
+            $hookSpot = explode(',', $hookSpot);
         }
-        if (is_array($hook_spot)) {
-            foreach ($hook_spot as $h) {
-                $this->addHook($h, $callable, $arguments, $priority);
+        if (is_array($hookSpot)) {
+            foreach ($hookSpot as $h) {
+                $this->onHook($h, $fx, $args, $priority);
             }
 
             return $this;
         }
 
-        // short for addHook('test', $this); to call $this->test();
-        if (!is_callable($callable)) {
-            if (is_object($callable)) {
-                if (isset($callable->_dynamicMethodTrait)) {
-                    if (!$callable->hasMethod($hook_spot)) {
+        // short for onHook('test', $this); to call $this->test();
+        if (!is_callable($fx)) {
+            if (is_object($fx)) {
+                if (isset($fx->_dynamicMethodTrait)) {
+                    if (!$fx->hasMethod($hookSpot)) {
                         throw new Exception([
-                            '$callable should be a valid callback',
-                            'callable' => $callable,
+                            '$fx should be a valid callback',
+                            'callable' => $fx,
                         ]);
                     }
                 } else {
-                    if (!method_exists($callable, $hook_spot)) {
+                    if (!method_exists($fx, $hookSpot)) {
                         throw new Exception([
                             '$callable should be a valid callback',
-                            'callable' => $callable,
+                            'callable' => $fx,
                         ]);
                     }
                 }
-                $callable = [$callable, $hook_spot];
+                $fx = [$fx, $hookSpot];
             } else {
                 throw new Exception([
-                    '$callable should be a valid callback',
-                    'callable' => $callable,
+                    '$fx should be a valid callback',
+                    'callable' => $fx,
                 ]);
             }
         }
 
-        if (!isset($this->hooks[$hook_spot][$priority])) {
-            $this->hooks[$hook_spot][$priority] = [];
+        if (!isset($this->hooks[$hookSpot][$priority])) {
+            $this->hooks[$hookSpot][$priority] = [];
         }
 
         if ($priority >= 0) {
-            $this->hooks[$hook_spot][$priority][] = [$callable, $arguments];
+            $this->hooks[$hookSpot][$priority][] = [$fx, $args];
         } else {
-            array_unshift($this->hooks[$hook_spot][$priority], [$callable, $arguments]);
+            array_unshift($this->hooks[$hookSpot][$priority], [$fx, $args]);
         }
 
         return $this;
@@ -98,13 +106,13 @@ trait HookTrait
     /**
      * Delete all hooks for specified spot.
      *
-     * @param string $hook_spot Hook identifier to bind on
+     * @param string $hookSpot Hook identifier to bind on
      *
      * @return $this
      */
-    public function removeHook($hook_spot)
+    public function removeHook($hookSpot)
     {
-        unset($this->hooks[$hook_spot]);
+        unset($this->hooks[$hookSpot]);
 
         return $this;
     }
@@ -112,33 +120,33 @@ trait HookTrait
     /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param string $hook_spot Hook identifier
+     * @param string $hookSpot Hook identifier
      *
      * @return bool
      */
-    public function hookHasCallbacks($hook_spot)
+    public function hookHasCallbacks($hookSpot)
     {
-        return isset($this->hooks[$hook_spot]);
+        return isset($this->hooks[$hookSpot]);
     }
 
     /**
      * Execute all callables assigned to $hook_spot.
      *
-     * @param string $hook_spot Hook identifier
-     * @param array  $arg       Additional arguments to callables
+     * @param string $hookSpot Hook identifier
+     * @param array  $args     Additional arguments to callables
      *
      * @throws Exception
      *
      * @return mixed Array of responses or value specified to breakHook
      */
-    public function hook($hook_spot, $arg = null)
+    public function hook($hookSpot, $args = null)
     {
-        if (is_null($arg)) {
-            $arg = [];
-        } elseif (!is_array($arg)) {
+        if (is_null($args)) {
+            $args = [];
+        } elseif (!is_array($args)) {
             throw new Exception([
                 'Arguments for callbacks should be passed as array',
-                'arg' => $arg,
+                'arg' => $args,
             ]);
         }
 
@@ -146,28 +154,28 @@ trait HookTrait
 
         try {
             if (
-                isset($this->hooks[$hook_spot])
-                && is_array($this->hooks[$hook_spot])
+                isset($this->hooks[$hookSpot])
+                && is_array($this->hooks[$hookSpot])
             ) {
-                krsort($this->hooks[$hook_spot]); // lower priority is called sooner
-                $hook_backup = $this->hooks[$hook_spot];
-                while ($_data = array_pop($this->hooks[$hook_spot])) {
+                krsort($this->hooks[$hookSpot]); // lower priority is called sooner
+                $hookBackup = $this->hooks[$hookSpot];
+                while ($_data = array_pop($this->hooks[$hookSpot])) {
                     foreach ($_data as &$data) {
                         $return[] = call_user_func_array(
                             $data[0],
                             array_merge(
                                 [$this],
-                                $arg,
+                                $args,
                                 $data[1]
                             )
                         );
                     }
                 }
 
-                $this->hooks[$hook_spot] = $hook_backup;
+                $this->hooks[$hookSpot] = $hookBackup;
             }
         } catch (HookBreaker $e) {
-            $this->hooks[$hook_spot] = $hook_backup;
+            $this->hooks[$hookSpot] = $hookBackup;
 
             return $e->return_value;
         }

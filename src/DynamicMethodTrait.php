@@ -19,12 +19,12 @@ trait DynamicMethodTrait
      * Magic method - tries to call dynamic method and throws exception if
      * this was not possible.
      *
-     * @param string $name      Name of the method
-     * @param array  $arguments Array of arguments to pass to this method
+     * @param string $name Name of the method
+     * @param array  $args Array of arguments to pass to this method
      */
-    public function __call(string $method, $arguments)
+    public function __call(string $method, $args)
     {
-        if ($ret = $this->tryCall($method, $arguments)) {
+        if ($ret = $this->tryCall($method, $args)) {
             return $ret[0];
         }
 
@@ -32,27 +32,27 @@ trait DynamicMethodTrait
             'Method '.$method.' is not defined for this object',
             'class'     => get_class($this),
             'method'    => $method,
-            'arguments' => $arguments,
+            'args'      => $args,
         ]);
     }
 
     /**
      * Tries to call dynamic method.
      *
-     * @param string $name      Name of the method
-     * @param array  $arguments Array of arguments to pass to this method
+     * @param string $name Name of the method
+     * @param array  $args Array of arguments to pass to this method
      *
      * @return mixed|null
      */
-    public function tryCall($method, $arguments)
+    public function tryCall($method, $args)
     {
-        if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$method, $arguments)) {
+        if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$method, $args)) {
             return $ret;
         }
 
         if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
-            array_unshift($arguments, $this);
-            if ($ret = $this->app->hook('global-method-'.$method, $arguments)) {
+            array_unshift($args, $this);
+            if ($ret = $this->app->hook('global-method-'.$method, $args)) {
                 return $ret;
             }
         }
@@ -61,12 +61,12 @@ trait DynamicMethodTrait
     /**
      * Add new method for this object.
      *
-     * @param string|array $name     Name of new method of $this object
-     * @param callable     $callable Callback
+     * @param string|array $name Name of new method of $this object
+     * @param callable     $fx   Callback
      *
      * @return $this
      */
-    public function addMethod($name, $callable)
+    public function addMethod($name, $fx)
     {
         // HookTrait is mandatory
         if (!isset($this->_hookTrait)) {
@@ -79,21 +79,21 @@ trait DynamicMethodTrait
 
         if (is_array($name)) {
             foreach ($name as $h) {
-                $this->addMethod($h, $callable);
+                $this->addMethod($h, $fx);
             }
 
             return $this;
         }
 
-        if (is_object($callable) && !is_callable($callable)) {
-            $callable = [$callable, $name];
+        if (is_object($fx) && !is_callable($fx)) {
+            $fx = [$fx, $name];
         }
 
         if ($this->hasMethod($name)) {
             throw new Exception(['Registering method twice', 'name' => $name]);
         }
 
-        $this->addHook('method-'.$name, $callable);
+        $this->onHook('method-'.$name, $fx);
 
         return $this;
     }
@@ -146,10 +146,10 @@ trait DynamicMethodTrait
      * @see self::hasMethod()
      * @see self::__call()
      *
-     * @param string   $name     Name of the method
-     * @param callable $callable Calls your function($object, $arg1, $arg2)
+     * @param string   $name Name of the method
+     * @param callable $fx   Calls your function($object, $arg1, $arg2)
      */
-    public function addGlobalMethod($name, $callable)
+    public function addGlobalMethod($name, $fx)
     {
         // AppScopeTrait and HookTrait for app are mandatory
         if (!isset($this->_appScopeTrait) || !isset($this->app->_hookTrait)) {
@@ -159,7 +159,7 @@ trait DynamicMethodTrait
         if ($this->hasGlobalMethod($name)) {
             throw new Exception(['Registering global method twice', 'name' => $name]);
         }
-        $this->app->addHook('global-method-'.$name, $callable);
+        $this->app->onHook('global-method-'.$name, $fx);
     }
 
     /**
