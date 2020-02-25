@@ -43,7 +43,7 @@ trait HookTrait
         $fx = $fx ?: $this;
 
         $args = (array) $args;
-        
+
         // multiple hooks can be linked
         if (is_string($spot) && strpos($spot, ',') !== false) {
             $spot = explode(',', $spot);
@@ -126,7 +126,7 @@ trait HookTrait
      * Execute all callables assigned to $hook_spot.
      *
      * @param string $spot Hook identifier
-     * @param array  $args     Additional arguments to callables
+     * @param array  $args Additional arguments to callables
      *
      * @throws Exception
      *
