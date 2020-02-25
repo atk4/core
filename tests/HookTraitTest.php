@@ -145,10 +145,16 @@ class HookTraitTest extends TestCase
     public function testHookException1()
     {
         // wrong 2nd argument
-        $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->onHook('tst', $this);
-        $m->hook('tst', 'wrong_parameter');
+
+        $result = '';        
+        $m->onHook('tst', function($m, $arg) use (&$result){
+            $result .= $arg;
+        });
+
+        $m->hook('tst', 'parameter');
+
+        $this->assertEquals('parameter', $result);
     }
 
     public function testOrder()

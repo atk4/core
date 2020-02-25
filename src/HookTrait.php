@@ -134,14 +134,7 @@ trait HookTrait
      */
     public function hook($spot, $args = null)
     {
-        if (is_null($args)) {
-            $args = [];
-        } elseif (!is_array($args)) {
-            throw new Exception([
-                'Arguments for callbacks should be passed as array',
-                'arg' => $args,
-            ]);
-        }
+        $args = (array) $args;
 
         $return = [];
 
