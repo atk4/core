@@ -11,13 +11,22 @@ use PHPUnit\Framework\TestCase;
  */
 class HookTraitTest extends TestCase
 {
-    public function testException1()
+    public function testArguments()
     {
-        $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->addHook('test1', function () use (&$result) {
+
+        $result = 0;
+        $m->onHook('test1', function () use (&$result) {
             $result++;
-        }, 'incorrect_argument');
+        }, 0);
+
+        $this->assertEquals(0, $result);
+
+        $m->onHook('test1', function () use (&$result) {
+            $result++;
+        }, 5);
+
+        $this->assertEquals(0, $result);
     }
 
     /**
@@ -28,7 +37,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $result = 0;
 
-        $m->addHook('test1', function () use (&$result) {
+        $m->onHook('test1', function () use (&$result) {
             $result++;
         });
 
@@ -44,11 +53,11 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $result = 20;
 
-        $m->addHook('test1', function () use (&$result) {
+        $m->onHook('test1', function () use (&$result) {
             $result++;
         });
 
-        $m->addHook('test1', function () use (&$result) {
+        $m->onHook('test1', function () use (&$result) {
             $result = 0;
         }, null, 1);
 
@@ -61,7 +70,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $result = 0;
 
-        $m->addHook(['test1,test2', 'test3'], function () use (&$result) {
+        $m->onHook(['test1,test2', 'test3'], function () use (&$result) {
             $result++;
         });
 
@@ -96,7 +105,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $this->result = 0;
 
-        $m->addHook('tst', $this);
+        $m->onHook('tst', $this);
         $m->hook('tst');
 
         $this->assertEquals(1, $this->result);
@@ -106,7 +115,7 @@ class HookTraitTest extends TestCase
 
         // Existing method - foo
         $m = new HookWithDynamicMethodMock();
-        $m->addHook('foo', $m);
+        $m->onHook('foo', $m);
     }
 
     public function testCallableException1()
@@ -114,7 +123,7 @@ class HookTraitTest extends TestCase
         // unknown method
         $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->addHook('unknown_method', $m);
+        $m->onHook('unknown_method', $m);
     }
 
     public function testCallableException2()
@@ -122,7 +131,7 @@ class HookTraitTest extends TestCase
         // not existing dynamic method
         $this->expectException(Exception::class);
         $m = new HookWithDynamicMethodMock();
-        $m->addHook('unknown_method', $m);
+        $m->onHook('unknown_method', $m);
     }
 
     public function testCallableException3()
@@ -130,52 +139,58 @@ class HookTraitTest extends TestCase
         // wrong 2nd argument
         $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->addHook('unknown_method', 'incorrect_param');
+        $m->onHook('unknown_method', 'incorrect_param');
     }
 
     public function testHookException1()
     {
         // wrong 2nd argument
-        $this->expectException(Exception::class);
         $m = new HookMock();
-        $m->addHook('tst', $this);
-        $m->hook('tst', 'wrong_parameter');
+
+        $result = '';
+        $m->onHook('tst', function ($m, $arg) use (&$result) {
+            $result .= $arg;
+        });
+
+        $m->hook('tst', 'parameter');
+
+        $this->assertEquals('parameter', $result);
     }
 
     public function testOrder()
     {
         $m = new HookMock();
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 3;
         }, null, -1);
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 2;
         }, null, -5);
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 1;
         }, null, -5);
 
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 4;
         }, null, 0);
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 5;
         }, null, 0);
 
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 10;
         }, null, 1000);
 
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 6;
         }, null, 2);
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 7;
         }, null, 5);
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 8;
         });
-        $m->addHook('spot', function () {
+        $m->onHook('spot', function () {
             return 9;
         }, null, 5);
 
@@ -196,8 +211,8 @@ class HookTraitTest extends TestCase
             return $a + $b;
         };
 
-        $obj->addHook('test', $mul);
-        $obj->addHook('test', $add);
+        $obj->onHook('test', $mul);
+        $obj->onHook('test', $add);
 
         $res1 = $obj->hook('test', [2, 2]);
         $this->assertEquals([4, 4], $res1);
@@ -222,10 +237,10 @@ class HookTraitTest extends TestCase
             return pow($a, $power) + pow($b, $power);
         };
 
-        $obj->addHook('test', $mul);
-        $obj->addHook('test', $add);
-        $obj->addHook('test', $pow, [2]);
-        $obj->addHook('test', $pow, [7]);
+        $obj->onHook('test', $mul);
+        $obj->onHook('test', $add);
+        $obj->onHook('test', $pow, [2]);
+        $obj->onHook('test', $pow, [7]);
 
         $res1 = $obj->hook('test', [2, 2]);
         $this->assertEquals([4, 4, 8, 256], $res1);
@@ -242,7 +257,7 @@ class HookTraitTest extends TestCase
             $a++;
         };
 
-        $obj->addHook('inc', $inc);
+        $obj->onHook('inc', $inc);
         $v = 1;
         $a = [&$v];
         $obj->hook('inc', $a);
@@ -256,7 +271,7 @@ class HookTraitTest extends TestCase
         };
 
         $v = 1;
-        $obj->addHook('inc', $inc);
+        $obj->onHook('inc', $inc);
         $obj->hook('inc', [&$v]);
 
         $this->assertEquals(2, $v);
@@ -265,7 +280,7 @@ class HookTraitTest extends TestCase
     public function testDefaultMethod()
     {
         $obj = new HookMock();
-        $obj->addHook('myCallback', $obj);
+        $obj->onHook('myCallback', $obj);
         $obj->hook('myCallback');
 
         $this->assertEquals(1, $obj->result);
@@ -283,9 +298,9 @@ class HookTraitTest extends TestCase
             }
         };
 
-        $m->addHook('inc', $inc);
-        $m->addHook('inc', $inc);
-        $m->addHook('inc', $inc);
+        $m->onHook('inc', $inc);
+        $m->onHook('inc', $inc);
+        $m->onHook('inc', $inc);
 
         $ret = $m->hook('inc');
         $this->assertEquals(2, $m->result);
@@ -302,7 +317,7 @@ class HookTraitTest extends TestCase
             throw new \atk4\core\Exception(['stuff went wrong']);
         };
 
-        $m->addHook('inc', $inc);
+        $m->onHook('inc', $inc);
         $ret = $m->hook('inc');
     }
 }
