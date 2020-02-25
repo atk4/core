@@ -18,7 +18,7 @@ jobs:
       matrix:
         php: ['7.2', '7.3', 'latest']
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       # need this to trick composer
       - run: php --version
       - run: "git branch develop; git checkout develop"
