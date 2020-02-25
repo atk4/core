@@ -38,8 +38,9 @@ trait HookTrait
      *
      * @return $this
      */
-    public function onHook($hookSpot, $fx, $args = null, $priority = null)
+    public function onHook($hookSpot, $fx = null, $args = null, $priority = null)
     {
+        $fx = $fx ?: $this;
 
         // Set defaults
         if (is_null($args)) {
