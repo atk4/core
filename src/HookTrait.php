@@ -58,29 +58,19 @@ trait HookTrait
 
         // short for onHook('test', $this); to call $this->test();
         if (!is_callable($fx)) {
+            $valid = false;
             if (is_object($fx)) {
-                if (isset($fx->_dynamicMethodTrait)) {
-                    if (!$fx->hasMethod($spot)) {
-                        throw new Exception([
-                            '$fx should be a valid callback',
-                            'fx' => $fx,
-                        ]);
-                    }
-                } else {
-                    if (!method_exists($fx, $spot)) {
-                        throw new Exception([
-                            '$fx should be a valid callback',
-                            'fx' => $fx,
-                        ]);
-                    }
-                }
-                $fx = [$fx, $spot];
-            } else {
+                $valid = (isset($fx->_dynamicMethodTrait) && $fx->hasMethod($spot)) || method_exists($fx, $spot);
+            }
+
+            if (!$valid) {
                 throw new Exception([
                     '$fx should be a valid callback',
                     'fx' => $fx,
                 ]);
             }
+
+            $fx = [$fx, $spot];
         }
 
         if (!isset($this->hooks[$spot][$priority])) {
