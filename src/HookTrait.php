@@ -38,8 +38,9 @@ trait HookTrait
      *
      * @return $this
      */
-    public function onHook($hookSpot, $fx, $args = null, $priority = null)
+    public function onHook($hookSpot, $fx = null, $args = null, $priority = null)
     {
+        $fx = $fx ?: $this;
 
         // Set defaults
         if (is_null($args)) {
@@ -70,14 +71,14 @@ trait HookTrait
                     if (!$fx->hasMethod($hookSpot)) {
                         throw new Exception([
                             '$fx should be a valid callback',
-                            'callable' => $fx,
+                            'fx' => $fx,
                         ]);
                     }
                 } else {
                     if (!method_exists($fx, $hookSpot)) {
                         throw new Exception([
-                            '$callable should be a valid callback',
-                            'callable' => $fx,
+                            '$fx should be a valid callback',
+                            'fx' => $fx,
                         ]);
                     }
                 }
@@ -85,7 +86,7 @@ trait HookTrait
             } else {
                 throw new Exception([
                     '$fx should be a valid callback',
-                    'callable' => $fx,
+                    'fx' => $fx,
                 ]);
             }
         }
