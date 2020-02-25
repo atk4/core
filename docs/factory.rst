@@ -16,14 +16,26 @@ things like:
 
 Thanks to Factory trait, the following code::
 
-   $view->add(['Button', 'A Label', 'icon'=>'book', 'action'=>My\Action::class]);
+   $button = $app->add(['Button', 'A Label', 'icon'=>'book', 'action'=>My\Action::class]);
 
 can replace this::
 
    $button = new \atk4\ui\Button('A Label');
    $button->icon = new \atk4\ui\Icon('book');
    $button->action = new My\Action();
+   $app->add($button);
 
+Type Hinting
+------------
+
+Agile Toolkit 2.1 introduces support for a new syntax. It is functionally
+identical to a short-hand code, but your IDE will properly set type for
+a `$button` to be `class Button` instead of `class View`::
+
+    $button = Button::addTo($view, ['A Label', 'icon'=>'book', 'action'=>My\Action::class]);
+
+The traditional `$view->add` will remain available, there are no plans to
+remove that syntax.
 
 Class Name Resolution
 =====================
