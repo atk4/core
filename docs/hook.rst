@@ -35,7 +35,7 @@ You can register multiple call-backs to be executed for the requested `spot`::
 Adding callbacks
 ================
 
-.. php:method:: onHook($spot, $callback, $args = null, $priority = 5)
+.. php:method:: onHook($spot, $fx = null, $args = null, $priority = 5)
 
 Register a call-back method. Calling several times will register multiple
 callbacks which will be execute in the order that they were added.
@@ -43,13 +43,15 @@ callbacks which will be execute in the order that they were added.
 Short way to describe callback method
 =====================================
 
-There is a concise syntax for using $callback by specifying object only.
+There is a concise syntax for using $fx by specifying object only.
+In case $fx is omitted then $this object is used as $fx.
+
 In this case a method with same name as $spot will be used as callback::
 
     function init() {
         parent::init();
 
-        $this->onHook('beforeUpdate', $this);
+        $this->onHook('beforeUpdate');
     }
 
     function beforeUpdate($obj){
