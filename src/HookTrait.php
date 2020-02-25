@@ -42,16 +42,11 @@ trait HookTrait
     {
         $fx = $fx ?: $this;
 
-        // Set defaults
-        if (is_null($args)) {
-            $args = [];
-        } elseif (!is_array($args)) {
-            throw new Exception(['Incorrect arguments for onHook', 'args' => $args]);
-        }
         if (is_null($priority)) {
             $priority = 5;
         }
-
+        $args = (array) $args;
+        
         // multiple hooks can be linked
         if (is_string($hookSpot) && strpos($hookSpot, ',') !== false) {
             $hookSpot = explode(',', $hookSpot);
