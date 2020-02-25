@@ -147,8 +147,8 @@ class HookTraitTest extends TestCase
         // wrong 2nd argument
         $m = new HookMock();
 
-        $result = '';        
-        $m->onHook('tst', function($m, $arg) use (&$result){
+        $result = '';
+        $m->onHook('tst', function ($m, $arg) use (&$result) {
             $result .= $arg;
         });
 
