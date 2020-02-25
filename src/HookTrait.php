@@ -33,7 +33,7 @@ trait HookTrait
      *
      * @param string          $spot     Hook identifier to bind on
      * @param object|callable $fx       Will be called on hook()
-     * @param array           $args     Arguments are passed to $callable
+     * @param array           $args     Arguments are passed to $fx
      * @param int             $priority Lower priority is called sooner
      *
      * @return $this
