@@ -60,7 +60,7 @@ trait HookTrait
         if (!is_callable($fx)) {
             $valid = false;
             if (is_object($fx)) {
-                $valid = isset($fx->_dynamicMethodTrait) && $fx->hasMethod($spot) || method_exists($fx, $spot);
+                $valid = (isset($fx->_dynamicMethodTrait) && $fx->hasMethod($spot)) || method_exists($fx, $spot);
             }
 
             if (!$valid) {
