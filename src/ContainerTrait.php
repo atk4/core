@@ -246,8 +246,12 @@ trait ContainerTrait
     public function getElement($short_name)
     {
         if (!isset($this->elements[$short_name])) {
+            $msg = 'Child element not found';
+            if ($short_name == 'name') {
+                $msg .= " (Hint: 'name' is the default for a model's \$title_field property. Did you maybe forget to set it?)";
+            }
             throw new Exception([
-                'Child element not found',
+                $msg,
                 'parent'  => $this,
                 'element' => $short_name,
             ]);
