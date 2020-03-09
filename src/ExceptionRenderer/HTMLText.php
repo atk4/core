@@ -27,7 +27,7 @@ class HTMLText extends RendererAbstract
 {CLASS}: <span color='pink'><b>{MESSAGE}</b></span> {CODE}
 
 HTML
-);
+        );
     }
 
     protected function processParams(): void
