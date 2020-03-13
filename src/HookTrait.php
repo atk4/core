@@ -21,9 +21,9 @@ trait HookTrait
     /**
      * @deprecated use onHook instead
      */
-    public function addHook($spot, $fx, $args = null, $priority = null)
+    public function addHook($spot, $fx, array $args = null, int $priority = null)
     {
-        return $this->onHook(...func_get_args());
+        return $this->onHook($spot, $fx, $args, $priority ?? 0);
     }
 
     /**
@@ -31,18 +31,16 @@ trait HookTrait
      *
      * If priority is negative, then hooks will be executed in reverse order.
      *
-     * @param string          $spot     Hook identifier to bind on
-     * @param object|callable $fx       Will be called on hook()
-     * @param array           $args     Arguments are passed to $fx
-     * @param int             $priority Lower priority is called sooner
+     * @param string|string[]      $spot     Hook identifier to bind on
+     * @param object|callable|null $fx       Will be called on hook()
+     * @param array                $args     Arguments are passed to $fx
+     * @param int                  $priority Lower priority is called sooner
      *
-     * @return $this
+     * @return static
      */
-    public function onHook($spot, $fx = null, $args = [], $priority = 5)
+    public function onHook($spot, $fx = null, array $args = [], int $priority = 5)
     {
         $fx = $fx ?: $this;
-
-        $args = (array) $args;
 
         // multiple hooks can be linked
         if (is_string($spot) && strpos($spot, ',') !== false) {
@@ -55,6 +53,7 @@ trait HookTrait
 
             return $this;
         }
+        $spot = (string) $spot;
 
         // short for onHook('test', $this); to call $this->test();
         if (!is_callable($fx)) {
@@ -87,15 +86,20 @@ trait HookTrait
     }
 
     /**
-     * Delete all hooks for specified spot.
+     * Delete all hooks for specified spot and priority.
      *
-     * @param string $spot Hook identifier to bind on
+     * @param string   $spot     Hook identifier to bind on
+     * @param int|null $priority Filter specific priority, null for all
      *
-     * @return $this
+     * @return static
      */
-    public function removeHook($spot)
+    public function removeHook(string $spot, int $priority = null)
     {
-        unset($this->hooks[$spot]);
+        if ($priority !== null) {
+            unset($this->hooks[$spot][$priority]);
+        } else {
+            unset($this->hooks[$spot]);
+        }
 
         return $this;
     }
@@ -103,13 +107,16 @@ trait HookTrait
     /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param string $spot Hook identifier
-     *
-     * @return bool
+     * @param string   $spot     Hook identifier
+     * @param int|null $priority Filter specific priority, null for all
      */
-    public function hookHasCallbacks($spot)
+    public function hookHasCallbacks(string $spot, int $priority = null): bool
     {
-        return isset($this->hooks[$spot]);
+        if (!isset($this->hooks[$spot])) {
+            return false;
+        }
+
+        return $priority !== null ? isset($this->hooks[$spot][$priority]) : true;
     }
 
     /**
@@ -122,17 +129,12 @@ trait HookTrait
      *
      * @return mixed Array of responses or value specified to breakHook
      */
-    public function hook($spot, $args = null)
+    public function hook(string $spot, array $args = [])
     {
-        $args = (array) $args;
-
         $return = [];
 
-        try {
-            if (
-                isset($this->hooks[$spot])
-                && is_array($this->hooks[$spot])
-            ) {
+        if (isset($this->hooks[$spot])) {
+            try {
                 krsort($this->hooks[$spot]); // lower priority is called sooner
                 $hookBackup = $this->hooks[$spot];
                 while ($_data = array_pop($this->hooks[$spot])) {
@@ -147,13 +149,14 @@ trait HookTrait
                         );
                     }
                 }
+                unset($data);
 
                 $this->hooks[$spot] = $hookBackup;
-            }
-        } catch (HookBreaker $e) {
-            $this->hooks[$spot] = $hookBackup;
+            } catch (HookBreaker $e) {
+                $this->hooks[$spot] = $hookBackup;
 
-            return $e->return_value;
+                return $e->return_value;
+            }
         }
 
         return $return;
