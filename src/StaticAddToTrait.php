@@ -27,8 +27,13 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], ...$add_arguments)
+    public static function addTo(object $parent, $seed = [], array $add_arguments = [])
     {
+        if (!is_array($seed) && !is_scalar($seed)) { // allow seed other than array but prevent bad usage
+            throw (new Exception(['Seed must be an array or a scalar']))
+                    ->addMoreInfo('seed_type', gettype($seed));
+        }
+
         if (isset($parent->_factoryTrait)) {
             $object = $parent->factory(static::class, $seed);
         } elseif (is_array($seed)) {
