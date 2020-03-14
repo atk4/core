@@ -30,7 +30,7 @@ trait StaticAddToTrait
     public static function addTo(object $parent, $seed = [], array $add_args = [])
     {
         if (func_num_args() > 3) { // prevent bad usage
-            throw new Error(['Too many method arguments']);
+            throw new \Error(['Too many method arguments']);
         }
 
         if (is_object($seed)) {
@@ -52,8 +52,16 @@ trait StaticAddToTrait
             }
         }
 
+        return static::_addTo_add($parent, $object, false, $add_args);
+    }
+
+    /**
+     * @return static
+     */
+    private static function _addTo_add(object $parent, object $object, bool $unsafe, array $add_args)
+    {
         // check if object is instance of this class
-        if (!($object instanceof static)) {
+        if (!$unsafe && !($object instanceof static)) {
             throw (new Exception(['Seed class name is not a subtype of the current class']))
                     ->addMoreInfo('seed_class', get_class($object))
                     ->addMoreInfo('current_class', static::class);
@@ -75,9 +83,33 @@ trait StaticAddToTrait
     public static function addToWithClassName(object $parent, $seed = [], array $add_args = [])
     {
         if (func_num_args() > 3) { // prevent bad usage
-            throw new Error(['Too many method arguments']);
+            throw new \Error(['Too many method arguments']);
         }
 
+        return static::_addToWithClassName($parent, $seed, false, $add_args);
+    }
+
+    /**
+     * Same as addToWithClassName(), but the new object is not checked if it is instance of this class.
+     *
+     * @param array|string $seed The first element specifies a class name, other element are seed
+     *
+     * @return static
+     */
+    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [])
+    {
+        if (func_num_args() > 3) { // prevent bad usage
+            throw new \Error(['Too many method arguments']);
+        }
+
+        return static::_addToWithClassName($parent, $seed, true, $add_args);
+    }
+
+    /**
+     * @return static
+     */
+    private static function _addToWithClassName(object $parent, $seed, bool $unsafe, array $add_args)
+    {
         if (is_object($seed)) {
             $object = $seed;
         } else {
@@ -99,6 +131,6 @@ trait StaticAddToTrait
             }
         }
 
-        return static::addTo($parent, $object, $add_args);
+        return static::_addTo_add($parent, $object, $unsafe, $add_args);
     }
 }
