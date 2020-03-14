@@ -27,8 +27,12 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], array $add_arguments = [])
+    public static function addTo(object $parent, $seed = [], array $add_args = [])
     {
+        if (func_num_args() > 3) { // prevent bad usage
+            throw new Error(['Too many method arguments']);
+        }
+
         if (is_object($seed)) {
             $object = $seed;
         } else {
@@ -56,7 +60,7 @@ trait StaticAddToTrait
         }
 
         // add to parent
-        $parent->add($object, ...$add_arguments);
+        $parent->add($object, ...$add_args);
 
         return $object;
     }
@@ -68,8 +72,12 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassName(object $parent, $seed = [], array $add_arguments = [])
+    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [])
     {
+        if (func_num_args() > 3) { // prevent bad usage
+            throw new Error(['Too many method arguments']);
+        }
+
         if (is_object($seed)) {
             $object = $seed;
         } else {
@@ -91,6 +99,6 @@ trait StaticAddToTrait
             }
         }
 
-        static::addTo($parent, $object, false, $add_arguments);
+        static::addTo($parent, $object, false, $add_args);
     }
 }
