@@ -20,8 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: php --version
-      # need this to trick composer
-      # - run: "git branch develop; git checkout develop"
+
+      # need this to trick composer that this is a "atk4/core:develop" dependency to install atk4/data
+      - name: Rename HEAD to develop for Composer
+        run: git switch -C develop HEAD
+
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |
