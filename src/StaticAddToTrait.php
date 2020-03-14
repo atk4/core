@@ -17,22 +17,22 @@ trait StaticAddToTrait
     /**
      * A better way to initialize and add new object into parent - more typehinting-friendly.
      *
-     * $crud = CRUD::addTo($app, ['displayFields'=>['name']]);
+     * $crud = CRUD::addTo($app, ['displayFields' => ['name']]);
+     *   is equivalent to
+     * $crud = $app->add(['CRUD', 'displayFields' => ['name']]);
+     *   but the first one design pattern is strongly recommended as it supports refactoring.
      *
-     * is equivalent to
+     * @param object       $parent
+     * @param array|string $seed
      *
-     *
-     * //
-     *
-     * @param object $parent
-     * @param array  $seed
-     *
-     * @return self
+     * @return static
      */
     public static function addTo(object $parent, $seed = [], ...$add_arguments)
     {
         if (isset($parent->_factoryTrait)) {
             $object = $parent->factory(static::class, $seed);
+        } elseif (is_array($seed)) {
+            $object = new static(...$seed);
         } else {
             $object = new static($seed);
         }
