@@ -69,7 +69,7 @@ class StaticAddToTest extends TestCase
         $this->assertNotNull($tr);
 
         // trackable object can be referenced by name
-        $tr3 = TrackableMockSAT::addTo($m, [], 'foo');
+        $tr3 = TrackableMockSAT::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');
         $this->assertEquals($tr, $tr3);
     }
@@ -81,9 +81,9 @@ class StaticAddToTest extends TestCase
         // two anonymous children should get unique names asigned.
         TrackableMockSAT::addTo($m);
         $anon = TrackableMockSAT::addTo($m);
-        TrackableMockSAT::addTo($m, [], 'foo bar');
-        TrackableMockSAT::addTo($m, [], '123');
-        TrackableMockSAT::addTo($m, [], 'false');
+        TrackableMockSAT::addTo($m, [], ['foo bar']);
+        TrackableMockSAT::addTo($m, [], ['123']);
+        TrackableMockSAT::addTo($m, [], ['false']);
 
         $this->assertEquals(true, (bool) $m->hasElement('foo bar'));
         $this->assertEquals(true, (bool) $m->hasElement('123'));
