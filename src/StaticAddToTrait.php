@@ -16,6 +16,7 @@ trait StaticAddToTrait
 
     /**
      * A better way to initialize and add new object into parent - more typehinting-friendly.
+     * The new object is checked if it is instance of current class.
      *
      * $crud = CRUD::addTo($app, ['displayFields' => ['name']]);
      *   is equivalent to
@@ -58,5 +59,38 @@ trait StaticAddToTrait
         $parent->add($object, ...$add_arguments);
 
         return $object;
+    }
+
+    /**
+     * Same as addTo(), but the first element of seed specifies a class name instead of static::class.
+     *
+     * @param array|string $seed The first element specifies a class name, other element are seed
+     *
+     * @return static
+     */
+    public static function addToWithClassName(object $parent, $seed = [], array $add_arguments = [])
+    {
+        if (is_object($seed)) {
+            $object = $seed;
+        } else {
+            if (!is_array($seed)) {
+                if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
+                    throw (new Exception(['Seed must be an array or a scalar']))
+                            ->addMoreInfo('seed_type', gettype($seed));
+                }
+
+                $seed = [$seed];
+            }
+
+            if (isset($parent->_factoryTrait)) {
+                $object = $parent->factory($seed);
+            } else {
+                $cl = reset($seed);
+                unset($seed[key($seed)]);
+                $object = new $cl(...$seed);
+            }
+        }
+
+        static::addTo($parent, $object, false, $add_arguments);
     }
 }
