@@ -103,9 +103,13 @@ class StaticAddToTest extends TestCase
         $tr = StdSAT::addToWithClassName($m, StdSAT2::class);
         $this->assertEquals(StdSAT2::class, get_class($tr));
 
-        // not the same or extended class
+        // not the same or extended class - unsafe disabled
         $this->expectException(\atk4\core\Exception::class);
         $tr = StdSAT::addToWithClassName($m, \stdClass::class);
+
+        // not the same or extended class - unsafe enabled
+        $tr = StdSAT::addToWithClassNameUnsafe($m, \stdClass::class);
+        $this->assertEquals(\stdClass::class, get_class($tr));
     }
 
     public function testUniqueNames()
