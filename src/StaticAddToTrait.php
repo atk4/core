@@ -99,6 +99,6 @@ trait StaticAddToTrait
             }
         }
 
-        static::addTo($parent, $object, false, $add_args);
+        return static::addTo($parent, $object, $add_args);
     }
 }
