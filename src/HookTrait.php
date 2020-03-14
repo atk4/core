@@ -19,6 +19,13 @@ trait HookTrait
     protected $hooks = [];
 
     /**
+     * Next hook index counter.
+     *
+     * @var int
+     */
+    private $_hookIndexCounter = 0;
+
+    /**
      * @deprecated use onHook instead
      */
     public function addHook($spot, $fx, array $args = null, int $priority = null)
@@ -36,7 +43,7 @@ trait HookTrait
      * @param array                $args     Arguments are passed to $fx
      * @param int                  $priority Lower priority is called sooner
      *
-     * @return static
+     * @return int|int[] Index under which the hook was added
      */
     public function onHook($spot, $fx = null, array $args = [], int $priority = 5)
     {
@@ -47,11 +54,12 @@ trait HookTrait
             $spot = explode(',', $spot);
         }
         if (is_array($spot)) {
-            foreach ($spot as $h) {
-                $this->onHook($h, $fx, $args, $priority);
+            $indexes = [];
+            foreach ($spot as $k => $h) {
+                $indexes[$k] = $this->onHook($h, $fx, $args, $priority);
             }
 
-            return $this;
+            return $indexes;
         }
         $spot = (string) $spot;
 
@@ -76,27 +84,37 @@ trait HookTrait
             $this->hooks[$spot][$priority] = [];
         }
 
-        if ($priority >= 0) {
-            $this->hooks[$spot][$priority][] = [$fx, $args];
+        $index = $this->_hookIndexCounter++;
+        $data = [$fx, $args];
+        if ($priority < 0) {
+            $this->hooks[$spot][$priority] = [$index => $data] + $this->hooks[$spot][$priority];
         } else {
-            array_unshift($this->hooks[$spot][$priority], [$fx, $args]);
+            $this->hooks[$spot][$priority][$index] = $data;
         }
 
-        return $this;
+        return $index;
     }
 
     /**
-     * Delete all hooks for specified spot and priority.
+     * Delete all hooks for specified spot, priority and index.
      *
-     * @param string   $spot     Hook identifier to bind on
-     * @param int|null $priority Filter specific priority, null for all
+     * @param string   $spot            Hook identifier
+     * @param int|null $priority        Filter specific priority, null for all
+     * @param int|null $priorityIsIndex Filter by index instead of priority
      *
      * @return static
      */
-    public function removeHook(string $spot, int $priority = null)
+    public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
     {
         if ($priority !== null) {
-            unset($this->hooks[$spot][$priority]);
+            if ($priorityIsIndex) {
+                $index = $priority;
+                foreach (array_keys($this->hooks[$spot]) as $priority) {
+                    unset($this->hooks[$spot][$priority][$index]);
+                }
+            } else {
+                unset($this->hooks[$spot][$priority]);
+            }
         } else {
             unset($this->hooks[$spot]);
         }
@@ -107,16 +125,30 @@ trait HookTrait
     /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param string   $spot     Hook identifier
-     * @param int|null $priority Filter specific priority, null for all
+     * @param string   $spot            Hook identifier
+     * @param int|null $priority        Filter specific priority, null for all
+     * @param int|null $priorityIsIndex Filter by index instead of priority
      */
-    public function hookHasCallbacks(string $spot, int $priority = null): bool
+    public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
     {
         if (!isset($this->hooks[$spot])) {
             return false;
+        } elseif ($priority === null) {
+            return true;
         }
 
-        return $priority !== null ? isset($this->hooks[$spot][$priority]) : true;
+        if ($priorityIsIndex) {
+            $index = $priority;
+            foreach (array_keys($this->hooks[$spot]) as $priority) {
+                if (isset($this->hooks[$spot][$priority][$index])) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return isset($this->hooks[$spot][$priority]);
     }
 
     /**
@@ -127,19 +159,20 @@ trait HookTrait
      *
      * @throws Exception
      *
-     * @return mixed Array of responses or value specified to breakHook
+     * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
     public function hook(string $spot, array $args = [])
     {
         $return = [];
 
         if (isset($this->hooks[$spot])) {
+            krsort($this->hooks[$spot]); // lower priority is called sooner
+            $hookBackup = $this->hooks[$spot];
+
             try {
-                krsort($this->hooks[$spot]); // lower priority is called sooner
-                $hookBackup = $this->hooks[$spot];
                 while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as &$data) {
-                        $return[] = call_user_func_array(
+                    foreach ($_data as $index => &$data) {
+                        $return[$index] = call_user_func_array(
                             $data[0],
                             array_merge(
                                 [$this],

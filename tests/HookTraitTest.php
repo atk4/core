@@ -160,7 +160,7 @@ class HookTraitTest extends TestCase
     public function testOrder()
     {
         $m = new HookMock();
-        $m->onHook('spot', function () {
+        $ind = $m->onHook('spot', function () {
             return 3;
         }, [], -1);
         $m->onHook('spot', function () {
@@ -196,7 +196,18 @@ class HookTraitTest extends TestCase
 
         $ret = $m->hook('spot');
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $ret);
+        $this->assertEquals([
+            $ind + 2 => 1,
+            $ind + 1 => 2,
+            $ind     => 3,
+            $ind + 3 => 4,
+            $ind + 4 => 5,
+            $ind + 6 => 6,
+            $ind + 7 => 7,
+            $ind + 8 => 8,
+            $ind + 9 => 9,
+            $ind + 5 => 10,
+        ], $ret);
     }
 
     public function testMulti()
