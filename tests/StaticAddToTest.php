@@ -15,6 +15,10 @@ class StdSAT extends \StdClass
     use StaticAddToTrait;
 }
 
+class StdSAT2 extends StdSAT
+{
+}
+
 class ContainerFactoryMockSAT
 {
     use ContainerTrait;
@@ -68,10 +72,40 @@ class StaticAddToTest extends TestCase
         $tr = StdSAT::addTo($m);
         $this->assertNotNull($tr);
 
+        // add object - for BC
+        $tr = StdSAT::addTo($m, $tr);
+        $this->assertEquals(StdSAT::class, get_class($tr));
+
         // trackable object can be referenced by name
         $tr3 = TrackableMockSAT::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');
         $this->assertEquals($tr, $tr3);
+
+        // not the same or extended class
+        $this->expectException(\atk4\core\Exception::class);
+        $tr = StdSAT::addTo($m, $tr);
+    }
+
+    public function testWithClassName()
+    {
+        $m = new ContainerMock();
+        $this->assertEquals(true, isset($m->_containerTrait));
+
+        // the same class
+        $tr = StdSAT::addToWithClassName($m, StdSAT::class);
+        $this->assertEquals(StdSAT::class, get_class($tr));
+
+        // add object - for BC
+        $tr = StdSAT::addToWithClassName($m, $tr);
+        $this->assertEquals(StdSAT::class, get_class($tr));
+
+        // extended class
+        $tr = StdSAT::addToWithClassName($m, StdSAT2::class);
+        $this->assertEquals(StdSAT2::class, get_class($tr));
+
+        // not the same or extended class
+        $this->expectException(\atk4\core\Exception::class);
+        $tr = StdSAT::addToWithClassName($m, \stdClass::class);
     }
 
     public function testUniqueNames()
