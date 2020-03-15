@@ -30,7 +30,7 @@ trait StaticAddToTrait
     public static function addTo(object $parent, $seed = [], array $add_args = [])
     {
         if (func_num_args() > 3) { // prevent bad usage
-            throw new \Error(['Too many method arguments']);
+            throw new \Error('Too many method arguments');
         }
 
         if (is_object($seed)) {
@@ -38,7 +38,7 @@ trait StaticAddToTrait
         } else {
             if (!is_array($seed)) {
                 if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
-                    throw (new Exception(['Seed must be an array or a scalar']))
+                    throw (new Exception('Seed must be an array or a scalar'))
                             ->addMoreInfo('seed_type', gettype($seed));
                 }
 
@@ -62,7 +62,7 @@ trait StaticAddToTrait
     {
         // check if object is instance of this class
         if (!$unsafe && !($object instanceof static)) {
-            throw (new Exception(['Seed class name is not a subtype of the current class']))
+            throw (new Exception('Seed class name is not a subtype of the current class'))
                     ->addMoreInfo('seed_class', get_class($object))
                     ->addMoreInfo('current_class', static::class);
         }
@@ -83,7 +83,7 @@ trait StaticAddToTrait
     public static function addToWithClassName(object $parent, $seed = [], array $add_args = [])
     {
         if (func_num_args() > 3) { // prevent bad usage
-            throw new \Error(['Too many method arguments']);
+            throw new \Error('Too many method arguments');
         }
 
         return static::_addToWithClassName($parent, $seed, false, $add_args);
@@ -99,7 +99,7 @@ trait StaticAddToTrait
     public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [])
     {
         if (func_num_args() > 3) { // prevent bad usage
-            throw new \Error(['Too many method arguments']);
+            throw new \Error('Too many method arguments');
         }
 
         return static::_addToWithClassName($parent, $seed, true, $add_args);
@@ -115,7 +115,7 @@ trait StaticAddToTrait
         } else {
             if (!is_array($seed)) {
                 if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
-                    throw (new Exception(['Seed must be an array or a scalar']))
+                    throw (new Exception('Seed must be an array or a scalar'))
                             ->addMoreInfo('seed_type', gettype($seed));
                 }
 
