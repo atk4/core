@@ -112,15 +112,15 @@ trait StaticAddToTrait
                 $seed = [$seed];
             }
 
-            $cl = reset($seed);
-            if (key($seed) !== 0) {
-                throw new Exception('Class name in seed is not defined');
-            }
-
             if (isset($parent->_factoryTrait)) {
-                $object = $parent->factory($seed);
+                $object = $parent->factory($parent->mergeSeeds($seed, [static::class]));
             } else {
-                unset($seed[key($seed)]);
+                $cl = reset($seed);
+                if (key($seed) === 0) {
+                    unset($seed[key($seed)]);
+                } else {
+                    $cl = static::class;
+                }
                 $object = new $cl(...$seed);
             }
         }
