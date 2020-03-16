@@ -27,12 +27,8 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], array $add_args = [])
+    public static function addTo(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)
     {
-        if (func_num_args() > 3) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         if (is_object($seed)) {
             $object = $seed;
         } else {
@@ -52,13 +48,13 @@ trait StaticAddToTrait
             }
         }
 
-        return static::_addTo_add($parent, $object, false, $add_args);
+        return static::_addTo_add($parent, $object, false, $add_args, $skip_add);
     }
 
     /**
      * @return static
      */
-    private static function _addTo_add(object $parent, object $object, bool $unsafe, array $add_args)
+    private static function _addTo_add(object $parent, object $object, bool $unsafe, array $add_args, bool $skip_add = false)
     {
         // check if object is instance of this class
         if (!$unsafe && !($object instanceof static)) {
@@ -68,7 +64,9 @@ trait StaticAddToTrait
         }
 
         // add to parent
-        $parent->add($object, ...$add_args);
+        if (!$skip_add) {
+            $parent->add($object, ...$add_args);
+        }
 
         return $object;
     }
@@ -80,13 +78,9 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [])
+    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)
     {
-        if (func_num_args() > 3) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
-        return static::_addToWithClassName($parent, $seed, false, $add_args);
+        return static::_addToWithClassName($parent, $seed, false, $add_args, $skip_add);
     }
 
     /**
@@ -96,19 +90,15 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [])
+    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)
     {
-        if (func_num_args() > 3) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
-        return static::_addToWithClassName($parent, $seed, true, $add_args);
+        return static::_addToWithClassName($parent, $seed, true, $add_args, $skip_add);
     }
 
     /**
      * @return static
      */
-    private static function _addToWithClassName(object $parent, $seed, bool $unsafe, array $add_args)
+    private static function _addToWithClassName(object $parent, $seed, bool $unsafe, array $add_args, bool $skip_add = false)
     {
         if (is_object($seed)) {
             $object = $seed;
@@ -131,6 +121,6 @@ trait StaticAddToTrait
             }
         }
 
-        return static::_addTo_add($parent, $object, $unsafe, $add_args);
+        return static::_addTo_add($parent, $object, $unsafe, $add_args, $skip_add);
     }
 }
