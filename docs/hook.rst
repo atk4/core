@@ -35,7 +35,7 @@ You can register multiple call-backs to be executed for the requested `spot`::
 Adding callbacks
 ================
 
-.. php:method:: onHook($spot, $fx = null, $args = null, $priority = 5)
+.. php:method:: onHook($spot, $fx = null, array $args = [], int $priority = 5)
 
 Register a call-back method. Calling several times will register multiple
 callbacks which will be execute in the order that they were added.
@@ -69,20 +69,20 @@ hook with priority 1 it will always be executed before any hooks with priority
 Normally hooks are executed in the same order as they are added, however if you
 use negative priority, then hooks will be executed in reverse order::
 
-    $obj->onHook('spot', third,    null, -1);
+    $obj->onHook('spot', third,    [], -1);
 
-    $obj->onHook('spot', second,   null, -5);
-    $obj->onHook('spot', first,    null, -5);
+    $obj->onHook('spot', second,   [], -5);
+    $obj->onHook('spot', first,    [], -5);
 
-    $obj->onHook('spot', fourth,   null, 0);
-    $obj->onHook('spot', fifth,    null, 0);
+    $obj->onHook('spot', fourth,   [], 0);
+    $obj->onHook('spot', fifth,    [], 0);
 
-    $obj->onHook('spot', ten,      null, 1000);
+    $obj->onHook('spot', ten,      [], 1000);
 
-    $obj->onHook('spot', sixth,    null, 2);
-    $obj->onHook('spot', seventh,  null, 5);
+    $obj->onHook('spot', sixth,    [], 2);
+    $obj->onHook('spot', seventh,  [], 5);
     $obj->onHook('spot', eight);
-    $obj->onHook('spot', nine,     null, 5);
+    $obj->onHook('spot', nine,     [], 5);
 
 
 .. php:method:: hook($spot, $args = null)
@@ -159,7 +159,7 @@ call-backs from being executed::
 
     $obj->onHook('test', function($obj){
         $obj->breakHook("break2");
-    }, null, -5);
+    }, [], -5);
 
     $res3 = $obj->hook('test', [4, 4]);
     // res3 = "break2"
