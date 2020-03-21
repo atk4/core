@@ -18,13 +18,13 @@ class HookTraitTest extends TestCase
         $result = 0;
         $m->onHook('test1', function () use (&$result) {
             $result++;
-        }, 0);
+        }, [0]);
 
         $this->assertEquals(0, $result);
 
         $m->onHook('test1', function () use (&$result) {
             $result++;
-        }, 5);
+        }, [5]);
 
         $this->assertEquals(0, $result);
     }
@@ -59,7 +59,7 @@ class HookTraitTest extends TestCase
 
         $m->onHook('test1', function () use (&$result) {
             $result = 0;
-        }, null, 1);
+        }, [], 1);
 
         $m->hook('test1'); // zero will be executed first, then increment
         $this->assertEquals(1, $result);
@@ -152,7 +152,7 @@ class HookTraitTest extends TestCase
             $result .= $arg;
         });
 
-        $m->hook('tst', 'parameter');
+        $m->hook('tst', ['parameter']);
 
         $this->assertEquals('parameter', $result);
     }
@@ -160,43 +160,54 @@ class HookTraitTest extends TestCase
     public function testOrder()
     {
         $m = new HookMock();
-        $m->onHook('spot', function () {
+        $ind = $m->onHook('spot', function () {
             return 3;
-        }, null, -1);
+        }, [], -1);
         $m->onHook('spot', function () {
             return 2;
-        }, null, -5);
+        }, [], -5);
         $m->onHook('spot', function () {
             return 1;
-        }, null, -5);
+        }, [], -5);
 
         $m->onHook('spot', function () {
             return 4;
-        }, null, 0);
+        }, [], 0);
         $m->onHook('spot', function () {
             return 5;
-        }, null, 0);
+        }, [], 0);
 
         $m->onHook('spot', function () {
             return 10;
-        }, null, 1000);
+        }, [], 1000);
 
         $m->onHook('spot', function () {
             return 6;
-        }, null, 2);
+        }, [], 2);
         $m->onHook('spot', function () {
             return 7;
-        }, null, 5);
+        }, [], 5);
         $m->onHook('spot', function () {
             return 8;
         });
         $m->onHook('spot', function () {
             return 9;
-        }, null, 5);
+        }, [], 5);
 
         $ret = $m->hook('spot');
 
-        $this->assertEquals([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], $ret);
+        $this->assertEquals([
+            $ind + 2 => 1,
+            $ind + 1 => 2,
+            $ind     => 3,
+            $ind + 3 => 4,
+            $ind + 4 => 5,
+            $ind + 6 => 6,
+            $ind + 7 => 7,
+            $ind + 8 => 8,
+            $ind + 9 => 9,
+            $ind + 5 => 10,
+        ], $ret);
     }
 
     public function testMulti()

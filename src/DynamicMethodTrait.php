@@ -25,7 +25,7 @@ trait DynamicMethodTrait
     public function __call(string $method, $args)
     {
         if ($ret = $this->tryCall($method, $args)) {
-            return $ret[0];
+            return reset($ret);
         }
 
         throw new Exception([
