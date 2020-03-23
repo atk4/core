@@ -30,7 +30,7 @@ trait HookTrait
      */
     public function addHook($spot, $fx, array $args = null, int $priority = null)
     {
-        return $this->onHook($spot, $fx, $args, $priority ?? 0);
+        return $this->onHook($spot, $fx, $args ?? [], $priority ?? 0);
     }
 
     /**
