@@ -12,9 +12,6 @@ class CollectionMock
     protected $fields = [];
 
     /**
-     * @param $name
-     * @param $seed
-     *
      * @throws core\Exception
      *
      * @return mixed|object
@@ -34,8 +31,6 @@ class CollectionMock
     }
 
     /**
-     * @param $name
-     *
      * @throws core\Exception
      *
      * @return mixed
