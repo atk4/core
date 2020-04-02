@@ -62,6 +62,12 @@ class Exception extends \Exception
             // message contain additional parameters
             $this->params = $message;
             $message = array_shift($this->params);
+            if (isset($this->params['solutions'])) {
+                foreach ((array) $this->params['solutions'] as $solution) {
+                    $this->addSolution($solution);
+                }
+                unset($this->params['solutions']);
+            }
         }
 
         parent::__construct($message, $code ?? 0, $previous);
