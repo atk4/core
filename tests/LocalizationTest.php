@@ -60,8 +60,7 @@ class LocalizationTest extends TestCase
                     array $parameters = [],
                     ?string $domain = null,
                     ?string $locale = null
-                ): string
-                {
+                ): string {
                     return 'external translator';
                 }
             });
