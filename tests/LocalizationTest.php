@@ -55,10 +55,12 @@ class LocalizationTest extends TestCase
             /* @var $e Exception */
             // emulate an external translator already configured
             $e->setTranslatorAdapter(new class() implements ITranslatorAdapter {
-                public function _(string $message,
+                public function _(
+                    string $message,
                     array $parameters = [],
                     ?string $domain = null,
-                    ?string $locale = null): string
+                    ?string $locale = null
+                ): string
                 {
                     return 'external translator';
                 }

@@ -26,7 +26,7 @@ class Console extends RendererAbstract
 \e[1;41m--[ {TITLE} ]\e[0m
 {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
 TEXT
-);
+        );
     }
 
     protected function processParams(): void
