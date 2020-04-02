@@ -62,11 +62,8 @@ class Exception extends \Exception
             // message contain additional parameters
             $this->params = $message;
             $message = array_shift($this->params);
-            if ($this->params['solutions'] ?? null) {
-                if (!is_array($this->params['solutions'])) {
-                    $this->params['solutions'] = [$this->params['solutions']];
-                }
-                foreach ($this->params['solutions'] as $solution) {
+            if (isset($this->params['solutions'])) {
+                foreach ((array)$this->params['solutions'] as $solution) {
                     $this->addSolution($solution);
                 }
                 unset($this->params['solutions']);
