@@ -15,13 +15,17 @@ jobs:
     container:
       image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
     strategy:
+      fail-fast: false
       matrix:
         php: ['7.2', '7.3', 'latest']
     steps:
-      - uses: actions/checkout@v1
-      # need this to trick composer
+      - uses: actions/checkout@v2
       - run: php --version
-      - run: "git branch develop; git checkout develop"
+
+      # need this to trick composer that this is a "atk4/core:develop" dependency to install atk4/data
+      - name: Rename HEAD to develop for Composer
+        run: git switch -C develop HEAD
+
       - name: Get Composer Cache Directory
         id: composer-cache
         run: |

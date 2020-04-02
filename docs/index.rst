@@ -20,7 +20,7 @@ Object Containers
 .. figure:: images/containers.png
    :scale: 50 %
 
-Within your application / framework you can quite often have requirement for
+Within your application or framework you can quite often have requirement for
 using containers:
 
  - Form containing fields
@@ -134,8 +134,8 @@ and triggering callbacks::
 
     $object = new AnyClass();
 
-    $object->addHook('test', function($o){ echo 'hello'; }
-    $object->addHook('test', function($o){ echo 'world'; }
+    $object->onHook('test', function($o){ echo 'hello'; }
+    $object->onHook('test', function($o){ echo 'world'; }
 
     $object->hook('test');
     // outputs: helloworld
@@ -273,3 +273,4 @@ Others
 
     debug
     session
+    docs

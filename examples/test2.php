@@ -17,7 +17,7 @@ class MyClass
 }
 
 $c = new MyClass();
-$c->addHook('afterWork', function () {
+$c->onHook('afterWork', function () {
     echo "HOOKed on work\n";
 });
 $c->doWork();
