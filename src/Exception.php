@@ -50,7 +50,7 @@ class Exception extends \Exception
      *
      * @param string|array $message
      * @param int          $code
-     * @param \Throwable    $previous
+     * @param \Throwable   $previous
      */
     public function __construct(
         $message = '',
