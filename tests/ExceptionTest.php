@@ -7,7 +7,6 @@ namespace atk4\core\tests;
 use atk4\core\Exception;
 use atk4\core\TrackableTrait;
 use PHPUnit\Framework\TestCase;
-use StdClass;
 
 /**
  * @coversDefaultClass \atk4\core\Exception
@@ -63,7 +62,7 @@ class ExceptionTest extends TestCase
         $ret = $m->toString('abc');
         $this->assertEquals('"abc"', $ret);
 
-        $ret = $m->toString(new StdClass());
+        $ret = $m->toString(new \stdClass());
         $this->assertEquals('Object stdClass', $ret);
 
         $a = new TrackableMock2();
