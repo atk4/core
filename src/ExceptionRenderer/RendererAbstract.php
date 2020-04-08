@@ -130,6 +130,47 @@ abstract class RendererAbstract
             : get_class($this->exception);
     }
 
+    /**
+     * Returns stack trace and reindex it from the first call. If shortening is allowed,
+     * shorten the stack trace if it starts with the parent one.
+     */
+    protected function getStackTrace(bool $shorten): array
+    {
+        $trace = $this->exception instanceof Exception
+            ? $this->exception->getMyTrace()
+            : $this->exception->getTrace();
+        $trace = array_combine(range(count($trace) - 1, 0, -1), $trace);
+
+        if (!$shorten || $this->parent_exception === null) {
+            return $trace;
+        }
+
+        $parent_trace = $this->parent_exception instanceof Exception
+            ? $this->parent_exception->getMyTrace()
+            : $this->parent_exception->getTrace();
+        $parent_trace = array_combine(range(count($parent_trace) - 1, 0, -1), $parent_trace);
+
+        $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
+        $c = min(count($trace), count($parent_trace));
+        for ($i = 0; $i < $c; $i++) {
+            $cv = $trace[$i];
+            $pv = $parent_trace[$i];
+
+            if (($cv['line'] ?? null) === ($pv['line'] ?? null)
+                    && ($cv['file'] ?? null) === ($pv['file'] ?? null)
+                    && ($cv['class'] ?? null) === ($pv['class'] ?? null)
+                    && (!$both_atk || ($cv['object'] ?? null) === ($pv['object'] ?? null))
+                    && ($cv['function'] ?? null) === ($pv['function'] ?? null)
+                    && (!$both_atk || ($cv['args'] ?? null) === ($pv['args'] ?? null))) {
+                unset($trace[$i]);
+            } else {
+                break;
+            }
+        }
+
+        return $trace;
+    }
+
     public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         return $this->adapter
