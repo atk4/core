@@ -109,7 +109,7 @@ class HTML extends RendererAbstract
         $this->output .= '
             <table class="ui very compact small selectable table">
                 <thead><tr><th colspan="3">Stack Trace</th></tr></thead>
-                <thead><tr><th>#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
+                <thead><tr><th style="text-align:right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
                 <tbody>
         ';
 
@@ -123,7 +123,7 @@ class HTML extends RendererAbstract
 
     protected function processStackTraceInternal(): void
     {
-        $text = '   
+        $text = '
             <tr class="{CSS_CLASS}">
                 <td style="text-align:right">{INDEX}</td>
                 <td>{FILE_LINE}</td>
