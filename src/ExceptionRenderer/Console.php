@@ -31,7 +31,7 @@ TEXT
 
     protected function processParams(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -50,7 +50,7 @@ TEXT
 
     protected function processSolutions(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -87,7 +87,7 @@ TEXT;
         $in_atk = true;
         $escape_frame = false;
         $tokens = [];
-        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
+        $trace = $this->exception instanceof Exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
         $trace_count = count($trace);
         foreach ($trace as $index => $call) {
             $call = $this->parseCallTraceObject($call);

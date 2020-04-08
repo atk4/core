@@ -19,17 +19,13 @@ abstract class RendererAbstract
     /** @var string */
     public $output = '';
 
-    /** @var bool */
-    public $is_atk_exception = false;
-
     /** @var ITranslatorAdapter|null */
     public $adapter;
 
-    public function __construct($exception, ?ITranslatorAdapter $adapter = null)
+    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null)
     {
         $this->adapter = $adapter;
         $this->exception = $exception;
-        $this->is_atk_exception = $exception instanceof Exception;
     }
 
     abstract protected function processHeader(): void;
@@ -61,7 +57,7 @@ abstract class RendererAbstract
             return $this->output;
         } catch (\Throwable $e) {
             // fallback if Exception occur in renderer
-            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->_($this->exception->getMessage());
+            return get_class($this->exception).' ['.$this->exception->getCode().'] Error: '.$this->_($this->exception->getMessage());
         }
     }
 
@@ -115,7 +111,7 @@ abstract class RendererAbstract
      */
     protected function getExceptionTitle(): string
     {
-        return $this->is_atk_exception
+        return $this->exception instanceof Exception
             ? $this->exception->getCustomExceptionTitle()
             : static::getClassShortName($this->exception).' Error';
     }
@@ -125,7 +121,7 @@ abstract class RendererAbstract
      */
     protected function getExceptionName(): string
     {
-        return $this->is_atk_exception
+        return $this->exception instanceof Exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
     }

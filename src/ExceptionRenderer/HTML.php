@@ -34,7 +34,7 @@ class HTML extends RendererAbstract
 
     protected function processParams(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -75,7 +75,7 @@ class HTML extends RendererAbstract
 
     protected function processSolutions(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -135,7 +135,7 @@ class HTML extends RendererAbstract
         $in_atk = true;
         $escape_frame = false;
         $tokens_trace = [];
-        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
+        $trace = $this->exception instanceof Exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
         $trace_count = count($trace);
         foreach ($trace as $index => $call) {
             $call = $this->parseCallTraceObject($call);
