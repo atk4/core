@@ -1,19 +1,9 @@
-How to build this documentation
+Our documentation can now be built in the Docker.
 
 ```
-sudo apt-get install python-sphinx python-setuptools
-sudo easy_install pip
-
-sudo pip install sphinx_rtd_theme
-sudo pip install sphinxcontrib-phpdomain
-
-make html
+docker build -t docs .
+docker run -p 8080:80 docs
 ```
 
-next open `html/index.html` in your browser
-
-```
-open html/index.html
-```
- 
+Open http://localhost:8080/ in your browser.
 
