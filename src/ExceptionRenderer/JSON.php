@@ -113,7 +113,7 @@ HTML;
             return;
         }
 
-        $previous = new static($this->exception->getPrevious());
+        $previous = new static($this->exception->getPrevious(), $this->adapter);
         $text = (string) $previous; // need to trigger processAll;
 
         $this->json['previous'] = $previous->json;

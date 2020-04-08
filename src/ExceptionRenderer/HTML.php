@@ -190,6 +190,6 @@ class HTML extends RendererAbstract
             </div>
         ';
 
-        $this->output .= (string) (new static($this->exception->getPrevious()));
+        $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
     }
 }

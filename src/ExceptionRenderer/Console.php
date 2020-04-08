@@ -128,7 +128,7 @@ TEXT;
 
         $this->output .= PHP_EOL."\e[1;45mCaused by Previous Exception:\e[0m".PHP_EOL;
 
-        $this->output .= (string) (new static($this->exception->getPrevious()));
+        $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
         $this->output .= <<<TEXT
 \e[1;31m--
 \e[0m

@@ -136,6 +136,6 @@ HTML;
 
         $this->output .= PHP_EOL.'Caused by Previous Exception:'.PHP_EOL;
 
-        $this->output .= (string) (new static($this->exception->getPrevious()));
+        $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
     }
 }

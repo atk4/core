@@ -16,16 +16,20 @@ abstract class RendererAbstract
     /** @var \Throwable */
     public $exception;
 
+    /** @var \Throwable|null */
+    public $parent_exception;
+
     /** @var string */
     public $output = '';
 
     /** @var ITranslatorAdapter|null */
     public $adapter;
 
-    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null)
+    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parent_exception = null)
     {
         $this->adapter = $adapter;
         $this->exception = $exception;
+        $this->parent_exception = $parent_exception;
     }
 
     abstract protected function processHeader(): void;
