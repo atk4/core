@@ -83,7 +83,7 @@ HTML;
         $escape_frame = false;
         $trace = $this->getStackTrace(false);
         foreach ($trace as $index => $call) {
-            $call = $this->parseCallTraceObject($call);
+            $call = $this->parseStackTraceCall($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
@@ -117,7 +117,7 @@ HTML;
         $this->json['previous'] = $previous->json;
     }
 
-    protected function parseCallTraceObject($call): array
+    protected function parseStackTraceCall($call): array
     {
         return [
             'line'     => $call['line'] ?? '',

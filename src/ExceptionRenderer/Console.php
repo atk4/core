@@ -89,7 +89,7 @@ TEXT;
         $short_trace = $this->getStackTrace(true);
         $is_shortened = end($short_trace) && key($short_trace) !== 0;
         foreach ($short_trace as $index => $call) {
-            $call = $this->parseCallTraceObject($call);
+            $call = $this->parseStackTraceCall($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;

@@ -70,7 +70,7 @@ abstract class RendererAbstract
         return str_replace(array_keys($tokens), array_values($tokens), $text);
     }
 
-    protected function parseCallTraceObject($call): array
+    protected function parseStackTraceCall(array $call): array
     {
         $parsed = [
             'line'             => (string) ($call['line'] ?? ''),
