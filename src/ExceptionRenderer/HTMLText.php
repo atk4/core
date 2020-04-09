@@ -87,7 +87,7 @@ HTML;
     protected function processStackTraceInternal(): void
     {
         $text = <<<'HTML'
-<span color='cyan'>{FILE}</span>:<span color='pink'>{LINE}</span>{OBJECT} <span color='gray'>{CLASS}<span style="color:{FUNCTION_COLOR}">{FUNCTION}<span style='color:pink'>{FUNCTION_ARGS}</span></span>
+<span color='cyan'>{FILE}</span>:<span color='pink'>{LINE}</span>{OBJECT} <span color='gray'>{CLASS}<span style="color:{FUNCTION_COLOR}">{FUNCTION}<span style='color:pink'>{FUNCTION_ARGS}</span></span></span>
 
 HTML;
 
