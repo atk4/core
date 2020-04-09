@@ -81,9 +81,7 @@ HTML;
     {
         $in_atk = true;
         $escape_frame = false;
-        $tokens_trace = [];
-        $trace = $this->exception instanceof Exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count = count($trace);
+        $trace = $this->getStackTrace(false);
         foreach ($trace as $index => $call) {
             $call = $this->parseCallTraceObject($call);
 

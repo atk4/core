@@ -93,10 +93,9 @@ HTML;
 
         $in_atk = true;
         $escape_frame = false;
-        $tokens = [];
-        $trace = $this->exception instanceof Exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count = count($trace);
-        foreach ($trace as $index => $call) {
+        $short_trace = $this->getStackTrace(true);
+        $is_shortened = end($short_trace) && key($short_trace) !== 0;
+        foreach ($short_trace as $index => $call) {
             $call = $this->parseCallTraceObject($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
@@ -104,6 +103,7 @@ HTML;
                 $in_atk = false;
             }
 
+            $tokens = [];
             $tokens['{FILE}'] = $call['file_formatted'];
             $tokens['{LINE}'] = $call['line_formatted'];
             $tokens['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
@@ -121,10 +121,15 @@ HTML;
                     $args[] = static::toSafeString($arg);
                 }
 
-                $tokens['{FUNCTION_ARGS}'] = PHP_EOL.str_repeat(' ', 40).'('.implode(', ', $args).')';
+                $tokens['{FUNCTION_ARGS}'] = '('.PHP_EOL.str_repeat(' ', 40).implode(','.PHP_EOL.str_repeat(' ', 40), $args).')';
             }
 
             $this->output .= $this->replaceTokens($tokens, $text);
+        }
+
+        if ($is_shortened) {
+            $this->output .= '...
+            ';
         }
     }
 
