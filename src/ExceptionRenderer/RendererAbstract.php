@@ -16,20 +16,20 @@ abstract class RendererAbstract
     /** @var \Throwable */
     public $exception;
 
+    /** @var \Throwable|null */
+    public $parent_exception;
+
     /** @var string */
     public $output = '';
-
-    /** @var bool */
-    public $is_atk_exception = false;
 
     /** @var ITranslatorAdapter|null */
     public $adapter;
 
-    public function __construct($exception, ?ITranslatorAdapter $adapter = null)
+    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parent_exception = null)
     {
         $this->adapter = $adapter;
         $this->exception = $exception;
-        $this->is_atk_exception = $exception instanceof Exception;
+        $this->parent_exception = $parent_exception;
     }
 
     abstract protected function processHeader(): void;
@@ -61,7 +61,7 @@ abstract class RendererAbstract
             return $this->output;
         } catch (\Throwable $e) {
             // fallback if Exception occur in renderer
-            return get_class($this->exception).' ['.$this->exception->getCode().'] Error:'.$this->_($this->exception->getMessage());
+            return get_class($this->exception).' ['.$this->exception->getCode().'] Error: '.$this->_($this->exception->getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ abstract class RendererAbstract
         return str_replace(array_keys($tokens), array_values($tokens), $text);
     }
 
-    protected function parseCallTraceObject($call): array
+    protected function parseStackTraceCall(array $call): array
     {
         $parsed = [
             'line'             => (string) ($call['line'] ?? ''),
@@ -115,7 +115,7 @@ abstract class RendererAbstract
      */
     protected function getExceptionTitle(): string
     {
-        return $this->is_atk_exception
+        return $this->exception instanceof Exception
             ? $this->exception->getCustomExceptionTitle()
             : static::getClassShortName($this->exception).' Error';
     }
@@ -125,9 +125,50 @@ abstract class RendererAbstract
      */
     protected function getExceptionName(): string
     {
-        return $this->is_atk_exception
+        return $this->exception instanceof Exception
             ? $this->exception->getCustomExceptionName()
             : get_class($this->exception);
+    }
+
+    /**
+     * Returns stack trace and reindex it from the first call. If shortening is allowed,
+     * shorten the stack trace if it starts with the parent one.
+     */
+    protected function getStackTrace(bool $shorten): array
+    {
+        $trace = $this->exception instanceof Exception
+            ? $this->exception->getMyTrace()
+            : $this->exception->getTrace();
+        $trace = array_combine(range(count($trace) - 1, 0, -1), $trace);
+
+        if ($shorten && $this->parent_exception !== null) {
+            $parent_trace = $this->parent_exception instanceof Exception
+                ? $this->parent_exception->getMyTrace()
+                : $this->parent_exception->getTrace();
+            $parent_trace = array_combine(range(count($parent_trace) - 1, 0, -1), $parent_trace);
+        } else {
+            $parent_trace = [];
+        }
+
+        $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
+        $c = min(count($trace), count($parent_trace));
+        for ($i = 0; $i < $c; $i++) {
+            $cv = $this->parseStackTraceCall($trace[$i]);
+            $pv = $this->parseStackTraceCall($parent_trace[$i]);
+
+            if ($cv['line'] === $pv['line']
+                    && $cv['file'] === $pv['file']
+                    && $cv['class'] === $pv['class']
+                    && (!$both_atk || $cv['object'] === $pv['object'])
+                    && $cv['function'] === $pv['function']
+                    && (!$both_atk || $cv['args'] === $pv['args'])) {
+                unset($trace[$i]);
+            } else {
+                break;
+            }
+        }
+
+        return $trace;
     }
 
     public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string

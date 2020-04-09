@@ -25,7 +25,7 @@ class HTML extends RendererAbstract
                 <i class="warning sign icon"></i>
                 <div class="content">
                     <div class="header">{TITLE}</div>
-                    {CLASS} {CODE}
+                    {CLASS} {CODE}:
                     {MESSAGE}
                 </div>
             </div>
@@ -34,7 +34,7 @@ class HTML extends RendererAbstract
 
     protected function processParams(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -75,7 +75,7 @@ class HTML extends RendererAbstract
 
     protected function processSolutions(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -107,8 +107,8 @@ class HTML extends RendererAbstract
     protected function processStackTrace(): void
     {
         $this->output .= '
-            <table class="ui very compact small selectable table">
-                <thead><tr><th colspan="3">Stack Trace</th></tr></thead>
+            <table class="ui very compact small selectable table top aligned">
+                <thead><tr><th colspan="4">Stack Trace</th></tr></thead>
                 <thead><tr><th style="text-align:right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
                 <tbody>
         ';
@@ -128,31 +128,31 @@ class HTML extends RendererAbstract
                 <td style="text-align:right">{INDEX}</td>
                 <td>{FILE_LINE}</td>
                 <td>{OBJECT}</td>
-                <td>{FUNCTION}{FUNCTION_ARGS}<!--</td> manage closing tag in foreach below -->
+                <td>{FUNCTION}{FUNCTION_ARGS}</td>
             </tr>
         ';
 
         $in_atk = true;
         $escape_frame = false;
-        $tokens_trace = [];
-        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count = count($trace);
-        foreach ($trace as $index => $call) {
-            $call = $this->parseCallTraceObject($call);
+        $short_trace = $this->getStackTrace(true);
+        $is_shortened = end($short_trace) && key($short_trace) !== 0;
+        foreach ($short_trace as $index => $call) {
+            $call = $this->parseStackTraceCall($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
                 $in_atk = false;
             }
 
-            $tokens_trace['{INDEX}'] = $trace_count - $index;
-            $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
-            $tokens_trace['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
-            $tokens_trace['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
+            $tokens = [];
+            $tokens['{INDEX}'] = $index + 1;
+            $tokens['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
+            $tokens['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
+            $tokens['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
+            $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
-            $tokens_trace['{FUNCTION}'] = $call['function'];
-            $tokens_trace['{FUNCTION_ARGS}'] = '()</td>';
+            $tokens['{FUNCTION}'] = $call['function'];
+            $tokens['{FUNCTION_ARGS}'] = '()';
 
             if ($escape_frame) {
                 $escape_frame = false;
@@ -163,18 +163,22 @@ class HTML extends RendererAbstract
                 }
 
                 if (!empty($args)) {
-                    $tokens_trace['{FUNCTION_ARGS}'] = "
-                            </td>
-                        </tr>
-                        <tr class='negative'>
-                            <td colspan=3></td>
-                            <td> (".str_repeat(' ', 20).implode(', ', $args).') </td>
-                        </tr>
-                        ';
+                    $tokens['{FUNCTION_ARGS}'] = '(<br />'.implode(','.'<br />', $args).')';
                 }
             }
 
-            $this->output .= $this->replaceTokens($tokens_trace, $text);
+            $this->output .= $this->replaceTokens($tokens, $text);
+        }
+
+        if ($is_shortened) {
+            $this->output .= '
+                <tr class="">
+                    <td style="text-align:right">...</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            ';
         }
     }
 
@@ -190,6 +194,6 @@ class HTML extends RendererAbstract
             </div>
         ';
 
-        $this->output .= (string) (new static($this->exception->getPrevious()));
+        $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
     }
 }

@@ -33,7 +33,7 @@ class JSON extends RendererAbstract
 
     protected function processParams(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -51,7 +51,7 @@ class JSON extends RendererAbstract
 
     protected function processSolutions(): void
     {
-        if (false === $this->is_atk_exception) {
+        if (!$this->exception instanceof Exception) {
             return;
         }
 
@@ -81,11 +81,9 @@ HTML;
     {
         $in_atk = true;
         $escape_frame = false;
-        $tokens_trace = [];
-        $trace = $this->is_atk_exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
-        $trace_count = count($trace);
+        $trace = $this->getStackTrace(false);
         foreach ($trace as $index => $call) {
-            $call = $this->parseCallTraceObject($call);
+            $call = $this->parseStackTraceCall($call);
 
             if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
                 $escape_frame = true;
@@ -113,13 +111,13 @@ HTML;
             return;
         }
 
-        $previous = new static($this->exception->getPrevious());
+        $previous = new static($this->exception->getPrevious(), $this->adapter);
         $text = (string) $previous; // need to trigger processAll;
 
         $this->json['previous'] = $previous->json;
     }
 
-    protected function parseCallTraceObject($call): array
+    protected function parseStackTraceCall($call): array
     {
         return [
             'line'     => $call['line'] ?? '',
