@@ -13,10 +13,10 @@ abstract class RendererAbstract
 {
     use TranslatableTrait;
 
-    /** @var \Throwable */
+    /** @var \Throwable|Exception */
     public $exception;
 
-    /** @var \Throwable|null */
+    /** @var \Throwable|Exception|null */
     public $parent_exception;
 
     /** @var string */
@@ -105,29 +105,11 @@ abstract class RendererAbstract
         return (string) json_encode($val);
     }
 
-    protected static function getClassShortName(\Throwable $exception): string
-    {
-        return preg_replace('/.*\\\\/', '', get_class($exception));
-    }
-
-    /**
-     * @return string
-     */
     protected function getExceptionTitle(): string
     {
         return $this->exception instanceof Exception
             ? $this->exception->getCustomExceptionTitle()
-            : static::getClassShortName($this->exception).' Error';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getExceptionName(): string
-    {
-        return $this->exception instanceof Exception
-            ? $this->exception->getCustomExceptionName()
-            : get_class($this->exception);
+            : 'Critical Error';
     }
 
     /**

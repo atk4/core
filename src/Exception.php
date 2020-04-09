@@ -28,9 +28,6 @@ class Exception extends \Exception
     /** @var string */
     protected $custom_exception_title = 'Critical Error';
 
-    /** @var string The name of the Exception for custom naming */
-    protected $custom_exception_name = null;
-
     /**
      * Most exceptions would be a cause by some other exception, Agile
      * Core will encapsulate them and allow you to access them anyway.
@@ -212,16 +209,6 @@ class Exception extends \Exception
     public function getSolutions(): array
     {
         return $this->solutions;
-    }
-
-    /**
-     * Get the custom Exception name, if defined in $custom_exception_name.
-     *
-     * @return string
-     */
-    public function getCustomExceptionName(): string
-    {
-        return $this->custom_exception_name ?? get_class($this);
     }
 
     /**

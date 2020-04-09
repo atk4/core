@@ -139,44 +139,20 @@ class ExceptionTest extends TestCase
         $this->assertRegExp('/2nd Solution/', $ret);
     }
 
-    public function testCustomName(): void
-    {
-        $m = new ExceptionCustomName(
-            [
-                'Exception with custom name',
-            ]
-        );
-
-        $ret = $m->getColorfulText();
-        $this->assertRegExp('/CustomNameException/', $ret);
-
-        // get colorful text
-        $ret = $m->getHTML();
-        $this->assertRegExp('/CustomNameException/', $ret);
-
-        // get colorful text
-        $ret = $m->getHTMLText();
-        $this->assertRegExp('/CustomNameException/', $ret);
-
-        // get colorful text
-        $ret = $m->getJSON();
-        $this->assertRegExp('/CustomNameException/', $ret);
-    }
-
     public function testExceptionFallback(): void
     {
         $m = new ExceptionTestThrowError(['test']);
-        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error: test', $m->getHTML());
-        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error: test', $m->getHTMLText());
-        $this->assertEquals('atk4\core\tests\ExceptionTestThrowError [0] Error: test', $m->getColorfulText());
+        $this->assertEquals(ExceptionTestThrowError::class.' [0] Error: test', $m->getHTML());
+        $this->assertEquals(ExceptionTestThrowError::class.' [0] Error: test', $m->getHTMLText());
+        $this->assertEquals(ExceptionTestThrowError::class.' [0] Error: test', $m->getColorfulText());
         $this->assertEquals(
             json_encode(
                 [
                     'success'  => false,
                     'code'     => 0,
                     'message'  => 'Error during JSON renderer : test',
-                    'title'    => 'atk4\\core\\tests\\ExceptionTestThrowError',
-                    'class'    => 'atk4\\core\\tests\\ExceptionTestThrowError',
+                    'title'    => ExceptionTestThrowError::class,
+                    'class'    => ExceptionTestThrowError::class,
                     'params'   => [],
                     'solution' => [],
                     'trace'    => [],
@@ -203,17 +179,9 @@ class TrackableMock2
 // @codingStandardsIgnoreEnd
 
 // @codingStandardsIgnoreStart
-class ExceptionCustomName extends Exception
-{
-    protected $custom_exception_name = 'CustomNameException';
-}
-
-// @codingStandardsIgnoreEnd
-
-// @codingStandardsIgnoreStart
 class ExceptionTestThrowError extends Exception
 {
-    public function getCustomExceptionName(): string
+    public function getCustomExceptionTitle(): string
     {
         throw new \Exception('just to cover __string');
     }

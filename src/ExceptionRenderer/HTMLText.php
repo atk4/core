@@ -11,7 +11,7 @@ class HTMLText extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = $this->getExceptionName();
+        $class = get_class($this->exception);
 
         $tokens = [
             '{TITLE}'   => $title,
@@ -36,16 +36,13 @@ HTML
             return;
         }
 
-        /** @var Exception $exception */
-        $exception = $this->exception;
-
-        if (0 === count($exception->getParams())) {
+        if (0 === count($this->exception->getParams())) {
             return;
         }
 
         $this->output .= PHP_EOL.'<span style="color:cyan;">Exception params: </span>';
 
-        foreach ($exception->getParams() as $key => $val) {
+        foreach ($this->exception->getParams() as $key => $val) {
             $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
             $val = htmlentities(static::toSafeString($val));

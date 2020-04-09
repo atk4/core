@@ -11,7 +11,7 @@ class HTML extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = $this->getExceptionName();
+        $class = get_class($this->exception);
 
         $tokens = [
             '{TITLE}'   => $title,
@@ -38,10 +38,7 @@ class HTML extends RendererAbstract
             return;
         }
 
-        /** @var Exception $exception */
-        $exception = $this->exception;
-
-        if (0 === count($exception->getParams())) {
+        if (0 === count($this->exception->getParams())) {
             return;
         }
 
@@ -56,7 +53,7 @@ class HTML extends RendererAbstract
             '{PARAMS}' => '',
         ];
         $text_inner = '<div class="ui segment"><b>{KEY}</b>:{VAL}</div>';
-        foreach ($exception->getParams() as $key => $val) {
+        foreach ($this->exception->getParams() as $key => $val) {
             $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
             $val = htmlentities(static::toSafeString($val));

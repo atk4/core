@@ -23,7 +23,7 @@ class JSON extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = $this->getExceptionName();
+        $class = get_class($this->exception);
 
         $this->json['code'] = $this->exception->getCode();
         $this->json['message'] = $this->_($this->exception->getMessage());
@@ -37,14 +37,11 @@ class JSON extends RendererAbstract
             return;
         }
 
-        /** @var Exception $exception */
-        $exception = $this->exception;
-
-        if (0 === count($exception->getParams())) {
+        if (0 === count($this->exception->getParams())) {
             return;
         }
 
-        foreach ($exception->getParams() as $key => $val) {
+        foreach ($this->exception->getParams() as $key => $val) {
             $this->json['params'][$key] = static::toSafeString($val);
         }
     }

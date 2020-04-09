@@ -11,7 +11,7 @@ class Console extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = $this->getExceptionName();
+        $class = get_class($this->exception);
 
         $tokens = [
             '{TITLE}'   => $title,
@@ -54,14 +54,11 @@ TEXT
             return;
         }
 
-        /** @var Exception $exception */
-        $exception = $this->exception;
-
-        if (0 === count($exception->getSolutions())) {
+        if (0 === count($this->exception->getSolutions())) {
             return;
         }
 
-        foreach ($exception->getSolutions() as $key => $val) {
+        foreach ($this->exception->getSolutions() as $key => $val) {
             $this->output .= PHP_EOL."\e[92mSolution: ".$val."\e[0m";
         }
     }
