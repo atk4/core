@@ -141,27 +141,27 @@ abstract class RendererAbstract
             : $this->exception->getTrace();
         $trace = array_combine(range(count($trace) - 1, 0, -1), $trace);
 
-        if (!$shorten || $this->parent_exception === null) {
-            return $trace;
+        if ($shorten && $this->parent_exception !== null) {
+            $parent_trace = $this->parent_exception instanceof Exception
+                ? $this->parent_exception->getMyTrace()
+                : $this->parent_exception->getTrace();
+            $parent_trace = array_combine(range(count($parent_trace) - 1, 0, -1), $parent_trace);
+        } else {
+            $parent_trace = [];
         }
-
-        $parent_trace = $this->parent_exception instanceof Exception
-            ? $this->parent_exception->getMyTrace()
-            : $this->parent_exception->getTrace();
-        $parent_trace = array_combine(range(count($parent_trace) - 1, 0, -1), $parent_trace);
 
         $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
         $c = min(count($trace), count($parent_trace));
         for ($i = 0; $i < $c; $i++) {
-            $cv = $trace[$i];
-            $pv = $parent_trace[$i];
+            $cv = $this->parseStackTraceCall($trace[$i]);
+            $pv = $this->parseStackTraceCall($parent_trace[$i]);
 
-            if (($cv['line'] ?? null) === ($pv['line'] ?? null)
-                    && ($cv['file'] ?? null) === ($pv['file'] ?? null)
-                    && ($cv['class'] ?? null) === ($pv['class'] ?? null)
-                    && (!$both_atk || ($cv['object'] ?? null) === ($pv['object'] ?? null))
-                    && ($cv['function'] ?? null) === ($pv['function'] ?? null)
-                    && (!$both_atk || ($cv['args'] ?? null) === ($pv['args'] ?? null))) {
+            if ($cv['line'] === $pv['line']
+                    && $cv['file'] === $pv['file']
+                    && $cv['class'] === $pv['class']
+                    && (!$both_atk || $cv['object'] === $pv['object'])
+                    && $cv['function'] === $pv['function']
+                    && (!$both_atk || $cv['args'] === $pv['args'])) {
                 unset($trace[$i]);
             } else {
                 break;
