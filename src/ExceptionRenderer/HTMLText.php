@@ -11,7 +11,7 @@ class HTMLText extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = $this->getExceptionName();
+        $class = get_class($this->exception);
 
         $tokens = [
             '{TITLE}'   => $title,

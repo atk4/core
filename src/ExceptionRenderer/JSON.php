@@ -23,7 +23,7 @@ class JSON extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = $this->getExceptionName();
+        $class = get_class($this->exception);
 
         $this->json['code'] = $this->exception->getCode();
         $this->json['message'] = $this->_($this->exception->getMessage());
