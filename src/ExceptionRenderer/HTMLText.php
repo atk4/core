@@ -93,7 +93,7 @@ HTML;
 
         $in_atk = true;
         $escape_frame = false;
-        $tokens_trace = [];
+        $tokens = [];
         $trace = $this->exception instanceof Exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
         $trace_count = count($trace);
         foreach ($trace as $index => $call) {
@@ -104,14 +104,14 @@ HTML;
                 $in_atk = false;
             }
 
-            $tokens_trace['{FILE}'] = $call['file_formatted'];
-            $tokens_trace['{LINE}'] = $call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
-            $tokens_trace['{CLASS}'] = null !== $call['class'] ? $call['class'].'::' : '';
+            $tokens['{FILE}'] = $call['file_formatted'];
+            $tokens['{LINE}'] = $call['line_formatted'];
+            $tokens['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>".$call['object_formatted'].'</span>' : '';
+            $tokens['{CLASS}'] = null !== $call['class'] ? $call['class'].'::' : '';
 
-            $tokens_trace['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
-            $tokens_trace['{FUNCTION}'] = $call['function'];
-            $tokens_trace['{FUNCTION_ARGS}'] = '()';
+            $tokens['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
+            $tokens['{FUNCTION}'] = $call['function'];
+            $tokens['{FUNCTION_ARGS}'] = '()';
 
             if ($escape_frame) {
                 $escape_frame = false;
@@ -121,10 +121,10 @@ HTML;
                     $args[] = static::toSafeString($arg);
                 }
 
-                $tokens_trace['{FUNCTION_ARGS}'] = PHP_EOL.str_repeat(' ', 40).'('.implode(', ', $args).')';
+                $tokens['{FUNCTION_ARGS}'] = PHP_EOL.str_repeat(' ', 40).'('.implode(', ', $args).')';
             }
 
-            $this->output .= $this->replaceTokens($tokens_trace, $text);
+            $this->output .= $this->replaceTokens($tokens, $text);
         }
     }
 

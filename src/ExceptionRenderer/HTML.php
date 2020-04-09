@@ -134,7 +134,7 @@ class HTML extends RendererAbstract
 
         $in_atk = true;
         $escape_frame = false;
-        $tokens_trace = [];
+        $tokens = [];
         $trace = $this->exception instanceof Exception ? $this->exception->getMyTrace() : $this->exception->getTrace();
         $trace_count = count($trace);
         foreach ($trace as $index => $call) {
@@ -145,14 +145,14 @@ class HTML extends RendererAbstract
                 $in_atk = false;
             }
 
-            $tokens_trace['{INDEX}'] = $trace_count - $index;
-            $tokens_trace['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
-            $tokens_trace['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
-            $tokens_trace['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
-            $tokens_trace['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
+            $tokens['{INDEX}'] = $trace_count - $index;
+            $tokens['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
+            $tokens['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
+            $tokens['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
+            $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
-            $tokens_trace['{FUNCTION}'] = $call['function'];
-            $tokens_trace['{FUNCTION_ARGS}'] = '()</td>';
+            $tokens['{FUNCTION}'] = $call['function'];
+            $tokens['{FUNCTION_ARGS}'] = '()</td>';
 
             if ($escape_frame) {
                 $escape_frame = false;
@@ -163,7 +163,7 @@ class HTML extends RendererAbstract
                 }
 
                 if (!empty($args)) {
-                    $tokens_trace['{FUNCTION_ARGS}'] = "
+                    $tokens['{FUNCTION_ARGS}'] = "
                             </td>
                         </tr>
                         <tr class='negative'>
@@ -174,7 +174,7 @@ class HTML extends RendererAbstract
                 }
             }
 
-            $this->output .= $this->replaceTokens($tokens_trace, $text);
+            $this->output .= $this->replaceTokens($tokens, $text);
         }
     }
 
