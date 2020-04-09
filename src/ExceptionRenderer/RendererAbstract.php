@@ -13,10 +13,10 @@ abstract class RendererAbstract
 {
     use TranslatableTrait;
 
-    /** @var \Throwable */
+    /** @var \Throwable|Exception */
     public $exception;
 
-    /** @var \Throwable|null */
+    /** @var \Throwable|Exception|null */
     public $parent_exception;
 
     /** @var string */

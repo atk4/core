@@ -37,14 +37,11 @@ class JSON extends RendererAbstract
             return;
         }
 
-        /** @var Exception $exception */
-        $exception = $this->exception;
-
-        if (0 === count($exception->getParams())) {
+        if (0 === count($this->exception->getParams())) {
             return;
         }
 
-        foreach ($exception->getParams() as $key => $val) {
+        foreach ($this->exception->getParams() as $key => $val) {
             $this->json['params'][$key] = static::toSafeString($val);
         }
     }
