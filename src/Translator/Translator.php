@@ -42,7 +42,7 @@ class Translator
      *
      * @throws Exception
      */
-    public function setDefaults(array $properties = [], bool $passively = false): void
+    public function setDefaults(array $properties, bool $passively = false): void
     {
         if (null !== ($properties['instance'] ?? null)) {
             throw new Exception(['$instance cannot be replaced']);
