@@ -70,7 +70,7 @@ class DIContainerTraitTest extends TestCase
     public function testPassively()
     {
         $m = new FactoryDIMock2();
-        $m->setDefaults(null, true);
+        $m->setDefaults([], true);
         $this->assertTrue(true);
     }
 }
