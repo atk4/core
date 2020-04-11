@@ -33,27 +33,27 @@ class ExceptionTest extends TestCase
 
         // get colorful text
         $ret = $m->getColorfulText();
-        $this->assertRegExp('/TestIt/', $ret);
-        $this->assertRegExp('/PrevError/', $ret);
-        $this->assertRegExp('/333/', $ret);
+        $this->assertMatchesRegularExpression('/TestIt/', $ret);
+        $this->assertMatchesRegularExpression('/PrevError/', $ret);
+        $this->assertMatchesRegularExpression('/333/', $ret);
 
         // get console HTLM
         $ret = $m->getHTMLText();
-        $this->assertRegExp('/TestIt/', $ret);
-        $this->assertRegExp('/PrevError/', $ret);
-        $this->assertRegExp('/333/', $ret);
+        $this->assertMatchesRegularExpression('/TestIt/', $ret);
+        $this->assertMatchesRegularExpression('/PrevError/', $ret);
+        $this->assertMatchesRegularExpression('/333/', $ret);
 
         // get colorful text
         $ret = $m->getHTML();
-        $this->assertRegExp('/TestIt/', $ret);
-        $this->assertRegExp('/PrevError/', $ret);
-        $this->assertRegExp('/333/', $ret);
+        $this->assertMatchesRegularExpression('/TestIt/', $ret);
+        $this->assertMatchesRegularExpression('/PrevError/', $ret);
+        $this->assertMatchesRegularExpression('/333/', $ret);
 
         // get JSON
         $ret = $m->getJSON();
-        $this->assertRegExp('/TestIt/', $ret);
-        $this->assertRegExp('/PrevError/', $ret);
-        $this->assertRegExp('/333/', $ret);
+        $this->assertMatchesRegularExpression('/TestIt/', $ret);
+        $this->assertMatchesRegularExpression('/PrevError/', $ret);
+        $this->assertMatchesRegularExpression('/333/', $ret);
 
         // to string
         $ret = $m->toString(1);
@@ -79,20 +79,20 @@ class ExceptionTest extends TestCase
         $m->setMessage('bumbum');
 
         $ret = $m->getColorfulText();
-        $this->assertRegExp('/Classic/', $ret);
-        $this->assertRegExp('/bumbum/', $ret);
+        $this->assertMatchesRegularExpression('/Classic/', $ret);
+        $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
         $ret = $m->getHTML();
-        $this->assertRegExp('/Classic/', $ret);
-        $this->assertRegExp('/bumbum/', $ret);
+        $this->assertMatchesRegularExpression('/Classic/', $ret);
+        $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
         $ret = $m->getHTMLText();
-        $this->assertRegExp('/Classic/', $ret);
-        $this->assertRegExp('/bumbum/', $ret);
+        $this->assertMatchesRegularExpression('/Classic/', $ret);
+        $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
         $ret = $m->getJSON();
-        $this->assertRegExp('/Classic/', $ret);
-        $this->assertRegExp('/bumbum/', $ret);
+        $this->assertMatchesRegularExpression('/Classic/', $ret);
+        $this->assertMatchesRegularExpression('/bumbum/', $ret);
     }
 
     public function testSolution(): void
@@ -101,19 +101,19 @@ class ExceptionTest extends TestCase
         $m->addSolution('One Solution');
 
         $ret = $m->getColorfulText();
-        $this->assertRegExp('/One Solution/', $ret);
+        $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
         // get colorful text
         $ret = $m->getHTML();
-        $this->assertRegExp('/One Solution/', $ret);
+        $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
         // get colorful text
         $ret = $m->getHTMLText();
-        $this->assertRegExp('/One Solution/', $ret);
+        $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
         // get colorful text
         $ret = $m->getJSON();
-        $this->assertRegExp('/One Solution/', $ret);
+        $this->assertMatchesRegularExpression('/One Solution/', $ret);
     }
 
     public function testSolution2(): void
@@ -124,7 +124,7 @@ class ExceptionTest extends TestCase
         ]);
 
         $ret = $m->getColorfulText();
-        $this->assertRegExp('/1st Solution/', $ret);
+        $this->assertMatchesRegularExpression('/1st Solution/', $ret);
 
         $m = new Exception([
             'Exception with solution',
@@ -135,8 +135,8 @@ class ExceptionTest extends TestCase
         ]);
 
         $ret = $m->getColorfulText();
-        $this->assertRegExp('/1st Solution/', $ret);
-        $this->assertRegExp('/2nd Solution/', $ret);
+        $this->assertMatchesRegularExpression('/1st Solution/', $ret);
+        $this->assertMatchesRegularExpression('/2nd Solution/', $ret);
     }
 
     public function testExceptionFallback(): void
