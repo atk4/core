@@ -45,12 +45,8 @@ trait DIContainerTrait
      *
      * @return $this
      */
-    public function setDefaults(array $properties = [], bool $passively = false)
+    public function setDefaults(array $properties, bool $passively = false)
     {
-        if ($properties === null) {
-            $properties = [];
-        }
-
         foreach ($properties as $key => $val) {
             if (!is_numeric($key) && property_exists($this, $key)) {
                 if ($passively && $this->$key !== null) {

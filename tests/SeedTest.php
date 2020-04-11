@@ -288,7 +288,7 @@ class SeedTest extends TestCase
         $this->assertEquals('bar', $s1->foo);
         $this->assertEquals('', $s1->baz);
 
-        $s1->setDefaults(null);
+        $s1->setDefaults([]);
     }
 
     public function testNull()
