@@ -167,11 +167,11 @@ trait ContainerTrait
     /**
      * Remove child element if it exists.
      *
-     * @param string $short_name short name of the element
+     * @param string|TrackableTrait $short_name short name of the element
      *
      * @throws Exception
      */
-    public function removeElement(string $short_name)
+    public function removeElement($short_name)
     {
         if (is_object($short_name)) {
             $short_name = $short_name->short_name;
