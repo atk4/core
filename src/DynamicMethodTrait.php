@@ -61,27 +61,15 @@ trait DynamicMethodTrait
     /**
      * Add new method for this object.
      *
-     * @param string|array $name Name of new method of $this object
+     * @param string $name Name of new method of $this object
      *
      * @return $this
      */
-    public function addMethod($name, callable $fx)
+    public function addMethod(string $name, callable $fx)
     {
         // HookTrait is mandatory
         if (!isset($this->_hookTrait)) {
             throw new Exception(['Object must use hookTrait for Dynamic Methods to work']);
-        }
-
-        if (is_string($name) && strpos($name, ',') !== false) {
-            $name = array_map('trim', explode(',', $name));
-        }
-
-        if (is_array($name)) {
-            foreach ($name as $h) {
-                $this->addMethod($h, $fx);
-            }
-
-            return $this;
         }
 
         if ($this->hasMethod($name)) {

@@ -77,31 +77,6 @@ class DynamicMethodTraitTest extends TestCase
         $res = $m->sum(3, 5);
         $this->assertEquals(8, $res);
 
-        // method name as CSV
-        $m = new DynamicMethodMock();
-        $m->addMethod(['min,less'], function ($m, $a, $b) {
-            return min($a, $b);
-        });
-        $res = $m->min(3, 5);
-        $this->assertEquals(3, $res);
-
-        $m = new DynamicMethodMock();
-        $m->addMethod(['min, less'], function ($m, $a, $b) {
-            return min($a, $b);
-        });
-        $res = $m->less(5, 3);
-        $this->assertEquals(3, $res);
-
-        // method name as array
-        $m = new DynamicMethodMock();
-        $m->addMethod(['min', 'less'], function ($m, $a, $b) {
-            return min($a, $b);
-        });
-        $res = $m->min(3, 5);
-        $this->assertEquals(3, $res);
-        $res = $m->less(5, 3);
-        $this->assertEquals(3, $res);
-
         // callable as object/array
         $m = new DynamicMethodMock();
         $m->addMethod('getElementCount', [new ContainerMock(), 'getElementCount']);
