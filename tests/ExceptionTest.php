@@ -75,7 +75,7 @@ class ExceptionTest extends TestCase
     {
         $m = new \Exception('Classic Exception');
 
-        $m = new Exception('atk4 exception', null, $m);
+        $m = new Exception('atk4 exception', 0, $m);
         $m->setMessage('bumbum');
 
         $ret = $m->getColorfulText();
