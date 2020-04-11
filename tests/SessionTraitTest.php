@@ -44,22 +44,22 @@ class SessionTraitTest extends TestCase
 
         // value as string
         $m->memorize('foo', 'bar');
-        $this->assertEquals('bar', $_SESSION['o'][$m->name]['foo']);
+        $this->assertEquals('bar', $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as null
         $m->memorize('foo', null);
-        $this->assertEquals(null, $_SESSION['o'][$m->name]['foo']);
+        $this->assertEquals(null, $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as callable
         $m->memorize('foo', function () {
             return 'bar';
         });
-        $this->assertEquals('bar', $_SESSION['o'][$m->name]['foo']);
+        $this->assertEquals('bar', $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as object
         $o = new \StdClass();
         $m->memorize('foo', $o);
-        $this->assertEquals($o, $_SESSION['o'][$m->name]['foo']);
+        $this->assertEquals($o, $_SESSION['__atk_session'][$m->name]['foo']);
 
         $m->destroySession();
     }
