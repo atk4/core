@@ -102,9 +102,9 @@ class DynamicMethodTraitTest extends TestCase
         $res = $m->less(5, 3);
         $this->assertEquals(3, $res);
 
-        // callable as object
+        // callable as object/array
         $m = new DynamicMethodMock();
-        $m->addMethod('getElementCount', new ContainerMock());
+        $m->addMethod('getElementCount', [new ContainerMock(), 'getElementCount']);
         $this->assertEquals(0, $m->getElementCount());
     }
 
