@@ -26,7 +26,7 @@ trait DebugTrait
      *
      * @param string $message
      */
-    protected function _echo_stderr($message)
+    protected function _echo_stderr(string $message): void
     {
         file_put_contents('php://stderr', $message);
     }
@@ -62,18 +62,14 @@ trait DebugTrait
     /**
      * Output log message.
      *
-     * @param string $level
-     * @param string $message
-     * @param array  $context
-     *
      * @return $this
      */
-    public function log($level, $message, array $context = [])
+    public function log(string $level, string $message, array $context = [])
     {
         if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
             $this->app->logger->log($level, $message, $context);
         } else {
-            $this->_echo_stderr("$message\n");
+            $this->_echo_stderr($message."\n");
         }
 
         return $this;
@@ -83,12 +79,9 @@ trait DebugTrait
      * Output message that needs to be acknowledged by application user. Make sure
      * that $context does not contain any sensitive information.
      *
-     * @param string $message
-     * @param array  $context
-     *
      * @return $this
      */
-    public function userMessage($message, $context = [])
+    public function userMessage(string $message, array $context = [])
     {
         if (isset($this->app) && $this->app instanceof \atk4\core\AppUserNotificationInterface) {
             $this->app->userNotification($message, $context);
@@ -111,10 +104,8 @@ trait DebugTrait
      * is invoked through different call paths, this debug info will be logged.
      *
      * Do not leave this method in production code !!!
-     *
-     * @param string $trace
      */
-    public function debugTraceChange($trace = 'default')
+    public function debugTraceChange(string $trace = 'default'): void
     {
         $bt = [];
         foreach (debug_backtrace() as $line) {
@@ -135,13 +126,8 @@ trait DebugTrait
 
     /**
      * System is unusable.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function emergency($message, array $context = [])
+    public function emergency(string $message, array $context = []): void
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
@@ -151,13 +137,8 @@ trait DebugTrait
      *
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function alert($message, array $context = [])
+    public function alert(string $message, array $context = []): void
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
@@ -166,13 +147,8 @@ trait DebugTrait
      * Critical conditions.
      *
      * Example: Application component unavailable, unexpected exception.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function critical($message, array $context = [])
+    public function critical(string $message, array $context = []): void
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
@@ -180,13 +156,8 @@ trait DebugTrait
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function error($message, array $context = [])
+    public function error(string $message, array $context = []): void
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
@@ -196,26 +167,16 @@ trait DebugTrait
      *
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function warning($message, array $context = [])
+    public function warning(string $message, array $context = []): void
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
 
     /**
      * Normal but significant events.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function notice($message, array $context = [])
+    public function notice(string $message, array $context = []): void
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
@@ -224,13 +185,8 @@ trait DebugTrait
      * Interesting events.
      *
      * Example: User logs in, SQL logs.
-     *
-     * @param string $message
-     * @param array  $context
-     *
-     * @return void
      */
-    public function info($message, array $context = [])
+    public function info(string $message, array $context = []): void
     {
         $this->log(LogLevel::INFO, $message, $context);
     }

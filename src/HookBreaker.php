@@ -10,12 +10,18 @@ namespace atk4\core;
  * @license MIT
  * @copyright Agile Toolkit (c) http://agiletoolkit.org/
  */
-class HookBreaker extends \Exception
+class HookBreaker extends Exception
 {
+    /**
+     * @var mixed
+     */
     public $return_value = null;
 
-    public function __construct($rv)
+    /**
+     * @param mixed $return_value
+     */
+    public function __construct($return_value)
     {
-        $this->return_value = $rv;
+        $this->return_value = $return_value;
     }
 }

@@ -23,16 +23,15 @@ trait ContainerTrait
      */
     public $elements = [];
 
+    /**
+     * @var int[]
+     */
     private $_element_name_counts = [];
 
     /**
      * Returns unique element name based on desired name.
-     *
-     * @param string $desired
-     *
-     * @return string
      */
-    public function _unique_element($desired)
+    public function _unique_element(string $desired): string
     {
         if (!isset($this->_element_name_counts[$desired])) {
             $this->_element_name_counts[$desired] = 1;
@@ -54,10 +53,8 @@ trait ContainerTrait
      * @param array|string $args
      *
      * @throws Exception
-     *
-     * @return object
      */
-    public function add($obj, $args = [])
+    public function add($obj, $args = []): object
     {
         if (isset($this->_factoryTrait)) {
             // Factory allows us to pass string-type objects
@@ -95,10 +92,8 @@ trait ContainerTrait
      * @param array|string $args
      *
      * @throws Exception
-     *
-     * @return object
      */
-    protected function _add_Container($element, $args = [])
+    protected function _add_Container($element, $args = []): object
     {
         if (!is_object($element)) {
             throw new Exception(['Only objects may be added into containers', 'arg' => $element]);
@@ -175,10 +170,8 @@ trait ContainerTrait
      * @param string $short_name short name of the element
      *
      * @throws Exception
-     *
-     * @return $this
      */
-    public function removeElement($short_name)
+    public function removeElement(string $short_name)
     {
         if (is_object($short_name)) {
             $short_name = $short_name->short_name;
@@ -204,7 +197,7 @@ trait ContainerTrait
      *
      * @return string Shortened name of new object.
      */
-    protected function _shorten($desired)
+    protected function _shorten(string $desired): string
     {
         if (
             isset($this->_appScopeTrait) &&
@@ -240,10 +233,8 @@ trait ContainerTrait
      * @param string $short_name Short name of the child element
      *
      * @throws Exception
-     *
-     * @return object
      */
-    public function getElement($short_name)
+    public function getElement(string $short_name): object
     {
         if (!isset($this->elements[$short_name])) {
             throw new Exception([

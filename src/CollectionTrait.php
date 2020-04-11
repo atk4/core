@@ -28,7 +28,7 @@ trait CollectionTrait
      *
      * @throws Exception
      *
-     * @return object|mixed $obect
+     * @return object
      */
     public function _addIntoCollection(string $name, object $object, string $collection)
     {
@@ -90,12 +90,9 @@ trait CollectionTrait
     /**
      * Removes element from specified collection.
      *
-     * @param string $name
-     * @param string $collection
-     *
      * @throws Exception
      */
-    public function _removeFromCollection(string $name, string $collection)
+    public function _removeFromCollection(string $name, string $collection): void
     {
         if ($this->_hasInCollection($name, $collection) === false) {
             throw new Exception([
@@ -112,9 +109,9 @@ trait CollectionTrait
      * Call this on collections after cloning object. This will clone all collection
      * elements (which are objects).
      *
-     * @param string $collection to be cloned
+     * @param string Collection to be cloned
      */
-    public function _cloneCollection(string $collection)
+    public function _cloneCollection(string $collection): void
     {
         foreach ($this->{$collection} as &$object) {
             $object = clone $object;
@@ -127,9 +124,6 @@ trait CollectionTrait
     /**
      * Returns object from collection or false if object is not found.
      *
-     * @param string $name
-     * @param string $collection
-     *
      * @return object|false
      */
     public function _hasInCollection(string $name, string $collection)
@@ -138,14 +132,9 @@ trait CollectionTrait
     }
 
     /**
-     * @param string $name
-     * @param string $collection
-     *
      * @throws Exception
-     *
-     * @return object
      */
-    public function _getFromCollection(string $name, string $collection)
+    public function _getFromCollection(string $name, string $collection): object
     {
         $object = $this->_hasInCollection($name, $collection);
         if (false === $object) {
@@ -162,13 +151,13 @@ trait CollectionTrait
 
     /**
      * Method used internally for shortening object names
-     * Identical implementation to ContainerTrait::_shortern.
+     * Identical implementation to ContainerTrait::_shorten.
      *
      * @param string $desired Desired name of new object.
      *
      * @return string Shortened name of new object.
      */
-    protected function _shorten_ml($desired)
+    protected function _shorten_ml(string $desired): string
     {
         if (
             isset($this->_appScopeTrait) &&

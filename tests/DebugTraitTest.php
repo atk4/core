@@ -216,7 +216,7 @@ class DebugAppMock2 implements \atk4\core\AppUserNotificationInterface
 {
     public $message;
 
-    public function userNotification($message, array $context = [])
+    public function userNotification(string $message, array $context = []): void
     {
         $this->message = [$message, $context];
     }

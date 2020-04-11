@@ -16,6 +16,7 @@ class Generic implements ITranslatorAdapter
         setConfig as protected;
     }
 
+    /** @var array */
     protected $definitions = [];
 
     /**
@@ -37,13 +38,8 @@ class Generic implements ITranslatorAdapter
     /**
      * Return translated string.
      * if parameters is not empty will replace tokens.
-     *
-     * @param array|string $definition
-     * @param array|null   $parameters
-     *
-     * @return string
      */
-    protected function processMessage($definition, array $parameters = []): string
+    protected function processMessage(string $definition, array $parameters = []): string
     {
         foreach ($parameters as $key => $val) {
             $definition = str_replace('{{'.$key.'}}', $val, $definition);
@@ -56,8 +52,6 @@ class Generic implements ITranslatorAdapter
      * @param array|string $definition A string of definitions separated by |
      * @param array        $parameters An array of parameters
      * @param int          $count      Requested plural form
-     *
-     * @return string
      */
     protected function processMessagePlural($definition, array $parameters = [], int $count = 1): string
     {
@@ -81,6 +75,9 @@ class Generic implements ITranslatorAdapter
         return $this->processMessage($definition, $parameters);
     }
 
+    /**
+     * @return array|string
+     */
     protected function getDefinition(string $message, $domain, ?string $locale)
     {
         $this->loadDefinitionATK($locale); // need to be called before manual add
@@ -105,11 +102,6 @@ class Generic implements ITranslatorAdapter
     /**
      * Load definitions from file.
      *
-     * @param string $file
-     * @param string $locale
-     * @param string $domain
-     * @param string $format
-     *
      * @throws \atk4\core\Exception
      */
     public function addDefinitionFromFile(string $file, string $locale, string $domain, string $format): void
@@ -133,10 +125,7 @@ class Generic implements ITranslatorAdapter
     /**
      * Set or Replace a single definition within a domain.
      *
-     * @param string       $key
      * @param string|array $definition
-     * @param string       $locale
-     * @param string       $domain
      *
      * @return $this
      */

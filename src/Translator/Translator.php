@@ -40,12 +40,9 @@ class Translator
     /**
      * Set property like Depedency injection.
      *
-     * @param array $properties
-     * @param bool  $passively
-     *
      * @throws Exception
      */
-    public function setDefaults($properties = [], $passively = false): void
+    public function setDefaults(array $properties = [], bool $passively = false): void
     {
         if (null !== ($properties['instance'] ?? null)) {
             throw new Exception(['$instance cannot be replaced']);
@@ -67,11 +64,6 @@ class Translator
         $this->_setDefaults($properties);
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return Translator
-     */
     public function setDefaultLocale(string $locale): self
     {
         $this->default_locale = $locale;
@@ -79,11 +71,6 @@ class Translator
         return $this;
     }
 
-    /**
-     * @param string $default_domain
-     *
-     * @return Translator
-     */
     public function setDefaultDomain(string $default_domain): self
     {
         $this->default_domain = $default_domain;
@@ -98,6 +85,7 @@ class Translator
      */
     protected function __clone()
     {
+        throw new Exception('Translator cannot be cloned');
     }
 
     /**
@@ -113,7 +101,7 @@ class Translator
     }
 
     /**
-     * is a singleton and need a method to access the instance.
+     * Is a singleton and need a method to access the instance.
      */
     public static function instance(): self
     {
@@ -126,10 +114,6 @@ class Translator
 
     /**
      * Set the Translator Adapter.
-     *
-     * @param ITranslatorAdapter $translator
-     *
-     * @return Translator
      */
     public function setAdapter(ITranslatorAdapter $translator): self
     {
@@ -142,8 +126,6 @@ class Translator
      * Get the adapter.
      *
      * @TODO should remain private?
-     *
-     * @return ITranslatorAdapter
      */
     private function getAdapter(): ITranslatorAdapter
     {

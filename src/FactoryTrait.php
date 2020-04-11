@@ -106,10 +106,8 @@ trait FactoryTrait
      * @param mixed  $seed
      * @param array  $defaults
      * @param string $prefix   Optional prefix for class name
-     *
-     * @return object
      */
-    public function factory($seed, $defaults = [], $prefix = null)
+    public function factory($seed, $defaults = [], string $prefix = null): object
     {
         if ($defaults === null) {
             $defaults = [];
@@ -195,7 +193,7 @@ trait FactoryTrait
      *
      * @return string Full, normalized class name
      */
-    public function normalizeClassName($name, $prefix = null)
+    public function normalizeClassName(string $name, string $prefix = null): string
     {
         // If App has "normalizeClassName" (obsolete now), use it instead
         if (

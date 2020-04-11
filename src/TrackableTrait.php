@@ -30,15 +30,13 @@ trait TrackableTrait
      *
      * @var string
      */
-    public $short_name = null;
+    public $short_name;
 
     /**
      * If name of the object is omitted then it's naturally to name them
      * after the class. You can specify a different naming pattern though.
-     *
-     * @return string
      */
-    public function getDesiredName()
+    public function getDesiredName(): string
     {
         return preg_replace('/.*\\\\/', '', strtolower(get_class($this)));
     }
@@ -47,7 +45,7 @@ trait TrackableTrait
      * Removes object from parent, so that PHP's Garbage Collector can
      * dispose of it.
      */
-    public function destroy()
+    public function destroy(): void
     {
         if (
             isset($this->owner) &&

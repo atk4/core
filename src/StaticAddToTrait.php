@@ -27,7 +27,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)
+    public static function addTo(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)/* :static supported by PHP8+ */
     {
         if (is_object($seed)) {
             $object = $seed;
@@ -78,7 +78,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)
+    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)/* :static supported by PHP8+ */
     {
         return static::_addToWithClassName($parent, $seed, false, $add_args, $skip_add);
     }
@@ -90,7 +90,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)
+    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)/* :self is too strict with unsafe behaviour */
     {
         return static::_addToWithClassName($parent, $seed, true, $add_args, $skip_add);
     }

@@ -25,7 +25,7 @@ trait InitializerTrait
     /**
      * Initialize object. Always call parent::init(). Do not call directly.
      */
-    public function init()
+    public function init(): void
     {
         if ($this->_initialized) {
             throw new Exception(['Attempting to initialize twice', 'this'=>$this]);

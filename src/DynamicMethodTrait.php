@@ -22,16 +22,16 @@ trait DynamicMethodTrait
      * @param string $name Name of the method
      * @param array  $args Array of arguments to pass to this method
      */
-    public function __call(string $method, $args)
+    public function __call(string $name, $args)
     {
-        if ($ret = $this->tryCall($method, $args)) {
+        if ($ret = $this->tryCall($name, $args)) {
             return reset($ret);
         }
 
         throw new Exception([
-            'Method '.$method.' is not defined for this object',
+            'Method '.$name.' is not defined for this object',
             'class'     => get_class($this),
-            'method'    => $method,
+            'method'    => $name,
             'args'      => $args,
         ]);
     }
@@ -44,15 +44,15 @@ trait DynamicMethodTrait
      *
      * @return mixed|null
      */
-    public function tryCall($method, $args)
+    public function tryCall($name, $args)
     {
-        if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$method, $args)) {
+        if (isset($this->_hookTrait) && $ret = $this->hook('method-'.$name, $args)) {
             return $ret;
         }
 
         if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
             array_unshift($args, $this);
-            if ($ret = $this->app->hook('global-method-'.$method, $args)) {
+            if ($ret = $this->app->hook('global-method-'.$name, $args)) {
                 return $ret;
             }
         }
@@ -62,11 +62,10 @@ trait DynamicMethodTrait
      * Add new method for this object.
      *
      * @param string|array $name Name of new method of $this object
-     * @param callable     $fx   Callback
      *
      * @return $this
      */
-    public function addMethod($name, $fx)
+    public function addMethod($name, callable $fx)
     {
         // HookTrait is mandatory
         if (!isset($this->_hookTrait)) {
@@ -85,10 +84,6 @@ trait DynamicMethodTrait
             return $this;
         }
 
-        if (is_object($fx) && !is_callable($fx)) {
-            $fx = [$fx, $name];
-        }
-
         if ($this->hasMethod($name)) {
             throw new Exception(['Registering method twice', 'name' => $name]);
         }
@@ -102,10 +97,8 @@ trait DynamicMethodTrait
      * Return if this object has specified method (either native or dynamic).
      *
      * @param string $name Name of the method
-     *
-     * @return bool
      */
-    public function hasMethod($name)
+    public function hasMethod(string $name): bool
     {
         return method_exists($this, $name)
             || (isset($this->_hookTrait) && $this->hookHasCallbacks('method-'.$name))
@@ -116,10 +109,8 @@ trait DynamicMethodTrait
      * Remove dynamically registered method.
      *
      * @param string $name Name of the method
-     *
-     * @return $this
      */
-    public function removeMethod($name)
+    public function removeMethod(string $name)
     {
         if (isset($this->_hookTrait)) {
             $this->removeHook('method-'.$name);
@@ -146,10 +137,9 @@ trait DynamicMethodTrait
      * @see self::hasMethod()
      * @see self::__call()
      *
-     * @param string   $name Name of the method
-     * @param callable $fx   Calls your function($object, $arg1, $arg2)
+     * @param string $name Name of the method
      */
-    public function addGlobalMethod($name, $fx)
+    public function addGlobalMethod(string $name, callable $fx): void
     {
         // AppScopeTrait and HookTrait for app are mandatory
         if (!isset($this->_appScopeTrait) || !isset($this->app->_hookTrait)) {
@@ -166,10 +156,8 @@ trait DynamicMethodTrait
      * Return true if such global method exists.
      *
      * @param string $name Name of the method
-     *
-     * @return bool
      */
-    public function hasGlobalMethod($name)
+    public function hasGlobalMethod(string $name): bool
     {
         return
             isset($this->_appScopeTrait) &&
@@ -181,15 +169,11 @@ trait DynamicMethodTrait
      * Remove dynamically registered global method.
      *
      * @param string $name Name of the method
-     *
-     * @return $this
      */
-    public function removeGlobalMethod($name)
+    public function removeGlobalMethod(string $name): void
     {
         if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
             $this->app->removeHook('global-method-'.$name);
         }
-
-        return $this;
     }
 }
