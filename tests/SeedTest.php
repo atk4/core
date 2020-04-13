@@ -453,7 +453,7 @@ class ViewTestMock extends SeedTestMock
     }
     public $def = null;
 
-    public function setDefaults($properties = [], $passively = false)
+    public function setDefaults(array $properties = [], bool $passively = false)
     {
         if ($properties['foo']) {
             if ($passively) {
@@ -475,15 +475,15 @@ class SeedDefTestMock extends SeedTestMock
     }
     public $def = null;
 
-    public function setDefaults($def, $passively = false)
+    public function setDefaults(array $properties, bool $passively = false)
     {
-        $this->def = $def;
+        $this->def = $properties;
     }
 }
 
 class SeedAppPrefixMock
 {
-    public function normalizeClassNameApp($name, $prefix)
+    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
     {
         var_dump($name, $prefix);
     }
