@@ -22,6 +22,7 @@ class HookBreaker extends Exception
      */
     public function __construct($return_value)
     {
+        parent::__construct();
         $this->return_value = $return_value;
     }
 }
