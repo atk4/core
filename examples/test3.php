@@ -14,4 +14,4 @@ $c->addMethod('mymethod', function ($c, $a, $b) {
     return $a + $b;
 });
 
-echo $c->mymethod(2, 3)."\n";
+echo $c->mymethod(2, 3) . "\n";

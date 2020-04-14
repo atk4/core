@@ -17,7 +17,7 @@ class HTML extends RendererAbstract
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->_($this->exception->getMessage()),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
         $this->output .= $this->replaceTokens($tokens, '
@@ -143,9 +143,9 @@ class HTML extends RendererAbstract
 
             $tokens = [];
             $tokens['{INDEX}'] = $index + 1;
-            $tokens['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'].':'.$call['line_formatted'];
+            $tokens['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'] . ':' . $call['line_formatted'];
             $tokens['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
-            $tokens['{CLASS}'] = false !== $call['class'] ? $call['class'].'::' : '';
+            $tokens['{CLASS}'] = false !== $call['class'] ? $call['class'] . '::' : '';
             $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];
@@ -160,7 +160,7 @@ class HTML extends RendererAbstract
                 }
 
                 if (!empty($args)) {
-                    $tokens['{FUNCTION_ARGS}'] = '(<br />'.implode(','.'<br />', $args).')';
+                    $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', $args) . ')';
                 }
             }
 

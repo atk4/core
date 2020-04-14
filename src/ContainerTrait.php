@@ -37,10 +37,10 @@ trait ContainerTrait
             $this->_element_name_counts[$desired] = 1;
             $postfix = '';
         } else {
-            $postfix = '_'.(++$this->_element_name_counts[$desired]);
+            $postfix = '_' . (++$this->_element_name_counts[$desired]);
         }
 
-        return $desired.$postfix;
+        return $desired . $postfix;
     }
 
     /**
@@ -150,7 +150,7 @@ trait ContainerTrait
 
         $element->owner = $this;
         $element->short_name = $args[0];
-        $element->name = $this->_shorten($this->name.'_'.$element->short_name);
+        $element->name = $this->_shorten($this->name . '_' . $element->short_name);
         $this->elements[$element->short_name] = $element;
 
         unset($args[0]);
@@ -218,9 +218,9 @@ trait ContainerTrait
             $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
+                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
             }
-            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
         }
 
         return $desired;
