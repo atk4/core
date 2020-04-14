@@ -453,7 +453,7 @@ class ViewTestMock extends SeedTestMock
     }
     public $def = null;
 
-    public function setDefaults(array $properties = [], bool $passively = false)
+    public function setDefaults(array $properties, bool $passively = false)
     {
         if ($properties['foo']) {
             if ($passively) {
