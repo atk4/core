@@ -16,14 +16,14 @@ trait SessionTrait
      *
      * @var string
      */
-    protected $session_key = 'o';
+    protected $session_key = '__atk_session';
 
     /**
      * Create new session.
      *
      * @param array $options Options for session_start()
      */
-    public function startSession($options = [])
+    public function startSession(array $options = [])
     {
         // all methods use this method to start session, so we better check
         // NameTrait existence here in one place.
@@ -57,12 +57,11 @@ trait SessionTrait
     /**
      * Remember data in object-relevant session data.
      *
-     * @param string $key   Key for the data
-     * @param mixed  $value Value
+     * @param mixed $value Value
      *
      * @return mixed $value
      */
-    public function memorize($key, $value)
+    public function memorize(string $key, $value)
     {
         $this->startSession();
 
@@ -78,12 +77,9 @@ trait SessionTrait
     /**
      * Similar to memorize, but if value for key exist, will return it.
      *
-     * @param string $key     Data Key
-     * @param mixed  $default Default value
-     *
      * @return mixed Previously memorized data or $default
      */
-    public function learn($key, $default = null)
+    public function learn(string $key, $default = null)
     {
         $this->startSession();
 
@@ -100,12 +96,9 @@ trait SessionTrait
      * Returns session data for this object. If not previously set, then
      * $default is returned.
      *
-     * @param string $key     Data Key
-     * @param mixed  $default Default value
-     *
      * @return mixed Previously memorized data or $default
      */
-    public function recall($key, $default = null)
+    public function recall(string $key, $default = null)
     {
         $this->startSession();
 
@@ -130,7 +123,7 @@ trait SessionTrait
      *
      * @return $this
      */
-    public function forget($key = null)
+    public function forget(string $key = null)
     {
         $this->startSession();
 

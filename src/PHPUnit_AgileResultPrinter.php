@@ -12,11 +12,13 @@ class PHPUnit_AgileResultPrinter extends \PHPUnit_TextUI_ResultPrinter
      *
      * @param \PHPUnit_Framework_TestFailure $defect
      */
-    protected function printDefectTrace(\PHPUnit_Framework_TestFailure $defect)
+    protected function printDefectTrace(\PHPUnit_Framework_TestFailure $defect): void
     {
         $e = $defect->thrownException();
         if (!$e instanceof \atk4\core\PHPUnit_AgileExceptionWrapper) {
-            return parent::printDefectTrace($defect);
+            parent::printDefectTrace($defect);
+
+            return;
         }
         $this->write((string) $e);
 

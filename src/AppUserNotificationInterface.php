@@ -14,8 +14,6 @@ interface AppUserNotificationInterface
     /**
      * This function will be called with a message that needs to be
      * displayed to user.
-     *
-     * @param string $message
      */
-    public function userNotification($message, array $context = []);
+    public function userNotification(string $message, array $context = []): void;
 }

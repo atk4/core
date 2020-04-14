@@ -7,17 +7,10 @@ namespace atk4\core;
  */
 class PHPUnit_AgileExceptionWrapper extends \PHPUnit_Framework_Exception
 {
-    /** @var \Exception Previous exception */
+    /** @var \Throwable Previous exception */
     public $previous;
 
-    /**
-     * Constructor.
-     *
-     * @param string     $message
-     * @param int        $code
-     * @param \Exception $previous
-     */
-    public function __construct($message = '', $code = 0, \Exception $previous = null)
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
     {
         $this->previous = $previous;
         parent::__construct($message, $code, $previous);

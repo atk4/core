@@ -28,14 +28,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PsyshE extends TraceCommand implements ContextAware
 {
+    /**
+     * @var Context
+     */
     protected $context;
 
-    public function setContext(Context $context)
+    public function setContext(Context $context): void
     {
         $this->context = $context;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('e')
@@ -47,7 +50,7 @@ HELP
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $exception = $this->context->getLastException();
         if (!$exception instanceof \atk4\core\Exception) {

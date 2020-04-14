@@ -26,7 +26,7 @@ trait DebugTrait
      *
      * @param string $message
      */
-    protected function _echo_stderr($message)
+    protected function _echo_stderr(string $message): void
     {
         file_put_contents('php://stderr', $message);
     }
@@ -64,7 +64,6 @@ trait DebugTrait
      *
      * @param string $level
      * @param string $message
-     * @param array  $context
      *
      * @return $this
      */
@@ -73,7 +72,7 @@ trait DebugTrait
         if (isset($this->app) && isset($this->app->logger) && $this->app->logger instanceof \Psr\Log\LoggerInterface) {
             $this->app->logger->log($level, $message, $context);
         } else {
-            $this->_echo_stderr("$message\n");
+            $this->_echo_stderr($message."\n");
         }
 
         return $this;
@@ -83,12 +82,9 @@ trait DebugTrait
      * Output message that needs to be acknowledged by application user. Make sure
      * that $context does not contain any sensitive information.
      *
-     * @param string $message
-     * @param array  $context
-     *
      * @return $this
      */
-    public function userMessage($message, $context = [])
+    public function userMessage(string $message, array $context = [])
     {
         if (isset($this->app) && $this->app instanceof \atk4\core\AppUserNotificationInterface) {
             $this->app->userNotification($message, $context);
@@ -111,10 +107,8 @@ trait DebugTrait
      * is invoked through different call paths, this debug info will be logged.
      *
      * Do not leave this method in production code !!!
-     *
-     * @param string $trace
      */
-    public function debugTraceChange($trace = 'default')
+    public function debugTraceChange(string $trace = 'default'): void
     {
         $bt = [];
         foreach (debug_backtrace() as $line) {
@@ -137,7 +131,6 @@ trait DebugTrait
      * System is unusable.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */
@@ -153,7 +146,6 @@ trait DebugTrait
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */
@@ -168,7 +160,6 @@ trait DebugTrait
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */
@@ -182,7 +173,6 @@ trait DebugTrait
      * be logged and monitored.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */
@@ -198,7 +188,6 @@ trait DebugTrait
      * that are not necessarily wrong.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */
@@ -211,7 +200,6 @@ trait DebugTrait
      * Normal but significant events.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */
@@ -226,7 +214,6 @@ trait DebugTrait
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     * @param array  $context
      *
      * @return void
      */

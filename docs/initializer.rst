@@ -24,7 +24,7 @@ Declare a object class in your framework::
 
         public $value = null;
 
-        function init() {
+        function init(): void {
             parent::init();
 
             if($_POST[$this->name) {
@@ -65,7 +65,7 @@ class::
 
         public $value = null;
 
-        function init() {
+        function init(): void {
             $this->_init();   // call init of InitializerTrait
 
             if($_POST[$this->name) {

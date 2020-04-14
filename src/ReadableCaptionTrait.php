@@ -9,12 +9,8 @@ trait ReadableCaptionTrait
      *
      * This will translate 'this\\ _isNASA_MyBigBull shit_123\Foo'
      * into 'This Is NASA My Big Bull Shit 123 Foo'
-     *
-     * @param string $s
-     *
-     * @return string
      */
-    public function readableCaption($s)
+    public function readableCaption(string $s): string
     {
         //$s = 'this\\ _isNASA_MyBigBull shit_123\Foo';
 
