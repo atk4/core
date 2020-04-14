@@ -46,12 +46,10 @@ class Exception extends \Exception
      * Constructor.
      *
      * @param string|array $message
-     * @param int          $code
-     * @param \Throwable   $previous
      */
     public function __construct(
         $message = '',
-        ?int $code = null,
+        int $code = 0,
         \Throwable $previous = null
     ) {
         if (is_array($message)) {
@@ -66,7 +64,7 @@ class Exception extends \Exception
             }
         }
 
-        parent::__construct($message, $code ?? 0, $previous);
+        parent::__construct($message, $code, $previous);
         $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
     }
 
@@ -74,11 +72,9 @@ class Exception extends \Exception
      * Change message (subject) of a current exception. Primary use is
      * for localization purposes.
      *
-     * @param string $message
-     *
      * @return $this
      */
-    public function setMessage($message): self
+    public function setMessage(string $message): self
     {
         $this->message = $message;
 
@@ -87,10 +83,8 @@ class Exception extends \Exception
 
     /**
      * Return trace array.
-     *
-     * @return array
      */
-    public function getMyTrace()
+    public function getMyTrace(): array
     {
         return $this->trace2;
     }
@@ -105,8 +99,6 @@ class Exception extends \Exception
      *
      * --
      * <triggered by>
-     *
-     * @return string
      */
     public function getColorfulText(): string
     {
@@ -115,8 +107,6 @@ class Exception extends \Exception
 
     /**
      * Similar to getColorfulText() but will use raw HTML for outputting colors.
-     *
-     * @return string
      */
     public function getHTMLText(): string
     {
@@ -132,8 +122,6 @@ class Exception extends \Exception
      *   $l->layout->template->setHTML('Content', $e->getHTML());
      *   $l->run();
      *   exit;
-     *
-     * @return string
      */
     public function getHTML(): string
     {
@@ -142,8 +130,6 @@ class Exception extends \Exception
 
     /**
      * Return exception in JSON Format.
-     *
-     * @return string
      */
     public function getJSON(): string
     {
@@ -154,8 +140,6 @@ class Exception extends \Exception
      * Safely converts some value to string.
      *
      * @param mixed $val
-     *
-     * @return string
      */
     public function toString($val): string
     {
@@ -164,10 +148,8 @@ class Exception extends \Exception
 
     /**
      * Follow the getter-style of PHP Exception.
-     *
-     * @return array
      */
-    public function getParams()
+    public function getParams(): array
     {
         return $this->params;
     }
@@ -175,12 +157,11 @@ class Exception extends \Exception
     /**
      * Augment existing exception with more info.
      *
-     * @param string $param
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return $this
      */
-    public function addMoreInfo($param, $value): self
+    public function addMoreInfo(string $param, $value): self
     {
         $this->params[$param] = $value;
 
@@ -192,11 +173,9 @@ class Exception extends \Exception
      *
      * @TODO can be added more features? usually we are out of App
      *
-     * @param string $solution
-     *
-     * @return Exception
+     * @return $this
      */
-    public function addSolution(string $solution)
+    public function addSolution(string $solution): self
     {
         $this->solutions[] = $solution;
 
@@ -213,8 +192,6 @@ class Exception extends \Exception
 
     /**
      * Get the custom Exception title, if defined in $custom_exception_title.
-     *
-     * @return string
      */
     public function getCustomExceptionTitle(): string
     {
@@ -226,7 +203,7 @@ class Exception extends \Exception
      *
      * @param ITranslatorAdapter|null $adapter
      *
-     * @return Exception
+     * @return $this
      */
     public function setTranslatorAdapter(?ITranslatorAdapter $adapter = null): self
     {

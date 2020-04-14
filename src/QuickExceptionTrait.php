@@ -20,6 +20,8 @@ trait QuickExceptionTrait
 
     /**
      * Calls exception.
+     *
+     * @TODO NOT IMPLEMENTED
      */
     public function exception()
     {

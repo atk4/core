@@ -191,7 +191,7 @@ class to define a business object, such as - ShoppingBag::
     class ShoppingBag extends \atk4\data\Model {
         public $table = 'shopping_bag';
 
-        function init() {
+        function init(): void {
             parent::init();
 
             $this->hasOne('user_id', new User());

@@ -7,15 +7,10 @@ namespace atk4\core;
  */
 class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Runs the bare test sequence.
-     *
-     * @return null
-     */
-    public function runBare()
+    public function runBare(): void
     {
         try {
-            return parent::runBare();
+            parent::runBare();
         } catch (Exception $e) {
             throw new PHPUnit_AgileExceptionWrapper($e->getMessage(), 0, $e);
         }
@@ -27,13 +22,11 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
      * NOTE: this method must only be used for low-level functionality, not
      * for general test-scripts.
      *
-     * @param object $obj
-     * @param string $name
-     * @param array  $args
+     * @throws \ReflectionException
      *
      * @return mixed
      */
-    public function callProtected($obj, $name, array $args = [])
+    public function callProtected(object $obj, string $name, array $args = [])
     {
         $class = new \ReflectionClass($obj);
         $method = $class->getMethod($name);
@@ -48,12 +41,11 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
      * NOTE: this method must only be used for low-level functionality, not
      * for general test-scripts.
      *
-     * @param object $obj
-     * @param string $name
+     * @throws \ReflectionException
      *
      * @return mixed
      */
-    public function getProtected($obj, $name)
+    public function getProtected(object $obj, string $name)
     {
         $class = new \ReflectionClass($obj);
         $method = $class->getProperty($name);
@@ -65,7 +57,7 @@ class PHPUnit_AgileTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Fake test. Otherwise Travis gives warning that there are no tests in here.
      */
-    public function testFake()
+    public function testFake(): void
     {
         $this->assertTrue(true);
     }

@@ -53,7 +53,7 @@ class InitializerMock extends _InitializerMock
 {
     public $result = false;
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -63,7 +63,7 @@ class InitializerMock extends _InitializerMock
 
 class BrokenInitializerMock extends _InitializerMock
 {
-    public function init()
+    public function init(): void
     {
         // do not call parent
     }

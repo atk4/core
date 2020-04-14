@@ -131,7 +131,7 @@ class CollectionTraitTest extends TestCase
             use core\InitializerTrait;
             public $name;
 
-            public function init()
+            public function init(): void
             {
             }
         });

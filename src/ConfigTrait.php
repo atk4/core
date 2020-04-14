@@ -44,7 +44,7 @@ trait ConfigTrait
      *
      * @return $this
      */
-    public function readConfig($files = ['config.php'], $format = 'php')
+    public function readConfig($files = ['config.php'], string $format = 'php')
     {
         if (!is_array($files)) {
             $files = [$files];
@@ -136,7 +136,7 @@ trait ConfigTrait
      *
      * @return mixed
      */
-    public function getConfig($path, $default_value = null)
+    public function getConfig(string $path, $default_value = null)
     {
         $pos = &$this->_lookupConfigElement($path, false);
 
@@ -157,7 +157,7 @@ trait ConfigTrait
      * @return &pos|false Pointer to element in $this->config or false is element don't exist and $create_elements===false
      *                    Returns false if element don't exist and $create_elements===false
      */
-    protected function &_lookupConfigElement($path, $create_elements = false)
+    protected function &_lookupConfigElement(string $path, bool $create_elements = false)
     {
         // trick to return false because we need reference here
         $false = false;

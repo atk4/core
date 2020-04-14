@@ -20,10 +20,10 @@ class LocalizationTest extends TestCase
             Persistence::connect('error:error');
         } catch (\Throwable $e) {
             /* @var $e Exception */
-            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getHTML());
-            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getHTMLText());
-            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getColorfulText());
-            $this->assertRegExp('/Невозможно определить постоянство драйвера из DSN/', $e->getJSON());
+            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getHTML());
+            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getHTMLText());
+            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getColorfulText());
+            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getJSON());
         }
     }
 
@@ -37,10 +37,10 @@ class LocalizationTest extends TestCase
         } catch (\Throwable $e) {
             /* @var $e Exception */
             $e->setTranslatorAdapter($adapter);
-            $this->assertRegExp('/message is translated/', $e->getHTML());
-            $this->assertRegExp('/message is translated/', $e->getHTMLText());
-            $this->assertRegExp('/message is translated/', $e->getColorfulText());
-            $this->assertRegExp('/message is translated/', $e->getJSON());
+            $this->assertMatchesRegularExpression('/message is translated/', $e->getHTML());
+            $this->assertMatchesRegularExpression('/message is translated/', $e->getHTMLText());
+            $this->assertMatchesRegularExpression('/message is translated/', $e->getColorfulText());
+            $this->assertMatchesRegularExpression('/message is translated/', $e->getJSON());
         }
     }
 
@@ -64,10 +64,24 @@ class LocalizationTest extends TestCase
                     return 'external translator';
                 }
             });
-            $this->assertRegExp('/external translator/', $e->getHTML());
-            $this->assertRegExp('/external translator/', $e->getHTMLText());
-            $this->assertRegExp('/external translator/', $e->getColorfulText());
-            $this->assertRegExp('/external translator/', $e->getJSON());
+            $this->assertMatchesRegularExpression('/external translator/', $e->getHTML());
+            $this->assertMatchesRegularExpression('/external translator/', $e->getHTMLText());
+            $this->assertMatchesRegularExpression('/external translator/', $e->getColorfulText());
+            $this->assertMatchesRegularExpression('/external translator/', $e->getJSON());
+        }
+    }
+
+    /**
+     * Add assertMatchesRegularExpression() method for phpunit >= 8.0 < 9.0 for compatibility with PHP 7.2.
+     *
+     * @TODO Remove once PHP 7.2 support is not needed for testing anymore.
+     */
+    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        if (method_exists(parent::class, 'assertMatchesRegularExpression')) {
+            parent::assertMatchesRegularExpression($pattern, $string, $message);
+        } else {
+            static::assertRegExp($pattern, $string, $message);
         }
     }
 }

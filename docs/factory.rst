@@ -141,7 +141,7 @@ ATK provides a way:
 Example::
 
    // class App
-   function normalizeClassName($name, $prefix) {
+   function normalizeClassName(string $name, string $prefix = null): string {
       if ($name == 'Form' && $prefix == 'atk4\ui') {
          return MyExtensions\SecureForm::class;
       }
@@ -405,7 +405,7 @@ values. See my description below the example::
     class RedButton extends Button {
         protected $icon = 'book';
 
-        function init() {
+        function init(): void {
             parent::init();
 
             $this->icon = 'right arrow';
@@ -759,12 +759,12 @@ The next example will replace all the ``Grid`` classes with the one you have
 implemented inside your own namespace::
 
     class MyApp extends \atk4\ui\App {
-        function normalizeClassNameApp($class) {
-            if ($class == 'Grid') {
+        function normalizeClassNameApp(string $name, string $prefix = null): ?string {
+            if ($name == 'Grid') {
                 return '\myextensions\Grid';
             }
 
-            return parent::normalizeClassNameApp($class);
+            return parent::normalizeClassNameApp($name);
         }
     }
 

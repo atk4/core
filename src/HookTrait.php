@@ -100,7 +100,7 @@ trait HookTrait
      *
      * @param string   $spot            Hook identifier
      * @param int|null $priority        Filter specific priority, null for all
-     * @param int|null $priorityIsIndex Filter by index instead of priority
+     * @param int      $priorityIsIndex Filter by index instead of priority
      *
      * @return static
      */
@@ -127,7 +127,7 @@ trait HookTrait
      *
      * @param string   $spot            Hook identifier
      * @param int|null $priority        Filter specific priority, null for all
-     * @param int|null $priorityIsIndex Filter by index instead of priority
+     * @param int      $priorityIsIndex Filter by index instead of priority
      */
     public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
     {
@@ -204,7 +204,7 @@ trait HookTrait
      *
      * @throws HookBreaker
      */
-    public function breakHook($return)
+    public function breakHook($return): void
     {
         throw new HookBreaker($return);
     }

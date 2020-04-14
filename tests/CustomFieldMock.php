@@ -18,7 +18,7 @@ class CustomFieldMock extends FieldMock
     /** @var null verifying if init wal called */
     public $var = null;
 
-    public function init()
+    public function init(): void
     {
         $this->_init();
 
