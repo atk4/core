@@ -68,7 +68,7 @@ trait CollectionTrait
             $object->short_name = $name;
             $object->owner = $this;
             if (isset($this->_trackableTrait)) {
-                $object->name = $this->_shorten_ml($this->name.'-'.$collection.'_'.$name);
+                $object->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
             }
         }
 
@@ -178,9 +178,9 @@ trait CollectionTrait
             $rest = substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_'.dechex(crc32($key));
+                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
             }
-            $desired = $this->app->unique_hashes[$key].'__'.$rest;
+            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
         }
 
         return $desired;

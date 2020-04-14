@@ -209,7 +209,7 @@ trait FactoryTrait
 
         // Rule 1: if starts with "." always prefix
         if ($name && $name[0] == '.' && $prefix) {
-            $name = $prefix.'\\'.substr($name, 1);
+            $name = $prefix . '\\' . substr($name, 1);
             $name = str_replace('/', '\\', $name);
 
             return $name;
@@ -223,7 +223,7 @@ trait FactoryTrait
         }
 
         if ($name && $name[0] !== '/' && $prefix) {
-            $name = $prefix.'\\'.$name;
+            $name = $prefix . '\\' . $name;
         }
 
         $name = str_replace('/', '\\', $name);

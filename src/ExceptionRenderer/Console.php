@@ -17,7 +17,7 @@ class Console extends RendererAbstract
             '{TITLE}'   => $title,
             '{CLASS}'   => $class,
             '{MESSAGE}' => $this->_($this->exception->getMessage()),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: '.$this->exception->getCode().']' : '',
+            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
         $this->output .= $this->replaceTokens(
@@ -44,7 +44,7 @@ TEXT
 
         foreach ($exception->getParams() as $key => $val) {
             $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
-            $this->output .= PHP_EOL."\e[91m".$key.': '.static::toSafeString($val)."\e[0m";
+            $this->output .= PHP_EOL . "\e[91m" . $key . ': ' . static::toSafeString($val) . "\e[0m";
         }
     }
 
@@ -59,7 +59,7 @@ TEXT
         }
 
         foreach ($this->exception->getSolutions() as $key => $val) {
-            $this->output .= PHP_EOL."\e[92mSolution: ".$val."\e[0m";
+            $this->output .= PHP_EOL . "\e[92mSolution: " . $val . "\e[0m";
         }
     }
 
@@ -96,8 +96,8 @@ TEXT;
             $tokens = [];
             $tokens['{FILE}'] = $call['file_formatted'];
             $tokens['{LINE}'] = $call['line_formatted'];
-            $tokens['{OBJECT}'] = null !== $call['object_formatted'] ? " - \e[0;32m".$call['object_formatted']."\e[0m" : '';
-            $tokens['{CLASS}'] = null !== $call['class'] ? "\e[0;32m".$call['class']."::\e[0m" : '';
+            $tokens['{OBJECT}'] = null !== $call['object_formatted'] ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
+            $tokens['{CLASS}'] = null !== $call['class'] ? "\e[0;32m" . $call['class'] . "::\e[0m" : '';
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];
@@ -110,7 +110,7 @@ TEXT;
                     $args[] = static::toSafeString($arg);
                 }
 
-                $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(".PHP_EOL.str_repeat(' ', 40).implode(','.PHP_EOL.str_repeat(' ', 40), $args).')';
+                $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . PHP_EOL . str_repeat(' ', 40) . implode(',' . PHP_EOL . str_repeat(' ', 40), $args) . ')';
             }
 
             $this->output .= $this->replaceTokens($tokens, $text);
@@ -128,7 +128,7 @@ TEXT;
             return;
         }
 
-        $this->output .= PHP_EOL."\e[1;45mCaused by Previous Exception:\e[0m".PHP_EOL;
+        $this->output .= PHP_EOL . "\e[1;45mCaused by Previous Exception:\e[0m" . PHP_EOL;
 
         $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
         $this->output .= <<<TEXT

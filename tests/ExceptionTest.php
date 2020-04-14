@@ -142,9 +142,9 @@ class ExceptionTest extends TestCase
     public function testExceptionFallback(): void
     {
         $m = new ExceptionTestThrowError(['test']);
-        $this->assertEquals(ExceptionTestThrowError::class.' [0] Error: test', $m->getHTML());
-        $this->assertEquals(ExceptionTestThrowError::class.' [0] Error: test', $m->getHTMLText());
-        $this->assertEquals(ExceptionTestThrowError::class.' [0] Error: test', $m->getColorfulText());
+        $this->assertEquals(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
+        $this->assertEquals(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTMLText());
+        $this->assertEquals(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());
         $this->assertEquals(
             json_encode(
                 [

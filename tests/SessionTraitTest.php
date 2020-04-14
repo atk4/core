@@ -84,7 +84,7 @@ class SessionTraitTest extends TestCase
 
         // value as callback
         $m->learn('foo', function ($key) {
-            return $key.'_bar';
+            return $key . '_bar';
         });
         $this->assertEquals('foo_bar', $m->recall('foo'));
 
@@ -92,7 +92,7 @@ class SessionTraitTest extends TestCase
         $this->assertEquals('another', $m->recall('foo_2'));
 
         $v = $m->recall('foo_3', function ($key) {
-            return $key.'_bar';
+            return $key . '_bar';
         });
         $this->assertEquals('foo_3_bar', $v);
         $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
