@@ -30,7 +30,7 @@ abstract class TranslatorAdapterBase extends TestCase
             'other' => 'Test are {{count}}',
         ],
         'There was error while decoding JSON'                                    => 'There was error while decoding JSON',
-        'Unable to determine persistence driver from DSN'                        => 'Unable to determine persistence driver from DSN',
+        'Unable to determine persistence driver type from DSN'                   => 'Unable to determine persistence driver type from DSN',
         'Unable to serialize field value on load'                                => 'Unable to serialize field value on load ({{field}})',
         'Unable to serialize field value on save'                                => 'Unable to serialize field value on save ({{field}})',
         'Unable to typecast field value on load'                                 => 'Unable to typecast field value on load ({{field}})',
