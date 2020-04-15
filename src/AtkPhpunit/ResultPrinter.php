@@ -13,8 +13,6 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
 {
     /**
      * Prints trace info.
-     *
-     * @param \PHPUnit_Framework_TestFailure $defect
      */
     protected function printDefectTrace(TestFailure $defect): void
     {
