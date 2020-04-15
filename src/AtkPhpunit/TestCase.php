@@ -2,7 +2,7 @@
 
 namespace atk4\core\AtkPhpunit;
 
-require_once __DIR__ . '/phpunit6_polyfill.php';
+require_once __DIR__ . '/phpunit_polyfill.php';
 
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.

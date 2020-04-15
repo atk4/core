@@ -13,7 +13,9 @@
               <file>src/AtkPhpunit/ResultPrinter.php</file>
               <file>src/AtkPhpunit/ExceptionWrapper.php</file>
               <file>src/AtkPhpunit/TestCase.php</file>
+              <file>src/AtkPhpunit/phpunit_polyfill.php</file>
               <file>src/AtkPhpunit/phpunit6_polyfill.php</file>
+              <file>src/AtkPhpunit/phpunit8_polyfill.php</file>
             </exclude>
         </whitelist>
     </filter>
