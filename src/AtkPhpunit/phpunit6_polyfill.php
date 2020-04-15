@@ -10,26 +10,22 @@ if (class_exists(\PHPUnit\Framework\TestCase::class)) { // do nothing for phpuni
     return;
 }
 
-namespace PHPUnit\Framework;
+namespace PHPUnit\Framework {
+    class Exception extends \PHPUnit_Framework_Exception
+    {
+    }
 
-class Exception extends \PHPUnit_Framework_Exception
-{
+    class TestCase extends \PHPUnit_Framework_TestCase
+    {
+    }
+
+    class TestFailure extends \PHPUnit_Framework_TestFailure
+    {
+    }
 }
 
-namespace PHPUnit\TextUI;
-
-class ResultPrinter extends \PHPUnit_TextUI_ResultPrinter
-{
-}
-
-namespace PHPUnit\Framework;
-
-class TestCase extends \PHPUnit_Framework_TestCase
-{
-}
-
-namespace PHPUnit\Framework;
-
-class TestFailure extends \PHPUnit_Framework_TestFailure
-{
+namespace PHPUnit\TextUI {
+    class ResultPrinter extends \PHPUnit_TextUI_ResultPrinter
+    {
+    }
 }
