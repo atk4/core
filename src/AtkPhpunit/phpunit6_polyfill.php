@@ -5,7 +5,13 @@
  * - map commonly used classes to equivalent phpunit 7.0 namespaced names
  */
 
-namespace PHPUnit\Framework {
+namespace atk4\core\AtkPhpunit
+{
+    // prevent StyleCI class rename
+}
+
+namespace PHPUnit\Framework
+{
     class Exception extends \PHPUnit_Framework_Exception
     {
     }
@@ -19,7 +25,8 @@ namespace PHPUnit\Framework {
     }
 }
 
-namespace PHPUnit\TextUI {
+namespace PHPUnit\TextUI
+{
     class ResultPrinter extends \PHPUnit_TextUI_ResultPrinter
     {
     }
