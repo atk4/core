@@ -2,7 +2,7 @@
 
 namespace atk4\core\AtkPhpunit {
     /**
-     * Polyfill for phpunit < 9.0 to include equivalent but missing classes in phpunit 9.0.
+     * Polyfill for phpunit < 9.0 to include missing but equivalent classes in phpunit 9.0.
      */
     if (class_exists(\PHPUnit\TextUI\DefaultResultPrinter::class)) { // do nothing for phpunit 9.0 or higher
         return;
