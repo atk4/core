@@ -65,9 +65,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Add assertMatchesRegularExpression() method for phpunit >= 8.0 < 9.0 for compatibility with PHP 7.2.
+     * Add assertMatchesRegularExpression() method for phpunit < 9.0 for compatibility with PHP 7.2.
      *
-     * @TODO Remove once PHP 7.2 support is not needed for testing anymore.
+     * @TODO Remove once PHP 7.2 support is not needed for testing anymore, ie. phpunit 9.0 can be used.
      */
     public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
     {
