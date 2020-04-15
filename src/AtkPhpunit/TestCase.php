@@ -2,14 +2,12 @@
 
 namespace atk4\core\AtkPhpunit;
 
-use PHPUnit\Framework\TestCase;
-
 require_once __DIR__ . '/phpunit6_polyfill.php';
 
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
  */
-class TestCase extends TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     public function runBare(): void
     {

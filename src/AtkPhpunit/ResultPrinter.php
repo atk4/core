@@ -3,14 +3,13 @@
 namespace atk4\core\AtkPhpunit;
 
 use PHPUnit\Framework\TestFailure;
-use PHPUnit\TextUI\ResultPrinter;
 
 require_once __DIR__ . '/phpunit6_polyfill.php';
 
 /**
  * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
  */
-class ResultPrinter extends ResultPrinter
+class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
 {
     /**
      * Prints trace info.
