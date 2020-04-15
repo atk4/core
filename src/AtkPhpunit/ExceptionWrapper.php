@@ -1,11 +1,13 @@
 <?php
 
-namespace atk4\core;
+namespace atk4\core\AtkPhpunit;
+
+require_once __DIR__ . '/phpunit6_polyfill.php';
 
 /**
  * Generic PHPUnit exception wrapper for ATK4 repos.
  */
-class PHPUnit_AgileExceptionWrapper extends \PHPUnit_Framework_Exception
+class ExceptionWrapper extends \PHPUnit\Framework\Exception
 {
     /** @var \Throwable Previous exception */
     public $previous;

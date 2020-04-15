@@ -2,12 +2,13 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\ReadableCaptionTrait;
 
 /**
  * @coversDefaultClass \atk4\core\ReadableCaptionTrait
  */
-class ReadableCaptionTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
+class ReadableCaptionTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Test readableCaption method.
