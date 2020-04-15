@@ -2,17 +2,15 @@
 
 namespace atk4\core\AtkPhpunit;
 
-$phpunitVersion = 5;
-if (class_exists(\PHPUnit\TextUI\DefaultResultPrinter::class)) {
-    $phpunitVersion = 9;
-} elseif (class_exists(\PHPUnit\Framework\TestCase::class)) {
-    $phpunitVersion = 7;
+$phpunitVersionStr = (class_exists(\PHPUnit\Runner\Version::class)
+        ? \PHPUnit\Runner\Version::class
+        : \PHPUnit_Runner_Version::class)::id();
+$phpunitVersion = (float)preg_replace('~^(\d+(?:\.\d+)?).*~s', '$1', $phpunitVersionStr);
+
+if ($phpunitVersion < 6) {
+    require_once __DIR__ . '/phpunit5_polyfill.php';
 }
 
-if ($phpunitVersion <= 6) {
-    require_once __DIR__ . '/phpunit6_polyfill.php';
-}
-
-if ($phpunitVersion <= 8) {
+if ($phpunitVersion < 9) {
     require_once __DIR__ . '/phpunit8_polyfill.php';
 }

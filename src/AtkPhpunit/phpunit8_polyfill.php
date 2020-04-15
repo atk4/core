@@ -7,7 +7,7 @@
 
 namespace atk4\core\AtkPhpunit
 {
-    // prevent StyleCI class rename
+    // prevent class rename by StyleCI
 }
 
 namespace PHPUnit\TextUI
