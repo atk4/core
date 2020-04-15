@@ -2,9 +2,9 @@
 
 namespace atk4\core\AtkPhpunit;
 
-$phpunitVersionStr = (class_exists(\PHPUnit\Runner\Version::class)
-        ? \PHPUnit\Runner\Version::class
-        : \PHPUnit_Runner_Version::class)::id();
+$phpunitVersionStr = class_exists(\PHPUnit\Runner\Version::class)
+        ? \PHPUnit\Runner\Version::id()
+        : \PHPUnit_Runner_Version::id();
 $phpunitVersion = (float)preg_replace('~^(\d+(?:\.\d+)?).*~s', '$1', $phpunitVersionStr);
 
 if ($phpunitVersion < 6) {
