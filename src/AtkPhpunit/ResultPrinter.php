@@ -4,17 +4,15 @@ namespace atk4\core\AtkPhpunit;
 
 use PHPUnit\Framework\TestFailure;
 
-require_once __DIR__ . '/phpunit6_polyfill.php';
+require_once __DIR__ . '/phpunit_polyfill.php';
 
 /**
  * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
  */
-class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
+class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
 {
     /**
      * Prints trace info.
-     *
-     * @param \PHPUnit_Framework_TestFailure $defect
      */
     protected function printDefectTrace(TestFailure $defect): void
     {
