@@ -2,14 +2,14 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\Exception;
 use atk4\core\Translator\Adapter\Generic;
 use atk4\core\Translator\ITranslatorAdapter;
 use atk4\core\Translator\Translator;
 use atk4\data\Persistence;
-use PHPUnit\Framework\TestCase;
 
-class LocalizationTest extends TestCase
+class LocalizationTest extends AtkPhpunit\TestCase
 {
     public function testTranslatableTrait()
     {
@@ -68,20 +68,6 @@ class LocalizationTest extends TestCase
             $this->assertMatchesRegularExpression('/external translator/', $e->getHTMLText());
             $this->assertMatchesRegularExpression('/external translator/', $e->getColorfulText());
             $this->assertMatchesRegularExpression('/external translator/', $e->getJSON());
-        }
-    }
-
-    /**
-     * Add assertMatchesRegularExpression() method for phpunit >= 8.0 < 9.0 for compatibility with PHP 7.2.
-     *
-     * @TODO Remove once PHP 7.2 support is not needed for testing anymore.
-     */
-    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
-    {
-        if (method_exists(parent::class, 'assertMatchesRegularExpression')) {
-            parent::assertMatchesRegularExpression($pattern, $string, $message);
-        } else {
-            static::assertRegExp($pattern, $string, $message);
         }
     }
 }

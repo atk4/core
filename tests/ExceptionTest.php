@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\Exception;
 use atk4\core\TrackableTrait;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\Exception
  */
-class ExceptionTest extends TestCase
+class ExceptionTest extends AtkPhpunit\TestCase
 {
     /**
      * Test getColorfulText() and toString().
@@ -167,20 +167,6 @@ class ExceptionTest extends TestCase
             ),
             $m->getJSON()
         );
-    }
-
-    /**
-     * Add assertMatchesRegularExpression() method for phpunit >= 8.0 < 9.0 for compatibility with PHP 7.2.
-     *
-     * @TODO Remove once PHP 7.2 support is not needed for testing anymore.
-     */
-    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
-    {
-        if (method_exists(parent::class, 'assertMatchesRegularExpression')) {
-            parent::assertMatchesRegularExpression($pattern, $string, $message);
-        } else {
-            static::assertRegExp($pattern, $string, $message);
-        }
     }
 }
 

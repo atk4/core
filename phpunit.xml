@@ -10,12 +10,10 @@
             <directory suffix=".php">./src</directory>
             <exclude>
               <file>./src/PsyshE.php</file>
-              <file>src/PHPUnit_AgileResultPrinter.php</file>
-              <file>src/PHPUnit_AgileExceptionWrapper.php</file>
-              <file>src/PHPUnit_AgileTestCase.php</file>
-              <file>src/PHPUnit7_AgileResultPrinter.php</file>
-              <file>src/PHPUnit7_AgileExceptionWrapper.php</file>
-              <file>src/PHPUnit7_AgileTestCase.php</file>
+              <file>src/AtkPhpunit/ResultPrinter.php</file>
+              <file>src/AtkPhpunit/ExceptionWrapper.php</file>
+              <file>src/AtkPhpunit/TestCase.php</file>
+              <file>src/AtkPhpunit/phpunit6_polyfill.php</file>
             </exclude>
         </whitelist>
     </filter>

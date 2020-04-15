@@ -2,13 +2,13 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\ContainerTrait
  */
-class CollectionTraitTest extends TestCase
+class CollectionTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

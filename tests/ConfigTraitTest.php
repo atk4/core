@@ -2,12 +2,13 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\ConfigTrait;
 
 /**
  * @coversDefaultClass \atk4\core\ConfigTrait
  */
-class ConfigTraitTest extends \atk4\core\PHPUnit7_AgileTestCase
+class ConfigTraitTest extends AtkPhpunit\TestCase
 {
     public $dir = __DIR__ . '/config_test/';
 

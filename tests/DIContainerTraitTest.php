@@ -2,15 +2,15 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\DIContainerTrait;
 use atk4\core\Exception;
 use atk4\core\FactoryTrait;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\DIContainerTrait
  */
-class DIContainerTraitTest extends TestCase
+class DIContainerTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Ignore numeric property names (array keys).

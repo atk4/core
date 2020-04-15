@@ -1,22 +1,20 @@
 <?php
 
-declare(strict_types=1);
+namespace atk4\core\AtkPhpunit;
 
-namespace atk4\core;
-
-use PHPUnit\Framework\TestCase;
+require_once __DIR__ . '/phpunit6_polyfill.php';
 
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
  */
-class PHPUnit7_AgileTestCase extends TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     public function runBare(): void
     {
         try {
             parent::runBare();
         } catch (Exception $e) {
-            throw new PHPUnit7_AgileExceptionWrapper($e->getMessage(), 0, $e);
+            throw new ExceptionWrapper($e->getMessage(), 0, $e);
         }
     }
 
@@ -64,5 +62,19 @@ class PHPUnit7_AgileTestCase extends TestCase
     public function testFake(): void
     {
         $this->assertTrue(true);
+    }
+
+    /**
+     * Add assertMatchesRegularExpression() method for phpunit < 9.0 for compatibility with PHP 7.2.
+     *
+     * @TODO Remove once PHP 7.2 support is not needed for testing anymore, ie. phpunit 9.0 can be used.
+     */
+    public static function assertMatchesRegularExpression(string $pattern, string $string, string $message = ''): void
+    {
+        if (method_exists(parent::class, 'assertMatchesRegularExpression')) {
+            parent::assertMatchesRegularExpression($pattern, $string, $message);
+        } else {
+            static::assertRegExp($pattern, $string, $message);
+        }
     }
 }

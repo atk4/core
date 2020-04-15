@@ -2,14 +2,14 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core;
 use atk4\core\Exception;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\InitializerTrait
  */
-class InitializerTraitTest extends TestCase
+class InitializerTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.
