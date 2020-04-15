@@ -11,6 +11,8 @@ if (class_exists(\PHPUnit\TextUI\DefaultResultPrinter::class)) {
 
 if ($phpunitVersion <= 6) {
     require_once __DIR__ . '/phpunit6_polyfill.php';
-} elseif ($phpunitVersion <= 8) {
+}
+
+if ($phpunitVersion <= 8) {
     require_once __DIR__ . '/phpunit8_polyfill.php';
 }
