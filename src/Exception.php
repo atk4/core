@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// vim:ts=4:sw=4:et:fdm=marker
-
 namespace atk4\core;
 
 use atk4\core\ExceptionRenderer\Console;
