@@ -2,16 +2,16 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\AppScopeTrait;
 use atk4\core\DynamicMethodTrait;
 use atk4\core\Exception;
 use atk4\core\HookTrait;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\DynamicMethodTrait
  */
-class DynamicMethodTraitTest extends TestCase
+class DynamicMethodTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

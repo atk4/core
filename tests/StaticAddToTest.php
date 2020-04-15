@@ -2,12 +2,12 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\ContainerTrait;
 use atk4\core\DIContainerTrait;
 use atk4\core\FactoryTrait;
 use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
-use PHPUnit\Framework\TestCase;
 
 // @codingStandardsIgnoreStart
 class StdSAT extends \StdClass
@@ -61,7 +61,7 @@ class DIConstructorMockSAT
 /**
  * @coversDefaultClass \atk4\core\StaticAddToTrait
  */
-class StaticAddToTest extends TestCase
+class StaticAddToTest extends AtkPhpunit\TestCase
 {
     public function testBasic()
     {

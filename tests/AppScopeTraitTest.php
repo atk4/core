@@ -2,16 +2,16 @@
 
 namespace atk4\core\tests;
 
+use atk4\core\AtkPhpunit;
 use atk4\core\AppScopeTrait;
 use atk4\core\ContainerTrait;
 use atk4\core\NameTrait;
 use atk4\core\TrackableTrait;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @coversDefaultClass \atk4\core\AppScopeTrait
  */
-class AppScopeTraitTest extends TestCase
+class AppScopeTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.

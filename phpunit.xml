@@ -12,7 +12,7 @@
               <file>./src/PsyshE.php</file>
               <file>src/AtkPhpunit/ResultPrinter.php</file>
               <file>src/AtkPhpunit/ExceptionWrapper.php</file>
-              <file>src/AtkPhpunit/AgileTestCase.php</file>
+              <file>src/AtkPhpunit/TestCase.php</file>
               <file>src/AtkPhpunit/phpunit6_polyfill.php</file>
             </exclude>
         </whitelist>
