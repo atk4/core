@@ -30,7 +30,7 @@ class LocalizationTest extends TestCase
     public function testTranslatableTrait2()
     {
         $adapter = new Generic();
-        $adapter->setDefinitionSingle('Unable to determine persistence driver from DSN', 'message is translated', 'en', 'atk');
+        $adapter->setDefinitionSingle('Unable to determine persistence driver type from DSN', 'message is translated', 'en', 'atk');
 
         try {
             Persistence::connect('error:error');
