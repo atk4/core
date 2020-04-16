@@ -10,11 +10,18 @@ namespace atk4\core\AtkPhpunit
     // prevent class rename by StyleCI
 }
 
+namespace PHPUnit\Runner
+{
+    class Version extends \PHPUnit_Runner_Version
+    {
+    }
+}
+
 namespace PHPUnit\Framework
 {
-    // defined since phpunit 5.4.0
+    // for phpunit < 5.4 only
     // see https://github.com/sebastianbergmann/phpunit/tree/5.4.0/src/ForwardCompatibility
-    if (!class_exists(TestCase::class)) {
+    if (version_compare(\PHPUnit\Runner\Version::id(), '5.4') < 0) {
         class TestCase extends \PHPUnit_Framework_TestCase
         {
         }

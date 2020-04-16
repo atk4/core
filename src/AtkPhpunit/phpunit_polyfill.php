@@ -2,15 +2,10 @@
 
 namespace atk4\core\AtkPhpunit;
 
-$phpunitVersionStr = class_exists(\PHPUnit\Runner\Version::class)
-        ? \PHPUnit\Runner\Version::id()
-        : \PHPUnit_Runner_Version::id();
-$phpunitVersion = (float)preg_replace('~^(\d+(?:\.\d+)?).*~s', '$1', $phpunitVersionStr);
-
-if ($phpunitVersion < 6) {
+if (version_compare(class_exists(\PHPUnit\Runner\Version::class) ? \PHPUnit\Runner\Version::id() : \PHPUnit_Runner_Version::id(), 6) < 0) {
     require_once __DIR__ . '/phpunit5_polyfill.php';
 }
 
-if ($phpunitVersion < 9) {
+if (version_compare(\PHPUnit\Runner\Version::id(), 9) < 0) {
     require_once __DIR__ . '/phpunit8_polyfill.php';
 }
