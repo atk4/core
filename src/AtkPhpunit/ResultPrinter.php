@@ -45,7 +45,7 @@ if (version_compare(\PHPUnit\Runner\Version::id(), 6) < 0) {
          */
         protected function printDefectTrace(\PHPUnit_Framework_TestFailure $defect): void
         {
-            _printDefectTrace($defect);
+            $this->_printDefectTrace($defect);
         }
     }
 } else {
