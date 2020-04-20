@@ -28,16 +28,14 @@
     "phpunit/phpunit": "*",
     "symfony/yaml": ">=3.4",
     "satooshi/php-coveralls": "^1.0",
-    "codeclimate/php-test-reporter": "*",
-    "symfony/contracts": "^1.1",
+    "symfony/contracts": ">=1.1",
     "atk4/data": "dev-develop"
   },
   "require-dev-release": {
     "phpunit/phpunit": "*",
     "symfony/yaml": ">=3.4",
     "satooshi/php-coveralls": "^1.0",
-    "codeclimate/php-test-reporter": "*",
-    "symfony/contracts": "^1.1",
+    "symfony/contracts": ">=1.1",
     "atk4/data": "^2.0"
   },
   "replace": {
