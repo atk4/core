@@ -47,7 +47,8 @@ jobs:
       - name: SQLite Testing
         run: vendor/bin/phpunit --configuration phpunit.xml --coverage-text
 
-      - uses: codecov/codecov-action@v1
+      - name: Upload coverage logs (only for "latest") 
+        uses: codecov/codecov-action@v1
         if: matrix.php == 'latest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
