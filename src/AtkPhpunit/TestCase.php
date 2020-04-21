@@ -58,10 +58,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
 
     /**
      * Fake test. Otherwise Travis gives warning that there are no tests in here.
+     *
+     * @doesNotPerformAssertions
      */
     public function testFake(): void
     {
-        $this->assertTrue(true);
     }
 
     /**
