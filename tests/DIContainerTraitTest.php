@@ -14,12 +14,13 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Ignore numeric property names (array keys).
+     *
+     * @doesNotPerformAssertions
      */
     public function testException1()
     {
         $m = new FactoryDIMock2();
         $m->setDefaults([5 => 'qwerty']);
-        $this->assertTrue(true);
     }
 
     /**
@@ -67,11 +68,13 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertEquals([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testPassively()
     {
         $m = new FactoryDIMock2();
         $m->setDefaults([], true);
-        $this->assertTrue(true);
     }
 }
 
