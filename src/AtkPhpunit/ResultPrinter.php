@@ -12,7 +12,7 @@ trait ResultPrinterTrait
     /**
      * Prints trace info.
      */
-    protected function printDefectTrace(TestFailure $defect): void
+    protected function printDefectTrace($defect): void
     {
         $e = $defect->thrownException();
         if (!$e instanceof ExceptionWrapper) {
