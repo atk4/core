@@ -13,12 +13,12 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
-    {
-      "name": "Romans Malinovskis",
-      "email": "romans@agiletoolkit.org",
-      "homepage": "https://nearly.guru/"
-    }
+    {"name": "Romans Malinovskis", "email": "romans@agiletoolkit.org", "homepage": "https://nearly.guru/" },
+    {"name": "Michael Voříšek", "homepage": "https://mvorisek.cz/"}
   ],
+  "config": {
+    "sort-packages": true
+  },
   "require": {
     "php": ">=7.2.0",
     "psr/log": "~1.0",
@@ -27,12 +27,14 @@
   },
   "require-dev": {
     "phpunit/phpunit": "*",
+    "friendsofphp/php-cs-fixer": "^2.16",
     "symfony/yaml": ">=3.4",
     "symfony/contracts": ">=1.1",
     "atk4/data": "dev-develop"
   },
   "require-dev-release": {
     "phpunit/phpunit": "*",
+    "friendsofphp/php-cs-fixer": "^2.16",
     "symfony/yaml": ">=3.4",
     "symfony/contracts": ">=1.1",
     "atk4/data": "^2.0"
