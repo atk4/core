@@ -24,17 +24,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * NOTE: this method must only be used for low-level functionality, not
      * for general test-scripts.
      *
-     * @throws \ReflectionException
-     *
      * @return mixed
      */
     public function callProtected(object $obj, string $name, array $args = [])
     {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getMethod($name);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($obj, $args);
+        return \Closure::bind(static function () use ($obj, $name, $args) {
+            return $obj->$name(...$args);
+        }, null, $obj)();
     }
 
     /**
@@ -43,17 +39,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * NOTE: this method must only be used for low-level functionality, not
      * for general test-scripts.
      *
-     * @throws \ReflectionException
-     *
      * @return mixed
      */
     public function getProtected(object $obj, string $name)
     {
-        $class = new \ReflectionClass($obj);
-        $method = $class->getProperty($name);
-        $method->setAccessible(true);
-
-        return $method->getValue($obj);
+        return \Closure::bind(static function () use ($obj, $name) {
+            return $obj->$name;
+        }, null, $obj)();
     }
 
     /**
