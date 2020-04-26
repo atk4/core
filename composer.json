@@ -21,23 +21,23 @@
   },
   "require": {
     "php": ">=7.2.0",
+    "ext-json": "*",
     "psr/log": "~1.0",
-    "symfony/polyfill-php73": "^1.15",
-    "ext-json": "*"
+    "symfony/polyfill-php73": "^1.15"
   },
   "require-dev": {
-    "phpunit/phpunit": "*",
+    "atk4/data": "dev-develop",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "symfony/yaml": ">=3.4",
+    "phpunit/phpunit": "*",
     "symfony/contracts": ">=1.1",
-    "atk4/data": "dev-develop"
+    "symfony/yaml": ">=3.4"
   },
   "require-dev-release": {
-    "phpunit/phpunit": "*",
+    "atk4/data": "^2.0",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "symfony/yaml": ">=3.4",
+    "phpunit/phpunit": "*",
     "symfony/contracts": ">=1.1",
-    "atk4/data": "^2.0"
+    "symfony/yaml": ">=3.4"
   },
   "replace": {
     "atk4/core": "self.version"
