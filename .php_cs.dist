@@ -1,10 +1,18 @@
 <?php
-/*
- * This document has been generated with
- * https://mlocati.github.io/php-cs-fixer-configurator/?version=2.15#configurator
- * you can change this configuration by importing this file.
- */
-return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
+
+$finder = PhpCsFixer\Finder::create()
+    ->in([__DIR__])
+    ->exclude([
+        'cache',
+        'build',
+        'vendor',
+    ]);
+
+return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
+    ->setRules([
+      //  '@Symfony' => true,
+      //  '@Symfony:risky' => true,
         '@PSR1'                                 => true,
         '@PSR2'                                 => true,
         
@@ -103,4 +111,6 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         'no_null_property_initialization' => true,
         'pow_to_exponentiation' => true,
         'combine_nested_dirname' => true,
-    ])->setFinder(PhpCsFixer\Finder::create()->exclude('vendor')->in(__DIR__));
+    ])
+    ->setFinder($finder)
+    ->setCacheFile(__DIR__ . '/.php_cs.cache');
