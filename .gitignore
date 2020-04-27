@@ -5,8 +5,12 @@ docs/build
 .idea
 nbproject
 .DS_Store
+
+local
 *.local
 *.local.*
+cache
+*.cache
+*.cache.*
 
 /phpunit.xml
-.php_cs.cache
