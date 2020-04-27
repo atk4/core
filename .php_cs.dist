@@ -88,4 +88,9 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
             'equal' => false,
             'identical' => false,
         ],
+        
+        // merge from template
+        'psr4' => false,
+        'array_indentation' => true,
+        'no_null_property_initialization' => true,
     ])->setFinder(PhpCsFixer\Finder::create()->exclude('vendor')->in(__DIR__));

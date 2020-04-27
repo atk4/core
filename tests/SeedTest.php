@@ -431,8 +431,8 @@ class SeedTest extends AtkPhpunit\TestCase
 
 class SeedTestMock
 {
-    public $args = null;
-    public $foo = null;
+    public $args;
+    public $foo;
     public $baz = 0;
 
     public function __construct(...$args)
@@ -451,7 +451,7 @@ class ViewTestMock extends SeedTestMock
     use DIContainerTrait {
         setDefaults as _setDefaults;
     }
-    public $def = null;
+    public $def;
 
     public function setDefaults(array $properties, bool $passively = false)
     {
@@ -473,7 +473,7 @@ class SeedDefTestMock extends SeedTestMock
     use DIContainerTrait {
         setDefaults as _setDefaults;
     }
-    public $def = null;
+    public $def;
 
     public function setDefaults(array $properties, bool $passively = false)
     {

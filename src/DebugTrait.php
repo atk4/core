@@ -14,7 +14,7 @@ trait DebugTrait
     public $_debugTrait = true;
 
     /** @var bool Is debug enabled? */
-    public $debug = null;
+    public $debug;
 
     /** @var array Helps debugTraceChange. */
     protected $_prev_bt = [];
