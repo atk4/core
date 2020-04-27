@@ -23,8 +23,6 @@ trait DebugTrait
      * Outputs message to STDERR.
      *
      * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
-     *
-     * @param string $message
      */
     protected function _echo_stderr(string $message): void
     {
@@ -35,7 +33,6 @@ trait DebugTrait
      * Send some info to debug stream.
      *
      * @param bool|string $message
-     * @param array       $context
      *
      * @return $this
      */
