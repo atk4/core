@@ -35,7 +35,7 @@ trait StaticAddToTrait
             if (!is_array($seed)) {
                 if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
                     throw (new Exception('Seed must be an array or a scalar'))
-                            ->addMoreInfo('seed_type', gettype($seed));
+                        ->addMoreInfo('seed_type', gettype($seed));
                 }
 
                 $seed = [$seed];
@@ -59,8 +59,8 @@ trait StaticAddToTrait
         // check if object is instance of this class
         if (!$unsafe && !($object instanceof static)) {
             throw (new Exception('Seed class name is not a subtype of the current class'))
-                    ->addMoreInfo('seed_class', get_class($object))
-                    ->addMoreInfo('current_class', static::class);
+                ->addMoreInfo('seed_class', get_class($object))
+                ->addMoreInfo('current_class', static::class);
         }
 
         // add to parent
@@ -106,7 +106,7 @@ trait StaticAddToTrait
             if (!is_array($seed)) {
                 if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
                     throw (new Exception('Seed must be an array or a scalar'))
-                            ->addMoreInfo('seed_type', gettype($seed));
+                        ->addMoreInfo('seed_type', gettype($seed));
                 }
 
                 $seed = [$seed];

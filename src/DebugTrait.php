@@ -88,7 +88,7 @@ trait DebugTrait
         } elseif (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
             $this->app->log('warning', 'Could not notify user about: ' . $message, $context);
         } else {
-            $this->_echo_stderr("Could not notify user about: ${message}\n");
+            $this->_echo_stderr("Could not notify user about: {$message}\n");
         }
 
         return $this;
