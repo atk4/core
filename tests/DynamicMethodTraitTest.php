@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core\AppScopeTrait;
+use atk4\core\AtkPhpunit;
 use atk4\core\DynamicMethodTrait;
 use atk4\core\Exception;
 use atk4\core\HookTrait;

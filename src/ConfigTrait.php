@@ -165,7 +165,6 @@ trait ConfigTrait
         $path = explode('/', $path);
         $pos = &$this->config;
         foreach ($path as $el) {
-
             // need to return if not is array
             // before call array_key_exists and throw error
             if (!is_array($pos)) {

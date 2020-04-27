@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core;
+use atk4\core\AtkPhpunit;
 use atk4\core\Exception;
 
 /**

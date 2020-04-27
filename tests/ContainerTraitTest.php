@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core;
+use atk4\core\AtkPhpunit;
 
 /**
  * @coversDefaultClass \atk4\core\ContainerTrait
@@ -91,7 +91,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $min_len = 99;
         $max_len_v = '';
 
-        for ($x = 1; $x < 100; $x++) {
+        for ($x = 1; $x < 100; ++$x) {
             $sh = str_repeat('x', $x);
             $m = $app->add(new ContainerAppMock(), $sh);
             if (strlen($m->name) > $max_len) {
@@ -217,7 +217,7 @@ class ContainerAppMock
 
         $d = array_flip($this->app->unique_hashes);
 
-        for ($x = 1; $x < 100; $x++) {
+        for ($x = 1; $x < 100; ++$x) {
             @list($l, $r) = explode('__', $n);
 
             if (!$r) {

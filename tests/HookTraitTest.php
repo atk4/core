@@ -17,13 +17,13 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
         $result = 0;
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         }, [0]);
 
         $this->assertEquals(0, $result);
 
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         }, [5]);
 
         $this->assertEquals(0, $result);
@@ -38,7 +38,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $result = 0;
 
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         });
 
         $this->assertEquals(0, $result);
@@ -54,7 +54,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $result = 20;
 
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         });
 
         $m->onHook('test1', function () use (&$result) {
@@ -71,7 +71,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $result = 0;
 
         $m->onHook(['test1,test2', 'test3'], function () use (&$result) {
-            $result++;
+            ++$result;
         });
 
         $m->hook('test1');
@@ -265,7 +265,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $obj = new HookMock();
 
         $inc = function ($obj, &$a) {
-            $a++;
+            ++$a;
         };
 
         $obj->onHook('inc', $inc);
@@ -278,7 +278,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $obj = new HookMock();
 
         $inc = function ($obj, &$a) {
-            $a++;
+            ++$a;
         };
 
         $v = 1;
@@ -303,7 +303,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->result = 0;
 
         $inc = function ($obj) {
-            $obj->result++;
+            ++$obj->result;
             if ($obj->result == 2) {
                 $obj->breakHook('stop');
             }
@@ -342,7 +342,7 @@ class HookMock
 
     public function myCallback($obj)
     {
-        $this->result++;
+        ++$this->result;
     }
 }
 class HookWithDynamicMethodMock extends HookMock

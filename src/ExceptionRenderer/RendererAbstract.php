@@ -134,7 +134,7 @@ abstract class RendererAbstract
 
         $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
         $c = min(count($trace), count($parent_trace));
-        for ($i = 0; $i < $c; $i++) {
+        for ($i = 0; $i < $c; ++$i) {
             $cv = $this->parseStackTraceCall($trace[$i]);
             $pv = $this->parseStackTraceCall($parent_trace[$i]);
 

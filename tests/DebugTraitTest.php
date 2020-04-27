@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core\AppScopeTrait;
+use atk4\core\AtkPhpunit;
 use atk4\core\DebugTrait;
 
 /**
@@ -147,7 +147,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
         $app->log = null;
 
-        for ($i = 1; $i < 5; $i++) {
+        for ($i = 1; $i < 5; ++$i) {
             $this->triggerDebugTraceChange($m, 'test2'); // called from same line all 5 times = no difference
         }
 

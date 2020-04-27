@@ -164,7 +164,6 @@ trait CollectionTrait
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
-
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed

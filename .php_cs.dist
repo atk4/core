@@ -11,10 +11,8 @@ $finder = PhpCsFixer\Finder::create()
 return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
-      //  '@Symfony' => true,
+        '@Symfony' => true,
       //  '@Symfony:risky' => true,
-        '@PSR1'                                 => true,
-        '@PSR2'                                 => true,
         
         
         // Each line of multi-line DocComments must have an asterisk [PSR-5] and must be aligned with the first one.
