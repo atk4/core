@@ -30,7 +30,7 @@ trait ResultPrinterTrait
     }
 }
 
-if (version_compare(\PHPUnit\Runner\Version::id(), 6) < 0) {
+if (version_compare(\PHPUnit\Runner\Version::id(), '6') < 0) {
     /**
      * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
      */
