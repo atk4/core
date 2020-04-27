@@ -12,6 +12,33 @@ use atk4\core\SessionTrait;
  */
 class SessionTraitTest extends AtkPhpunit\TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        session_abort();
+        $sessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
+        if (!file_exists($sessionDir)) {
+            mkdir($sessionDir);
+        }
+        ini_set('session.save_path', $sessionDir);
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        session_abort();
+        $sessionDir = ini_get('session.save_path');
+        foreach (scandir($sessionDir) as $f) {
+            if (!in_array($f, ['.', '..'])) {
+                unlink($sessionDir . '/' . $f);
+            }
+        }
+
+        rmdir($sessionDir);
+    }
+
     public function testException1()
     {
         // when try to start session without NameTrait
