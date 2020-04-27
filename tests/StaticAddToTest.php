@@ -137,12 +137,12 @@ class StaticAddToTest extends AtkPhpunit\TestCase
     public function testFactoryMock()
     {
         $m = new ContainerFactoryMockSAT();
-        $m1 = DIMockSAT::addTo($m, ['a'=>'XXX', 'b'=>'YYY']);
+        $m1 = DIMockSAT::addTo($m, ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertEquals('XXX', $m1->a);
         $this->assertEquals('YYY', $m1->b);
         $this->assertNull($m1->c);
 
-        $m2 = DIConstructorMockSAT::addTo($m, ['a'=>'XXX', 'John', 'b'=>'YYY']);
+        $m2 = DIConstructorMockSAT::addTo($m, ['a' => 'XXX', 'John', 'b' => 'YYY']);
         $this->assertEquals('XXX', $m2->a);
         $this->assertEquals('YYY', $m2->b);
         $this->assertEquals('John', $m2->c);

@@ -30,9 +30,9 @@ trait DynamicMethodTrait
 
         throw new Exception([
             'Method ' . $name . ' is not defined for this object',
-            'class'     => static::class,
-            'method'    => $name,
-            'args'      => $args,
+            'class' => static::class,
+            'method' => $name,
+            'args' => $args,
         ]);
     }
 

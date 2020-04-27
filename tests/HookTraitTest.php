@@ -199,7 +199,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertEquals([
             $ind + 2 => 1,
             $ind + 1 => 2,
-            $ind     => 3,
+            $ind => 3,
             $ind + 3 => 4,
             $ind + 4 => 5,
             $ind + 6 => 6,

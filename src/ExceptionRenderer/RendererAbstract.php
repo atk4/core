@@ -73,15 +73,15 @@ abstract class RendererAbstract
     protected function parseStackTraceCall(array $call): array
     {
         $parsed = [
-            'line'             => (string) ($call['line'] ?? ''),
-            'file'             => (string) ($call['file'] ?? ''),
-            'class'            => $call['class'] ?? null,
-            'object'           => $call['object'] ?? null,
-            'function'         => $call['function'] ?? null,
-            'args'             => $call['args'] ?? [],
+            'line' => (string) ($call['line'] ?? ''),
+            'file' => (string) ($call['file'] ?? ''),
+            'class' => $call['class'] ?? null,
+            'object' => $call['object'] ?? null,
+            'function' => $call['function'] ?? null,
+            'args' => $call['args'] ?? [],
             'object_formatted' => null,
-            'file_formatted'   => null,
-            'line_formatted'   => null,
+            'file_formatted' => null,
+            'line_formatted' => null,
         ];
 
         $parsed['file_formatted'] = str_pad(substr($parsed['file'], -40), 40, ' ', STR_PAD_LEFT);

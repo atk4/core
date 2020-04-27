@@ -14,17 +14,17 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@PHP71Migration:risky' => true,
+        'concat_space' => [
+            'spacing' => 'one',
+        ],
+        
+        
+        
         'declare_strict_types' => false,
         'void_return' => false,
         
+        'align_multiline_comment' => true,
         
-        // Each line of multi-line DocComments must have an asterisk [PSR-5] and must be aligned with the first one.
-        'align_multiline_comment'               => ['comment_type' => 'phpdocs_like'],
-        // Binary operators should be surrounded by space as configured.
-        'binary_operator_spaces'                => [
-            'align_double_arrow' => true,
-            'align_equals'       => false
-        ],
         // Equal sign in declare statement should be surrounded by spaces or not following configuration.
         'declare_equal_normalize'               => false,
         // Transforms imported FQCN parameters and return types in function arguments to short version.
@@ -37,9 +37,6 @@ return PhpCsFixer\Config::create()
         
         
         // merge from template
-        'concat_space' => [
-            'spacing' => 'one',
-        ],
         // 'no_blank_lines_after_phpdoc' => false,
         'no_superfluous_phpdoc_tags' => false,
         /*'phpdoc_align' => [

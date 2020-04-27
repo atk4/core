@@ -35,25 +35,25 @@ trait CollectionTrait
         if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw new Exception([
                 'Name of collection is specified incorrectly',
-                'parent'    => $this,
-                'collection'=> $collection,
+                'parent' => $this,
+                'collection' => $collection,
             ]);
         }
 
         if (!$name) {
             throw new Exception([
                 'Object must be given a name when adding into this',
-                'child'     => $object,
-                'parent'    => $this,
-                'collection'=> $collection,
+                'child' => $object,
+                'parent' => $this,
+                'collection' => $collection,
             ]);
         }
 
         if ($this->_hasInCollection($name, $collection) !== false) {
             throw new Exception([
                 'Object with requested name already exist in collection',
-                'name'      => $name,
-                'collection'=> $collection,
+                'name' => $name,
+                'collection' => $collection,
             ]);
         }
         $this->{$collection}[$name] = $object;
@@ -79,7 +79,7 @@ trait CollectionTrait
             if (!$object->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'object'=> $object,
+                    'object' => $object,
                 ]);
             }
         }
@@ -97,9 +97,9 @@ trait CollectionTrait
         if ($this->_hasInCollection($name, $collection) === false) {
             throw new Exception([
                 'Element by this name is NOT in the collection, cannot remove',
-                'parent'    => $this,
-                'collection'=> $collection,
-                'name'      => $name,
+                'parent' => $this,
+                'collection' => $collection,
+                'name' => $name,
             ]);
         }
         unset($this->{$collection}[$name]);
@@ -140,9 +140,9 @@ trait CollectionTrait
         if ($object === false) {
             throw new Exception([
                 'Element is not found in collection',
-                'collection'=> $collection,
-                'name'      => $name,
-                'this'      => $this,
+                'collection' => $collection,
+                'name' => $name,
+                'this' => $this,
             ]);
         }
 

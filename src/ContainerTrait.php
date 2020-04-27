@@ -76,7 +76,7 @@ trait ContainerTrait
             if (!$obj->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'obj'=> $obj,
+                    'obj' => $obj,
                 ]);
             }
         }
@@ -137,9 +137,9 @@ trait ContainerTrait
             throw new Exception([
                 'Element with requested name already exists',
                 'element' => $element,
-                'name'    => $args[0],
-                'this'    => $this,
-                'arg2'    => $args,
+                'name' => $args[0],
+                'this' => $this,
+                'arg2' => $args,
             ]);
         }
 
@@ -175,8 +175,8 @@ trait ContainerTrait
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..',
-                'parent'=> $this,
-                'name'  => $short_name,
+                'parent' => $this,
+                'name' => $short_name,
             ]);
         }
 
@@ -233,7 +233,7 @@ trait ContainerTrait
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Child element not found',
-                'parent'  => $this,
+                'parent' => $this,
                 'element' => $short_name,
             ]);
         }

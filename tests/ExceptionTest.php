@@ -148,18 +148,18 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $this->assertEquals(
             json_encode(
                 [
-                    'success'  => false,
-                    'code'     => 0,
-                    'message'  => 'Error during JSON renderer : test',
-                    'title'    => ExceptionTestThrowError::class,
-                    'class'    => ExceptionTestThrowError::class,
-                    'params'   => [],
+                    'success' => false,
+                    'code' => 0,
+                    'message' => 'Error during JSON renderer : test',
+                    'title' => ExceptionTestThrowError::class,
+                    'class' => ExceptionTestThrowError::class,
+                    'params' => [],
                     'solution' => [],
-                    'trace'    => [],
+                    'trace' => [],
                     'previous' => [
-                        'title'   => 'Exception',
-                        'class'   => 'Exception',
-                        'code'    => 0,
+                        'title' => 'Exception',
+                        'class' => 'Exception',
+                        'code' => 0,
                         'message' => 'just to cover __string',
                     ],
                 ],

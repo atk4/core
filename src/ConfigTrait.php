@@ -86,7 +86,7 @@ trait ConfigTrait
             if (!is_array($tempConfig)) {
                 throw new Exception([
                     'File was read but has a bad format',
-                    'file'   => $file,
+                    'file' => $file,
                     'format' => $format,
                 ]);
             }
@@ -113,7 +113,7 @@ trait ConfigTrait
             $paths = [$paths => $value];
         }
 
-        foreach ($paths as $path=>$value) {
+        foreach ($paths as $path => $value) {
             $pos = &$this->_lookupConfigElement($path, true);
 
             if (is_array($pos) && !empty($pos) && is_array($value)) {

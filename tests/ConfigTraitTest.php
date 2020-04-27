@@ -19,45 +19,45 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
     {
         // for php
         $a = [
-            'num'  => 123,
-            'txt'  => 'foo',
+            'num' => 123,
+            'txt' => 'foo',
             'bool' => true,
-            'obj'  => new \stdClass(),
-            'arr'  => [
-                'num'  => 456,
-                'txt'  => 'bar',
+            'obj' => new \stdClass(),
+            'arr' => [
+                'num' => 456,
+                'txt' => 'bar',
                 'bool' => true,
-                'obj'  => new \stdClass(),
+                'obj' => new \stdClass(),
             ],
         ];
         // for json
         $b = [
-            'num'  => 123,
-            'txt'  => 'foo',
+            'num' => 123,
+            'txt' => 'foo',
             'bool' => true,
-            'obj'  => [
-                'num'  => 456,
-                'txt'  => 'bar',
+            'obj' => [
+                'num' => 456,
+                'txt' => 'bar',
                 'bool' => true,
             ],
             'arr' => [
-                ['one'  => 'one', 'another' => 'another'],
-                ['two'  => 'two'],
+                ['one' => 'one', 'another' => 'another'],
+                ['two' => 'two'],
             ],
         ];
         // for yaml
         $c = [
-            'num'  => 123,
-            'txt'  => 'foo',
+            'num' => 123,
+            'txt' => 'foo',
             'bool' => true,
-            'obj'  => [
-                'num'  => 456,
-                'txt'  => 'bar',
+            'obj' => [
+                'num' => 456,
+                'txt' => 'bar',
                 'bool' => true,
             ],
             'arr' => [
-                ['one'  => 'one', 'another' => 'another'],
-                ['two'  => 'two'],
+                ['one' => 'one', 'another' => 'another'],
+                ['two' => 'two'],
             ],
         ];
 
@@ -100,21 +100,21 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
     public function testSetGetConfig()
     {
         $a = [
-            'num'  => 789,
-            'txt'  => 'foo',
+            'num' => 789,
+            'txt' => 'foo',
             'bool' => true,
-            'obj'  => null,
-            'arr'  => [
-                'num'  => 456,
-                'txt'  => 'qwerty',
+            'obj' => null,
+            'arr' => [
+                'num' => 456,
+                'txt' => 'qwerty',
                 'bool' => true,
-                'obj'  => new \stdClass(),
+                'obj' => new \stdClass(),
                 'name' => 'Jane',
-                'sub'  => [
+                'sub' => [
                     'one' => 'more',
                     'two' => 'another',
                 ],
-                'foo'  => 'bar',
+                'foo' => 'bar',
             ],
             'name' => 'John',
         ];
@@ -126,12 +126,12 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $m->setConfig('num', 789);       // overwrite
         $m->setConfig('name', 'John');   // add
         $m->setConfig([
-            'obj'         => null,          // overwrite
-            'arr/txt'     => 'qwerty',      // overwrite
-            'arr/name'    => 'Jane',        // add
+            'obj' => null,          // overwrite
+            'arr/txt' => 'qwerty',      // overwrite
+            'arr/name' => 'Jane',        // add
             'arr/sub/one' => 'more',        // add in deep structure
             'arr/sub/two' => 'another',     // add one more in deep structure
-            'arr'         => ['foo'=>'bar'], // merge arrays
+            'arr' => ['foo' => 'bar'], // merge arrays
         ]);
         $this->assertEquals($a, $this->getProtected($m, 'config'));
 

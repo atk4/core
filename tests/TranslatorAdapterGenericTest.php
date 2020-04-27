@@ -92,20 +92,20 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 
         // test plurals
         Translator::instance()->setDefaults([
-            'adapter'        => $adapter,
+            'adapter' => $adapter,
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [
-            'zero'  => 'is empty',
-            'one'   => 'is one',
+            'zero' => 'is empty',
+            'one' => 'is one',
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is empty', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertEquals('is empty', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertEquals('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
     public function testAdapterPlurals_notFullDefinition(): void
@@ -114,19 +114,19 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 
         // test plurals
         Translator::instance()->setDefaults([
-            'adapter'        => $adapter,
+            'adapter' => $adapter,
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [
-            'one'   => 'is one',
+            'one' => 'is one',
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertEquals('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
     public function testAdapterPlurals_Singular(): void
@@ -135,7 +135,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 
         // test plurals
         Translator::instance()->setDefaults([
-            'adapter'        => $adapter,
+            'adapter' => $adapter,
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
@@ -144,8 +144,8 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is 1', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertEquals('is 1', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 }

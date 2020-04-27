@@ -14,10 +14,10 @@ class HTML extends RendererAbstract
         $class = get_class($this->exception);
 
         $tokens = [
-            '{TITLE}'   => $title,
-            '{CLASS}'   => $class,
+            '{TITLE}' => $title,
+            '{CLASS}' => $class,
             '{MESSAGE}' => $this->_($this->exception->getMessage()),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
+            '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
         $this->output .= $this->replaceTokens($tokens, '

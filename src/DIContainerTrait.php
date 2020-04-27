@@ -83,9 +83,9 @@ trait DIContainerTrait
 
         throw new Exception([
             'Property for specified object is not defined',
-            'object'  => $this,
-            'property'=> $key,
-            'value'   => $value,
+            'object' => $this,
+            'property' => $key,
+            'value' => $value,
         ]);
     }
 }
