@@ -128,8 +128,6 @@ trait DebugTrait
      * System is unusable.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function emergency($message, array $context = [])
     {
@@ -143,8 +141,6 @@ trait DebugTrait
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function alert($message, array $context = [])
     {
@@ -157,8 +153,6 @@ trait DebugTrait
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function critical($message, array $context = [])
     {
@@ -170,8 +164,6 @@ trait DebugTrait
      * be logged and monitored.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function error($message, array $context = [])
     {
@@ -185,8 +177,6 @@ trait DebugTrait
      * that are not necessarily wrong.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function warning($message, array $context = [])
     {
@@ -197,8 +187,6 @@ trait DebugTrait
      * Normal but significant events.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function notice($message, array $context = [])
     {
@@ -211,8 +199,6 @@ trait DebugTrait
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function info($message, array $context = [])
     {

@@ -8,8 +8,7 @@ require '../vendor/autoload.php';
 
 try {
     Persistence::connect('error:error');
-} catch (\Throwable $e) {
-    /* @var $e Exception */
+} catch (Exception $e) {
     echo $e->getColorfulText();
 }
 
@@ -18,7 +17,6 @@ $trans->setDefaultLocale('ru');
 
 try {
     Persistence::connect('error:error');
-} catch (\Throwable $e) {
-    /* @var $e Exception */
+} catch (Exception $e) {
     echo $e->getColorfulText();
 }

@@ -12,9 +12,6 @@ use atk4\core\FactoryTrait;
  */
 class SeedTest extends AtkPhpunit\TestCase
 {
-    /*
-     * Test constructor.
-     */
     use FactoryTrait;
 
     public function testMerge1()
