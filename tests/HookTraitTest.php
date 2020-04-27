@@ -304,7 +304,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
         $inc = function ($obj) {
             ++$obj->result;
-            if ($obj->result == 2) {
+            if ($obj->result === 2) {
                 $obj->breakHook('stop');
             }
         };

@@ -12,18 +12,21 @@ return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
-        '@Symfony:risky' => true,
+        '@PhpCsFixer:risky' =>true,
         '@PHP71Migration:risky' => true,
+
+        // required by PSR-12
         'concat_space' => [
             'spacing' => 'one',
         ],
-
-
-
-
-            
-
-        'single_line_throw' => false,
+        
+        // disable some too strict rules
+        //'strict_comparison' => false, @TODO test impact with atk4/data and atk4/ui
+        //'strict_param' => false, @TODO test impact with atk4/data and atk4/ui
+        'phpdoc_types_order' => [
+            'null_adjustment' => 'always_last',
+            'sort_algorithm' => 'none', // we should order types from the most common one
+        ],
         'yoda_style' => [
             'equal' => false,
             'identical' => false,
@@ -32,30 +35,27 @@ return PhpCsFixer\Config::create()
         'non_printable_character' => [
             'use_escape_sequences_in_strings' => true,
         ],
-        'array_indentation' => true,
-        'no_null_property_initialization' => true,
         'declare_strict_types' => false,
         'void_return' => false,
-        'fully_qualified_strict_types' => true,
-        'no_useless_return' => true,
-        'phpdoc_order' => true,
         'combine_consecutive_issets' => false,
         'combine_consecutive_unsets' => false,
         'php_unit_internal_class' => false,
         'php_unit_test_class_requires_covers' => false,
 
-        // revert to symfony
-        'phpdoc_types_order' => [
-            'null_adjustment' => 'always_last',
-            'sort_algorithm' => 'none',
-        ],
-
         'ordered_class_elements' => false,
         'no_superfluous_elseif' => false,
         'multiline_whitespace_before_semicolons' => false,
 
+        'comment_to_phpdoc' => false,
+
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
+        'php_unit_strict' => false,
+        
+        
+        'php_unit_test_annotation' => false,
+        'php_unit_test_case_static_method_calls' => false,
+        
     ])
     ->setFinder($finder)
     ->setCacheFile(__DIR__ . '/.php_cs.cache');

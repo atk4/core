@@ -31,7 +31,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
         session_abort();
         $sessionDir = ini_get('session.save_path');
         foreach (scandir($sessionDir) as $f) {
-            if (!in_array($f, ['.', '..'])) {
+            if (!in_array($f, ['.', '..'], true)) {
                 unlink($sessionDir . '/' . $f);
             }
         }
