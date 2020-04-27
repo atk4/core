@@ -201,7 +201,7 @@ class Exception extends \Exception
      *
      * @return $this
      */
-    public function setTranslatorAdapter(?ITranslatorAdapter $adapter = null): self
+    public function setTranslatorAdapter(ITranslatorAdapter $adapter = null): self
     {
         $this->adapter = $adapter;
 
