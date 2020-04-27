@@ -17,9 +17,9 @@ class ReadableCaptionTraitTest extends AtkPhpunit\TestCase
     {
         $a = new ReadableCaptionMock();
 
-        $this->assertEquals('User Defined Entity', $a->readableCaption('userDefinedEntity'));
-        $this->assertEquals('New NASA Module', $a->readableCaption('newNASA_module'));
-        $this->assertEquals('This Is NASA My Big Bull Shit 123 Foo', $a->readableCaption('this\\ _isNASA_MyBigBull shit_123\Foo'));
+        $this->assertSame('User Defined Entity', $a->readableCaption('userDefinedEntity'));
+        $this->assertSame('New NASA Module', $a->readableCaption('newNASA_module'));
+        $this->assertSame('This Is NASA My Big Bull Shit 123 Foo', $a->readableCaption('this\\ _isNASA_MyBigBull shit_123\Foo'));
     }
 }
 

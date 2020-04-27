@@ -13,7 +13,7 @@ class HookBreaker extends Exception
     /**
      * @var mixed
      */
-    public $return_value = null;
+    public $return_value;
 
     /**
      * @param mixed $return_value

@@ -27,7 +27,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)/* :static supported by PHP8+ */
+    public static function addTo(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :static supported by PHP8+
     {
         if (is_object($seed)) {
             $object = $seed;
@@ -35,7 +35,7 @@ trait StaticAddToTrait
             if (!is_array($seed)) {
                 if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
                     throw (new Exception('Seed must be an array or a scalar'))
-                            ->addMoreInfo('seed_type', gettype($seed));
+                        ->addMoreInfo('seed_type', gettype($seed));
                 }
 
                 $seed = [$seed];
@@ -59,8 +59,8 @@ trait StaticAddToTrait
         // check if object is instance of this class
         if (!$unsafe && !($object instanceof static)) {
             throw (new Exception('Seed class name is not a subtype of the current class'))
-                    ->addMoreInfo('seed_class', get_class($object))
-                    ->addMoreInfo('current_class', static::class);
+                ->addMoreInfo('seed_class', get_class($object))
+                ->addMoreInfo('current_class', static::class);
         }
 
         // add to parent
@@ -78,7 +78,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)/* :static supported by PHP8+ */
+    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :static supported by PHP8+
     {
         return static::_addToWithClassName($parent, $seed, false, $add_args, $skip_add);
     }
@@ -90,7 +90,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)/* :self is too strict with unsafe behaviour */
+    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :self is too strict with unsafe behaviour
     {
         return static::_addToWithClassName($parent, $seed, true, $add_args, $skip_add);
     }
@@ -106,7 +106,7 @@ trait StaticAddToTrait
             if (!is_array($seed)) {
                 if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
                     throw (new Exception('Seed must be an array or a scalar'))
-                            ->addMoreInfo('seed_type', gettype($seed));
+                        ->addMoreInfo('seed_type', gettype($seed));
                 }
 
                 $seed = [$seed];

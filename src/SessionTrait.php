@@ -39,6 +39,7 @@ trait SessionTrait
                 break;
             case PHP_SESSION_NONE:
                 session_start($options);
+
                 break;
         }
     }
@@ -48,7 +49,7 @@ trait SessionTrait
      */
     public function destroySession()
     {
-        if (session_status() == PHP_SESSION_ACTIVE) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
             session_destroy();
             unset($_SESSION);
         }
@@ -84,12 +85,12 @@ trait SessionTrait
         $this->startSession();
 
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
-            || is_null($_SESSION[$this->session_key][$this->name][$key])
+            || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
             return $this->memorize($key, $default);
-        } else {
-            return $this->recall($key);
         }
+
+        return $this->recall($key);
     }
 
     /**
@@ -103,7 +104,7 @@ trait SessionTrait
         $this->startSession();
 
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
-            || is_null($_SESSION[$this->session_key][$this->name][$key])
+            || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
             if (is_callable($default)) {
                 $default = call_user_func($default, $key);

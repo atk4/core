@@ -14,7 +14,7 @@ trait DebugTrait
     public $_debugTrait = true;
 
     /** @var bool Is debug enabled? */
-    public $debug = null;
+    public $debug = false;
 
     /** @var array Helps debugTraceChange. */
     protected $_prev_bt = [];
@@ -23,8 +23,6 @@ trait DebugTrait
      * Outputs message to STDERR.
      *
      * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
-     *
-     * @param string $message
      */
     protected function _echo_stderr(string $message): void
     {
@@ -35,7 +33,6 @@ trait DebugTrait
      * Send some info to debug stream.
      *
      * @param bool|string $message
-     * @param array       $context
      *
      * @return $this
      */
@@ -51,7 +48,7 @@ trait DebugTrait
         // if debug is enabled, then log it
         if ($this->debug) {
             if (!isset($this->app) || !isset($this->app->logger) || !$this->app->logger instanceof \Psr\Log\LoggerInterface) {
-                $message = '[' . get_class($this) . ']: ' . $message;
+                $message = '[' . static::class . ']: ' . $message;
             }
             $this->log(LogLevel::DEBUG, $message, $context);
         }
@@ -91,7 +88,7 @@ trait DebugTrait
         } elseif (isset($this->app) && $this->app instanceof \Psr\Log\LoggerInterface) {
             $this->app->log('warning', 'Could not notify user about: ' . $message, $context);
         } else {
-            $this->_echo_stderr("Could not notify user about: $message\n");
+            $this->_echo_stderr("Could not notify user about: {$message}\n");
         }
 
         return $this;
@@ -131,8 +128,6 @@ trait DebugTrait
      * System is unusable.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function emergency($message, array $context = [])
     {
@@ -146,8 +141,6 @@ trait DebugTrait
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function alert($message, array $context = [])
     {
@@ -160,8 +153,6 @@ trait DebugTrait
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function critical($message, array $context = [])
     {
@@ -173,8 +164,6 @@ trait DebugTrait
      * be logged and monitored.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function error($message, array $context = [])
     {
@@ -188,8 +177,6 @@ trait DebugTrait
      * that are not necessarily wrong.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function warning($message, array $context = [])
     {
@@ -200,8 +187,6 @@ trait DebugTrait
      * Normal but significant events.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function notice($message, array $context = [])
     {
@@ -214,8 +199,6 @@ trait DebugTrait
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     *
-     * @return void
      */
     public function info($message, array $context = [])
     {

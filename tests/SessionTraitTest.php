@@ -12,6 +12,33 @@ use atk4\core\SessionTrait;
  */
 class SessionTraitTest extends AtkPhpunit\TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        session_abort();
+        $sessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
+        if (!file_exists($sessionDir)) {
+            mkdir($sessionDir);
+        }
+        ini_set('session.save_path', $sessionDir);
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+
+        session_abort();
+        $sessionDir = ini_get('session.save_path');
+        foreach (scandir($sessionDir) as $f) {
+            if (!in_array($f, ['.', '..'], true)) {
+                unlink($sessionDir . '/' . $f);
+            }
+        }
+
+        rmdir($sessionDir);
+    }
+
     public function testException1()
     {
         // when try to start session without NameTrait
@@ -27,11 +54,11 @@ class SessionTraitTest extends AtkPhpunit\TestCase
     {
         $m = new SessionMock();
 
-        $this->assertEquals(false, isset($_SESSION));
+        $this->assertFalse(isset($_SESSION));
         $m->startSession();
-        $this->assertEquals(true, isset($_SESSION));
+        $this->assertTrue(isset($_SESSION));
         $m->destroySession();
-        $this->assertEquals(false, isset($_SESSION));
+        $this->assertFalse(isset($_SESSION));
     }
 
     /**
@@ -44,22 +71,22 @@ class SessionTraitTest extends AtkPhpunit\TestCase
 
         // value as string
         $m->memorize('foo', 'bar');
-        $this->assertEquals('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as null
         $m->memorize('foo', null);
-        $this->assertEquals(null, $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as callable
         $m->memorize('foo', function () {
             return 'bar';
         });
-        $this->assertEquals('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as object
         $o = new \StdClass();
         $m->memorize('foo', $o);
-        $this->assertEquals($o, $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertSame($o, $_SESSION['__atk_session'][$m->name]['foo']);
 
         $m->destroySession();
     }
@@ -74,33 +101,33 @@ class SessionTraitTest extends AtkPhpunit\TestCase
 
         // value as string
         $m->learn('foo', 'bar');
-        $this->assertEquals('bar', $m->recall('foo'));
+        $this->assertSame('bar', $m->recall('foo'));
 
         $m->learn('foo', 'qwerty');
-        $this->assertEquals('bar', $m->recall('foo'));
+        $this->assertSame('bar', $m->recall('foo'));
 
         $m->forget('foo');
-        $this->assertEquals('undefined', $m->recall('foo', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
         $m->learn('foo', function ($key) {
             return $key . '_bar';
         });
-        $this->assertEquals('foo_bar', $m->recall('foo'));
+        $this->assertSame('foo_bar', $m->recall('foo'));
 
         $m->learn('foo_2', 'another');
-        $this->assertEquals('another', $m->recall('foo_2'));
+        $this->assertSame('another', $m->recall('foo_2'));
 
         $v = $m->recall('foo_3', function ($key) {
             return $key . '_bar';
         });
-        $this->assertEquals('foo_3_bar', $v);
-        $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
+        $this->assertSame('foo_3_bar', $v);
+        $this->assertSame('undefined', $m->recall('foo_3', 'undefined'));
 
         $m->forget();
-        $this->assertEquals('undefined', $m->recall('foo', 'undefined'));
-        $this->assertEquals('undefined', $m->recall('foo_2', 'undefined'));
-        $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo_2', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo_3', 'undefined'));
     }
 }
 

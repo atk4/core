@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core;
+use atk4\core\AtkPhpunit;
 
 /**
  * @coversDefaultClass \atk4\core\ContainerTrait
@@ -25,7 +25,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
 
             $m->addField('surname', ['CustomFieldMock']);
 
-            $this->assertEquals(CustomFieldMock::class, get_class($m->hasField('surname')));
+            $this->assertSame(CustomFieldMock::class, get_class($m->hasField('surname')));
             $this->assertTrue($m->getField('surname')->var);
 
             $m->removeField('name');
@@ -54,9 +54,9 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
 
             $surname = $m->addField('surname', ['CustomFieldMock']);
 
-            $this->assertEquals('app', $surname->app->name);
+            $this->assertSame('app', $surname->app->name);
 
-            $this->assertEquals('form-fields_surname', $surname->name);
+            $this->assertSame('form-fields_surname', $surname->name);
             $this->assertSame($surname->owner, $m);
 
             $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', ['CustomFieldMock']);
@@ -146,7 +146,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
 
             $c = clone $m;
             $this->assertNotEmpty($c->hasField('name'));
-            $this->assertEquals(CustomFieldMock::class, get_class($c->hasField('surname')));
+            $this->assertSame(CustomFieldMock::class, get_class($c->hasField('surname')));
             $this->assertTrue($c->getField('surname')->var);
         } catch (core\Exception $e) {
             echo $e->getColorfulText();

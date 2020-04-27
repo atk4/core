@@ -17,16 +17,16 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
         $result = 0;
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         }, [0]);
 
-        $this->assertEquals(0, $result);
+        $this->assertSame(0, $result);
 
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         }, [5]);
 
-        $this->assertEquals(0, $result);
+        $this->assertSame(0, $result);
     }
 
     /**
@@ -38,14 +38,14 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $result = 0;
 
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         });
 
-        $this->assertEquals(0, $result);
+        $this->assertSame(0, $result);
 
         $m->hook('test1');
         $m->hook('test1');
-        $this->assertEquals(2, $result);
+        $this->assertSame(2, $result);
     }
 
     public function testAdvanced()
@@ -54,7 +54,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $result = 20;
 
         $m->onHook('test1', function () use (&$result) {
-            $result++;
+            ++$result;
         });
 
         $m->onHook('test1', function () use (&$result) {
@@ -62,7 +62,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         }, [], 1);
 
         $m->hook('test1'); // zero will be executed first, then increment
-        $this->assertEquals(1, $result);
+        $this->assertSame(1, $result);
     }
 
     public function testMultiple()
@@ -71,14 +71,14 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $result = 0;
 
         $m->onHook(['test1,test2', 'test3'], function () use (&$result) {
-            $result++;
+            ++$result;
         });
 
         $m->hook('test1');
         $m->hook('test2');
         $m->hook('test3');
         $m->hook('test4');
-        $this->assertEquals(3, $result);
+        $this->assertSame(3, $result);
 
         $m->removeHook('test2');
         $m->hook('test1');
@@ -86,14 +86,14 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->hook('test3');
         $m->hook('test4');
 
-        $this->assertEquals(5, $result);
+        $this->assertSame(5, $result);
     }
 
     private $result = 0;
 
     public function tst($obj = null, $inc = 1)
     {
-        if (is_null($obj)) {
+        if ($obj === null) {
             // because phpunit tries to execute this method
             return;
         }
@@ -108,10 +108,10 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->onHook('tst', $this);
         $m->hook('tst');
 
-        $this->assertEquals(1, $this->result);
+        $this->assertSame(1, $this->result);
 
         $m->hook('tst', [5]);
-        $this->assertEquals(6, $this->result);
+        $this->assertSame(6, $this->result);
 
         // Existing method - foo
         $m = new HookWithDynamicMethodMock();
@@ -154,7 +154,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
         $m->hook('tst', ['parameter']);
 
-        $this->assertEquals('parameter', $result);
+        $this->assertSame('parameter', $result);
     }
 
     public function testOrder()
@@ -196,10 +196,10 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
         $ret = $m->hook('spot');
 
-        $this->assertEquals([
+        $this->assertSame([
             $ind + 2 => 1,
             $ind + 1 => 2,
-            $ind     => 3,
+            $ind => 3,
             $ind + 3 => 4,
             $ind + 4 => 5,
             $ind + 6 => 6,
@@ -226,10 +226,10 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $obj->onHook('test', $add);
 
         $res1 = $obj->hook('test', [2, 2]);
-        $this->assertEquals([4, 4], $res1);
+        $this->assertSame([4, 4], $res1);
 
         $res2 = $obj->hook('test', [3, 3]);
-        $this->assertEquals([9, 6], $res2);
+        $this->assertSame([9, 6], $res2);
     }
 
     public function testArgs()
@@ -245,7 +245,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         };
 
         $pow = function ($obj, $a, $b, $power) {
-            return pow($a, $power) + pow($b, $power);
+            return $a ** $power + $b ** $power;
         };
 
         $obj->onHook('test', $mul);
@@ -254,10 +254,10 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $obj->onHook('test', $pow, [7]);
 
         $res1 = $obj->hook('test', [2, 2]);
-        $this->assertEquals([4, 4, 8, 256], $res1);
+        $this->assertSame([4, 4, 8, 256], $res1);
 
         $res2 = $obj->hook('test', [2, 3]);
-        $this->assertEquals([6, 5, 13, 2315], $res2);
+        $this->assertSame([6, 5, 13, 2315], $res2);
     }
 
     public function testReferences()
@@ -265,7 +265,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $obj = new HookMock();
 
         $inc = function ($obj, &$a) {
-            $a++;
+            ++$a;
         };
 
         $obj->onHook('inc', $inc);
@@ -273,19 +273,19 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $a = [&$v];
         $obj->hook('inc', $a);
 
-        $this->assertEquals([2], $a);
+        $this->assertSame([2], $a);
 
         $obj = new HookMock();
 
         $inc = function ($obj, &$a) {
-            $a++;
+            ++$a;
         };
 
         $v = 1;
         $obj->onHook('inc', $inc);
         $obj->hook('inc', [&$v]);
 
-        $this->assertEquals(2, $v);
+        $this->assertSame(2, $v);
     }
 
     public function testDefaultMethod()
@@ -294,7 +294,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $obj->onHook('myCallback', $obj);
         $obj->hook('myCallback');
 
-        $this->assertEquals(1, $obj->result);
+        $this->assertSame(1, $obj->result);
     }
 
     public function testBreakHook()
@@ -303,8 +303,8 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->result = 0;
 
         $inc = function ($obj) {
-            $obj->result++;
-            if ($obj->result == 2) {
+            ++$obj->result;
+            if ($obj->result === 2) {
                 $obj->breakHook('stop');
             }
         };
@@ -314,8 +314,8 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->onHook('inc', $inc);
 
         $ret = $m->hook('inc');
-        $this->assertEquals(2, $m->result);
-        $this->assertEquals('stop', $ret);
+        $this->assertSame(2, $m->result);
+        $this->assertSame('stop', $ret);
     }
 
     public function testExceptionInHook()
@@ -342,7 +342,7 @@ class HookMock
 
     public function myCallback($obj)
     {
-        $this->result++;
+        ++$this->result;
     }
 }
 class HookWithDynamicMethodMock extends HookMock

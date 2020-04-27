@@ -199,8 +199,6 @@ class Exception extends \Exception
     /**
      * Set Custom Translator adapter.
      *
-     * @param ITranslatorAdapter|null $adapter
-     *
      * @return $this
      */
     public function setTranslatorAdapter(?ITranslatorAdapter $adapter = null): self

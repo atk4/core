@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core;
+use atk4\core\AtkPhpunit;
 
 /**
  * @coversDefaultClass \atk4\core\ContainerTrait
@@ -16,16 +16,16 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testBasic()
     {
         $m = new ContainerMock();
-        $this->assertEquals(true, isset($m->_containerTrait));
+        $this->assertTrue(isset($m->_containerTrait));
 
         // add to return object
         $tr = $m->add($tr2 = new \StdClass());
-        $this->assertEquals($tr, $tr2);
+        $this->assertSame($tr, $tr2);
 
         // trackable object can be referenced by name
         $m->add($tr3 = new TrackableMock(), 'foo');
         $tr = $m->getElement('foo');
-        $this->assertEquals($tr, $tr3);
+        $this->assertSame($tr, $tr3);
     }
 
     public function testUniqueNames()
@@ -39,15 +39,15 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m->add(new TrackableMock(), '123');
         $m->add(new TrackableMock(), 'false');
 
-        $this->assertEquals(true, (bool) $m->hasElement('foo bar'));
-        $this->assertEquals(true, (bool) $m->hasElement('123'));
-        $this->assertEquals(true, (bool) $m->hasElement('false'));
-        $this->assertEquals(5, $m->getElementCount());
+        $this->assertTrue((bool) $m->hasElement('foo bar'));
+        $this->assertTrue((bool) $m->hasElement('123'));
+        $this->assertTrue((bool) $m->hasElement('false'));
+        $this->assertSame(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
-        $this->assertEquals(4, $m->getElementCount());
+        $this->assertSame(4, $m->getElementCount());
         $anon->destroy();
-        $this->assertEquals(3, $m->getElementCount());
+        $this->assertSame(3, $m->getElementCount());
     }
 
     public function testLongNames()
@@ -63,7 +63,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $x = $m->add(new ContainerAppMock(), 'a');
         $x = $m->add(new ContainerAppMock(), 'mint');
 
-        $this->assertEquals(
+        $this->assertSame(
             '_quick-brown-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake',
             $m->unshortenName($this)
         );
@@ -73,10 +73,10 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
 
         $m->removeElement($x);
 
-        $this->assertEquals(2, $m->getElementCount());
+        $this->assertSame(2, $m->getElementCount());
         $m->add(new \StdClass());
 
-        $this->assertEquals(2, $m->getElementCount());
+        $this->assertSame(2, $m->getElementCount());
     }
 
     public function testLongNames2()
@@ -91,7 +91,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $min_len = 99;
         $max_len_v = '';
 
-        for ($x = 1; $x < 100; $x++) {
+        for ($x = 1; $x < 100; ++$x) {
             $sh = str_repeat('x', $x);
             $m = $app->add(new ContainerAppMock(), $sh);
             if (strlen($m->name) > $max_len) {
@@ -114,11 +114,11 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     {
         $m = new ContainerFactoryMock();
         $m2 = $m->add('atk4/core/tests/ContainerMock');
-        $this->assertEquals('atk4\core\tests\ContainerMock', get_class($m2));
+        $this->assertSame('atk4\core\tests\ContainerMock', get_class($m2));
 
         $m3 = $m->add('atk4/core/tests/TrackableContainerMock', 'name');
-        $this->assertEquals('atk4\core\tests\TrackableContainerMock', get_class($m3));
-        $this->assertEquals('name', $m3->short_name);
+        $this->assertSame('atk4\core\tests\TrackableContainerMock', get_class($m3));
+        $this->assertSame('name', $m3->short_name);
     }
 
     public function testArgs()
@@ -126,8 +126,8 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         // passing name with array key 'name'
         $m = new ContainerMock();
         $m2 = $m->add(new TrackableMock(), ['name' => 'foo', 'test' => 'ok']);
-        $this->assertEquals(true, (bool) $m->hasElement('foo'));
-        $this->assertEquals('ok', $m2->test);
+        $this->assertTrue((bool) $m->hasElement('foo'));
+        $this->assertSame('ok', $m2->test);
     }
 
     public function testExceptionExists()
@@ -141,8 +141,8 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testDesiredName()
     {
         $m = new ContainerMock();
-        $m->add(new TrackableMock(), ['desired_name'=>'foo']);
-        $m->add(new TrackableMock(), ['desired_name'=>'foo']);
+        $m->add(new TrackableMock(), ['desired_name' => 'foo']);
+        $m->add(new TrackableMock(), ['desired_name' => 'foo']);
 
         $this->assertNotEmpty($m->hasElement('foo'));
     }
@@ -217,7 +217,7 @@ class ContainerAppMock
 
         $d = array_flip($this->app->unique_hashes);
 
-        for ($x = 1; $x < 100; $x++) {
+        for ($x = 1; $x < 100; ++$x) {
             @list($l, $r) = explode('__', $n);
 
             if (!$r) {

@@ -28,7 +28,7 @@ trait InitializerTrait
     public function init(): void
     {
         if ($this->_initialized) {
-            throw new Exception(['Attempting to initialize twice', 'this'=>$this]);
+            throw new Exception(['Attempting to initialize twice', 'this' => $this]);
         }
         $this->_initialized = true;
     }

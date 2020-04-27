@@ -10,14 +10,14 @@ class JSON extends RendererAbstract
 {
     /** @var array */
     protected $json = [
-        'success'  => false,
-        'code'     => 0,
-        'message'  => '',
-        'title'    => '',
-        'class'    => '',
-        'params'   => [],
+        'success' => false,
+        'code' => 0,
+        'message' => '',
+        'title' => '',
+        'class' => '',
+        'params' => [],
         'solution' => [],
-        'trace'    => [],
+        'trace' => [],
         'previous' => [],
     ];
 
@@ -38,7 +38,7 @@ class JSON extends RendererAbstract
             return;
         }
 
-        if (0 === count($this->exception->getParams())) {
+        if (count($this->exception->getParams()) === 0) {
             return;
         }
 
@@ -56,7 +56,7 @@ class JSON extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (0 === count($exception->getSolutions())) {
+        if (count($exception->getSolutions()) === 0) {
             return;
         }
 
@@ -118,12 +118,12 @@ HTML;
     protected function parseStackTraceCall($call): array
     {
         return [
-            'line'     => $call['line'] ?? '',
-            'file'     => $call['file'] ?? '',
-            'class'    => $call['class'] ?? null,
-            'object'   => ($call['object'] ?? null) !== null ? ($call['object']->name ?? get_class($call['object'])) : null,
+            'line' => $call['line'] ?? '',
+            'file' => $call['file'] ?? '',
+            'class' => $call['class'] ?? null,
+            'object' => ($call['object'] ?? null) !== null ? ($call['object']->name ?? get_class($call['object'])) : null,
             'function' => $call['function'] ?? null,
-            'args'     => $call['args'] ?? [],
+            'args' => $call['args'] ?? [],
         ];
     }
 
@@ -134,21 +134,21 @@ HTML;
         } catch (\Throwable $e) {
             // fallback if error occur
             $this->json = [
-                'success'  => false,
-                'code'     => $this->exception->getCode(),
-                'message'  => 'Error during JSON renderer : ' . $this->exception->getMessage(),
+                'success' => false,
+                'code' => $this->exception->getCode(),
+                'message' => 'Error during JSON renderer : ' . $this->exception->getMessage(),
                 // avoid translation
                 //'message'  => $this->_($this->exception->getMessage()),
-                'title'    => get_class($this->exception),
-                'class'    => get_class($this->exception),
-                'params'   => [],
+                'title' => get_class($this->exception),
+                'class' => get_class($this->exception),
+                'params' => [],
                 'solution' => [],
-                'trace'    => [],
+                'trace' => [],
                 'previous' => [
-                    'title'    => get_class($e),
-                    'class'    => get_class($e),
-                    'code'     => $e->getCode(),
-                    'message'  => $e->getMessage(),
+                    'title' => get_class($e),
+                    'class' => get_class($e),
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
                 ],
             ];
         }

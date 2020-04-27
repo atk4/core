@@ -63,16 +63,16 @@ trait ConfigTrait
                     $config = null;
                     require $file; // fills $config variable
                     $tempConfig = $config;
-                    break;
 
+                    break;
                 case 'php-inline':
                     $tempConfig = require $file;
-                    break;
 
+                    break;
                 case 'json':
                     $tempConfig = json_decode(file_get_contents($file), true);
-                    break;
 
+                    break;
                 case 'yaml':
                     // @codeCoverageIgnoreStart
                     if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
@@ -86,7 +86,7 @@ trait ConfigTrait
             if (!is_array($tempConfig)) {
                 throw new Exception([
                     'File was read but has a bad format',
-                    'file'   => $file,
+                    'file' => $file,
                     'format' => $format,
                 ]);
             }
@@ -113,7 +113,7 @@ trait ConfigTrait
             $paths = [$paths => $value];
         }
 
-        foreach ($paths as $path=>$value) {
+        foreach ($paths as $path => $value) {
             $pos = &$this->_lookupConfigElement($path, true);
 
             if (is_array($pos) && !empty($pos) && is_array($value)) {
@@ -131,7 +131,7 @@ trait ConfigTrait
     /**
      * Get configuration element.
      *
-     * @param string $path          Path to configuration element.
+     * @param string $path          path to configuration element
      * @param mixed  $default_value Default value returned if element don't exist
      *
      * @return mixed
@@ -165,7 +165,6 @@ trait ConfigTrait
         $path = explode('/', $path);
         $pos = &$this->config;
         foreach ($path as $el) {
-
             // need to return if not is array
             // before call array_key_exists and throw error
             if (!is_array($pos)) {

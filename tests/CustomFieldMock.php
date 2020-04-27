@@ -16,7 +16,7 @@ class CustomFieldMock extends FieldMock
     use AppScopeTrait;
 
     /** @var null verifying if init wal called */
-    public $var = null;
+    public $var;
 
     public function init(): void
     {

@@ -66,7 +66,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
     public function testBasic()
     {
         $m = new ContainerMock();
-        $this->assertEquals(true, isset($m->_containerTrait));
+        $this->assertTrue(isset($m->_containerTrait));
 
         // add to return object
         $tr = StdSAT::addTo($m);
@@ -74,12 +74,12 @@ class StaticAddToTest extends AtkPhpunit\TestCase
 
         // add object - for BC
         $tr = StdSAT::addTo($m, $tr);
-        $this->assertEquals(StdSAT::class, get_class($tr));
+        $this->assertSame(StdSAT::class, get_class($tr));
 
         // trackable object can be referenced by name
         $tr3 = TrackableMockSAT::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');
-        $this->assertEquals($tr, $tr3);
+        $this->assertSame($tr, $tr3);
 
         // not the same or extended class
         $this->expectException(\atk4\core\Exception::class);
@@ -89,19 +89,19 @@ class StaticAddToTest extends AtkPhpunit\TestCase
     public function testWithClassName()
     {
         $m = new ContainerMock();
-        $this->assertEquals(true, isset($m->_containerTrait));
+        $this->assertTrue(isset($m->_containerTrait));
 
         // the same class
         $tr = StdSAT::addToWithClassName($m, StdSAT::class);
-        $this->assertEquals(StdSAT::class, get_class($tr));
+        $this->assertSame(StdSAT::class, get_class($tr));
 
         // add object - for BC
         $tr = StdSAT::addToWithClassName($m, $tr);
-        $this->assertEquals(StdSAT::class, get_class($tr));
+        $this->assertSame(StdSAT::class, get_class($tr));
 
         // extended class
         $tr = StdSAT::addToWithClassName($m, StdSAT2::class);
-        $this->assertEquals(StdSAT2::class, get_class($tr));
+        $this->assertSame(StdSAT2::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
         $this->expectException(\atk4\core\Exception::class);
@@ -109,7 +109,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
 
         // not the same or extended class - unsafe enabled
         $tr = StdSAT::addToWithClassNameUnsafe($m, \stdClass::class);
-        $this->assertEquals(\stdClass::class, get_class($tr));
+        $this->assertSame(\stdClass::class, get_class($tr));
     }
 
     public function testUniqueNames()
@@ -123,28 +123,28 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         TrackableMockSAT::addTo($m, [], ['123']);
         TrackableMockSAT::addTo($m, [], ['false']);
 
-        $this->assertEquals(true, (bool) $m->hasElement('foo bar'));
-        $this->assertEquals(true, (bool) $m->hasElement('123'));
-        $this->assertEquals(true, (bool) $m->hasElement('false'));
-        $this->assertEquals(5, $m->getElementCount());
+        $this->assertTrue((bool) $m->hasElement('foo bar'));
+        $this->assertTrue((bool) $m->hasElement('123'));
+        $this->assertTrue((bool) $m->hasElement('false'));
+        $this->assertSame(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
-        $this->assertEquals(4, $m->getElementCount());
+        $this->assertSame(4, $m->getElementCount());
         $anon->destroy();
-        $this->assertEquals(3, $m->getElementCount());
+        $this->assertSame(3, $m->getElementCount());
     }
 
     public function testFactoryMock()
     {
         $m = new ContainerFactoryMockSAT();
-        $m1 = DIMockSAT::addTo($m, ['a'=>'XXX', 'b'=>'YYY']);
-        $this->assertEquals('XXX', $m1->a);
-        $this->assertEquals('YYY', $m1->b);
-        $this->assertEquals(null, $m1->c);
+        $m1 = DIMockSAT::addTo($m, ['a' => 'XXX', 'b' => 'YYY']);
+        $this->assertSame('XXX', $m1->a);
+        $this->assertSame('YYY', $m1->b);
+        $this->assertNull($m1->c);
 
-        $m2 = DIConstructorMockSAT::addTo($m, ['a'=>'XXX', 'John', 'b'=>'YYY']);
-        $this->assertEquals('XXX', $m2->a);
-        $this->assertEquals('YYY', $m2->b);
-        $this->assertEquals('John', $m2->c);
+        $m2 = DIConstructorMockSAT::addTo($m, ['a' => 'XXX', 'John', 'b' => 'YYY']);
+        $this->assertSame('XXX', $m2->a);
+        $this->assertSame('YYY', $m2->b);
+        $this->assertSame('John', $m2->c);
     }
 }

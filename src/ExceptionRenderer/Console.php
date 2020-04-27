@@ -14,10 +14,10 @@ class Console extends RendererAbstract
         $class = get_class($this->exception);
 
         $tokens = [
-            '{TITLE}'   => $title,
-            '{CLASS}'   => $class,
+            '{TITLE}' => $title,
+            '{CLASS}' => $class,
             '{MESSAGE}' => $this->_($this->exception->getMessage()),
-            '{CODE}'    => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
+            '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
         $this->output .= $this->replaceTokens(
@@ -38,7 +38,7 @@ TEXT
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (0 === count($exception->getParams())) {
+        if (count($exception->getParams()) === 0) {
             return;
         }
 
@@ -54,7 +54,7 @@ TEXT
             return;
         }
 
-        if (0 === count($this->exception->getSolutions())) {
+        if (count($this->exception->getSolutions()) === 0) {
             return;
         }
 
@@ -96,8 +96,8 @@ TEXT;
             $tokens = [];
             $tokens['{FILE}'] = $call['file_formatted'];
             $tokens['{LINE}'] = $call['line_formatted'];
-            $tokens['{OBJECT}'] = null !== $call['object_formatted'] ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
-            $tokens['{CLASS}'] = null !== $call['class'] ? "\e[0;32m" . $call['class'] . "::\e[0m" : '';
+            $tokens['{OBJECT}'] = $call['object_formatted'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
+            $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m" . $call['class'] . "::\e[0m" : '';
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];

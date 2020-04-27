@@ -18,8 +18,7 @@ class LocalizationTest extends AtkPhpunit\TestCase
 
         try {
             Persistence::connect('error:error');
-        } catch (\Throwable $e) {
-            /* @var $e Exception */
+        } catch (Exception $e) {
             $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getHTML());
             $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getHTMLText());
             $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getColorfulText());
@@ -34,8 +33,7 @@ class LocalizationTest extends AtkPhpunit\TestCase
 
         try {
             Persistence::connect('error:error');
-        } catch (\Throwable $e) {
-            /* @var $e Exception */
+        } catch (Exception $e) {
             $e->setTranslatorAdapter($adapter);
             $this->assertMatchesRegularExpression('/message is translated/', $e->getHTML());
             $this->assertMatchesRegularExpression('/message is translated/', $e->getHTMLText());
@@ -51,8 +49,7 @@ class LocalizationTest extends AtkPhpunit\TestCase
 
         try {
             Persistence::connect('error:error');
-        } catch (\Throwable $e) {
-            /* @var $e Exception */
+        } catch (Exception $e) {
             // emulate an external translator already configured
             $e->setTranslatorAdapter(new class() implements ITranslatorAdapter {
                 public function _(

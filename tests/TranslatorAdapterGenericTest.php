@@ -19,12 +19,12 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         };
     }
 
-    public function testExceptionDI_not_found(): void
+    public function testExceptionDINotFound(): void
     {
-        $this->assertEquals('no key return self', Translator::instance()->_('no key return self'));
+        $this->assertSame('no key return self', Translator::instance()->_('no key return self'));
     }
 
-    public function testExceptionDI_instance(): void
+    public function testExceptionDIInstance(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
@@ -32,7 +32,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         ]);
     }
 
-    public function testExceptionDI_adapter(): void
+    public function testExceptionDIAdapter(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
@@ -40,19 +40,19 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         ]);
     }
 
-    public function testExceptionDI_default_domain(): void
+    public function testExceptionDIDefaultDomain(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
-            'default_domain' => 123, /* just to throw exception*/
+            'default_domain' => 123, // just to throw exception
         ]);
     }
 
-    public function testExceptionDI_default_locale(): void
+    public function testExceptionDIDefaultLocale(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
-            'default_locale' => 123, /* just to throw exception*/
+            'default_locale' => 123, // just to throw exception
         ]);
     }
 
@@ -60,30 +60,30 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
     {
         $adapter = new Generic();
 
-        /* just to cover method addDefinitionFromFile*/
+        // just to cover method addDefinitionFromFile
         $adapter->addDefinitionFromFile(Locale::getPath() . '/en/atk.php', 'en', 'atk', 'php-inline');
 
         $adapter->setDefinitionSingle('test', 'custom definition', 'en', 'other');
 
         Translator::instance()->setAdapter($adapter);
 
-        $this->assertEquals('custom definition', Translator::instance()->_('test', [], 'other', 'en'));
+        $this->assertSame('custom definition', Translator::instance()->_('test', [], 'other', 'en'));
 
         // test replace
         $adapter->setDefinitionSingle('test', 'custom definition replaced', 'en', 'other');
 
-        $this->assertEquals('custom definition replaced', Translator::instance()->_('test', [], 'other', 'en'));
+        $this->assertSame('custom definition replaced', Translator::instance()->_('test', [], 'other', 'en'));
 
         // test other language
         $adapter->setDefinitionSingle('test', 'definizione personalizzata', 'it', 'other');
 
-        $this->assertEquals('definizione personalizzata', Translator::instance()->_('test', [], 'other', 'it'));
+        $this->assertSame('definizione personalizzata', Translator::instance()->_('test', [], 'other', 'it'));
 
         Translator::instance()->setDefaultLocale('it');
-        $this->assertEquals('definizione personalizzata', Translator::instance()->_('test', [], 'other'));
+        $this->assertSame('definizione personalizzata', Translator::instance()->_('test', [], 'other'));
 
         Translator::instance()->setDefaultDomain('other');
-        $this->assertEquals('definizione personalizzata', Translator::instance()->_('test'));
+        $this->assertSame('definizione personalizzata', Translator::instance()->_('test'));
     }
 
     public function testAdapterPlurals(): void
@@ -92,50 +92,50 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 
         // test plurals
         Translator::instance()->setDefaults([
-            'adapter'        => $adapter,
+            'adapter' => $adapter,
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [
-            'zero'  => 'is empty',
-            'one'   => 'is one',
+            'zero' => 'is empty',
+            'one' => 'is one',
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is empty', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertSame('is empty', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertSame('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertSame('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
-    public function testAdapterPlurals_notFullDefinition(): void
+    public function testAdapterPluralsNotFullDefinition(): void
     {
         $adapter = new Generic();
 
         // test plurals
         Translator::instance()->setDefaults([
-            'adapter'        => $adapter,
+            'adapter' => $adapter,
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [
-            'one'   => 'is one',
+            'one' => 'is one',
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertSame('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertSame('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertSame('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
-    public function testAdapterPlurals_Singular(): void
+    public function testAdapterPluralsSingular(): void
     {
         $adapter = new Generic();
 
         // test plurals
         Translator::instance()->setDefaults([
-            'adapter'        => $adapter,
+            'adapter' => $adapter,
             'default_domain' => 'other',
             'default_locale' => 'en',
         ]);
@@ -144,8 +144,8 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' =>0]));
-        $this->assertEquals('is 1', Translator::instance()->_('test', ['count' =>1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' =>500]));
+        $this->assertSame('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertSame('is 1', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertSame('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 }

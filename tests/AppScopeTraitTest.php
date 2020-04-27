@@ -2,8 +2,8 @@
 
 namespace atk4\core\tests;
 
-use atk4\core\AtkPhpunit;
 use atk4\core\AppScopeTrait;
+use atk4\core\AtkPhpunit;
 use atk4\core\ContainerTrait;
 use atk4\core\NameTrait;
 use atk4\core\TrackableTrait;
@@ -22,15 +22,15 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
         $m->app = 'myapp';
 
         $c = $m->add(new Child1());
-        $this->assertEquals('myapp', $c->app);
+        $this->assertSame('myapp', $c->app);
 
         $c = $m->add(new Child2());
-        $this->assertEquals(false, isset($c->app));
+        $this->assertFalse(isset($c->app));
 
         $m = new AppScopeMock2();
 
         $c = $m->add(new Child1());
-        $this->assertEquals(false, isset($c->app));
+        $this->assertFalse(isset($c->app));
 
         // test for GC
         $m = new AppScopeMock();

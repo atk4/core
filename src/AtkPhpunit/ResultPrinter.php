@@ -2,8 +2,6 @@
 
 namespace atk4\core\AtkPhpunit;
 
-use PHPUnit\Framework\TestFailure;
-
 require_once __DIR__ . '/phpunit_polyfill.php';
 
 // trait is needed for phpunit < 6.0 only, fix ResultPrinterTrait::printDefectTrace() method header mismatch
@@ -30,7 +28,7 @@ trait ResultPrinterTrait
     }
 }
 
-if (version_compare(\PHPUnit\Runner\Version::id(), 6) < 0) {
+if (version_compare(\PHPUnit\Runner\Version::id(), '6') < 0) {
     /**
      * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
      */

@@ -35,25 +35,25 @@ trait CollectionTrait
         if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw new Exception([
                 'Name of collection is specified incorrectly',
-                'parent'    => $this,
-                'collection'=> $collection,
+                'parent' => $this,
+                'collection' => $collection,
             ]);
         }
 
         if (!$name) {
             throw new Exception([
                 'Object must be given a name when adding into this',
-                'child'     => $object,
-                'parent'    => $this,
-                'collection'=> $collection,
+                'child' => $object,
+                'parent' => $this,
+                'collection' => $collection,
             ]);
         }
 
         if ($this->_hasInCollection($name, $collection) !== false) {
             throw new Exception([
                 'Object with requested name already exist in collection',
-                'name'      => $name,
-                'collection'=> $collection,
+                'name' => $name,
+                'collection' => $collection,
             ]);
         }
         $this->{$collection}[$name] = $object;
@@ -79,7 +79,7 @@ trait CollectionTrait
             if (!$object->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'object'=> $object,
+                    'object' => $object,
                 ]);
             }
         }
@@ -97,9 +97,9 @@ trait CollectionTrait
         if ($this->_hasInCollection($name, $collection) === false) {
             throw new Exception([
                 'Element by this name is NOT in the collection, cannot remove',
-                'parent'    => $this,
-                'collection'=> $collection,
-                'name'      => $name,
+                'parent' => $this,
+                'collection' => $collection,
+                'name' => $name,
             ]);
         }
         unset($this->{$collection}[$name]);
@@ -137,12 +137,12 @@ trait CollectionTrait
     public function _getFromCollection(string $name, string $collection): object
     {
         $object = $this->_hasInCollection($name, $collection);
-        if (false === $object) {
+        if ($object === false) {
             throw new Exception([
                 'Element is not found in collection',
-                'collection'=> $collection,
-                'name'      => $name,
-                'this'      => $this,
+                'collection' => $collection,
+                'name' => $name,
+                'this' => $this,
             ]);
         }
 
@@ -153,9 +153,9 @@ trait CollectionTrait
      * Method used internally for shortening object names
      * Identical implementation to ContainerTrait::_shorten.
      *
-     * @param string $desired Desired name of new object.
+     * @param string $desired desired name of new object
      *
-     * @return string Shortened name of new object.
+     * @return string shortened name of new object
      */
     protected function _shorten_ml(string $desired): string
     {
@@ -164,7 +164,6 @@ trait CollectionTrait
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
-
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed

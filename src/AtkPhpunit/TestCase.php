@@ -29,7 +29,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public function callProtected(object $obj, string $name, array $args = [])
     {
         return \Closure::bind(static function () use ($obj, $name, $args) {
-            return $obj->$name(...$args);
+            return $obj->{$name}(...$args);
         }, null, $obj)();
     }
 
@@ -44,7 +44,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public function getProtected(object $obj, string $name)
     {
         return \Closure::bind(static function () use ($obj, $name) {
-            return $obj->$name;
+            return $obj->{$name};
         }, null, $obj)();
     }
 

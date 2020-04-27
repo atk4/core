@@ -76,7 +76,7 @@ trait ContainerTrait
             if (!$obj->_initialized) {
                 throw new Exception([
                     'You should call parent::init() when you override initializer',
-                    'obj'=> $obj,
+                    'obj' => $obj,
                 ]);
             }
         }
@@ -111,27 +111,22 @@ trait ContainerTrait
 
         // Normalize the arguments, bring name out
         if (is_string($args)) {
-
             // passed as string
             $args = [$args];
-        } elseif (!is_array($args) && !is_null($args)) {
+        } elseif (!is_array($args) && $args !== null) {
             throw new Exception(['Second argument must be array', 'arg2' => $args]);
         } elseif (isset($args['desired_name'])) {
-
             // passed as ['desired_name'=>'foo'];
             $args[0] = $this->_unique_element($args['desired_name']);
             unset($args['desired_name']);
         } elseif (isset($args['name'])) {
-
             // passed as ['name'=>'foo'];
             $args[0] = $args['name'];
             unset($args['name']);
         } elseif (isset($element->short_name)) {
-
             // element has a name already
             $args[0] = $this->_unique_element($element->short_name);
         } else {
-
             // ask element on his preferred name, then make it unique.
             $cn = $element->getDesiredName();
             $args[0] = $this->_unique_element($cn);
@@ -142,9 +137,9 @@ trait ContainerTrait
             throw new Exception([
                 'Element with requested name already exists',
                 'element' => $element,
-                'name'    => $args[0],
-                'this'    => $this,
-                'arg2'    => $args,
+                'name' => $args[0],
+                'this' => $this,
+                'arg2' => $args,
             ]);
         }
 
@@ -157,7 +152,7 @@ trait ContainerTrait
         unset($args['name']);
         foreach ($args as $key => $arg) {
             if ($arg !== null) {
-                $element->$key = $arg;
+                $element->{$key} = $arg;
             }
         }
 
@@ -180,8 +175,8 @@ trait ContainerTrait
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..',
-                'parent'=> $this,
-                'name'  => $short_name,
+                'parent' => $this,
+                'name' => $short_name,
             ]);
         }
 
@@ -193,9 +188,9 @@ trait ContainerTrait
     /**
      * Method used internally for shortening object names.
      *
-     * @param string $desired Desired name of new object.
+     * @param string $desired desired name of new object
      *
-     * @return string Shortened name of new object.
+     * @return string shortened name of new object
      */
     protected function _shorten(string $desired): string
     {
@@ -204,7 +199,6 @@ trait ContainerTrait
             isset($this->app->max_name_length) &&
             strlen($desired) > $this->app->max_name_length
         ) {
-
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed
@@ -239,7 +233,7 @@ trait ContainerTrait
         if (!isset($this->elements[$short_name])) {
             throw new Exception([
                 'Child element not found',
-                'parent'  => $this,
+                'parent' => $this,
                 'element' => $short_name,
             ]);
         }

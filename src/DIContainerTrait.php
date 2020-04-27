@@ -49,12 +49,12 @@ trait DIContainerTrait
     {
         foreach ($properties as $key => $val) {
             if (!is_numeric($key) && property_exists($this, $key)) {
-                if ($passively && $this->$key !== null) {
+                if ($passively && $this->{$key} !== null) {
                     continue;
                 }
 
                 if ($val !== null) {
-                    $this->$key = $val;
+                    $this->{$key} = $val;
                 }
             } else {
                 $this->setMissingProperty($key, $val);
@@ -83,9 +83,9 @@ trait DIContainerTrait
 
         throw new Exception([
             'Property for specified object is not defined',
-            'object'  => $this,
-            'property'=> $key,
-            'value'   => $value,
+            'object' => $this,
+            'property' => $key,
+            'value' => $value,
         ]);
     }
 }

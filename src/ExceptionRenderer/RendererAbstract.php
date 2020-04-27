@@ -73,21 +73,21 @@ abstract class RendererAbstract
     protected function parseStackTraceCall(array $call): array
     {
         $parsed = [
-            'line'             => (string) ($call['line'] ?? ''),
-            'file'             => (string) ($call['file'] ?? ''),
-            'class'            => $call['class'] ?? null,
-            'object'           => $call['object'] ?? null,
-            'function'         => $call['function'] ?? null,
-            'args'             => $call['args'] ?? [],
+            'line' => (string) ($call['line'] ?? ''),
+            'file' => (string) ($call['file'] ?? ''),
+            'class' => $call['class'] ?? null,
+            'object' => $call['object'] ?? null,
+            'function' => $call['function'] ?? null,
+            'args' => $call['args'] ?? [],
             'object_formatted' => null,
-            'file_formatted'   => null,
-            'line_formatted'   => null,
+            'file_formatted' => null,
+            'line_formatted' => null,
         ];
 
         $parsed['file_formatted'] = str_pad(substr($parsed['file'], -40), 40, ' ', STR_PAD_LEFT);
         $parsed['line_formatted'] = str_pad($parsed['line'] ?? '', 4, ' ', STR_PAD_LEFT);
 
-        if (null !== $parsed['object']) {
+        if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = $parsed['object']->name ?? get_class($parsed['object']);
         }
 
@@ -134,7 +134,7 @@ abstract class RendererAbstract
 
         $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
         $c = min(count($trace), count($parent_trace));
-        for ($i = 0; $i < $c; $i++) {
+        for ($i = 0; $i < $c; ++$i) {
             $cv = $this->parseStackTraceCall($trace[$i]);
             $pv = $this->parseStackTraceCall($parent_trace[$i]);
 
