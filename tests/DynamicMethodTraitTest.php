@@ -26,7 +26,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->assertTrue($m->hasMethod('test'));
 
         $res = 'Hello, ' . $m->test();
-        $this->assertEquals('Hello, world', $res);
+        $this->assertSame('Hello, world', $res);
     }
 
     public function testException1()
@@ -75,12 +75,12 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
             return $a + $b;
         });
         $res = $m->sum(3, 5);
-        $this->assertEquals(8, $res);
+        $this->assertSame(8, $res);
 
         // callable as object/array
         $m = new DynamicMethodMock();
         $m->addMethod('getElementCount', [new ContainerMock(), 'getElementCount']);
-        $this->assertEquals(0, $m->getElementCount());
+        $this->assertSame(0, $m->getElementCount());
     }
 
     /**
@@ -91,7 +91,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $m = new DynamicMethodWithoutHookMock();
         $this->assertFalse($m->hasMethod('sum'));
 
-        $this->assertEquals($m, $m->removeMethod('sum'));
+        $this->assertSame($m, $m->removeMethod('sum'));
     }
 
     public function testDoubleMethodException()
@@ -151,7 +151,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->assertTrue($m->hasGlobalMethod('sum'));
 
         $res = $m2->sum(3, 5);
-        $this->assertEquals(8, $res);
+        $this->assertSame(8, $res);
 
         $m->removeGlobalMethod('sum');
         $this->assertFalse($m2->hasGlobalMethod('sum'));

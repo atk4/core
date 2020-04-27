@@ -21,7 +21,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new Exception(['TestIt', 'a1' => 111, 'a2' => 222]);
 
         // params
-        $this->assertEquals(['a1' => 111, 'a2' => 222], $m->getParams());
+        $this->assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
 
         $m = new Exception('PrevError');
         $m = new Exception('TestIt', 123, $m);
@@ -29,7 +29,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m->addMoreInfo('a2', 333);
 
         // params
-        $this->assertEquals(['a1' => 222, 'a2' => 333], $m->getParams());
+        $this->assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
 
         // get colorful text
         $ret = $m->getColorfulText();
@@ -57,18 +57,18 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
         // to string
         $ret = $m->toString(1);
-        $this->assertEquals('1', $ret);
+        $this->assertSame('1', $ret);
 
         $ret = $m->toString('abc');
-        $this->assertEquals('"abc"', $ret);
+        $this->assertSame('"abc"', $ret);
 
         $ret = $m->toString(new \stdClass());
-        $this->assertEquals('Object stdClass', $ret);
+        $this->assertSame('Object stdClass', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
         $ret = $m->toString($a);
-        $this->assertEquals('atk4\core\tests\TrackableMock2 (foo)', $ret);
+        $this->assertSame('atk4\core\tests\TrackableMock2 (foo)', $ret);
     }
 
     public function testMore(): void
@@ -142,10 +142,10 @@ class ExceptionTest extends AtkPhpunit\TestCase
     public function testExceptionFallback(): void
     {
         $m = new ExceptionTestThrowError(['test']);
-        $this->assertEquals(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
-        $this->assertEquals(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTMLText());
-        $this->assertEquals(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());
-        $this->assertEquals(
+        $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
+        $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTMLText());
+        $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());
+        $this->assertSame(
             json_encode(
                 [
                     'success' => false,

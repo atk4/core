@@ -22,7 +22,7 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
         $m->app = 'myapp';
 
         $c = $m->add(new Child1());
-        $this->assertEquals('myapp', $c->app);
+        $this->assertSame('myapp', $c->app);
 
         $c = $m->add(new Child2());
         $this->assertFalse(isset($c->app));

@@ -21,7 +21,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 
     public function testExceptionDINotFound(): void
     {
-        $this->assertEquals('no key return self', Translator::instance()->_('no key return self'));
+        $this->assertSame('no key return self', Translator::instance()->_('no key return self'));
     }
 
     public function testExceptionDIInstance(): void
@@ -67,23 +67,23 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 
         Translator::instance()->setAdapter($adapter);
 
-        $this->assertEquals('custom definition', Translator::instance()->_('test', [], 'other', 'en'));
+        $this->assertSame('custom definition', Translator::instance()->_('test', [], 'other', 'en'));
 
         // test replace
         $adapter->setDefinitionSingle('test', 'custom definition replaced', 'en', 'other');
 
-        $this->assertEquals('custom definition replaced', Translator::instance()->_('test', [], 'other', 'en'));
+        $this->assertSame('custom definition replaced', Translator::instance()->_('test', [], 'other', 'en'));
 
         // test other language
         $adapter->setDefinitionSingle('test', 'definizione personalizzata', 'it', 'other');
 
-        $this->assertEquals('definizione personalizzata', Translator::instance()->_('test', [], 'other', 'it'));
+        $this->assertSame('definizione personalizzata', Translator::instance()->_('test', [], 'other', 'it'));
 
         Translator::instance()->setDefaultLocale('it');
-        $this->assertEquals('definizione personalizzata', Translator::instance()->_('test', [], 'other'));
+        $this->assertSame('definizione personalizzata', Translator::instance()->_('test', [], 'other'));
 
         Translator::instance()->setDefaultDomain('other');
-        $this->assertEquals('definizione personalizzata', Translator::instance()->_('test'));
+        $this->assertSame('definizione personalizzata', Translator::instance()->_('test'));
     }
 
     public function testAdapterPlurals(): void
@@ -103,9 +103,9 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is empty', Translator::instance()->_('test', ['count' => 0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' => 1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
+        $this->assertSame('is empty', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertSame('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertSame('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
     public function testAdapterPluralsNotFullDefinition(): void
@@ -124,9 +124,9 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' => 0]));
-        $this->assertEquals('is one', Translator::instance()->_('test', ['count' => 1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
+        $this->assertSame('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertSame('is one', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertSame('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 
     public function testAdapterPluralsSingular(): void
@@ -144,8 +144,8 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
             'other' => 'is {{count}}',
         ], 'en', 'other');
 
-        $this->assertEquals('is 0', Translator::instance()->_('test', ['count' => 0]));
-        $this->assertEquals('is 1', Translator::instance()->_('test', ['count' => 1]));
-        $this->assertEquals('is 500', Translator::instance()->_('test', ['count' => 500]));
+        $this->assertSame('is 0', Translator::instance()->_('test', ['count' => 0]));
+        $this->assertSame('is 1', Translator::instance()->_('test', ['count' => 1]));
+        $this->assertSame('is 500', Translator::instance()->_('test', ['count' => 500]));
     }
 }

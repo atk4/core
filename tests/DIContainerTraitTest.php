@@ -41,11 +41,11 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
         $m = new FactoryDIMock2();
 
         $m->setDefaults(['a' => 'foo', 'c' => 'bar']);
-        $this->assertEquals([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
+        $this->assertSame([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
 
         $m = new FactoryDIMock2();
         $m->setDefaults(['a' => null, 'c' => false]);
-        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+        $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
     }
 
     /**
@@ -56,16 +56,16 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
         $m = new FactoryDIMock2();
 
         $m->setDefaults(['a' => 'foo', 'c' => 'bar'], true);
-        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', 'bar']);
+        $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', 'bar']);
 
         $m = new FactoryDIMock2();
         $m->setDefaults(['a' => null, 'c' => false], true);
-        $this->assertEquals([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+        $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
 
         $m = new FactoryDIMock2();
         $m->a = ['foo'];
         $m->setDefaults(['a' => ['bar']], true);
-        $this->assertEquals([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
+        $this->assertSame([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
     }
 
     /**

@@ -71,7 +71,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
 
         // value as string
         $m->memorize('foo', 'bar');
-        $this->assertEquals('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as null
         $m->memorize('foo', null);
@@ -81,12 +81,12 @@ class SessionTraitTest extends AtkPhpunit\TestCase
         $m->memorize('foo', function () {
             return 'bar';
         });
-        $this->assertEquals('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as object
         $o = new \StdClass();
         $m->memorize('foo', $o);
-        $this->assertEquals($o, $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertSame($o, $_SESSION['__atk_session'][$m->name]['foo']);
 
         $m->destroySession();
     }
@@ -101,33 +101,33 @@ class SessionTraitTest extends AtkPhpunit\TestCase
 
         // value as string
         $m->learn('foo', 'bar');
-        $this->assertEquals('bar', $m->recall('foo'));
+        $this->assertSame('bar', $m->recall('foo'));
 
         $m->learn('foo', 'qwerty');
-        $this->assertEquals('bar', $m->recall('foo'));
+        $this->assertSame('bar', $m->recall('foo'));
 
         $m->forget('foo');
-        $this->assertEquals('undefined', $m->recall('foo', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
         $m->learn('foo', function ($key) {
             return $key . '_bar';
         });
-        $this->assertEquals('foo_bar', $m->recall('foo'));
+        $this->assertSame('foo_bar', $m->recall('foo'));
 
         $m->learn('foo_2', 'another');
-        $this->assertEquals('another', $m->recall('foo_2'));
+        $this->assertSame('another', $m->recall('foo_2'));
 
         $v = $m->recall('foo_3', function ($key) {
             return $key . '_bar';
         });
-        $this->assertEquals('foo_3_bar', $v);
-        $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
+        $this->assertSame('foo_3_bar', $v);
+        $this->assertSame('undefined', $m->recall('foo_3', 'undefined'));
 
         $m->forget();
-        $this->assertEquals('undefined', $m->recall('foo', 'undefined'));
-        $this->assertEquals('undefined', $m->recall('foo_2', 'undefined'));
-        $this->assertEquals('undefined', $m->recall('foo_3', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo_2', 'undefined'));
+        $this->assertSame('undefined', $m->recall('foo_3', 'undefined'));
     }
 }
 

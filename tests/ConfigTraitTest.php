@@ -136,11 +136,11 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $this->assertEquals($a, $this->getProtected($m, 'config'));
 
         // test getConfig
-        $this->assertEquals(789, $m->getConfig('num'));
+        $this->assertSame(789, $m->getConfig('num'));
         $this->assertNull($m->getConfig('unknown'));
-        $this->assertEquals('default', $m->getConfig('unknown', 'default'));
-        $this->assertEquals('another', $m->getConfig('arr/sub/two', 'default'));
-        $this->assertEquals('default', $m->getConfig('arr/sub/three', 'default'));
+        $this->assertSame('default', $m->getConfig('unknown', 'default'));
+        $this->assertSame('another', $m->getConfig('arr/sub/two', 'default'));
+        $this->assertSame('default', $m->getConfig('arr/sub/three', 'default'));
     }
 
     public function testCaseGetConfigPathThatNotExists()

@@ -43,7 +43,7 @@ abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
         $message = 'Field requires array for defaults';
 
         $actual = $this->translate($message, [], 'atk', 'en');
-        $this->assertEquals($message, $actual);
+        $this->assertSame($message, $actual);
     }
 
     public function testSubstitution(): void
@@ -51,7 +51,7 @@ abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
         $message = 'Unable to serialize field value on load';
 
         $actual = $this->translate($message, ['field' => 'field_name'], 'atk', 'en');
-        $this->assertEquals('Unable to serialize field value on load (field_name)', $actual);
+        $this->assertSame('Unable to serialize field value on load (field_name)', $actual);
     }
 
     public function testPluralZero(): void
@@ -59,7 +59,7 @@ abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
         $message = 'Test with plural';
 
         $actual = $this->translate($message, ['count' => 0], 'atk', 'it');
-        $this->assertEquals('Test zero', $actual);
+        $this->assertSame('Test zero', $actual);
     }
 
     public function testPluralBig(): void
@@ -67,7 +67,7 @@ abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
         $message = 'Test with plural';
 
         $actual = $this->translate($message, ['count' => 50], 'atk', 'it');
-        $this->assertEquals('Test sono 50', $actual);
+        $this->assertSame('Test sono 50', $actual);
     }
 
     public function testPluralOne(): void
@@ -75,6 +75,6 @@ abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
         $message = 'Test with plural';
 
         $actual = $this->translate($message, ['count' => 1], 'atk', 'it');
-        $this->assertEquals('Test è uno', $actual);
+        $this->assertSame('Test è uno', $actual);
     }
 }

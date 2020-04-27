@@ -62,7 +62,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
         $m->debug('debug test2');
 
-        $this->assertEquals(['debug', 'debug test2', []], $app->log);
+        $this->assertSame(['debug', 'debug test2', []], $app->log);
     }
 
     public function testLog1()
@@ -84,7 +84,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->app = $app;
         $m->log('warning', 'debug test3');
 
-        $this->assertEquals(['warning', 'debug test3', []], $app->log);
+        $this->assertSame(['warning', 'debug test3', []], $app->log);
     }
 
     public function testMessage1()
@@ -104,7 +104,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->app = $app;
         $m->userMessage('hello user');
 
-        $this->assertEquals(['warning', 'Could not notify user about: hello user', []], $app->log);
+        $this->assertSame(['warning', 'Could not notify user about: hello user', []], $app->log);
     }
 
     public function testMessage3()
@@ -116,7 +116,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->app = $app;
         $m->userMessage('hello user');
 
-        $this->assertEquals(['hello user', []], $app->message);
+        $this->assertSame(['hello user', []], $app->message);
     }
 
     protected function triggerDebugTraceChange($o, $label)
@@ -141,9 +141,9 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
         // Changes detected
         $this->assertTrue(is_array($matches));
-        $this->assertEquals(5, count($matches));
-        $this->assertEquals($matches[1], $matches[3]);
-        $this->assertEquals($matches[2] + 1, $matches[4]);
+        $this->assertSame(5, count($matches));
+        $this->assertSame($matches[1], $matches[3]);
+        $this->assertSame((string)($matches[2] + 1), $matches[4]);
 
         $app->log = null;
 
@@ -164,25 +164,25 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->app = $app;
 
         $m->info('i', ['x']);
-        $this->assertEquals(['info', 'i', ['x']], $app->log);
+        $this->assertSame(['info', 'i', ['x']], $app->log);
 
         $m->warning('t', ['x']);
-        $this->assertEquals(['warning', 't', ['x']], $app->log);
+        $this->assertSame(['warning', 't', ['x']], $app->log);
 
         $m->emergency('em', ['x', 'y']);
-        $this->assertEquals(['emergency', 'em', ['x', 'y']], $app->log);
+        $this->assertSame(['emergency', 'em', ['x', 'y']], $app->log);
 
         $m->alert('al', ['x']);
-        $this->assertEquals(['alert', 'al', ['x']], $app->log);
+        $this->assertSame(['alert', 'al', ['x']], $app->log);
 
         $m->critical('cr', ['x']);
-        $this->assertEquals(['critical', 'cr', ['x']], $app->log);
+        $this->assertSame(['critical', 'cr', ['x']], $app->log);
 
         $m->error('er', ['x']);
-        $this->assertEquals(['error', 'er', ['x']], $app->log);
+        $this->assertSame(['error', 'er', ['x']], $app->log);
 
         $m->notice('nt', ['x']);
-        $this->assertEquals(['notice', 'nt', ['x']], $app->log);
+        $this->assertSame(['notice', 'nt', ['x']], $app->log);
     }
 }
 
