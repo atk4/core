@@ -153,9 +153,9 @@ trait CollectionTrait
      * Method used internally for shortening object names
      * Identical implementation to ContainerTrait::_shorten.
      *
-     * @param string $desired Desired name of new object.
+     * @param string $desired desired name of new object
      *
-     * @return string Shortened name of new object.
+     * @return string shortened name of new object
      */
     protected function _shorten_ml(string $desired): string
     {

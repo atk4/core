@@ -7,6 +7,8 @@
 return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         '@PSR1'                                 => true,
         '@PSR2'                                 => true,
+        
+        
         // Each line of multi-line DocComments must have an asterisk [PSR-5] and must be aligned with the first one.
         'align_multiline_comment'               => ['comment_type' => 'phpdocs_like'],
         // PHP arrays should be declared using the configured syntax.
@@ -19,12 +21,11 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         // An empty line feed should precede a return statement.
         'blank_line_before_return'              => true,
         // Concatenation should be spaced according configuration.
-        'concat_space'                          => true,
+        'concat_space'                          => [
+            'spacing' => 'one',
+        ],
         // Equal sign in declare statement should be surrounded by spaces or not following configuration.
         'declare_equal_normalize'               => false,
-        // Force strict types declaration in all files.
-        // Requires PHP >= 7.0.
-        'declare_strict_types'                  => true,
         // Transforms imported FQCN parameters and return types in function arguments to short version.
         'fully_qualified_strict_types'          => true,
         // All instances created with new keyword must be followed by braces.
@@ -43,14 +44,10 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         'no_trailing_comma_in_singleline_array' => true,
         // Removes unneeded curly braces that are superfluous and aren't part of a control structure's body.
         'no_unneeded_curly_braces'              => true,
-        // There should not be useless `else` cases.
-        'no_useless_else'                       => true,
         // There should not be an empty `return` statement at the end of a function.
         'no_useless_return'                     => true,
         // Array index should always be written by using square braces.
         'normalize_index_brace'                 => true,
-        // PHPDoc should contain `@param` for all params.
-        'phpdoc_add_missing_param_annotation'   => true,
         // All items of the given phpdoc tags must be either left-aligned or (by default) aligned vertically.
         'phpdoc_align'                          => true,
         // PHPDoc annotation descriptions should not be a sentence.
@@ -61,8 +58,6 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         'phpdoc_inline_tag'                     => true,
         // `@access` annotations should be omitted from PHPDoc.
         'phpdoc_no_access'                      => true,
-        // `@return void` and `@return null` annotations should be omitted from PHPDoc.
-        'phpdoc_no_empty_return'                => true,
         // `@package` and `@subpackage` annotations should be omitted from PHPDoc.
         'phpdoc_no_package'                     => true,
         // Classy that does not inherit must not have `@inheritdoc` tags.
@@ -86,13 +81,8 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         'return_type_declaration'               => true,
         // Replace all `<>` with `!=`.
         'standardize_not_equals'                => true,
-        // Comparisons should be strict.
-        'strict_comparison'                     => true,
         // PHP multi-line arrays should have a trailing comma.
         'trailing_comma_in_multiline_array'     => true,
-        // Add void return type to functions with missing or empty return statements, but priority is given to `@return` annotations.
-        // Requires PHP >= 7.1.
-        'void_return'                           => true,
         // Write conditions in Yoda style (`true`), non-Yoda style (`false`) or ignore those conditions (`null`) based on configuration.
-        'yoda_style'                            => true,
+        'yoda_style'                            => false
     ])->setFinder(PhpCsFixer\Finder::create()->exclude('vendor')->in(__DIR__));

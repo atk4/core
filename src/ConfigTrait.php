@@ -131,7 +131,7 @@ trait ConfigTrait
     /**
      * Get configuration element.
      *
-     * @param string $path          Path to configuration element.
+     * @param string $path          path to configuration element
      * @param mixed  $default_value Default value returned if element don't exist
      *
      * @return mixed

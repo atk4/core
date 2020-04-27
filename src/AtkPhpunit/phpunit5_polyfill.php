@@ -2,9 +2,8 @@
 
 /**
  * Polyfill for phpunit < 6.0:
- * - map commonly used classes to equivalent phpunit 6.0 namespaced names
+ * - map commonly used classes to equivalent phpunit 6.0 namespaced names.
  */
-
 namespace atk4\core\AtkPhpunit
 {
     // prevent class rename by StyleCI
