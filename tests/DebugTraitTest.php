@@ -143,7 +143,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertTrue(is_array($matches));
         $this->assertSame(5, count($matches));
         $this->assertSame($matches[1], $matches[3]);
-        $this->assertSame((string)($matches[2] + 1), $matches[4]);
+        $this->assertSame((string) ($matches[2] + 1), $matches[4]);
 
         $app->log = null;
 
