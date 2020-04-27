@@ -2,7 +2,11 @@ docs/build
 /build
 /vendor
 /composer.lock
+.idea
+nbproject
 .DS_Store
-#.github*
-/.idea
-.phpunit.result.cache
+*.local
+*.local.*
+
+/phpunit.xml
+.php_cs.cache
