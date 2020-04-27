@@ -84,7 +84,7 @@ trait SessionTrait
         $this->startSession();
 
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
-            || is_null($_SESSION[$this->session_key][$this->name][$key])
+            || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
             return $this->memorize($key, $default);
         } else {
@@ -103,7 +103,7 @@ trait SessionTrait
         $this->startSession();
 
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
-            || is_null($_SESSION[$this->session_key][$this->name][$key])
+            || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
             if (is_callable($default)) {
                 $default = call_user_func($default, $key);

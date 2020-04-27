@@ -18,7 +18,7 @@ class QuickExceptionTraitTest extends AtkPhpunit\TestCase
         $m = new QuickExceptionMock();
 
         // not implemented yet
-        $this->assertEquals(null, $m->exception());
+        $this->assertNull($m->exception());
     }
 }
 

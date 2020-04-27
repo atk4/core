@@ -128,7 +128,7 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $m1 = $m->factory('atk4\core\tests\FactoryDIMock', ['a'=>'XXX', 'b'=>'YYY']);
         $this->assertEquals('XXX', $m1->a);
         $this->assertEquals('YYY', $m1->b);
-        $this->assertEquals(null, $m1->c);
+        $this->assertNull($m1->c);
 
         $m1 = $m->factory('atk4\core\tests\FactoryDIMock', ['a'=>null, 'b'=>'YYY', 'c'=>'ZZZ']);
         $this->assertEquals('AAA', $m1->a);
@@ -140,7 +140,7 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $m2 = $m->factory($m1, ['a'=>'XXX', 'b'=>'YYY']);
         $this->assertEquals('XXX', $m2->a);
         $this->assertEquals('YYY', $m2->b);
-        $this->assertEquals(null, $m2->c);
+        $this->assertNull($m2->c);
 
         $m1 = $m->factory('atk4\core\tests\FactoryDIMock');
         $m2 = $m->factory($m1, ['a'=>null, 'b'=>'YYY', 'c'=>'ZZZ']);

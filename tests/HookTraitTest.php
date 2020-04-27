@@ -93,7 +93,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
     public function tst($obj = null, $inc = 1)
     {
-        if (is_null($obj)) {
+        if ($obj === null) {
             // because phpunit tries to execute this method
             return;
         }

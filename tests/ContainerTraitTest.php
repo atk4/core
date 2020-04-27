@@ -16,7 +16,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testBasic()
     {
         $m = new ContainerMock();
-        $this->assertEquals(true, isset($m->_containerTrait));
+        $this->assertTrue(isset($m->_containerTrait));
 
         // add to return object
         $tr = $m->add($tr2 = new \StdClass());
@@ -39,9 +39,9 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m->add(new TrackableMock(), '123');
         $m->add(new TrackableMock(), 'false');
 
-        $this->assertEquals(true, (bool) $m->hasElement('foo bar'));
-        $this->assertEquals(true, (bool) $m->hasElement('123'));
-        $this->assertEquals(true, (bool) $m->hasElement('false'));
+        $this->assertTrue((bool) $m->hasElement('foo bar'));
+        $this->assertTrue((bool) $m->hasElement('123'));
+        $this->assertTrue((bool) $m->hasElement('false'));
         $this->assertEquals(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
@@ -126,7 +126,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         // passing name with array key 'name'
         $m = new ContainerMock();
         $m2 = $m->add(new TrackableMock(), ['name' => 'foo', 'test' => 'ok']);
-        $this->assertEquals(true, (bool) $m->hasElement('foo'));
+        $this->assertTrue((bool) $m->hasElement('foo'));
         $this->assertEquals('ok', $m2->test);
     }
 

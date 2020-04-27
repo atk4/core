@@ -54,11 +54,11 @@ class SessionTraitTest extends AtkPhpunit\TestCase
     {
         $m = new SessionMock();
 
-        $this->assertEquals(false, isset($_SESSION));
+        $this->assertFalse(isset($_SESSION));
         $m->startSession();
-        $this->assertEquals(true, isset($_SESSION));
+        $this->assertTrue(isset($_SESSION));
         $m->destroySession();
-        $this->assertEquals(false, isset($_SESSION));
+        $this->assertFalse(isset($_SESSION));
     }
 
     /**
@@ -75,7 +75,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
 
         // value as null
         $m->memorize('foo', null);
-        $this->assertEquals(null, $_SESSION['__atk_session'][$m->name]['foo']);
+        $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as callable
         $m->memorize('foo', function () {

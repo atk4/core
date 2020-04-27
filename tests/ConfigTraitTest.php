@@ -137,7 +137,7 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
 
         // test getConfig
         $this->assertEquals(789, $m->getConfig('num'));
-        $this->assertEquals(null, $m->getConfig('unknown'));
+        $this->assertNull($m->getConfig('unknown'));
         $this->assertEquals('default', $m->getConfig('unknown', 'default'));
         $this->assertEquals('another', $m->getConfig('arr/sub/two', 'default'));
         $this->assertEquals('default', $m->getConfig('arr/sub/three', 'default'));
@@ -148,7 +148,7 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $m = new ConfigMock();
         $m->readConfig($this->dir . 'config.php', 'php');
         $excepted = $m->getConfig('arr/num/notExists');
-        $this->assertEquals(null, $excepted);
+        $this->assertNull($excepted);
     }
 }
 

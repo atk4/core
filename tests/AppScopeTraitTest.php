@@ -25,12 +25,12 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
         $this->assertEquals('myapp', $c->app);
 
         $c = $m->add(new Child2());
-        $this->assertEquals(false, isset($c->app));
+        $this->assertFalse(isset($c->app));
 
         $m = new AppScopeMock2();
 
         $c = $m->add(new Child1());
-        $this->assertEquals(false, isset($c->app));
+        $this->assertFalse(isset($c->app));
 
         // test for GC
         $m = new AppScopeMock();

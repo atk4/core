@@ -19,7 +19,7 @@ class InitializerTraitTest extends AtkPhpunit\TestCase
         $m = new ContainerMock2();
         $i = $m->add(new InitializerMock());
 
-        $this->assertEquals(true, $i->result);
+        $this->assertTrue($i->result);
     }
 
     public function testInitializerNotCalled()

@@ -113,7 +113,7 @@ trait ContainerTrait
         if (is_string($args)) {
             // passed as string
             $args = [$args];
-        } elseif (!is_array($args) && !is_null($args)) {
+        } elseif (!is_array($args) && $args !== null) {
             throw new Exception(['Second argument must be array', 'arg2' => $args]);
         } elseif (isset($args['desired_name'])) {
             // passed as ['desired_name'=>'foo'];

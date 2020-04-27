@@ -202,7 +202,7 @@ trait FactoryTrait
         ) {
             $result = $this->app->normalizeClassNameApp($name, $prefix);
 
-            if (!is_null($result)) {
+            if ($result !== null) {
                 return $result;
             }
         }

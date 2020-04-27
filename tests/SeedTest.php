@@ -347,7 +347,7 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testMerge7()
     {
         $s1 = $this->mergeSeeds(new SeedDefTestMock(), ['foo']);
-        $this->assertEquals(null, $s1->def);
+        $this->assertNull($s1->def);
     }
 
     public function testMerge8()

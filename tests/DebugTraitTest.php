@@ -18,16 +18,16 @@ class DebugTraitTest extends AtkPhpunit\TestCase
     {
         $m = new DebugMock();
 
-        $this->assertEquals(false, $m->debug);
+        $this->assertFalse($m->debug);
 
         $m->debug();
-        $this->assertEquals(true, $m->debug);
+        $this->assertTrue($m->debug);
 
         $m->debug(false);
-        $this->assertEquals(false, $m->debug);
+        $this->assertFalse($m->debug);
 
         $m->debug(true);
-        $this->assertEquals(true, $m->debug);
+        $this->assertTrue($m->debug);
     }
 
     public function testDebugOutput()
