@@ -20,27 +20,6 @@ return PhpCsFixer\Config::create()
         
         
         
-        'declare_strict_types' => false,
-        'void_return' => false,
-        
-        'align_multiline_comment' => true,
-        
-        // Transforms imported FQCN parameters and return types in function arguments to short version.
-    /* from csFixer */    'fully_qualified_strict_types'          => true,
-        // There should not be an empty `return` statement at the end of a function.
-    /* from csFixer */    'no_useless_return'                     => true,
-        // Annotations in PHPDoc should be ordered so that `@param` annotations come first, then `@throws` annotations, then `@return` annotations.
-    /* from csFixer */    'phpdoc_order'                          => true,
-        
-        
-        
-        // merge from template
-        // 'no_blank_lines_after_phpdoc' => false,
-        /*'phpdoc_align' => [
-            'align' => 'left',
-        ],*/
-        'phpdoc_separation' => false,
-        'phpdoc_summary' => true, // originally false, but true is default for Doctrine
         'single_line_throw' => false,
         'yoda_style' => [
             'equal' => false,
@@ -52,6 +31,11 @@ return PhpCsFixer\Config::create()
         ],
         'array_indentation' => true,
         'no_null_property_initialization' => true,
+        'declare_strict_types' => false,
+        'void_return' => false,
+        'fully_qualified_strict_types' => true,
+        'no_useless_return' => true,
+        'phpdoc_order' => true,
     ])
     ->setFinder($finder)
     ->setCacheFile(__DIR__ . '/.php_cs.cache');
