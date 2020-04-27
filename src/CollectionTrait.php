@@ -137,7 +137,7 @@ trait CollectionTrait
     public function _getFromCollection(string $name, string $collection): object
     {
         $object = $this->_hasInCollection($name, $collection);
-        if (false === $object) {
+        if ($object === false) {
             throw new Exception([
                 'Element is not found in collection',
                 'collection'=> $collection,

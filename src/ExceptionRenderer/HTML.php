@@ -38,7 +38,7 @@ class HTML extends RendererAbstract
             return;
         }
 
-        if (0 === count($this->exception->getParams())) {
+        if (count($this->exception->getParams()) === 0) {
             return;
         }
 
@@ -79,7 +79,7 @@ class HTML extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (0 === count($exception->getSolutions())) {
+        if (count($exception->getSolutions()) === 0) {
             return;
         }
 
@@ -144,8 +144,8 @@ class HTML extends RendererAbstract
             $tokens = [];
             $tokens['{INDEX}'] = $index + 1;
             $tokens['{FILE_LINE}'] = empty(trim($call['file_formatted'])) ? '' : $call['file_formatted'] . ':' . $call['line_formatted'];
-            $tokens['{OBJECT}'] = false !== $call['object'] ? $call['object_formatted'] : '-';
-            $tokens['{CLASS}'] = false !== $call['class'] ? $call['class'] . '::' : '';
+            $tokens['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
+            $tokens['{CLASS}'] = $call['class'] !== false ? $call['class'] . '::' : '';
             $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];

@@ -26,7 +26,7 @@ class Generic implements ITranslatorAdapter
     {
         $definition = $this->getDefinition($message, $domain ?? 'atk', $locale ?? 'en');
 
-        if (null === $definition) {
+        if ($definition === null) {
             return $message;
         }
 

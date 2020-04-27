@@ -36,7 +36,7 @@ HTML
             return;
         }
 
-        if (0 === count($this->exception->getParams())) {
+        if (count($this->exception->getParams()) === 0) {
             return;
         }
 
@@ -60,7 +60,7 @@ HTML
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (0 === count($exception->getSolutions())) {
+        if (count($exception->getSolutions()) === 0) {
             return;
         }
 
@@ -103,8 +103,8 @@ HTML;
             $tokens = [];
             $tokens['{FILE}'] = $call['file_formatted'];
             $tokens['{LINE}'] = $call['line_formatted'];
-            $tokens['{OBJECT}'] = null !== $call['object'] ? " - <span style='color:yellow'>" . $call['object_formatted'] . '</span>' : '';
-            $tokens['{CLASS}'] = null !== $call['class'] ? $call['class'] . '::' : '';
+            $tokens['{OBJECT}'] = $call['object'] !== null ? " - <span style='color:yellow'>" . $call['object_formatted'] . '</span>' : '';
+            $tokens['{CLASS}'] = $call['class'] !== null ? $call['class'] . '::' : '';
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
             $tokens['{FUNCTION}'] = $call['function'];

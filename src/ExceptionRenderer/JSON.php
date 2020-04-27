@@ -38,7 +38,7 @@ class JSON extends RendererAbstract
             return;
         }
 
-        if (0 === count($this->exception->getParams())) {
+        if (count($this->exception->getParams()) === 0) {
             return;
         }
 
@@ -56,7 +56,7 @@ class JSON extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (0 === count($exception->getSolutions())) {
+        if (count($exception->getSolutions()) === 0) {
             return;
         }
 

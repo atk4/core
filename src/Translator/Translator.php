@@ -49,7 +49,7 @@ class Translator
         }
 
         $adapter = $properties['adapter'] ?? null;
-        if (null !== $adapter && !($adapter instanceof ITranslatorAdapter)) {
+        if ($adapter !== null && !($adapter instanceof ITranslatorAdapter)) {
             throw new Exception(['$adapter must be an instance of ITranslatorAdapter']);
         }
 
@@ -105,7 +105,7 @@ class Translator
      */
     public static function instance(): self
     {
-        if (null === self::$instance) {
+        if (self::$instance === null) {
             self::$instance = new static();
         }
 
@@ -129,7 +129,7 @@ class Translator
      */
     private function getAdapter(): ITranslatorAdapter
     {
-        if (null === $this->adapter) {
+        if ($this->adapter === null) {
             $this->adapter = new Generic();
         }
 

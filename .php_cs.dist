@@ -84,5 +84,8 @@ return PhpCsFixer\Config::create()->setRiskyAllowed(true)->setRules([
         // PHP multi-line arrays should have a trailing comma.
         'trailing_comma_in_multiline_array'     => true,
         // Write conditions in Yoda style (`true`), non-Yoda style (`false`) or ignore those conditions (`null`) based on configuration.
-        'yoda_style'                            => false
+        'yoda_style'                            => [
+            'equal' => false,
+            'identical' => false,
+        ],
     ])->setFinder(PhpCsFixer\Finder::create()->exclude('vendor')->in(__DIR__));

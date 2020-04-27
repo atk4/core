@@ -87,7 +87,7 @@ abstract class RendererAbstract
         $parsed['file_formatted'] = str_pad(substr($parsed['file'], -40), 40, ' ', STR_PAD_LEFT);
         $parsed['line_formatted'] = str_pad($parsed['line'] ?? '', 4, ' ', STR_PAD_LEFT);
 
-        if (null !== $parsed['object']) {
+        if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = $parsed['object']->name ?? get_class($parsed['object']);
         }
 
