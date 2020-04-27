@@ -51,7 +51,7 @@ trait DebugTrait
         // if debug is enabled, then log it
         if ($this->debug) {
             if (!isset($this->app) || !isset($this->app->logger) || !$this->app->logger instanceof \Psr\Log\LoggerInterface) {
-                $message = '[' . get_class($this) . ']: ' . $message;
+                $message = '[' . static::class . ']: ' . $message;
             }
             $this->log(LogLevel::DEBUG, $message, $context);
         }
