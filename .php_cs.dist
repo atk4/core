@@ -19,13 +19,13 @@ return PhpCsFixer\Config::create()
         'concat_space' => [
             'spacing' => 'one',
         ],
-        
+
         // disable some too strict rules
-        //'strict_comparison' => false, @TODO test impact with atk4/data and atk4/ui
-        //'strict_param' => false, @TODO test impact with atk4/data and atk4/ui
+        'strict_comparison' => false,
+        'strict_param' => false,
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
-            'sort_algorithm' => 'none', // we should order types from the most common one
+            'sort_algorithm' => 'none',
         ],
         'yoda_style' => [
             'equal' => false,
@@ -39,21 +39,17 @@ return PhpCsFixer\Config::create()
         'void_return' => false,
         'combine_consecutive_issets' => false,
         'combine_consecutive_unsets' => false,
+        'multiline_whitespace_before_semicolons' => false,
+        'no_superfluous_elseif' => false,
+        'ordered_class_elements' => false,
         'php_unit_internal_class' => false,
         'php_unit_test_class_requires_covers' => false,
-
-        'ordered_class_elements' => false,
-        'no_superfluous_elseif' => false,
-        'multiline_whitespace_before_semicolons' => false,
-
-        'comment_to_phpdoc' => false,
-
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
+        'comment_to_phpdoc' => false,
+
+        // may be fixed/removed later
         'php_unit_strict' => false,
-        
-        
-        'php_unit_test_annotation' => false,
         'php_unit_test_case_static_method_calls' => false,
         
     ])
