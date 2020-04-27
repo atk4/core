@@ -245,7 +245,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         };
 
         $pow = function ($obj, $a, $b, $power) {
-            return pow($a, $power) + pow($b, $power);
+            return $a ** $power + $b ** $power;
         };
 
         $obj->onHook('test', $mul);
