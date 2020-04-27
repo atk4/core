@@ -152,7 +152,7 @@ trait ContainerTrait
         unset($args['name']);
         foreach ($args as $key => $arg) {
             if ($arg !== null) {
-                $element->$key = $arg;
+                $element->{$key} = $arg;
             }
         }
 

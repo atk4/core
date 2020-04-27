@@ -63,16 +63,16 @@ trait ConfigTrait
                     $config = null;
                     require $file; // fills $config variable
                     $tempConfig = $config;
-                    break;
 
+                    break;
                 case 'php-inline':
                     $tempConfig = require $file;
-                    break;
 
+                    break;
                 case 'json':
                     $tempConfig = json_decode(file_get_contents($file), true);
-                    break;
 
+                    break;
                 case 'yaml':
                     // @codeCoverageIgnoreStart
                     if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {

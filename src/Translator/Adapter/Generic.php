@@ -60,12 +60,15 @@ class Generic implements ITranslatorAdapter
         switch ((int) $count) {
             case 0:
                 $found_definition = $definitions_forms['zero'] ?? end($definitions_forms);
+
                 break;
             case 1:
                 $found_definition = $definitions_forms['one'] ?? null;
+
                 break;
             default:
                 $found_definition = $definitions_forms['other'] ?? null;
+
                 break;
         }
 

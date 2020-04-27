@@ -39,6 +39,7 @@ trait SessionTrait
                 break;
             case PHP_SESSION_NONE:
                 session_start($options);
+
                 break;
         }
     }
@@ -87,9 +88,9 @@ trait SessionTrait
             || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
             return $this->memorize($key, $default);
-        } else {
-            return $this->recall($key);
         }
+
+        return $this->recall($key);
     }
 
     /**
