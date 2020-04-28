@@ -141,7 +141,7 @@ trait FactoryTrait
         $object = array_shift($arguments); // first numeric key argument is object
 
         if (!is_object($object)) {
-            $class = $this->normalizeClassName($object ?? '', $prefix);
+            $class = is_string($object) ? $this->normalizeClassName($object, $prefix) : '';
 
             if (!$class) {
                 throw new Exception([
