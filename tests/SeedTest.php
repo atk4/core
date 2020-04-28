@@ -178,10 +178,13 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testMerge6()
     {
         $oo = $this->mergeSeeds(['4' => 'four'], ['5' => 'five']);
-        $this->assertEquals($oo, ['4' => 'four', '5' => 'five']);
+        $this->assertSame($oo, ['4' => 'four', '5' => 'five']);
 
         $oo = $this->mergeSeeds(['4' => ['four']], ['5' => ['five']]);
-        $this->assertEquals($oo, ['4' => ['four'], '5' => ['five']]);
+        $this->assertSame($oo, ['4' => ['four'], '5' => ['five']]);
+
+        $oo = $this->mergeSeeds(['4' => 'four'], ['5' => 'five'], ['6' => 'six']);
+        $this->assertSame($oo, ['4' => 'four', '5' => 'five', '6' => 'six']);
 
         $oo = $this->mergeSeeds(['x' => ['four']], ['x' => ['five']]);
         $this->assertSame($oo, ['x' => ['four']]);

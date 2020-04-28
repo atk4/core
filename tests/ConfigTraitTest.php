@@ -64,23 +64,23 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         // default config
         $m = new ConfigMock();
         $m->readConfig($this->dir . 'config.php', 'php');
-        $this->assertEquals($a, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
 
         // inline config
         $m = new ConfigMock();
         $m->readConfig($this->dir . 'config-inline.php', 'php-inline');
-        $this->assertEquals($a, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
 
         // json config
         $m = new ConfigMock();
         $m->readConfig($this->dir . 'config.json', 'json');
-        $this->assertEquals($b, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($b, $this->getProtected($m, 'config'));
 
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir . 'config.yml', 'yaml');
         //var_dump($this->getProtected($m, 'config'));
-        $this->assertEquals($c, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($c, $this->getProtected($m, 'config'));
     }
 
     public function testFileReadException()
@@ -133,7 +133,7 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
             'arr/sub/two' => 'another',     // add one more in deep structure
             'arr' => ['foo' => 'bar'], // merge arrays
         ]);
-        $this->assertEquals($a, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
 
         // test getConfig
         $this->assertSame(789, $m->getConfig('num'));
