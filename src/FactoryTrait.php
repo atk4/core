@@ -81,19 +81,8 @@ trait FactoryTrait
             $seed2 = [$seed2];
         }
 
-        /**/
-        foreach ($seed as $key => $value) {
-            if ($value !== null) {
-                $seed2[$key] = $value;
-            } elseif (is_numeric($key) && !isset($seed2[$key])) {
-                $seed2[$key] = $value;
-            }
-        }
-
-        return $seed2;
-
-        /*
         // merge seeds but prefer seed over seed2
+        if(isset($seed['wrong_parameter'])||isset($seed2['wrong_parameter'])) var_dump($seed,$seed2);
         foreach ($seed as $key => $value) {
             if ($value === null && !is_numeric($key)) {
                 unset($seed[$key]);
@@ -104,9 +93,9 @@ trait FactoryTrait
                 $seed[$key] = $value;
             }
         }
+        if(isset($seed['wrong_parameter'])||isset($seed2['wrong_parameter'])) var_dump($seed,$seed2);
 
         return $seed;
-        */
     }
 
     /**
@@ -149,10 +138,16 @@ trait FactoryTrait
             return $seed;
         }
 
-        $object = array_shift($seed); // first numeric key argument is object
-
         $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys
+
+        $object = array_shift($arguments); // first numeric key argument is object
+        if (!$object) {
+            throw new Exception([
+                'factory() could not find object',
+                'seed' => $seed,
+            ]);
+        }
 
         if (is_string($object)) {
             $class = $this->normalizeClassName($object, $prefix);
