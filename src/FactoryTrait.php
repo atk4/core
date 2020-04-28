@@ -82,9 +82,6 @@ trait FactoryTrait
         }
 
         // merge seeds but prefer seed over seed2
-        if (isset($seed['wrong_parameter'])||isset($seed2['wrong_parameter'])) {
-            var_dump($seed, $seed2);
-        }
         foreach ($seed as $key => $value) {
             if ($value === null && !is_numeric($key)) {
                 unset($seed[$key]);
@@ -94,9 +91,6 @@ trait FactoryTrait
             if (!isset($seed[$key]) && ($value !== null || is_numeric($key))) {
                 $seed[$key] = $value;
             }
-        }
-        if (isset($seed['wrong_parameter'])||isset($seed2['wrong_parameter'])) {
-            var_dump($seed, $seed2);
         }
 
         return $seed;
