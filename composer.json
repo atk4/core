@@ -41,11 +41,6 @@
     "symfony/contracts": ">=1.1",
     "symfony/yaml": ">=3.4"
   },
-  "replace": {
-    "atk4/core": "self.version"
-  },
-  "replace-release": {
-  },
   "suggest": {
     "symfony/yaml": ">=3.4"
   },
