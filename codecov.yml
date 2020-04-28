@@ -1,0 +1,17 @@
+ignore:
+  - docs
+  - examples
+  - tests
+  - tools
+coverage:
+  precision: 2
+  round: down
+  range: "95...100" # lower coverage expectations
+  status:
+    project:
+      default:
+        threshold: 0.5% # lower coverage diff threshold, but maybe is not working
+        target: 100
+        target: 95
+    patch: yes
+    changes: no
