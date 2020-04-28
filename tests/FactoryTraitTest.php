@@ -61,8 +61,8 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
         $this->assertSame('a\b\MyClass', $class);
 
-        $class = $m->normalizeClassName(\atk\data\Persistence::class, 'Prefix');
-        $this->assertSame('atk\data\Persistence', $class);
+        $class = $m->normalizeClassName(\atk4\core\Translator\Adapter\Generic::class, 'Prefix');
+        $this->assertSame('atk4\core\Translator\Adapter\Generic', $class);
 
         $class = $m->normalizeClassName(HB::class);
         $this->assertSame('atk4\core\HookBreaker', $class);
