@@ -140,7 +140,7 @@ trait FactoryTrait
         $injection = array_diff_key($seed, $arguments); // with string keys
         $object = array_shift($arguments); // first numeric key argument is object
 
-        if (is_string($object)) {
+        if (!is_object($object)) {
             $class = $this->normalizeClassName($object, $prefix);
 
             if (!$class) {
