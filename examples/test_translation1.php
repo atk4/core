@@ -2,21 +2,22 @@
 
 use atk4\core\Exception;
 use atk4\core\Translator\Translator;
-use atk4\data\Persistence;
 
 require '../vendor/autoload.php';
 
-try {
-    Persistence::connect('error:error');
-} catch (Exception $e) {
-    echo $e->getColorfulText();
-}
+if (class_exists('atk4\data\Persistence')) {
+    try {
+        \atk4\data\Persistence::connect('error:error');
+    } catch (Exception $e) {
+        echo $e->getColorfulText();
+    }
 
-$trans = Translator::instance();
-$trans->setDefaultLocale('ru');
+    $trans = Translator::instance();
+    $trans->setDefaultLocale('ru');
 
-try {
-    Persistence::connect('error:error');
-} catch (Exception $e) {
-    echo $e->getColorfulText();
+    try {
+        \atk4\data\Persistence::connect('error:error');
+    } catch (Exception $e) {
+        echo $e->getColorfulText();
+    }
 }
