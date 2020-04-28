@@ -89,7 +89,7 @@ trait FactoryTrait
                 $seed2[$key] = $value;
             }
         }
-        
+
         return $seed2;
 
         /*
