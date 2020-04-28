@@ -142,7 +142,7 @@ trait FactoryTrait
         $object = array_shift($arguments); // first numeric key argument is object
         if (!$object) {
             throw new Exception([
-                'factory() could not find object',
+                'factory() could not find object in seed',
                 'seed' => $seed,
             ]);
         }
