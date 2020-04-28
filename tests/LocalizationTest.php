@@ -55,8 +55,8 @@ class LocalizationTest extends AtkPhpunit\TestCase
                 public function _(
                     string $message,
                     array $parameters = [],
-                    ?string $domain = null,
-                    ?string $locale = null
+                    string $domain = null,
+                    string $locale = null
                 ): string {
                     return 'external translator';
                 }

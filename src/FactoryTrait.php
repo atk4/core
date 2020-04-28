@@ -81,16 +81,19 @@ trait FactoryTrait
             $seed2 = [$seed2];
         }
 
-        // overwrite seed2 with seed
+        // merge seeds but prefer seed over seed2
         foreach ($seed as $key => $value) {
-            if ($value !== null) {
-                $seed2[$key] = $value;
-            } elseif (is_numeric($key) && !isset($seed2[$key])) {
-                $seed2[$key] = $value;
+            if ($value === null && !is_numeric($key)) {
+                unset($seed[$key]);
+            }
+        }
+        foreach ($seed2 as $key => $value) {
+            if (!isset($seed[$key]) && ($value !== null || is_numeric($key))) {
+                $seed[$key] = $value;
             }
         }
 
-        return $seed2;
+        return $seed;
     }
 
     /**
@@ -133,13 +136,12 @@ trait FactoryTrait
             return $seed;
         }
 
-        $object = array_shift($seed); // first numeric key argument is object
-
         $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys
+        $object = array_shift($arguments); // first numeric key argument is object
 
-        if (is_string($object)) {
-            $class = $this->normalizeClassName($object, $prefix);
+        if (!is_object($object)) {
+            $class = $this->normalizeClassName($object ?? '', $prefix);
 
             if (!$class) {
                 throw new Exception([

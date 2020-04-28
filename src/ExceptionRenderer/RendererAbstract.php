@@ -153,7 +153,7 @@ abstract class RendererAbstract
         return $trace;
     }
 
-    public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         return $this->adapter
             ? $this->adapter->_($message, $parameters, $domain, $locale)

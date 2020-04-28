@@ -4,9 +4,6 @@ namespace atk4\core;
 
 /**
  * Special exception for HookTrait->breakHook method.
- *
- * @license MIT
- * @copyright Agile Toolkit (c) http://agiletoolkit.org/
  */
 class HookBreaker extends Exception
 {

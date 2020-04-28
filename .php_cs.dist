@@ -21,12 +21,11 @@ return PhpCsFixer\Config::create()
         ],
 
         // disable some too strict rules
-        'strict_comparison' => false,
-        'strict_param' => false,
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',
         ],
+        'single_line_throw' => false,
         'yoda_style' => [
             'equal' => false,
             'identical' => false,
@@ -43,14 +42,16 @@ return PhpCsFixer\Config::create()
         'no_superfluous_elseif' => false,
         'ordered_class_elements' => false,
         'php_unit_internal_class' => false,
+        'php_unit_test_case_static_method_calls' => [
+            'call_type' => 'this',
+        ],
         'php_unit_test_class_requires_covers' => false,
         'phpdoc_add_missing_param_annotation' => false,
         'return_assignment' => false,
         'comment_to_phpdoc' => false,
-
-        // may be fixed/removed later
-        'php_unit_strict' => false,
-        'php_unit_test_case_static_method_calls' => false,
+        'nullable_type_declaration_for_default_null_value' => [
+            'use_nullable_type_declaration' => false,
+        ],
         
     ])
     ->setFinder($finder)

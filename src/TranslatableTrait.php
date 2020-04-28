@@ -28,7 +28,7 @@ trait TranslatableTrait
      *
      * @return string The translated string
      */
-    public function _($message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         // if App is present
         if (isset($this->app) && method_exists($this->app, '_')) {
