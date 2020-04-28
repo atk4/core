@@ -105,7 +105,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds(['foo' => 1], $o);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, 1);
+        $this->assertSame(1, $oo->foo);
 
         // even it already has value
         $o = new SeedDITestMock();
@@ -113,7 +113,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds(['foo' => 1], $o);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, 1);
+        $this->assertSame(1, $oo->foo);
 
         // but this way existing value is respected
         $o = new SeedDITestMock();
@@ -121,7 +121,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds($o, ['foo' => 1]);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, 5);
+        $this->assertSame(5, $oo->foo);
     }
 
     public function testMerge4()
@@ -132,7 +132,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds(['foo' => ['green']], $o);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, ['red', 'green']);
+        $this->assertSame(['red', 'green'], $oo->foo);
 
         // still we don't care if they are to the right of the object
         $o = new SeedDITestMock();
@@ -140,7 +140,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds($o, ['foo' => ['green']]);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, ['red']);
+        $this->assertSame(['red'], $oo->foo);
     }
 
     public function testMerge5()
@@ -151,7 +151,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds(['foo' => ['xx']], ['foo' => ['green']], $o);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, ['red', 'green', 'xx']);
+        $this->assertSame(['red', 'green', 'xx'], $oo->foo);
 
         // also without arrays
         $o = new SeedDITestMock();
@@ -159,7 +159,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds(['foo' => 'xx'], ['foo' => 'green'], $o, ['foo' => 5]);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, 'xx');
+        $this->assertSame('xx', $oo->foo);
     }
 
     public function testMerge5b()
@@ -178,22 +178,22 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testMerge6()
     {
         $oo = $this->mergeSeeds(['4' => 'four'], ['5' => 'five']);
-        $this->assertSame($oo, ['4' => 'four', '5' => 'five']);
+        $this->assertSame(['4' => 'four', '5' => 'five'], $oo);
 
         $oo = $this->mergeSeeds(['4' => ['four']], ['5' => ['five']]);
-        $this->assertSame($oo, ['4' => ['four'], '5' => ['five']]);
+        $this->assertSame(['4' => ['four'], '5' => ['five']], $oo);
 
         $oo = $this->mergeSeeds(['4' => 'four'], ['5' => 'five'], ['6' => 'six']);
-        $this->assertSame($oo, ['4' => 'four', '5' => 'five', '6' => 'six']);
+        $this->assertSame(['4' => 'four', '5' => 'five', '6' => 'six'], $oo);
 
         $oo = $this->mergeSeeds(['x' => ['four']], ['x' => ['five']]);
-        $this->assertSame($oo, ['x' => ['four']]);
+        $this->assertSame(['x' => ['four']], $oo);
 
         $oo = $this->mergeSeeds(['4' => ['four']], ['4' => ['five']]);
-        $this->assertSame($oo, ['4' => ['four']]);
+        $this->assertSame(['4' => ['four']], $oo);
 
         $oo = $this->mergeSeeds(['4' => ['200']], ['4' => ['201']]);
-        $this->assertSame($oo, ['4' => ['200']]);
+        $this->assertSame(['4' => ['200']], $oo);
     }
 
     public function testMergeFail1()
@@ -205,7 +205,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds($o, ['foo' => 5]);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, ['red', 'green', 'xx']);
+        $this->assertSame(['red', 'green', 'xx'], $oo->foo);
     }
 
     public function testMergeFail2()
@@ -217,7 +217,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $oo = $this->mergeSeeds(['foo' => ['xx']], ['foo' => ['green']], $o);
 
         $this->assertSame($o, $oo);
-        $this->assertSame($oo->foo, ['red', 'green', 'xx']);
+        $this->assertSame(['red', 'green', 'xx'], $oo->foo);
     }
 
     public function testBasic()
