@@ -81,6 +81,18 @@ trait FactoryTrait
             $seed2 = [$seed2];
         }
 
+        /**/
+        foreach ($seed as $key => $value) {
+            if ($value !== null) {
+                $seed2[$key] = $value;
+            } elseif (is_numeric($key) && !isset($seed2[$key])) {
+                $seed2[$key] = $value;
+            }
+        }
+        
+        return $seed2;
+
+        /*
         // merge seeds but prefer seed over seed2
         foreach ($seed as $key => $value) {
             if ($value === null && !is_numeric($key)) {
@@ -94,6 +106,7 @@ trait FactoryTrait
         }
 
         return $seed;
+        */
     }
 
     /**
