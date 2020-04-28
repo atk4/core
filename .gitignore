@@ -5,7 +5,6 @@ docs/build
 .idea
 nbproject
 .DS_Store
-php.cmd
 
 local
 *.local
