@@ -138,14 +138,7 @@ trait FactoryTrait
 
         $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys
-
         $object = array_shift($arguments); // first numeric key argument is object
-        if (!$object) {
-            throw new Exception([
-                'factory() could not find object in seed',
-                'seed' => $seed,
-            ]);
-        }
 
         if (is_string($object)) {
             $class = $this->normalizeClassName($object, $prefix);
