@@ -82,18 +82,33 @@ trait FactoryTrait
         }
 
         // merge seeds but prefer seed over seed2
-        foreach ($seed as $key => $value) {
-            if ($value === null && !is_numeric($key)) {
-                unset($seed[$key]);
+        // move numerical keys to the beginning and sort them
+        $res = [];
+        $res2 = [];
+        foreach ($seed as $k => $v) {
+            if (is_numeric($k)) {
+                $res[$k] = $v;
+            } elseif ($v !== null) {
+                $res2[$k] = $v;
             }
         }
-        foreach ($seed2 as $key => $value) {
-            if (!isset($seed[$key]) && ($value !== null || is_numeric($key))) {
-                $seed[$key] = $value;
+        foreach ($seed2 as $k => $v) {
+            if (is_numeric($k)) {
+                if (!isset($res[$k])) {
+                    $res[$k] = $v;
+                }
+            } elseif ($v !== null) {
+                if (!isset($res2[$k])) {
+                    $res2[$k] = $v;
+                }
             }
+        }
+        ksort($res, SORT_NUMERIC);
+        foreach ($res2 as $k => $v) {
+            $res[$k] = $v;
         }
 
-        return $seed;
+        return $res;
     }
 
     /**
