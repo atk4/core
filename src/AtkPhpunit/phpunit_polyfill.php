@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace atk4\core\AtkPhpunit;
 
 if (!class_exists(\PHPUnit\Runner\Version::class) && version_compare(\PHPUnit_Runner_Version::id(), '6') < 0) {

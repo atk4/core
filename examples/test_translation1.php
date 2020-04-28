@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use atk4\core\Exception;
 use atk4\core\Translator\Translator;
 

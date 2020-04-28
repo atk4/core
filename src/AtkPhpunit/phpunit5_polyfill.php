@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Polyfill for phpunit < 6.0:
  * - map commonly used classes to equivalent phpunit 6.0 namespaced names.
