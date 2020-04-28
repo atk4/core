@@ -104,9 +104,7 @@ trait FactoryTrait
             }
         }
         ksort($res, SORT_NUMERIC);
-        foreach ($res2 as $k => $v) {
-            $res[$k] = $v;
-        }
+        $res = $res + $res2;
 
         return $res;
     }
