@@ -6,11 +6,11 @@ ignore:
 coverage:
   precision: 2
   round: down
-  range: "95...100" # coverage expectations
+  range: "95...100"
   status:
     project:
       default:
-        threshold: 1% # coverage diff threshold
+        threshold: 1%
         target: 100
         target: 95
     patch: yes
