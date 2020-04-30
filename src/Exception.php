@@ -60,7 +60,19 @@ class Exception extends \Exception
         }
 
         parent::__construct($message, $code, $previous);
-        $this->trace2 = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+
+        // save trace but skip parent constructors of this exception
+        $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+        for ($i = 0; $i < count($trace) - 1; ++$i) {
+            $c = $trace[$i];
+            $cNext = $trace[$i + 1];
+            if (isset($c['object']) && $c['object'] === $this
+                    && isset($cNext['object']) && $cNext['object'] === $this
+                    && $c['function'] === '__construct' && $cNext['function'] === '__construct') {
+                array_shift($trace);
+            }
+        }
+        $this->trace2 = $trace;
     }
 
     /**
