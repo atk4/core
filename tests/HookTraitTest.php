@@ -6,6 +6,7 @@ namespace atk4\core\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\core\Exception;
+use atk4\core\HookBreaker;
 use atk4\core\HookTrait;
 
 /**
@@ -318,6 +319,21 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $ret = $m->hook('inc');
         $this->assertSame(2, $m->result);
         $this->assertSame('stop', $ret);
+    }
+
+    public function testBreakHookBrokenBy()
+    {
+        $m = new HookMock();
+
+        $m->onHook('inc', function () use ($m) {
+            $m->breakHook('stop');
+        });
+
+        /** @var $brokenBy HookBreaker */
+        $ret = $m->hook('inc', [], $brokenBy);
+        $this->assertSame('stop', $ret);
+        $this->assertInstanceOf(HookBreaker::class, $brokenBy);
+        $this->assertSame('stop', $brokenBy->getReturnValue());
     }
 
     public function testExceptionInHook()
