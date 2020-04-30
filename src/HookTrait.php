@@ -176,14 +176,11 @@ trait HookTrait
             try {
                 while ($_data = array_pop($this->hooks[$spot])) {
                     foreach ($_data as $index => $data) {
-                        $return[$index] = call_user_func_array(
-                            $data[0],
-                            array_merge(
-                                [$this],
-                                $args,
-                                $data[1]
-                            )
-                        );
+                        $return[$index] = $data[0](...array_merge(
+                            [$this],
+                            $args,
+                            $data[1]
+                        ));
                     }
                 }
             } catch (HookBreaker $e) {
