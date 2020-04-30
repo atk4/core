@@ -12,14 +12,22 @@ class HookBreaker extends Exception
     /**
      * @var mixed
      */
-    public $return_value;
+    protected $returnValue;
 
     /**
-     * @param mixed $return_value
+     * @param mixed $returnValue
      */
-    public function __construct($return_value)
+    public function __construct($returnValue)
     {
         parent::__construct();
-        $this->return_value = $return_value;
+        $this->returnValue = $returnValue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReturnValue()
+    {
+        return $this->returnValue;
     }
 }

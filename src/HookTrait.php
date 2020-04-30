@@ -163,8 +163,10 @@ trait HookTrait
      *
      * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
-    public function hook(string $spot, array $args = [])
+    public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
+        $brokenBy = null;
+
         $return = [];
 
         if (isset($this->hooks[$spot])) {
@@ -173,7 +175,7 @@ trait HookTrait
 
             try {
                 while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as $index => &$data) {
+                    foreach ($_data as $index => $data) {
                         $return[$index] = call_user_func_array(
                             $data[0],
                             array_merge(
@@ -184,13 +186,12 @@ trait HookTrait
                         );
                     }
                 }
-                unset($data);
-
-                $this->hooks[$spot] = $hookBackup;
             } catch (HookBreaker $e) {
-                $this->hooks[$spot] = $hookBackup;
+                $brokenBy = $e;
 
-                return $e->return_value;
+                return $e->getReturnValue();
+            } finally {
+                $this->hooks[$spot] = $hookBackup;
             }
         }
 
