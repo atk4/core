@@ -69,7 +69,7 @@ trait SessionTrait
         $this->startSession();
 
         if (is_callable($value)) {
-            $value = call_user_func($value, $key);
+            $value = $value($key);
         }
 
         $_SESSION[$this->session_key][$this->name][$key] = $value;
@@ -109,7 +109,7 @@ trait SessionTrait
             || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
             if (is_callable($default)) {
-                $default = call_user_func($default, $key);
+                $default = $default($key);
             }
 
             return $default;
