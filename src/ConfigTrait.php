@@ -83,6 +83,12 @@ trait ConfigTrait
                     $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
                     // @codeCoverageIgnoreEnd
                     break;
+                default:
+                    throw new Exception([
+                        'Unknown Format. Allowed format : php, php-inline, json, yml.',
+                        'file' => $file,
+                        'format' => $format
+                    ]);
             }
 
             if (!is_array($tempConfig)) {
