@@ -99,6 +99,13 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $m->readConfig($this->dir . 'config_bad_format.php');
     }
 
+    public function testWrongFileFormatException()
+    {
+        $this->expectException(\atk4\core\Exception::class);
+        $m = new ConfigMock();
+        $m->readConfig($this->dir . 'config.yml', 'wrong-format');
+    }
+
     public function testSetGetConfig()
     {
         $a = [
