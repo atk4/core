@@ -87,7 +87,7 @@ trait ConfigTrait
                     throw new Exception([
                         'Unknown Format. Allowed format : php, php-inline, json, yml.',
                         'file' => $file,
-                        'format' => $format
+                        'format' => $format,
                     ]);
             }
 
