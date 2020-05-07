@@ -329,7 +329,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
             $m->breakHook('stop');
         });
 
-        /** @var $brokenBy HookBreaker */
+        /** @var HookBreaker $brokenBy */
         $ret = $m->hook('inc', [], $brokenBy);
         $this->assertSame('stop', $ret);
         $this->assertInstanceOf(HookBreaker::class, $brokenBy);
