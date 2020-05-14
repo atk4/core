@@ -35,18 +35,6 @@ Supported Formats
 
 php
 ---
-Configuration is declared in a variable $config
-
-    $config=[
-        'var A' => new UserClass(),
-        'var B' => 2,
-        'var C' => [
-            '2nd-level' => 'var D'
-        ]
-    ];
-
-php-inline
----
 Configuration is defined as a return statement
 
     return [

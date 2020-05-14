@@ -61,7 +61,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         $adapter = new Generic();
 
         // just to cover method addDefinitionFromFile
-        $adapter->addDefinitionFromFile(Locale::getPath() . '/en/atk.php', 'en', 'atk', 'php-inline');
+        $adapter->addDefinitionFromFile(Locale::getPath() . '/en/atk.php', 'en', 'atk', 'php');
 
         $adapter->setDefinitionSingle('test', 'custom definition', 'en', 'other');
 

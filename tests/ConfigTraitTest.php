@@ -68,11 +68,6 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $m->readConfig($this->dir . '/config.php', 'php');
         $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
 
-        // inline config
-        $m = new ConfigMock();
-        $m->readConfig($this->dir . '/config-inline.php', 'php-inline');
-        $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
-
         // json config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.json', 'json');
