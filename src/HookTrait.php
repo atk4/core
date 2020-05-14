@@ -28,64 +28,19 @@ trait HookTrait
     private $_hookIndexCounter = 0;
 
     /**
-     * @deprecated use onHook instead
-     */
-    public function addHook($spot, $fx, array $args = null, int $priority = null)
-    {
-        return $this->onHook($spot, $fx, $args ?? [], $priority ?? 0);
-    }
-
-    /**
      * Add another callback to be executed during hook($hook_spot);.
      *
      * If priority is negative, then hooks will be executed in reverse order.
      *
-     * @param string|string[]      $spot     Hook identifier to bind on
-     * @param object|\Closure|null $fx       Will be called on hook()
-     * @param array                $args     Arguments are passed to $fx
-     * @param int                  $priority Lower priority is called sooner
+     * @param string   $spot     Hook identifier to bind on
+     * @param \Closure $fx       Will be called on hook()
+     * @param array    $args     Arguments are passed to $fx
+     * @param int      $priority Lower priority is called sooner
      *
-     * @return int|int[] Index under which the hook was added
+     * @return int Index under which the hook was added
      */
-    public function onHook($spot, $fx = null, array $args = [], int $priority = 5)
+    public function onHook(string $spot, \Closure $fx = null, array $args = [], int $priority = 5)
     {
-        $fx = $fx ?: $this;
-
-        // multiple hooks can be linked
-        if (is_string($spot) && strpos($spot, ',') !== false) {
-            $spot = explode(',', $spot);
-        }
-        if (is_array($spot)) {
-            $indexes = [];
-            foreach ($spot as $k => $h) {
-                $indexes[$k] = $this->onHook($h, $fx, $args, $priority);
-            }
-
-            return $indexes;
-        }
-        $spot = (string) $spot;
-
-        // short for onHook('test', $this); to call $this->test();
-        if (!is_callable($fx)) {
-            $valid = false;
-            if (is_object($fx)) {
-                $valid = (isset($fx->_dynamicMethodTrait) && $fx->hasMethod($spot)) || method_exists($fx, $spot);
-            }
-
-            if (!$valid) {
-                throw new Exception([
-                    '$fx should be a valid callback',
-                    'fx' => $fx,
-                ]);
-            }
-
-            $fx = \Closure::fromCallable([$fx, $spot]);
-        }
-
-        if (!$fx instanceof \Closure) {
-            throw new Exception('Callable must be an instance of Closure');
-        }
-
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];
         }
