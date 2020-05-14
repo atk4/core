@@ -41,7 +41,7 @@ trait HookTrait
      * If priority is negative, then hooks will be executed in reverse order.
      *
      * @param string|string[]      $spot     Hook identifier to bind on
-     * @param object|callable|null $fx       Will be called on hook()
+     * @param object|\Closure|null $fx       Will be called on hook()
      * @param array                $args     Arguments are passed to $fx
      * @param int                  $priority Lower priority is called sooner
      *
@@ -79,7 +79,11 @@ trait HookTrait
                 ]);
             }
 
-            $fx = [$fx, $spot];
+            $fx = \Closure::fromCallable([$fx, $spot]);
+        }
+
+        if (!$fx instanceof \Closure) {
+            throw new Exception('Callable must be an instance of Closure');
         }
 
         if (!isset($this->hooks[$spot][$priority])) {
