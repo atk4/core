@@ -73,8 +73,9 @@ trait ConfigTrait
                     if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
                         throw new Exception(['You need Symfony\Yaml repository if you want to parse YAML files']);
                     }
-                    $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
                     // @codeCoverageIgnoreEnd
+                    $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
+
                     break;
                 default:
                     throw new Exception([
