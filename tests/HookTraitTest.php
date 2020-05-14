@@ -68,30 +68,6 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(1, $result);
     }
 
-    public function testMultiple()
-    {
-        $m = new HookMock();
-        $result = 0;
-
-        $m->onHook(['test1,test2', 'test3'], function () use (&$result) {
-            ++$result;
-        });
-
-        $m->hook('test1');
-        $m->hook('test2');
-        $m->hook('test3');
-        $m->hook('test4');
-        $this->assertSame(3, $result);
-
-        $m->removeHook('test2');
-        $m->hook('test1');
-        $m->hook('test2');
-        $m->hook('test3');
-        $m->hook('test4');
-
-        $this->assertSame(5, $result);
-    }
-
     private $result = 0;
 
     public function tst($obj = null, $inc = 1)
@@ -101,48 +77,6 @@ class HookTraitTest extends AtkPhpunit\TestCase
             return;
         }
         $this->result += $inc;
-    }
-
-    public function testCallable()
-    {
-        $m = new HookMock();
-        $this->result = 0;
-
-        $m->onHook('tst', $this);
-        $m->hook('tst');
-
-        $this->assertSame(1, $this->result);
-
-        $m->hook('tst', [5]);
-        $this->assertSame(6, $this->result);
-
-        // Existing method - foo
-        $m = new HookWithDynamicMethodMock();
-        $m->onHook('foo', $m);
-    }
-
-    public function testCallableException1()
-    {
-        // unknown method
-        $this->expectException(Exception::class);
-        $m = new HookMock();
-        $m->onHook('unknown_method', $m);
-    }
-
-    public function testCallableException2()
-    {
-        // not existing dynamic method
-        $this->expectException(Exception::class);
-        $m = new HookWithDynamicMethodMock();
-        $m->onHook('unknown_method', $m);
-    }
-
-    public function testCallableException3()
-    {
-        // wrong 2nd argument
-        $this->expectException(Exception::class);
-        $m = new HookMock();
-        $m->onHook('unknown_method', 'incorrect_param');
     }
 
     public function testHookException1()
@@ -217,16 +151,15 @@ class HookTraitTest extends AtkPhpunit\TestCase
     {
         $obj = new HookMock();
 
-        $mul = function ($obj, $a, $b) {
+        $mulFunc = function ($obj, $a, $b) {
             return $a * $b;
         };
-
-        $add = function ($obj, $a, $b) {
+        $addFunc = function ($obj, $a, $b) {
             return $a + $b;
         };
 
-        $obj->onHook('test', $mul);
-        $obj->onHook('test', $add);
+        $obj->onHook('test', $mulFunc);
+        $obj->onHook('test', $addFunc);
 
         $res1 = $obj->hook('test', [2, 2]);
         $this->assertSame([4, 4], $res1);
@@ -239,22 +172,20 @@ class HookTraitTest extends AtkPhpunit\TestCase
     {
         $obj = new HookMock();
 
-        $mul = function ($obj, $a, $b) {
+        $mulFunc = function ($obj, $a, $b) {
             return $a * $b;
         };
-
-        $add = function ($obj, $a, $b) {
+        $addFunc = function ($obj, $a, $b) {
             return $a + $b;
         };
-
-        $pow = function ($obj, $a, $b, $power) {
+        $powFunc = function ($obj, $a, $b, $power) {
             return $a ** $power + $b ** $power;
         };
 
-        $obj->onHook('test', $mul);
-        $obj->onHook('test', $add);
-        $obj->onHook('test', $pow, [2]);
-        $obj->onHook('test', $pow, [7]);
+        $obj->onHook('test', $mulFunc);
+        $obj->onHook('test', $addFunc);
+        $obj->onHook('test', $powFunc, [2]);
+        $obj->onHook('test', $powFunc, [7]);
 
         $res1 = $obj->hook('test', [2, 2]);
         $this->assertSame([4, 4, 8, 256], $res1);
@@ -267,11 +198,11 @@ class HookTraitTest extends AtkPhpunit\TestCase
     {
         $obj = new HookMock();
 
-        $inc = function ($obj, &$a) {
+        $incFunc = function ($obj, &$a) {
             ++$a;
         };
 
-        $obj->onHook('inc', $inc);
+        $obj->onHook('inc', $incFunc);
         $v = 1;
         $a = [&$v];
         $obj->hook('inc', $a);
@@ -280,24 +211,11 @@ class HookTraitTest extends AtkPhpunit\TestCase
 
         $obj = new HookMock();
 
-        $inc = function ($obj, &$a) {
-            ++$a;
-        };
-
         $v = 1;
-        $obj->onHook('inc', $inc);
+        $obj->onHook('inc', $incFunc);
         $obj->hook('inc', [&$v]);
 
         $this->assertSame(2, $v);
-    }
-
-    public function testDefaultMethod()
-    {
-        $obj = new HookMock();
-        $obj->onHook('myCallback', $obj);
-        $obj->hook('myCallback');
-
-        $this->assertSame(1, $obj->result);
     }
 
     public function testBreakHook()
@@ -305,16 +223,16 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m = new HookMock();
         $m->result = 0;
 
-        $inc = function ($obj) {
+        $incFunc = function ($obj) {
             ++$obj->result;
             if ($obj->result === 2) {
                 $obj->breakHook('stop');
             }
         };
 
-        $m->onHook('inc', $inc);
-        $m->onHook('inc', $inc);
-        $m->onHook('inc', $inc);
+        $m->onHook('inc', $incFunc);
+        $m->onHook('inc', $incFunc);
+        $m->onHook('inc', $incFunc);
 
         $ret = $m->hook('inc');
         $this->assertSame(2, $m->result);
@@ -342,11 +260,9 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m = new HookMock();
         $m->result = 0;
 
-        $inc = function ($obj) {
+        $m->onHook('inc', function ($obj) {
             throw new \atk4\core\Exception(['stuff went wrong']);
-        };
-
-        $m->onHook('inc', $inc);
+        });
         $ret = $m->hook('inc');
     }
 }
