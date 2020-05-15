@@ -34,8 +34,7 @@ trait ConfigTrait
      * Read config file or files and store it in $config property.
      *
      * Supported formats:
-     *  php         - PHP file with $config['foo'] = 'bar' structure
-     *  php-inline  - PHP file with return ['foo' => 'bar'] structure
+     *  php         - PHP file with return ['foo'] = 'bar' structure
      *  json        - JSON file with {'foo':'bar'} structure
      *  yaml        - YAML file with yaml structure
      *
@@ -62,12 +61,6 @@ trait ConfigTrait
 
             switch (strtolower($format)) {
                 case 'php':
-                    $config = null;
-                    require $file; // fills $config variable
-                    $tempConfig = $config;
-
-                    break;
-                case 'php-inline':
                     $tempConfig = require $file;
 
                     break;
@@ -76,16 +69,12 @@ trait ConfigTrait
 
                     break;
                 case 'yaml':
-                    // @codeCoverageIgnoreStart
-                    if (!class_exists(\Symfony\Component\Yaml\Yaml::class)) {
-                        throw new Exception(['You need Symfony\Yaml repository if you want to parse YAML files']);
-                    }
                     $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
-                    // @codeCoverageIgnoreEnd
+
                     break;
                 default:
                     throw new Exception([
-                        'Unknown Format. Allowed format : php, php-inline, json, yml.',
+                        'Unknown Format. Allowed formats: php, json, yml.',
                         'file' => $file,
                         'format' => $format,
                     ]);

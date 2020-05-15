@@ -98,7 +98,7 @@ class Generic implements ITranslatorAdapter
 
         if (class_exists('\atk4\data\Locale')) {
             $path = Locale::getPath();
-            $this->addDefinitionFromFile($path . '/' . $locale . '/atk.php', $locale, 'atk', 'php-inline');
+            $this->addDefinitionFromFile($path . '/' . $locale . '/atk.php', $locale, 'atk', 'php');
         }
     }
 
