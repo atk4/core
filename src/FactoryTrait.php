@@ -226,14 +226,14 @@ trait FactoryTrait
 
         // Rule 1: if starts with "." always prefix
         if ($name && $name[0] === '.' && $prefix) {
-            $name = $prefix . '\\' . mb_substr($name, 1);
+            $name = $prefix . '\\' . substr($name, 1);
             $name = str_replace('/', '\\', $name);
 
             return $name;
         }
 
         // Rule 2: if "\" is present, don't prefix
-        if (mb_strpos($name, '\\') !== false) {
+        if (strpos($name, '\\') !== false) {
             $name = str_replace('/', '\\', $name);
 
             return $name;

@@ -52,7 +52,7 @@ trait HookTrait
         $fx = $fx ?: $this;
 
         // multiple hooks can be linked
-        if (is_string($spot) && mb_strpos($spot, ',') !== false) {
+        if (is_string($spot) && strpos($spot, ',') !== false) {
             $spot = explode(',', $spot);
         }
         if (is_array($spot)) {

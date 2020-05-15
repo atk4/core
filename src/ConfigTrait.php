@@ -59,7 +59,7 @@ trait ConfigTrait
 
             $tempConfig = [];
 
-            switch (mb_strtolower($format)) {
+            switch (strtolower($format)) {
                 case 'php':
                     $tempConfig = require $file;
 
