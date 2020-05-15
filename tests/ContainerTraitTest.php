@@ -96,12 +96,12 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         for ($x = 1; $x < 100; ++$x) {
             $sh = str_repeat('x', $x);
             $m = $app->add(new ContainerAppMock(), $sh);
-            if (strlen($m->name) > $max_len) {
-                $max_len = strlen($m->name);
+            if (mb_strlen($m->name) > $max_len) {
+                $max_len = mb_strlen($m->name);
                 $max_len_v = $m->name;
             }
-            if (strlen($m->name) < $min_len) {
-                $min_len = strlen($m->name);
+            if (mb_strlen($m->name) < $min_len) {
+                $min_len = mb_strlen($m->name);
                 $min_len_v = $m->name;
             }
         }

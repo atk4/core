@@ -164,7 +164,7 @@ trait CollectionTrait
         if (
             isset($this->_appScopeTrait) &&
             isset($this->app->max_name_length) &&
-            strlen($desired) > $this->app->max_name_length
+            mb_strlen($desired) > $this->app->max_name_length
         ) {
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
@@ -172,11 +172,11 @@ trait CollectionTrait
              * max_name_length. First chop will be max-10, then chop size will increase by
              * max-15
              */
-            $len = strlen($desired);
+            $len = mb_strlen($desired);
             $left = $len - ($len - 10) % ($this->app->max_name_length - 15) - 5;
 
-            $key = substr($desired, 0, $left);
-            $rest = substr($desired, $left);
+            $key = mb_substr($desired, 0, $left);
+            $rest = mb_substr($desired, $left);
 
             if (!isset($this->app->unique_hashes[$key])) {
                 $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));

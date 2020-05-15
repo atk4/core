@@ -62,7 +62,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             $this->assertSame($surname->owner, $m);
 
             $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', ['CustomFieldMock']);
-            $this->assertLessThan(21, strlen($long->name));
+            $this->assertLessThan(21, mb_strlen($long->name));
         } catch (core\Exception $e) {
             echo $e->getColorfulText();
 
