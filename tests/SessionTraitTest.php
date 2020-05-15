@@ -79,12 +79,6 @@ class SessionTraitTest extends AtkPhpunit\TestCase
         $m->memorize('foo', null);
         $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
 
-        // value as callable
-        $m->memorize('foo', function () {
-            return 'bar';
-        });
-        $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
-
         // value as object
         $o = new \StdClass();
         $m->memorize('foo', $o);

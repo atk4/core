@@ -68,10 +68,6 @@ trait SessionTrait
     {
         $this->startSession();
 
-        if (is_callable($value)) {
-            $value = $value($key);
-        }
-
         $_SESSION[$this->session_key][$this->name][$key] = $value;
 
         return $value;
@@ -89,6 +85,10 @@ trait SessionTrait
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
             || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
+            if (is_callable($default)) {
+                $default = $default($key);
+            }
+
             return $this->memorize($key, $default);
         }
 
