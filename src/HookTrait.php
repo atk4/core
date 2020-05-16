@@ -133,12 +133,18 @@ trait HookTrait
             $hookBackup = $this->hooks[$spot];
 
             try {
-                while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as $index => $data) {
-                        $return[$index] = $data[0](...array_merge(
-                            [$this],
+                while ($data = array_pop($this->hooks[$spot])) {
+                    foreach ($data as $index => [$hFx, $hArgs]) {
+                        $withThis = false;
+                        if (isset($hArgs[0]) && $hArgs[0] instanceof HookArgThis) {
+                            $withThis = true;
+                            unset($hArgs[0]);
+                        }
+
+                        $return[$index] = $hFx(...array_merge(
+                            $withThis ? [$this] : [],
                             $args,
-                            $data[1]
+                            $hArgs
                         ));
                     }
                 }
