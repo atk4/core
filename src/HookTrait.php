@@ -112,6 +112,22 @@ trait HookTrait
         return isset($this->hooks[$spot][$priority]);
     }
 
+    private function hookCheckIfParameterTypeMatchesTemplate(?\ReflectionType $tType, ?\ReflectionType $hType, bool $isReturn): void
+    {
+        if ($isReturn) {
+            [$tType, $hType] = [$hType, $tType];
+        }
+
+        if (($tType === null && $hType === null)
+            || $hType->allowsNull() !== $tType->allowsNull() || is_a($hType->getName(), $tType->getName(), true)) {
+            throw new Exception([
+                'Hook callback does not match the template',
+                'callbackParamType' => $hType !== null ? $hType->getName() : 'no param',
+                'templateParamType' => $tType !== null ? $tType->getName() : 'no param',
+            ]);
+        }
+    }
+
     /**
      * Execute all closures assigned to $hook_spot.
      *
@@ -132,11 +148,26 @@ trait HookTrait
 
             try {
                 while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as $index => $data) {
-                        $return[$index] = $data[0](...array_merge(
+                    foreach ($_data as $index => [$hFx, $hArgs]) {
+                        if (isset($args['closureTemplate'])) {
+                            $tFx = $args['closureTemplate'];
+                            unset($args['closureTemplate']);
+
+                            $tFxRef = new \ReflectionFunction($hFx);
+                            $hFxRef = new \ReflectionFunction($hFx);
+
+                            $tFxParams = $tFxRef->getParameters();
+                            $hFxParams = $hFxRef->getParameters();
+                            for ($i = 0; $i < count($tFxParams) && $i < count($hFxParams); $i++) {
+                                $this->hookCheckIfParameterTypeMatchesTemplate($tFxParams[$i], $hFxParams[$i], false);
+                            }
+                            $this->hookCheckIfParameterTypeMatchesTemplate($tFxRef->getReturnType(), $hFxRef->getReturnType(), true);
+                        }
+
+                        $return[$index] = $hFx(...array_merge(
                             [$this],
                             $args,
-                            $data[1]
+                            $hArgs
                         ));
                     }
                 }
