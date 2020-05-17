@@ -38,6 +38,11 @@ trait DynamicMethodTrait
         ]);
     }
 
+    private function buildMethodHookName(string $name, bool $isGlobal)
+    {
+        return '__atk__method__' . ($isGlobal ? 'g' : 'l') . '__' . $name;
+    }
+
     /**
      * Tries to call dynamic method.
      *
@@ -48,13 +53,13 @@ trait DynamicMethodTrait
      */
     public function tryCall($name, $args)
     {
-        if (isset($this->_hookTrait) && $ret = $this->hook('method-' . $name, $args)) {
+        if (isset($this->_hookTrait) && $ret = $this->hook($this->buildMethodHookName($name, false), $args)) {
             return $ret;
         }
 
         if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
             array_unshift($args, $this);
-            if ($ret = $this->app->hook('global-method-' . $name, $args)) {
+            if ($ret = $this->app->hook($this->buildMethodHookName($name, true), $args)) {
                 return $ret;
             }
         }
@@ -78,7 +83,7 @@ trait DynamicMethodTrait
             throw new Exception(['Registering method twice', 'name' => $name]);
         }
 
-        $this->onHook('method-' . $name, $fx);
+        $this->onHook($this->buildMethodHookName($name, false), $fx);
 
         return $this;
     }
@@ -91,7 +96,7 @@ trait DynamicMethodTrait
     public function hasMethod(string $name): bool
     {
         return method_exists($this, $name)
-            || (isset($this->_hookTrait) && $this->hookHasCallbacks('method-' . $name))
+            || (isset($this->_hookTrait) && $this->hookHasCallbacks($this->buildMethodHookName($name, false)))
             || $this->hasGlobalMethod($name);
     }
 
@@ -103,7 +108,7 @@ trait DynamicMethodTrait
     public function removeMethod(string $name)
     {
         if (isset($this->_hookTrait)) {
-            $this->removeHook('method-' . $name);
+            $this->removeHook($this->buildMethodHookName($name, false));
         }
 
         return $this;
@@ -139,7 +144,7 @@ trait DynamicMethodTrait
         if ($this->hasGlobalMethod($name)) {
             throw new Exception(['Registering global method twice', 'name' => $name]);
         }
-        $this->app->onHook('global-method-' . $name, $fx);
+        $this->app->onHook($this->buildMethodHookName($name, true), $fx);
     }
 
     /**
@@ -152,7 +157,7 @@ trait DynamicMethodTrait
         return
             isset($this->_appScopeTrait) &&
             isset($this->app->_hookTrait) &&
-            $this->app->hookHasCallbacks('global-method-' . $name);
+            $this->app->hookHasCallbacks($this->buildMethodHookName($name, true));
     }
 
     /**
@@ -163,7 +168,7 @@ trait DynamicMethodTrait
     public function removeGlobalMethod(string $name): void
     {
         if (isset($this->_appScopeTrait) && isset($this->app->_hookTrait)) {
-            $this->app->removeHook('global-method-' . $name);
+            $this->app->removeHook($this->buildMethodHookName($name, true));
         }
     }
 }
