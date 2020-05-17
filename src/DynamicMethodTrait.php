@@ -38,7 +38,7 @@ trait DynamicMethodTrait
         ]);
     }
 
-    private function buildMethodHookName(string $name, bool $isGlobal)
+    private function buildMethodHookName(string $name, bool $isGlobal): string
     {
         return '__atk__method__' . ($isGlobal ? 'g' : 'l') . '__' . $name;
     }
