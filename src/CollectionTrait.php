@@ -115,11 +115,12 @@ trait CollectionTrait
      */
     public function _cloneCollection(string $collection): void
     {
-        $this->{$collection} = array_map(function($obj) {
+        $this->{$collection} = array_map(function ($obj) {
             $obj = clone $obj;
             if (isset($obj->owner)) {
                 $obj->owner = $this;
             }
+
             return $obj;
         }, $this->{$collection});
     }
