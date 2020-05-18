@@ -40,7 +40,7 @@ trait TrackableTrait
      */
     public function getDesiredName(): string
     {
-        return preg_replace('/.*\\\\/', '', strtolower(static::class));
+        return preg_replace('/.*\\\\/', '', mb_strtolower(static::class));
     }
 
     /**
