@@ -154,7 +154,7 @@ trait ConfigTrait
      * @return &pos|false Pointer to element in $this->config or false is element don't exist and $create_elements===false
      *                    Returns false if element don't exist and $create_elements===false
      */
-    protected function &_lookupConfigElement(string $path, bool $create_elements = false)
+    private function &_lookupConfigElement(string $path, bool $create_elements = false)
     {
         // trick to return false because we need reference here
         $false = false;
