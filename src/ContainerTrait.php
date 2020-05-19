@@ -147,7 +147,9 @@ trait ContainerTrait
 
         $element->owner = $this;
         $element->short_name = $args[0];
-        $element->name = $this->_shorten($this->name . '_' . $element->short_name);
+        if (isset($this->_nameTrait)) {
+            $element->name = $this->_shorten($this->name . '_' . $element->short_name);
+        }
         $this->elements[$element->short_name] = $element;
 
         unset($args[0]);
