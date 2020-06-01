@@ -191,14 +191,13 @@ trait FactoryTrait
      * add prefix.
      *
      * Rules observed, in order:
-     *  - If class starts with "." then prefixing is always done.
-     *  - If class contains "\" prefixing is never done.
+     *  - If class starts with "./" then prefixing is always done.
+     *  - If class contains "\" or it is an anonymous class prefixing is never done.
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *
      * Example: normalizeClassName('User', 'Model') == 'Model\User';
      * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # or as per "use"
-     * Example: normalizeClassName('Test/User', 'Model') == 'Model\Test\User';
      * Example: normalizeClassName('./User', 'Model') == 'Model\User';
      * Example: normalizeClassName('User', 'Model') == 'Model\User'; # if exists, 'User' otherwise
      *
@@ -224,26 +223,19 @@ trait FactoryTrait
             }
         }
 
-        // Rule 1: if starts with "." always prefix
-        if ($name && $name[0] === '.' && $prefix) {
-            $name = $prefix . '\\' . substr($name, 1);
-            $name = str_replace('/', '\\', $name);
-
-            return $name;
+        // Rule 1: if starts with "./" always prefix
+        if (strpos($name, './') === 0 && $prefix) {
+            return $prefix . '\\' . substr($name, 2);
         }
 
         // Rule 2: if "\" is present, don't prefix
-        if (strpos($name, '\\') !== false) {
-            $name = str_replace('/', '\\', $name);
-
+        if (strpos($name, '\\') !== false || strpos($name, 'class@anonymous') === 0) {
             return $name;
         }
 
-        if ($name && $name[0] !== '/' && $prefix) {
+        if ($name && $prefix) {
             $name = $prefix . '\\' . $name;
         }
-
-        $name = str_replace('/', '\\', $name);
 
         return $name;
     }
