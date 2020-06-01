@@ -191,14 +191,14 @@ trait FactoryTrait
      * add prefix.
      *
      * Rules observed, in order:
-     *  - If class starts with "./" then prefixing is always done.
+     *  - If class starts with ".\" then prefixing is always done.
      *  - If class contains "\" or it is an anonymous class prefixing is never done.
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *
      * Example: normalizeClassName('User', 'Model') == 'Model\User';
      * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # or as per "use"
-     * Example: normalizeClassName('./User', 'Model') == 'Model\User';
+     * Example: normalizeClassName('.\User', 'Model') == 'Model\User';
      * Example: normalizeClassName('User', 'Model') == 'Model\User'; # if exists, 'User' otherwise
      *
      * # If used without namespace:
@@ -222,12 +222,12 @@ trait FactoryTrait
             }
         }
 
-        // Rule 1: if starts with "./" always prefix
-        if (strpos($name, './') === 0 && $prefix) {
-            return $prefix . '\\' . substr($name, 2);
+        // Rule 1: if starts with ".\" always prefix
+        if (strpos($name, '.\\') === 0 && $prefix) {
+            return $prefix . substr($name, 1);
         }
 
-        // Rule 2: if "\" is present, don't prefix
+        // Rule 2: if contains "\" never prefix
         if (strpos($name, '\\') !== false || strpos($name, 'class@anonymous') === 0) {
             return $name;
         }
