@@ -81,7 +81,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
 
         // callable as object/array
         $m = new DynamicMethodMock();
-        $m->addMethod('getElementCount', [new ContainerMock(), 'getElementCount']);
+        $m->addMethod('getElementCount', \Closure::fromCallable([new ContainerMock(), 'getElementCount']));
         $this->assertSame(0, $m->getElementCount());
     }
 

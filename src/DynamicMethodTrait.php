@@ -72,7 +72,7 @@ trait DynamicMethodTrait
      *
      * @return $this
      */
-    public function addMethod(string $name, callable $fx)
+    public function addMethod(string $name, \Closure $fx)
     {
         // HookTrait is mandatory
         if (!isset($this->_hookTrait)) {
@@ -134,7 +134,7 @@ trait DynamicMethodTrait
      *
      * @param string $name Name of the method
      */
-    public function addGlobalMethod(string $name, callable $fx): void
+    public function addGlobalMethod(string $name, \Closure $fx): void
     {
         // AppScopeTrait and HookTrait for app are mandatory
         if (!isset($this->_appScopeTrait) || !isset($this->app->_hookTrait)) {

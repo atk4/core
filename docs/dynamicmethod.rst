@@ -55,7 +55,7 @@ Methods
     Tries to call dynamic method, but doesn't throw exception if it is not
     possible.
 
-.. php:method:: addMethod($name, $callable)
+.. php:method:: addMethod($name, $closure)
 
     Add new method for this object.
     See examples above.
@@ -69,7 +69,7 @@ Methods
 
     Remove dynamically registered method.
 
-.. php:method:: addGlobalMethod($name, $callable)
+.. php:method:: addGlobalMethod($name, $closure)
 
     Registers a globally-recognized method for all objects.
 
