@@ -217,7 +217,6 @@ trait FactoryTrait
             && method_exists($this->app, 'normalizeClassNameApp')
         ) {
             $result = $this->app->normalizeClassNameApp($name, $prefix);
-
             if ($result !== null) {
                 return $result;
             }
