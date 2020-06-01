@@ -196,13 +196,11 @@ trait FactoryTrait
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *
-     * Example: normalizeClassName('User', 'Model') == 'Model\User';
-     * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # or as per "use"
-     * Example: normalizeClassName('.\User', 'Model') == 'Model\User';
-     * Example: normalizeClassName('User', 'Model') == 'Model\User'; # if exists, 'User' otherwise
-     *
-     * # If used without namespace:
-     * Example: normalizeClassName(User::class, 'Model') == 'Model\User'; # if exists, 'User' otherwise
+     * Example: normalizeClassName('User') == 'User'; # default -> no prefix
+     * Example: normalizeClassName('User', 'Model') == 'Model\User'; # default -> with prefix
+     * Example: normalizeClassName('.\User', 'Model') == 'Model\User'; # relative to Model
+     * Example: normalizeClassName(User::class, 'Model') == 'Model\User'; # no namespace -> prefix
+     * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # has namespace -> no prefix
      *
      * @param string $name   Name of class
      * @param string $prefix Optional prefix for class name
@@ -211,7 +209,7 @@ trait FactoryTrait
      */
     public function normalizeClassName(string $name, string $prefix = null): string
     {
-        // If App has "normalizeClassName" (obsolete now), use it instead
+        // Compatibility: if App has "normalizeClassNameApp" (obsolete now), use it instead
         if (
             isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
@@ -222,12 +220,12 @@ trait FactoryTrait
             }
         }
 
-        // Rule 1: if starts with ".\" always prefix
+        // Rule 1: if starts with ".\" then always prefix
         if (strpos($name, '.\\') === 0 && $prefix) {
             return $prefix . substr($name, 1);
         }
 
-        // Rule 2: if contains "\" never prefix
+        // Rule 2: if contains "\" or is anonymous class then never prefix
         if (strpos($name, '\\') !== false || strpos($name, 'class@anonymous') === 0) {
             return $name;
         }
