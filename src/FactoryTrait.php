@@ -191,19 +191,18 @@ trait FactoryTrait
      * add prefix.
      *
      * Rules observed, in order:
-     *  - If class starts with "." then prefixing is always done.
-     *  - If class contains "\" prefixing is never done.
+     *  - If class starts with ".\" then prefixing is always done.
+     *  - If class contains "\" or it is an anonymous class prefixing is never done.
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *
-     * Example: normalizeClassName('User', 'Model') == 'Model\User';
-     * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # or as per "use"
-     * Example: normalizeClassName('Test/User', 'Model') == 'Model\Test\User';
-     * Example: normalizeClassName('./User', 'Model') == 'Model\User';
-     * Example: normalizeClassName('User', 'Model') == 'Model\User'; # if exists, 'User' otherwise
+     * Leading backslash is removed if presented. (canonical class name does not have a leading backslash)
      *
-     * # If used without namespace:
-     * Example: normalizeClassName(User::class, 'Model') == 'Model\User'; # if exists, 'User' otherwise
+     * Example: normalizeClassName('User')                    -> 'User'
+     * Example: normalizeClassName('User', 'Model')           -> 'Model\User'
+     * Example: normalizeClassName('.\User', 'Model')         -> 'Model\User'
+     * Example: normalizeClassName(User::class, 'Model')      -> 'Model\User'
+     * Example: normalizeClassName(Test\User::class, 'Model') -> 'Test\User'
      *
      * @param string $name   Name of class
      * @param string $prefix Optional prefix for class name
@@ -212,38 +211,29 @@ trait FactoryTrait
      */
     public function normalizeClassName(string $name, string $prefix = null): string
     {
-        // If App has "normalizeClassName" (obsolete now), use it instead
+        // compatibility: if App has "normalizeClassNameApp" (obsolete now), use it instead
         if (
             isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
         ) {
             $result = $this->app->normalizeClassNameApp($name, $prefix);
-
             if ($result !== null) {
                 return $result;
             }
         }
 
-        // Rule 1: if starts with "." always prefix
-        if ($name && $name[0] === '.' && $prefix) {
-            $name = $prefix . '\\' . substr($name, 1);
-            $name = str_replace('/', '\\', $name);
-
-            return $name;
+        if ($prefix !== null && (substr($prefix, 0, 1) === '\\' || substr($prefix, -1) === '\\')) {
+            throw new Exception('Class prefix must not start/end with backslash');
         }
 
-        // Rule 2: if "\" is present, don't prefix
-        if (strpos($name, '\\') !== false) {
-            $name = str_replace('/', '\\', $name);
-
-            return $name;
-        }
-
-        if ($name && $name[0] !== '/' && $prefix) {
+        if (strpos($name, '\\') === 0) { // forced absolute path, remove leading backslash
+            $name = substr($name, 1);
+        } elseif (strpos($name, '.\\') === 0 && $prefix) { // forced relative path
+            $name = $prefix . substr($name, 1);
+        } elseif (strpos($name, '\\') === false && strpos($name, 'class@anonymous') !== 0 // path without NS
+            && $name && $prefix && class_exists($prefix . '\\' . $name)) { // existing within the prefix NS
             $name = $prefix . '\\' . $name;
         }
-
-        $name = str_replace('/', '\\', $name);
 
         return $name;
     }

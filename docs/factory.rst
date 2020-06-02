@@ -596,7 +596,7 @@ A same logic can be applied to addField::
 
 and the implementation uses factory's default::
 
-    $field = $this->factory($this->_field_class, $arg, '\atk4\data');
+    $field = $this->factory($this->_field_class, $arg, 'atk4\data');
 
 Normally the field class property is a string, which will be used, but it can
 also be array.
@@ -606,31 +606,10 @@ also be array.
 OBSOLETE - Namespace
 ====================
 
-.. important:: MUST REVIEW THIS!!!!!!!!
-
 You might have noticed, that seeds do not specify namespace. This is because
 factory relies on $app to normalize your class name.
 
 .. php:method:: normalizeClassName($name, $prefix = null)
-
-Seed can use '/my/namespace/Class' where '/' are used instead of '\' to separate
-namespaces. The '/' will be translated into '\' and they have exactly the same
-meaning::
-
-    $button = $this->factory(['\My\Namespace\RedButton'], null, 'other/prefix');
-
-    // same as
-
-    $button = $this->factory(['/My/Namespace/RedButton'], null, 'other/prefix');
-
-A regular slashes, may be used in various combinations. Here are few things
-to consider.
-
-    - 3rd argument of factory() is called "Contextual Prefix" and is explained
-      below.
-    - Application may change namespace with "Global Prefixing"
-    - User may want to specify extra namespace inside seed
-    - User may want to override namespace entirely
 
 Motivation
 ----------
@@ -659,7 +638,7 @@ framework:
 
  - Allow to work with App and without App.
  - Contextual prefixing is great for creating separate class namespaces:
-   'Checkbox' -> 'FormField/Checkbox'
+   'Checkbox' -> 'FormField\Checkbox'
  - Namespace prefix "FormLayout" can be used for discovery of possible classes.
  - Global prefixing logic can be quite sophisticated and implemented inside App.
  - Use of forward slashes helps avoid errors
@@ -679,7 +658,7 @@ by you "Button" is converted into ``\atk4\ui\Button``::
     $app->add(['Button\WithDropdown', 'My Label']);
 
     // \MyNamespace\Button
-    $app->add(['\MyNamespace\Button', 'My Label']);
+    $app->add([\MyNamespace\Button::class, 'My Label']);
 
 
 Contextual Prefix
@@ -710,7 +689,7 @@ Here are some examples of contextual prefixing::
 
     // \MyNamespace\Checkbox
     $form = $app->add('Form');
-    $form->addField('agree_to_terms', '\MyNamespace\Checkbox', 'I Agree to Terms of Service');
+    $form->addField('agree_to_terms', \MyNamespace\Checkbox::class, 'I Agree to Terms of Service');
 
 Specifying contextual prefix will still leave it up for global prefixing, but
 if you want to fully specify a namespace, then you can use ``\Prefix``. If you
@@ -725,7 +704,7 @@ this technique::
         use ContainerTrait;  // implements $this->add
 
         function enableFeature($feature) {
-            return $this->add($this->factory($feature, ['myattr' => $this], '\my\auth\feature');
+            return $this->add($this->factory($feature, ['myattr' => $this], 'my\auth\feature');
         }
     }
 
@@ -761,7 +740,7 @@ implemented inside your own namespace::
     class MyApp extends \atk4\ui\App {
         function normalizeClassNameApp(string $name, string $prefix = null): ?string {
             if ($name == 'Grid') {
-                return '\myextensions\Grid';
+                return 'myextensions\Grid';
             }
 
             return parent::normalizeClassNameApp($name);
