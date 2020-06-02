@@ -42,12 +42,6 @@
     "symfony/yaml": ">=3.4"
   },
   "require-dev": {
-    "atk4/data": "dev-develop",
-    "friendsofphp/php-cs-fixer": "^2.16",
-    "phpunit/phpunit": "*",
-    "symfony/contracts": ">=1.1"
-  },
-  "require-dev-release": {
     "atk4/data": "^2.0",
     "friendsofphp/php-cs-fixer": "^2.16",
     "phpunit/phpunit": "*",
