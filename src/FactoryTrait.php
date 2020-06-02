@@ -196,11 +196,11 @@ trait FactoryTrait
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *
-     * Example: normalizeClassName('User') == 'User'; # default -> no prefix
-     * Example: normalizeClassName('User', 'Model') == 'Model\User'; # default -> with prefix
-     * Example: normalizeClassName('.\User', 'Model') == 'Model\User'; # relative to Model
-     * Example: normalizeClassName(User::class, 'Model') == 'Model\User'; # no namespace -> prefix
-     * Example: normalizeClassName(Test\User::class, 'Model') == 'Test\User'; # has namespace -> no prefix
+     * Example: normalizeClassName('User')                    -> 'User'
+     * Example: normalizeClassName('User', 'Model')           -> 'Model\User'
+     * Example: normalizeClassName('.\User', 'Model')         -> 'Model\User'
+     * Example: normalizeClassName(User::class, 'Model')      -> 'Model\User'
+     * Example: normalizeClassName(Test\User::class, 'Model') -> 'Test\User'
      *
      * @param string $name   Name of class
      * @param string $prefix Optional prefix for class name
@@ -230,7 +230,7 @@ trait FactoryTrait
             return $name;
         }
 
-        if ($name && $prefix) {
+        if ($name && $prefix && class_exists($prefix . '\\' . $name)) {
             $name = $prefix . '\\' . $name;
         }
 
