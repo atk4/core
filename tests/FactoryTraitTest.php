@@ -30,7 +30,7 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
 
         // pass classname
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m1));
+        $this->assertSame(FactoryMock::class, get_class($m1));
     }
 
     /**
@@ -48,18 +48,6 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $class = $m->normalizeClassName('a\b\MyClass');
         $this->assertSame('a\b\MyClass', $class);
 
-        $class = $m->normalizeClassName('a/b\MyClass');
-        $this->assertSame('a\b\MyClass', $class);
-
-        $class = $m->normalizeClassName('a/b/MyClass', 'Prefix');
-        $this->assertSame('Prefix\a\b\MyClass', $class);
-
-        $class = $m->normalizeClassName('/a/b/MyClass', 'Prefix');
-        $this->assertSame('\a\b\MyClass', $class);
-
-        $class = $m->normalizeClassName('\a\b\MyClass', 'Prefix');
-        $this->assertSame('\a\b\MyClass', $class);
-
         $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
         $this->assertSame('a\b\MyClass', $class);
 
@@ -70,12 +58,12 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('atk4\core\HookBreaker', $class);
 
         $class = $m->normalizeClassName(\Datetime::class, 'Prefix');
+        $this->assertSame('Datetime', $class);
+
+        $class = $m->normalizeClassName('.\Datetime', 'Prefix');
         $this->assertSame('Prefix\Datetime', $class);
 
-        $class = $m->normalizeClassName('.Datetime', 'Prefix');
-        $this->assertSame('Prefix\Datetime', $class);
-
-        $class = $m->normalizeClassName('.Date\Time', 'Prefix');
+        $class = $m->normalizeClassName('.\Date\Time', 'Prefix');
         $this->assertSame('Prefix\Date\Time', $class);
 
         // With Application Prefixing
@@ -105,26 +93,26 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
 
         // as class name
         $m1 = $m->factory('atk4\core\tests\FactoryMock');
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m1));
+        $this->assertSame(FactoryMock::class, get_class($m1));
 
         $m1 = $m->factory(\atk4\core\tests\FactoryMock::class);
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m1));
+        $this->assertSame(FactoryMock::class, get_class($m1));
 
         $m1 = $m->factory(FactoryMock::class);
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m1));
+        $this->assertSame(FactoryMock::class, get_class($m1));
 
         $m1 = $m->factory(HB::class, ['ok']);
-        $this->assertSame('atk4\core\HookBreaker', get_class($m1));
+        $this->assertSame(\atk4\core\HookBreaker::class, get_class($m1));
 
         $m1 = $m->factory(['atk4\core\tests\FactoryMock']);
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m1));
+        $this->assertSame(FactoryMock::class, get_class($m1));
 
         // as object
         $m2 = $m->factory($m1);
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m2));
+        $this->assertSame(FactoryMock::class, get_class($m2));
 
         $m2 = $m->factory([$m1]);
-        $this->assertSame('atk4\core\tests\FactoryMock', get_class($m2));
+        $this->assertSame(FactoryMock::class, get_class($m2));
 
         // as class name with parameters
         $m1 = $m->factory('atk4\core\tests\FactoryDIMock', ['a' => 'XXX', 'b' => 'YYY']);

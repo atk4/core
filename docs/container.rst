@@ -78,7 +78,7 @@ Example::
         {
             $seed = $this->mergeSeeds($seed, ['FieldMock']);
 
-            $field = $this->factory($seed, ['name'=>$name], '\atk4\core\tests');
+            $field = $this->factory($seed, ['name'=>$name], 'atk4\core\tests');
 
             return $this->_addIntoCollection($name, $field, 'fields');
         }
@@ -107,7 +107,7 @@ Methods
     Adds a new element into collection::
 
         function addField($name, $definition) {
-            $field = $this->factory($definition, [], '\atk4\data\Field');
+            $field = $this->factory($definition, [], 'atk4\data\Field');
             return $this->_addIntoCollection($name, $field, 'fields');
         }
 

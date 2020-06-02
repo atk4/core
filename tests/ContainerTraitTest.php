@@ -115,11 +115,11 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testFactoryMock()
     {
         $m = new ContainerFactoryMock();
-        $m2 = $m->add('atk4/core/tests/ContainerMock');
-        $this->assertSame('atk4\core\tests\ContainerMock', get_class($m2));
+        $m2 = $m->add(ContainerMock::class);
+        $this->assertSame(ContainerMock::class, get_class($m2));
 
-        $m3 = $m->add('atk4/core/tests/TrackableContainerMock', 'name');
-        $this->assertSame('atk4\core\tests\TrackableContainerMock', get_class($m3));
+        $m3 = $m->add(TrackableContainerMock::class, 'name');
+        $this->assertSame(TrackableContainerMock::class, get_class($m3));
         $this->assertSame('name', $m3->short_name);
     }
 

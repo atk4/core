@@ -196,6 +196,8 @@ trait FactoryTrait
      *  - If class (with prefix) exists, do prefix.
      *  - don't prefix otherwise.
      *
+     * Leading backslash is removed if presented. (canonical class name does not have a leading backslash)
+     *
      * Example: normalizeClassName('User')                    -> 'User'
      * Example: normalizeClassName('User', 'Model')           -> 'Model\User'
      * Example: normalizeClassName('.\User', 'Model')         -> 'Model\User'
@@ -209,7 +211,7 @@ trait FactoryTrait
      */
     public function normalizeClassName(string $name, string $prefix = null): string
     {
-        // Compatibility: if App has "normalizeClassNameApp" (obsolete now), use it instead
+        // compatibility: if App has "normalizeClassNameApp" (obsolete now), use it instead
         if (
             isset($this->_appScopeTrait, $this->app)
             && method_exists($this->app, 'normalizeClassNameApp')
@@ -220,17 +222,16 @@ trait FactoryTrait
             }
         }
 
-        // Rule 1: if starts with ".\" then always prefix
-        if (strpos($name, '.\\') === 0 && $prefix) {
-            return $prefix . substr($name, 1);
+        if ($prefix !== null && (substr($prefix, 0, 1) === '\\' || substr($prefix, -1) === '\\')) {
+            throw new Exception('Class prefix must not start/end with backslash');
         }
 
-        // Rule 2: if contains "\" or is anonymous class then never prefix
-        if (strpos($name, '\\') !== false || strpos($name, 'class@anonymous') === 0) {
-            return $name;
-        }
-
-        if ($name && $prefix && class_exists($prefix . '\\' . $name)) {
+        if (strpos($name, '\\') === 0) { // forced absolute path, remove leading backslash
+            $name = substr($name, 1);
+        } elseif (strpos($name, '.\\') === 0 && $prefix) { // forced relative path
+            $name = $prefix . substr($name, 1);
+        } elseif (strpos($name, '\\') === false && strpos($name, 'class@anonymous') !== 0 // path without NS
+            && $name && $prefix && class_exists($prefix . '\\' . $name)) { // existing within the prefix NS
             $name = $prefix . '\\' . $name;
         }
 

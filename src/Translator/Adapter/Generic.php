@@ -96,7 +96,7 @@ class Generic implements ITranslatorAdapter
 
         $this->definitions[$locale]['atk'] = [];
 
-        if (class_exists('\atk4\data\Locale')) {
+        if (class_exists(\atk4\data\Locale::class)) {
             $path = Locale::getPath();
             $this->addDefinitionFromFile($path . '/' . $locale . '/atk.php', $locale, 'atk', 'php');
         }

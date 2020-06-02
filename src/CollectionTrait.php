@@ -19,7 +19,7 @@ trait CollectionTrait
      * Use this method trait like this:.
      *
      * function addField($name, $definition) {
-     *     $field = $this->factory($definition, [], '\atk4\data\Field');
+     *     $field = $this->factory($definition, [], 'atk4\data\Field');
      *
      *     return $this->_addIntoCollection($name, $field, 'fields');
      * }
