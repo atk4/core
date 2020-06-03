@@ -44,7 +44,7 @@ Ability to specify only name of the class in ATK is used to keep code clean::
 
    $app->initLayout('Centered');
    $form = $app->add('Form');
-   $form->addField('food_selection', ['Lookup', 'model'=>Model\Food::class]);
+   $form->addField('food_selection', [\atk4\ui\FormField\Lookup::class, 'model'=>Model\Food::class]);
 
 In this snippet - 'Centered' refers to \atk4\ui\Layout\Centered, 'Form'
 refers to \atk4\ui\Form and 'Lookup' refers to \atk4\ui\FormField\Lookup. Yet
@@ -549,7 +549,7 @@ A default class is 'Line' but there are several ways how it can be overridden:
 Each of the above can specify class name, so with 3 seed sources they need
 merging::
 
-    $seed = mergeSeeds($decorator, $field->ui, $inferred, ['Line', 'form' => $this]);
+    $seed = mergeSeeds($decorator, $field->ui, $inferred, [\atk4\ui\FormField\Line::class, 'form' => $this]);
     $decorator = factory($seed, null, 'FormField');
 
 Passing an actual object anywhere will use it instead even if you specify seed.
@@ -677,7 +677,7 @@ prefixed with 'Layout\Centered'.
 This is called Contextual Prefix and is used in various methods throughout
 Agile Toolkit:
 
- - Form::addField('age', ['Hidden']); // uses FormField\Hidden class
+ - Form::addField('age', [\atk4\ui\FormField\Hidden::class]); // uses FormField\Hidden class
  - Table::addColumn('status', ['Checkbox']); // uses TableColumn\Checkbox class
  - App::initLayout('Admin'); // uses Layout\Admin class
 
