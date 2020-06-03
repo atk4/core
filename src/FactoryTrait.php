@@ -162,7 +162,7 @@ trait FactoryTrait
                 ]);
             }
 
-            $object = new $class(...$arguments);
+            $object = new $object(...$arguments);
         }
 
         if ($injection) {
