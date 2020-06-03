@@ -175,8 +175,8 @@ abstract class RendererAbstract
             throw new Exception('Path not found');
         }
 
-        $filePathArr = explode(DIRECTORY_SEPARATOR, ltrim($pathReal, '/\\'));
-        $vendorRootArr = explode(DIRECTORY_SEPARATOR, ltrim($this->getVendorDirectory(), '/\\'));
+        $filePathArr = explode(\DIRECTORY_SEPARATOR, ltrim($pathReal, '/\\'));
+        $vendorRootArr = explode(\DIRECTORY_SEPARATOR, ltrim($this->getVendorDirectory(), '/\\'));
         if ($filePathArr[0] !== $vendorRootArr[0]) {
             return $filePathArr;
         }
