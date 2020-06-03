@@ -351,9 +351,8 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testClassMayNotBeEmpty()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Error::class);
         $s1 = $this->factory([''], [SeedDITestMock::class, 'test']);
-        $this->assertSame(['test'], $s1->args);
     }
 
     public function testMystBeDI()
