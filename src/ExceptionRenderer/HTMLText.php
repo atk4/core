@@ -101,8 +101,8 @@ HTML;
             }
 
             $tokens = [];
-            $tokens['{FILE}'] = $call['file_formatted'];
-            $tokens['{LINE}'] = $call['line_formatted'];
+            $tokens['{FILE}'] = str_pad(mb_substr($call['file_rel'], -40), 40, ' ', STR_PAD_LEFT);
+            $tokens['{LINE}'] = str_pad($call['line'], 4, ' ', STR_PAD_LEFT);
             $tokens['{OBJECT}'] = $call['object'] !== null ? " - <span style='color:yellow'>" . $call['object_formatted'] . '</span>' : '';
             $tokens['{CLASS}'] = $call['class'] !== null ? $call['class'] . '::' : '';
 
