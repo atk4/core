@@ -78,7 +78,7 @@ trait StaticAddToTrait
     {
         // check if object is instance of this class
         if (!$unsafe) {
-            static::getTyped($object);
+            static::checkInstanceOf($object);
         }
 
         // add to parent
