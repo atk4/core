@@ -72,9 +72,9 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function fromSeedWithClassName($seed = [])// :static supported by PHP8+
+    public static function fromSeedWithCl($seed = [])// :static supported by PHP8+
     {
-        return static::addToWithClassName(self::_getDefaultFactory(), $seed, [], true);
+        return static::addToWithCl(self::_getDefaultFactory(), $seed, [], true);
     }
 
     /**
@@ -139,27 +139,27 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :static supported by PHP8+
+    public static function addToWithCl(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :static supported by PHP8+
     {
-        return static::_addToWithClassName($parent, $seed, false, $add_args, $skip_add);
+        return static::_addToWithCl($parent, $seed, false, $add_args, $skip_add);
     }
 
     /**
-     * Same as ::addToWithClassName(), but the new object is not checked if it is instance of this class.
+     * Same as ::addToWithCl(), but the new object is not checked if it is instance of this class.
      *
      * @param array|string $seed The first element specifies a class name, other element are seed
      *
      * @return static
      */
-    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :self is too strict with unsafe behaviour
+    public static function addToWithClUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :self is too strict with unsafe behaviour
     {
-        return static::_addToWithClassName($parent, $seed, true, $add_args, $skip_add);
+        return static::_addToWithCl($parent, $seed, true, $add_args, $skip_add);
     }
 
     /**
      * @return static
      */
-    private static function _addToWithClassName(object $parent, $seed, bool $unsafe, array $add_args, bool $skip_add = false)
+    private static function _addToWithCl(object $parent, $seed, bool $unsafe, array $add_args, bool $skip_add = false)
     {
         if (is_object($seed)) {
             $object = $seed;

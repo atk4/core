@@ -72,8 +72,8 @@ class StaticAddToTest extends AtkPhpunit\TestCase
 
         // create object using default factory
         $this->assertSame(StdSAT::class, get_class(StdSAT::fromSeed()));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithClassName(StdSAT2::class)));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithClassName([StdSAT2::class])));
+        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithCl(StdSAT2::class)));
+        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithCl([StdSAT2::class])));
 
         // add to return object
         $tr = StdSAT::addTo($m);
@@ -114,23 +114,23 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($m->_containerTrait));
 
         // the same class
-        $tr = StdSAT::addToWithClassName($m, StdSAT::class);
+        $tr = StdSAT::addToWithCl($m, StdSAT::class);
         $this->assertSame(StdSAT::class, get_class($tr));
 
         // add object - for BC
-        $tr = StdSAT::addToWithClassName($m, $tr);
+        $tr = StdSAT::addToWithCl($m, $tr);
         $this->assertSame(StdSAT::class, get_class($tr));
 
         // extended class
-        $tr = StdSAT::addToWithClassName($m, StdSAT2::class);
+        $tr = StdSAT::addToWithCl($m, StdSAT2::class);
         $this->assertSame(StdSAT2::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
         $this->expectException(\atk4\core\Exception::class);
-        $tr = StdSAT::addToWithClassName($m, \stdClass::class);
+        $tr = StdSAT::addToWithCl($m, \stdClass::class);
 
         // not the same or extended class - unsafe enabled
-        $tr = StdSAT::addToWithClassNameUnsafe($m, \stdClass::class);
+        $tr = StdSAT::addToWithClUnsafe($m, \stdClass::class);
         $this->assertSame(\stdClass::class, get_class($tr));
     }
 
