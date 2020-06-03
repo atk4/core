@@ -88,6 +88,21 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSAT::addTo($m, $tr);
     }
 
+    public function testCheckType()
+    {
+        // object is of the same class
+        StdSAT::checkType(new StdSAT());
+        $o = new StdSAT();
+        $this->assertSame($o, StdSAT::checkType($o));
+
+        // object is a subtype
+        StdSAT::checkType(new StdSAT2());
+
+        // object is not a subtype
+        $this->expectException(\atk4\core\Exception::class);
+        StdSAT2::checkType(new StdSAT());
+    }
+
     public function testWithClassName()
     {
         $m = new ContainerMock();

@@ -17,6 +17,24 @@ trait StaticAddToTrait
     public $_staticAddToTrait = true;
 
     /**
+     * Return the argument and check if it is instance of current class. Typehinting-friendly.
+     *
+     * Best way to annotate object type if it not defined as function parameter or strong typing can not be used.
+     *
+     * @return static
+     */
+    public static function checkType(object $object)// :static supported by PHP8+
+    {
+        if (!($object instanceof static)) {
+            throw (new Exception('Seed class name is not a subtype of the current class'))
+                ->addMoreInfo('seed_class', get_class($object))
+                ->addMoreInfo('current_class', static::class);
+        }
+
+        return $object;
+    }
+
+    /**
      * A better way to initialize and add new object into parent - more typehinting-friendly.
      * The new object is checked if it is instance of current class.
      *
@@ -59,10 +77,8 @@ trait StaticAddToTrait
     private static function _addTo_add(object $parent, object $object, bool $unsafe, array $add_args, bool $skip_add = false)
     {
         // check if object is instance of this class
-        if (!$unsafe && !($object instanceof static)) {
-            throw (new Exception('Seed class name is not a subtype of the current class'))
-                ->addMoreInfo('seed_class', get_class($object))
-                ->addMoreInfo('current_class', static::class);
+        if (!$unsafe) {
+            static::getTyped($object);
         }
 
         // add to parent
