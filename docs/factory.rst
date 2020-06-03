@@ -412,8 +412,8 @@ A default class is 'Line' but there are several ways how it can be overridden:
 Each of the above can specify class name, so with 3 seed sources they need
 merging::
 
-    $seed = mergeSeeds($decorator, $field->ui, $inferred, ['Line', 'form' => $this]);
-    $decorator = factory($seed);
+    $seed = mergeSeeds($decorator, $field->ui, $inferred, [\atk4\ui\FormField\Line::class, 'form' => $this]);
+    $decorator = factory($seed, null, 'FormField');
 
 Passing an actual object anywhere will use it instead even if you specify seed.
 
