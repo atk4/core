@@ -123,7 +123,7 @@ trait FactoryTrait
      *
      * @param mixed  $seed
      * @param array  $defaults
-     * @param string $prefix No longer supported
+     * @param string $prefix   No longer supported
      */
     public function factory($seed, $defaults = [], string $prefix = null): object
     {
