@@ -25,7 +25,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
 
             $this->assertNotEmpty($m->hasField('name'));
 
-            $m->addField('surname', ['CustomFieldMock']);
+            $m->addField('surname', [CustomFieldMock::class]);
 
             $this->assertSame(CustomFieldMock::class, get_class($m->hasField('surname')));
             $this->assertTrue($m->getField('surname')->var);
@@ -54,14 +54,14 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             };
             $m->name = 'form';
 
-            $surname = $m->addField('surname', ['CustomFieldMock']);
+            $surname = $m->addField('surname', [CustomFieldMock::class]);
 
             $this->assertSame('app', $surname->app->name);
 
             $this->assertSame('form-fields_surname', $surname->name);
             $this->assertSame($surname->owner, $m);
 
-            $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', ['CustomFieldMock']);
+            $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [CustomFieldMock::class]);
             $this->assertLessThan(21, strlen($long->name));
         } catch (core\Exception $e) {
             echo $e->getColorfulText();
@@ -144,7 +144,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
         try {
             $m = new CollectionMock();
             $m->addField('name');
-            $m->addField('surname', ['CustomFieldMock']);
+            $m->addField('surname', [CustomFieldMock::class]);
 
             $c = clone $m;
             $this->assertNotEmpty($c->hasField('name'));

@@ -78,7 +78,7 @@ Example::
         {
             $seed = $this->mergeSeeds($seed, ['FieldMock']);
 
-            $field = $this->factory($seed, ['name'=>$name], 'atk4\core\tests');
+            $field = $this->factory($seed, ['name'=>$name]);
 
             return $this->_addIntoCollection($name, $field, 'fields');
         }
