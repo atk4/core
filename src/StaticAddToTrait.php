@@ -16,6 +16,67 @@ trait StaticAddToTrait
      */
     public $_staticAddToTrait = true;
 
+    /** @var FactoryTrait */
+    private static $_defaultFactory;
+
+    /**
+     * Return the argument and check if it is instance of current class. Typehinting-friendly.
+     *
+     * Best way to annotate object type if it not defined as function parameter or strong typing can not be used.
+     *
+     * @return static
+     */
+    public static function checkInstanceOf(object $object)// :static supported by PHP8+
+    {
+        if (!($object instanceof static)) {
+            throw (new Exception('Seed class name is not a subtype of the current class'))
+                ->addMoreInfo('seed_class', get_class($object))
+                ->addMoreInfo('current_class', static::class);
+        }
+
+        return $object;
+    }
+
+    /**
+     * @return FactoryTrait
+     */
+    private static function _getDefaultFactory()
+    {
+        if (self::$_defaultFactory === null) {
+            self::$_defaultFactory = new class() {
+                use FactoryTrait;
+            };
+        }
+
+        return self::$_defaultFactory;
+    }
+
+    /**
+     * Create new object and check if it is instance of current class. Typehinting-friendly.
+     *
+     * Best way to create object if it should not be immediatelly added to a parent (otherwise use addTo()).
+     *
+     * @param array|string $seed
+     *
+     * @return static
+     */
+    public static function fromSeed($seed = [])// :static supported by PHP8+
+    {
+        return static::addTo(self::_getDefaultFactory(), $seed, [], true);
+    }
+
+    /**
+     * Same as ::fromSeed(), but the first element of seed specifies a class name instead of static::class.
+     *
+     * @param array|string $seed The first element specifies a class name, other element are seed
+     *
+     * @return static
+     */
+    public static function fromSeedWithCl($seed = [])// :static supported by PHP8+
+    {
+        return static::addToWithCl(self::_getDefaultFactory(), $seed, [], true);
+    }
+
     /**
      * A better way to initialize and add new object into parent - more typehinting-friendly.
      * The new object is checked if it is instance of current class.
@@ -59,10 +120,8 @@ trait StaticAddToTrait
     private static function _addTo_add(object $parent, object $object, bool $unsafe, array $add_args, bool $skip_add = false)
     {
         // check if object is instance of this class
-        if (!$unsafe && !($object instanceof static)) {
-            throw (new Exception('Seed class name is not a subtype of the current class'))
-                ->addMoreInfo('seed_class', get_class($object))
-                ->addMoreInfo('current_class', static::class);
+        if (!$unsafe) {
+            static::checkInstanceOf($object);
         }
 
         // add to parent
@@ -74,33 +133,33 @@ trait StaticAddToTrait
     }
 
     /**
-     * Same as addTo(), but the first element of seed specifies a class name instead of static::class.
+     * Same as ::addTo(), but the first element of seed specifies a class name instead of static::class.
      *
      * @param array|string $seed The first element specifies a class name, other element are seed
      *
      * @return static
      */
-    public static function addToWithClassName(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :static supported by PHP8+
+    public static function addToWithCl(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :static supported by PHP8+
     {
-        return static::_addToWithClassName($parent, $seed, false, $add_args, $skip_add);
+        return static::_addToWithCl($parent, $seed, false, $add_args, $skip_add);
     }
 
     /**
-     * Same as addToWithClassName(), but the new object is not checked if it is instance of this class.
+     * Same as ::addToWithCl(), but the new object is not checked if it is instance of this class.
      *
      * @param array|string $seed The first element specifies a class name, other element are seed
      *
      * @return static
      */
-    public static function addToWithClassNameUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :self is too strict with unsafe behaviour
+    public static function addToWithClUnsafe(object $parent, $seed = [], array $add_args = [], bool $skip_add = false)// :self is too strict with unsafe behaviour
     {
-        return static::_addToWithClassName($parent, $seed, true, $add_args, $skip_add);
+        return static::_addToWithCl($parent, $seed, true, $add_args, $skip_add);
     }
 
     /**
      * @return static
      */
-    private static function _addToWithClassName(object $parent, $seed, bool $unsafe, array $add_args, bool $skip_add = false)
+    private static function _addToWithCl(object $parent, $seed, bool $unsafe, array $add_args, bool $skip_add = false)
     {
         if (is_object($seed)) {
             $object = $seed;
