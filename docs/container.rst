@@ -76,7 +76,7 @@ Example::
 
         public function addField($name, $seed = null)
         {
-            $seed = $this->mergeSeeds($seed, ['FieldMock']);
+            $seed = $this->mergeSeeds($seed, [FieldMock::class]);
 
             $field = $this->factory($seed, ['name'=>$name]);
 
@@ -107,7 +107,7 @@ Methods
     Adds a new element into collection::
 
         function addField($name, $definition) {
-            $field = $this->factory($definition, [], 'atk4\data\Field');
+            $field = $this->factory($definition, []);
             return $this->_addIntoCollection($name, $field, 'fields');
         }
 

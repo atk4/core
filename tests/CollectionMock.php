@@ -20,7 +20,7 @@ class CollectionMock
      */
     public function addField($name, $seed = null)
     {
-        $seed = $this->mergeSeeds($seed, ['FieldMock']);
+        $seed = $this->mergeSeeds($seed, [FieldMock::class]);
 
         $field = $this->factory($seed, ['name' => $name]);
 

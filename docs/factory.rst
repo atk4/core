@@ -391,7 +391,7 @@ The first thing beginners learn about Agile Toolkit is how to specify layout::
 
 The argument for initLayout is passed to factory::
 
-    $this->layout = $this->factory($layout, null, 'Layout');
+    $this->layout = $this->factory($layout);
 
 The value you specify will be treated like this:
 
@@ -413,7 +413,7 @@ Each of the above can specify class name, so with 3 seed sources they need
 merging::
 
     $seed = mergeSeeds($decorator, $field->ui, $inferred, ['Line', 'form' => $this]);
-    $decorator = factory($seed, null, 'FormField');
+    $decorator = factory($seed);
 
 Passing an actual object anywhere will use it instead even if you specify seed.
 
@@ -459,7 +459,7 @@ A same logic can be applied to addField::
 
 and the implementation uses factory's default::
 
-    $field = $this->factory($this->_field_class, $arg, 'atk4\data');
+    $field = $this->factory($this->_field_class);
 
 Normally the field class property is a string, which will be used, but it can
 also be array.
