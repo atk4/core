@@ -23,7 +23,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function checkType(object $object)// :static supported by PHP8+
+    public static function checkInstanceOf(object $object)// :static supported by PHP8+
     {
         if (!($object instanceof static)) {
             throw (new Exception('Seed class name is not a subtype of the current class'))
