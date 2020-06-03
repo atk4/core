@@ -71,9 +71,9 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($m->_containerTrait));
 
         // create object using default factory
-        $this->assertSame(StdSAT::class, get_class(StdSAT::createChecked()));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::createCheckedWithClassName(StdSAT2::class)));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::createCheckedWithClassName([StdSAT2::class])));
+        $this->assertSame(StdSAT::class, get_class(StdSAT::fromSeed()));
+        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithClassName(StdSAT2::class)));
+        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithClassName([StdSAT2::class])));
 
         // add to return object
         $tr = StdSAT::addTo($m);

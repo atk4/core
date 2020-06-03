@@ -60,7 +60,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function createChecked($seed = [])// :static supported by PHP8+
+    public static function fromSeed($seed = [])// :static supported by PHP8+
     {
         return static::addTo(self::_getDefaultFactory(), $seed, [], true);
     }
@@ -72,7 +72,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function createCheckedWithClassName($seed = [])// :static supported by PHP8+
+    public static function fromSeedWithClassName($seed = [])// :static supported by PHP8+
     {
         return static::addToWithClassName(self::_getDefaultFactory(), $seed, [], true);
     }
