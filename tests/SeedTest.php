@@ -351,9 +351,8 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testClassMayNotBeEmpty()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Error::class);
         $s1 = $this->factory([''], [SeedDITestMock::class, 'test']);
-        $this->assertSame(['test'], $s1->args);
     }
 
     public function testMystBeDI()
@@ -465,13 +464,5 @@ class SeedDefTestMock extends SeedTestMock
     public function setDefaults(array $properties, bool $passively = false)
     {
         $this->def = $properties;
-    }
-}
-
-class SeedAppPrefixMock
-{
-    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
-    {
-        var_dump($name, $prefix);
     }
 }

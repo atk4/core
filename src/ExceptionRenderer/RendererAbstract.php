@@ -84,8 +84,11 @@ abstract class RendererAbstract
             'line_formatted' => null,
         ];
 
-        $parsed['file_formatted'] = str_pad(mb_substr($parsed['file'], -40), 40, ' ', STR_PAD_LEFT);
-        $parsed['line_formatted'] = str_pad($parsed['line'] ?? '', 4, ' ', STR_PAD_LEFT);
+        try {
+            $parsed['file_rel'] = $this->makeRelativePath($parsed['file']);
+        } catch (Exception $e) {
+            $parsed['file_rel'] = $parsed['file'];
+        }
 
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = $parsed['object']->name ?? get_class($parsed['object']);
@@ -158,5 +161,32 @@ abstract class RendererAbstract
         return $this->adapter
             ? $this->adapter->_($message, $parameters, $domain, $locale)
             : Translator::instance()->_($message, $parameters, $domain, $locale);
+    }
+
+    protected function getVendorDirectory(): string
+    {
+        return realpath(dirname(__DIR__, 4) . '/');
+    }
+
+    protected function makeRelativePath(string $path): string
+    {
+        $pathReal = realpath($path);
+        if ($pathReal === false) {
+            throw new Exception('Path not found');
+        }
+
+        $filePathArr = explode(\DIRECTORY_SEPARATOR, ltrim($pathReal, '/\\'));
+        $vendorRootArr = explode(\DIRECTORY_SEPARATOR, ltrim($this->getVendorDirectory(), '/\\'));
+        if ($filePathArr[0] !== $vendorRootArr[0]) {
+            return $filePathArr;
+        }
+
+        array_pop($vendorRootArr); // assume parent directory as project directory
+        while (isset($filePathArr[0]) && isset($vendorRootArr[0]) && $filePathArr[0] === $vendorRootArr[0]) {
+            array_shift($filePathArr);
+            array_shift($vendorRootArr);
+        }
+
+        return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : './') . implode('/', $filePathArr);
     }
 }

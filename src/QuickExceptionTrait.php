@@ -18,7 +18,7 @@ trait QuickExceptionTrait
      *
      * @var string
      */
-    public $default_exception = 'atk4\core\Exception';
+    public $default_exception = Exception::class;
 
     /**
      * Calls exception.
