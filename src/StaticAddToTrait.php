@@ -16,6 +16,9 @@ trait StaticAddToTrait
      */
     public $_staticAddToTrait = true;
 
+    /** @var FactoryTrait */
+    private static $_defaultFactory;
+
     /**
      * Return the argument and check if it is instance of current class. Typehinting-friendly.
      *
@@ -32,6 +35,46 @@ trait StaticAddToTrait
         }
 
         return $object;
+    }
+
+    /**
+     * @return FactoryTrait
+     */
+    private static function _getDefaultFactory()
+    {
+        if (self::$_defaultFactory === null) {
+            self::$_defaultFactory = new class() {
+                use FactoryTrait;
+            };
+        }
+
+        return self::$_defaultFactory;
+    }
+
+    /**
+     * Create new object and check if it is instance of current class. Typehinting-friendly.
+     *
+     * Best way to create object if it should not be immediatelly added to a parent (otherwise use addTo()).
+     *
+     * @param array|string $seed
+     *
+     * @return static
+     */
+    public static function createChecked($seed = [])// :static supported by PHP8+
+    {
+        return static::addTo(self::_getDefaultFactory(), $seed, [], true);
+    }
+
+    /**
+     * Same as createChecked(), but the first element of seed specifies a class name instead of static::class.
+     *
+     * @param array|string $seed The first element specifies a class name, other element are seed
+     *
+     * @return static
+     */
+    public static function createCheckedWithClassName($seed = [])// :static supported by PHP8+
+    {
+        return static::addToWithClassName(self::_getDefaultFactory(), $seed, [], true);
     }
 
     /**
