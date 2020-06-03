@@ -163,7 +163,8 @@ abstract class RendererAbstract
             : Translator::instance()->_($message, $parameters, $domain, $locale);
     }
 
-    protected function getVendorDirectory() {
+    protected function getVendorDirectory(): string
+    {
         return realpath(dirname(__DIR__, 4) . '/');
     }
 
