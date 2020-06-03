@@ -160,7 +160,7 @@ trait FactoryTrait
         $object = array_shift($arguments); // first numeric key argument is object
 
         if (!is_object($object)) {
-            if (!is_string($object) || $object === '') {
+            if (!is_string($object)) {
                 throw new Exception([
                     'Class name was not specified by the seed',
                     'seed' => $seed,
