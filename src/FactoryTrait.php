@@ -121,11 +121,16 @@ trait FactoryTrait
      *
      * To learn more about mechanics of factory trait, see documentation
      *
-     * @param mixed $seed
-     * @param array $defaults
+     * @param mixed  $seed
+     * @param array  $defaults
+     * @param string $prefix No longer supported
      */
-    public function factory($seed, $defaults = []): object
+    public function factory($seed, $defaults = [], string $prefix = null): object
     {
+        if ($prefix !== null) { // remove in 2021-june
+            throw new Exception(['Factory does no longer support relative names, pass full class name without prefix']);
+        }
+
         if ($defaults === null) {
             $defaults = [];
         }
