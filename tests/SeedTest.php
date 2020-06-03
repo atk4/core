@@ -467,11 +467,3 @@ class SeedDefTestMock extends SeedTestMock
         $this->def = $properties;
     }
 }
-
-class SeedAppPrefixMock
-{
-    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
-    {
-        var_dump($name, $prefix);
-    }
-}

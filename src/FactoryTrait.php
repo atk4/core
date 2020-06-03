@@ -123,9 +123,8 @@ trait FactoryTrait
      *
      * @param mixed  $seed
      * @param array  $defaults
-     * @param string $prefix   Optional prefix for class name
      */
-    public function factory($seed, $defaults = [], string $prefix = null): object
+    public function factory($seed, $defaults = []): object
     {
         if ($defaults === null) {
             $defaults = [];
@@ -156,9 +155,7 @@ trait FactoryTrait
         $object = array_shift($arguments); // first numeric key argument is object
 
         if (!is_object($object)) {
-            $class = is_string($object) ? $this->normalizeClassName($object, $prefix) : '';
-
-            if (!$class) {
+            if (!is_string($object) || $object === '') {
                 throw new Exception([
                     'Class name was not specified by the seed',
                     'seed' => $seed,
@@ -182,59 +179,5 @@ trait FactoryTrait
         }
 
         return $object;
-    }
-
-    /**
-     * First normalize class name, then add specified prefix to
-     * class name. Finally if $app is defined, and has method
-     * `normalizeClassNameApp` it will also get a chance to
-     * add prefix.
-     *
-     * Rules observed, in order:
-     *  - If class starts with ".\" then prefixing is always done.
-     *  - If class contains "\" or it is an anonymous class prefixing is never done.
-     *  - If class (with prefix) exists, do prefix.
-     *  - don't prefix otherwise.
-     *
-     * Leading backslash is removed if presented. (canonical class name does not have a leading backslash)
-     *
-     * Example: normalizeClassName('User')                    -> 'User'
-     * Example: normalizeClassName('User', 'Model')           -> 'Model\User'
-     * Example: normalizeClassName('.\User', 'Model')         -> 'Model\User'
-     * Example: normalizeClassName(User::class, 'Model')      -> 'Model\User'
-     * Example: normalizeClassName(Test\User::class, 'Model') -> 'Test\User'
-     *
-     * @param string $name   Name of class
-     * @param string $prefix Optional prefix for class name
-     *
-     * @return string Full, normalized class name
-     */
-    public function normalizeClassName(string $name, string $prefix = null): string
-    {
-        // compatibility: if App has "normalizeClassNameApp" (obsolete now), use it instead
-        if (
-            isset($this->_appScopeTrait, $this->app)
-            && method_exists($this->app, 'normalizeClassNameApp')
-        ) {
-            $result = $this->app->normalizeClassNameApp($name, $prefix);
-            if ($result !== null) {
-                return $result;
-            }
-        }
-
-        if ($prefix !== null && (substr($prefix, 0, 1) === '\\' || substr($prefix, -1) === '\\')) {
-            throw new Exception('Class prefix must not start/end with backslash');
-        }
-
-        if (strpos($name, '\\') === 0) { // forced absolute path, remove leading backslash
-            $name = substr($name, 1);
-        } elseif (strpos($name, '.\\') === 0 && $prefix) { // forced relative path
-            $name = $prefix . substr($name, 1);
-        } elseif (strpos($name, '\\') === false && strpos($name, 'class@anonymous') !== 0 // path without NS
-            && $name && $prefix && class_exists($prefix . '\\' . $name)) { // existing within the prefix NS
-            $name = $prefix . '\\' . $name;
-        }
-
-        return $name;
     }
 }
