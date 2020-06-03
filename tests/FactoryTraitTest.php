@@ -34,46 +34,6 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
     }
 
     /**
-     * Test normalizeClassName().
-     */
-    public function testNormalize()
-    {
-        $m = new FactoryMock();
-
-        // parameter as simple string
-        $class = $m->normalizeClassName('MyClass');
-        $this->assertSame('MyClass', $class);
-
-        // parameter as namespaced string
-        $class = $m->normalizeClassName('a\b\MyClass');
-        $this->assertSame('a\b\MyClass', $class);
-
-        $class = $m->normalizeClassName('a\b\MyClass', 'Prefix');
-        $this->assertSame('a\b\MyClass', $class);
-
-        $class = $m->normalizeClassName(\atk4\core\Translator\Adapter\Generic::class, 'Prefix');
-        $this->assertSame('atk4\core\Translator\Adapter\Generic', $class);
-
-        $class = $m->normalizeClassName(HB::class);
-        $this->assertSame('atk4\core\HookBreaker', $class);
-
-        $class = $m->normalizeClassName(\Datetime::class, 'Prefix');
-        $this->assertSame('Datetime', $class);
-
-        $class = $m->normalizeClassName('.\Datetime', 'Prefix');
-        $this->assertSame('Prefix\Datetime', $class);
-
-        $class = $m->normalizeClassName('.\Date\Time', 'Prefix');
-        $this->assertSame('Prefix\Date\Time', $class);
-
-        // With Application Prefixing
-        $m = new FactoryAppScopeMock();
-        $m->app = new FactoryTestAppMock();
-        $class = $m->normalizeClassName('MyClass', 'atk4\test');
-        $this->assertSame('atk4\mytest\MyClass', $class);
-    }
-
-    /**
      * Object factory definition must use ["class name", "x"=>"y"] form.
      */
     public function testException1()
@@ -193,15 +153,5 @@ class FactoryAppScopeMock
 {
     use AppScopeTrait;
     use FactoryTrait;
-}
-
-class FactoryTestAppMock
-{
-    public function normalizeClassNameApp(string $name, string $prefix = null): ?string
-    {
-        if ($prefix === 'atk4\test') {
-            return 'atk4\mytest\\' . $name;
-        }
-    }
 }
 // @codingStandardsIgnoreEnd

@@ -46,9 +46,9 @@ to create necessary methods with minimum code footprint::
 
        public function addField($name, $seed = null)
        {
-           $seed = $this->mergeSeeds($seed, ['FieldMock']);
+           $seed = $this->mergeSeeds($seed, [FieldMock::class]);
 
-           $field = $this->factory($seed, ['name'=>$name], 'atk4\ui\FormField');
+           $field = $this->factory($seed, ['name'=>$name]);
 
            return $this->_addIntoCollection($name, $field, 'fields');
        }
