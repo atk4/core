@@ -66,7 +66,7 @@ trait StaticAddToTrait
     }
 
     /**
-     * Same as createChecked(), but the first element of seed specifies a class name instead of static::class.
+     * Same as ::fromSeed(), but the first element of seed specifies a class name instead of static::class.
      *
      * @param array|string $seed The first element specifies a class name, other element are seed
      *
@@ -133,7 +133,7 @@ trait StaticAddToTrait
     }
 
     /**
-     * Same as addTo(), but the first element of seed specifies a class name instead of static::class.
+     * Same as ::addTo(), but the first element of seed specifies a class name instead of static::class.
      *
      * @param array|string $seed The first element specifies a class name, other element are seed
      *
@@ -145,7 +145,7 @@ trait StaticAddToTrait
     }
 
     /**
-     * Same as addToWithClassName(), but the new object is not checked if it is instance of this class.
+     * Same as ::addToWithClassName(), but the new object is not checked if it is instance of this class.
      *
      * @param array|string $seed The first element specifies a class name, other element are seed
      *
