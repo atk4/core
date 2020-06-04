@@ -40,7 +40,21 @@ trait TrackableTrait
      */
     public function getDesiredName(): string
     {
-        return preg_replace('/.*\\\\/', '', mb_strtolower(static::class));
+        // can be anything, but better to build meaningful name
+        $name = static::class;
+        if (strpos($name, 'class@anonymous') === 0) {
+            $name = '';
+            foreach (class_parents(static::class) as $v) {
+                if (strpos($v, 'class@anonymous') !== 0) {
+                    $name = $v;
+
+                    break;
+                }
+            }
+            $name .= '@anonymous';
+        }
+
+        return trim(preg_replace('~^atk4\\\\[^\\\\]+\\\\|[^0-9a-z\x7f-\xfe]+~s', '_', mb_strtolower($name)), '_');
     }
 
     /**
