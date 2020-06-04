@@ -123,12 +123,11 @@ trait FactoryTrait
      *
      * @param mixed  $seed
      * @param array  $defaults
-     * @param string $prefix   No longer supported
      */
-    public function factory($seed, $defaults = [], string $prefix = null): object
+    public function factory($seed, $defaults = []): object
     {
-        if ($prefix !== null) { // remove in 2021-june
-            throw new Exception(['Factory does no longer support relative names, pass full class name without prefix']);
+        if (func_num_args() > 2) { // prevent bad usage
+            throw new \Error('Too many method arguments, factory does no longer support relative names, pass full class name without prefix');
         }
 
         if ($defaults === null) {
