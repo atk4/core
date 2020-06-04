@@ -108,9 +108,12 @@ HTML;
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? 'pink' : 'gray';
             $tokens['{FUNCTION}'] = $call['function'];
-            $tokens['{FUNCTION_ARGS}'] = '()';
 
-            if ($escape_frame) {
+            if ($index === 'self') {
+                $tokens['{FUNCTION_ARGS}'] = '';
+            } elseif (!$escape_frame) {
+                $tokens['{FUNCTION_ARGS}'] = '()';
+            } else {
                 $escape_frame = false;
 
                 $args = [];

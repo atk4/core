@@ -101,9 +101,12 @@ TEXT;
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];
-            $tokens['{FUNCTION_ARGS}'] = '()';
 
-            if ($escape_frame) {
+            if ($index === 'self') {
+                $tokens['{FUNCTION_ARGS}'] = '';
+            } elseif (!$escape_frame) {
+                $tokens['{FUNCTION_ARGS}'] = '()';
+            } else {
                 $escape_frame = false;
                 $args = [];
                 foreach ($call['args'] as $arg) {
