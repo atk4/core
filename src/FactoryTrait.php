@@ -121,8 +121,8 @@ trait FactoryTrait
      *
      * To learn more about mechanics of factory trait, see documentation
      *
-     * @param mixed  $seed
-     * @param array  $defaults
+     * @param mixed $seed
+     * @param array $defaults
      */
     public function factory($seed, $defaults = []): object
     {
