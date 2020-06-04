@@ -157,9 +157,9 @@ abstract class RendererAbstract
 
         // display location as another stack trace call
         $trace = ['self' => [
-                'line' => $this->exception->getLine(),
-                'file' => $this->exception->getFile(),
-            ]] + $trace;
+            'line' => $this->exception->getLine(),
+            'file' => $this->exception->getFile(),
+        ]] + $trace;
 
         return $trace;
     }
