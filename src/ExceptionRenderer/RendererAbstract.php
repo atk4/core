@@ -130,12 +130,7 @@ abstract class RendererAbstract
         };
 
         $trace = $custTraceFunc($this->exception);
-
-        if ($shorten && $this->parent_exception !== null) {
-            $parent_trace = $custTraceFunc($this->parent_exception);
-        } else {
-            $parent_trace = [];
-        }
+        $parent_trace = $shorten && $this->parent_exception !== null ? $custTraceFunc($this->parent_exception) : [];
 
         $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
         $c = min(count($trace), count($parent_trace));
