@@ -91,7 +91,7 @@ HTML;
         $in_atk = true;
         $escape_frame = false;
         $short_trace = $this->getStackTrace(true);
-        $is_shortened = end($short_trace) && key($short_trace) !== 0;
+        $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
         foreach ($short_trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 

@@ -126,7 +126,7 @@ abstract class RendererAbstract
                 ? $ex->getMyTrace()
                 : $ex->getTrace();
 
-            return array_combine(range(count($trace) - 1, 0, -1), $trace);
+            return count($trace) > 0 ? array_combine(range(count($trace) - 1, 0, -1), $trace) : [];
         };
 
         $trace = $custTraceFunc($this->exception);
