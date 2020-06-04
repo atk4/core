@@ -190,6 +190,6 @@ abstract class RendererAbstract
             array_shift($vendorRootArr);
         }
 
-        return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : './') . implode('/', $filePathArr);
+        return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : '') . implode('/', $filePathArr);
     }
 }
