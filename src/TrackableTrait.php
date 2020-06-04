@@ -44,8 +44,9 @@ trait TrackableTrait
         $name = static::class;
         if (strpos($name, 'class@anonymous') === 0) {
             $name = '';
-            foreach (class_parents(static::class) as $name) {
-                if (strpos($name, 'class@anonymous') !== 0) {
+            foreach (class_parents(static::class) as $v) {
+                if (strpos($v, 'class@anonymous') !== 0) {
+                    $name = $v;
                     break;
                 }
             }
