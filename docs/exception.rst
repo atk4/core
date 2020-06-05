@@ -73,7 +73,7 @@ user to see. This will include the error, parameters and backtrace. The code
 will also make an attempt to locate and highlight the code that have caused the
 problem.
 
-.. php:method:: getHTMLText()
+.. php:method:: getHTML()
 
 Will return nice HTML-formatted exception that will rely on a presence of
 Semantic UI. This will include the error, parameters and backtrace. The code
@@ -108,7 +108,7 @@ If you do not instantiate App, or set it up without automatic exception catching
 
 then you might want to output message details yourself.
 
-Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHTMLText`::
+Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHTML`::
 
     try {
         // some code..
@@ -117,10 +117,6 @@ Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHTMLText`
     } catch (\Exception $e) {
         echo $e->getMessage();
     }
-
-Finally if you don't want ANSII output, you can also do::
-
-    echo strip_tags($e->getHTMLText());
 
 Although it's not advisable to output anything else other than the Message to user (in production),
 you can get values of additional parameters through::
