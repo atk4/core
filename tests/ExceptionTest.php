@@ -137,7 +137,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
     public function testExceptionFallback(): void
     {
-        $m = new ExceptionTestThrowError(['test']);
+        $m = new ExceptionTestThrowError('test');
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTMLText());
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());
