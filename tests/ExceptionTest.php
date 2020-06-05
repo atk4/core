@@ -118,21 +118,15 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
     public function testSolution2(): void
     {
-        $m = new Exception([
-            'Exception with solution',
-            'solutions' => '1st Solution',
-        ]);
+        $m = (new Exception('Exception with solution'))
+            ->addSolution('1st Solution');
 
         $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/1st Solution/', $ret);
 
-        $m = new Exception([
-            'Exception with solution',
-            'solutions' => [
-                '1st Solution',
-                '2nd Solution',
-            ],
-        ]);
+        $m = (new Exception('Exception with solution'))
+            ->addSolution('1st Solution')
+            ->addSolution('2nd Solution');
 
         $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/1st Solution/', $ret);

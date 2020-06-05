@@ -21,7 +21,7 @@ the constructor or using addMoreInfo()
     This uses same format as a regular PHP exception, but error parameter will
     now support array::
 
-        throw new Exception(['Value is too big', 'max'=>$max]);
+        throw (new Exception('Value is too big'))->addMoreInfo('max', $max);
 
 The other option is to supply error is:
 

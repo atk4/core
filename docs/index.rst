@@ -247,7 +247,7 @@ The same can be said about web output:
 Agile Core implements :php:class:`Exception` class which offers many benefits
 compared to standard PHP exceptions:
 
- - Pass additional information `new Exception(['Bad argument', 'arg'=>$arg'])`
+ - Pass additional information `(new Exception('Bad argument'))->addMoreInfo('arg', $arg')`
  - Visualize in ASCII or HTML
  - Better means of localization
 
