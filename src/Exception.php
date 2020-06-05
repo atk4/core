@@ -37,28 +37,8 @@ class Exception extends \Exception
     /** @var ITranslatorAdapter */
     private $adapter;
 
-    /**
-     * Constructor.
-     *
-     * @param string|array $message
-     */
-    public function __construct(
-        $message = '',
-        int $code = 0,
-        \Throwable $previous = null
-    ) {
-        if (is_array($message)) {
-            // message contain additional parameters
-            $this->params = $message;
-            $message = array_shift($this->params);
-            if (isset($this->params['solutions'])) {
-                foreach ((array) $this->params['solutions'] as $solution) {
-                    $this->addSolution($solution);
-                }
-                unset($this->params['solutions']);
-            }
-        }
-
+    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
+    {
         parent::__construct($message, $code, $previous);
 
         // save trace but skip constructors of this exception
