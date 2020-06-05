@@ -25,7 +25,7 @@ class HTML extends RendererAbstract
                 <i class="warning sign icon"></i>
                 <div class="content">
                     <div class="header">{TITLE}</div>
-                    {CLASS} {CODE}:
+                    {CLASS}{CODE}:
                     {MESSAGE}
                 </div>
             </div>
