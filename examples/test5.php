@@ -9,10 +9,8 @@ function loopToCreateStack($test)
     if ($test > 5) {
         $exc_prev = new \Exception('Previous Exception');
 
-        $exc = new atk4\core\Exception([
-            'Test value is too high',
-            'test' => $test,
-        ], 200, $exc_prev);
+        $exc = (new atk4\core\Exception('Test value is too high', 200, $exc_prev))
+            ->addMoreInfo('test', $test);
 
         throw $exc->addSolution('Suggested solution test');
     }

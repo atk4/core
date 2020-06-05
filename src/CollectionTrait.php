@@ -35,28 +35,22 @@ trait CollectionTrait
     public function _addIntoCollection(string $name, object $object, string $collection)
     {
         if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
-            throw new Exception([
-                'Name of collection is specified incorrectly',
-                'parent' => $this,
-                'collection' => $collection,
-            ]);
+            throw (new Exception('Name of collection is specified incorrectly'))
+                ->addMoreInfo('parent', $this)
+                ->addMoreInfo('collection', $collection);
         }
 
         if (!$name) {
-            throw new Exception([
-                'Object must be given a name when adding into this',
-                'child' => $object,
-                'parent' => $this,
-                'collection' => $collection,
-            ]);
+            throw (new Exception('Object must be given a name when adding into this'))
+                ->addMoreInfo('child', $object)
+                ->addMoreInfo('parent', $this)
+                ->addMoreInfo('collection', $collection);
         }
 
         if ($this->_hasInCollection($name, $collection) !== false) {
-            throw new Exception([
-                'Object with requested name already exist in collection',
-                'name' => $name,
-                'collection' => $collection,
-            ]);
+            throw (new Exception('Object with requested name already exist in collection'))
+                ->addMoreInfo('name', $name)
+                ->addMoreInfo('collection', $collection);
         }
         $this->{$collection}[$name] = $object;
 
@@ -79,10 +73,8 @@ trait CollectionTrait
                 $object->init();
             }
             if (!$object->_initialized) {
-                throw new Exception([
-                    'You should call parent::init() when you override initializer',
-                    'object' => $object,
-                ]);
+                throw (new Exception('You should call parent::init() when you override initializer'))
+                    ->addMoreInfo('object', $object);
             }
         }
 
@@ -97,12 +89,10 @@ trait CollectionTrait
     public function _removeFromCollection(string $name, string $collection): void
     {
         if ($this->_hasInCollection($name, $collection) === false) {
-            throw new Exception([
-                'Element by this name is NOT in the collection, cannot remove',
-                'parent' => $this,
-                'collection' => $collection,
-                'name' => $name,
-            ]);
+            throw (new Exception('Element by this name is NOT in the collection, cannot remove'))
+                ->addMoreInfo('parent', $this)
+                ->addMoreInfo('collection', $collection)
+                ->addMoreInfo('name', $name);
         }
         unset($this->{$collection}[$name]);
     }
@@ -142,12 +132,10 @@ trait CollectionTrait
     {
         $object = $this->_hasInCollection($name, $collection);
         if ($object === false) {
-            throw new Exception([
-                'Element is not found in collection',
-                'collection' => $collection,
-                'name' => $name,
-                'this' => $this,
-            ]);
+            throw (new Exception('Element is not found in collection'))
+                ->addMoreInfo('collection', $collection)
+                ->addMoreInfo('name', $name)
+                ->addMoreInfo('this', $this);
         }
 
         return $object;

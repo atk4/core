@@ -76,10 +76,8 @@ trait ContainerTrait
                 $obj->init();
             }
             if (!$obj->_initialized) {
-                throw new Exception([
-                    'You should call parent::init() when you override initializer',
-                    'obj' => $obj,
-                ]);
+                throw (new Exception('You should call parent::init() when you override initializer'))
+                    ->addMoreInfo('obj', $obj);
             }
         }
 
@@ -98,7 +96,8 @@ trait ContainerTrait
     protected function _add_Container($element, $args = []): object
     {
         if (!is_object($element)) {
-            throw new Exception(['Only objects may be added into containers', 'arg' => $element]);
+            throw (new Exception('Only objects may be added into containers'))
+                ->addMoreInfo('arg', $element);
         }
 
         // Carry on reference to application if we have appScopeTraits set
@@ -116,7 +115,8 @@ trait ContainerTrait
             // passed as string
             $args = [$args];
         } elseif (!is_array($args) && $args !== null) {
-            throw new Exception(['Second argument must be array', 'arg2' => $args]);
+            throw (new Exception('Second argument must be array'))
+                ->addMoreInfo('arg2', $args);
         } elseif (isset($args['desired_name'])) {
             // passed as ['desired_name'=>'foo'];
             $args[0] = $this->_unique_element($args['desired_name']);
@@ -136,13 +136,11 @@ trait ContainerTrait
 
         // Maybe element already exists
         if (isset($this->elements[$args[0]])) {
-            throw new Exception([
-                'Element with requested name already exists',
-                'element' => $element,
-                'name' => $args[0],
-                'this' => $this,
-                'arg2' => $args,
-            ]);
+            throw (new Exception('Element with requested name already exists'))
+                ->addMoreInfo('element', $element)
+                ->addMoreInfo('name', $args[0])
+                ->addMoreInfo('this', $this)
+                ->addMoreInfo('arg2', $args);
         }
 
         $element->owner = $this;
@@ -177,11 +175,9 @@ trait ContainerTrait
         }
 
         if (!isset($this->elements[$short_name])) {
-            throw new Exception([
-                'Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..',
-                'parent' => $this,
-                'name' => $short_name,
-            ]);
+            throw (new Exception('Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..'))
+                ->addMoreInfo('parent', $this)
+                ->addMoreInfo('name', $short_name);
         }
 
         unset($this->elements[$short_name]);
@@ -235,11 +231,9 @@ trait ContainerTrait
     public function getElement(string $short_name): object
     {
         if (!isset($this->elements[$short_name])) {
-            throw new Exception([
-                'Child element not found',
-                'parent' => $this,
-                'element' => $short_name,
-            ]);
+            throw (new Exception('Child element not found'))
+                ->addMoreInfo('parent', $this)
+                ->addMoreInfo('element', $short_name);
         }
 
         return $this->elements[$short_name];

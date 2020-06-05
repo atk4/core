@@ -45,20 +45,20 @@ class Translator
     public function setDefaults(array $properties, bool $passively = false): void
     {
         if (null !== ($properties['instance'] ?? null)) {
-            throw new Exception(['$instance cannot be replaced']);
+            throw new Exception('$instance cannot be replaced');
         }
 
         $adapter = $properties['adapter'] ?? null;
         if ($adapter !== null && !($adapter instanceof ITranslatorAdapter)) {
-            throw new Exception(['$adapter must be an instance of ITranslatorAdapter']);
+            throw new Exception('$adapter must be an instance of ITranslatorAdapter');
         }
 
         if (!is_string($properties['default_domain'] ?? '')) {
-            throw new Exception(['default_domain must be string']);
+            throw new Exception('default_domain must be string');
         }
 
         if (!is_string($properties['default_locale'] ?? '')) {
-            throw new Exception(['default_locale must be string']);
+            throw new Exception('default_locale must be string');
         }
 
         $this->_setDefaults($properties);

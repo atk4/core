@@ -30,12 +30,10 @@ trait DynamicMethodTrait
             return reset($ret);
         }
 
-        throw new Exception([
-            'Method ' . $name . ' is not defined for this object',
-            'class' => static::class,
-            'method' => $name,
-            'args' => $args,
-        ]);
+        throw (new Exception('Method ' . $name . ' is not defined for this object'))
+            ->addMoreInfo('class', static::class)
+            ->addMoreInfo('method', $name)
+            ->addMoreInfo('args', $args);
     }
 
     private function buildMethodHookName(string $name, bool $isGlobal): string
@@ -76,11 +74,12 @@ trait DynamicMethodTrait
     {
         // HookTrait is mandatory
         if (!isset($this->_hookTrait)) {
-            throw new Exception(['Object must use hookTrait for Dynamic Methods to work']);
+            throw new Exception('Object must use hookTrait for Dynamic Methods to work');
         }
 
         if ($this->hasMethod($name)) {
-            throw new Exception(['Registering method twice', 'name' => $name]);
+            throw (new Exception('Registering method twice'))
+                ->addMoreInfo('name', $name);
         }
 
         $this->onHook($this->buildMethodHookName($name, false), $fx);
@@ -138,11 +137,12 @@ trait DynamicMethodTrait
     {
         // AppScopeTrait and HookTrait for app are mandatory
         if (!isset($this->_appScopeTrait) || !isset($this->app->_hookTrait)) {
-            throw new Exception(['You need AppScopeTrait and HookTrait traits, see docs']);
+            throw new Exception('You need AppScopeTrait and HookTrait traits, see docs');
         }
 
         if ($this->hasGlobalMethod($name)) {
-            throw new Exception(['Registering global method twice', 'name' => $name]);
+            throw (new Exception('Registering global method twice'))
+                ->addMoreInfo('name', $name);
         }
         $this->app->onHook($this->buildMethodHookName($name, true), $fx);
     }
