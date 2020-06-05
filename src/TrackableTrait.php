@@ -51,7 +51,7 @@ trait TrackableTrait
                     break;
                 }
             }
-            $name .= '@anonymous';
+            // $name .= '@anonymous';
         }
 
         return trim(preg_replace('~^.+\\\\|[^0-9a-z\x7f-\xfe]+~s', '_', mb_strtolower($name)), '_');
