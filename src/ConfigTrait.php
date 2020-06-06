@@ -54,7 +54,9 @@ trait ConfigTrait
         $configs = [];
         foreach ($files as $file) {
             if (!is_readable($file)) {
-                throw new Exception(['Can not read config file', 'file' => $file, 'format' => $format]);
+                throw (new Exception('Can not read config file'))
+                    ->addMoreInfo('file', $file)
+                    ->addMoreInfo('format', $format);
             }
 
             $tempConfig = [];
@@ -73,19 +75,15 @@ trait ConfigTrait
 
                     break;
                 default:
-                    throw new Exception([
-                        'Unknown Format. Allowed formats: php, json, yml.',
-                        'file' => $file,
-                        'format' => $format,
-                    ]);
+                    throw (new Exception('Unknown Format. Allowed formats: php, json, yml.'))
+                        ->addMoreInfo('file', $file)
+                        ->addMoreInfo('format', $format);
             }
 
             if (!is_array($tempConfig)) {
-                throw new Exception([
-                    'File was read but has a bad format',
-                    'file' => $file,
-                    'format' => $format,
-                ]);
+                throw (new Exception('File was read but has a bad format'))
+                    ->addMoreInfo('file', $file)
+                    ->addMoreInfo('format', $format);
             }
 
             $configs[] = $tempConfig;

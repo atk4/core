@@ -11,10 +11,8 @@ function faulty($test)
     if ($test > 5) {
         $exception_prev = new \Exception('Previous Exception');
 
-        $exception = new Exception([
-            'Test value is too high',
-            'test' => $test,
-        ], 200, $exception_prev);
+        $exception = (new Exception('Test value is too high', 200, $exception_prev))
+            ->addMoreInfo('test', $test);
         $exception->addSolution('Suggested solution test');
 
         throw $exception;

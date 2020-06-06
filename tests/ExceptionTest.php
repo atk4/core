@@ -18,7 +18,9 @@ class ExceptionTest extends AtkPhpunit\TestCase
      */
     public function testColorfulText(): void
     {
-        $m = new Exception(['TestIt', 'a1' => 111, 'a2' => 222]);
+        $m = (new Exception('TestIt'))
+            ->addMoreInfo('a1', 111)
+            ->addMoreInfo('a2', 222);
 
         // params
         $this->assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
@@ -97,7 +99,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
     public function testSolution(): void
     {
-        $m = new Exception(['Exception with solution']);
+        $m = new Exception('Exception with solution');
         $m->addSolution('One Solution');
 
         $ret = $m->getColorfulText();
@@ -118,21 +120,15 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
     public function testSolution2(): void
     {
-        $m = new Exception([
-            'Exception with solution',
-            'solutions' => '1st Solution',
-        ]);
+        $m = (new Exception('Exception with solution'))
+            ->addSolution('1st Solution');
 
         $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/1st Solution/', $ret);
 
-        $m = new Exception([
-            'Exception with solution',
-            'solutions' => [
-                '1st Solution',
-                '2nd Solution',
-            ],
-        ]);
+        $m = (new Exception('Exception with solution'))
+            ->addSolution('1st Solution')
+            ->addSolution('2nd Solution');
 
         $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/1st Solution/', $ret);
@@ -141,7 +137,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
     public function testExceptionFallback(): void
     {
-        $m = new ExceptionTestThrowError(['test']);
+        $m = new ExceptionTestThrowError('test');
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTMLText());
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());

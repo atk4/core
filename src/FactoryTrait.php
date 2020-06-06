@@ -42,11 +42,9 @@ trait FactoryTrait
                     if (isset($seed->_DIContainerTrait)) {
                         $seed->setDefaults($injection, true);
                     } else {
-                        throw new Exception([
-                            'factory() requested to passively inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                            'object' => $seed,
-                            'injection' => $injection,
-                        ]);
+                        throw (new Exception('factory() requested to passively inject some properties into existing object that does not use \atk4\core\DIContainerTrait'))
+                            ->addMoreInfo('object', $seed)
+                            ->addMoreInfo('injection', $injection);
                     }
                 }
             }
@@ -63,11 +61,9 @@ trait FactoryTrait
                     if (isset($seed2->_DIContainerTrait)) {
                         $seed2->setDefaults($injection);
                     } else {
-                        throw new Exception([
-                            'factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait',
-                            'object' => $seed2,
-                            'injection' => $seed,
-                        ]);
+                        throw (new Exception('factory() requested to inject some properties into existing object that does not use \atk4\core\DIContainerTrait'))
+                            ->addMoreInfo('object', $seed2)
+                            ->addMoreInfo('injection', $seed);
                     }
                 }
             }
@@ -128,7 +124,7 @@ trait FactoryTrait
     public function factory($seed, $defaults = [], string $prefix = null): object
     {
         if ($prefix !== null) { // remove in 2021-june
-            throw new Exception(['Factory does no longer support relative names, pass full class name without prefix']);
+            throw new Exception('Factory does no longer support relative names, pass full class name without prefix');
         }
 
         if ($defaults === null) {
@@ -161,10 +157,8 @@ trait FactoryTrait
 
         if (!is_object($object)) {
             if (!is_string($object)) {
-                throw new Exception([
-                    'Class name was not specified by the seed',
-                    'seed' => $seed,
-                ]);
+                throw (new Exception('Class name was not specified by the seed'))
+                    ->addMoreInfo('seed', $seed);
             }
 
             $object = new $object(...$arguments);
@@ -174,12 +168,10 @@ trait FactoryTrait
             if (isset($object->_DIContainerTrait)) {
                 $object->setDefaults($injection);
             } else {
-                throw new Exception([
-                    'factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait',
-                    'object' => $object,
-                    'seed' => $seed,
-                    'injection' => $injection,
-                ]);
+                throw (new Exception('factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait'))
+                    ->addMoreInfo('object', $object)
+                    ->addMoreInfo('seed', $seed)
+                    ->addMoreInfo('injection', $injection);
             }
         }
 

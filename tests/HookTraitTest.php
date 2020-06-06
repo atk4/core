@@ -261,7 +261,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->result = 0;
 
         $m->onHook('inc', function ($obj) {
-            throw new \atk4\core\Exception(['stuff went wrong']);
+            throw new \atk4\core\Exception('stuff went wrong');
         });
         $ret = $m->hook('inc');
     }
