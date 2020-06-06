@@ -61,7 +61,10 @@ abstract class RendererAbstract
             return $this->output;
         } catch (\Throwable $e) {
             // fallback if Exception occur in renderer
-            return get_class($this->exception) . ' [' . $this->exception->getCode() . '] Error: ' . $this->_($this->exception->getMessage());
+            return '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
+                . get_class($this->exception)
+                . ($this->exception->getCode() !== 0 ? '(' . $this->exception->getCode() . ')' : '')
+                . ': ' . $this->_($this->exception->getMessage()) . ' !!';
         }
     }
 
