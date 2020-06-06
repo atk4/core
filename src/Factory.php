@@ -138,14 +138,7 @@ class Factory
         }
 
         if ($injection) {
-            if (isset($object->_DIContainerTrait)) {
-                $object->setDefaults($injection);
-            } else {
-                throw (new Exception('factory() could not inject properties into new object. It does not use \atk4\core\DIContainerTrait'))
-                    ->addMoreInfo('object', $object)
-                    ->addMoreInfo('seed', $seed)
-                    ->addMoreInfo('injection', $injection);
-            }
+            $this->_mergeSeeds($injection, $object);
         }
 
         return $object;
