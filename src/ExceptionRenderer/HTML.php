@@ -132,7 +132,7 @@ class HTML extends RendererAbstract
         $in_atk = true;
         $escape_frame = false;
         $short_trace = $this->getStackTrace(true);
-        $is_shortened = end($short_trace) && key($short_trace) !== 0;
+        $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
         foreach ($short_trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
@@ -142,14 +142,14 @@ class HTML extends RendererAbstract
             }
 
             $tokens = [];
-            $tokens['{INDEX}'] = $index + 1;
+            $tokens['{INDEX}'] = $index === 'self' ? '' : $index + 1;
             $tokens['{FILE_LINE}'] = $call['file_rel'] !== '' ? $call['file_rel'] . ':' . $call['line'] : '';
             $tokens['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
             $tokens['{CLASS}'] = $call['class'] !== false ? $call['class'] . '::' : '';
             $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];
-            $tokens['{FUNCTION_ARGS}'] = '()';
+            $tokens['{FUNCTION_ARGS}'] = $index === 'self' ? '' : '()';
 
             if ($escape_frame) {
                 $escape_frame = false;

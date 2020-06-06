@@ -84,7 +84,7 @@ TEXT;
         $in_atk = true;
         $escape_frame = false;
         $short_trace = $this->getStackTrace(true);
-        $is_shortened = end($short_trace) && key($short_trace) !== 0;
+        $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
         foreach ($short_trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
@@ -101,9 +101,12 @@ TEXT;
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];
-            $tokens['{FUNCTION_ARGS}'] = '()';
 
-            if ($escape_frame) {
+            if ($index === 'self') {
+                $tokens['{FUNCTION_ARGS}'] = '';
+            } elseif (!$escape_frame) {
+                $tokens['{FUNCTION_ARGS}'] = '()';
+            } else {
                 $escape_frame = false;
                 $args = [];
                 foreach ($call['args'] as $arg) {

@@ -121,19 +121,16 @@ abstract class RendererAbstract
      */
     protected function getStackTrace(bool $shorten): array
     {
-        $trace = $this->exception instanceof Exception
-            ? $this->exception->getMyTrace()
-            : $this->exception->getTrace();
-        $trace = array_combine(range(count($trace) - 1, 0, -1), $trace);
+        $custTraceFunc = function (\Throwable $ex) {
+            $trace = $ex instanceof Exception
+                ? $ex->getMyTrace()
+                : $ex->getTrace();
 
-        if ($shorten && $this->parent_exception !== null) {
-            $parent_trace = $this->parent_exception instanceof Exception
-                ? $this->parent_exception->getMyTrace()
-                : $this->parent_exception->getTrace();
-            $parent_trace = array_combine(range(count($parent_trace) - 1, 0, -1), $parent_trace);
-        } else {
-            $parent_trace = [];
-        }
+            return count($trace) > 0 ? array_combine(range(count($trace) - 1, 0, -1), $trace) : [];
+        };
+
+        $trace = $custTraceFunc($this->exception);
+        $parent_trace = $shorten && $this->parent_exception !== null ? $custTraceFunc($this->parent_exception) : [];
 
         $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
         $c = min(count($trace), count($parent_trace));
@@ -152,6 +149,12 @@ abstract class RendererAbstract
                 break;
             }
         }
+
+        // display location as another stack trace call
+        $trace = ['self' => [
+            'line' => $this->exception->getLine(),
+            'file' => $this->exception->getFile(),
+        ]] + $trace;
 
         return $trace;
     }
@@ -187,6 +190,6 @@ abstract class RendererAbstract
             array_shift($vendorRootArr);
         }
 
-        return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : './') . implode('/', $filePathArr);
+        return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : '') . implode('/', $filePathArr);
     }
 }
