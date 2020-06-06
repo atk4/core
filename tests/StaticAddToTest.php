@@ -14,6 +14,7 @@ use atk4\core\TrackableTrait;
 // @codingStandardsIgnoreStart
 class StdSAT extends \StdClass
 {
+    use DIContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
 }
 
@@ -30,6 +31,7 @@ class ContainerFactoryMockSAT
 class TrackableMockSAT
 {
     use TrackableTrait;
+    use DIContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
 }
 class DIMockSAT
@@ -70,11 +72,6 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $m = new ContainerMock();
         $this->assertTrue(isset($m->_containerTrait));
 
-        // create object using default factory
-        $this->assertSame(StdSAT::class, get_class(StdSAT::fromSeed()));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithCl(StdSAT2::class)));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeedWithCl([StdSAT2::class])));
-
         // add to return object
         $tr = StdSAT::addTo($m);
         $this->assertNotNull($tr);
@@ -93,19 +90,19 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSAT::addTo($m, $tr);
     }
 
-    public function testCheckInstanceOf()
+    public function testAssertInstanceOf()
     {
         // object is of the same class
-        StdSAT::checkInstanceOf(new StdSAT());
+        StdSAT::assertInstanceOf(new StdSAT());
         $o = new StdSAT();
-        $this->assertSame($o, StdSAT::checkInstanceOf($o));
+        $this->assertSame($o, StdSAT::assertInstanceOf($o));
 
         // object is a subtype
-        StdSAT::checkInstanceOf(new StdSAT2());
+        StdSAT::assertInstanceOf(new StdSAT2());
 
         // object is not a subtype
         $this->expectException(\atk4\core\Exception::class);
-        StdSAT2::checkInstanceOf(new StdSAT());
+        StdSAT2::assertInstanceOf(new StdSAT());
     }
 
     public function testWithClassName()
@@ -125,13 +122,13 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSAT::addToWithCl($m, StdSAT2::class);
         $this->assertSame(StdSAT2::class, get_class($tr));
 
-        // not the same or extended class - unsafe disabled
-        $this->expectException(\atk4\core\Exception::class);
-        $tr = StdSAT::addToWithCl($m, \stdClass::class);
-
         // not the same or extended class - unsafe enabled
         $tr = StdSAT::addToWithClUnsafe($m, \stdClass::class);
         $this->assertSame(\stdClass::class, get_class($tr));
+
+        // not the same or extended class - unsafe disabled
+        $this->expectException(\atk4\core\Exception::class);
+        $tr = StdSAT::addToWithCl($m, \stdClass::class);
     }
 
     public function testUniqueNames()
