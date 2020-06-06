@@ -100,7 +100,8 @@ trait DIContainerTrait
     public static function assertInstanceOf(object $object)// :static supported by PHP8+
     {
         if (!($object instanceof static)) {
-            throw (new Exception('Object is not an instance of ' . static::class))
+            throw (new Exception('Object is not an instance of static class'))
+                ->addMoreInfo('static_class', static::class)
                 ->addMoreInfo('object_class', get_class($object));
         }
 
@@ -125,7 +126,8 @@ trait DIContainerTrait
 
             $cl = $seed[0];
             if (!$unsafe && !is_a($cl, static::class, true)) {
-                throw (new Exception('Seed class is not a subtype of ' . static::class))
+                throw (new Exception('Seed class is not a subtype of static class'))
+                    ->addMoreInfo('static_class', static::class)
                     ->addMoreInfo('seed_class', $cl);
             }
         }
