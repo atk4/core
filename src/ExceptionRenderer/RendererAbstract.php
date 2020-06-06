@@ -172,6 +172,7 @@ abstract class RendererAbstract
     protected function getVendorDirectory(): string
     {
         $loaderFile = (new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName();
+
         return realpath(dirname($loaderFile, 2) . '/');
     }
 
