@@ -41,7 +41,15 @@ class Factory
             if (is_array($seed2)) {
                 $arguments = array_filter($seed2, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
                 $injection = array_diff_key($seed2, $arguments); // with string keys
-                if ($injection) {
+                unset($seed2);
+
+                if (count($arguments) > 0) {
+                    throw (new Exception('Constructor arguments can not be injected into existing object'))
+                        ->addMoreInfo('object', $seed)
+                        ->addMoreInfo('arguments', $arguments);
+                }
+
+                if (count($injection) > 0) {
                     if (isset($seed->_DIContainerTrait)) {
                         $seed->setDefaults($injection, $passively);
                     } else {
