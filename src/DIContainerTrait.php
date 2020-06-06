@@ -121,7 +121,8 @@ trait DIContainerTrait
             }
 
             if (!isset($seed[0])) {
-                throw (new Exception('Class name is not defined in seed'));
+                throw (new Exception('Class name is not specified by the seed'))
+                    ->addMoreInfo('seed', $seed);
             }
 
             $cl = $seed[0];

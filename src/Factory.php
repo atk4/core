@@ -26,7 +26,7 @@ class Factory
     protected function _mergeSeeds($seed, $seed2, ...$more_seeds)
     {
         // recursively merge extra seeds
-        if ($more_seeds) {
+        if (count($more_seeds) > 0) {
             $seed2 = $this->_mergeSeeds($seed2, ...$more_seeds);
         }
 
@@ -99,15 +99,13 @@ class Factory
 
     protected function _factory($seed, $defaults = []): object
     {
-        if ($defaults === null) {
+        if ($defaults === null) { // should be deprecated soon
             $defaults = [];
         }
 
-        if (!$seed) {
+        if ($seed === null) { // should be deprecated soon
             $seed = [];
-        }
-
-        if (!is_array($seed)) {
+        } elseif (!is_array($seed)) {
             $seed = [$seed];
         }
 
@@ -130,7 +128,7 @@ class Factory
 
         if (!is_object($object)) {
             if (!is_string($object)) {
-                throw (new Exception('Class name was not specified by the seed'))
+                throw (new Exception('Class name is not specified by the seed'))
                     ->addMoreInfo('seed', $seed);
             }
 
