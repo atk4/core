@@ -44,7 +44,7 @@ class Html extends RendererAbstract
 
         $text = '
             <div class="ui stacked segments">
-                <div class="ui inverted red segment fitted">Exception Parameters</div>
+                <div class="ui inverted red segment" style="padding-top: 5px; padding-bottom: 5px;">Exception Parameters</div>
                 {PARAMS}
             </div>
         ';
@@ -52,7 +52,7 @@ class Html extends RendererAbstract
         $tokens = [
             '{PARAMS}' => '',
         ];
-        $text_inner = '<div class="ui segment"><b>{KEY}:</b> {VAL}</div>';
+        $text_inner = '<div class="ui segment" style="padding-top: 5px; padding-bottom: 5px;"><b>{KEY}:</b> {VAL}</div>';
         foreach ($this->exception->getParams() as $key => $val) {
             $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
