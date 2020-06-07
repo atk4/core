@@ -136,7 +136,7 @@ HTML;
             $this->json = [
                 'success' => false,
                 'code' => $this->exception->getCode(),
-                'message' => 'Error during JSON renderer : ' . $this->exception->getMessage(),
+                'message' => 'Error during JSON renderer: ' . $this->exception->getMessage(),
                 // avoid translation
                 //'message'  => $this->_($this->exception->getMessage()),
                 'title' => get_class($this->exception),
