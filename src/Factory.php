@@ -42,6 +42,7 @@ class Factory
                 $arguments = array_filter($seed2, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
                 $injection = array_diff_key($seed2, $arguments); // with string keys
                 unset($seed2);
+                unset($arguments[0]); // the first argument specifies a class name
 
                 if (count($arguments) > 0) {
                     throw (new Exception('Constructor arguments can not be injected into existing object'))
@@ -143,7 +144,7 @@ class Factory
             $object = $this->createNewObject($object, $arguments);
         }
 
-        if ($injection) {
+        if (count($injection) > 0) {
             $this->_mergeSeeds($injection, $object);
         }
 
