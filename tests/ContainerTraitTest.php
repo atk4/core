@@ -131,7 +131,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
             use core\DIContainerTrait;
         }, ['name' => 'foo']);
         $this->assertTrue((bool) $m->hasElement('foo'));
-        $this->assertSame('foo', $m2->name);
+        $this->assertSame('foo', $m2->short_name);
     }
 
     public function testExceptionExists()
