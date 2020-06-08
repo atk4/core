@@ -173,7 +173,7 @@ abstract class RendererAbstract
     {
         $loaderFile = realpath((new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName());
         $coreDir = realpath(dirname(__DIR__, 2) . '/');
-        if (strpos($loaderFile, $coreDir . DIRECTORY_SEPARATOR) === 0) { // this repo is main project
+        if (strpos($loaderFile, $coreDir . \DIRECTORY_SEPARATOR) === 0) { // this repo is main project
             return realpath(dirname($loaderFile, 2) . '/');
         }
 
