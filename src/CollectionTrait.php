@@ -122,7 +122,9 @@ trait CollectionTrait
      */
     public function _tryGetFromCollection(string $name, string $collection): ?object
     {
-        return $this->{$collection}[$name] ?? null;
+        $data = $this->{$collection};
+
+        return $data[$name] ?? null;
     }
 
     /**
