@@ -147,7 +147,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             $m->addField('surname', [CustomFieldMock::class]);
 
             $c = clone $m;
-            $this->assertNull($c->tryGetField('name'));
+            $this->assertNotNull($c->tryGetField('name'));
             $this->assertSame(CustomFieldMock::class, get_class($c->tryGetField('surname')));
             $this->assertTrue($c->getField('surname')->var);
         } catch (core\Exception $e) {
