@@ -129,9 +129,9 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m = new ContainerMock();
         $m2 = $m->add(new class() extends TrackableMock {
             use core\DIContainerTrait;
-        }, ['name' => 'foo', 'test' => 'ok']);
+        }, ['name' => 'foo']);
         $this->assertTrue((bool) $m->hasElement('foo'));
-        $this->assertSame('ok', $m2->test);
+        $this->assertSame('foo', $m2->name);
     }
 
     public function testExceptionExists()
