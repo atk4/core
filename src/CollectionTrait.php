@@ -170,9 +170,11 @@ trait CollectionTrait
 
                     public function shorten(?object $app, string $desired): string
                     {
-                        $this->_appScopeTrait = !is_null($app);
+                        $this->_appScopeTrait = $app !== null;
+
                         try {
                             $this->app = $app;
+
                             return $this->_shorten($desired);
                         } finally {
                             $this->app = null; // important for GC
@@ -183,7 +185,6 @@ trait CollectionTrait
 
             return $factory->collectionTraitHelper;
         }, null, Factory::class)();
-
 
         return $collectionTraitHelper->shorten($this->_appScopeTrait ? $this->app : null, $desired);
     }
