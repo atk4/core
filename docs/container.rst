@@ -85,7 +85,7 @@ Example::
 
         public function tryGetField($name)
         {
-            return $this->_TryGetFromCollection($name, 'fields');
+            return $this->_tryGetFromCollection($name, 'fields');
         }
 
         public function getField($name)
