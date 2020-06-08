@@ -171,9 +171,13 @@ abstract class RendererAbstract
 
     protected function getVendorDirectory(): string
     {
-        $loaderFile = (new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName();
+        $loaderFile = realpath((new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName());
+        $coreDir = realpath(dirname(__DIR__, 2) . '/');
+        if (strpos($loaderFile, $coreDir . DIRECTORY_SEPARATOR) === 0) { // this repo is main project
+            return realpath(dirname($loaderFile, 2) . '/');
+        }
 
-        return realpath(dirname($loaderFile, 2) . '/');
+        return realpath(dirname(__DIR__, 4) . '/');
     }
 
     protected function makeRelativePath(string $path): string
