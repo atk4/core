@@ -163,29 +163,18 @@ trait CollectionTrait
      */
     protected function _shorten_ml(string $desired): string
     {
-        if (
-            isset($this->_appScopeTrait) &&
-            isset($this->app->max_name_length) &&
-            mb_strlen($desired) > $this->app->max_name_length
-        ) {
-            /*
-             * Basic rules: hash is 10 character long (8+2 for separator)
-             * We need at least 5 characters on the right side. Total must not exceed
-             * max_name_length. First chop will be max-10, then chop size will increase by
-             * max-15
-             */
-            $len = mb_strlen($desired);
-            $left = $len - ($len - 10) % ($this->app->max_name_length - 15) - 5;
-
-            $key = mb_substr($desired, 0, $left);
-            $rest = mb_substr($desired, $left);
-
-            if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
-            }
-            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
+        // ugly hack to deduplicate code
+        if (Factory::$collectionTraitSingleton === null) {
+            Factory::$collectionTraitSingleton = new class() {
+                use AppScopeTrait;
+                use ContainerTrait;
+            };
         }
 
-        return $desired;
+        Factory::$collectionTraitSingleton->app = $this->_appScopeTrait ? $this->app : null;
+        $res = Factory::$collectionTraitSingleton->_shorten($desired);
+        Factory::$collectionTraitSingleton->app = null; // important for GC
+
+        return $res;
     }
 }
