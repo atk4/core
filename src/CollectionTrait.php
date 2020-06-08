@@ -19,20 +19,16 @@ trait CollectionTrait
      * Use this method trait like this:.
      *
      * function addField($name, $definition) {
-     *     $field = $this->factory($definition, [], 'atk4\data\Field');
+     *     $field = Field::fromSeed($seed);
      *
      *     return $this->_addIntoCollection($name, $field, 'fields');
      * }
      *
-     * @param string $name       Name that can be used to reference object
-     * @param object $object     New element to add
-     * @param string $collection string String corresponding to the name of the property
+     * @param string $collection property name
      *
      * @throws Exception
-     *
-     * @return object
      */
-    public function _addIntoCollection(string $name, object $object, string $collection)
+    public function _addIntoCollection(string $name, object $object, string $collection): object
     {
         if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw (new Exception('Name of collection is specified incorrectly'))
@@ -84,6 +80,8 @@ trait CollectionTrait
     /**
      * Removes element from specified collection.
      *
+     * @param string $collection property name
+     *
      * @throws Exception
      */
     public function _removeFromCollection(string $name, string $collection): void
@@ -101,7 +99,7 @@ trait CollectionTrait
      * Call this on collections after cloning object. This will clone all collection
      * elements (which are objects).
      *
-     * @param string Collection to be cloned
+     * @param string $collection property name to be cloned
      */
     public function _cloneCollection(string $collection): void
     {
@@ -117,6 +115,8 @@ trait CollectionTrait
 
     /**
      * Returns object from collection or null if object is not found.
+     *
+     * @param string $collection property name
      */
     public function _tryGetFromCollection(string $name, string $collection): ?object
     {
@@ -136,6 +136,8 @@ trait CollectionTrait
     }
 
     /**
+     * @param string $collection property name
+     *
      * @throws Exception
      */
     public function _getFromCollection(string $name, string $collection): object
@@ -157,7 +159,7 @@ trait CollectionTrait
      *
      * @param string $desired desired name of new object
      *
-     * @return string shortened name of new object
+     * @return string shortened name
      */
     protected function _shorten_ml(string $desired): string
     {
