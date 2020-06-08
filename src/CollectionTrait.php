@@ -47,7 +47,7 @@ trait CollectionTrait
                 ->addMoreInfo('collection', $collection);
         }
 
-        if ($this->_hasInCollection($name, $collection) !== false) {
+        if ($this->_tryGetFromCollection($name, $collection) !== null) {
             throw (new Exception('Object with requested name already exist in collection'))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('collection', $collection);
@@ -88,7 +88,7 @@ trait CollectionTrait
      */
     public function _removeFromCollection(string $name, string $collection): void
     {
-        if ($this->_hasInCollection($name, $collection) === false) {
+        if ($this->_tryGetFromCollection($name, $collection) === null) {
             throw (new Exception('Element by this name is NOT in the collection, cannot remove'))
                 ->addMoreInfo('parent', $this)
                 ->addMoreInfo('collection', $collection)
@@ -140,8 +140,8 @@ trait CollectionTrait
      */
     public function _getFromCollection(string $name, string $collection): object
     {
-        $object = $this->_hasInCollection($name, $collection);
-        if ($object === false) {
+        $object = $this->_tryGetFromCollection($name, $collection);
+        if ($object === null) {
             throw (new Exception('Element is not found in collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name)
