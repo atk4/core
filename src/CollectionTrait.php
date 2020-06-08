@@ -161,17 +161,30 @@ trait CollectionTrait
     protected function _shorten_ml(string $desired): string
     {
         // ugly hack to deduplicate code
-        if (Factory::$collectionTraitSingleton === null) {
-            Factory::$collectionTraitSingleton = new class() {
-                use AppScopeTrait;
-                use ContainerTrait;
-            };
-        }
+        $collectionTraitHelper = \Closure::bind(function () {
+            $factory = Factory::getInstance();
+            if (!property_exists($factory, 'collectionTraitHelper')) {
+                $factory->collectionTraitHelper = new class() {
+                    use AppScopeTrait;
+                    use ContainerTrait;
 
-        Factory::$collectionTraitSingleton->app = $this->_appScopeTrait ? $this->app : null;
-        $res = Factory::$collectionTraitSingleton->_shorten($desired);
-        Factory::$collectionTraitSingleton->app = null; // important for GC
+                    public function shorten(?object $app, string $desired): string
+                    {
+                        $this->_appScopeTrait = !is_null($app);
+                        try {
+                            $this->app = $app;
+                            return $this->_shorten($desired);
+                        } finally {
+                            $this->app = null; // important for GC
+                        }
+                    }
+                };
+            }
 
-        return $res;
+            return $factory->collectionTraitHelper;
+        }, null, Factory::class)();
+
+
+        return $collectionTraitHelper->shorten($this->_appScopeTrait ? $this->app : null, $desired);
     }
 }
