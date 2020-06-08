@@ -116,13 +116,23 @@ trait CollectionTrait
     }
 
     /**
-     * Returns object from collection or false if object is not found.
+     * Returns object from collection or null if object is not found.
      *
-     * @return object|false
+     * @return object|null
+     */
+    public function _tryGetFromCollection(string $name, string $collection): ?object
+    {
+        return $this->{$collection}[$name] ?? null;
+    }
+
+    /**
+     * Use _tryGetFromCollection() instead and note it return null instead of false on non-match.
+     *
+     * @deprecated will be removed in 2021-jun
      */
     public function _hasInCollection(string $name, string $collection)
     {
-        return $this->{$collection}[$name] ?? false;
+        return $this->_tryGetFromCollection($name, $collection) ?? false;
     }
 
     /**
