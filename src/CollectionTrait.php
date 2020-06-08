@@ -19,78 +19,74 @@ trait CollectionTrait
      * Use this method trait like this:.
      *
      * function addField($name, $definition) {
-     *     $field = $this->factory($definition, [], 'atk4\data\Field');
+     *     $field = Field::fromSeed($seed);
      *
      *     return $this->_addIntoCollection($name, $field, 'fields');
      * }
      *
-     * @param string $name       Name that can be used to reference object
-     * @param object $object     New element to add
-     * @param string $collection string String corresponding to the name of the property
+     * @param string $collection property name
      *
      * @throws Exception
-     *
-     * @return object
      */
-    public function _addIntoCollection(string $name, object $object, string $collection)
+    public function _addIntoCollection(string $name, object $item, string $collection): object
     {
-        if (!$collection || !isset($this->{$collection}) || !is_array($this->{$collection})) {
-            throw (new Exception('Name of collection is specified incorrectly'))
-                ->addMoreInfo('parent', $this)
+        if (!isset($this->{$collection}) || !is_array($this->{$collection})) {
+            throw (new Exception('Collection does NOT exist'))
                 ->addMoreInfo('collection', $collection);
         }
 
-        if (!$name) {
-            throw (new Exception('Object must be given a name when adding into this'))
-                ->addMoreInfo('child', $object)
-                ->addMoreInfo('parent', $this)
-                ->addMoreInfo('collection', $collection);
+        if ($name === '') {
+            throw (new Exception('Empty name is not supported'))
+                ->addMoreInfo('collection', $collection)
+                ->addMoreInfo('name', $name);
         }
 
-        if ($this->_hasInCollection($name, $collection) !== false) {
-            throw (new Exception('Object with requested name already exist in collection'))
-                ->addMoreInfo('name', $name)
-                ->addMoreInfo('collection', $collection);
+        if ($this->_tryGetFromCollection($name, $collection) !== null) {
+            throw (new Exception('Element with the same name already exist in the collection'))
+                ->addMoreInfo('collection', $collection)
+                ->addMoreInfo('name', $name);
         }
-        $this->{$collection}[$name] = $object;
+        $this->{$collection}[$name] = $item;
 
         // Carry on reference to application if we have appScopeTraits set
-        if (isset($this->_appScopeTrait) && isset($object->_appScopeTrait)) {
-            $object->app = $this->app;
+        if (isset($this->_appScopeTrait) && isset($item->_appScopeTrait)) {
+            $item->app = $this->app;
         }
 
         // Calculate long "name" but only if both are trackables
-        if (isset($object->_trackableTrait)) {
-            $object->short_name = $name;
-            $object->owner = $this;
+        if (isset($item->_trackableTrait)) {
+            $item->short_name = $name;
+            $item->owner = $this;
             if (isset($this->_trackableTrait)) {
-                $object->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
+                $item->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
             }
         }
 
-        if (isset($object->_initializerTrait)) {
-            if (!$object->_initialized) {
-                $object->init();
+        if (isset($item->_initializerTrait)) {
+            if (!$item->_initialized) {
+                $item->init();
             }
-            if (!$object->_initialized) {
+            if (!$item->_initialized) {
                 throw (new Exception('You should call parent::init() when you override initializer'))
-                    ->addMoreInfo('object', $object);
+                    ->addMoreInfo('collection', $collection)
+                    ->addMoreInfo('object', $item);
             }
         }
 
-        return $object;
+        return $item;
     }
 
     /**
      * Removes element from specified collection.
      *
+     * @param string $collection property name
+     *
      * @throws Exception
      */
     public function _removeFromCollection(string $name, string $collection): void
     {
-        if ($this->_hasInCollection($name, $collection) === false) {
-            throw (new Exception('Element by this name is NOT in the collection, cannot remove'))
-                ->addMoreInfo('parent', $this)
+        if ($this->_tryGetFromCollection($name, $collection) === null) {
+            throw (new Exception('Element is NOT in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
@@ -101,79 +97,95 @@ trait CollectionTrait
      * Call this on collections after cloning object. This will clone all collection
      * elements (which are objects).
      *
-     * @param string Collection to be cloned
+     * @param string $collectionName property name to be cloned
      */
-    public function _cloneCollection(string $collection): void
+    public function _cloneCollection(string $collectionName): void
     {
-        $this->{$collection} = array_map(function ($obj) {
-            $obj = clone $obj;
-            if (isset($obj->owner)) {
-                $obj->owner = $this;
+        $this->{$collectionName} = array_map(function ($item) {
+            $item = clone $item;
+            if (isset($item->owner)) {
+                $item->owner = $this;
             }
 
-            return $obj;
-        }, $this->{$collection});
+            return $item;
+        }, $this->{$collectionName});
     }
 
     /**
-     * Returns object from collection or false if object is not found.
+     * Returns object from collection or null if object is not found.
      *
-     * @return object|false
+     * @param string $collection property name
+     */
+    public function _tryGetFromCollection(string $name, string $collection): ?object
+    {
+        $data = $this->{$collection};
+
+        return $data[$name] ?? null;
+    }
+
+    /**
+     * Use _tryGetFromCollection() instead and note it return null instead of false on non-match.
+     *
+     * @deprecated will be removed in 2021-jun
      */
     public function _hasInCollection(string $name, string $collection)
     {
-        return $this->{$collection}[$name] ?? false;
+        return $this->_tryGetFromCollection($name, $collection) ?? false;
     }
 
     /**
+     * @param string $collection property name
+     *
      * @throws Exception
      */
     public function _getFromCollection(string $name, string $collection): object
     {
-        $object = $this->_hasInCollection($name, $collection);
-        if ($object === false) {
-            throw (new Exception('Element is not found in collection'))
+        $item = $this->_tryGetFromCollection($name, $collection);
+        if ($item === null) {
+            throw (new Exception('Element is NOT in the collection'))
                 ->addMoreInfo('collection', $collection)
-                ->addMoreInfo('name', $name)
-                ->addMoreInfo('this', $this);
+                ->addMoreInfo('name', $name);
         }
 
-        return $object;
+        return $item;
     }
 
     /**
      * Method used internally for shortening object names
      * Identical implementation to ContainerTrait::_shorten.
      *
-     * @param string $desired desired name of new object
+     * @param string $desired desired name of the object
      *
-     * @return string shortened name of new object
+     * @return string shortened name
      */
     protected function _shorten_ml(string $desired): string
     {
-        if (
-            isset($this->_appScopeTrait) &&
-            isset($this->app->max_name_length) &&
-            mb_strlen($desired) > $this->app->max_name_length
-        ) {
-            /*
-             * Basic rules: hash is 10 character long (8+2 for separator)
-             * We need at least 5 characters on the right side. Total must not exceed
-             * max_name_length. First chop will be max-10, then chop size will increase by
-             * max-15
-             */
-            $len = mb_strlen($desired);
-            $left = $len - ($len - 10) % ($this->app->max_name_length - 15) - 5;
+        // ugly hack to deduplicate code
+        $collectionTraitHelper = \Closure::bind(function () {
+            $factory = Factory::getInstance();
+            if (!property_exists($factory, 'collectionTraitHelper')) {
+                $factory->collectionTraitHelper = new class() {
+                    use AppScopeTrait;
+                    use ContainerTrait;
 
-            $key = mb_substr($desired, 0, $left);
-            $rest = mb_substr($desired, $left);
+                    public function shorten(?object $app, string $desired): string
+                    {
+                        $this->_appScopeTrait = $app !== null;
 
-            if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
+                        try {
+                            $this->app = $app;
+
+                            return $this->_shorten($desired);
+                        } finally {
+                            $this->app = null; // important for GC
+                        }
+                    }
+                };
             }
-            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
-        }
 
-        return $desired;
+            return $factory->collectionTraitHelper;
+        }, null, Factory::class)();
+
+        return $collectionTraitHelper->shorten($this->_appScopeTrait ? $this->app : null, $desired);
     }
 }

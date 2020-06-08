@@ -88,4 +88,94 @@ trait DIContainerTrait
             ->addMoreInfo('property', $key)
             ->addMoreInfo('value', $value);
     }
+
+    /**
+     * Return the argument and assert it is instance of current class.
+     *
+     * The best, typehinting-friendly, way to annotate object type if it not defined
+     * at method header or strong typing in method header can not be used.
+     *
+     * @return static
+     */
+    public static function assertInstanceOf(object $object)// :static supported by PHP8+
+    {
+        if (!($object instanceof static)) {
+            throw (new Exception('Object is not an instance of static class'))
+                ->addMoreInfo('static_class', static::class)
+                ->addMoreInfo('object_class', get_class($object));
+        }
+
+        return $object;
+    }
+
+    private static function _fromSeedPrecheck($seed, bool $unsafe)// :self is too strict with unsafe behaviour
+    {
+        if (!is_object($seed)) {
+            if (!is_array($seed)) {
+                if (!is_string($seed)) { // allow string class name seed but prevent bad usage
+                    throw (new Exception('Seed must be an array, a string class name (deprecated) or an object'))
+                        ->addMoreInfo('seed_type', gettype($seed));
+                }
+
+                $seed = [$seed];
+            }
+
+            if (!isset($seed[0])) {
+                throw (new Exception('Class name is not specified by the seed'))
+                    ->addMoreInfo('seed', $seed);
+            }
+
+            $cl = $seed[0];
+            if (!$unsafe && !is_a($cl, static::class, true)) {
+                throw (new Exception('Seed class is not a subtype of static class'))
+                    ->addMoreInfo('static_class', static::class)
+                    ->addMoreInfo('seed_class', $cl);
+            }
+        }
+
+        return $seed;
+    }
+
+    /**
+     * Create new object from seed and assert it is instance of current class.
+     *
+     * The best, typehinting-friendly, way to create an object if it should not be
+     * immediately added to a parent (otherwise use addTo() method).
+     *
+     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     *
+     * @return static
+     */
+    public static function fromSeed($seed = [], $defaults = [])// :static supported by PHP8+
+    {
+        if (func_num_args() > 2) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
+        $seed = static::_fromSeedPrecheck($seed, false);
+        $object = Factory::factory($seed, $defaults);
+
+        static::assertInstanceOf($object);
+
+        return $object;
+    }
+
+    /**
+     * Same as fromSeed(), but the new object is not asserted to be an instance of this class.
+     *
+     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     *
+     * @return static
+     */
+    public static function fromSeedUnsafe($seed = [], $defaults = [])// :self is too strict with unsafe behaviour
+    {
+        if (func_num_args() > 2) { // prevent bad usage
+            throw new \Error('Too many method arguments');
+        }
+
+        $seed = static::_fromSeedPrecheck($seed, true);
+        $object = Factory::factory($seed, $defaults);
+
+        return $object;
+    }
 }

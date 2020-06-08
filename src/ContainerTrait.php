@@ -58,16 +58,13 @@ trait ContainerTrait
      */
     public function add($obj, $args = []): object
     {
-        if (isset($this->_factoryTrait)) {
-            // Factory allows us to pass string-type objects
+        if (is_array($args)) {
             $args1 = $args;
-            if (is_array($args1)) {
-                unset($args1['desired_name']);
-                unset($args1[0]);
-                $obj = $this->factory($obj, $args1);
-            } else {
-                $obj = $this->factory($obj);
-            }
+            unset($args1['desired_name']);
+            unset($args1[0]);
+            $obj = Factory::factory($obj, $args1);
+        } else {
+            $obj = Factory::factory($obj);
         }
         $obj = $this->_add_Container($obj, $args);
 

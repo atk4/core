@@ -70,7 +70,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $o = new SeedDITestMock();
         $this->assertSame(
             $o,
-            $this->mergeSeeds([null, 'a2', null], 'b1', ['c1', null, 'c3'], $o)
+            $this->mergeSeeds(['a1'], $o)
         );
 
         // is object is wrapped in array - we dont care
@@ -86,6 +86,12 @@ class SeedTest extends AtkPhpunit\TestCase
             $o,
             $this->mergeSeeds([null, 'a2', null], [null, null, 'c3'], [$o])[0]
         );
+
+        // but constructor arguments (except silently ignored class name)
+        // for already instanced object are not valid
+        $o = new SeedDITestMock();
+        $this->expectException(Exception::class);
+        $this->mergeSeeds(['a1', 'a2'], $o);
     }
 
     public function testMerge3()

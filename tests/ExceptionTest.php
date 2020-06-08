@@ -118,15 +118,17 @@ class ExceptionTest extends AtkPhpunit\TestCase
 
     public function testExceptionFallback(): void
     {
-        $m = new ExceptionTestThrowError('test');
+        $m = new ExceptionTestThrowError('test', 2);
+        $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
+            . ExceptionTestThrowError::class . '(2): test !!';
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
         $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());
         $this->assertSame(
             json_encode(
                 [
                     'success' => false,
-                    'code' => 0,
-                    'message' => 'Error during JSON renderer : test',
+                    'code' => 2,
+                    'message' => 'Error during JSON renderer: test',
                     'title' => ExceptionTestThrowError::class,
                     'class' => ExceptionTestThrowError::class,
                     'params' => [],

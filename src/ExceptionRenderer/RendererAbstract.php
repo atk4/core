@@ -61,7 +61,10 @@ abstract class RendererAbstract
             return $this->output;
         } catch (\Throwable $e) {
             // fallback if Exception occur in renderer
-            return get_class($this->exception) . ' [' . $this->exception->getCode() . '] Error: ' . $this->_($this->exception->getMessage());
+            return '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
+                . get_class($this->exception)
+                . ($this->exception->getCode() !== 0 ? '(' . $this->exception->getCode() . ')' : '')
+                . ': ' . $this->_($this->exception->getMessage()) . ' !!';
         }
     }
 
@@ -168,13 +171,18 @@ abstract class RendererAbstract
 
     protected function getVendorDirectory(): string
     {
+        $loaderFile = realpath((new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName());
+        $coreDir = realpath(dirname(__DIR__, 2) . '/');
+        if (strpos($loaderFile, $coreDir . \DIRECTORY_SEPARATOR) === 0) { // this repo is main project
+            return realpath(dirname($loaderFile, 2) . '/');
+        }
+
         return realpath(dirname(__DIR__, 4) . '/');
     }
 
     protected function makeRelativePath(string $path): string
     {
-        $pathReal = realpath($path);
-        if ($pathReal === false) {
+        if ($path === '' || ($pathReal = realpath($path)) === false) {
             throw new Exception('Path not found');
         }
 
