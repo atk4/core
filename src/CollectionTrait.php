@@ -117,8 +117,6 @@ trait CollectionTrait
 
     /**
      * Returns object from collection or null if object is not found.
-     *
-     * @return object|null
      */
     public function _tryGetFromCollection(string $name, string $collection): ?object
     {
