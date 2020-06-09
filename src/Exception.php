@@ -6,7 +6,6 @@ namespace atk4\core;
 
 use atk4\core\ExceptionRenderer\Console;
 use atk4\core\ExceptionRenderer\HTML;
-use atk4\core\ExceptionRenderer\HTMLText;
 use atk4\core\ExceptionRenderer\JSON;
 use atk4\core\ExceptionRenderer\RendererAbstract;
 use atk4\core\Translator\ITranslatorAdapter;
@@ -90,19 +89,11 @@ class Exception extends \Exception
     }
 
     /**
-     * Similar to getColorfulText() but will use raw HTML for outputting colors.
-     */
-    public function getHTMLText(): string
-    {
-        return (string) new HTMLText($this, $this->adapter);
-    }
-
-    /**
      * Return exception message using HTML block and Semantic UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $l = new \atk4\ui\App();
-     *   $l->initLayout('Centered');
+     *   $l->initLayout(\atk4\ui\Layout\Centered::class);
      *   $l->layout->template->setHTML('Content', $e->getHTML());
      *   $l->run();
      *   exit;

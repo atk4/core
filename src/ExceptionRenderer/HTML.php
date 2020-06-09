@@ -25,7 +25,7 @@ class HTML extends RendererAbstract
                 <i class="warning sign icon"></i>
                 <div class="content">
                     <div class="header">{TITLE}</div>
-                    {CLASS} {CODE}:
+                    {CLASS}{CODE}:
                     {MESSAGE}
                 </div>
             </div>
@@ -52,7 +52,7 @@ class HTML extends RendererAbstract
         $tokens = [
             '{PARAMS}' => '',
         ];
-        $text_inner = '<div class="ui segment"><b>{KEY}</b>:{VAL}</div>';
+        $text_inner = '<div class="ui segment"><b>{KEY}:</b> {VAL}</div>';
         foreach ($this->exception->getParams() as $key => $val) {
             $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);

@@ -13,10 +13,7 @@ use atk4\core\TrackableTrait;
  */
 class ExceptionTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test getColorfulText() and toString().
-     */
-    public function testColorfulText(): void
+    public function testBasic(): void
     {
         $m = (new Exception('TestIt'))
             ->addMoreInfo('a1', 111)
@@ -33,20 +30,14 @@ class ExceptionTest extends AtkPhpunit\TestCase
         // params
         $this->assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
 
+        // get HTML
+        $ret = $m->getHTML();
+        $this->assertMatchesRegularExpression('/TestIt/', $ret);
+        $this->assertMatchesRegularExpression('/PrevError/', $ret);
+        $this->assertMatchesRegularExpression('/333/', $ret);
+
         // get colorful text
         $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/TestIt/', $ret);
-        $this->assertMatchesRegularExpression('/PrevError/', $ret);
-        $this->assertMatchesRegularExpression('/333/', $ret);
-
-        // get console HTLM
-        $ret = $m->getHTMLText();
-        $this->assertMatchesRegularExpression('/TestIt/', $ret);
-        $this->assertMatchesRegularExpression('/PrevError/', $ret);
-        $this->assertMatchesRegularExpression('/333/', $ret);
-
-        // get colorful text
-        $ret = $m->getHTML();
         $this->assertMatchesRegularExpression('/TestIt/', $ret);
         $this->assertMatchesRegularExpression('/PrevError/', $ret);
         $this->assertMatchesRegularExpression('/333/', $ret);
@@ -80,15 +71,11 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new Exception('atk4 exception', 0, $m);
         $m->setMessage('bumbum');
 
-        $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/Classic/', $ret);
-        $this->assertMatchesRegularExpression('/bumbum/', $ret);
-
         $ret = $m->getHTML();
         $this->assertMatchesRegularExpression('/Classic/', $ret);
         $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
-        $ret = $m->getHTMLText();
+        $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/Classic/', $ret);
         $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
@@ -102,18 +89,12 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new Exception('Exception with solution');
         $m->addSolution('One Solution');
 
-        $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/One Solution/', $ret);
-
-        // get colorful text
         $ret = $m->getHTML();
         $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
-        // get colorful text
-        $ret = $m->getHTMLText();
+        $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
-        // get colorful text
         $ret = $m->getJSON();
         $this->assertMatchesRegularExpression('/One Solution/', $ret);
     }
@@ -141,7 +122,6 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionTestThrowError::class . '(2): test !!';
         $this->assertSame($expectedFallbackText, $m->getHTML());
-        $this->assertSame($expectedFallbackText, $m->getHTMLText());
         $this->assertSame($expectedFallbackText, $m->getColorfulText());
         $this->assertSame(
             json_encode(
