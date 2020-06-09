@@ -121,8 +121,8 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new ExceptionTestThrowError('test', 2);
         $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionTestThrowError::class . '(2): test !!';
-        $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getHTML());
-        $this->assertSame(ExceptionTestThrowError::class . ' [0] Error: test', $m->getColorfulText());
+        $this->assertSame($expectedFallbackText, $m->getHTML());
+        $this->assertSame($expectedFallbackText, $m->getColorfulText());
         $this->assertSame(
             json_encode(
                 [
