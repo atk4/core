@@ -104,8 +104,6 @@ class Generic implements ITranslatorAdapter
 
     /**
      * Load definitions from file.
-     *
-     * @throws \atk4\core\Exception
      */
     public function addDefinitionFromFile(string $file, string $locale, string $domain, string $format): void
     {

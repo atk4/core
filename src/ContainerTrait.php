@@ -53,8 +53,6 @@ trait ContainerTrait
      *
      * @param mixed        $obj
      * @param array|string $args
-     *
-     * @throws Exception
      */
     public function add($obj, $args = []): object
     {
@@ -87,8 +85,6 @@ trait ContainerTrait
      *
      * @param object       $element
      * @param array|string $args
-     *
-     * @throws Exception
      */
     protected function _add_Container($element, $args = []): object
     {
@@ -162,8 +158,6 @@ trait ContainerTrait
      * Remove child element if it exists.
      *
      * @param string|TrackableTrait $short_name short name of the element
-     *
-     * @throws Exception
      */
     public function removeElement($short_name)
     {
@@ -222,8 +216,6 @@ trait ContainerTrait
      * Exception if not found.
      *
      * @param string $short_name Short name of the child element
-     *
-     * @throws Exception
      */
     public function getElement(string $short_name): object
     {

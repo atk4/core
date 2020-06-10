@@ -41,8 +41,6 @@ trait ConfigTrait
      * @param string|array $files  One or more filenames
      * @param string       $format Optional format for config files
      *
-     * @throws Exception
-     *
      * @return $this
      */
     public function readConfig($files = ['config.php'], string $format = 'php')

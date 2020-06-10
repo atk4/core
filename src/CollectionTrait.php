@@ -25,8 +25,6 @@ trait CollectionTrait
      * }
      *
      * @param string $collection property name
-     *
-     * @throws Exception
      */
     public function _addIntoCollection(string $name, object $item, string $collection): object
     {
@@ -80,8 +78,6 @@ trait CollectionTrait
      * Removes element from specified collection.
      *
      * @param string $collection property name
-     *
-     * @throws Exception
      */
     public function _removeFromCollection(string $name, string $collection): void
     {
@@ -135,8 +131,6 @@ trait CollectionTrait
 
     /**
      * @param string $collection property name
-     *
-     * @throws Exception
      */
     public function _getFromCollection(string $name, string $collection): object
     {

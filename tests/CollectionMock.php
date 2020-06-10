@@ -14,8 +14,6 @@ class CollectionMock
     protected $fields = [];
 
     /**
-     * @throws core\Exception
-     *
      * @return mixed|object
      */
     public function addField($name, $seed = null)
@@ -33,8 +31,6 @@ class CollectionMock
     }
 
     /**
-     * @throws core\Exception
-     *
      * @return mixed
      */
     public function getField($name)
