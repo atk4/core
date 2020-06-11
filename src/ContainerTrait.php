@@ -237,16 +237,12 @@ trait ContainerTrait
     }
 
     /**
-     * Find child element. Use in condition.
-     *
      * @param string $short_name Short name of the child element
      *
      * @return object|bool
      */
-    public function hasElement($short_name)
+    public function hasElement($short_name): bool
     {
-        return isset($this->elements[$short_name])
-            ? $this->elements[$short_name]
-            : false;
+        return isset($this->elements[$short_name]);
     }
 }

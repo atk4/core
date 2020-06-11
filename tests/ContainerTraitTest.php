@@ -41,9 +41,9 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m->add(new TrackableMock(), '123');
         $m->add(new TrackableMock(), 'false');
 
-        $this->assertTrue((bool) $m->hasElement('foo bar'));
-        $this->assertTrue((bool) $m->hasElement('123'));
-        $this->assertTrue((bool) $m->hasElement('false'));
+        $this->assertTrue($m->hasElement('foo bar'));
+        $this->assertTrue($m->hasElement('123'));
+        $this->assertTrue($m->hasElement('false'));
         $this->assertSame(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
@@ -130,7 +130,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m2 = $m->add(new class() extends TrackableMock {
             use core\DIContainerTrait;
         }, ['name' => 'foo']);
-        $this->assertTrue((bool) $m->hasElement('foo'));
+        $this->assertTrue($m->hasElement('foo'));
         $this->assertSame('foo', $m2->short_name);
     }
 
@@ -148,7 +148,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m->add(new TrackableMock(), ['desired_name' => 'foo']);
         $m->add(new TrackableMock(), ['desired_name' => 'foo']);
 
-        $this->assertNotEmpty($m->hasElement('foo'));
+        $this->assertTrue($m->hasElement('foo'));
     }
 
     public function testExceptionShortName()
