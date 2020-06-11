@@ -41,7 +41,7 @@ trait CollectionTrait
                 ->addMoreInfo('name', $name);
         }
 
-        if ($this->_tryGetFromCollection($name, $collection) !== null) {
+        if ($this->_hasInCollection($name, $collection)) {
             throw (new Exception('Element with the same name already exist in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
@@ -85,7 +85,7 @@ trait CollectionTrait
      */
     public function _removeFromCollection(string $name, string $collection): void
     {
-        if ($this->_tryGetFromCollection($name, $collection) === null) {
+        if (!$this->_hasInCollection($name, $collection)) {
             throw (new Exception('Element is NOT in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
@@ -112,25 +112,15 @@ trait CollectionTrait
     }
 
     /**
-     * Returns object from collection or null if object is not found.
+     * Returns true if and only if collection exists and object with given name is presented in it.
      *
      * @param string $collection property name
      */
-    public function _tryGetFromCollection(string $name, string $collection): ?object
+    public function _hasInCollection(string $name, string $collection): bool
     {
         $data = $this->{$collection};
 
-        return $data[$name] ?? null;
-    }
-
-    /**
-     * Use _tryGetFromCollection() instead and note it return null instead of false on non-match.
-     *
-     * @deprecated will be removed in 2021-jun
-     */
-    public function _hasInCollection(string $name, string $collection)
-    {
-        return $this->_tryGetFromCollection($name, $collection) ?? false;
+        return isset($data[$name]);
     }
 
     /**
@@ -140,14 +130,13 @@ trait CollectionTrait
      */
     public function _getFromCollection(string $name, string $collection): object
     {
-        $item = $this->_tryGetFromCollection($name, $collection);
-        if ($item === null) {
+        if ($this->_hasInCollection($name, $collection)) {
             throw (new Exception('Element is NOT in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
 
-        return $item;
+        return $this->{$collection}[$name];
     }
 
     /**

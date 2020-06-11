@@ -23,15 +23,15 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             $m = new CollectionMock();
             $m->addField('name');
 
-            $this->assertNotNull($m->tryGetField('name'));
+            $this->assertTrue($m->hasField('name'));
 
             $m->addField('surname', [CustomFieldMock::class]);
 
-            $this->assertSame(CustomFieldMock::class, get_class($m->tryGetField('surname')));
+            $this->assertSame(CustomFieldMock::class, get_class($m->getField('surname')));
             $this->assertTrue($m->getField('surname')->var);
 
             $m->removeField('name');
-            $this->assertNull($m->tryGetField('name'));
+            $this->assertFalse($m->hasField('name'));
         } catch (core\Exception $e) {
             echo $e->getColorfulText();
 
@@ -147,8 +147,8 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             $m->addField('surname', [CustomFieldMock::class]);
 
             $c = clone $m;
-            $this->assertNotNull($c->tryGetField('name'));
-            $this->assertSame(CustomFieldMock::class, get_class($c->tryGetField('surname')));
+            $this->assertTrue($c->hasField('name'));
+            $this->assertSame(CustomFieldMock::class, get_class($c->getField('surname')));
             $this->assertTrue($c->getField('surname')->var);
         } catch (core\Exception $e) {
             echo $e->getColorfulText();
