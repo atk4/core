@@ -118,8 +118,6 @@ trait HookTrait
      * @param string $spot Hook identifier
      * @param array  $args Additional arguments to callables
      *
-     * @throws Exception
-     *
      * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)

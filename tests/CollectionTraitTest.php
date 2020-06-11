@@ -14,8 +14,6 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
 {
     /**
      * Test constructor.
-     *
-     * @throws core\Exception
      */
     public function testBasic()
     {
@@ -41,8 +39,6 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
 
     /**
      * Test Trackable and AppScope.
-     *
-     * @throws core\Exception
      */
     public function testBasicWithApp()
     {

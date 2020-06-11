@@ -38,9 +38,7 @@ class Translator
     }
 
     /**
-     * Set property like Depedency injection.
-     *
-     * @throws Exception
+     * Set property like dependency injection.
      */
     public function setDefaults(array $properties, bool $passively = false): void
     {
@@ -92,8 +90,6 @@ class Translator
      * No serialize.
      *
      * @codeCoverageIgnore
-     *
-     * @throws Exception
      */
     public function __wakeup(): void
     {
