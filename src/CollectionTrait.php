@@ -130,7 +130,7 @@ trait CollectionTrait
      */
     public function _getFromCollection(string $name, string $collection): object
     {
-        if ($this->_hasInCollection($name, $collection)) {
+        if (!$this->_hasInCollection($name, $collection)) {
             throw (new Exception('Element is NOT in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
