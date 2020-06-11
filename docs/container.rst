@@ -83,9 +83,9 @@ Example::
             return $this->_addIntoCollection($name, $field, 'fields');
         }
 
-        public function tryGetField($name)
+        public function hasField($name): bool
         {
-            return $this->_tryGetFromCollection($name, 'fields');
+            return $this->_hasInCollection($name, 'fields');
         }
 
         public function getField($name)
@@ -245,8 +245,8 @@ Methods
 
 .. php:method:: hasElement($short_name)
 
-    Given a short-name of the element, will return the object. If object with
-    such short_name does not exist, will return false instead.
+    Given a short-name of the element, will return true if object with
+    such short_name exists, otherwise false.
 
 .. php:method:: _unique_element
 

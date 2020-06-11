@@ -25,9 +25,9 @@ class CollectionMock
         return $this->_addIntoCollection($name, $field, 'fields');
     }
 
-    public function tryGetField($name)
+    public function hasField($name): bool
     {
-        return $this->_tryGetFromCollection($name, 'fields');
+        return $this->_hasInCollection($name, 'fields');
     }
 
     /**

@@ -142,9 +142,9 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         TrackableMockSAT::addTo($m, [], ['123']);
         TrackableMockSAT::addTo($m, [], ['false']);
 
-        $this->assertTrue((bool) $m->hasElement('foo bar'));
-        $this->assertTrue((bool) $m->hasElement('123'));
-        $this->assertTrue((bool) $m->hasElement('false'));
+        $this->assertTrue($m->hasElement('foo bar'));
+        $this->assertTrue($m->hasElement('123'));
+        $this->assertTrue($m->hasElement('false'));
         $this->assertSame(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
