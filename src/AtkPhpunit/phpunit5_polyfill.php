@@ -7,6 +7,11 @@ declare(strict_types=1);
  * - map commonly used classes to equivalent phpunit 6.0 namespaced names.
  */
 
+namespace atk4\core\AtkPhpunit
+{
+    // prevent class rename by CS fixer
+}
+
 namespace PHPUnit\Runner
 {
     class Version extends \PHPUnit_Runner_Version
