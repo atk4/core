@@ -78,11 +78,6 @@ trait DIContainerTrait
      */
     protected function setMissingProperty($key, $value)
     {
-        // ignore numeric properties by default
-        if (is_numeric($key)) {
-            return $this;
-        }
-
         throw (new Exception('Property for specified object is not defined'))
             ->addMoreInfo('object', $this)
             ->addMoreInfo('property', $key)
