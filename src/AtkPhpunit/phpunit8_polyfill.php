@@ -7,11 +7,6 @@ declare(strict_types=1);
  * - include missing but equivalent classes in phpunit 9.0.
  */
 
-namespace atk4\core\AtkPhpunit
-{
-    // prevent class rename by StyleCI
-}
-
 namespace PHPUnit\TextUI
 {
     class DefaultResultPrinter extends ResultPrinter
