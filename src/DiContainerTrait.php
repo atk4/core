@@ -47,7 +47,9 @@ trait DiContainerTrait
     {
         foreach ($properties as $key => $val) {
             if (is_int($key)) { // @phpstan-ignore-line
-                $key = (string) $key; // @phpstan-ignore-line
+                $this->setMissingProperty((string) $key, $val); // @phpstan-ignore-line
+
+                continue;
             }
 
             $getterName = 'get' . ucfirst($key);
