@@ -45,21 +45,29 @@ trait DiContainerTrait
      */
     public function setDefaults(array $properties, bool $passively = false)
     {
-        foreach ($properties as $k => $v) {
-            if (is_int($k)) { // @phpstan-ignore-line
-                $k = (string) $k; // @phpstan-ignore-line
+        foreach ($properties as $key => $val) {
+            if (is_int($key)) { // @phpstan-ignore-line
+                $key = (string) $key; // @phpstan-ignore-line
             }
 
-            if (property_exists($this, $k)) {
-                if ($passively && isset($this->{$k}) && $this->{$k} !== null) {
+            $getterName = 'get' . ucfirst($key);
+            $setterName = 'set' . ucfirst($key);
+            $setterExists = method_exists($this, $setterName);
+
+            if ($setterExists || property_exists($this, $key)) {
+                if ($passively && ($setterExists ? $this->{$getterName}() : (isset($this->{$k}) && $this->{$k} !== null)) {
                     continue;
                 }
 
-                if ($v !== null) {
-                    $this->{$k} = $v;
+                if ($val !== null) {
+                    if ($setterExists) {
+                        $this->{$setterName}($val);
+                    } else {
+                        $this->{$key} = $val;
+                    }
                 }
             } else {
-                $this->setMissingProperty($k, $v);
+                $this->setMissingProperty($key, $val);
             }
         }
 
