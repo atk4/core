@@ -153,13 +153,11 @@ trait HookTrait
     }
 
     /**
-     * When called from inside a hook callable, will stop execution of other
+     * When called from inside a hook callable, it will stop execution of other
      * callables on the same hook. The passed argument will be returned by the
      * hook method.
      *
      * @param mixed $return What would hook() return?
-     *
-     * @throws HookBreaker
      */
     public function breakHook($return): void
     {
