@@ -54,7 +54,7 @@ trait DiContainerTrait
 
             $getterName = 'get' . ucfirst($key);
             $setterName = 'set' . ucfirst($key);
-            $setterExists = method_exists($this, $setterName);
+            $setterExists = method_exists($this, $setterName) && $setterName !== 'setDefaults';
 
             if ($setterExists || property_exists($this, $key)) {
                 if ($passively && ($setterExists ? $this->{$getterName}() : (isset($this->{$k}) && $this->{$k} !== null)) {
