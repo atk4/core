@@ -251,20 +251,6 @@ compared to standard PHP exceptions:
  - Visualize in ASCII or HTML
  - Better means of localization
 
-On top of that, there is :php:trait:`QuickExceptionTrait` which will add a
-method for your class emitting new ready-to-throw exception::
-
-    throw $object->exception(['Incorrect foo value', 'foo'=>$bar]);
-
-This takes care of choosing the right class for exception, adding useful
-context information and more.
-
-.. toctree::
-    :maxdepth: 3
-
-    exception
-    quickexception
-
 Others
 ======
 
