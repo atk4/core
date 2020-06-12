@@ -43,7 +43,7 @@ trait DIContainerTrait
      * Call from __construct() to initialize the properties allowing
      * developer to pass Dependency Injector Container.
      *
-     * @param bool $passively If true, existing non-null argument values will be kept
+     * @param bool $passively If true, existing non-null values will be kept
      *
      * @return $this
      */
@@ -67,12 +67,8 @@ trait DIContainerTrait
     }
 
     /**
-     * Sets object property.
-     * Throws exception.
-     *
      * @param mixed $key
      * @param mixed $value
-     * @param bool  $strict
      *
      * @return $this
      */
