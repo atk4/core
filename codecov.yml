@@ -3,15 +3,12 @@ ignore:
   - examples
   - tests
   - tools
+comment: false
 coverage:
-  precision: 2
-  round: down
-  range: "95...100"
   status:
     project:
       default:
-        threshold: 1%
-        target: 100
-        target: 95
-    patch: yes
-    changes: no
+        target: auto
+        threshold: 1.0
+    patch: false
+    changes: false
