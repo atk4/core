@@ -1,8 +1,6 @@
 ignore:
   - docs
   - examples
-  - tests
-  - tools
 comment: false
 coverage:
   status:
