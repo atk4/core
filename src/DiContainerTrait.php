@@ -50,13 +50,21 @@ trait DiContainerTrait
                 $k = (string) $k; // @phpstan-ignore-line
             }
 
-            if (property_exists($this, $k)) {
-                if ($passively && isset($this->{$k}) && $this->{$k} !== null) {
+            $getterName = 'get' . ucfirst($k);
+            $setterName = 'set' . ucfirst($k);
+            $setterExists = method_exists($this, $setterName);
+
+            if ($setterExists || property_exists($this, $k)) {
+                if ($passively && ($setterExists ? $this->{$getterName}() : (isset($this->{$k}) && $this->{$k} !== null))) {
                     continue;
                 }
 
                 if ($v !== null) {
-                    $this->{$k} = $v;
+                    if ($setterExists) {
+                        $this->{$setterName}($v);
+                    } else {
+                        $this->{$k} = $v;
+                    }
                 }
             } else {
                 $this->setMissingProperty($k, $v);
