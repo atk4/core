@@ -15,13 +15,6 @@ namespace Atk4\Core;
 trait AppScopeTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_appScopeTrait = true;
-
-    /**
      * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
      */
     private $app;

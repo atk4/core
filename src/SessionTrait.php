@@ -7,13 +7,6 @@ namespace Atk4\Core;
 trait SessionTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_sessionTrait = true;
-
-    /**
      * Session container key.
      *
      * @var string

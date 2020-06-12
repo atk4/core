@@ -8,13 +8,6 @@ use Psr\Log\LogLevel;
 
 trait DebugTrait
 {
-    /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_debugTrait = true;
-
     /** @var bool Is debug enabled? */
     public $debug = false;
 

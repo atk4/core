@@ -17,13 +17,6 @@ namespace Atk4\Core;
 trait ConfigTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_configTrait = true;
-
-    /**
      * This property stores config values. Use getConfig() method to access its values.
      *
      * @var array

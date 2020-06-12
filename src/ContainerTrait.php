@@ -11,13 +11,6 @@ namespace Atk4\Core;
 trait ContainerTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_containerTrait = true;
-
-    /**
      * short_name => object hash of children objects. If the child is not
      * trackable, then object will be set to "true" (to avoid extra reference).
      *

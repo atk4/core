@@ -12,13 +12,6 @@ use Atk4\Core\Translator\Translator;
 trait TranslatableTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_translatableTrait = true;
-
-    /**
      * Translates the given message.
      *
      * @param string      $message    The message to be translated
