@@ -3,12 +3,9 @@
 **Collection of PHP Traits for designing object-oriented frameworks.**
 
 ![Build](https://github.com/atk4/core/workflows/Unit%20Testing/badge.svg)
-[![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
-[![StyleCI](https://styleci.io/repos/57242416/shield)](https://styleci.io/repos/57242416)
 [![CodeCov](https://codecov.io/gh/atk4/core/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/core)
-[![Test Coverage](https://codeclimate.com/github/atk4/core/badges/coverage.svg)](https://codeclimate.com/github/atk4/core/coverage)
-[![GitHub release](https://img.shields.io/github/release/atk4/core.svg?maxAge=2592000)](CHANGELOG.md)
-
+[![GitHub release](https://img.shields.io/github/release/atk4/core.svg)](CHANGELOG.md)
+[![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
 
 
 Agile Core was created for [Agile Data](https://github.com/atk4/data) and [Agile UI](https://github.com/atk4/ui), but can be used in any other framework too. You will mostly find PHP Traits here, that add functionality into your objects such as:
@@ -28,8 +25,8 @@ http://agile-core.readthedocs.io/
 
 ## Community and Support
 
-[![Gitter](https://img.shields.io/gitter/room/atk4/data.svg?maxAge=2592000)](https://gitter.im/atk4/dataset?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Stack Overlfow Community](https://img.shields.io/stackexchange/stackoverflow/t/atk4.svg?maxAge=2592000)](http://stackoverflow.com/questions/ask?tags=atk4)
+[![Gitter](https://img.shields.io/gitter/room/atk4/data.svg)](https://gitter.im/atk4/dataset?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Stack Overlfow Community](https://img.shields.io/stackexchange/stackoverflow/t/atk4.svg)](http://stackoverflow.com/questions/ask?tags=atk4)
 [![Discord User forum](https://img.shields.io/badge/discord-User_Forum-green.svg)](https://forum.agiletoolkit.org/c/44)
 
 ##  Install from Composer
