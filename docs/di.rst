@@ -63,7 +63,7 @@ How to use DIContainerTrait
 
 .. php:trait: DIContainerTrait
 
-.. php:method: setDefaults($array)
+.. php:method: setDefaults($properties, $passively = false)
 
 .. php:method: setMissingProperty($propertyName, $value)
 
