@@ -83,7 +83,7 @@ HTML;
         foreach ($trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
-            if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
+            if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
                 $escape_frame = true;
                 $in_atk = false;
             }
