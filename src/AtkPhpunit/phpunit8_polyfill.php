@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace atk4\core\AtkPhpunit
 {
-    // prevent class rename by StyleCI
+    // prevent class rename by CS fixer
 }
 
 namespace PHPUnit\TextUI
