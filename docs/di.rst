@@ -63,9 +63,9 @@ How to use DIContainerTrait
 
 .. php:trait: DIContainerTrait
 
-.. php:method: setDefaults($array, $strict = false)
+.. php:method: setDefaults($properties, $passively = false)
 
-.. php:method: setMissingProperty($array, $strict = false)
+.. php:method: setMissingProperty($propertyName, $value)
 
 Calling this method will set object's properties. If any specified property
 is undefined then it will be skipped. Here is how you should use trait::
@@ -95,11 +95,11 @@ This is done by overriding setMissingProperty method::
             $this->setDefaults($defaults, true);
         }
 
-        function setMissingProperty($key, $value, $strict = false) {
+        function setMissingProperty($key, $value) {
             // do something with $key / $value
 
             // will either cause exception or will ignorance
-            $this->_setMissingProperty($key, $value, $strict);
+            $this->_setMissingProperty($key, $value);
         }
     }
 

@@ -43,14 +43,14 @@ trait DIContainerTrait
      * Call from __construct() to initialize the properties allowing
      * developer to pass Dependency Injector Container.
      *
-     * @param bool $passively If true, existing non-null argument values will be kept
+     * @param bool $passively If true, existing non-null values will be kept
      *
      * @return $this
      */
     public function setDefaults(array $properties, bool $passively = false)
     {
         foreach ($properties as $key => $val) {
-            if (!is_numeric($key) && property_exists($this, $key)) {
+            if (property_exists($this, $key)) {
                 if ($passively && $this->{$key} !== null) {
                     continue;
                 }
@@ -67,25 +67,13 @@ trait DIContainerTrait
     }
 
     /**
-     * Sets object property.
-     * Throws exception.
-     *
-     * @param mixed $key
      * @param mixed $value
-     * @param bool  $strict
-     *
-     * @return $this
      */
-    protected function setMissingProperty($key, $value)
+    protected function setMissingProperty(string $propertyName, $value): void
     {
-        // ignore numeric properties by default
-        if (is_numeric($key)) {
-            return $this;
-        }
-
         throw (new Exception('Property for specified object is not defined'))
             ->addMoreInfo('object', $this)
-            ->addMoreInfo('property', $key)
+            ->addMoreInfo('property', $propertyName)
             ->addMoreInfo('value', $value);
     }
 

@@ -24,30 +24,20 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
         StdSAT2::fromSeed([StdSAT::class]);
     }
 
-    /**
-     * Ignore numeric property names (array keys).
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testException1()
+    public function testNoPropExNumeric()
     {
+        $this->expectException(\Error::class);
         $m = new FactoryDIMock2();
         $m->setDefaults([5 => 'qwerty']);
     }
 
-    /**
-     * Do not allow non existant property names (array keys).
-     */
-    public function testException2()
+    public function testNoPropExStandard()
     {
         $this->expectException(Exception::class);
         $m = new FactoryDIMock2();
         $m->setDefaults(['not_exist' => 'qwerty']);
     }
 
-    /**
-     * Test properties.
-     */
     public function testProperties()
     {
         $m = new FactoryDIMock2();
@@ -60,9 +50,6 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
     }
 
-    /**
-     * Test properties.
-     */
     public function testPropertiesPassively()
     {
         $m = new FactoryDIMock2();

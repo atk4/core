@@ -101,7 +101,7 @@ class Factory
         return $res;
     }
 
-    protected function createNewObject(string $className, array $ctorArgs): object
+    protected function _newObject(string $className, array $ctorArgs): object
     {
         return new $className(...$ctorArgs);
     }
@@ -141,7 +141,7 @@ class Factory
                     ->addMoreInfo('seed', $seed);
             }
 
-            $object = $this->createNewObject($object, $arguments);
+            $object = $this->_newObject($object, $arguments);
         }
 
         if (count($injection) > 0) {

@@ -82,13 +82,13 @@ TEXT;
 TEXT;
 
         $in_atk = true;
-        $escape_frame = false;
         $short_trace = $this->getStackTrace(true);
         $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
         foreach ($short_trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
-            if ($in_atk && !preg_match('/atk4\/.*\/src\//', $call['file'])) {
+            $escape_frame = false;
+            if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
                 $escape_frame = true;
                 $in_atk = false;
             }
@@ -104,16 +104,16 @@ TEXT;
 
             if ($index === 'self') {
                 $tokens['{FUNCTION_ARGS}'] = '';
-            } elseif (!$escape_frame) {
+            } elseif (count($call['args']) === 0) {
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
-                $escape_frame = false;
-                $args = [];
-                foreach ($call['args'] as $arg) {
-                    $args[] = static::toSafeString($arg);
+                if ($escape_frame) {
+                    $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . PHP_EOL . str_repeat(' ', 40) . implode(',' . PHP_EOL . str_repeat(' ', 40), array_map(function ($arg) {
+                        return static::toSafeString($arg);
+                    }, $call['args'])) . ')';
+                } else {
+                    $tokens['{FUNCTION_ARGS}'] = '(...)';
                 }
-
-                $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . PHP_EOL . str_repeat(' ', 40) . implode(',' . PHP_EOL . str_repeat(' ', 40), $args) . ')';
             }
 
             $this->output .= $this->replaceTokens($tokens, $text);
