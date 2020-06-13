@@ -78,25 +78,20 @@ HTML;
     protected function processStackTraceInternal(): void
     {
         $in_atk = true;
-        $escape_frame = false;
         $trace = $this->getStackTrace(false);
         foreach ($trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
+            $escape_frame = false;
             if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
                 $escape_frame = true;
                 $in_atk = false;
             }
 
             if ($escape_frame) {
-                $escape_frame = false;
-
-                $args = [];
-                foreach ($call['args'] as $arg) {
-                    $args[] = static::toSafeString($arg);
-                }
-
-                $call['args'] = $args;
+                $call['args'] = array_map(function ($arg) {
+                    return static::toSafeString($arg);
+                }, $call['args']);
             }
 
             $this->json['stack'][] = $call;

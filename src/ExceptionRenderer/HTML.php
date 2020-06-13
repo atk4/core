@@ -130,12 +130,12 @@ class HTML extends RendererAbstract
         ';
 
         $in_atk = true;
-        $escape_frame = false;
         $short_trace = $this->getStackTrace(true);
         $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
         foreach ($short_trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
+            $escape_frame = false;
             if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
                 $escape_frame = true;
                 $in_atk = false;
@@ -149,18 +149,18 @@ class HTML extends RendererAbstract
             $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];
-            $tokens['{FUNCTION_ARGS}'] = $index === 'self' ? '' : '()';
 
-            if ($escape_frame) {
-                $escape_frame = false;
-
-                $args = [];
-                foreach ($call['args'] as $arg) {
-                    $args[] = static::toSafeString($arg);
-                }
-
-                if (!empty($args)) {
-                    $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', $args) . ')';
+            if ($index === 'self') {
+                $tokens['{FUNCTION_ARGS}'] = '';
+            } elseif (count($call['args']) === 0) {
+                $tokens['{FUNCTION_ARGS}'] = '()';
+            } else {
+                if ($escape_frame) {
+                    $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', array_map(function ($arg) {
+                        return static::toSafeString($arg);
+                    }, $call['args'])) . ')';
+                } else {
+                    $tokens['{FUNCTION_ARGS}'] = '(...)';
                 }
             }
 
