@@ -50,7 +50,7 @@ trait DIContainerTrait
     public function setDefaults(array $properties, bool $passively = false)
     {
         foreach ($properties as $key => $val) {
-            if (!is_numeric($key) && property_exists($this, $key)) {
+            if (property_exists($this, $key)) {
                 if ($passively && $this->{$key} !== null) {
                     continue;
                 }
@@ -67,16 +67,13 @@ trait DIContainerTrait
     }
 
     /**
-     * @param mixed $key
      * @param mixed $value
-     *
-     * @return $this
      */
-    protected function setMissingProperty($key, $value)
+    protected function setMissingProperty(string $propertyName, $value): void
     {
         throw (new Exception('Property for specified object is not defined'))
             ->addMoreInfo('object', $this)
-            ->addMoreInfo('property', $key)
+            ->addMoreInfo('property', $propertyName)
             ->addMoreInfo('value', $value);
     }
 

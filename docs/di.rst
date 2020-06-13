@@ -65,7 +65,7 @@ How to use DIContainerTrait
 
 .. php:method: setDefaults($array)
 
-.. php:method: setMissingProperty($key, $value)
+.. php:method: setMissingProperty($propertyName, $value)
 
 Calling this method will set object's properties. If any specified property
 is undefined then it will be skipped. Here is how you should use trait::
