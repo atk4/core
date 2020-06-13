@@ -26,7 +26,7 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
 
     public function testNoPropExNumeric()
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Error::class);
         $m = new FactoryDIMock2();
         $m->setDefaults([5 => 'qwerty']);
     }
