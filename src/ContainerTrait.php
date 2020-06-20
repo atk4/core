@@ -83,16 +83,10 @@ trait ContainerTrait
      * Extension to add() method which will perform linking of
      * the object with the current class.
      *
-     * @param object       $element
      * @param array|string $args
      */
-    protected function _add_Container($element, $args = []): object
+    protected function _add_Container(object $element, $args = []): object
     {
-        if (!is_object($element)) {
-            throw (new Exception('Only objects may be added into containers'))
-                ->addMoreInfo('arg', $element);
-        }
-
         // Carry on reference to application if we have appScopeTraits set
         if (isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
             $element->app = $this->app;
@@ -136,6 +130,9 @@ trait ContainerTrait
                 ->addMoreInfo('arg2', $args);
         }
 
+        if ($element->owner !== null) {
+            throw new Exception('Element owner is already set');
+        }
         $element->owner = $this;
         $element->short_name = $args[0];
         if (isset($this->_nameTrait)) {

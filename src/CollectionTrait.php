@@ -54,6 +54,9 @@ trait CollectionTrait
         // Calculate long "name" but only if both are trackables
         if (isset($item->_trackableTrait)) {
             $item->short_name = $name;
+            if ($item->owner !== null) {
+                throw new Exception('Element owner is already set');
+            }
             $item->owner = $this;
             if (isset($this->_trackableTrait)) {
                 $item->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
