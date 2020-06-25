@@ -21,26 +21,26 @@ class SeedTest extends AtkPhpunit\TestCase
         // string become array
         $this->assertSame(
             ['hello'],
-            $this->mergeSeeds('hello', null)
+            $this->mergeSeeds(['hello'], null)
         );
 
         // left-most value is used
         $this->assertSame(
             ['one'],
-            $this->mergeSeeds('one', 'two', 'three', 'four')
+            $this->mergeSeeds(['one'], ['two'], ['three'], ['four'])
         );
 
         // nulls are ignored
         $this->assertSame(
             ['two'],
-            $this->mergeSeeds(null, 'two', 'three', 'four')
+            $this->mergeSeeds(null, ['two'], ['three'], ['four'])
         );
 
         // object takes precedence
         $o = new SeedDITestMock();
         $this->assertSame(
             $o,
-            $this->mergeSeeds(null, 'two', $o, 'four')
+            $this->mergeSeeds(null, ['two'], $o, ['four'])
         );
 
         // if more than one object, leftmost is returned
@@ -48,7 +48,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $o2 = new SeedDITestMock();
         $this->assertSame(
             $o2,
-            $this->mergeSeeds(null, 'two', $o2, $o1, 'four')
+            $this->mergeSeeds(null, ['two'], $o2, $o1, ['four'])
         );
     }
 
@@ -63,7 +63,7 @@ class SeedTest extends AtkPhpunit\TestCase
         // nulls are ignored
         $this->assertSame(
             ['b1', 'a2', 'c3'],
-            $this->mergeSeeds([null, 'a2', null], 'b1', ['c1', null, 'c3'])
+            $this->mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'])
         );
 
         // object takes precedence
@@ -77,7 +77,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $o = new SeedDITestMock();
         $this->assertSame(
             ['b1', 'a2', 'c3'],
-            $this->mergeSeeds([null, 'a2', null], 'b1', ['c1', null, 'c3'], [$o])
+            $this->mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'], [$o])
         );
 
         // we will still return it
@@ -230,7 +230,7 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testBasic()
     {
-        $s1 = $this->factory(SeedTestMock::class);
+        $s1 = $this->factory([SeedTestMock::class]);
         $this->assertEmpty($s1->args);
 
         $s1 = $this->factory(new SeedTestMock());
@@ -241,9 +241,6 @@ class SeedTest extends AtkPhpunit\TestCase
 
         $s1 = $this->factory(new SeedTestMock(null, 'world'));
         $this->assertSame([null, 'world'], $s1->args);
-
-        $s1 = $this->factory([SeedTestMock::class]);
-        $this->assertEmpty($s1->args);
     }
 
     public function testInjection()
@@ -382,12 +379,12 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testStringDefault()
     {
-        $s1 = $this->factory(SeedDITestMock::class, 'hello');
+        $s1 = $this->factory([SeedDITestMock::class], ['hello']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertSame(['hello'], $s1->args);
 
         // also OK if it's not a DIContainer object
-        $s1 = $this->factory(SeedTestMock::class, 'hello');
+        $s1 = $this->factory([SeedTestMock::class], ['hello']);
         $this->assertTrue($s1 instanceof SeedTestMock);
         $this->assertSame(['hello'], $s1->args);
     }
@@ -398,7 +395,7 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testNonDIInject()
     {
         $this->expectException(Exception::class);
-        $s1 = $this->factory(SeedTestMock::class, ['foo' => 'hello']);
+        $s1 = $this->factory([SeedTestMock::class], ['foo' => 'hello']);
         $this->assertTrue($s1 instanceof SeedDITestMock);
         $this->assertSame(['hello'], $s1->args);
     }

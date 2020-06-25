@@ -18,7 +18,6 @@ class DIContainerTraitTest extends AtkPhpunit\TestCase
     {
         $this->assertSame(StdSAT::class, get_class(StdSAT::fromSeed([StdSAT::class])));
         $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeed([StdSAT2::class])));
-        $this->assertSame(StdSAT2::class, get_class(StdSAT::fromSeed(StdSAT2::class)));
 
         $this->expectException(Exception::class);
         StdSAT2::fromSeed([StdSAT::class]);

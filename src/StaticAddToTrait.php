@@ -53,7 +53,7 @@ trait StaticAddToTrait
             $seed = [$seed];
         }
 
-        $object = static::fromSeed(static::class, $seed);
+        $object = static::fromSeed([static::class], $seed);
 
         static::_addTo_add($parent, $object, $addArgs, $skipAdd);
 
