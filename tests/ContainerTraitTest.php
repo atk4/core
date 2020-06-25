@@ -115,10 +115,10 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testFactoryMock()
     {
         $m = new ContainerFactoryMock();
-        $m2 = $m->add(ContainerMock::class);
+        $m2 = $m->add([ContainerMock::class]);
         $this->assertSame(ContainerMock::class, get_class($m2));
 
-        $m3 = $m->add(TrackableContainerMock::class, 'name');
+        $m3 = $m->add([TrackableContainerMock::class], 'name');
         $this->assertSame(TrackableContainerMock::class, get_class($m3));
         $this->assertSame('name', $m3->short_name);
     }
@@ -175,7 +175,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->expectException(\Error::class);
         $this->expectExceptionMessage("Class 'hello' not found");
         $m = new ContainerMock();
-        $m->add('hello', 123);
+        $m->add(['hello'], 123);
     }
 
     public function testException4()

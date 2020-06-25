@@ -61,7 +61,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $a = new TrackableMock2();
         $a->name = 'foo';
         $ret = $m->toString($a);
-        $this->assertSame('atk4\core\tests\TrackableMock2 (foo)', $ret);
+        $this->assertSame(TrackableMock2::class . ' (foo)', $ret);
     }
 
     public function testMore(): void

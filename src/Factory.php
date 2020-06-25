@@ -23,11 +23,45 @@ class Factory
         return self::$_instance;
     }
 
+    private function _printDeprecatedWarningWithTrace(string $msg): void // remove once not used within this class
+    {
+        static $traceRenderer = null;
+        if ($traceRenderer === null) {
+            $traceRenderer = new class(new Exception()) extends ExceptionRenderer\HTML {
+                public function tryRelativizePath(string $path): string
+                {
+                    try {
+                        return $this->makeRelativePath($path);
+                    } catch (Exception $e) {
+                    }
+
+                    return $path;
+                }
+            };
+        }
+
+        ob_start();
+        debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $trace = preg_replace('~^#0.+?\n~', '', ob_get_clean());
+        $trace = preg_replace_callback('~[^\n\[\]<>]+\.php~', function ($matches) use ($traceRenderer) {
+            return $traceRenderer->tryRelativizePath($matches[0]);
+        }, $trace);
+        // echo (new Exception('xxx'))->getHTML();
+        'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
+    }
+
     protected function _mergeSeeds($seed, $seed2, ...$more_seeds)
     {
         // recursively merge extra seeds
         if (count($more_seeds) > 0) {
             $seed2 = $this->_mergeSeeds($seed2, ...$more_seeds);
+        }
+
+        if ((!is_array($seed) && !is_object($seed) && $seed !== null) || (!is_array($seed2) && !is_object($seed2) && $seed2 !== null)) { // remove/do not accept other seed than object/array type after 2020-dec
+            $varName = !is_array($seed) && !is_object($seed) && $seed !== null ? 'seed' : 'seed2';
+            $this->_printDeprecatedWarningWithTrace(
+                'Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is deprecated and support will be removed shortly.'
+            );
         }
 
         if (is_object($seed) || is_object($seed2)) {
@@ -114,7 +148,16 @@ class Factory
 
         if ($seed === null) { // should be deprecated soon
             $seed = [];
-        } elseif (!is_array($seed)) {
+        }
+
+        if ((!is_array($seed) && !is_object($seed)) || (!is_array($defaults) && !is_object($defaults))) { // remove/do not accept other seed than object/array type after 2020-dec
+            $varName = !is_array($seed) && !is_object($seed) ? 'seed' : 'defaults';
+            $this->_printDeprecatedWarningWithTrace(
+                'Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is deprecated and support will be removed shortly.'
+            );
+        }
+
+        if (!is_array($seed)) {
             $seed = [$seed];
         }
 

@@ -105,6 +105,8 @@ trait DIContainerTrait
                         ->addMoreInfo('seed_type', gettype($seed));
                 }
 
+                Factory::mergeSeeds($seed, []); // emit deprecated warning, remove in 2020-dec once string seed is no longer supported
+
                 $seed = [$seed];
             }
 
