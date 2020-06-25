@@ -23,7 +23,7 @@ class Factory
         return self::$_instance;
     }
 
-    private function _printDeprecatedWarningWithTrace(string $msg): void // remove once not used within this class
+    protected function printDeprecatedWarningWithTrace(string $msg): void // remove once not used within this class
     {
         static $traceRenderer = null;
         if ($traceRenderer === null) {
@@ -46,7 +46,7 @@ class Factory
         $trace = preg_replace_callback('~[^\n\[\]<>]+\.php~', function ($matches) use ($traceRenderer) {
             return $traceRenderer->tryRelativizePath($matches[0]);
         }, $trace);
-        // echo (new Exception('xxx'))->getHTML();
+        // echo (new Exception($msg))->getHTML();
         'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
     }
 
@@ -59,7 +59,7 @@ class Factory
 
         if ((!is_array($seed) && !is_object($seed) && $seed !== null) || (!is_array($seed2) && !is_object($seed2) && $seed2 !== null)) { // remove/do not accept other seed than object/array type after 2020-dec
             $varName = !is_array($seed) && !is_object($seed) && $seed !== null ? 'seed' : 'seed2';
-            $this->_printDeprecatedWarningWithTrace(
+            $this->printDeprecatedWarningWithTrace(
                 'Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is deprecated and support will be removed shortly.'
             );
         }
@@ -152,7 +152,7 @@ class Factory
 
         if ((!is_array($seed) && !is_object($seed)) || (!is_array($defaults) && !is_object($defaults))) { // remove/do not accept other seed than object/array type after 2020-dec
             $varName = !is_array($seed) && !is_object($seed) ? 'seed' : 'defaults';
-            $this->_printDeprecatedWarningWithTrace(
+            $this->printDeprecatedWarningWithTrace(
                 'Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is deprecated and support will be removed shortly.'
             );
         }
