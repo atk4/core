@@ -172,12 +172,6 @@ class Factory
         }
         $seed = $this->_mergeSeeds($seed, $defaults);
 
-        if (is_object($seed)) {
-            // setDefaults() already called in _mergeSeeds()
-
-            return $seed;
-        }
-
         $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys
         $object = array_shift($arguments); // first numeric key argument is object
