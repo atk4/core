@@ -142,6 +142,10 @@ class Factory
 
     protected function _factory($seed, $defaults = []): object
     {
+        if (is_object($defaults)) {
+            throw new Exception('Factory $defaults can not be an object');
+        }
+
         if ($defaults === null) { // should be deprecated soon
             $defaults = [];
         }
@@ -163,7 +167,7 @@ class Factory
 
         if (is_array($defaults)) {
             array_unshift($defaults, null); // insert argument 0
-        } elseif (!is_object($defaults)) {
+        } else {
             $defaults = [null, $defaults];
         }
         $seed = $this->_mergeSeeds($seed, $defaults);

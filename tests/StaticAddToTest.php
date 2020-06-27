@@ -76,10 +76,6 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSAT::addTo($m);
         $this->assertNotNull($tr);
 
-        // add object - for BC
-        $tr = StdSAT::addTo($m, $tr);
-        $this->assertSame(StdSAT::class, get_class($tr));
-
         // trackable object can be referenced by name
         $tr3 = TrackableMockSAT::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');

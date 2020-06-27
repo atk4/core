@@ -372,9 +372,8 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testGiveClassFirst()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory(['foo' => 'bar'], new SeedDITestMock());
-        $this->assertTrue($s1 instanceof SeedDITestMock);
-        $this->assertSame('bar', $s1->foo);
     }
 
     public function testStringDefault()
