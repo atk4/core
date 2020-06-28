@@ -77,14 +77,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $o = new SeedDITestMock();
         $this->assertSame(
             ['b1', 'a2', 'c3'],
-            $this->mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'], [$o])
-        );
-
-        // we will still return it
-        $o = new SeedDITestMock();
-        $this->assertSame(
-            $o,
-            $this->mergeSeeds([null, 'a2', null], [null, null, 'c3'], [$o])[0]
+            $this->mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'], [1 => $o])
         );
 
         // but constructor arguments (except silently ignored class name)
@@ -309,29 +302,18 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testDefaultsObject()
     {
+        // $this->expectException(Exception::class);
+        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
         $s1 = $this->factory([new SeedDITestMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
-        $this->assertSame('bar', $s1->foo);
-        $this->assertSame('', $s1->baz);
     }
 
     public function testMerge()
     {
-        $s1 = $this->factory([new SeedDITestMock(), 'foo' => ['red']], ['foo' => ['big'], 'foo' => 'default']);
-        $this->assertSame(['red'], $s1->foo);
-
-        $o = new ViewTestMock();
-        $o->foo = ['xx'];
-        $s1 = $this->factory([$o, 'foo' => ['red']], ['foo' => ['big'], 'foo' => 'default']);
-        $this->assertSame(['xx', 'red'], $s1->foo);
-
         $s1 = $this->factory([SeedDITestMock::class, 'hello', 'world'], ['more', 'more', 'args']);
         $this->assertSame(['hello', 'world', 'args'], $s1->args);
 
         $s1 = $this->factory([SeedDITestMock::class, null, 'world'], ['more', 'more', 'args']);
         $this->assertSame(['more', 'world', 'args'], $s1->args);
-
-        $s1 = $this->factory([new SeedDITestMock('x', 'y'), null, 'bar'], ['foo', 'baz']);
-        $this->assertSame(['x', 'y'], $s1->args);
     }
 
     public function testMerge7()
@@ -372,9 +354,8 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testGiveClassFirst()
     {
+        $this->expectException(Exception::class);
         $s1 = $this->factory(['foo' => 'bar'], new SeedDITestMock());
-        $this->assertTrue($s1 instanceof SeedDITestMock);
-        $this->assertSame('bar', $s1->foo);
     }
 
     public function testStringDefault()

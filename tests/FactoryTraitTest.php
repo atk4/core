@@ -67,9 +67,6 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $m2 = $m->factory($m1);
         $this->assertSame(FactoryMock::class, get_class($m2));
 
-        $m2 = $m->factory([$m1]);
-        $this->assertSame(FactoryMock::class, get_class($m2));
-
         // as class name with parameters
         $m1 = $m->factory([FactoryDIMock::class], ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertSame('XXX', $m1->a);
@@ -99,6 +96,11 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('XXX', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertSame('ZZZ', $m2->c);
+
+        // as object wrapped in array
+        // $this->expectException(Exception::class);
+        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
+        $m->factory([$m1]);
     }
 
     /**

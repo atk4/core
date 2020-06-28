@@ -64,6 +64,38 @@ class Factory
             );
         }
 
+        // remove/do not accept seed with 1st argument other than valid class name (or null) after 2020-dec
+        $checkSeedClFunc = function ($seed): ?string {
+            if (is_object($seed) || $seed === null) {
+                return null;
+            } elseif (!array_key_exists(0, $seed)) {
+                return null; // 'not defined' allow this method to be used to merge seeds without class name
+            } elseif ($seed[0] === null) {
+                return null;
+            } elseif (!is_string($seed[0])) {
+                return 'invalid type (' . (is_object($seed[0]) ? get_class($seed[0]) . ' (class wrapped in an array?)' : gettype($seed[0])) . ')';
+            } elseif (class_exists($seed[0])) {
+                return null;
+            }
+
+            // do not emit warnings for core tests:
+            // - some tests already tests for exception
+            // - we may later want to use this function for "mergeDefaults" (like _factory() below does)
+            foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $cl) {
+                if (strpos($cl['class'] ?? '', 'atk4\core\tests\\') === 0) {
+                    return null;
+                }
+            }
+
+            return 'non-existing/non-autoloadable (' . $seed[0] . ')';
+        };
+        if ($checkSeedClFunc($seed) !== null || $checkSeedClFunc($seed2) !== null) {
+            $varName = $checkSeedClFunc($seed) ? 'seed' : 'seed2';
+            $this->printDeprecatedWarningWithTrace(
+                'Use of invalid/deprecated $' . $varName . ' class name (' . $checkSeedClFunc(${$varName}) . '). Support will be removed shortly.'
+            );
+        }
+
         if (is_object($seed) || is_object($seed2)) {
             if (is_object($seed)) {
                 $passively = true; // set defaults but don't override existing properties
@@ -142,6 +174,10 @@ class Factory
 
     protected function _factory($seed, $defaults = []): object
     {
+        if (is_object($defaults)) {
+            throw new Exception('Factory $defaults can not be an object');
+        }
+
         if ($defaults === null) { // should be deprecated soon
             $defaults = [];
         }
@@ -157,22 +193,24 @@ class Factory
             );
         }
 
-        if (!is_array($seed)) {
-            $seed = [$seed];
-        }
-
         if (is_array($defaults)) {
             array_unshift($defaults, null); // insert argument 0
-        } elseif (!is_object($defaults)) {
+        } else {
             $defaults = [null, $defaults];
         }
-        $seed = $this->_mergeSeeds($seed, $defaults);
 
         if (is_object($seed)) {
-            // setDefaults() already called in _mergeSeeds()
+            $defaults = $this->_mergeSeeds([], $defaults);
+            $defaults[0] = $seed;
+            $seed = $defaults;
+        } else {
+            if (!is_array($seed)) {
+                $seed = [$seed];
+            }
 
-            return $seed;
+            $seed = $this->_mergeSeeds($seed, $defaults);
         }
+        unset($defaults);
 
         $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys
