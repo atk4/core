@@ -44,13 +44,13 @@
   "require-dev": {
     "atk4/data": "dev-develop",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpunit/phpunit": ">=8.0",
+    "phpunit/phpunit": ">=8.0 || dev-master",
     "symfony/contracts": ">=1.1"
   },
   "require-dev-release": {
     "atk4/data": "^2.0",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpunit/phpunit": ">=8.0",
+    "phpunit/phpunit": ">=8.0 || dev-master",
     "symfony/contracts": ">=1.1"
   },
   "autoload": {
@@ -62,5 +62,12 @@
     "psr-4": {
       "atk4\\core\\tests\\": "tests/"
     }
+  }
+  ,"replace": {
+    "phar-io/manifest": "1.0.99",
+    "phar-io/version": "2.0.99",
+    "phpspec/prophecy": "1.10.99",
+    "sebastian/diff": "4.0.1",
+    "phpunit/php-code-coverage": "9.0"
   }
 }
