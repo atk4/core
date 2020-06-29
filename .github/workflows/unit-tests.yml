@@ -30,7 +30,7 @@ jobs:
 
       - name: Configure PHP
         run: |
-          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini || true ; fi
+          if [ -z "$LOG_COVERAGE" ]; then rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini ; fi
           php --version
 
       # trick composer that this is a "atk4/core:develop" dependency to install atk4/data
