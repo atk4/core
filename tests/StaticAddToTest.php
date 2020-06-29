@@ -76,10 +76,6 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSAT::addTo($m);
         $this->assertNotNull($tr);
 
-        // add object - for BC
-        $tr = StdSAT::addTo($m, $tr);
-        $this->assertSame(StdSAT::class, get_class($tr));
-
         // trackable object can be referenced by name
         $tr3 = TrackableMockSAT::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');
@@ -111,7 +107,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($m->_containerTrait));
 
         // the same class
-        $tr = StdSAT::addToWithCl($m, StdSAT::class);
+        $tr = StdSAT::addToWithCl($m, [StdSAT::class]);
         $this->assertSame(StdSAT::class, get_class($tr));
 
         // add object - for BC
@@ -119,16 +115,16 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertSame(StdSAT::class, get_class($tr));
 
         // extended class
-        $tr = StdSAT::addToWithCl($m, StdSAT2::class);
+        $tr = StdSAT::addToWithCl($m, [StdSAT2::class]);
         $this->assertSame(StdSAT2::class, get_class($tr));
 
         // not the same or extended class - unsafe enabled
-        $tr = StdSAT::addToWithClUnsafe($m, \stdClass::class);
+        $tr = StdSAT::addToWithClUnsafe($m, [\stdClass::class]);
         $this->assertSame(\stdClass::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
         $this->expectException(\atk4\core\Exception::class);
-        $tr = StdSAT::addToWithCl($m, \stdClass::class);
+        $tr = StdSAT::addToWithCl($m, [\stdClass::class]);
     }
 
     public function testUniqueNames()

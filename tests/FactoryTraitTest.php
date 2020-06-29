@@ -28,9 +28,14 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $m2 = $m->factory($m1);
         $this->assertSame($m1, $m2);
 
-        // pass classname
-        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        // from array seed
+        $m1 = $m->factory([FactoryMock::class]);
         $this->assertSame(FactoryMock::class, get_class($m1));
+
+        // from string seed
+        // $this->expectException(Exception::class);
+        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
+        $m->factory(FactoryMock::class);
     }
 
     /**
@@ -52,57 +57,50 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $m = new FactoryDIMock();
 
         // as class name
-        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        $m1 = $m->factory([FactoryMock::class]);
         $this->assertSame(FactoryMock::class, get_class($m1));
 
-        $m1 = $m->factory(\atk4\core\tests\FactoryMock::class);
-        $this->assertSame(FactoryMock::class, get_class($m1));
-
-        $m1 = $m->factory(FactoryMock::class);
-        $this->assertSame(FactoryMock::class, get_class($m1));
-
-        $m1 = $m->factory(HB::class, ['ok']);
-        $this->assertSame(\atk4\core\HookBreaker::class, get_class($m1));
-
-        $m1 = $m->factory(['atk4\core\tests\FactoryMock']);
-        $this->assertSame(FactoryMock::class, get_class($m1));
+        $m2 = $m->factory([HB::class], ['ok']);
+        $this->assertSame(\atk4\core\HookBreaker::class, get_class($m2));
 
         // as object
         $m2 = $m->factory($m1);
         $this->assertSame(FactoryMock::class, get_class($m2));
 
-        $m2 = $m->factory([$m1]);
-        $this->assertSame(FactoryMock::class, get_class($m2));
-
         // as class name with parameters
-        $m1 = $m->factory('atk4\core\tests\FactoryDIMock', ['a' => 'XXX', 'b' => 'YYY']);
+        $m1 = $m->factory([FactoryDIMock::class], ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertSame('XXX', $m1->a);
         $this->assertSame('YYY', $m1->b);
         $this->assertNull($m1->c);
 
-        $m1 = $m->factory('atk4\core\tests\FactoryDIMock', ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
+        $m1 = $m->factory([FactoryDIMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
         $this->assertSame('AAA', $m1->a);
         $this->assertSame('YYY', $m1->b);
         $this->assertSame('ZZZ', $m1->c);
 
         // as object with parameters
-        $m1 = $m->factory('atk4\core\tests\FactoryDIMock');
+        $m1 = $m->factory([FactoryDIMock::class]);
         $m2 = $m->factory($m1, ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertSame('XXX', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertNull($m2->c);
 
-        $m1 = $m->factory('atk4\core\tests\FactoryDIMock');
+        $m1 = $m->factory([FactoryDIMock::class]);
         $m2 = $m->factory($m1, ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
         $this->assertSame('AAA', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertSame('ZZZ', $m2->c);
 
-        $m1 = $m->factory('atk4\core\tests\FactoryDIMock', ['a' => null, 'b' => 'YYY', 'c' => 'SSS']);
+        $m1 = $m->factory([FactoryDIMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'SSS']);
         $m2 = $m->factory($m1, ['a' => 'XXX', 'b' => null, 'c' => 'ZZZ']);
         $this->assertSame('XXX', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertSame('ZZZ', $m2->c);
+
+        // as object wrapped in array
+        // $this->expectException(Exception::class);
+        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
+        $m->factory([$m1]);
     }
 
     /**
@@ -114,7 +112,7 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);
         $m = new FactoryMock();
-        $m1 = $m->factory('atk4\core\tests\FactoryMock', ['not_exist' => 'test']);
+        $m1 = $m->factory([FactoryMock::class], ['not_exist' => 'test']);
     }
 
     /**
@@ -126,7 +124,7 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);
         $m = new FactoryMock();
-        $m1 = $m->factory('atk4\core\tests\FactoryMock');
+        $m1 = $m->factory([FactoryMock::class]);
         $m2 = $m->factory($m1, ['not_exist' => 'test']);
     }
 }
