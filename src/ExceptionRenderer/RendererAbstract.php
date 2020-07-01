@@ -122,7 +122,7 @@ abstract class RendererAbstract
     {
         $msg = $this->exception->getMessage();
 
-        $msg = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[A-Za-z]:)\w?+[^:"\',;]+?\.php(?!\w)~', function ($matches) {
+        $msg = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
             try {
                 return $this->makeRelativePath($matches[0]);
             } catch (\Exception $e) {
