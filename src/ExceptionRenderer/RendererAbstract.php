@@ -64,7 +64,7 @@ abstract class RendererAbstract
             return '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
                 . get_class($this->exception)
                 . ($this->exception->getCode() !== 0 ? '(' . $this->exception->getCode() . ')' : '')
-                . ': ' . $this->_($this->exception->getMessage()) . ' !!';
+                . ': ' . $this->exception->getMessage() . ' !!';
         }
     }
 
@@ -116,6 +116,23 @@ abstract class RendererAbstract
         return $this->exception instanceof Exception
             ? $this->exception->getCustomExceptionTitle()
             : 'Critical Error';
+    }
+
+    protected function getExceptionMessage(): string
+    {
+        $msg = $this->exception->getMessage();
+
+        $msg = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[A-Za-z]:)\w?+[^:"\',;]+?\.php(?!\w)~', function ($matches) {
+            try {
+                return $this->makeRelativePath($matches[0]);
+            } catch (\Exception $e) {
+                return $matches[0];
+            }
+        }, $msg);
+
+        $msg = $this->_($msg);
+
+        return $msg;
     }
 
     /**
