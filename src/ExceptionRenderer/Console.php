@@ -16,7 +16,7 @@ class Console extends RendererAbstract
         $tokens = [
             '{TITLE}' => $title,
             '{CLASS}' => $class,
-            '{MESSAGE}' => $this->_($this->exception->getMessage()),
+            '{MESSAGE}' => $this->getExceptionMessage(),
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
