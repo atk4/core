@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\core\AtkPhpunit;
 
-require_once __DIR__ . '/phpunit_polyfill.php';
-
 /**
  * Generic PHPUnit exception wrapper for ATK4 repos.
  */
