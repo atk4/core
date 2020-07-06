@@ -26,10 +26,15 @@ class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return mixed
      */
-    public function callProtected(object $obj, string $name, array $args = [])
+    public function &callProtected(object $obj, string $name, ...$args)
     {
-        return \Closure::bind(static function () use ($obj, $name, $args) {
-            return $obj->{$name}(...$args);
+        return \Closure::bind(static function &() use ($obj, $name, $args) {
+            if ((new \ReflectionClass($obj))->getMethod($name)->returnsReference()) {
+                return $obj->{$name}(...$args);
+            } else {
+                $v = $obj->{$name}(...$args);
+                return $v;
+            }
         }, null, $obj)();
     }
 
@@ -41,9 +46,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return mixed
      */
-    public function getProtected(object $obj, string $name)
+    public function &getProtected(object $obj, string $name)
     {
-        return \Closure::bind(static function () use ($obj, $name) {
+        return \Closure::bind(static function &() use ($obj, $name) {
             return $obj->{$name};
         }, null, $obj)();
     }
