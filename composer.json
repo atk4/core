@@ -38,19 +38,20 @@
     "php": ">=7.3.0",
     "ext-json": "*",
     "psr/log": "~1.0",
-    "symfony/polyfill-php73": "^1.15",
+    "symfony/polyfill-php74": "^1.17",
+    "symfony/polyfill-php80": "^1.17",
     "symfony/yaml": ">=3.4"
   },
   "require-dev": {
     "atk4/data": "dev-develop",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpunit/phpunit": ">=8.0",
+    "phpunit/phpunit": ">=9.0",
     "symfony/contracts": ">=1.1"
   },
   "require-dev-release": {
     "atk4/data": "^2.0",
     "friendsofphp/php-cs-fixer": "^2.16",
-    "phpunit/phpunit": ">=8.0",
+    "phpunit/phpunit": ">=9.0",
     "symfony/contracts": ">=1.1"
   },
   "autoload": {
