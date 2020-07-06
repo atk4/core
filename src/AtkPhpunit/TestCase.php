@@ -31,10 +31,11 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return \Closure::bind(static function &() use ($obj, $name, $args) {
             if ((new \ReflectionClass($obj))->getMethod($name)->returnsReference()) {
                 return $obj->{$name}(...$args);
-            } else {
-                $v = $obj->{$name}(...$args);
-                return $v;
             }
+
+            $v = $obj->{$name}(...$args);
+
+            return $v;
         }, null, $obj)();
     }
 
