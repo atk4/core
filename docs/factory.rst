@@ -139,7 +139,7 @@ is done by executing factory method.
 .. php:method:: factory($seed, $defaults = [])
 
 Creates and returns new object. If is_object($seed), then it will be returned and
-$defaults will only be sed if object implement DIContainerTrait.
+$defaults will only be sed if object implement DiContainerTrait.
 
 
 In a conventional PHP, you can create and configure object before passing
@@ -200,7 +200,7 @@ Any other numeric arguments will be passed as constructor arguments::
     new Button('My Label', 'red', 'big');
 
 Finally any named values inside seed array will be assigned to class properties
-by using :php:meth:`DIContainerTrait::setDefaults`.
+by using :php:meth:`DiContainerTrait::setDefaults`.
 
 Factory uses `array_shift` to separate class definition from other components.
 
@@ -284,7 +284,7 @@ specified in the seed and is also mentioned in the second argument - $defaults.
 The seed takes precedence, so icon='cake'.
 
 Factory will then create instance of RedButton with a default icon 'book'.
-It will then execute :php:meth:`DIContainerTrait::setDefaults` with the
+It will then execute :php:meth:`DiContainerTrait::setDefaults` with the
 `['icon'=>'cake']` which will change value of $icon to `cake`.
 
 The `cake` will be the final value of the example above. Even though `init()`

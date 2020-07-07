@@ -125,7 +125,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
         $this->expectException(core\Exception::class);
         $m = new CollectionMock();
         $m->addField('test', new class() {
-            use core\DIContainerTrait;
+            use core\DiContainerTrait;
             use core\InitializerTrait;
             public $name;
 

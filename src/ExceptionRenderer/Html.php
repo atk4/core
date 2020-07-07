@@ -6,7 +6,7 @@ namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
 
-class HTML extends RendererAbstract
+class Html extends RendererAbstract
 {
     protected function processHeader(): void
     {

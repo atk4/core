@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace atk4\core;
 
-use atk4\core\ExceptionRenderer\Console;
-use atk4\core\ExceptionRenderer\HTML;
-use atk4\core\ExceptionRenderer\JSON;
-use atk4\core\ExceptionRenderer\RendererAbstract;
 use atk4\core\Translator\ITranslatorAdapter;
 
 /**
@@ -84,7 +80,7 @@ class Exception extends \Exception
      */
     public function getColorfulText(): string
     {
-        return (string) new Console($this, $this->adapter);
+        return (string) new ExceptionRenderer\Console($this, $this->adapter);
     }
 
     /**
@@ -93,21 +89,21 @@ class Exception extends \Exception
      *
      *   $l = new \atk4\ui\App();
      *   $l->initLayout(\atk4\ui\Layout\Centered::class);
-     *   $l->layout->template->setHTML('Content', $e->getHTML());
+     *   $l->layout->template->setHtml('Content', $e->getHtml());
      *   $l->run();
      *   exit;
      */
-    public function getHTML(): string
+    public function getHtml(): string
     {
-        return (string) new HTML($this, $this->adapter);
+        return (string) new ExceptionRenderer\Html($this, $this->adapter);
     }
 
     /**
      * Return exception in JSON Format.
      */
-    public function getJSON(): string
+    public function getJson(): string
     {
-        return (string) new JSON($this, $this->adapter);
+        return (string) new ExceptionRenderer\Json($this, $this->adapter);
     }
 
     /**
@@ -117,7 +113,7 @@ class Exception extends \Exception
      */
     public function toString($val): string
     {
-        return RendererAbstract::toSafeString($val);
+        return ExceptionRenderer\RendererAbstract::toSafeString($val);
     }
 
     /**

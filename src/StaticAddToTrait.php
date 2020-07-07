@@ -7,11 +7,11 @@ namespace atk4\core;
 /**
  * Trait StaticAddToTrait.
  *
- * Intended to be always used with DIContainerTrait trait.
+ * Intended to be always used with DiContainerTrait trait.
  */
 trait StaticAddToTrait
 {
-    // use DIContainerTrait; // uncomment once PHP7.2 support is dropped
+    // use DiContainerTrait; // uncomment once PHP7.2 support is dropped
 
     /**
      * Check this property to see if trait is present in the object.
@@ -33,9 +33,9 @@ trait StaticAddToTrait
      * The best, typehinting-friendly, way to create an object if it should be immediately
      * added to a parent (otherwise use fromSeed() method).
      *
-     * $crud = CRUD::addTo($app, ['displayFields' => ['name']]);
+     * $crud = Crud::addTo($app, ['displayFields' => ['name']]);
      *   is equivalent to
-     * $crud = $app->add(['CRUD', 'displayFields' => ['name']]);
+     * $crud = $app->add(['Crud', 'displayFields' => ['name']]);
      *   but the first one design pattern is strongly recommended as it supports refactoring.
      *
      * @param array|string $seed

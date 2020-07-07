@@ -128,7 +128,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         // passing name with array key 'name'
         $m = new ContainerMock();
         $m2 = $m->add(new class() extends TrackableMock {
-            use core\DIContainerTrait;
+            use core\DiContainerTrait;
         }, ['name' => 'foo']);
         $this->assertTrue($m->hasElement('foo'));
         $this->assertSame('foo', $m2->short_name);

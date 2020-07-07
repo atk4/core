@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\core\Translator;
 
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\Exception;
 use atk4\core\Translator\Adapter\Generic;
 
@@ -14,7 +14,7 @@ use atk4\core\Translator\Adapter\Generic;
  */
 class Translator
 {
-    use DIContainerTrait {
+    use DiContainerTrait {
         setDefaults as protected _setDefaults;
     }
 

@@ -21,5 +21,5 @@ function loopToCreateStack($test)
 try {
     loopToCreateStack(1);
 } catch (Exception $e) {
-    echo $e->getJSON();
+    echo $e->getJson();
 }

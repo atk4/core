@@ -6,38 +6,38 @@ namespace atk4\core\tests;
 
 use atk4\core\AtkPhpunit;
 use atk4\core\ContainerTrait;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\FactoryTrait;
 use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 
 // @codingStandardsIgnoreStart
-class StdSAT extends \StdClass
+class StdSat extends \StdClass
 {
-    use DIContainerTrait; // remove once PHP7.2 support is dropped
+    use DiContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
 }
 
-class StdSAT2 extends StdSAT
+class StdSat2 extends StdSat
 {
 }
 
-class ContainerFactoryMockSAT
+class ContainerFactoryMockSat
 {
     use ContainerTrait;
     use FactoryTrait;
 }
 
-class TrackableMockSAT
+class TrackableMockSat
 {
     use TrackableTrait;
-    use DIContainerTrait; // remove once PHP7.2 support is dropped
+    use DiContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
 }
-class DIMockSAT
+class DiMockSat
 {
     use FactoryTrait;
-    use DIContainerTrait;
+    use DiContainerTrait;
     use StaticAddToTrait;
 
     public $a = 'AAA';
@@ -45,10 +45,10 @@ class DIMockSAT
     public $c;
 }
 
-class DIConstructorMockSAT
+class DiConstructorMockSat
 {
     use FactoryTrait;
-    use DIContainerTrait;
+    use DiContainerTrait;
     use StaticAddToTrait;
 
     public $a = 'AAA';
@@ -73,32 +73,32 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($m->_containerTrait));
 
         // add to return object
-        $tr = StdSAT::addTo($m);
+        $tr = StdSat::addTo($m);
         $this->assertNotNull($tr);
 
         // trackable object can be referenced by name
-        $tr3 = TrackableMockSAT::addTo($m, [], ['foo']);
+        $tr3 = TrackableMockSat::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');
         $this->assertSame($tr, $tr3);
 
         // not the same or extended class
         $this->expectException(\atk4\core\Exception::class);
-        $tr = StdSAT::addTo($m, $tr);
+        $tr = StdSat::addTo($m, $tr);
     }
 
     public function testAssertInstanceOf()
     {
         // object is of the same class
-        StdSAT::assertInstanceOf(new StdSAT());
-        $o = new StdSAT();
-        $this->assertSame($o, StdSAT::assertInstanceOf($o));
+        StdSat::assertInstanceOf(new StdSat());
+        $o = new StdSat();
+        $this->assertSame($o, StdSat::assertInstanceOf($o));
 
         // object is a subtype
-        StdSAT::assertInstanceOf(new StdSAT2());
+        StdSat::assertInstanceOf(new StdSat2());
 
         // object is not a subtype
         $this->expectException(\atk4\core\Exception::class);
-        StdSAT2::assertInstanceOf(new StdSAT());
+        StdSat2::assertInstanceOf(new StdSat());
     }
 
     public function testWithClassName()
@@ -107,24 +107,24 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertTrue(isset($m->_containerTrait));
 
         // the same class
-        $tr = StdSAT::addToWithCl($m, [StdSAT::class]);
-        $this->assertSame(StdSAT::class, get_class($tr));
+        $tr = StdSat::addToWithCl($m, [StdSat::class]);
+        $this->assertSame(StdSat::class, get_class($tr));
 
         // add object - for BC
-        $tr = StdSAT::addToWithCl($m, $tr);
-        $this->assertSame(StdSAT::class, get_class($tr));
+        $tr = StdSat::addToWithCl($m, $tr);
+        $this->assertSame(StdSat::class, get_class($tr));
 
         // extended class
-        $tr = StdSAT::addToWithCl($m, [StdSAT2::class]);
-        $this->assertSame(StdSAT2::class, get_class($tr));
+        $tr = StdSat::addToWithCl($m, [StdSat2::class]);
+        $this->assertSame(StdSat2::class, get_class($tr));
 
         // not the same or extended class - unsafe enabled
-        $tr = StdSAT::addToWithClUnsafe($m, [\stdClass::class]);
+        $tr = StdSat::addToWithClUnsafe($m, [\stdClass::class]);
         $this->assertSame(\stdClass::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
         $this->expectException(\atk4\core\Exception::class);
-        $tr = StdSAT::addToWithCl($m, [\stdClass::class]);
+        $tr = StdSat::addToWithCl($m, [\stdClass::class]);
     }
 
     public function testUniqueNames()
@@ -132,11 +132,11 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $m = new ContainerMock();
 
         // two anonymous children should get unique names asigned.
-        TrackableMockSAT::addTo($m);
-        $anon = TrackableMockSAT::addTo($m);
-        TrackableMockSAT::addTo($m, [], ['foo bar']);
-        TrackableMockSAT::addTo($m, [], ['123']);
-        TrackableMockSAT::addTo($m, [], ['false']);
+        TrackableMockSat::addTo($m);
+        $anon = TrackableMockSat::addTo($m);
+        TrackableMockSat::addTo($m, [], ['foo bar']);
+        TrackableMockSat::addTo($m, [], ['123']);
+        TrackableMockSat::addTo($m, [], ['false']);
 
         $this->assertTrue($m->hasElement('foo bar'));
         $this->assertTrue($m->hasElement('123'));
@@ -151,13 +151,13 @@ class StaticAddToTest extends AtkPhpunit\TestCase
 
     public function testFactoryMock()
     {
-        $m = new ContainerFactoryMockSAT();
-        $m1 = DIMockSAT::addTo($m, ['a' => 'XXX', 'b' => 'YYY']);
+        $m = new ContainerFactoryMockSat();
+        $m1 = DiMockSat::addTo($m, ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertSame('XXX', $m1->a);
         $this->assertSame('YYY', $m1->b);
         $this->assertNull($m1->c);
 
-        $m2 = DIConstructorMockSAT::addTo($m, ['a' => 'XXX', 'John', 'b' => 'YYY']);
+        $m2 = DiConstructorMockSat::addTo($m, ['a' => 'XXX', 'John', 'b' => 'YYY']);
         $this->assertSame('XXX', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertSame('John', $m2->c);

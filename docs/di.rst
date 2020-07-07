@@ -2,7 +2,7 @@
 Dependency Injection Container
 ==============================
 
-.. php:trait:: DIContainerTrait
+.. php:trait:: DiContainerTrait
 
 Agile Core implements basic support for Dependency Injection Container.
 
@@ -40,10 +40,10 @@ This improves testability of objects, for instance. Typically constructor can
 be good for 1 or 2 arguments.
 
 However in Agile UI there are components that are designed specifically to
-encapsulate many various objects. CRUD for example is a fully-functioning
+encapsulate many various objects. Crud for example is a fully-functioning
 editing solution, but suppose you want to use custom form object::
 
-    $crud = new CRUD([
+    $crud = new Crud([
         'formEdit' => new MyForm(),
         'formAdd'  => new MyForm()
     ]);
@@ -54,14 +54,14 @@ Dependency Injection Container. Theory states that developers who use IDEs
 extensively would prefer to pass "object" and not "array", however we typically
 offer a better option::
 
-    $crud = new CRUD();
+    $crud = new Crud();
     $crud->formEdit = new MyForm();
     $crud->formAdd  = new MyForm();
 
-How to use DIContainerTrait
+How to use DiContainerTrait
 ---------------------------
 
-.. php:trait: DIContainerTrait
+.. php:trait: DiContainerTrait
 
 .. php:method: setDefaults($properties, $passively = false)
 
@@ -71,7 +71,7 @@ Calling this method will set object's properties. If any specified property
 is undefined then it will be skipped. Here is how you should use trait::
 
     class MyObj {
-        use DIContainerTrait;
+        use DiContainerTrait;
 
         function __construct($defaults = []) {
             $this->setDefaults($defaults, true);
@@ -87,7 +87,7 @@ like this::
 This is done by overriding setMissingProperty method::
 
     class MyObj {
-        use DIContainerTrait {
+        use DiContainerTrait {
             setMissingProperty as _setMissingProperty;
         }
 

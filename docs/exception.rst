@@ -73,7 +73,7 @@ user to see. This will include the error, parameters and backtrace. The code
 will also make an attempt to locate and highlight the code that have caused the
 problem.
 
-.. php:method:: getHTML()
+.. php:method:: getHtml()
 
 Will return nice HTML-formatted exception that will rely on a presence of
 Semantic UI. This will include the error, parameters and backtrace. The code
@@ -108,7 +108,7 @@ If you do not instantiate App, or set it up without automatic exception catching
 
 then you might want to output message details yourself.
 
-Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHTML`::
+Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHtml`::
 
     try {
         // some code..

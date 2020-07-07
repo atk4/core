@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace atk4\core\tests;
 
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 
 class FieldMock
 {
-    use DIContainerTrait;
+    use DiContainerTrait;
 
     public $name;
 }

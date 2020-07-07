@@ -6,7 +6,7 @@ namespace atk4\core\tests;
 
 use atk4\core\AppScopeTrait;
 use atk4\core\AtkPhpunit;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 use atk4\core\HookBreaker as HB;
@@ -54,7 +54,7 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
      */
     public function testParameters()
     {
-        $m = new FactoryDIMock();
+        $m = new FactoryDiMock();
 
         // as class name
         $m1 = $m->factory([FactoryMock::class]);
@@ -68,30 +68,30 @@ class FactoryTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(FactoryMock::class, get_class($m2));
 
         // as class name with parameters
-        $m1 = $m->factory([FactoryDIMock::class], ['a' => 'XXX', 'b' => 'YYY']);
+        $m1 = $m->factory([FactoryDiMock::class], ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertSame('XXX', $m1->a);
         $this->assertSame('YYY', $m1->b);
         $this->assertNull($m1->c);
 
-        $m1 = $m->factory([FactoryDIMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
+        $m1 = $m->factory([FactoryDiMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
         $this->assertSame('AAA', $m1->a);
         $this->assertSame('YYY', $m1->b);
         $this->assertSame('ZZZ', $m1->c);
 
         // as object with parameters
-        $m1 = $m->factory([FactoryDIMock::class]);
+        $m1 = $m->factory([FactoryDiMock::class]);
         $m2 = $m->factory($m1, ['a' => 'XXX', 'b' => 'YYY']);
         $this->assertSame('XXX', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertNull($m2->c);
 
-        $m1 = $m->factory([FactoryDIMock::class]);
+        $m1 = $m->factory([FactoryDiMock::class]);
         $m2 = $m->factory($m1, ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
         $this->assertSame('AAA', $m2->a);
         $this->assertSame('YYY', $m2->b);
         $this->assertSame('ZZZ', $m2->c);
 
-        $m1 = $m->factory([FactoryDIMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'SSS']);
+        $m1 = $m->factory([FactoryDiMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'SSS']);
         $m2 = $m->factory($m1, ['a' => 'XXX', 'b' => null, 'c' => 'ZZZ']);
         $this->assertSame('XXX', $m2->a);
         $this->assertSame('YYY', $m2->b);
@@ -138,10 +138,10 @@ class FactoryMock
     public $b = 'BBB';
     public $c;
 }
-class FactoryDIMock
+class FactoryDiMock
 {
     use FactoryTrait;
-    use DIContainerTrait;
+    use DiContainerTrait;
 
     public $a = 'AAA';
     public $b = 'BBB';

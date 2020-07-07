@@ -31,7 +31,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $this->assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
 
         // get HTML
-        $ret = $m->getHTML();
+        $ret = $m->getHtml();
         $this->assertMatchesRegularExpression('/TestIt/', $ret);
         $this->assertMatchesRegularExpression('/PrevError/', $ret);
         $this->assertMatchesRegularExpression('/333/', $ret);
@@ -43,7 +43,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $this->assertMatchesRegularExpression('/333/', $ret);
 
         // get JSON
-        $ret = $m->getJSON();
+        $ret = $m->getJson();
         $this->assertMatchesRegularExpression('/TestIt/', $ret);
         $this->assertMatchesRegularExpression('/PrevError/', $ret);
         $this->assertMatchesRegularExpression('/333/', $ret);
@@ -71,7 +71,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new Exception('atk4 exception', 0, $m);
         $m->setMessage('bumbum');
 
-        $ret = $m->getHTML();
+        $ret = $m->getHtml();
         $this->assertMatchesRegularExpression('/Classic/', $ret);
         $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
@@ -79,7 +79,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $this->assertMatchesRegularExpression('/Classic/', $ret);
         $this->assertMatchesRegularExpression('/bumbum/', $ret);
 
-        $ret = $m->getJSON();
+        $ret = $m->getJson();
         $this->assertMatchesRegularExpression('/Classic/', $ret);
         $this->assertMatchesRegularExpression('/bumbum/', $ret);
     }
@@ -89,13 +89,13 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new Exception('Exception with solution');
         $m->addSolution('One Solution');
 
-        $ret = $m->getHTML();
+        $ret = $m->getHtml();
         $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
         $ret = $m->getColorfulText();
         $this->assertMatchesRegularExpression('/One Solution/', $ret);
 
-        $ret = $m->getJSON();
+        $ret = $m->getJson();
         $this->assertMatchesRegularExpression('/One Solution/', $ret);
     }
 
@@ -121,14 +121,14 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $m = new ExceptionTestThrowError('test', 2);
         $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionTestThrowError::class . '(2): test !!';
-        $this->assertSame($expectedFallbackText, $m->getHTML());
+        $this->assertSame($expectedFallbackText, $m->getHtml());
         $this->assertSame($expectedFallbackText, $m->getColorfulText());
         $this->assertSame(
             json_encode(
                 [
                     'success' => false,
                     'code' => 2,
-                    'message' => 'Error during JSON renderer: test',
+                    'message' => 'Error during json renderer: test',
                     'title' => ExceptionTestThrowError::class,
                     'class' => ExceptionTestThrowError::class,
                     'params' => [],
@@ -143,7 +143,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
                 ],
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
             ),
-            $m->getJSON()
+            $m->getJson()
         );
     }
 }
