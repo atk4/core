@@ -6,7 +6,7 @@ namespace atk4\core\ExceptionRenderer;
 
 use atk4\core\Exception;
 
-class JSON extends RendererAbstract
+class Json extends RendererAbstract
 {
     /** @var array */
     protected $json = [
@@ -131,7 +131,7 @@ HTML;
             $this->json = [
                 'success' => false,
                 'code' => $this->exception->getCode(),
-                'message' => 'Error during JSON renderer: ' . $this->exception->getMessage(),
+                'message' => 'Error during json renderer: ' . $this->exception->getMessage(),
                 // avoid translation
                 //'message'  => $this->_($this->exception->getMessage()),
                 'title' => get_class($this->exception),

@@ -27,7 +27,7 @@ class Factory
     {
         static $traceRenderer = null;
         if ($traceRenderer === null) {
-            $traceRenderer = new class(new Exception()) extends ExceptionRenderer\HTML {
+            $traceRenderer = new class(new Exception()) extends ExceptionRenderer\Html {
                 public function tryRelativizePath(string $path): string
                 {
                     try {
@@ -46,7 +46,7 @@ class Factory
         $trace = preg_replace_callback('~[^\n\[\]<>]+\.php~', function ($matches) use ($traceRenderer) {
             return $traceRenderer->tryRelativizePath($matches[0]);
         }, $trace);
-        // echo (new Exception($msg))->getHTML();
+        // echo (new Exception($msg))->getHtml();
         'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
     }
 
@@ -117,10 +117,10 @@ class Factory
                 }
 
                 if (count($injection) > 0) {
-                    if (isset($seed->_DIContainerTrait)) {
+                    if (isset($seed->_DiContainerTrait)) {
                         $seed->setDefaults($injection, $passively);
                     } else {
-                        throw (new Exception('Property injection is possible only to objects that use \atk4\core\DIContainerTrait trait'))
+                        throw (new Exception('Property injection is possible only to objects that use \atk4\core\DiContainerTrait trait'))
                             ->addMoreInfo('object', $seed)
                             ->addMoreInfo('injection', $injection)
                             ->addMoreInfo('passively', $passively);

@@ -83,12 +83,12 @@ class Generic implements ITranslatorAdapter
      */
     protected function getDefinition(string $message, $domain, ?string $locale)
     {
-        $this->loadDefinitionATK($locale); // need to be called before manual add
+        $this->loadDefinitionAtk($locale); // need to be called before manual add
 
         return $this->definitions[$locale][$domain][$message] ?? null;
     }
 
-    protected function loadDefinitionATK(string $locale): void
+    protected function loadDefinitionAtk(string $locale): void
     {
         if (isset($this->definitions[$locale]['atk'])) {
             return;
@@ -107,7 +107,7 @@ class Generic implements ITranslatorAdapter
      */
     public function addDefinitionFromFile(string $file, string $locale, string $domain, string $format): void
     {
-        $this->loadDefinitionATK($locale); // need to be called before manual add
+        $this->loadDefinitionAtk($locale); // need to be called before manual add
 
         $this->readConfig($file, $format);
 
@@ -132,7 +132,7 @@ class Generic implements ITranslatorAdapter
      */
     public function setDefinitionSingle(string $key, $definition, string $locale = 'en', string $domain = 'atk')
     {
-        $this->loadDefinitionATK($locale); // need to be called before manual add
+        $this->loadDefinitionAtk($locale); // need to be called before manual add
 
         if (is_string($definition)) {
             $definition = [$definition];

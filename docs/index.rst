@@ -81,7 +81,7 @@ ChildClass can extend the basic functionality.
    child.
  - :php:trait:`TrackableTrait` will let you assign unique names to object
  - :php:trait:`FactoryTrait` will let you specify object class by Seed
- - :php:trait:`DIContainerTrait` will let you with dependency injection
+ - :php:trait:`DiContainerTrait` will let you with dependency injection
 
 Just to clarify what Seed is::
 

@@ -157,11 +157,11 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertNull($app->log);
     }
 
-    public function testPSR()
+    public function testPsr()
     {
         $app = new DebugAppMock();
 
-        $m = new PSRMock();
+        $m = new PsrMock();
         $app->logger = $app;
         $m->app = $app;
 
@@ -224,7 +224,7 @@ class DebugAppMock2 implements \atk4\core\AppUserNotificationInterface
     }
 }
 
-class PSRmock implements \Psr\Log\LoggerInterface
+class PsrMock implements \Psr\Log\LoggerInterface
 {
     use DebugTrait;
     use AppScopeTrait;

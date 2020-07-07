@@ -19,12 +19,12 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         };
     }
 
-    public function testExceptionDINotFound(): void
+    public function testExceptionDiNotFound(): void
     {
         $this->assertSame('no key return self', Translator::instance()->_('no key return self'));
     }
 
-    public function testExceptionDIInstance(): void
+    public function testExceptionDiInstance(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
@@ -32,7 +32,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         ]);
     }
 
-    public function testExceptionDIAdapter(): void
+    public function testExceptionDiAdapter(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
@@ -40,7 +40,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         ]);
     }
 
-    public function testExceptionDIDefaultDomain(): void
+    public function testExceptionDiDefaultDomain(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
@@ -48,7 +48,7 @@ class TranslatorAdapterGenericTest extends TranslatorAdapterBase
         ]);
     }
 
-    public function testExceptionDIDefaultLocale(): void
+    public function testExceptionDiDefaultLocale(): void
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([

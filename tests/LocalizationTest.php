@@ -21,9 +21,9 @@ class LocalizationTest extends AtkPhpunit\TestCase
         try {
             Persistence::connect('error:error');
         } catch (Exception $e) {
-            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getHTML());
+            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getHtml());
             $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getColorfulText());
-            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getJSON());
+            $this->assertMatchesRegularExpression('/Невозможно определить постоянство драйвера из DSN/', $e->getJson());
         }
     }
 
@@ -36,9 +36,9 @@ class LocalizationTest extends AtkPhpunit\TestCase
             Persistence::connect('error:error');
         } catch (Exception $e) {
             $e->setTranslatorAdapter($adapter);
-            $this->assertMatchesRegularExpression('/message is translated/', $e->getHTML());
+            $this->assertMatchesRegularExpression('/message is translated/', $e->getHtml());
             $this->assertMatchesRegularExpression('/message is translated/', $e->getColorfulText());
-            $this->assertMatchesRegularExpression('/message is translated/', $e->getJSON());
+            $this->assertMatchesRegularExpression('/message is translated/', $e->getJson());
         }
     }
 
@@ -61,9 +61,9 @@ class LocalizationTest extends AtkPhpunit\TestCase
                     return 'external translator';
                 }
             });
-            $this->assertMatchesRegularExpression('/external translator/', $e->getHTML());
+            $this->assertMatchesRegularExpression('/external translator/', $e->getHtml());
             $this->assertMatchesRegularExpression('/external translator/', $e->getColorfulText());
-            $this->assertMatchesRegularExpression('/external translator/', $e->getJSON());
+            $this->assertMatchesRegularExpression('/external translator/', $e->getJson());
         }
     }
 }

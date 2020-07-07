@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace atk4\core\tests;
 
 use atk4\core\AtkPhpunit;
-use atk4\core\DIContainerTrait;
+use atk4\core\DiContainerTrait;
 use atk4\core\Exception;
 use atk4\core\FactoryTrait;
 
@@ -37,15 +37,15 @@ class SeedTest extends AtkPhpunit\TestCase
         );
 
         // object takes precedence
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $this->assertSame(
             $o,
             $this->mergeSeeds(null, ['two'], $o, ['four'])
         );
 
         // if more than one object, leftmost is returned
-        $o1 = new SeedDITestMock();
-        $o2 = new SeedDITestMock();
+        $o1 = new SeedDiTestMock();
+        $o2 = new SeedDiTestMock();
         $this->assertSame(
             $o2,
             $this->mergeSeeds(null, ['two'], $o2, $o1, ['four'])
@@ -67,14 +67,14 @@ class SeedTest extends AtkPhpunit\TestCase
         );
 
         // object takes precedence
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $this->assertSame(
             $o,
             $this->mergeSeeds(['a1'], $o)
         );
 
         // is object is wrapped in array - we dont care
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $this->assertSame(
             ['b1', 'a2', 'c3'],
             $this->mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'], [1 => $o])
@@ -82,7 +82,7 @@ class SeedTest extends AtkPhpunit\TestCase
 
         // but constructor arguments (except silently ignored class name)
         // for already instanced object are not valid
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $this->expectException(Exception::class);
         $this->mergeSeeds(['a1', 'a2'], $o);
     }
@@ -102,14 +102,14 @@ class SeedTest extends AtkPhpunit\TestCase
         );
 
         // object is injected with values
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $oo = $this->mergeSeeds(['foo' => 1], $o);
 
         $this->assertSame($o, $oo);
         $this->assertSame(1, $oo->foo);
 
         // even it already has value
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $o->foo = 5;
         $oo = $this->mergeSeeds(['foo' => 1], $o);
 
@@ -117,7 +117,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $this->assertSame(1, $oo->foo);
 
         // but this way existing value is respected
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $o->foo = 5;
         $oo = $this->mergeSeeds($o, ['foo' => 1]);
 
@@ -136,7 +136,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $this->assertSame(['red', 'green'], $oo->foo);
 
         // still we don't care if they are to the right of the object
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $o->foo = ['red'];
         $oo = $this->mergeSeeds($o, ['foo' => ['green']]);
 
@@ -155,7 +155,7 @@ class SeedTest extends AtkPhpunit\TestCase
         $this->assertSame(['red', 'green', 'xx'], $oo->foo);
 
         // also without arrays
-        $o = new SeedDITestMock();
+        $o = new SeedDiTestMock();
         $o->foo = 'red';
         $oo = $this->mergeSeeds(['foo' => 'xx'], ['foo' => 'green'], $o, ['foo' => 5]);
 
@@ -238,10 +238,10 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testInjection()
     {
-        $s1 = $this->factory(new SeedDITestMock(), null);
+        $s1 = $this->factory(new SeedDiTestMock(), null);
         $this->assertNotSame('bar', $s1->foo);
 
-        $s1 = $this->factory(new SeedDITestMock(), ['foo' => 'bar']);
+        $s1 = $this->factory(new SeedDiTestMock(), ['foo' => 'bar']);
         $this->assertSame('bar', $s1->foo);
     }
 
@@ -258,15 +258,15 @@ class SeedTest extends AtkPhpunit\TestCase
         $s1 = $this->factory([SeedTestMock::class, null, 'world']);
         $this->assertSame([null, 'world'], $s1->args);
 
-        $s1 = $this->factory([SeedDITestMock::class, 'hello', 'foo' => 'bar', 'world']);
+        $s1 = $this->factory([SeedDiTestMock::class, 'hello', 'foo' => 'bar', 'world']);
         $this->assertSame(['hello', 'world'], $s1->args);
         $this->assertSame('bar', $s1->foo);
     }
 
     public function testDefaults()
     {
-        $s1 = $this->factory([SeedDITestMock::class, 'hello', 'foo' => 'bar', 'world'], ['more', 'baz' => '', 'more', 'args']);
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $s1 = $this->factory([SeedDiTestMock::class, 'hello', 'foo' => 'bar', 'world'], ['more', 'baz' => '', 'more', 'args']);
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['hello', 'world', 'args'], $s1->args);
         $this->assertSame('bar', $s1->foo);
         $this->assertSame('', $s1->baz);
@@ -276,27 +276,27 @@ class SeedTest extends AtkPhpunit\TestCase
 
     public function testNull()
     {
-        $s1 = $this->factory([SeedDITestMock::class, 'foo' => null, null, 'world'], ['more', 'foo' => 'bar', 'more', 'args']);
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $s1 = $this->factory([SeedDiTestMock::class, 'foo' => null, null, 'world'], ['more', 'foo' => 'bar', 'more', 'args']);
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['more', 'world', 'args'], $s1->args);
         $this->assertSame('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds([SeedDITestMock::class, 'foo' => null, null, 'world'], [SeedTestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $s1 = $this->factory($this->mergeSeeds([SeedDiTestMock::class, 'foo' => null, null, 'world'], [SeedTestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['more', 'world', 'args'], $s1->args);
         $this->assertSame('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds([null, 'foo' => null, null, 'world'], [SeedDITestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $s1 = $this->factory($this->mergeSeeds([null, 'foo' => null, null, 'world'], [SeedDiTestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['more', 'world', 'args'], $s1->args);
         $this->assertSame('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds(null, [SeedDITestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $s1 = $this->factory($this->mergeSeeds(null, [SeedDiTestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['more', 'more', 'args'], $s1->args);
         $this->assertSame('bar', $s1->foo);
 
-        $s1 = $this->factory($this->mergeSeeds([], [SeedDITestMock::class, 'test']));
+        $s1 = $this->factory($this->mergeSeeds([], [SeedDiTestMock::class, 'test']));
         $this->assertSame(['test'], $s1->args);
     }
 
@@ -304,15 +304,15 @@ class SeedTest extends AtkPhpunit\TestCase
     {
         // $this->expectException(Exception::class);
         $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
-        $s1 = $this->factory([new SeedDITestMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
+        $s1 = $this->factory([new SeedDiTestMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
     }
 
     public function testMerge()
     {
-        $s1 = $this->factory([SeedDITestMock::class, 'hello', 'world'], ['more', 'more', 'args']);
+        $s1 = $this->factory([SeedDiTestMock::class, 'hello', 'world'], ['more', 'more', 'args']);
         $this->assertSame(['hello', 'world', 'args'], $s1->args);
 
-        $s1 = $this->factory([SeedDITestMock::class, null, 'world'], ['more', 'more', 'args']);
+        $s1 = $this->factory([SeedDiTestMock::class, null, 'world'], ['more', 'more', 'args']);
         $this->assertSame(['more', 'world', 'args'], $s1->args);
     }
 
@@ -337,10 +337,10 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testClassMayNotBeEmpty()
     {
         $this->expectException(\Error::class);
-        $s1 = $this->factory([''], [SeedDITestMock::class, 'test']);
+        $s1 = $this->factory([''], [SeedDiTestMock::class, 'test']);
     }
 
-    public function testMystBeDI()
+    public function testMystBeDi()
     {
         $this->expectException(Exception::class);
         $s1 = $this->factory([SeedTestMock::class, 'hello', 'foo' => 'bar', 'world']);
@@ -349,19 +349,19 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testMustHaveProperty()
     {
         $this->expectException(Exception::class);
-        $s1 = $this->factory([SeedDITestMock::class, 'hello', 'xxx' => 'bar', 'world']);
+        $s1 = $this->factory([SeedDiTestMock::class, 'hello', 'xxx' => 'bar', 'world']);
     }
 
     public function testGiveClassFirst()
     {
         $this->expectException(Exception::class);
-        $s1 = $this->factory(['foo' => 'bar'], new SeedDITestMock());
+        $s1 = $this->factory(['foo' => 'bar'], new SeedDiTestMock());
     }
 
     public function testStringDefault()
     {
-        $s1 = $this->factory([SeedDITestMock::class], ['hello']);
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $s1 = $this->factory([SeedDiTestMock::class], ['hello']);
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['hello'], $s1->args);
 
         // also OK if it's not a DIContainer object
@@ -373,11 +373,11 @@ class SeedTest extends AtkPhpunit\TestCase
     /**
      * Cannot inject in non-DI.
      */
-    public function testNonDIInject()
+    public function testNonDiInject()
     {
         $this->expectException(Exception::class);
         $s1 = $this->factory([SeedTestMock::class], ['foo' => 'hello']);
-        $this->assertTrue($s1 instanceof SeedDITestMock);
+        $this->assertTrue($s1 instanceof SeedDiTestMock);
         $this->assertSame(['hello'], $s1->args);
     }
 
@@ -387,7 +387,7 @@ class SeedTest extends AtkPhpunit\TestCase
     public function testPropertyMerging()
     {
         $s1 = $this->factory(
-            [SeedDITestMock::class, 'foo' => ['Button', 'icon' => 'red']],
+            [SeedDiTestMock::class, 'foo' => ['Button', 'icon' => 'red']],
             ['foo' => ['Label', 'red']]
         );
 
@@ -411,14 +411,14 @@ class SeedTestMock
     }
 }
 
-class SeedDITestMock extends SeedTestMock
+class SeedDiTestMock extends SeedTestMock
 {
-    use DIContainerTrait;
+    use DiContainerTrait;
 }
 
 class ViewTestMock extends SeedTestMock
 {
-    use DIContainerTrait {
+    use DiContainerTrait {
         setDefaults as _setDefaults;
     }
     public $def;
@@ -440,7 +440,7 @@ class ViewTestMock extends SeedTestMock
 
 class SeedDefTestMock extends SeedTestMock
 {
-    use DIContainerTrait {
+    use DiContainerTrait {
         setDefaults as _setDefaults;
     }
     public $def;

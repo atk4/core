@@ -30,14 +30,14 @@ namespace atk4\core;
  * Relying on this trait excessively may cause anger management issues to
  * some code reviewers.
  */
-trait DIContainerTrait
+trait DiContainerTrait
 {
     /**
      * Check this property to see if trait is present in the object.
      *
      * @var bool
      */
-    public $_DIContainerTrait = true;
+    public $_DiContainerTrait = true;
 
     /**
      * Call from __construct() to initialize the properties allowing
