@@ -23,9 +23,9 @@ class Console extends RendererAbstract
         $this->output .= $this->replaceTokens(
             $tokens,
             <<<TEXT
-\e[1;41m--[ {TITLE} ]\e[0m
-{CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
-TEXT
+                \e[1;41m--[ {TITLE} ]\e[0m
+                {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
+                TEXT
         );
     }
 
@@ -67,9 +67,9 @@ TEXT
     {
         $this->output .= <<<TEXT
 
-\e[1;41m--[ Stack Trace ]\e[0m
+            \e[1;41m--[ Stack Trace ]\e[0m
 
-TEXT;
+            TEXT;
 
         $this->processStackTraceInternal();
     }
@@ -77,9 +77,9 @@ TEXT;
     protected function processStackTraceInternal(): void
     {
         $text = <<<TEXT
-\e[0m{FILE}\e[0m:\e[0;31m{LINE}\e[0m {OBJECT} {CLASS}{FUNCTION_COLOR}{FUNCTION}{FUNCTION_ARGS}
+            \e[0m{FILE}\e[0m:\e[0;31m{LINE}\e[0m {OBJECT} {CLASS}{FUNCTION_COLOR}{FUNCTION}{FUNCTION_ARGS}
 
-TEXT;
+            TEXT;
 
         $in_atk = true;
         $short_trace = $this->getStackTrace(true);
@@ -135,8 +135,8 @@ TEXT;
 
         $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
         $this->output .= <<<TEXT
-\e[1;31m--
-\e[0m
-TEXT;
+            \e[1;31m--
+            \e[0m
+            TEXT;
     }
 }

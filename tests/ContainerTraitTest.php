@@ -223,7 +223,7 @@ class ContainerAppMock
         $d = array_flip($this->app->unique_hashes);
 
         for ($x = 1; $x < 100; ++$x) {
-            @list($l, $r) = explode('__', $n);
+            @[$l, $r] = explode('__', $n);
 
             if (!$r) {
                 return $l;
