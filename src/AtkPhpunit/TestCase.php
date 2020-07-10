@@ -29,7 +29,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
     public function &callProtected(object $obj, string $name, ...$args)
     {
         return \Closure::bind(static function &() use ($obj, $name, $args) {
-            if ((new \ReflectionClass($obj))->getMethod($name)->returnsReference()) {
+            $objRefl = new \ReflectionClass($obj);
+            if ($objRefl
+                ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
+                ->returnsReference()) {
                 return $obj->{$name}(...$args);
             }
 
