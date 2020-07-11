@@ -108,7 +108,8 @@ abstract class RendererAbstract
                 : 'Object ' . get_class($val);
         }
 
-        return (string) json_encode($val);
+        return (string) json_encode($val,
+            JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
     }
 
     protected function getExceptionTitle(): string
