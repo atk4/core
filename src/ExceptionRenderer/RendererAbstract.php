@@ -126,15 +126,7 @@ abstract class RendererAbstract
     protected function getExceptionMessage(): string
     {
         $msg = $this->exception->getMessage();
-
-        $msg = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
-            try {
-                return $this->makeRelativePath($matches[0]);
-            } catch (\Exception $e) {
-                return $matches[0];
-            }
-        }, $msg);
-
+        $msg = $this->tryRelativizePathsInString($msg);
         $msg = $this->_($msg);
 
         return $msg;
@@ -221,5 +213,18 @@ abstract class RendererAbstract
         }
 
         return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : '') . implode('/', $filePathArr);
+    }
+
+    protected function tryRelativizePathsInString(string $str): string
+    {
+        $str = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
+            try {
+                return $this->makeRelativePath($matches[0]);
+            } catch (\Exception $e) {
+                return $matches[0];
+            }
+        }, $str);
+
+        return $str;
     }
 }
