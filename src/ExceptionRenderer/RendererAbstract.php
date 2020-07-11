@@ -100,20 +100,44 @@ abstract class RendererAbstract
         return $parsed;
     }
 
-    public static function toSafeString($val): string
+    public static function toSafeString($val, $allowNl = false, int $maxDepth = 2): string
     {
-        if (is_object($val) && !$val instanceof \Closure) {
-            return isset($val->_trackableTrait)
-                ? get_class($val) . ' (' . $val->name . ')'
-                : 'Object ' . get_class($val);
+        if ($val instanceof \Closure) {
+            return 'closure';
+        } elseif (is_object($val)) {
+            return get_class($val) . (isset($val->_trackableTrait) ? ' (' . $val->name . ')' : '');
+        } elseif (is_resource($val)) {
+            return 'resource';
+        } elseif (is_scalar($val) || $val === null) {
+            $out = json_encode($val, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
+            $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
+            $out = preg_replace('~\\\\([\\\\/])~s', '$1', $out); // unescape slashes
+
+            return $out;
         }
 
-        $out = json_encode(
-            $val,
-            JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE
-        );
+        if ($maxDepth === 0) {
+            return '...';
+        }
 
-        return $out !== false ? $out : 'value dump failed';
+        $out = '[';
+        foreach ($val as $k => $v) {
+            $kSafe = static::toSafeString($k);
+            $vSafe = static::toSafeString($v, $allowNl, $maxDepth - 1);
+
+            if ($allowNl) {
+                $out .= "\n" . '  ' . $kSafe . ': ' . preg_replace('~(?<=\n)~', '  ', $vSafe);
+            } else {
+                $out .= $kSafe . ': ' . $vSafe;
+            }
+
+            if ($k !== array_key_last($val)) {
+                $out .= $allowNl ? ',' : ', ';
+            }
+        }
+        $out .= ($allowNl && count($val) > 0 ? "\n" : '') . ']';
+
+        return $out;
     }
 
     protected function getExceptionTitle(): string

@@ -52,7 +52,8 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
     {
         $string = '';
         foreach ($e->getParams() as $param => $value) {
-            $string .= '  ' . $param . ': ' . \atk4\core\ExceptionRenderer\RendererAbstract::toSafeString($value) . "\n";
+            $valueStr = \atk4\core\ExceptionRenderer\RendererAbstract::toSafeString($value, true);
+            $string .= '  ' . $param . ': ' . str_replace("\n", "\n" . '  ', $valueStr) . "\n";
         }
 
         return $string;

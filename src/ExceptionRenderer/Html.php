@@ -57,7 +57,7 @@ class Html extends RendererAbstract
                     <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>';
         foreach ($this->exception->getParams() as $key => $val) {
             $key = htmlentities($key);
-            $val = htmlentities(static::toSafeString($val));
+            $val = '<code style="white-space: pre-wrap;">' . htmlentities(static::toSafeString($val, true)) . '</code>';
 
             $tokens['{PARAMS}'] .= $this->replaceTokens(
                 [
@@ -160,7 +160,7 @@ class Html extends RendererAbstract
             } else {
                 if ($escape_frame) {
                     $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', array_map(function ($arg) {
-                        return static::toSafeString($arg);
+                        return htmlentities(static::toSafeString($arg, false, 1));
                     }, $call['args'])) . ')';
                 } else {
                     $tokens['{FUNCTION_ARGS}'] = '(...)';
