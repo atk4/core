@@ -108,8 +108,10 @@ abstract class RendererAbstract
                 : 'Object ' . get_class($val);
         }
 
-        $out = json_encode($val,
-            JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
+        $out = json_encode(
+            $val,
+            JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE
+        );
 
         return $out !== false ? $out : 'value dump failed';
     }
