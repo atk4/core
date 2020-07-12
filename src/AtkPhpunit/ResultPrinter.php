@@ -34,7 +34,9 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
         $string = TestFailure::exceptionToString($e);
 
         if (is_a($e->getClassName(), Exception::class, true)) {
-            $string .= $this->atkExceptionParamsToString($e->getOriginalException());
+            if ($e->getOriginalException() !== null) { // original exception is not available when run with process isolation
+                $string .= $this->atkExceptionParamsToString($e->getOriginalException());
+            }
         }
 
         if ($trace = Filter::getFilteredStacktrace($e)) {
