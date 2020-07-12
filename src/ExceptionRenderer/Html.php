@@ -57,7 +57,7 @@ class Html extends RendererAbstract
                     <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>';
         foreach ($this->exception->getParams() as $key => $val) {
             $key = htmlentities($key);
-            $val = '<code style="white-space: pre-wrap;">' . htmlentities(static::toSafeString($val, true)) . '</code>';
+            $val = '<code style="font-family: inherit; white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', htmlentities(static::toSafeString($val, true))) . '</code>';
 
             $tokens['{PARAMS}'] .= $this->replaceTokens(
                 [
