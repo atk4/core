@@ -43,20 +43,21 @@ class Html extends RendererAbstract
         }
 
         $text = '
-            <div class="ui stacked segments">
-                <div class="ui inverted red segment fitted">Exception Parameters</div>
-                {PARAMS}
-            </div>
+            <table class="ui very compact small selectable table top aligned">
+                <thead><tr><th colspan="2" class="ui inverted red table">Exception Parameters</th></tr></thead>
+                <tbody>{PARAMS}
+                </tbody>
+            </table>
         ';
 
         $tokens = [
             '{PARAMS}' => '',
         ];
-        $text_inner = '<div class="ui segment"><b>{KEY}:</b> {VAL}</div>';
+        $text_inner = '
+                    <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>';
         foreach ($this->exception->getParams() as $key => $val) {
-            $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
             $key = htmlentities($key);
-            $val = htmlentities(static::toSafeString($val));
+            $val = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', htmlentities(static::toSafeString($val, true))) . '</span>';
 
             $tokens['{PARAMS}'] .= $this->replaceTokens(
                 [
@@ -84,16 +85,18 @@ class Html extends RendererAbstract
         }
 
         $text = '
-            <div class="ui stacked segments">
-                <div class="ui inverted secondary green segment small">Suggested solutions</div>
-                {SOLUTIONS}
-            </div>
+            <table class="ui very compact small selectable table top aligned">
+                <thead><tr><th colspan="2" class="ui inverted green table">Suggested solutions</th></tr></thead>
+                <tbody>{SOLUTIONS}
+                </tbody>
+            </table>
         ';
 
         $tokens = [
             '{SOLUTIONS}' => '',
         ];
-        $text_inner = '<div class="ui segment">{VAL}</div>';
+        $text_inner = '
+                    <tr><td>{VAL}</td></tr>';
         foreach ($exception->getSolutions() as $key => $val) {
             $tokens['{SOLUTIONS}'] .= $this->replaceTokens(['{VAL}' => htmlentities($val)], $text_inner);
         }
@@ -106,7 +109,7 @@ class Html extends RendererAbstract
         $this->output .= '
             <table class="ui very compact small selectable table top aligned">
                 <thead><tr><th colspan="4">Stack Trace</th></tr></thead>
-                <thead><tr><th style="text-align:right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
+                <thead><tr><th style="text-align: right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
                 <tbody>
         ';
 
@@ -122,7 +125,7 @@ class Html extends RendererAbstract
     {
         $text = '
             <tr class="{CSS_CLASS}">
-                <td style="text-align:right">{INDEX}</td>
+                <td style="text-align: right">{INDEX}</td>
                 <td>{FILE_LINE}</td>
                 <td>{OBJECT}</td>
                 <td>{FUNCTION}{FUNCTION_ARGS}</td>
@@ -157,7 +160,7 @@ class Html extends RendererAbstract
             } else {
                 if ($escape_frame) {
                     $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', array_map(function ($arg) {
-                        return static::toSafeString($arg);
+                        return htmlentities(static::toSafeString($arg, false, 1));
                     }, $call['args'])) . ')';
                 } else {
                     $tokens['{FUNCTION_ARGS}'] = '(...)';
@@ -169,8 +172,8 @@ class Html extends RendererAbstract
 
         if ($is_shortened) {
             $this->output .= '
-                <tr class="">
-                    <td style="text-align:right">...</td>
+                <tr>
+                    <td style="text-align: right">...</td>
                     <td></td>
                     <td></td>
                     <td></td>

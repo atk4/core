@@ -9,15 +9,6 @@ namespace atk4\core\AtkPhpunit;
  */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
-    public function runBare(): void
-    {
-        try {
-            parent::runBare();
-        } catch (Exception $e) {
-            throw new ExceptionWrapper($e->getMessage(), 0, $e);
-        }
-    }
-
     /**
      * Calls protected method.
      *

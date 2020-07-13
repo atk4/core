@@ -100,15 +100,44 @@ abstract class RendererAbstract
         return $parsed;
     }
 
-    public static function toSafeString($val): string
+    public static function toSafeString($val, $allowNl = false, int $maxDepth = 2): string
     {
-        if (is_object($val) && !$val instanceof \Closure) {
-            return isset($val->_trackableTrait)
-                ? get_class($val) . ' (' . $val->name . ')'
-                : 'Object ' . get_class($val);
+        if ($val instanceof \Closure) {
+            return 'closure';
+        } elseif (is_object($val)) {
+            return get_class($val) . (isset($val->_trackableTrait) ? ' (' . $val->name . ')' : '');
+        } elseif (is_resource($val)) {
+            return 'resource';
+        } elseif (is_scalar($val) || $val === null) {
+            $out = json_encode($val, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
+            $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
+            $out = preg_replace('~\\\\([\\\\/])~s', '$1', $out); // unescape slashes
+
+            return $out;
         }
 
-        return (string) json_encode($val);
+        if ($maxDepth === 0) {
+            return '...';
+        }
+
+        $out = '[';
+        foreach ($val as $k => $v) {
+            $kSafe = static::toSafeString($k);
+            $vSafe = static::toSafeString($v, $allowNl, $maxDepth - 1);
+
+            if ($allowNl) {
+                $out .= "\n" . '  ' . $kSafe . ': ' . preg_replace('~(?<=\n)~', '  ', $vSafe);
+            } else {
+                $out .= $kSafe . ': ' . $vSafe;
+            }
+
+            if ($k !== array_key_last($val)) {
+                $out .= $allowNl ? ',' : ', ';
+            }
+        }
+        $out .= ($allowNl && count($val) > 0 ? "\n" : '') . ']';
+
+        return $out;
     }
 
     protected function getExceptionTitle(): string
@@ -121,15 +150,7 @@ abstract class RendererAbstract
     protected function getExceptionMessage(): string
     {
         $msg = $this->exception->getMessage();
-
-        $msg = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
-            try {
-                return $this->makeRelativePath($matches[0]);
-            } catch (\Exception $e) {
-                return $matches[0];
-            }
-        }, $msg);
-
+        $msg = $this->tryRelativizePathsInString($msg);
         $msg = $this->_($msg);
 
         return $msg;
@@ -216,5 +237,18 @@ abstract class RendererAbstract
         }
 
         return (count($vendorRootArr) > 0 ? str_repeat('../', count($vendorRootArr)) : '') . implode('/', $filePathArr);
+    }
+
+    protected function tryRelativizePathsInString(string $str): string
+    {
+        $str = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
+            try {
+                return $this->makeRelativePath($matches[0]);
+            } catch (\Exception $e) {
+                return $matches[0];
+            }
+        }, $str);
+
+        return $str;
     }
 }

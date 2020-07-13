@@ -53,10 +53,10 @@ class ExceptionTest extends AtkPhpunit\TestCase
         $this->assertSame('1', $ret);
 
         $ret = $m->toString('abc');
-        $this->assertSame('"abc"', $ret);
+        $this->assertSame('\'abc\'', $ret);
 
         $ret = $m->toString(new \stdClass());
-        $this->assertSame('Object stdClass', $ret);
+        $this->assertSame('stdClass', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
