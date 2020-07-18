@@ -50,121 +50,112 @@ class Factory
         'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
     }
 
-    protected function _mergeSeeds($seed, $seed2, ...$more_seeds)
+    private function checkSeeFunc($seed): ?string {
+        if (is_object($seed) || $seed === null) {
+            return null;
+        } elseif (!array_key_exists(0, $seed)) {
+            return null; // 'not defined' allow this method to be used to merge seeds without class name
+        } elseif ($seed[0] === null) {
+            return null;
+        } elseif (!is_string($seed[0])) {
+            return 'invalid type (' . (is_object($seed[0]) ? get_class($seed[0]) . ' (class wrapped in an array?)' : gettype($seed[0])) . ')';
+        } elseif (class_exists($seed[0])) {
+            return null;
+        }
+
+        // do not emit warnings for core tests:
+        // - some tests already tests for exception
+        // - we may later want to use this function for "mergeDefaults" (like _factory() below does)
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $cl) {
+            if (strpos($cl['class'] ?? '', 'atk4\core\tests\\') === 0) {
+                return null;
+            }
+        }
+
+        return 'non-existing/non-autoloadable (' . $seed[0] . ')';
+    }
+
+    protected function _mergeSeeds(...$seeds)
     {
-        // recursively merge extra seeds
-        if (count($more_seeds) > 0) {
-            $seed2 = $this->_mergeSeeds($seed2, ...$more_seeds);
-        }
-
-        if ((!is_array($seed) && !is_object($seed) && $seed !== null) || (!is_array($seed2) && !is_object($seed2) && $seed2 !== null)) { // remove/do not accept other seed than object/array type after 2020-dec
-            $varName = !is_array($seed) && !is_object($seed) && $seed !== null ? 'seed' : 'seed2';
-            $this->printDeprecatedWarningWithTrace(
-                'Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is deprecated and support will be removed shortly.'
-            );
-        }
-
-        // remove/do not accept seed with 1st argument other than valid class name (or null) after 2020-dec
-        $checkSeedClFunc = function ($seed): ?string {
-            if (is_object($seed) || $seed === null) {
-                return null;
-            } elseif (!array_key_exists(0, $seed)) {
-                return null; // 'not defined' allow this method to be used to merge seeds without class name
-            } elseif ($seed[0] === null) {
-                return null;
-            } elseif (!is_string($seed[0])) {
-                return 'invalid type (' . (is_object($seed[0]) ? get_class($seed[0]) . ' (class wrapped in an array?)' : gettype($seed[0])) . ')';
-            } elseif (class_exists($seed[0])) {
-                return null;
-            }
-
-            // do not emit warnings for core tests:
-            // - some tests already tests for exception
-            // - we may later want to use this function for "mergeDefaults" (like _factory() below does)
-            foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $cl) {
-                if (strpos($cl['class'] ?? '', 'atk4\core\tests\\') === 0) {
-                    return null;
-                }
-            }
-
-            return 'non-existing/non-autoloadable (' . $seed[0] . ')';
-        };
-        if ($checkSeedClFunc($seed) !== null || $checkSeedClFunc($seed2) !== null) {
-            $varName = $checkSeedClFunc($seed) ? 'seed' : 'seed2';
-            $this->printDeprecatedWarningWithTrace(
-                'Use of invalid/deprecated $' . $varName . ' class name (' . $checkSeedClFunc(${$varName}) . '). Support will be removed shortly.'
-            );
-        }
-
-        if (is_object($seed) || is_object($seed2)) {
+        // merge seeds but prefer seed over seed2
+        // move numerical keys to the beginning and sort them
+        $arguments = [];
+        $injection = [];
+        $obj = null;
+        $beforeObjKeys = null;
+        foreach ($seeds as $seedIndex => $seed) {
             if (is_object($seed)) {
-                $passively = true; // set defaults but don't override existing properties
-            } else {
-                $passively = false;
-                [$seed, $seed2] = [$seed2, $seed]; // swap seeds
-            }
-
-            if (is_array($seed2)) {
-                $arguments = array_filter($seed2, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
-                $injection = array_diff_key($seed2, $arguments); // with string keys
-                unset($seed2);
-                unset($arguments[0]); // the first argument specifies a class name
-
-                if (count($arguments) > 0) {
-                    throw (new Exception('Constructor arguments can not be injected into existing object'))
-                        ->addMoreInfo('object', $seed)
-                        ->addMoreInfo('arguments', $arguments);
+                if ($obj !== null) {
+                    continue; // legacy behaviour
+                    throw new \Exception('Two or more objects specified as seed.');
                 }
 
+                $obj = $seed;
                 if (count($injection) > 0) {
-                    if (isset($seed->_DiContainerTrait)) {
-                        $seed->setDefaults($injection, $passively);
-                    } else {
-                        throw (new Exception('Property injection is possible only to objects that use \atk4\core\DiContainerTrait trait'))
-                            ->addMoreInfo('object', $seed)
-                            ->addMoreInfo('injection', $injection)
-                            ->addMoreInfo('passively', $passively);
+                    $beforeObjKeys = array_flip(array_keys($injection));
+                }
+
+                continue;
+            } elseif ($seed === null) {
+                continue;
+            }
+
+            if ($this->checkSeeFunc($seed) !== null) {
+                // remove/do not accept other seed than object/array type after 2020-dec
+                // remove/do not accept seed with 1st argument other than valid class name (or null) after 2020-dec
+                $this->printDeprecatedWarningWithTrace(
+                    'Use of invalid/deprecated $seed' . $seedIndex . ' class name (' . $this->checkSeeFunc($seed) . '). Support will be removed shortly.'
+                );
+            }
+
+            if (!is_array($seed)) {
+                $seed = [$seed];
+            }
+
+            foreach ($seed as $k => $v) {
+                if (is_numeric($k)) {
+                    if (!isset($arguments[$k])) {
+                        $arguments[$k] = $v;
+                    }
+                } elseif ($v !== null) {
+                    if (!isset($injection[$k]) && !isset($injectionActive[$k])) {
+                        $injection[$k] = $v;
                     }
                 }
             }
-
-            return $seed;
         }
 
-        if (!is_array($seed)) {
-            $seed = [$seed];
+        ksort($arguments, SORT_NUMERIC);
+        if ($obj === null) {
+            $arguments = $arguments + $injection;
+            return $arguments;
         }
 
-        if (!is_array($seed2)) {
-            $seed2 = [$seed2];
+        unset($arguments[0]); // the first argument specifies a class name
+        if (count($arguments) > 0) {
+            throw (new Exception('Constructor arguments can not be injected into existing object'))
+                ->addMoreInfo('object', $obj)
+                ->addMoreInfo('arguments', $arguments);
         }
 
-        // merge seeds but prefer seed over seed2
-        // move numerical keys to the beginning and sort them
-        $res = [];
-        $res2 = [];
-        foreach ($seed as $k => $v) {
-            if (is_numeric($k)) {
-                $res[$k] = $v;
-            } elseif ($v !== null) {
-                $res2[$k] = $v;
+        if (count($injection) > 0) {
+            if (!isset($obj->_DiContainerTrait)) {
+                throw (new Exception('Property injection is possible only to objects that use \atk4\core\DiContainerTrait trait'))
+                    ->addMoreInfo('object', $obj)
+                    ->addMoreInfo('injection', $injection);
             }
-        }
-        foreach ($seed2 as $k => $v) {
-            if (is_numeric($k)) {
-                if (!isset($res[$k])) {
-                    $res[$k] = $v;
-                }
-            } elseif ($v !== null) {
-                if (!isset($res2[$k])) {
-                    $res2[$k] = $v;
-                }
-            }
-        }
-        ksort($res, SORT_NUMERIC);
-        $res = $res + $res2;
 
-        return $res;
+            if ($beforeObjKeys !== null) {
+                $injectionActive = array_intersect_key($injection, $beforeObjKeys);
+                $injection = array_diff_key($injection, $beforeObjKeys);
+
+                $obj->setDefaults($injectionActive, false);
+            }
+            $obj->setDefaults($injection, true);
+        }
+
+        return $obj;
+
     }
 
     protected function _newObject(string $className, array $ctorArgs): object

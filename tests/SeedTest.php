@@ -149,7 +149,8 @@ class SeedTest extends AtkPhpunit\TestCase
         // works even if more arguments present
         $o = new ViewTestMock();
         $o->foo = ['red'];
-        $oo = $this->mergeSeeds(['foo' => ['xx']], ['foo' => ['green']], $o);
+        $oo = $this->mergeSeeds(['foo' => ['green']], $o);
+        $oo = $this->mergeSeeds(['foo' => ['xx']], $o);
 
         $this->assertSame($o, $oo);
         $this->assertSame(['red', 'green', 'xx'], $oo->foo);
@@ -425,7 +426,7 @@ class ViewTestMock extends SeedTestMock
 
     public function setDefaults(array $properties, bool $passively = false)
     {
-        if ($properties['foo']) {
+        if (array_key_exists('foo', $properties)) {
             if ($passively) {
                 $this->foo = array_merge($properties['foo'], $this->foo);
             } else {
