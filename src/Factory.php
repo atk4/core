@@ -118,7 +118,7 @@ class Factory
                         $arguments[$k] = $v;
                     }
                 } elseif ($v !== null) {
-                    if (!isset($injection[$k]) && !isset($injectionActive[$k])) {
+                    if (!isset($injection[$k])) {
                         $injection[$k] = $v;
                     }
                 }
