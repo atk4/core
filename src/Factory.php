@@ -50,7 +50,8 @@ class Factory
         'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
     }
 
-    private function checkSeeFunc($seed): ?string {
+    private function checkSeeFunc($seed): ?string
+    {
         if (is_object($seed) || $seed === null) {
             return null;
         } elseif (!array_key_exists(0, $seed)) {
@@ -87,6 +88,7 @@ class Factory
             if (is_object($seed)) {
                 if ($obj !== null) {
                     continue; // legacy behaviour
+
                     throw new \Exception('Two or more objects specified as seed.');
                 }
 
@@ -128,6 +130,7 @@ class Factory
         ksort($arguments, SORT_NUMERIC);
         if ($obj === null) {
             $arguments = $arguments + $injection;
+
             return $arguments;
         }
 
@@ -155,7 +158,6 @@ class Factory
         }
 
         return $obj;
-
     }
 
     protected function _newObject(string $className, array $ctorArgs): object
