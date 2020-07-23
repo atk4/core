@@ -112,6 +112,9 @@ abstract class RendererAbstract
             $out = json_encode($val, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
             $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
             $out = preg_replace('~\\\\([\\\\/])~s', '$1', $out); // unescape slashes
+            if ($allowNl) {
+                $out = preg_replace('~(\\\\r)?\\\\n|\\\\r~s', "\n", $out); // unescape new lines
+            }
 
             return $out;
         }
@@ -126,7 +129,7 @@ abstract class RendererAbstract
             $vSafe = static::toSafeString($v, $allowNl, $maxDepth - 1);
 
             if ($allowNl) {
-                $out .= "\n" . '  ' . $kSafe . ': ' . preg_replace('~(?<=\n)~', '  ', $vSafe);
+                $out .= "\n" . '  ' . $kSafe . ': ' . preg_replace('~(?<=\n)~', '    ', $vSafe);
             } else {
                 $out .= $kSafe . ': ' . $vSafe;
             }
