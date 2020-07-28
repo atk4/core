@@ -35,8 +35,8 @@ class InitializerTraitTest extends AtkPhpunit\TestCase
     {
         $this->expectException(Exception::class);
         $m = new InitializerMock();
-        $m->init();
-        $m->init();
+        $m->invokeInit();
+        $m->invokeInit();
     }
 }
 

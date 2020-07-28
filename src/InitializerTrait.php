@@ -27,12 +27,30 @@ trait InitializerTrait
     /**
      * Initialize object. Always call parent::init(). Do not call directly.
      */
-    public function init(): void
+    protected function init(): void
     {
         if ($this->_initialized) {
             throw (new Exception('Attempting to initialize twice'))
                 ->addMoreInfo('this', $this);
         }
         $this->_initialized = true;
+    }
+
+//    public function beforeInit(): void
+//    {
+//    }
+//
+//    public function afterInit(): void
+//    {
+//    }
+
+    /**
+     * Do not call directly.
+     */
+    public function invokeInit(): void
+    {
+//        $this->beforeInit();
+        $this->init();
+//        $this->afterInit();
     }
 }
