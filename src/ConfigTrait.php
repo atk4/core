@@ -109,7 +109,7 @@ trait ConfigTrait
         foreach ($paths as $path => $value) {
             $pos = &$this->_lookupConfigElement($path, true);
 
-            if (is_array($pos) && !empty($pos) && is_array($value)) {
+            if (is_array($pos) && count($pos) > 0 && is_array($value)) {
                 // special treatment for arrays - merge them
                 $pos = array_merge($pos, $value);
             } else {
