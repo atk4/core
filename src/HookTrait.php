@@ -113,10 +113,10 @@ trait HookTrait
     }
 
     /**
-     * Execute all callables assigned to $hook_spot.
+     * Execute all closures assigned to $hook_spot.
      *
      * @param string $spot Hook identifier
-     * @param array  $args Additional arguments to callables
+     * @param array  $args Additional arguments to closures
      *
      * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
@@ -153,8 +153,8 @@ trait HookTrait
     }
 
     /**
-     * When called from inside a hook callable, it will stop execution of other
-     * callables on the same hook. The passed argument will be returned by the
+     * When called from inside a hook closure, it will stop execution of other
+     * closures on the same hook. The passed argument will be returned by the
      * hook method.
      *
      * @param mixed $return What would hook() return?

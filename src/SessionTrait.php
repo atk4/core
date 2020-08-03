@@ -85,11 +85,7 @@ trait SessionTrait
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
             || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
-            if (is_callable($default)) {
-                if (!$default instanceof \Closure) {
-                    throw new Exception('Callable must be an instance of Closure');
-                }
-
+            if ($default instanceof \Closure) {
                 $default = $default($key);
             }
 
@@ -112,10 +108,7 @@ trait SessionTrait
         if (!isset($_SESSION[$this->session_key][$this->name][$key])
             || $_SESSION[$this->session_key][$this->name][$key] === null
         ) {
-            if (is_callable($default)) {
-                if (!$default instanceof \Closure) {
-                    throw new Exception('Callable must be an instance of Closure');
-                }
+            if ($default instanceof \Closure) {
                 $default = $default($key);
             }
 
