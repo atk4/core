@@ -115,7 +115,7 @@ class Factory
             }
 
             foreach ($seed as $k => $v) {
-                if (is_numeric($k)) {
+                if (is_int($k)) {
                     if (!isset($arguments[$k])) {
                         $arguments[$k] = $v;
                     }
@@ -205,7 +205,7 @@ class Factory
         }
         unset($defaults);
 
-        $arguments = array_filter($seed, 'is_numeric', ARRAY_FILTER_USE_KEY); // with numeric keys
+        $arguments = array_filter($seed, 'is_int', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys
         $object = array_shift($arguments); // first numeric key argument is object
 
