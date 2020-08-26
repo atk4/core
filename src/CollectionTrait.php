@@ -65,7 +65,7 @@ trait CollectionTrait
 
         if (isset($item->_initializerTrait)) {
             if (!$item->_initialized) {
-                $item->init();
+                $item->invokeInit();
             }
             if (!$item->_initialized) {
                 throw (new Exception('You should call parent::init() when you override initializer'))

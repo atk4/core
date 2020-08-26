@@ -48,7 +48,7 @@ In case $fx is omitted then $this object is used as $fx.
 
 In this case a method with same name as $spot will be used as callback::
 
-    function init(): void {
+    protected function init(): void {
         parent::init();
 
         $this->onHook('beforeUpdate');

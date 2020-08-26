@@ -268,7 +268,7 @@ values. See my description below the example::
     class RedButton extends Button {
         protected $icon = 'book';
 
-        function init(): void {
+        protected function init(): void {
             parent::init();
 
             $this->icon = 'right arrow';

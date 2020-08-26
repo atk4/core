@@ -35,8 +35,8 @@ class InitializerTraitTest extends AtkPhpunit\TestCase
     {
         $this->expectException(Exception::class);
         $m = new InitializerMock();
-        $m->init();
-        $m->init();
+        $m->invokeInit();
+        $m->invokeInit();
     }
 }
 
@@ -55,7 +55,7 @@ class InitializerMock extends _InitializerMock
 {
     public $result = false;
 
-    public function init(): void
+    protected function init(): void
     {
         parent::init();
 
@@ -65,7 +65,7 @@ class InitializerMock extends _InitializerMock
 
 class BrokenInitializerMock extends _InitializerMock
 {
-    public function init(): void
+    protected function init(): void
     {
         // do not call parent
     }

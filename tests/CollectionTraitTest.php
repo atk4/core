@@ -129,7 +129,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             use core\InitializerTrait;
             public $name;
 
-            public function init(): void
+            protected function init(): void
             {
             }
         });
