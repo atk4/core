@@ -112,20 +112,113 @@ trait HookTrait
         return isset($this->hooks[$spot][$priority]);
     }
 
-    private function hookCheckIfParameterTypeMatchesTemplate(?\ReflectionType $tType, ?\ReflectionType $hType, bool $isReturn): void
+    private function hookResolveReflectionType(\ReflectionType $type, ?string $selfClass, ?string $staticClass): string
     {
-        if ($isReturn) {
-            [$tType, $hType] = [$hType, $tType];
+        $n = $type->getName();
+
+        if ($n === 'self' || $n === 'static') {
+            if ($selfClass === null || $staticClass === null) {
+                throw new \Exception('Self or static used, but class is not defined');
+            }
+
+            if ($n === 'self') {
+                return $selfClass;
+            } else {
+                return $staticClass;
+            }
         }
 
-        if (($tType === null && $hType === null)
-            || $hType->allowsNull() !== $tType->allowsNull() || is_a($hType->getName(), $tType->getName(), true)) {
-            throw new Exception([
-                'Hook callback does not match the template',
-                'callbackParamType' => $hType !== null ? $hType->getName() : 'no param',
-                'templateParamType' => $tType !== null ? $tType->getName() : 'no param',
-            ]);
+        return $n;;
+    }
+
+    private function hookCheckIfParameterTypeMatchesStub(
+        ?\ReflectionType $stubType,
+        ?\ReflectionType $hookType,
+        bool $isReturn,
+        ?string $stubSelfClass,
+        ?string $stubStaticClass,
+        ?string $hookSelfClass,
+        ?string $hookStaticClass
+    ): void {
+        if ($stubType === null && $hookType === null) {
+            return;
         }
+
+        if ($isReturn) {
+            if ($stubType === null) {
+                return;
+            }
+
+            [$stubType, $hookType] = [$hookType, $stubType];
+        }
+
+        if ($stubType === null) { // stub has less params defined
+            return;
+        } elseif ($hookType === null) {
+            return;
+            throw new Exception('Missing parameter');
+        }
+
+        if ($stubType->allowsNull() && !$hookType->allowsNull()) {
+            throw new Exception('Must be nullable');
+        }
+
+        $stubResolved = $this->hookResolveReflectionType($stubType, $stubSelfClass, $stubStaticClass);
+        $hookResolved = $this->hookResolveReflectionType($hookType, $hookSelfClass, $hookStaticClass);
+
+        if (($stubType->isBuiltin() || $hookType->isBuiltin()) && $stubResolved !== $hookResolved) {
+            if ($hookResolved === 'object') {
+                return;
+            }
+
+            throw (new Exception('Builtin type must always match'))
+                ->addMoreInfo('stub', $stubResolved)
+                ->addMoreInfo('hook', $hookResolved);
+        }
+
+        // we do not want to check what php will do on call
+        // but instead if declared type on onHook() side can be better
+        if (!is_a($hookResolved, $stubResolved, true)) {
+            throw (new Exception('Type mismatch'))
+                ->addMoreInfo('stub', $stubResolved)
+                ->addMoreInfo('hook', $hookResolved);
+        }
+    }
+
+    private function hookCheckIfFxMatchesStub(\Closure $stubFx, \Closure $hookFx): void
+    {
+        $stubFxRef = new \ReflectionFunction($stubFx);
+        $hookFxRef = new \ReflectionFunction($hookFx);
+        unset($stubFx, $hookFx);
+
+        $stubSelfClass = $stubFxRef->getClosureScopeClass() !== null ? $stubFxRef->getClosureScopeClass()->getName() : null;
+        $stubStaticClass = $stubFxRef->getClosureThis() !== null ? get_class($stubFxRef->getClosureThis()) : null;
+
+        $hookSelfClass = $hookFxRef->getClosureScopeClass() !== null ? $hookFxRef->getClosureScopeClass()->getName() : null;
+        $hookStaticClass = $hookFxRef->getClosureThis() !== null ? get_class($hookFxRef->getClosureThis()) : null;
+
+        $stubFxParams = $stubFxRef->getParameters();
+        $hookFxParams = $hookFxRef->getParameters();
+        for ($i = 0; $i < count($stubFxParams) || $i < count($hookFxParams); ++$i) {
+            $this->hookCheckIfParameterTypeMatchesStub(
+                isset($stubFxParams[$i]) ? $stubFxParams[$i]->getType() : null,
+                isset($hookFxParams[$i]) ? $hookFxParams[$i]->getType() : null,
+                false,
+                $stubSelfClass,
+                $stubStaticClass,
+                $hookSelfClass,
+                $hookStaticClass,
+            );
+        }
+        $this->hookCheckIfParameterTypeMatchesStub(
+            $stubFxRef->getReturnType(),
+            $hookFxRef->getReturnType(),
+            true,
+            $stubSelfClass,
+            $stubStaticClass,
+            $hookSelfClass,
+            $hookStaticClass,
+        );
     }
 
     /**
@@ -143,31 +236,29 @@ trait HookTrait
         $return = [];
 
         if (isset($this->hooks[$spot])) {
+            if (isset($args['hookStub'])) {
+                $stubFx = $args['hookStub'];
+                unset($args['hookStub']);
+            } else {
+                $stubFx = null;
+
+                // debug
+                $stubFx = eval('return function(' . debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)[1]['class'] . ' $x'.') {};');
+            }
+
             krsort($this->hooks[$spot]); // lower priority is called sooner
             $hookBackup = $this->hooks[$spot];
 
             try {
                 while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as $index => [$hFx, $hArgs]) {
-                        if (isset($args['closureTemplate'])) {
-                            $tFx = $args['closureTemplate'];
-                            unset($args['closureTemplate']);
-
-                            $tFxRef = new \ReflectionFunction($hFx);
-                            $hFxRef = new \ReflectionFunction($hFx);
-
-                            $tFxParams = $tFxRef->getParameters();
-                            $hFxParams = $hFxRef->getParameters();
-                            for ($i = 0; $i < count($tFxParams) && $i < count($hFxParams); $i++) {
-                                $this->hookCheckIfParameterTypeMatchesTemplate($tFxParams[$i], $hFxParams[$i], false);
-                            }
-                            $this->hookCheckIfParameterTypeMatchesTemplate($tFxRef->getReturnType(), $hFxRef->getReturnType(), true);
+                    foreach ($_data as $index => [$hookFx, $hookArgs]) {
+                        if ($stubFx !== null) {
+                            $this->hookCheckIfFxMatchesStub($stubFx, $hookFx);
                         }
 
-                        $return[$index] = $hFx(...array_merge(
-                            [$this],
+                        $return[$index] = $hookFx($this, ...array_merge(
                             $args,
-                            $hArgs
+                            $hookArgs
                         ));
                     }
                 }
