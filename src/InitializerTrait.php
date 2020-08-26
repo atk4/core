@@ -36,21 +36,11 @@ trait InitializerTrait
         $this->_initialized = true;
     }
 
-//    public function beforeInit(): void
-//    {
-//    }
-//
-//    public function afterInit(): void
-//    {
-//    }
-
     /**
      * Do not call directly.
      */
     public function invokeInit(): void
     {
-//        $this->beforeInit();
         $this->init();
-//        $this->afterInit();
     }
 }
