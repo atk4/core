@@ -65,7 +65,7 @@ trait DiContainerTrait
                 $isMissing = true;
 
                 try {
-                    $origValue = ($this->{$name} ?? null);
+                    $origValue = $this->{$name} ?? null;
                     if ($origValue !== null) {
                         $isMissing = false;
                     }
