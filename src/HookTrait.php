@@ -13,19 +13,23 @@ trait HookTrait
      */
     public $_hookTrait = true;
 
-    /**
-     * Contains information about configured hooks (callbacks).
-     *
-     * @var array
-     */
+    /** @var array Configured hooks (callbacks). */
     protected $hooks = [];
 
-    /**
-     * Next hook index counter.
-     *
-     * @var int
-     */
+    /** @var int Next hook index counter. */
     private $_hookIndexCounter = 0;
+
+    /** @var string[] */
+    private $_hookActiveSpots = [];
+
+    private function _hookRequireInactive(string $spot): void
+    {
+        if ($this->_hookActiveSpots[$spot] ?? false) {
+            throw (new Exception('Hook spot must be inactive for requested operation, but it is already executing'))
+                ->addMoreInfo('object', $this)
+                ->addMoreInfo('spot', $spot);
+        }
+    }
 
     /**
      * Add another callback to be executed during hook($hook_spot);.
@@ -41,6 +45,8 @@ trait HookTrait
      */
     public function onHook(string $spot, \Closure $fx = null, array $args = [], int $priority = 5)
     {
+        $this->_hookRequireInactive($spot);
+
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];
         }
@@ -67,6 +73,8 @@ trait HookTrait
      */
     public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
     {
+        $this->_hookRequireInactive($spot);
+
         if ($priority !== null) {
             if ($priorityIsIndex) {
                 $index = $priority;
@@ -124,15 +132,17 @@ trait HookTrait
     {
         $brokenBy = null;
 
-        $return = [];
+        $this->_hookRequireInactive($spot);
 
+        $return = [];
         if (isset($this->hooks[$spot])) {
-            krsort($this->hooks[$spot]); // lower priority is called sooner
-            $hookBackup = $this->hooks[$spot];
+            ksort($this->hooks[$spot]); // lower priority is called sooner
 
             try {
-                while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as $index => $data) {
+                $this->_hookActiveSpots[$spot] = true;
+
+                foreach ($this->hooks[$spot] as $datas) {
+                    foreach ($datas as $index => $data) {
                         $return[$index] = $data[0](...array_merge(
                             [$this],
                             $args,
@@ -145,7 +155,7 @@ trait HookTrait
 
                 return $e->getReturnValue();
             } finally {
-                $this->hooks[$spot] = $hookBackup;
+                $this->_hookActiveSpots[$spot] = false;
             }
         }
 
