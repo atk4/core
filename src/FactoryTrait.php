@@ -33,10 +33,6 @@ trait FactoryTrait
      */
     public function factory($seed, $defaults = []): object
     {
-        if (func_num_args() > 2) { // prevent bad usage
-            throw new \Error('Too many method arguments, factory does no longer support prefix');
-        }
-
         return Factory::factory($seed, $defaults);
     }
 }
