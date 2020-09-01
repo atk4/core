@@ -41,23 +41,9 @@ trait InitializerTrait
      */
     public function invokeInit(): void
     {
-        // make sure init() method is never declared as public
-        $reflMethod = new \ReflectionMethod($this, 'init');
-        while (true) {
-            if ($reflMethod->getModifiers() & \ReflectionMethod::IS_PUBLIC) {
-                throw new Exception('Init method must have protected visibility');
-            }
-
-            $parentClass = get_parent_class($reflMethod->getDeclaringClass());
-            if ($parentClass === false) {
-                break;
-            }
-
-            try {
-                $reflMethod = new \ReflectionMethod($parentClass, 'init');
-            } catch (\ReflectionException $e) {
-                break;
-            }
+        // assert init() method is not declared as public, ie. not easily directly callable by the user
+        if ((new \ReflectionMethod($this, 'init'))->getModifiers() & \ReflectionMethod::IS_PUBLIC) {
+            throw new Exception('Init method must have protected visibility');
         }
 
         $this->init();
