@@ -28,6 +28,42 @@ trait HookTrait
     private $_hookIndexCounter = 0;
 
     /**
+     * @var static
+     */
+    private $_hookOrigThis;
+
+    private function _rebindHooksIfCloned(): void
+    {
+        if ($this->_hookOrigThis === $this) {
+            return;
+        } elseif ($this->_hookOrigThis === null) {
+            $this->_hookOrigThis = $this;
+
+            return;
+        }
+
+        foreach ($this->hooks as &$hooksByPriority) {
+            foreach ($hooksByPriority as &$hooksByIndex) {
+                foreach ($hooksByIndex as &$hookData) {
+                    $fxThis = (new \ReflectionFunction($hookData[0]))->getClosureThis();
+                    if ($fxThis === null) {
+                        continue;
+                    }
+
+                    if ($fxThis !== $this->_hookOrigThis) {
+                        throw new Exception('Object can not be cloned with hook bound to a different object than this');
+                    }
+
+                    $hookData[0] = \Closure::bind($hookData[0], $this);
+                }
+            }
+        }
+        unset($hooksByPriority, $hooksByIndex, $hookData);
+
+        $this->_hookOrigThis = $this;
+    }
+
+    /**
      * Add another callback to be executed during hook($hook_spot);.
      *
      * If priority is negative, then hooks will be executed in reverse order.
@@ -41,6 +77,8 @@ trait HookTrait
      */
     public function onHook(string $spot, \Closure $fx = null, array $args = [], int $priority = 5)
     {
+        $this->_rebindHooksIfCloned();
+
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];
         }
@@ -122,6 +160,8 @@ trait HookTrait
      */
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
+        $this->_rebindHooksIfCloned();
+
         $brokenBy = null;
 
         $return = [];
