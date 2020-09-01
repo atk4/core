@@ -128,16 +128,12 @@ trait HookTrait
 
         if (isset($this->hooks[$spot])) {
             krsort($this->hooks[$spot]); // lower priority is called sooner
-            $hookBackup = $this->hooks[$spot];
+            $hooksBackup = $this->hooks[$spot];
 
             try {
-                while ($_data = array_pop($this->hooks[$spot])) {
-                    foreach ($_data as $index => $data) {
-                        $return[$index] = $data[0](...array_merge(
-                            [$this],
-                            $args,
-                            $data[1]
-                        ));
+                while ($hooks = array_pop($this->hooks[$spot])) {
+                    foreach ($hooks as $index => [$hookFx, $hookArgs]) {
+                        $return[$index] = $hookFx($this, ...$args, ...$hookArgs);
                     }
                 }
             } catch (HookBreaker $e) {
@@ -145,7 +141,7 @@ trait HookTrait
 
                 return $e->getReturnValue();
             } finally {
-                $this->hooks[$spot] = $hookBackup;
+                $this->hooks[$spot] = $hooksBackup;
             }
         }
 
