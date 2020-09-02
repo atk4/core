@@ -1,4 +1,4 @@
-<phpunit colors="true" bootstrap="vendor/autoload.php">
+<phpunit bootstrap="vendor/autoload.php" colors="true" stderr="true">
     <php>
         <var name="DB_DSN" value="sqlite::memory:" />
         <var name="DB_USER" value="" />
