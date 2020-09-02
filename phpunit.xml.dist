@@ -1,26 +1,26 @@
-<phpunit bootstrap="vendor/autoload.php" stderr="true">
+<phpunit colors="true" bootstrap="vendor/autoload.php">
     <php>
         <var name="DB_DSN" value="sqlite::memory:" />
         <var name="DB_USER" value="" />
         <var name="DB_PASSWD" value="" />
         <var name="DB_DBNAME" value="" />
     </php>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-            <exclude>
-              <file>src/AtkPhpunit/ResultPrinter.php</file>
-              <file>src/AtkPhpunit/ExceptionWrapper.php</file>
-              <file>src/AtkPhpunit/TestCase.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
     <testsuites>
-        <testsuite name="core">
+        <testsuite name="tests">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <exclude>
+            <file>src/AtkPhpunit/ResultPrinter.php</file>
+            <file>src/AtkPhpunit/ExceptionWrapper.php</file>
+            <file>src/AtkPhpunit/TestCase.php</file>
+        </exclude>
+        <report>
+            <clover outputFile="build/logs/clover.xml" />
+        </report>
+    </coverage>
 </phpunit>
