@@ -129,7 +129,6 @@ trait HookTrait
         if (isset($this->hooks[$spot])) {
             krsort($this->hooks[$spot]); // lower priority is called sooner
             $hooksBackup = $this->hooks[$spot];
-
             try {
                 while ($hooks = array_pop($this->hooks[$spot])) {
                     foreach ($hooks as $index => [$hookFx, $hookArgs]) {
