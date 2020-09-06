@@ -265,6 +265,55 @@ class HookTraitTest extends AtkPhpunit\TestCase
         });
         $ret = $m->hook('inc');
     }
+
+    public function testCloningSafety()
+    {
+        $m = new class() extends HookMock {
+            public function makeCallbackWithoutThisUsed(): \Closure
+            {
+                return function () {
+                    return 'test';
+                };
+            }
+
+            public function makeCallbackWithThisUsed(): \Closure
+            {
+                return function () {
+                    $this->test = 'test';
+
+                    return $this->test;
+                };
+            }
+        };
+
+        // unbound callback
+        $m->onHook('inc', static function () {});
+        $m = clone $m;
+        $m->hook('inc');
+
+        // callback bound to the same object - without $this used
+        $m->onHook('inc', $m->makeCallbackWithoutThisUsed());
+        $m = clone $m;
+        $m->hook('inc');
+
+        // callback bound to the same object - with $this used
+        $m->onHook('inc', $m->makeCallbackWithThisUsed());
+        $m = clone $m;
+        $m->hook('inc');
+
+        // callback bound to a different object - without $this used
+        // not supported yet
+        //$m->onHook('inc', (clone $m)->makeCallbackWithoutThisUsed());
+        //$m = clone $m;
+        //$m->hook('inc');
+
+        // callback bound to a different object - with $this used
+        $m->onHook('inc', (clone $m)->makeCallbackWithThisUsed());
+        $m = clone $m;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object can not be cloned with hook bound to a different object than this');
+        $m->hook('inc');
+    }
 }
 
 // @codingStandardsIgnoreStart
