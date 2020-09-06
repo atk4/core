@@ -302,10 +302,9 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->hook('inc');
 
         // callback bound to a different object - without $this used
-        // not supported yet
-        //$m->onHook('inc', (clone $m)->makeCallbackWithoutThisUsed());
-        //$m = clone $m;
-        //$m->hook('inc');
+        $m->onHook('inc', (clone $m)->makeCallbackWithoutThisUsed());
+        $m = clone $m;
+        $m->hook('inc');
 
         // callback bound to a different object - with $this used
         $m->onHook('inc', (clone $m)->makeCallbackWithThisUsed());
