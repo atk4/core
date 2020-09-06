@@ -63,53 +63,6 @@ trait HookTrait
         $this->_hookOrigThis = $this;
     }
 
-    private function _unbindThisFromHookIfNotUsed(\Closure $fx): \Closure
-    {
-        $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
-        if ($fxThis === null) {
-            return $fx;
-        }
-
-        // detect if $this is unused, there is not better detection than php warning
-        // see https://stackoverflow.com/questions/63692512/how-to-detect-if-this-is-used-in-closure
-        $hasThis = false;
-        set_error_handler(function ($errNo, $errStr) use (&$hasThis) {
-            if (preg_match(
-                \PHP_MAJOR_VERSION === 7
-                    ? '~^Unbinding \$this of (?:a )?(?:method|closure) is deprecated$~s'
-                    : '~^Cannot unbind \$this of (?:method|closure using \$this)$~s',
-                $errStr
-            )) {
-                $hasThis = true;
-            } else {
-                throw (new Exception('Unexpected error'))
-                    ->addMoreInfo('error', $errStr);
-            }
-        });
-        $fxUnbound = \Closure::bind($fx, null);
-        restore_error_handler();
-
-        // there is no warning in PHP 7.3, so detect $this from code, remove once PHP 7.3 support is dropped
-        if (\PHP_MAJOR_VERSION <= 7 && \PHP_MINOR_VERSION <= 3) {
-            $funcRefl = new \ReflectionFunction($fx);
-            if ($funcRefl->getEndLine() === $funcRefl->getStartLine()) {
-                throw new \atk4\ui\Exception('Closure body to extract must be on separate lines');
-            }
-
-            $funcCode = implode("\n", array_slice(
-                explode("\n", file_get_contents($funcRefl->getFileName())),
-                $funcRefl->getStartLine(),
-                $funcRefl->getEndLine() - $funcRefl->getStartLine() - 1
-            ));
-
-            if (str_contains($funcCode, '$this')) {
-                $hasThis = true;
-            }
-        }
-
-        return $hasThis ? $fx : $fxUnbound;
-    }
-
     /**
      * Add another callback to be executed during hook($hook_spot);.
      *
@@ -125,8 +78,6 @@ trait HookTrait
     public function onHook(string $spot, \Closure $fx = null, array $args = [], int $priority = 5)
     {
         $this->_rebindHooksIfCloned();
-
-        $fx = $this->_unbindThisFromHookIfNotUsed($fx);
 
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];

@@ -269,19 +269,10 @@ class HookTraitTest extends AtkPhpunit\TestCase
     public function testCloningSafety()
     {
         $m = new class() extends HookMock {
-            public function makeCallbackWithoutThisUsed(): \Closure
+            public function makeCallback(): \Closure
             {
                 return function () {
                     return 'test';
-                };
-            }
-
-            public function makeCallbackWithThisUsed(): \Closure
-            {
-                return function () {
-                    $this->test = 'test';
-
-                    return $this->test;
                 };
             }
         };
@@ -291,23 +282,13 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m = clone $m;
         $m->hook('inc');
 
-        // callback bound to the same object - without $this used
-        $m->onHook('inc', $m->makeCallbackWithoutThisUsed());
+        // callback bound to the same object
+        $m->onHook('inc', $m->makeCallback());
         $m = clone $m;
         $m->hook('inc');
 
-        // callback bound to the same object - with $this used
-        $m->onHook('inc', $m->makeCallbackWithThisUsed());
-        $m = clone $m;
-        $m->hook('inc');
-
-        // callback bound to a different object - without $this used
-        $m->onHook('inc', (clone $m)->makeCallbackWithoutThisUsed());
-        $m = clone $m;
-        $m->hook('inc');
-
-        // callback bound to a different object - with $this used
-        $m->onHook('inc', (clone $m)->makeCallbackWithThisUsed());
+        // callback bound to a different object
+        $m->onHook('inc', (clone $m)->makeCallback());
         $m = clone $m;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Object can not be cloned with hook bound to a different object than this');
