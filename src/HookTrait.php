@@ -69,7 +69,7 @@ trait HookTrait
      * Lower priority is called sooner. If priority is negative,
      * then hooks will be executed in reverse order.
      *
-     * @return int Index under which the hook was added
+     * @return int index under which the hook was added
      */
     public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
@@ -93,7 +93,7 @@ trait HookTrait
     /**
      * Same as onHook() except no $this is passed to the callback as the 1st argument.
      *
-     * @return int Index under which the hook was added
+     * @return int index under which the hook was added
      */
     public function onHookShort(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
