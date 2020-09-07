@@ -315,6 +315,10 @@ class HookTraitTest extends AtkPhpunit\TestCase
         foreach ($m->hook('inc') as $hookRes) {
             $this->assertSame($m, $hookRes);
         }
+        $m = clone $m; // clone twice
+        foreach ($m->hook('inc') as $hookRes) {
+            $this->assertSame($m, $hookRes);
+        }
 
         // callback bound to a different object
         $m = $makeMock();
