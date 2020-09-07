@@ -284,6 +284,26 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->hook('inc', ['y']);
     }
 
+    public function testOnHookInvokeMethod()
+    {
+        $m = new HookMock();
+        $this->assertSame(0, $m->result);
+        $m->onHookMethod('inc', 'incMethod');
+        $m->hook('inc');
+        $this->assertSame(1, $m->result);
+        $m->hook('inc');
+        $this->assertSame(2, $m->result);
+
+        $m = new class() extends HookMock {
+            public function returnArgs(...$args)
+            {
+                return $args;
+            }
+        };
+        $m->onHookMethod('check_args', 'returnArgs', ['x']);
+        $this->assertSame([['y', 'x']], $m->hook('check_args', ['y']));
+    }
+
     public function testCloningSafety()
     {
         $makeMock = function () {
@@ -311,6 +331,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m = $makeMock();
         $m->onHook('inc', $m->makeCallback());
         $m->onHookShort('inc', $m->makeCallback());
+        $m->onHookMethod('inc', 'incMethod');
         $m = clone $m;
         foreach ($m->hook('inc') as $hookRes) {
             $this->assertSame($m, $hookRes);
@@ -319,6 +340,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         foreach ($m->hook('inc') as $hookRes) {
             $this->assertSame($m, $hookRes);
         }
+        $this->assertSame(2, $m->result);
 
         // callback bound to a different object
         $m = $makeMock();
@@ -337,9 +359,11 @@ class HookMock
 
     public $result = 0;
 
-    public function myCallback($obj)
+    public function incMethod()
     {
         ++$this->result;
+
+        return $this;
     }
 }
 
