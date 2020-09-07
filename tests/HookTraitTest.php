@@ -284,26 +284,6 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->hook('inc', ['y']);
     }
 
-    public function testOnHookInvokeMethod()
-    {
-        $m = new HookMock();
-        $this->assertSame(0, $m->result);
-        $m->onHookMethod('inc', 'incMethod');
-        $m->hook('inc');
-        $this->assertSame(1, $m->result);
-        $m->hook('inc');
-        $this->assertSame(2, $m->result);
-
-        $m = new class() extends HookMock {
-            public function returnArgs(...$args)
-            {
-                return $args;
-            }
-        };
-        $m->onHookMethod('check_args', 'returnArgs', ['x']);
-        $this->assertSame([['y', 'x']], $m->hook('check_args', ['y']));
-    }
-
     public function testCloningSafety()
     {
         $makeMock = function () {
@@ -311,6 +291,8 @@ class HookTraitTest extends AtkPhpunit\TestCase
                 public function makeCallback(): \Closure
                 {
                     return function () {
+                        $this->incrementResult();
+
                         return $this;
                     };
                 }
@@ -331,21 +313,20 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m = $makeMock();
         $m->onHook('inc', $m->makeCallback());
         $m->onHookShort('inc', $m->makeCallback());
-        $m->onHookMethod('inc', 'incMethod');
         $m = clone $m;
         foreach ($m->hook('inc') as $v) {
             $this->assertSame($m, $v);
         }
-        $this->assertSame(1, $m->result);
+        $this->assertSame(2, $m->result);
         foreach ($m->hook('inc') as $v) { // 2nd dispatch
             $this->assertSame($m, $v);
         }
-        $this->assertSame(2, $m->result);
+        $this->assertSame(4, $m->result);
         $m = clone $m; // 2nd clone
         foreach ($m->hook('inc') as $v) {
             $this->assertSame($m, $v);
         }
-        $this->assertSame(3, $m->result);
+        $this->assertSame(6, $m->result);
 
         // callback bound to a different object
         $m = $makeMock();
@@ -364,11 +345,9 @@ class HookMock
 
     public $result = 0;
 
-    public function incMethod()
+    public function incrementResult()
     {
         ++$this->result;
-
-        return $this;
     }
 }
 

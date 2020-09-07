@@ -52,7 +52,9 @@ In this case a method with same name as $spot will be used as callback::
     {
         parent::init();
 
-        $this->onHookMethod($spot, 'beforeUpdate');
+        $this->onHookShort($spot, function(...$args) {
+            $this->beforeUpdate(...$args);
+        });
     }
 
     function beforeUpdate()

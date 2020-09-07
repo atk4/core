@@ -119,18 +119,6 @@ trait HookTrait
     }
 
     /**
-     * Same as onHookShort() except callback is specified by a target object method.
-     *
-     * @return int index under which the hook was added
-     */
-    public function onHookMethod(string $spot, string $methodName, array $args = [], int $priority = 5): int
-    {
-        return $this->onHookShort($spot, function (...$args) use ($methodName) {
-            return $this->{$methodName}(...$args);
-        }, $args, $priority);
-    }
-
-    /**
      * Delete all hooks for specified spot, priority and index.
      *
      * @param int|null $priority        filter specific priority, null for all
