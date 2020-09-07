@@ -91,6 +91,34 @@ trait HookTrait
     }
 
     /**
+     * Same as onHook() except no $this is passed to the callback as the 1st argument.
+     *
+     * @return int Index under which the hook was added
+     */
+    public function onHookShort(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
+    {
+        // create long callback and bind it to the same scope class and object
+        $fxRefl = new \ReflectionFunction($fx);
+        $fxScopeClassRefl = $fxRefl->getClosureScopeClass();
+        $fxThis = $fxRefl->getClosureThis();
+        if ($fxScopeClassRefl === null) {
+            $fxLong = static function ($ignore, ...$args) use ($fx) {
+                return $fx(...$args);
+            };
+        } elseif ($fxThis === null) {
+            $fxLong = \Closure::bind(function ($ignore, ...$args) use ($fx) {
+                return $fx(...$args);
+            }, null, $fxScopeClassRefl->getName());
+        } else {
+            $fxLong = \Closure::bind(function ($ignore, ...$args) use ($fx) {
+                return \Closure::bind($fx, $this)(...$args);
+            }, $fxThis, $fxScopeClassRefl->getName());
+        }
+
+        return $this->onHook($spot, $fxLong, $args, $priority);
+    }
+
+    /**
      * Delete all hooks for specified spot, priority and index.
      *
      * @param int|null $priority        filter specific priority, null for all

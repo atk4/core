@@ -266,28 +266,57 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $ret = $m->hook('inc');
     }
 
+    public function testOnHookShort()
+    {
+        $m = new HookMock();
+
+        // unbound callback
+        $self = $this;
+        $m->onHookShort('inc', static function (...$args) use ($self) {
+            $self->assertSame(['y', 'x'], $args);
+        }, ['x']);
+        $m->hook('inc', ['y']);
+
+        // bound callback
+        $m->onHookShort('inc', function (...$args) {
+            $this->assertSame(['y', 'x'], $args);
+        }, ['x']);
+        $m->hook('inc', ['y']);
+    }
+
     public function testCloningSafety()
     {
-        $m = new class() extends HookMock {
-            public function makeCallback(): \Closure
-            {
-                return function () {
-                    return 'test';
-                };
-            }
+        $makeMock = function () {
+            return new class() extends HookMock {
+                public function makeCallback(): \Closure
+                {
+                    return function () {
+                        return $this;
+                    };
+                }
+            };
         };
 
         // unbound callback
+        $m = $makeMock();
         $m->onHook('inc', static function () {});
+        $m->onHookShort('inc', static function () {});
         $m = clone $m;
-        $m->hook('inc');
+        foreach ($m->hook('inc') as $hookRes) {
+            $this->assertNull($hookRes);
+        }
 
         // callback bound to the same object
+        $m = $makeMock();
         $m->onHook('inc', $m->makeCallback());
+        $m->onHookShort('inc', $m->makeCallback());
         $m = clone $m;
-        $m->hook('inc');
+        foreach ($m->hook('inc') as $hookRes) {
+            $this->assertSame($m, $hookRes);
+        }
 
         // callback bound to a different object
+        $m = $makeMock();
         $m->onHook('inc', (clone $m)->makeCallback());
         $m = clone $m;
         $this->expectException(Exception::class);
