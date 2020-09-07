@@ -66,16 +66,12 @@ trait HookTrait
     /**
      * Add another callback to be executed during hook($hook_spot);.
      *
-     * If priority is negative, then hooks will be executed in reverse order.
-     *
-     * @param string   $spot     Hook identifier to bind on
-     * @param \Closure $fx       Will be called on hook()
-     * @param array    $args     Arguments are passed to $fx
-     * @param int      $priority Lower priority is called sooner
+     * Lower priority is called sooner. If priority is negative,
+     * then hooks will be executed in reverse order.
      *
      * @return int Index under which the hook was added
      */
-    public function onHook(string $spot, \Closure $fx = null, array $args = [], int $priority = 5)
+    public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
         $this->_rebindHooksIfCloned();
 
@@ -97,9 +93,8 @@ trait HookTrait
     /**
      * Delete all hooks for specified spot, priority and index.
      *
-     * @param string   $spot            Hook identifier
-     * @param int|null $priority        Filter specific priority, null for all
-     * @param int      $priorityIsIndex Filter by index instead of priority
+     * @param int|null $priority        filter specific priority, null for all
+     * @param int      $priorityIsIndex filter by index instead of priority
      *
      * @return static
      */
@@ -124,9 +119,8 @@ trait HookTrait
     /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param string   $spot            Hook identifier
-     * @param int|null $priority        Filter specific priority, null for all
-     * @param int      $priorityIsIndex Filter by index instead of priority
+     * @param int|null $priority        filter specific priority, null for all
+     * @param int      $priorityIsIndex filter by index instead of priority
      */
     public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
     {
@@ -152,9 +146,6 @@ trait HookTrait
 
     /**
      * Execute all closures assigned to $hook_spot.
-     *
-     * @param string $spot Hook identifier
-     * @param array  $args Additional arguments to closures
      *
      * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
