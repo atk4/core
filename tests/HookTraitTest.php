@@ -323,8 +323,8 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->onHookShort('inc', static function () {});
         $m->onHookShort('null_scope_class', \Closure::fromCallable('trim'), ['x']);
         $m = clone $m;
-        foreach ($m->hook('inc') as $hookRes) {
-            $this->assertNull($hookRes);
+        foreach ($m->hook('inc') as $v) {
+            $this->assertNull($v);
         }
 
         // callback bound to the same object
@@ -333,14 +333,19 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->onHookShort('inc', $m->makeCallback());
         $m->onHookMethod('inc', 'incMethod');
         $m = clone $m;
-        foreach ($m->hook('inc') as $hookRes) {
-            $this->assertSame($m, $hookRes);
+        foreach ($m->hook('inc') as $v) {
+            $this->assertSame($m, $v);
         }
-        $m = clone $m; // clone twice
-        foreach ($m->hook('inc') as $hookRes) {
-            $this->assertSame($m, $hookRes);
+        $this->assertSame(1, $m->result);
+        foreach ($m->hook('inc') as $v) { // 2nd dispatch
+            $this->assertSame($m, $v);
         }
         $this->assertSame(2, $m->result);
+        $m = clone $m; // 2nd clone
+        foreach ($m->hook('inc') as $v) {
+            $this->assertSame($m, $v);
+        }
+        $this->assertSame(3, $m->result);
 
         // callback bound to a different object
         $m = $makeMock();
