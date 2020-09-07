@@ -301,6 +301,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m = $makeMock();
         $m->onHook('inc', static function () {});
         $m->onHookShort('inc', static function () {});
+        $m->onHookShort('null_scope_class', \Closure::fromCallable('trim'), ['x']);
         $m = clone $m;
         foreach ($m->hook('inc') as $hookRes) {
             $this->assertNull($hookRes);
@@ -337,6 +338,7 @@ class HookMock
         ++$this->result;
     }
 }
+
 class HookWithDynamicMethodMock extends HookMock
 {
     use \atk4\core\DynamicMethodTrait;
