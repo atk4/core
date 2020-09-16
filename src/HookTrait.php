@@ -104,15 +104,15 @@ trait HookTrait
         $fxScopeClassRefl = $fxRefl->getClosureScopeClass();
         $fxThis = $fxRefl->getClosureThis();
         if ($fxScopeClassRefl === null) {
-            $fxLong = static function ($ignore, ...$args) use ($fx) {
+            $fxLong = static function ($ignore, &...$args) use ($fx) {
                 return $fx(...$args);
             };
         } elseif ($fxThis === null) {
-            $fxLong = \Closure::bind(function ($ignore, ...$args) use ($fx) {
+            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
                 return $fx(...$args);
             }, null, $fxScopeClassRefl->getName());
         } else {
-            $fxLong = \Closure::bind(function ($ignore, ...$args) use ($fx) {
+            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
                 return \Closure::bind($fx, $this)(...$args);
             }, $fxThis, $fxScopeClassRefl->getName());
         }
@@ -127,7 +127,7 @@ trait HookTrait
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        $fxLong = function (...$args) use ($getFxThisFx, $fx) {
+        $fxLong = function (&...$args) use ($getFxThisFx, $fx) {
             $fxThis = $getFxThisFx($this);
             if ($fxThis === null) {
                 throw new Exception('New $this can not be null');
