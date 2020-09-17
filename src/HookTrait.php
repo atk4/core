@@ -127,7 +127,7 @@ trait HookTrait
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        $fxLong = function (&...$args) use ($getFxThisFx, $fx) {
+        $fxLong = function ($ignore, &...$args) use ($getFxThisFx, $fx) {
             $fxThis = $getFxThisFx($this);
             if ($fxThis === null) {
                 throw new Exception('New $this can not be null');
@@ -136,7 +136,7 @@ trait HookTrait
             return \Closure::bind($fx, $fxThis)($this, ...$args);
         };
 
-        return $this->onHookShort($spot, $fxLong, $args, $priority);
+        return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
     /**
