@@ -45,15 +45,16 @@ trait HookTrait
         foreach ($this->hooks as &$hooksByPriority) {
             foreach ($hooksByPriority as &$hooksByIndex) {
                 foreach ($hooksByIndex as &$hookData) {
-                    $fxThis = (new \ReflectionFunction($hookData[0]))->getClosureThis();
+                    $fxRefl = new \ReflectionFunction($hookData[0]);
+                    $fxThis = $fxRefl->getClosureThis();
                     if ($fxThis === null) {
                         continue;
                     }
 
                     if ($fxThis !== $this->_hookOrigThis) {
                         throw (new Exception('Object can not be cloned with hook bound to a different object than this'))
-                            ->addMoreInfo('closure_class', get_class($fxThis))
-                            ->addMoreInfo('closure_start_line', (new \ReflectionFunction($hookData[0]))->getStartLine());
+                            ->addMoreInfo('closure_file', $fxRefl->getFileName())
+                            ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
                     }
 
                     $hookData[0] = \Closure::bind($hookData[0], $this);
