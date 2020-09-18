@@ -382,6 +382,41 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(5, $m->result);
         $this->assertSame(3, $mCloned->result);
     }
+
+    public function testPassByReference()
+    {
+        $value = 0;
+        $m = new HookMock();
+        $m->onHook('inc', function ($ignoreObject, $ignore1st, int &$value) {
+            ++$value;
+        });
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(1, $value);
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(2, $value);
+
+        $value = 0;
+        $m = new HookMock();
+        $m->onHookShort('inc', function ($ignore1st, int &$value) {
+            ++$value;
+        });
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(1, $value);
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(2, $value);
+
+        $value = 0;
+        $m = new HookMock();
+        $m->onHookDynamic('inc', function () use ($m) {
+            return clone $m;
+        }, function ($ignoreObject, $ignore1st, int &$value) {
+            ++$value;
+        });
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(1, $value);
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(2, $value);
+    }
 }
 
 // @codingStandardsIgnoreStart
