@@ -51,7 +51,9 @@ trait HookTrait
                     }
 
                     if ($fxThis !== $this->_hookOrigThis) {
-                        throw new Exception('Object can not be cloned with hook bound to a different object than this');
+                        throw (new Exception('Object can not be cloned with hook bound to a different object than this'))
+                            ->addMoreInfo('closure_class', get_class($fxThis))
+                            ->addMoreInfo('closure_start_line', (new \ReflectionFunction($hookData[0]))->getStartLine());
                     }
 
                     $hookData[0] = \Closure::bind($hookData[0], $this);
@@ -116,6 +118,25 @@ trait HookTrait
         }
 
         return $this->onHook($spot, $fxLong, $args, $priority);
+    }
+
+    /**
+     * Same as onHookShort() except $this of callback is get and rebound on invoke.
+     *
+     * @return int index under which the hook was added
+     */
+    public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
+    {
+        $fxLong = function (...$args) use ($getFxThisFx, $fx) {
+            $fxThis = $getFxThisFx($this);
+            if ($fxThis === null) {
+                throw new Exception('New $this can not be null');
+            }
+
+            return \Closure::bind($fx, $fxThis)($this, ...$args);
+        };
+
+        return $this->onHookShort($spot, $fxLong, $args, $priority);
     }
 
     /**
