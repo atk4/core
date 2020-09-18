@@ -52,9 +52,16 @@ trait HookTrait
                     }
 
                     if ($fxThis !== $this->_hookOrigThis) {
-                        throw (new Exception('Object can not be cloned with hook bound to a different object than this'))
-                            ->addMoreInfo('closure_file', $fxRefl->getFileName())
-                            ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
+                        // TODO we throw only if the class name is the same, otherwise the check is too strict
+                        // and on a bad side - we should not throw when an object with a hook is cloned,
+                        // but instead we should throw once the closure this object is cloned
+                        if (get_class($fxThis) === get_class($this->_hookOrigThis) || preg_match('~^atk4\\\\(?:core|dsql|data)~', get_class($fxThis))) {
+                            throw (new Exception('Object can not be cloned with hook bound to a different object than this'))
+                                ->addMoreInfo('closure_file', $fxRefl->getFileName())
+                                ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
+                        }
+
+                        continue;
                     }
 
                     $hookData[0] = \Closure::bind($hookData[0], $this);
