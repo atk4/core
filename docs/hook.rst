@@ -30,7 +30,7 @@ The framework or application would typically execute hooks like this::
 
 You can register multiple call-backs to be executed for the requested `spot`::
 
-    $obj->onHook('spot', function($obj){ echo "Hook 'spot' is called!"; });
+    $obj->onHook('spot', function($obj) { echo "Hook 'spot' is called!"; });
 
 Adding callbacks
 ================
@@ -48,13 +48,17 @@ In case $fx is omitted then $this object is used as $fx.
 
 In this case a method with same name as $spot will be used as callback::
 
-    protected function init(): void {
+    protected function init(): void
+    {
         parent::init();
 
-        $this->onHook('beforeUpdate');
+        $this->onHookShort($spot, function(...$args) {
+            $this->beforeUpdate(...$args);
+        });
     }
 
-    function beforeUpdate($obj){
+    function beforeUpdate()
+    {
         // will be called from the hook
     }
 

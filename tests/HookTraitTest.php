@@ -265,6 +265,158 @@ class HookTraitTest extends AtkPhpunit\TestCase
         });
         $ret = $m->hook('inc');
     }
+
+    public function testOnHookShort()
+    {
+        $m = new HookMock();
+
+        // unbound callback
+        $self = $this;
+        $m->onHookShort('inc', static function (...$args) use ($self) {
+            $self->assertSame(['y', 'x'], $args);
+        }, ['x']);
+        $m->hook('inc', ['y']);
+
+        // bound callback
+        $m->onHookShort('inc', function (...$args) {
+            $this->assertSame(['y', 'x'], $args);
+        }, ['x']);
+        $m->hook('inc', ['y']);
+    }
+
+    public function testCloningSafety()
+    {
+        $makeMock = function () {
+            return new class() extends HookMock {
+                public function makeCallback(): \Closure
+                {
+                    return function () {
+                        $this->incrementResult();
+
+                        return $this;
+                    };
+                }
+            };
+        };
+
+        // unbound callback
+        $m = $makeMock();
+        $m->onHook('inc', static function () {});
+        $m->onHookShort('inc', static function () {});
+        $m->onHookShort('null_scope_class', \Closure::fromCallable('trim'), ['x']);
+        $m = clone $m;
+        foreach ($m->hook('inc') as $v) {
+            $this->assertNull($v);
+        }
+
+        // callback bound to the same object
+        $m = $makeMock();
+        $m->onHook('inc', $m->makeCallback());
+        $m->onHookShort('inc', $m->makeCallback());
+        $m = clone $m;
+        foreach ($m->hook('inc') as $v) {
+            $this->assertSame($m, $v);
+        }
+        $this->assertSame(2, $m->result);
+        foreach ($m->hook('inc') as $v) { // 2nd dispatch
+            $this->assertSame($m, $v);
+        }
+        $this->assertSame(4, $m->result);
+        $m = clone $m; // 2nd clone
+        foreach ($m->hook('inc') as $v) {
+            $this->assertSame($m, $v);
+        }
+        $this->assertSame(6, $m->result);
+
+        // callback bound to a different object
+        $m = $makeMock();
+        $m->onHook('inc', (clone $m)->makeCallback());
+        $m = clone $m;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object can not be cloned with hook bound to a different object than this');
+        $m->hook('inc');
+    }
+
+    public function testOnHookDynamic()
+    {
+        $m = new class() extends HookMock {
+            public function makeCallback(): \Closure
+            {
+                return function () {
+                    $this->incrementResult();
+
+                    return $this;
+                };
+            }
+        };
+
+        $hookThis = $m;
+        $m->onHookDynamic('inc', function () use (&$hookThis) {
+            return $hookThis;
+        }, $m->makeCallback());
+
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(1, $m->result);
+        $mCloned = clone $m;
+
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(2, $m->result);
+        $this->assertSame(1, $mCloned->result);
+        $this->assertSame([$hookThis], $mCloned->hook('inc'));
+        $this->assertSame(3, $m->result);
+        $this->assertSame(1, $mCloned->result);
+
+        $hookThis = $mCloned;
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(3, $m->result);
+        $this->assertSame(2, $mCloned->result);
+        $this->assertSame([$hookThis], $mCloned->hook('inc'));
+        $this->assertSame(3, $m->result);
+        $this->assertSame(3, $mCloned->result);
+
+        $hookThis = $m;
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(4, $m->result);
+        $this->assertSame(3, $mCloned->result);
+        $this->assertSame([$hookThis], $mCloned->hook('inc'));
+        $this->assertSame(5, $m->result);
+        $this->assertSame(3, $mCloned->result);
+    }
+
+    public function testPassByReference()
+    {
+        $value = 0;
+        $m = new HookMock();
+        $m->onHook('inc', function ($ignoreObject, $ignore1st, int &$value) {
+            ++$value;
+        });
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(1, $value);
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(2, $value);
+
+        $value = 0;
+        $m = new HookMock();
+        $m->onHookShort('inc', function ($ignore1st, int &$value) {
+            ++$value;
+        });
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(1, $value);
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(2, $value);
+
+        $value = 0;
+        $m = new HookMock();
+        $m->onHookDynamic('inc', function () use ($m) {
+            return clone $m;
+        }, function ($ignoreObject, $ignore1st, int &$value) {
+            ++$value;
+        });
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(1, $value);
+        $m->hook('inc', ['x', &$value]);
+        $this->assertSame(2, $value);
+    }
 }
 
 // @codingStandardsIgnoreStart
@@ -274,11 +426,12 @@ class HookMock
 
     public $result = 0;
 
-    public function myCallback($obj)
+    public function incrementResult()
     {
         ++$this->result;
     }
 }
+
 class HookWithDynamicMethodMock extends HookMock
 {
     use \atk4\core\DynamicMethodTrait;

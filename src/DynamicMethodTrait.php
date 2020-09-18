@@ -144,6 +144,7 @@ trait DynamicMethodTrait
             throw (new Exception('Registering global method twice'))
                 ->addMoreInfo('name', $name);
         }
+
         $this->app->onHook($this->buildMethodHookName($name, true), $fx);
     }
 

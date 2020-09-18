@@ -28,19 +28,56 @@ trait HookTrait
     private $_hookIndexCounter = 0;
 
     /**
+     * @var static
+     */
+    private $_hookOrigThis;
+
+    private function _rebindHooksIfCloned(): void
+    {
+        if ($this->_hookOrigThis === $this) {
+            return;
+        } elseif ($this->_hookOrigThis === null) {
+            $this->_hookOrigThis = $this;
+
+            return;
+        }
+
+        foreach ($this->hooks as &$hooksByPriority) {
+            foreach ($hooksByPriority as &$hooksByIndex) {
+                foreach ($hooksByIndex as &$hookData) {
+                    $fxRefl = new \ReflectionFunction($hookData[0]);
+                    $fxThis = $fxRefl->getClosureThis();
+                    if ($fxThis === null) {
+                        continue;
+                    }
+
+                    if ($fxThis !== $this->_hookOrigThis) {
+                        throw (new Exception('Object can not be cloned with hook bound to a different object than this'))
+                            ->addMoreInfo('closure_file', $fxRefl->getFileName())
+                            ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
+                    }
+
+                    $hookData[0] = \Closure::bind($hookData[0], $this);
+                }
+            }
+        }
+        unset($hooksByPriority, $hooksByIndex, $hookData);
+
+        $this->_hookOrigThis = $this;
+    }
+
+    /**
      * Add another callback to be executed during hook($hook_spot);.
      *
-     * If priority is negative, then hooks will be executed in reverse order.
+     * Lower priority is called sooner. If priority is negative,
+     * then hooks will be executed in reverse order.
      *
-     * @param string   $spot     Hook identifier to bind on
-     * @param \Closure $fx       Will be called on hook()
-     * @param array    $args     Arguments are passed to $fx
-     * @param int      $priority Lower priority is called sooner
-     *
-     * @return int Index under which the hook was added
+     * @return int index under which the hook was added
      */
-    public function onHook(string $spot, \Closure $fx = null, array $args = [], int $priority = 5)
+    public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
+        $this->_rebindHooksIfCloned();
+
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];
         }
@@ -57,11 +94,57 @@ trait HookTrait
     }
 
     /**
+     * Same as onHook() except no $this is passed to the callback as the 1st argument.
+     *
+     * @return int index under which the hook was added
+     */
+    public function onHookShort(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
+    {
+        // create long callback and bind it to the same scope class and object
+        $fxRefl = new \ReflectionFunction($fx);
+        $fxScopeClassRefl = $fxRefl->getClosureScopeClass();
+        $fxThis = $fxRefl->getClosureThis();
+        if ($fxScopeClassRefl === null) {
+            $fxLong = static function ($ignore, &...$args) use ($fx) {
+                return $fx(...$args);
+            };
+        } elseif ($fxThis === null) {
+            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
+                return $fx(...$args);
+            }, null, $fxScopeClassRefl->getName());
+        } else {
+            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
+                return \Closure::bind($fx, $this)(...$args);
+            }, $fxThis, $fxScopeClassRefl->getName());
+        }
+
+        return $this->onHook($spot, $fxLong, $args, $priority);
+    }
+
+    /**
+     * Same as onHookShort() except $this of callback is get and rebound on invoke.
+     *
+     * @return int index under which the hook was added
+     */
+    public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
+    {
+        $fxLong = function ($ignore, &...$args) use ($getFxThisFx, $fx) {
+            $fxThis = $getFxThisFx($this);
+            if ($fxThis === null) {
+                throw new Exception('New $this can not be null');
+            }
+
+            return \Closure::bind($fx, $fxThis)($this, ...$args);
+        };
+
+        return $this->onHook($spot, $fxLong, $args, $priority);
+    }
+
+    /**
      * Delete all hooks for specified spot, priority and index.
      *
-     * @param string   $spot            Hook identifier
-     * @param int|null $priority        Filter specific priority, null for all
-     * @param int      $priorityIsIndex Filter by index instead of priority
+     * @param int|null $priority        filter specific priority, null for all
+     * @param int      $priorityIsIndex filter by index instead of priority
      *
      * @return static
      */
@@ -86,9 +169,8 @@ trait HookTrait
     /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param string   $spot            Hook identifier
-     * @param int|null $priority        Filter specific priority, null for all
-     * @param int      $priorityIsIndex Filter by index instead of priority
+     * @param int|null $priority        filter specific priority, null for all
+     * @param int      $priorityIsIndex filter by index instead of priority
      */
     public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
     {
@@ -115,13 +197,12 @@ trait HookTrait
     /**
      * Execute all closures assigned to $hook_spot.
      *
-     * @param string $spot Hook identifier
-     * @param array  $args Additional arguments to closures
-     *
      * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
+        $this->_rebindHooksIfCloned();
+
         $brokenBy = null;
 
         $return = [];
