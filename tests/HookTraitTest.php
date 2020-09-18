@@ -336,6 +336,52 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->expectExceptionMessage('Object can not be cloned with hook bound to a different object than this');
         $m->hook('inc');
     }
+
+    public function testOnHookDynamic()
+    {
+        $m = new class() extends HookMock {
+            public function makeCallback(): \Closure
+            {
+                return function () {
+                    $this->incrementResult();
+
+                    return $this;
+                };
+            }
+        };
+
+        $hookThis = $m;
+        $m->onHookDynamic('inc', function () use (&$hookThis) {
+            return $hookThis;
+        }, $m->makeCallback());
+
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(1, $m->result);
+        $mCloned = clone $m;
+
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(2, $m->result);
+        $this->assertSame(1, $mCloned->result);
+        $this->assertSame([$hookThis], $mCloned->hook('inc'));
+        $this->assertSame(3, $m->result);
+        $this->assertSame(1, $mCloned->result);
+
+        $hookThis = $mCloned;
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(3, $m->result);
+        $this->assertSame(2, $mCloned->result);
+        $this->assertSame([$hookThis], $mCloned->hook('inc'));
+        $this->assertSame(3, $m->result);
+        $this->assertSame(3, $mCloned->result);
+
+        $hookThis = $m;
+        $this->assertSame([$hookThis], $m->hook('inc'));
+        $this->assertSame(4, $m->result);
+        $this->assertSame(3, $mCloned->result);
+        $this->assertSame([$hookThis], $mCloned->hook('inc'));
+        $this->assertSame(5, $m->result);
+        $this->assertSame(3, $mCloned->result);
+    }
 }
 
 // @codingStandardsIgnoreStart
