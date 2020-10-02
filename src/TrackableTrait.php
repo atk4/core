@@ -63,19 +63,12 @@ trait TrackableTrait
      */
     public function destroy(): void
     {
-        if (
-            isset($this->owner) &&
-            $this->owner->_containerTrait
-        ) {
+        if ($this->owner !== null && isset($this->owner->_containerTrait)) {
             $this->owner->removeElement($this->short_name);
 
             // GC remove reference to app is AppScope in use
-            if (
-                isset($this->app) &&
-                ($this->_appScopeTrait ?? false) &&
-                ($this->owner->_appScopeTrait ?? false)
-            ) {
-                $this->app = null;
+            if (isset($this->_appScopeTrait) && $this->issetApp() && isset($this->owner->_appScopeTrait)) {
+                $this->_app = null;
             }
 
             // GC : remove reference to owner

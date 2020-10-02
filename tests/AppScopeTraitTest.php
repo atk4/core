@@ -21,25 +21,27 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
     public function testConstruct()
     {
         $m = new AppScopeMock();
-        $m->app = 'myapp';
+        $fakeApp = new \stdClass();
+        $m->setApp($fakeApp);
 
-        $c = $m->add(new Child1());
-        $this->assertSame('myapp', $c->app);
+        $c = $m->add(new AppScopeChildBasic());
+        $this->assertSame($fakeApp, $c->getApp());
 
-        $c = $m->add(new Child2());
-        $this->assertFalse(isset($c->app));
+        $c = $m->add(new AppScopeChildWithoutAppScope());
+        $this->assertFalse(property_exists($c, 'app'));
+        $this->assertFalse(property_exists($c, '_app'));
 
         $m = new AppScopeMock2();
 
-        $c = $m->add(new Child1());
-        $this->assertFalse(isset($c->app));
+        $c = $m->add(new AppScopeChildBasic());
+        $this->assertFalse($c->issetApp());
 
         // test for GC
         $m = new AppScopeMock();
-        $m->app = $m;
-        $m->add($child = new Child3());
+        $m->setApp($m);
+        $m->add($child = new AppScopeChildTrackable());
         $child->destroy();
-        $this->assertNull($child->app);
+        $this->assertNull($this->getProtected($child, '_app'));
         $this->assertNull($child->owner);
     }
 }
@@ -67,17 +69,17 @@ class AppScopeMock2
     }
 }
 
-class Child1
+class AppScopeChildBasic
 {
     use AppScopeTrait;
 }
 
-class Child2
+class AppScopeChildWithoutAppScope
 {
     use TrackableTrait;
 }
 
-class Child3
+class AppScopeChildTrackable
 {
     use AppScopeTrait;
     use TrackableTrait;

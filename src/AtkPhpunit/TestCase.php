@@ -17,9 +17,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return mixed
      */
-    public function &callProtected(object $obj, string $name, ...$args)
+    public function &callProtected(object $obj, string $name, &...$args)
     {
-        return \Closure::bind(static function &() use ($obj, $name, $args) {
+        return \Closure::bind(static function &() use ($obj, $name, &$args) {
             $objRefl = new \ReflectionClass($obj);
             if ($objRefl
                 ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
@@ -49,7 +49,30 @@ class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Fake test. Otherwise Travis gives warning that there are no tests in here.
+     * Sets protected property value.
+     *
+     * NOTE: this method must only be used for low-level functionality, not
+     * for general test-scripts.
+     *
+     * @param mixed $value
+     *
+     * @return static
+     */
+    public function setProtected(object $obj, string $name, &$value, bool $byReference = false)
+    {
+        \Closure::bind(static function () use ($obj, &$value, $byReference) {
+            if ($byReference) {
+                $obj->{$name} = &$value;
+            } else {
+                $obj->{$name} = $value;
+            }
+        }, null, $obj)();
+
+        return $this;
+    }
+
+    /**
+     * Fake test. Otherwise phpunit gives warning that there are no tests in here.
      *
      * @doesNotPerformAssertions
      */

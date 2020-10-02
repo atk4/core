@@ -23,16 +23,15 @@ trait TranslatableTrait
      *
      * @param string      $message    The message to be translated
      * @param array       $parameters Array of parameters used to translate message
-     * @param string|null $context    The domain for the message or null to use the default
+     * @param string|null $domain     The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
      * @return string The translated string
      */
     public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
     {
-        // if App is present
-        if (isset($this->app) && method_exists($this->app, '_')) {
-            return $this->app->_($message, $parameters, $domain, $locale);
+        if (isset($this->_appScopeTrait) && $this->issetApp() && method_exists($this->getApp(), '_')) {
+            return $this->getApp()->_($message, $parameters, $domain, $locale);
         }
 
         return Translator::instance()->_($message, $parameters, $domain, $locale);

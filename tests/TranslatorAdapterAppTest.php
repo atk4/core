@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\core\tests;
 
+use atk4\core\AppScopeTrait;
 use atk4\core\TranslatableTrait;
 
 class TranslatorAdapterAppTest extends TranslatorAdapterBase
@@ -15,10 +16,11 @@ class TranslatorAdapterAppTest extends TranslatorAdapterBase
         };
 
         $mock = new class() {
+            use AppScopeTrait;
             use TranslatableTrait;
         };
 
-        $mock->app = $app;
+        $mock->setApp($app);
 
         return $mock;
     }

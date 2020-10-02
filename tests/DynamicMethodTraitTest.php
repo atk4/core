@@ -62,7 +62,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         // can't call method without HookTrait or AppScope+Hook traits
         $this->expectException(Exception::class);
         $m = new GlobalMethodObjectMock();
-        $m->app = new GlobalMethodAppMock();
+        $m->setApp(new GlobalMethodAppMock());
         $m->unknownMethod();
     }
 
@@ -141,10 +141,10 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $app = new GlobalMethodAppMock();
 
         $m = new GlobalMethodObjectMock();
-        $m->app = $app;
+        $m->setApp($app);
 
         $m2 = new GlobalMethodObjectMock();
-        $m2->app = $app;
+        $m2->setApp($app);
 
         $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
             return $a + $b;
@@ -163,7 +163,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->expectException(Exception::class);
 
         $m = new GlobalMethodObjectMock();
-        $m->app = new GlobalMethodAppMock();
+        $m->setApp(new GlobalMethodAppMock());
 
         $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
             return $a + $b;

@@ -59,7 +59,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $app->logger = $app;
 
         $m = new DebugMock();
-        $m->app = $app;
+        $m->setApp($app);
         $m->debug();
 
         $m->debug('debug test2');
@@ -83,7 +83,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $app->logger = $app;
 
         $m = new DebugMock();
-        $m->app = $app;
+        $m->setApp($app);
         $m->log('warning', 'debug test3');
 
         $this->assertSame(['warning', 'debug test3', []], $app->log);
@@ -103,7 +103,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $app = new DebugAppMock();
 
         $m = new DebugMock();
-        $m->app = $app;
+        $m->setApp($app);
         $m->userMessage('hello user');
 
         $this->assertSame(['warning', 'Could not notify user about: hello user', []], $app->log);
@@ -115,7 +115,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $app = new DebugAppMock2();
 
         $m = new DebugMock();
-        $m->app = $app;
+        $m->setApp($app);
         $m->userMessage('hello user');
 
         $this->assertSame(['hello user', []], $app->message);
@@ -132,7 +132,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
         $m = new DebugMock();
         $app->logger = $app;
-        $m->app = $app;
+        $m->setApp($app);
 
         $this->triggerDebugTraceChange($m, 'test1'); // difference is 1 line between calls
         $this->triggerDebugTraceChange($m, 'test1');
@@ -163,7 +163,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
         $m = new PsrMock();
         $app->logger = $app;
-        $m->app = $app;
+        $m->setApp($app);
 
         $m->info('i', ['x']);
         $this->assertSame(['info', 'i', ['x']], $app->log);
@@ -191,6 +191,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 // @codingStandardsIgnoreStart
 class DebugMock
 {
+    use AppScopeTrait;
     use DebugTrait {
         _echo_stderr as __echo_stderr;
     }

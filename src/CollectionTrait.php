@@ -48,7 +48,7 @@ trait CollectionTrait
 
         // Carry on reference to application if we have appScopeTraits set
         if (isset($this->_appScopeTrait) && isset($item->_appScopeTrait)) {
-            $item->app = $this->app;
+            $item->setApp($this->getApp());
         }
 
         // Calculate long "name" but only if both are trackables
@@ -159,11 +159,11 @@ trait CollectionTrait
                         $this->_appScopeTrait = $app !== null;
 
                         try {
-                            $this->app = $app;
+                            $this->setApp($app);
 
                             return $this->_shorten($desired);
                         } finally {
-                            $this->app = null; // important for GC
+                            $this->_app = null; // important for GC
                         }
                     }
                 };
@@ -172,6 +172,6 @@ trait CollectionTrait
             return $factory->collectionTraitHelper;
         }, null, Factory::class)();
 
-        return $collectionTraitHelper->shorten($this->_appScopeTrait ? $this->app : null, $desired);
+        return $collectionTraitHelper->shorten($this->_appScopeTrait ? $this->getApp() : null, $desired);
     }
 }

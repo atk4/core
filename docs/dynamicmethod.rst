@@ -20,7 +20,7 @@ If object has application scope :php:trait:`AppScopeTrait` and the application
 implements :php:trait:`HookTrait` then executing $object->test() will also
 look for globally-registered method inside the application::
 
-    $object->app->addGlobalMethod('test', function($app, $o, $args){
+    $object->getApp()->addGlobalMethod('test', function($app, $o, $args){
         echo 'hello, '.$args[0];
     });
 
