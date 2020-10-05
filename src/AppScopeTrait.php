@@ -100,6 +100,7 @@ trait AppScopeTrait
     public function getApp()
     {
         $this->assertNoDirectAppAssignment();
+        $this->assertInstanceOfApp($this->_app);
 
         return $this->_app;
     }
