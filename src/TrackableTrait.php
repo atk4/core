@@ -81,6 +81,23 @@ trait TrackableTrait
     }
 
     /**
+     * Should be used only when object is cloned.
+     *
+     * @return static
+     */
+    public function unsetOwner()
+    {
+        $this->assertNoDirectOwnerAssignment();
+        if (!$this->issetOwner()) {
+            throw new Exception('Owner not set');
+        }
+
+        $this->_owner = null;
+
+        return $this;
+    }
+
+    /**
      * If name of the object is omitted then it's naturally to name them
      * after the class. You can specify a different naming pattern though.
      */

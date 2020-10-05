@@ -100,7 +100,7 @@ trait CollectionTrait
         $this->{$collectionName} = array_map(function ($item) {
             $item = clone $item;
             if (isset($item->_trackableTrait) && $item->issetOwner()) {
-                $item->setOwner($this);
+                $item->unsetOwner()->setOwner($this);
             }
 
             return $item;
