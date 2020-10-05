@@ -114,8 +114,8 @@ trait AppScopeTrait
     {
         $this->assertNoDirectAppAssignment();
         $this->assertInstanceOfApp($app);
-        if ($this->issetApp()) {
-            throw new Exception('App already set');
+        if ($this->issetApp() && $this->getApp() !== $app) {
+            throw new Exception('App can not be replaced');
         }
 
         $this->_app = $app;
