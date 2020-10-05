@@ -55,7 +55,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
             $this->assertSame('app', $surname->getApp()->name);
 
             $this->assertSame('form-fields_surname', $surname->name);
-            $this->assertSame($surname->owner, $m);
+            $this->assertSame($surname->getOwner(), $m);
 
             $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [CustomFieldMock::class]);
             $this->assertLessThan(21, strlen($long->name));

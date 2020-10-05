@@ -21,11 +21,18 @@ trait TrackableTrait
     public $_trackableTrait = true;
 
     /**
+     * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
+     *
+     * @var object
+     */
+    private $owner;
+
+    /**
      * Link to (parent) object into which we added this object.
      *
      * @var object
      */
-    public $owner;
+    private $_owner;
 
     /**
      * Name of the object in owner's element array.
@@ -33,6 +40,45 @@ trait TrackableTrait
      * @var string
      */
     public $short_name;
+
+    /**
+     * To be removed in Jan 2021.
+     */
+    private function assertNoDirectOwnerAssignment(): void
+    {
+        if ($this->owner !== null) {
+            throw new Exception('Owner can not be assigned directly');
+        }
+    }
+
+    public function issetOwner(): bool
+    {
+        $this->assertNoDirectOwnerAssignment();
+
+        return $this->_owner !== null;
+    }
+
+    public function getOwner(): object
+    {
+        $this->assertNoDirectOwnerAssignment();
+
+        return $this->_owner;
+    }
+
+    /**
+     * @return static
+     */
+    public function setOwner(object $owner)
+    {
+        $this->assertNoDirectOwnerAssignment();
+        if ($this->issetOwner()) {
+            throw new Exception('Owner already set');
+        }
+
+        $this->_owner = $owner;
+
+        return $this;
+    }
 
     /**
      * If name of the object is omitted then it's naturally to name them
@@ -63,16 +109,16 @@ trait TrackableTrait
      */
     public function destroy(): void
     {
-        if ($this->owner !== null && isset($this->owner->_containerTrait)) {
-            $this->owner->removeElement($this->short_name);
+        if ($this->_owner !== null && isset($this->_owner->_containerTrait)) {
+            $this->_owner->removeElement($this->short_name);
 
             // GC remove reference to app is AppScope in use
-            if (isset($this->_appScopeTrait) && $this->issetApp() && isset($this->owner->_appScopeTrait)) {
+            if (isset($this->_appScopeTrait) && $this->issetApp()) {
                 $this->_app = null;
             }
 
             // GC : remove reference to owner
-            $this->owner = null;
+            $this->_owner = null;
         }
     }
 }

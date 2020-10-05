@@ -130,10 +130,7 @@ trait ContainerTrait
                 ->addMoreInfo('arg2', $args);
         }
 
-        if ($element->owner !== null) {
-            throw new Exception('Element owner is already set');
-        }
-        $element->owner = $this;
+        $element->setOwner($this);
         $element->short_name = $args[0];
         if (isset($this->_nameTrait)) {
             $element->name = $this->_shorten($this->name . '_' . $element->short_name);

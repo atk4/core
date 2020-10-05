@@ -42,7 +42,7 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
         $m->add($child = new AppScopeChildTrackable());
         $child->destroy();
         $this->assertNull($this->getProtected($child, '_app'));
-        $this->assertNull($child->owner);
+        $this->assertFalse($child->issetOwner());
     }
 }
 
