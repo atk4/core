@@ -115,7 +115,9 @@ trait AppScopeTrait
         $this->assertNoDirectAppAssignment();
         $this->assertInstanceOfApp($app);
         if ($this->issetApp() && $this->getApp() !== $app) {
-            throw new Exception('App can not be replaced');
+            if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
+                throw new Exception('App can not be replaced');
+            }
         }
 
         $this->_app = $app;
