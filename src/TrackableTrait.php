@@ -34,6 +34,42 @@ trait TrackableTrait
      */
     public $short_name;
 
+    public function issetOwner(): bool
+    {
+        return $this->owner !== null;
+    }
+
+    public function getOwner(): object
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @return static
+     */
+    public function setOwner(object $owner)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Should be used only when object is cloned.
+     *
+     * @return static
+     */
+    public function unsetOwner()
+    {
+        if (!$this->issetOwner()) {
+            throw new Exception('Owner not set');
+        }
+
+        $this->owner = null;
+
+        return $this;
+    }
+
     /**
      * If name of the object is omitted then it's naturally to name them
      * after the class. You can specify a different naming pattern though.

@@ -59,4 +59,29 @@ trait AppScopeTrait
      * @var array
      */
     public $unique_hashes = [];
+
+    public function issetApp(): bool
+    {
+        return $this->app !== null;
+    }
+
+    /**
+     * @return \atk4\ui\App
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+
+    /**
+     * @param \atk4\ui\App $app
+     *
+     * @return static
+     */
+    public function setApp(object $app)
+    {
+        $this->app = $app;
+
+        return $this;
+    }
 }
