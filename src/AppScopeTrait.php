@@ -22,11 +22,16 @@ trait AppScopeTrait
     public $_appScopeTrait = true;
 
     /**
-     * Always points to current Application.
-     *
-     * @var \atk4\ui\App
+     * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
      */
-    public $app;
+    private $app;
+
+    /**
+     * Always points to current application.
+     *
+     * @var App
+     */
+    private $_app;
 
     /**
      * When using mechanism for ContainerTrait, they inherit name of the
@@ -59,4 +64,64 @@ trait AppScopeTrait
      * @var array
      */
     public $unique_hashes = [];
+
+    private function assertInstanceOfApp(object $app): void
+    {
+        // called from phpunit, allow to use/test this trait without \atk4\ui\App class
+        if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+            return;
+        }
+
+        if (!$app instanceof \atk4\ui\App) {
+            throw new Exception('App must be instance of \atk4\ui\App');
+        }
+    }
+
+    /**
+     * To be removed in Jan 2021.
+     */
+    private function assertNoDirectAppAssignment(): void
+    {
+        if ($this->app !== null) {
+            throw new Exception('App can not be assigned directly');
+        }
+    }
+
+    public function issetApp(): bool
+    {
+        $this->assertNoDirectAppAssignment();
+
+        return $this->_app !== null;
+    }
+
+    /**
+     * @return \atk4\ui\App
+     */
+    public function getApp()
+    {
+        $this->assertNoDirectAppAssignment();
+        $this->assertInstanceOfApp($this->_app);
+
+        return $this->_app;
+    }
+
+    /**
+     * @param \atk4\ui\App $app
+     *
+     * @return static
+     */
+    public function setApp(object $app)
+    {
+        $this->assertNoDirectAppAssignment();
+        $this->assertInstanceOfApp($app);
+        if ($this->issetApp() && $this->getApp() !== $app) {
+            if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
+                throw new Exception('App can not be replaced');
+            }
+        }
+
+        $this->_app = $app;
+
+        return $this;
+    }
 }

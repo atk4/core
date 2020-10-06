@@ -89,7 +89,7 @@ trait ContainerTrait
     {
         // Carry on reference to application if we have appScopeTraits set
         if (isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
-            $element->app = $this->app;
+            $element->setApp($this->getApp());
         }
 
         // If element is not trackable, then we don't need to do anything with it
@@ -130,10 +130,7 @@ trait ContainerTrait
                 ->addMoreInfo('arg2', $args);
         }
 
-        if ($element->owner !== null) {
-            throw new Exception('Element owner is already set');
-        }
-        $element->owner = $this;
+        $element->setOwner($this);
         $element->short_name = $args[0];
         if (isset($this->_nameTrait)) {
             $element->name = $this->_shorten($this->name . '_' . $element->short_name);
@@ -182,11 +179,9 @@ trait ContainerTrait
      */
     protected function _shorten(string $desired): string
     {
-        if (
-            isset($this->_appScopeTrait) &&
-            isset($this->app->max_name_length) &&
-            mb_strlen($desired) > $this->app->max_name_length
-        ) {
+        if (isset($this->_appScopeTrait)
+            && isset($this->getApp()->max_name_length)
+            && mb_strlen($desired) > $this->getApp()->max_name_length) {
             /*
              * Basic rules: hash is 10 character long (8+2 for separator)
              * We need at least 5 characters on the right side. Total must not exceed
@@ -194,15 +189,15 @@ trait ContainerTrait
              * max-15
              */
             $len = mb_strlen($desired);
-            $left = $len - ($len - 10) % ($this->app->max_name_length - 15) - 5;
+            $left = $len - ($len - 10) % ($this->getApp()->max_name_length - 15) - 5;
 
             $key = mb_substr($desired, 0, $left);
             $rest = mb_substr($desired, $left);
 
-            if (!isset($this->app->unique_hashes[$key])) {
-                $this->app->unique_hashes[$key] = '_' . dechex(crc32($key));
+            if (!isset($this->getApp()->unique_hashes[$key])) {
+                $this->getApp()->unique_hashes[$key] = '_' . dechex(crc32($key));
             }
-            $desired = $this->app->unique_hashes[$key] . '__' . $rest;
+            $desired = $this->getApp()->unique_hashes[$key] . '__' . $rest;
         }
 
         return $desired;

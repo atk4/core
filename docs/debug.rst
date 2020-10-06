@@ -40,7 +40,7 @@ DebugTrait::
     $this->debug('User {user} created', ['user'=>$user]);
 
 The Application itself can use DebugTrait too and normally should do, making it
-possible to use ``$this->app->debug()``.
+possible to use ``$this->getApp()->debug()``.
 
 Various objects may implement DebugTrait and also invoke $this->debug(), but in
 most cases this will simply be ignored right away unless you manually enable
@@ -53,15 +53,15 @@ debugging for the object::
     $obj1->debug('test1'); // will go to logger
     $obj2->debug('test2'); // will not go to logger because debug is not enabled for this object
 
-Executing debug will look for ``$this->app`` link and if the application
-implements ``Psr\Log\LoggerInterface``, then ``$this->app->log()`` will be
+Executing debug will look for ``$this->getApp()`` link and if the application
+implements ``Psr\Log\LoggerInterface``, then ``$this->getApp()->log()`` will be
 called using LogLevel DEBUG.
 
 Log
 ---
 
 Log method will log message every time. DebugTrait implements the ``log()``
-method which will either display information on the STDOUT (if ``$this->app``
+method which will either display information on the STDOUT (if ``$this->getApp()``
 does not exist or does not implement PSR-3)
 
 Message

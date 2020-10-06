@@ -44,18 +44,18 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     {
         try {
             $m = new CollectionMockWithApp();
-            $m->app = new class() {
+            $m->setApp(new class() {
                 public $name = 'app';
                 public $max_name_length = 20;
-            };
+            });
             $m->name = 'form';
 
             $surname = $m->addField('surname', [CustomFieldMock::class]);
 
-            $this->assertSame('app', $surname->app->name);
+            $this->assertSame('app', $surname->getApp()->name);
 
             $this->assertSame('form-fields_surname', $surname->name);
-            $this->assertSame($surname->owner, $m);
+            $this->assertSame($surname->getOwner(), $m);
 
             $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [CustomFieldMock::class]);
             $this->assertLessThan(21, strlen($long->name));

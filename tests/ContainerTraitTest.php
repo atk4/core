@@ -55,7 +55,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testLongNames()
     {
         $app = new ContainerAppMock();
-        $app->app = $app;
+        $app->setApp($app);
         $app->max_name_length = 30;
         $m = $app->add(new ContainerAppMock(), 'quick-brown-fox');
         $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
@@ -84,7 +84,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testLongNames2()
     {
         $app = new ContainerAppMock();
-        $app->app = $app;
+        $app->setApp($app);
         $app->max_name_length = 30;
         $app->name = 'my-app-name-is-pretty-long';
 
@@ -220,7 +220,7 @@ class ContainerAppMock
     {
         $n = $this->name;
 
-        $d = array_flip($this->app->unique_hashes);
+        $d = array_flip($this->getApp()->unique_hashes);
 
         for ($x = 1; $x < 100; ++$x) {
             @[$l, $r] = explode('__', $n);
