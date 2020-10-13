@@ -43,7 +43,7 @@
     "symfony/yaml": ">=3.4"
   },
   "require-dev": {
-    "atk4/data": "^2.2.0",
+    "atk4/data": "~2.2.0",
     "friendsofphp/php-cs-fixer": "^2.16",
     "phpunit/phpunit": ">=9.0",
     "symfony/contracts": ">=1.1"
