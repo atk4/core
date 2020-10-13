@@ -173,7 +173,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testException3()
     {
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Class "hello" not found');
+        $this->expectExceptionMessage('not found');
         $m = new ContainerMock();
         $m->add(['hello'], 123);
     }
