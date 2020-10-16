@@ -129,23 +129,36 @@ trait HookTrait
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
-    /**
-     * Same as onHookShort() except $this of callback is get and rebound on invoke.
-     *
-     * @return int index under which the hook was added
-     */
-    public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
+    private function makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, array $args, bool $isShort): \Closure
     {
-        $fxLong = function ($ignore, &...$args) use ($getFxThisFx, $fx) {
+        return function ($ignore, &...$args) use ($getFxThisFx, $fx, $isShort) {
             $fxThis = $getFxThisFx($this);
             if ($fxThis === null) {
                 throw new Exception('New $this can not be null');
             }
 
-            return \Closure::bind($fx, $fxThis)($this, ...$args);
+            return \Closure::bind($fx, $fxThis)(...($isShort ? [] : [$this]), ...$args);
         };
+    }
 
-        return $this->onHook($spot, $fxLong, $args, $priority);
+    /**
+     * Same as onHook() except $this of the callback is dynamically rebound before invoke.
+     *
+     * @return int index under which the hook was added
+     */
+    public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
+    {
+        return $this->onHook($spot, $this->makeHookDynamicFx($getFxThisFx, $fx, $args, false), $args, $priority);
+    }
+
+    /**
+     * Same as makeHookDynamicFx() except no $this is passed to the callback as the 1st argument.
+     *
+     * @return int index under which the hook was added
+     */
+    public function onHookDynamicShort(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
+    {
+        return $this->onHook($spot, $this->makeHookDynamicFx($getFxThisFx, $fx, $args, true), $args, $priority);
     }
 
     /**
