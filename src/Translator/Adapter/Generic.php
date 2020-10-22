@@ -42,7 +42,7 @@ class Generic implements ITranslatorAdapter
     protected function processMessage(string $definition, array $parameters = []): string
     {
         foreach ($parameters as $key => $val) {
-            $definition = str_replace('{{' . $key . '}}', $val, $definition);
+            $definition = str_replace('{{' . $key . '}}', (string) $val, $definition);
         }
 
         return $definition;
