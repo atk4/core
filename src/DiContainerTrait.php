@@ -100,7 +100,7 @@ trait DiContainerTrait
     {
         if (!is_object($seed)) {
             if (!is_array($seed)) {
-                throw (new Exception('Seed must be an array, a string class name (deprecated) or an object'))
+                throw (new Exception('Seed must be an array or an object'))
                     ->addMoreInfo('seed_type', gettype($seed));
             }
 
