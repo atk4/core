@@ -63,7 +63,7 @@ trait StaticAddToTrait
     /**
      * Same as addTo(), but the first element of seed specifies a class name instead of static::class.
      *
-     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed the first element specifies a class name, other elements are seed
      *
      * @return static
      */
@@ -79,7 +79,7 @@ trait StaticAddToTrait
     /**
      * Same as addToWithCl(), but the new object is not asserted to be an instance of this class.
      *
-     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed the first element specifies a class name, other elements are seed
      *
      * @return static
      */
