@@ -94,7 +94,10 @@ abstract class RendererAbstract
         }
 
         if ($parsed['object'] !== null) {
-            $parsed['object_formatted'] = $parsed['object']->name ?? get_class($parsed['object']);
+            $objProps = get_object_vars($parsed['object']);
+            $parsed['object_formatted'] = isset($objProps['_trackableTrait'])
+                ? $objProps['name']
+                : get_class($parsed['object']);
         }
 
         return $parsed;
@@ -105,7 +108,9 @@ abstract class RendererAbstract
         if ($val instanceof \Closure) {
             return 'closure';
         } elseif (is_object($val)) {
-            return get_class($val) . (isset($val->_trackableTrait) ? ' (' . $val->name . ')' : '');
+            $objProps = get_object_vars($val);
+
+            return get_class($val) . (isset($objProps['_trackableTrait']) ? ' (' . $objProps['name'] . ')' : '');
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {
