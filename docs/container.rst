@@ -70,15 +70,14 @@ Example::
     class Form
     {
         use core\CollectionTrait;
-        use core\FactoryTrait;
 
         protected $fields = [];
 
         public function addField($name, $seed = null)
         {
-            $seed = $this->mergeSeeds($seed, [FieldMock::class]);
+            $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-            $field = $this->factory($seed, ['name'=>$name]);
+            $field = Factory::factory($seed, ['name'=>$name]);
 
             return $this->_addIntoCollection($name, $field, 'fields');
         }
@@ -107,7 +106,7 @@ Methods
     Adds a new element into collection::
 
         function addField($name, $definition) {
-            $field = $this->factory($definition, []);
+            $field = Factory::factory($definition, []);
             return $this->_addIntoCollection($name, $field, 'fields');
         }
 

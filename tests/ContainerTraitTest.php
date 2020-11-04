@@ -202,7 +202,6 @@ class ContainerFactoryMock
 {
     use core\NameTrait;
     use core\ContainerTrait;
-    use core\FactoryTrait;
 }
 
 class ContainerAppMock

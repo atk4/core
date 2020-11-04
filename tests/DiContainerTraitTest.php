@@ -7,7 +7,6 @@ namespace atk4\core\tests;
 use atk4\core\AtkPhpunit;
 use atk4\core\DiContainerTrait;
 use atk4\core\Exception;
-use atk4\core\FactoryTrait;
 
 /**
  * @coversDefaultClass \atk4\core\DiContainerTrait
@@ -79,7 +78,6 @@ class DiContainerTraitTest extends AtkPhpunit\TestCase
 // @codingStandardsIgnoreStart
 class FactoryDiMock2
 {
-    use FactoryTrait;
     use DiContainerTrait;
 
     public $a = 'AAA';

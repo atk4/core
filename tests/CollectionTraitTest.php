@@ -161,5 +161,4 @@ class CollectionMockWithApp extends CollectionMock
 {
     use core\TrackableTrait;
     use core\AppScopeTrait;
-    use core\FactoryTrait;
 }
