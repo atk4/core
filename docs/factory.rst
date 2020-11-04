@@ -302,23 +302,23 @@ properties:
 
 Some examples::
 
-    mergeSeeds(['Button', 'Button Label'], ['Message', 'Message label']);
+    Factory::mergeSeeds(['Button', 'Button Label'], ['Message', 'Message label']);
     // results in ['Button', 'Button Label']
 
-    mergeSeeds([null, 'Button Label'], ['Message', 'Message Label']);
+    Factory::mergeSeeds([null, 'Button Label'], ['Message', 'Message Label']);
     // Results in ['Message', 'Button Label']);
 
-    mergeSeeds(['null, 'Label1', 'icon'=>'book'], ['icon'=>'coin', 'Button'], ['class'=>['red']]);
+    Factory::mergeSeeds(['null, 'Label1', 'icon'=>'book'], ['icon'=>'coin', 'Button'], ['class'=>['red']]);
     // Results in ['Button', 'Label1', 'icon'=>'book', 'class'=>['red']]
 
 Seed merging can also be used to merge defaults::
 
-    mergeSeeds(['label 1'], ['icon'=>'book']);
+    Factory::mergeSeeds(['label 1'], ['icon'=>'book']);
     // results in ['label 1', 'icon'=>'book']
 
 When object is passed, it will take precedence and absorb all named arguments::
 
-    mergeSeeds(
+    Factory::mergeSeeds(
         ['null, 'Label1', 'icon'=>'book'],
         ['icon'=>'coin', 'Button'],
         new Message('foobar'),
@@ -404,7 +404,7 @@ A default class is 'Line' but there are several ways how it can be overridden:
 Each of the above can specify class name, so with 3 seed sources they need
 merging::
 
-    $seed = mergeSeeds($decorator, $field->ui, $inferred, [\atk4\ui\FormField\Line::class, 'form' => $this]);
+    $seed = Factory::mergeSeeds($decorator, $field->ui, $inferred, [\atk4\ui\FormField\Line::class, 'form' => $this]);
     $decorator = Factory::factory($seed, null, 'FormField');
 
 Passing an actual object anywhere will use it instead even if you specify seed.
