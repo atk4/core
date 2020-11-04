@@ -38,21 +38,12 @@ trait StaticAddToTrait
      * $crud = $app->add(['Crud', 'displayFields' => ['name']]);
      *   but the first one design pattern is strongly recommended as it supports refactoring.
      *
-     * @param array|string $seed
+     * @param array $seed
      *
      * @return static
      */
     public static function addTo(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false)// :static supported by PHP8+
     {
-        if (!is_object($seed) && !is_array($seed)) {
-            if (!is_scalar($seed)) { // allow single element seed but prevent bad usage
-                throw (new Exception('Seed must be an array, a scalar or an object'))
-                    ->addMoreInfo('seed_type', gettype($seed));
-            }
-
-            $seed = [$seed];
-        }
-
         $object = static::fromSeed([static::class], $seed);
 
         static::_addTo_add($parent, $object, $addArgs, $skipAdd);
@@ -63,7 +54,7 @@ trait StaticAddToTrait
     /**
      * Same as addTo(), but the first element of seed specifies a class name instead of static::class.
      *
-     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed the first element specifies a class name, other elements are seed
      *
      * @return static
      */
@@ -79,7 +70,7 @@ trait StaticAddToTrait
     /**
      * Same as addToWithCl(), but the new object is not asserted to be an instance of this class.
      *
-     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed the first element specifies a class name, other elements are seed
      *
      * @return static
      */

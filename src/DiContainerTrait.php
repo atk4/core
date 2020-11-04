@@ -100,14 +100,8 @@ trait DiContainerTrait
     {
         if (!is_object($seed)) {
             if (!is_array($seed)) {
-                if (!is_string($seed)) { // allow string class name seed but prevent bad usage
-                    throw (new Exception('Seed must be an array, a string class name (deprecated) or an object'))
-                        ->addMoreInfo('seed_type', gettype($seed));
-                }
-
-                Factory::mergeSeeds($seed, []); // emit deprecated warning, remove in 2020-dec once string seed is no longer supported
-
-                $seed = [$seed];
+                throw (new Exception('Seed must be an array or an object'))
+                    ->addMoreInfo('seed_type', gettype($seed));
             }
 
             if (!isset($seed[0])) {
@@ -132,7 +126,7 @@ trait DiContainerTrait
      * The best, typehinting-friendly, way to create an object if it should not be
      * immediately added to a parent (otherwise use addTo() method).
      *
-     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed the first element specifies a class name, other elements are seed
      *
      * @return static
      */
@@ -153,7 +147,7 @@ trait DiContainerTrait
     /**
      * Same as fromSeed(), but the new object is not asserted to be an instance of this class.
      *
-     * @param array|string|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed the first element specifies a class name, other elements are seed
      *
      * @return static
      */
