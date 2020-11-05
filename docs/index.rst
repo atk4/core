@@ -46,9 +46,9 @@ to create necessary methods with minimum code footprint::
 
        public function addField($name, $seed = null)
        {
-           $seed = $this->mergeSeeds($seed, [FieldMock::class]);
+           $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-           $field = $this->factory($seed, ['name'=>$name]);
+           $field = Factory::factory($seed, ['name' => $name]);
 
            return $this->_addIntoCollection($name, $field, 'fields');
        }
@@ -80,7 +80,7 @@ ChildClass can extend the basic functionality.
  - :php:trait:`AppScopeTrait` will pass value of $app property from container to
    child.
  - :php:trait:`TrackableTrait` will let you assign unique names to object
- - :php:trait:`FactoryTrait` will let you specify object class by Seed
+ - :php:class:`Factory` will let you specify object class by Seed
  - :php:trait:`DiContainerTrait` will let you with dependency injection
 
 Just to clarify what Seed is::

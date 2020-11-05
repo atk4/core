@@ -7,7 +7,6 @@ namespace atk4\core\tests;
 use atk4\core\AtkPhpunit;
 use atk4\core\ContainerTrait;
 use atk4\core\DiContainerTrait;
-use atk4\core\FactoryTrait;
 use atk4\core\StaticAddToTrait;
 use atk4\core\TrackableTrait;
 
@@ -25,7 +24,6 @@ class StdSat2 extends StdSat
 class ContainerFactoryMockSat
 {
     use ContainerTrait;
-    use FactoryTrait;
 }
 
 class TrackableMockSat
@@ -36,7 +34,6 @@ class TrackableMockSat
 }
 class DiMockSat
 {
-    use FactoryTrait;
     use DiContainerTrait;
     use StaticAddToTrait;
 
@@ -47,7 +44,6 @@ class DiMockSat
 
 class DiConstructorMockSat
 {
-    use FactoryTrait;
     use DiContainerTrait;
     use StaticAddToTrait;
 

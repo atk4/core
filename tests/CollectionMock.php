@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace atk4\core\tests;
 
-use atk4\core;
+use atk4\core\CollectionTrait;
+use atk4\core\Factory;
 
 class CollectionMock
 {
-    use core\CollectionTrait;
-    use core\FactoryTrait;
+    use CollectionTrait;
 
     protected $fields = [];
 
@@ -18,9 +18,9 @@ class CollectionMock
      */
     public function addField($name, $seed = null)
     {
-        $seed = $this->mergeSeeds($seed, [FieldMock::class]);
+        $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-        $field = $this->factory($seed, ['name' => $name]);
+        $field = Factory::factory($seed, ['name' => $name]);
 
         return $this->_addIntoCollection($name, $field, 'fields');
     }

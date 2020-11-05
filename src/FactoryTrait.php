@@ -4,38 +4,24 @@ declare(strict_types=1);
 
 namespace atk4\core;
 
-/**
- * @deprecated will be removed in 2021-jun
- */
+/** @deprecated will be removed in v2.5 */
 trait FactoryTrait
 {
-    /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_factoryTrait = true;
+    /** @deprecated will be removed in v2.5 */
+    private $_factoryTrait = true;
 
-    /**
-     * See \atk4\core\Factory::mergeSeeds().
-     *
-     * @deprecated will be removed in 2021-jun
-     */
+    /** @deprecated will be removed in v2.5 */
     public function mergeSeeds(...$seeds)
     {
+        'trigger_error'('Method mergeSeeds is deprecated. Use Factory::mergeSeeds instead', E_USER_DEPRECATED);
+
         return Factory::mergeSeeds(...$seeds);
     }
 
-    /**
-     * See \atk4\core\Factory::factory().
-     *
-     * @deprecated will be removed in 2021-jun
-     */
+    /** @deprecated will be removed in v2.5 */
     public function factory($seed, $defaults = []): object
     {
-        if (func_num_args() > 2) { // prevent bad usage
-            throw new \Error('Too many method arguments, factory does no longer support prefix');
-        }
+        'trigger_error'('Method factory is deprecated. Use Factory::factory instead', E_USER_DEPRECATED);
 
         return Factory::factory($seed, $defaults);
     }
