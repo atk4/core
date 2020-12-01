@@ -1,0 +1,19 @@
+parameters:
+    level: 1
+    paths:
+        - ./
+    excludes_analyse:
+        - cache/
+        - build/
+        - vendor/
+
+    # TODO review once we drop PHP 7.x support
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        - '~^Unsafe usage of new static\(\)\.$~'
+        
+        # TODO use interfaces for traits
+        - '~^(Class atk4\\ui\\App not found|Call to an undefined method .+::(issetApp|getApp)\(\))\.$~'
+        - '~^Call to an undefined method .+::(hook|onHook|hookHasCallbacks|removeHook)\(\)\.$~'
+        - '~^Access to an undefined property .+::\$(name|_appScopeTrait|_app)\.$~'
