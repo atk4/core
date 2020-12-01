@@ -7,9 +7,9 @@ require '../vendor/autoload.php';
 function loopToCreateStack($test)
 {
     if ($test > 5) {
-        $exc_prev = new \Exception('Previous Exception');
+        $excPrev = new \Exception('Previous Exception');
 
-        $exc = (new atk4\core\Exception('Test value is too high', 200, $exc_prev))
+        $exc = (new \atk4\core\Exception('Test value is too high', 200, $excPrev))
             ->addMoreInfo('test', $test);
 
         throw $exc->addSolution('Suggested solution test');
@@ -20,6 +20,6 @@ function loopToCreateStack($test)
 
 try {
     loopToCreateStack(1);
-} catch (Exception $e) {
+} catch (\atk4\core\Exception $e) {
     echo $e->getJson();
 }

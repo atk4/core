@@ -147,8 +147,8 @@ trait ConfigTrait
      * @param string $path            Path to navigate to
      * @param bool   $create_elements Should we create elements it they don't exist
      *
-     * @return &pos|false Pointer to element in $this->config or false is element don't exist and $create_elements===false
-     *                    Returns false if element don't exist and $create_elements===false
+     * @return array|false Pointer to element in $this->config or false is element don't exist and $create_elements===false
+     *                     Returns false if element don't exist and $create_elements===false
      */
     private function &_lookupConfigElement(string $path, bool $create_elements = false)
     {

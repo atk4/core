@@ -165,7 +165,7 @@ trait HookTrait
      * Delete all hooks for specified spot, priority and index.
      *
      * @param int|null $priority        filter specific priority, null for all
-     * @param int      $priorityIsIndex filter by index instead of priority
+     * @param bool     $priorityIsIndex filter by index instead of priority
      *
      * @return static
      */
@@ -191,7 +191,7 @@ trait HookTrait
      * Returns true if at least one callback is defined for this hook.
      *
      * @param int|null $priority        filter specific priority, null for all
-     * @param int      $priorityIsIndex filter by index instead of priority
+     * @param bool     $priorityIsIndex filter by index instead of priority
      */
     public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
     {

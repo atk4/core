@@ -13,8 +13,8 @@ parameters:
     ignoreErrors:
         - '~^Unsafe usage of new static\(\)\.$~'
         
-        # TODO use interfaces for traits
-        - '~^(Class atk4\\ui\\App not found|Call to an undefined method .+::(issetApp|getApp)\(\))\.$~'
+        # fix unresolved \atk4\ui\App class
+        - '~^(.+(?<!\w)atk4\\ui\\App.+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
         # for AppScopeTrait.php
         - '~^Call to an undefined method .+::setApp\(\)\.$~'
@@ -41,3 +41,24 @@ parameters:
         - '~^Call to an undefined method .+::unsetOwner\(\)\.$~'
         - '~^Call to an undefined method .+::getDesiredName\(\)\.$~'
         - '~^Access to an undefined property .+::\$short_name\.$~'
+
+        - '~^Cannot access property \$(foo|def) on array\|object\.$~'
+        - '~^Call to an undefined method atk4\\core\\tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
+        
+        # PHPStan issue https://github.com/phpstan/phpstan/issues/4167
+        - '~^Variable \$brokenBy in PHPDoc tag @var does not match assigned variable \$ret\.$~'
+        
+        # PHPStan issue https://github.com/phpstan/phpstan/issues/4168
+        - '~^Method .+::tryCall\(\) should return mixed but return statement is missing\.$~'
+    
+    # some extra rules
+    checkAlwaysTrueCheckTypeFunctionCall: true
+    checkAlwaysTrueInstanceof: true
+    checkAlwaysTrueStrictComparison: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+# TODO    checkMissingClosureNativeReturnTypehintRule: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkMissingIterableValueType: false
