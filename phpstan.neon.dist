@@ -1,0 +1,61 @@
+parameters:
+    level: 2
+    paths:
+        - ./
+    excludes_analyse:
+        - cache/
+        - build/
+        - vendor/
+
+    # TODO review once we drop PHP 7.x support
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        - '~^Unsafe usage of new static\(\)\.$~'
+
+        # fix unresolved \atk4\ui\App class
+        - '~^(.+(?<!\w)atk4\\ui\\App.+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
+
+        # for AppScopeTrait.php
+        - '~^Call to an undefined method .+::setApp\(\)\.$~'
+        - '~^Access to an undefined property .+::\$_appScopeTrait\.$~'
+        - '~^Access to an undefined property .+::\$_app\.$~'
+        - '~^Access to an undefined property .+::\$unique_hashes\.$~'
+        # for ContainerTrait.php
+        - '~^Call to an undefined method .+::removeElement\(\)\.$~'
+        # for DiContainerTrait.php
+        - '~^Call to an undefined method .+::setDefaults\(\)\.$~'
+        # for HookTrait.php
+        - '~^Call to an undefined method .+::onHook\(\)\.$~'
+        - '~^Call to an undefined method .+::removeHook\(\)\.$~'
+        - '~^Call to an undefined method .+::hookHasCallbacks\(\)\.$~'
+        - '~^Call to an undefined method .+::hook\(\)\.$~'
+        # for InitializerTrait.php
+        - '~^Call to an undefined method .+::invokeInit\(\)\.$~'
+        - '~^Access to an undefined property .+::\$_initialized\.$~'
+        # for NameTrait.php
+        - '~^Access to an undefined property .+::\$name\.$~'
+        # for TrackableTrait.php
+        - '~^Call to an undefined method .+::issetOwner\(\)\.$~'
+        - '~^Call to an undefined method .+::setOwner\(\)\.$~'
+        - '~^Call to an undefined method .+::unsetOwner\(\)\.$~'
+        - '~^Call to an undefined method .+::getDesiredName\(\)\.$~'
+        - '~^Access to an undefined property .+::\$short_name\.$~'
+
+        - '~^Cannot access property \$(foo|def) on array\|object\.$~'
+        - '~^Call to an undefined method atk4\\core\\tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
+
+        # PHPStan issue https://github.com/phpstan/phpstan/issues/4167
+        - '~^Variable \$brokenBy in PHPDoc tag @var does not match assigned variable \$ret\.$~'
+
+    # some extra rules
+    checkAlwaysTrueCheckTypeFunctionCall: true
+    checkAlwaysTrueInstanceof: true
+    checkAlwaysTrueStrictComparison: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+# TODO    checkMissingClosureNativeReturnTypehintRule: true
+    reportMaybesInMethodSignatures: true
+    reportStaticMethodSignatures: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkMissingIterableValueType: false

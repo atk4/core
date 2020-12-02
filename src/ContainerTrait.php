@@ -151,7 +151,7 @@ trait ContainerTrait
     /**
      * Remove child element if it exists.
      *
-     * @param string|TrackableTrait $short_name short name of the element
+     * @param string|object $short_name short name of the element
      */
     public function removeElement($short_name)
     {
@@ -222,8 +222,6 @@ trait ContainerTrait
 
     /**
      * @param string $short_name Short name of the child element
-     *
-     * @return object|bool
      */
     public function hasElement($short_name): bool
     {

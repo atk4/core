@@ -47,7 +47,7 @@ trait DynamicMethodTrait
      * @param string $name Name of the method
      * @param array  $args Array of arguments to pass to this method
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function tryCall($name, $args)
     {
@@ -61,6 +61,8 @@ trait DynamicMethodTrait
                 return $ret;
             }
         }
+
+        return null;
     }
 
     /**
