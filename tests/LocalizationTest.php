@@ -9,7 +9,7 @@ use Atk4\Core\Exception;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use Atk4\Core\Translator\Translator;
-use atk4\data\Persistence;
+use Atk4\Data\Persistence;
 
 class LocalizationTest extends AtkPhpunit\TestCase
 {

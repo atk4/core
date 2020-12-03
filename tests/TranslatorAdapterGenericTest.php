@@ -8,7 +8,7 @@ use Atk4\Core\Exception;
 use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\Translator;
-use atk4\data\Locale;
+use Atk4\Data\Locale;
 
 class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 {

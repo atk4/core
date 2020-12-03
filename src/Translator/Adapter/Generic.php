@@ -6,7 +6,7 @@ namespace Atk4\Core\Translator\Adapter;
 
 use Atk4\Core\ConfigTrait;
 use Atk4\Core\Translator\ITranslatorAdapter;
-use atk4\data\Locale;
+use Atk4\Data\Locale;
 
 class Generic implements ITranslatorAdapter
 {
@@ -96,7 +96,7 @@ class Generic implements ITranslatorAdapter
 
         $this->definitions[$locale]['atk'] = [];
 
-        if (class_exists(\atk4\data\Locale::class)) {
+        if (class_exists(\Atk4\Data\Locale::class)) {
             $path = Locale::getPath();
             $this->addDefinitionFromFile($path . '/' . $locale . '/atk.php', $locale, 'atk', 'php');
         }
