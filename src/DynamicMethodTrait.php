@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 /**
  * This trait makes it possible for you to add dynamic methods

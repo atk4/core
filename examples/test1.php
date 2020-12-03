@@ -6,12 +6,12 @@ require '../vendor/autoload.php';
 
 class MyParentObject
 {
-    use \atk4\core\ContainerTrait;
+    use \Atk4\Core\ContainerTrait;
 }
 
 class MyChildClass
 {
-    use \atk4\core\TrackableTrait;
+    use \Atk4\Core\TrackableTrait;
 }
 
 $parent = new MyParentObject();

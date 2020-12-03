@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 /**
  * Object with this trait will have it's init() method executed

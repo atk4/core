@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\AtkPhpunit;
+namespace Atk4\Core\AtkPhpunit;
 
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.

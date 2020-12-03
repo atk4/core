@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core;
-use atk4\core\AtkPhpunit;
+use Atk4\Core;
+use Atk4\Core\AtkPhpunit;
 
 /**
- * @coversDefaultClass \atk4\core\ContainerTrait
+ * @coversDefaultClass \Atk4\Core\ContainerTrait
  */
 class CollectionTraitTest extends AtkPhpunit\TestCase
 {

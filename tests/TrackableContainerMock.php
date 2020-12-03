@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core;
+use Atk4\Core;
 
 class TrackableContainerMock
 {

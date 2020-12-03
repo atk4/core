@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Translator;
+namespace Atk4\Core\Translator;
 
 interface ITranslatorAdapter
 {

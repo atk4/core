@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use atk4\core\Exception;
-use atk4\core\Translator\Translator;
+use Atk4\Core\Exception;
+use Atk4\Core\Translator\Translator;
 
 require '../vendor/autoload.php';
 
-if (class_exists('atk4\data\Persistence')) {
+if (class_exists('Atk4\Data\Persistence')) {
     try {
-        \atk4\data\Persistence::connect('error:error');
+        \Atk4\Data\Persistence::connect('error:error');
     } catch (Exception $e) {
         echo $e->getColorfulText();
     }
@@ -18,7 +18,7 @@ if (class_exists('atk4\data\Persistence')) {
     $trans->setDefaultLocale('ru');
 
     try {
-        \atk4\data\Persistence::connect('error:error');
+        \Atk4\Data\Persistence::connect('error:error');
     } catch (Exception $e) {
         echo $e->getColorfulText();
     }

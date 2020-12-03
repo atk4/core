@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\AtkPhpunit;
-use atk4\core\DynamicMethodTrait;
-use atk4\core\Exception;
-use atk4\core\HookTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\DynamicMethodTrait;
+use Atk4\Core\Exception;
+use Atk4\Core\HookTrait;
 
 /**
- * @coversDefaultClass \atk4\core\DynamicMethodTrait
+ * @coversDefaultClass \Atk4\Core\DynamicMethodTrait
  */
 class DynamicMethodTraitTest extends AtkPhpunit\TestCase
 {

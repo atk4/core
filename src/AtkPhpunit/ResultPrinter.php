@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\AtkPhpunit;
+namespace Atk4\Core\AtkPhpunit;
 
-use atk4\core\Exception;
+use Atk4\Core\Exception;
 use PHPUnit\Framework\ExceptionWrapper;
 use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\Filter;
@@ -54,7 +54,7 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
     {
         $string = '';
         foreach ($e->getParams() as $param => $value) {
-            $valueStr = \atk4\core\ExceptionRenderer\RendererAbstract::toSafeString($value, true);
+            $valueStr = \Atk4\Core\ExceptionRenderer\RendererAbstract::toSafeString($value, true);
             $string .= '  ' . $param . ': ' . str_replace("\n", "\n" . '    ', $valueStr) . "\n";
         }
 

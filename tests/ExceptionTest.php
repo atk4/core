@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\Exception;
-use atk4\core\TrackableTrait;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Exception;
+use Atk4\Core\TrackableTrait;
 
 /**
- * @coversDefaultClass \atk4\core\Exception
+ * @coversDefaultClass \Atk4\Core\Exception
  */
 class ExceptionTest extends AtkPhpunit\TestCase
 {

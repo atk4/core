@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 /**
  * Typical software design will create the application scope. Most frameworks

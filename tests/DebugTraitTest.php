@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\AtkPhpunit;
-use atk4\core\DebugTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\DebugTrait;
 
 /**
- * @coversDefaultClass \atk4\core\DebugTrait
+ * @coversDefaultClass \Atk4\Core\DebugTrait
  */
 class DebugTraitTest extends AtkPhpunit\TestCase
 {
@@ -34,7 +34,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
     public function testDebugOutput()
     {
-        $this->expectOutputString("[atk4\\core\\tests\\DebugMock]: debug test1\n");
+        $this->expectOutputString("[Atk4\\Core\\Tests\\DebugMock]: debug test1\n");
 
         $m = new DebugMock();
         $m->debug();
@@ -215,7 +215,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     }
 }
 
-class DebugAppMock2 implements \atk4\core\AppUserNotificationInterface
+class DebugAppMock2 implements \Atk4\Core\AppUserNotificationInterface
 {
     public $message;
 

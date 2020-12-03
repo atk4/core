@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\AtkPhpunit;
-use atk4\core\ContainerTrait;
-use atk4\core\NameTrait;
-use atk4\core\TrackableTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\ContainerTrait;
+use Atk4\Core\NameTrait;
+use Atk4\Core\TrackableTrait;
 
 /**
- * @coversDefaultClass \atk4\core\AppScopeTrait
+ * @coversDefaultClass \Atk4\Core\AppScopeTrait
  */
 class AppScopeTraitTest extends AtkPhpunit\TestCase
 {

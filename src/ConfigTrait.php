@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 /**
  * This trait makes it possible for you to read config files and various configurations
  * use:
  * 1. use Trait in your APP Class
- *    use \atk4\core\ConfigTrait;
+ *    use \Atk4\Core\ConfigTrait;
  * 2. create config-default.php and/or config.php file and add config values like
  *    $config['key'] = 'value';
  * 3. call $this->readConfig();

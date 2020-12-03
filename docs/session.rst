@@ -13,7 +13,7 @@ some objects want to memorize data.  (see https://github.com/atk4/ui/blob/develo
 
 You would need 3 things. First make use of session trait::
 
-    use \atk4\core\SessionTrait;
+    use \Atk4\Core\SessionTrait;
 
 next you may memorize any value, which will be stored independently from any other object (even of a same class)::
 

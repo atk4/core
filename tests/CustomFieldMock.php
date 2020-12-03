@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\TrackableTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\InitializerTrait;
+use Atk4\Core\TrackableTrait;
 
 class CustomFieldMock extends FieldMock
 {

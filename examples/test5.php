@@ -9,7 +9,7 @@ function loopToCreateStack($test)
     if ($test > 5) {
         $excPrev = new \Exception('Previous Exception');
 
-        $exc = (new \atk4\core\Exception('Test value is too high', 200, $excPrev))
+        $exc = (new \Atk4\Core\Exception('Test value is too high', 200, $excPrev))
             ->addMoreInfo('test', $test);
 
         throw $exc->addSolution('Suggested solution test');
@@ -20,6 +20,6 @@ function loopToCreateStack($test)
 
 try {
     loopToCreateStack(1);
-} catch (\atk4\core\Exception $e) {
+} catch (\Atk4\Core\Exception $e) {
     echo $e->getJson();
 }

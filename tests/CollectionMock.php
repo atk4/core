@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\CollectionTrait;
-use atk4\core\Factory;
+use Atk4\Core\CollectionTrait;
+use Atk4\Core\Factory;
 
 class CollectionMock
 {

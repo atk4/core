@@ -188,7 +188,7 @@ for object modeling.
 You may extend [Model](http://agile-data.readthedocs.io/en/develop/model.html)
 class to define a business object, such as - ShoppingBag::
 
-    class ShoppingBag extends \atk4\data\Model {
+    class ShoppingBag extends \Atk4\Data\Model {
         public $table = 'shopping_bag';
 
         protected function init(): void {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 use Psr\Log\LogLevel;
 
@@ -85,7 +85,7 @@ trait DebugTrait
      */
     public function userMessage(string $message, array $context = [])
     {
-        if (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \atk4\core\AppUserNotificationInterface) {
+        if (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \Atk4\Core\AppUserNotificationInterface) {
             $this->getApp()->userNotification($message, $context);
         } elseif (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \Psr\Log\LoggerInterface) {
             $this->getApp()->log('warning', 'Could not notify user about: ' . $message, $context);
