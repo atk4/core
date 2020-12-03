@@ -6,8 +6,8 @@ require '../vendor/autoload.php';
 
 class MyClass2
 {
-    use \atk4\core\DynamicMethodTrait;
-    use \atk4\core\HookTrait;
+    use \Atk4\Core\DynamicMethodTrait;
+    use \Atk4\Core\HookTrait;
 }
 
 $c = new MyClass2();

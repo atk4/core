@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\Exception;
-use atk4\core\NameTrait;
-use atk4\core\SessionTrait;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Exception;
+use Atk4\Core\NameTrait;
+use Atk4\Core\SessionTrait;
 
 /**
- * @coversDefaultClass \atk4\core\SessionTrait
+ * @coversDefaultClass \Atk4\Core\SessionTrait
  */
 class SessionTraitTest extends AtkPhpunit\TestCase
 {

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use atk4\core\Exception;
-use atk4\core\Translator\Translator;
+use Atk4\Core\Exception;
+use Atk4\Core\Translator\Translator;
 
 require '../vendor/autoload.php';
 

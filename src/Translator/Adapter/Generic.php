@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Translator\Adapter;
+namespace Atk4\Core\Translator\Adapter;
 
-use atk4\core\ConfigTrait;
-use atk4\core\Translator\ITranslatorAdapter;
+use Atk4\Core\ConfigTrait;
+use Atk4\Core\Translator\ITranslatorAdapter;
 use atk4\data\Locale;
 
 class Generic implements ITranslatorAdapter

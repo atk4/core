@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 /**
  * App may implement this interface meaning that it is capable of properly

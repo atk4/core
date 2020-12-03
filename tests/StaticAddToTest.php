@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\ContainerTrait;
-use atk4\core\DiContainerTrait;
-use atk4\core\StaticAddToTrait;
-use atk4\core\TrackableTrait;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\ContainerTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\StaticAddToTrait;
+use Atk4\Core\TrackableTrait;
 
 // @codingStandardsIgnoreStart
 class StdSat extends \StdClass
@@ -59,7 +59,7 @@ class DiConstructorMockSat
 // @codingStandardsIgnoreEnd
 
 /**
- * @coversDefaultClass \atk4\core\StaticAddToTrait
+ * @coversDefaultClass \Atk4\Core\StaticAddToTrait
  */
 class StaticAddToTest extends AtkPhpunit\TestCase
 {
@@ -78,7 +78,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertSame($tr, $tr3);
 
         // not the same or extended class
-        $this->expectException(\atk4\core\Exception::class);
+        $this->expectException(\Atk4\Core\Exception::class);
         $tr = StdSat::addTo($m, $tr);
     }
 
@@ -93,7 +93,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         StdSat::assertInstanceOf(new StdSat2());
 
         // object is not a subtype
-        $this->expectException(\atk4\core\Exception::class);
+        $this->expectException(\Atk4\Core\Exception::class);
         StdSat2::assertInstanceOf(new StdSat());
     }
 
@@ -119,7 +119,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertSame(\stdClass::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
-        $this->expectException(\atk4\core\Exception::class);
+        $this->expectException(\Atk4\Core\Exception::class);
         $tr = StdSat::addToWithCl($m, [\stdClass::class]);
     }
 

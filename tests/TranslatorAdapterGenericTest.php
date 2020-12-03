@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\Exception;
-use atk4\core\TranslatableTrait;
-use atk4\core\Translator\Adapter\Generic;
-use atk4\core\Translator\Translator;
+use Atk4\Core\Exception;
+use Atk4\Core\TranslatableTrait;
+use Atk4\Core\Translator\Adapter\Generic;
+use Atk4\Core\Translator\Translator;
 use atk4\data\Locale;
 
 class TranslatorAdapterGenericTest extends TranslatorAdapterBase

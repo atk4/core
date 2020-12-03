@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\DiContainerTrait;
-use atk4\core\Exception;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\Exception;
 
 /**
- * @coversDefaultClass \atk4\core\DiContainerTrait
+ * @coversDefaultClass \Atk4\Core\DiContainerTrait
  */
 class DiContainerTraitTest extends AtkPhpunit\TestCase
 {

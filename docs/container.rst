@@ -146,7 +146,7 @@ Container Trait
     Example::
 
         class MyContainer extends OtherClass {
-            use atk4\core\ContainerTrait;
+            use Atk4\Core\ContainerTrait;
 
             function add($obq, $args = []) {
                 return $this->_add_Container($obj, $args);
@@ -154,7 +154,7 @@ Container Trait
         }
 
         class MyItem  {
-            use atk4\core\TrackableTrait;
+            use Atk4\Core\TrackableTrait;
         }
 
         Now the instances of MyItem can be added to instances of MyContainer

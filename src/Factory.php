@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 class Factory
 {
@@ -68,7 +68,7 @@ class Factory
         // - some tests already tests for exception
         // - we may later want to use this function for "mergeDefaults" (like _factory() below does)
         foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $cl) {
-            if (strpos($cl['class'] ?? '', 'atk4\core\Tests\\') === 0) {
+            if (strpos($cl['class'] ?? '', 'Atk4\Core\Tests\\') === 0) {
                 return null;
             }
         }
@@ -143,7 +143,7 @@ class Factory
 
         if (count($injection) > 0) {
             if (!isset($obj->_DiContainerTrait)) {
-                throw (new Exception('Property injection is possible only to objects that use \atk4\core\DiContainerTrait trait'))
+                throw (new Exception('Property injection is possible only to objects that use \Atk4\Core\DiContainerTrait trait'))
                     ->addMoreInfo('object', $obj)
                     ->addMoreInfo('injection', $injection);
             }

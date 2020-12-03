@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Translator;
+namespace Atk4\Core\Translator;
 
-use atk4\core\DiContainerTrait;
-use atk4\core\Exception;
-use atk4\core\Translator\Adapter\Generic;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\Exception;
+use Atk4\Core\Translator\Adapter\Generic;
 
 /**
  * Translator is a bridge

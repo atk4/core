@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AppScopeTrait;
-use atk4\core\TranslatableTrait;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\TranslatableTrait;
 
 class TranslatorAdapterAppTest extends TranslatorAdapterBase
 {

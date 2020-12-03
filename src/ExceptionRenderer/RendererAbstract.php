@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\ExceptionRenderer;
+namespace Atk4\Core\ExceptionRenderer;
 
-use atk4\core\Exception;
-use atk4\core\TranslatableTrait;
-use atk4\core\Translator\ITranslatorAdapter;
-use atk4\core\Translator\Translator;
+use Atk4\Core\Exception;
+use Atk4\Core\TranslatableTrait;
+use Atk4\Core\Translator\ITranslatorAdapter;
+use Atk4\Core\Translator\Translator;
 
 abstract class RendererAbstract
 {

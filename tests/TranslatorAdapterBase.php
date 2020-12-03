@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AtkPhpunit;
+use Atk4\Core\AtkPhpunit;
 
 abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
 {

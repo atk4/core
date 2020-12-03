@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
-use atk4\core\Translator\Translator;
+use Atk4\Core\Translator\Translator;
 
 /**
  * If a class use this trait, string can be translated calling method translate.

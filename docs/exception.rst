@@ -95,7 +95,7 @@ If you want, you can wrap your code inside try / catch block::
 
     try {
         // some code..
-    } catch (\atk4\core\Exception $e) {
+    } catch (\Atk4\Core\Exception $e) {
         // handle exception
     }
 
@@ -112,7 +112,7 @@ Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHtml`::
 
     try {
         // some code..
-    } catch (\atk4\core\Exception $e) {
+    } catch (\Atk4\Core\Exception $e) {
         echo $e->getColorfulText();
     } catch (\Exception $e) {
         echo $e->getMessage();

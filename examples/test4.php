@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require '../vendor/autoload.php';
 
-use atk4\core\Exception;
+use Atk4\Core\Exception;
 
 function faulty($test)
 {

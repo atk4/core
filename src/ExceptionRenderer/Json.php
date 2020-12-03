@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\ExceptionRenderer;
+namespace Atk4\Core\ExceptionRenderer;
 
-use atk4\core\Exception;
+use Atk4\Core\Exception;
 
 class Json extends RendererAbstract
 {

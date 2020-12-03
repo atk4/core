@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace atk4\core\Tests;
+namespace Atk4\Core\Tests;
 
-use atk4\core\AtkPhpunit;
-use atk4\core\DiContainerTrait;
-use atk4\core\Exception;
-use atk4\core\Factory;
-use atk4\core\HookBreaker;
+use Atk4\Core\AtkPhpunit;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\Exception;
+use Atk4\Core\Factory;
+use Atk4\Core\HookBreaker;
 
 /**
- * @coversDefaultClass \atk4\core\Factory
+ * @coversDefaultClass \Atk4\Core\Factory
  */
 class FactoryTest extends AtkPhpunit\TestCase
 {

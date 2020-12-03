@@ -6,7 +6,7 @@ require '../vendor/autoload.php';
 
 class MyClass
 {
-    use \atk4\core\HookTrait;
+    use \Atk4\Core\HookTrait;
 
     public function doWork()
     {

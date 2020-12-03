@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace atk4\core;
+namespace Atk4\Core;
 
 /** @deprecated will be removed in v2.5 */
 trait FactoryTrait
