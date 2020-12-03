@@ -34,7 +34,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
 
     public function testDebugOutput()
     {
-        $this->expectOutputString("[atk4\\core\\tests\\DebugMock]: debug test1\n");
+        $this->expectOutputString("[atk4\\core\\Tests\\DebugMock]: debug test1\n");
 
         $m = new DebugMock();
         $m->debug();

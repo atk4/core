@@ -43,7 +43,7 @@ parameters:
         - '~^Access to an undefined property .+::\$short_name\.$~'
 
         - '~^Cannot access property \$(foo|def) on array\|object\.$~'
-        - '~^Call to an undefined method atk4\\core\\tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
+        - '~^Call to an undefined method atk4\\core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
 
         # PHPStan issue https://github.com/phpstan/phpstan/issues/4167
         - '~^Variable \$brokenBy in PHPDoc tag @var does not match assigned variable \$ret\.$~'

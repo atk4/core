@@ -68,7 +68,7 @@ class Factory
         // - some tests already tests for exception
         // - we may later want to use this function for "mergeDefaults" (like _factory() below does)
         foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $cl) {
-            if (strpos($cl['class'] ?? '', 'atk4\core\tests\\') === 0) {
+            if (strpos($cl['class'] ?? '', 'atk4\core\Tests\\') === 0) {
                 return null;
             }
         }
