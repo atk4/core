@@ -13,8 +13,8 @@ parameters:
     ignoreErrors:
         - '~^Unsafe usage of new static\(\)\.$~'
 
-        # fix unresolved \atk4\ui\App class
-        - '~^(.+(?<!\w)atk4\\ui\\App.+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
+        # fix unresolved \Atk4\Ui\App class
+        - '~^(.+(?<!\w)Atk4\\Ui\\App.+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
         # for AppScopeTrait.php
         - '~^Call to an undefined method .+::setApp\(\)\.$~'
