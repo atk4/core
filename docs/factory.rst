@@ -20,8 +20,8 @@ Thanks to Factory trait, the following code::
 
 can replace this::
 
-   $button = new \atk4\ui\Button('A Label');
-   $button->icon = new \atk4\ui\Icon('book');
+   $button = new \Atk4\Ui\Button('A Label');
+   $button->icon = new \Atk4\Ui\Icon('book');
    $button->action = new My\Action();
    $app->add($button);
 
@@ -157,7 +157,7 @@ e.g. ``Action`` may have to be configured individually.
 Agile Core implements a mechanism to make that possible through using Factory::factory()
 method and specifying a seed argument::
 
-   use atk4\ui\Button;
+   use Atk4\Ui\Button;
 
    $button = Factory::factory([Button::Class, 'A Label', 'icon' => ['book'], 'action' => new Action(..)]);
 
@@ -165,13 +165,13 @@ Note that passing 'icon'=>['book'] will also use factory to initialize icon obje
 
 Finally, if you are using IDE and type hinting, a preferred code would be::
 
-   use atk4\ui\Button;
+   use Atk4\Ui\Button;
    Factory::factory($button = new Button('A Label'), ['icon' => ['book'], 'action' => new Action(..)]);
 
 This will properly set type to $button variable, while still setting properties for icon/action. More
 commonly, however, you would use this through the add() method::
 
-   use atk4\ui\Button;
+   use Atk4\Ui\Button;
 
    $view->add([$button = new Button('A Label'), 'icon'=>['book'], 'action'=>new Action('..')]);
 
@@ -378,7 +378,7 @@ Specify Layout
 
 The first thing beginners learn about Agile Toolkit is how to specify layout::
 
-    $app = new \atk4\ui\App('Hello World');
+    $app = new \Atk4\Ui\App('Hello World');
     $app->initLayout('Centered');
 
 The argument for initLayout is passed to factory::
@@ -394,7 +394,7 @@ The value you specify will be treated like this:
 Form::addField and Table::addColumn
 -----------------------------------
 
-Agile UI is using form field classes from namespace \atk4\ui\FormField\.
+Agile UI is using form field classes from namespace \Atk4\Ui\FormField\.
 A default class is 'Line' but there are several ways how it can be overridden:
 
  - User can specify $ui['form'] / $ui['table'] property for model's field
@@ -404,7 +404,7 @@ A default class is 'Line' but there are several ways how it can be overridden:
 Each of the above can specify class name, so with 3 seed sources they need
 merging::
 
-    $seed = Factory::mergeSeeds($decorator, $field->ui, $inferred, [\atk4\ui\FormField\Line::class, 'form' => $this]);
+    $seed = Factory::mergeSeeds($decorator, $field->ui, $inferred, [\Atk4\Ui\FormField\Line::class, 'form' => $this]);
     $decorator = Factory::factory($seed, null, 'FormField');
 
 Passing an actual object anywhere will use it instead even if you specify seed.

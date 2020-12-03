@@ -29,7 +29,7 @@ trait AppScopeTrait
     /**
      * Always points to current application.
      *
-     * @var \atk4\ui\App
+     * @var \Atk4\Ui\App
      */
     private $_app;
 
@@ -67,13 +67,13 @@ trait AppScopeTrait
 
     private function assertInstanceOfApp(object $app): void
     {
-        // called from phpunit, allow to use/test this trait without \atk4\ui\App class
+        // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
         if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
             return;
         }
 
-        if (!$app instanceof \atk4\ui\App) {
-            throw new Exception('App must be instance of \atk4\ui\App');
+        if (!$app instanceof \Atk4\Ui\App) {
+            throw new Exception('App must be instance of \Atk4\Ui\App');
         }
     }
 
@@ -95,7 +95,7 @@ trait AppScopeTrait
     }
 
     /**
-     * @return \atk4\ui\App
+     * @return \Atk4\Ui\App
      */
     public function getApp()
     {
@@ -106,7 +106,7 @@ trait AppScopeTrait
     }
 
     /**
-     * @param \atk4\ui\App $app
+     * @param \Atk4\Ui\App $app
      *
      * @return static
      */

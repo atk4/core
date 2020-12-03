@@ -87,8 +87,8 @@ class Exception extends \Exception
      * Return exception message using HTML block and Semantic UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
-     *   $l = new \atk4\ui\App();
-     *   $l->initLayout(\atk4\ui\Layout\Centered::class);
+     *   $l = new \Atk4\Ui\App();
+     *   $l->initLayout(\Atk4\Ui\Layout\Centered::class);
      *   $l->layout->template->setHtml('Content', $e->getHtml());
      *   $l->run();
      *   exit;
