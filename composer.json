@@ -43,6 +43,10 @@
     "symfony/polyfill-php80": "^1.17",
     "symfony/yaml": ">=3.4"
   },
+  "conflict": {
+    "remove_once_johnkary_phpunit_speedtrap_pr_73_is_merged": "1",
+    "phpunit/phpunit": ">=9.5"
+  },
   "require-dev": {
     "atk4/data": "dev-develop",
     "friendsofphp/php-cs-fixer": "^2.16",
