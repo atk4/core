@@ -44,7 +44,7 @@
     "symfony/yaml": ">=3.4"
   },
   "conflict": {
-    "remove_once_johnkary_phpunit_speedtrap_pr_73_is_merged": "1",
+    "atk4/remove_once_johnkary_phpunit_speedtrap_pr_73_is_merged": "1",
     "phpunit/phpunit": ">=9.5"
   },
   "require-dev": {
