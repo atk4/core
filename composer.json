@@ -29,7 +29,7 @@
       "homepage": "https://mvorisek.cz/"
     }
   ],
-  "version": "2.3.1",
+  "version": "2.3.2",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
@@ -52,7 +52,8 @@
   },
   "autoload": {
     "psr-4": {
-      "atk4\\core\\": "src/"
+      "atk4\\core\\": "src/",
+      "Atk4\\Core\\": "src/"
     }
   },
   "autoload-dev": {
