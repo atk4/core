@@ -45,9 +45,7 @@
   },
   "conflict": {
     "atk4/remove_once_johnkary_phpunit_speedtrap_pr_73_is_merged": "1",
-    "phpunit/phpunit": ">=9.5",
-    "atk4/remove_once_phpcsfixer_issue_5343_is_fixed": "1",
-    "friendsofphp/php-cs-fixer": ">=2.17"
+    "phpunit/phpunit": ">=9.5"
   },
   "require-dev": {
     "atk4/data": "dev-develop",
