@@ -182,20 +182,12 @@ trait ContainerTrait
         if (isset($this->_appScopeTrait)
             && isset($this->getApp()->max_name_length)
             && mb_strlen($desired) > $this->getApp()->max_name_length) {
-            /*
-             * Basic rules: hash is 10 character long (8+2 for separator)
-             * We need at least 5 characters on the right side. Total must not exceed
-             * max_name_length. First chop will be max-10, then chop size will increase by
-             * max-15
-             */
-            $len = mb_strlen($desired);
-            $left = $len - ($len - 10) % ($this->getApp()->max_name_length - 15) - 5;
-
+            $left = mb_strlen($desired) + 35 - $this->getApp()->max_name_length;
             $key = mb_substr($desired, 0, $left);
             $rest = mb_substr($desired, $left);
 
             if (!isset($this->getApp()->unique_hashes[$key])) {
-                $this->getApp()->unique_hashes[$key] = '_' . dechex(crc32($key));
+                $this->getApp()->unique_hashes[$key] = '_' . md5($key);
             }
             $desired = $this->getApp()->unique_hashes[$key] . '__' . $rest;
         }

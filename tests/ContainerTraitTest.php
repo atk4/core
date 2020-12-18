@@ -56,7 +56,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     {
         $app = new ContainerAppMock();
         $app->setApp($app);
-        $app->max_name_length = 30;
+        $app->max_name_length = 40;
         $m = $app->add(new ContainerAppMock(), 'quick-brown-fox');
         $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
         $m = $m->add(new ContainerAppMock(), 'then-they-go-out-for-a-pint');
@@ -85,7 +85,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     {
         $app = new ContainerAppMock();
         $app->setApp($app);
-        $app->max_name_length = 30;
+        $app->max_name_length = 40;
         $app->name = 'my-app-name-is-pretty-long';
 
         $max_len = 0;

@@ -32,7 +32,7 @@ Properties
     ContainerTrait contains a mechanism for auto-shortening the name based
     around max_name_length. The mechanism does only work if AppScopeTrait is
     used, $app property is set and has a max_name_length defined.
-    Minimum value is 20.
+    Minimum value is 40.
 
 .. php:attr:: unique_hashes
 
