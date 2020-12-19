@@ -227,8 +227,8 @@ class DebugAppMock2 implements \Atk4\Core\AppUserNotificationInterface
 
 class PsrMock implements \Psr\Log\LoggerInterface
 {
-    use DebugTrait;
     use AppScopeTrait;
+    use DebugTrait;
 }
 
 // @codingStandardsIgnoreEnd
