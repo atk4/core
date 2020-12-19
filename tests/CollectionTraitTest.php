@@ -159,6 +159,6 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
  */
 class CollectionMockWithApp extends CollectionMock
 {
-    use core\TrackableTrait;
     use core\AppScopeTrait;
+    use core\TrackableTrait;
 }

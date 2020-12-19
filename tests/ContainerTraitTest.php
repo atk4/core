@@ -200,14 +200,14 @@ class TrackableMock
 }
 class ContainerFactoryMock
 {
-    use core\NameTrait;
     use core\ContainerTrait;
+    use core\NameTrait;
 }
 
 class ContainerAppMock
 {
-    use core\ContainerTrait;
     use core\AppScopeTrait;
+    use core\ContainerTrait;
     use core\TrackableTrait;
 
     public function getElementCount()

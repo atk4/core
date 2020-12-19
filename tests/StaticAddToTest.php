@@ -28,9 +28,9 @@ class ContainerFactoryMockSat
 
 class TrackableMockSat
 {
-    use TrackableTrait;
     use DiContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
+    use TrackableTrait;
 }
 class DiMockSat
 {

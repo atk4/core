@@ -10,12 +10,11 @@ use Atk4\Core\TrackableTrait;
 
 class CustomFieldMock extends FieldMock
 {
+    use AppScopeTrait;
     use InitializerTrait {
         init as _init;
     }
-
     use TrackableTrait;
-    use AppScopeTrait;
 
     /** @var null verifying if init wal called */
     public $var;

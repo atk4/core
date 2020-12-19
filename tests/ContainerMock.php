@@ -8,8 +8,8 @@ use Atk4\Core;
 
 class ContainerMock
 {
-    use core\NameTrait;
     use core\ContainerTrait;
+    use core\NameTrait;
 
     public function getElementCount()
     {
