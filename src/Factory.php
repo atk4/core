@@ -67,8 +67,8 @@ class Factory
         // do not emit warnings for core tests:
         // - some tests already tests for exception
         // - we may later want to use this function for "mergeDefaults" (like _factory() below does)
-        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $cl) {
-            if (strpos($cl['class'] ?? '', 'Atk4\Core\Tests\\') === 0) {
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+            if (strpos($frame['class'] ?? '', 'Atk4\Core\Tests\\') === 0) {
                 return null;
             }
         }
