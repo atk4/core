@@ -222,14 +222,14 @@ class ContainerAppMock
         $d = array_flip($this->getApp()->unique_hashes);
 
         for ($x = 1; $x < 100; ++$x) {
-            @[$l, $r] = explode('__', $n);
+            $tokens = explode('__', $n);
 
-            if (!$r) {
-                return $l;
+            if (!isset($tokens[1])) {
+                return $tokens[0];
             }
 
-            $l = $d[$l];
-            $n = $l . $r;
+            $l = $d[$tokens[0]];
+            $n = $l . $tokens[1];
         }
     }
 }

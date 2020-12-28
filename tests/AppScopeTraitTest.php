@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
+use _HumbugBox221ad6f1b81f\React\EventLoop\Factory;
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\AtkPhpunit;
 use Atk4\Core\ContainerTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\Exception;
 use Atk4\Core\NameTrait;
 use Atk4\Core\TrackableTrait;
 
@@ -43,6 +46,17 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
         $child->destroy();
         $this->assertNull($this->getProtected($child, '_app'));
         $this->assertFalse($child->issetOwner());
+    }
+
+    public function testAssertNoDirectAppAssignment(): void
+    {
+        $this->expectException(Exception::class);
+        $m = new AppScopeChildBasic();
+        $reflection = new \ReflectionClass($m);
+        $property = $reflection->getProperty('app');
+        $property->setAccessible(true);
+        $property->setValue($m, "fake type");
+        $m->getApp();
     }
 }
 
