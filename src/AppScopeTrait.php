@@ -63,7 +63,7 @@ trait AppScopeTrait
      */
     public $unique_hashes = [];
 
-    private function assertInstanceOfApp(object $app): void
+    protected function assertInstanceOfApp(object $app): void
     {
         // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
         if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
