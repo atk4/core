@@ -37,11 +37,12 @@ class Exception extends \Exception
 
         // save trace but skip constructors of this exception
         $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
-        for ($i = 0; $i < count($trace); ++$i) {
-            $c = $trace[$i];
+        $this->trace2 = [];
+        while($row = array_shift($trace)) {
             if (isset($c['object']) && $c['object'] === $this && $c['function'] === '__construct') {
-                array_shift($trace);
+                continue;
             }
+            $this->trace2[] = $row;
         }
         $this->trace2 = $trace;
     }

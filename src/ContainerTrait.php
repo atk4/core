@@ -58,8 +58,7 @@ trait ContainerTrait
     {
         if (is_array($args)) {
             $args1 = $args;
-            unset($args1['desired_name']);
-            unset($args1[0]);
+            unset($args1['desired_name'], $args1[0]);
             $obj = Factory::factory($obj, $args1);
         } else {
             $obj = Factory::factory($obj);
@@ -88,7 +87,7 @@ trait ContainerTrait
     protected function _add_Container(object $element, $args = []): object
     {
         // Carry on reference to application if we have appScopeTraits set
-        if (isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
+        if (isset($this->_appScopeTrait, $element->_appScopeTrait)) {
             $element->setApp($this->getApp());
         }
 
@@ -137,8 +136,7 @@ trait ContainerTrait
         }
         $this->elements[$element->short_name] = $element;
 
-        unset($args[0]);
-        unset($args['name']);
+        unset($args[0], $args['name']);
         foreach ($args as $key => $arg) {
             if ($arg !== null) {
                 $element->{$key} = $arg;
@@ -179,8 +177,7 @@ trait ContainerTrait
      */
     protected function _shorten(string $desired): string
     {
-        if (isset($this->_appScopeTrait)
-            && isset($this->getApp()->max_name_length)
+        if (isset($this->_appScopeTrait, $this->getApp()->max_name_length)
             && mb_strlen($desired) > $this->getApp()->max_name_length) {
             $left = mb_strlen($desired) + 35 - $this->getApp()->max_name_length;
             $key = mb_substr($desired, 0, $left);

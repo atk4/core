@@ -17,9 +17,9 @@ class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return mixed
      */
-    public function &callProtected(object $obj, string $name, ...$args)
+    public function callProtected(object $obj, string $name, ...$args)
     {
-        return \Closure::bind(static function &() use ($obj, $name, $args) {
+        $var = \Closure::bind(static function () use ($obj, $name, $args) {
             $objRefl = new \ReflectionClass($obj);
             if ($objRefl
                 ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
@@ -27,10 +27,10 @@ class TestCase extends \PHPUnit\Framework\TestCase
                 return $obj->{$name}(...$args);
             }
 
-            $v = $obj->{$name}(...$args);
-
-            return $v;
+            return $obj->{$name}(...$args);
         }, null, $obj)();
+
+        return $var;
     }
 
     /**
@@ -41,7 +41,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return mixed
      */
-    public function &getProtected(object $obj, string $name)
+    public function getProtected(object $obj, string $name)
     {
         return \Closure::bind(static function &() use ($obj, $name) {
             return $obj->{$name};

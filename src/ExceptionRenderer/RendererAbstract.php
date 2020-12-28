@@ -107,14 +107,19 @@ abstract class RendererAbstract
     {
         if ($val instanceof \Closure) {
             return 'closure';
-        } elseif (is_object($val)) {
-            $objProps = get_object_vars($val);
+        }
 
+        if (is_object($val)) {
+            $objProps = get_object_vars($val);
             return get_class($val) . (isset($objProps['_trackableTrait']) ? ' (' . $objProps['name'] . ')' : '');
-        } elseif (is_resource($val)) {
+        }
+
+        if (is_resource($val)) {
             return 'resource';
-        } elseif (is_scalar($val) || $val === null) {
-            $out = json_encode($val, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
+        }
+
+        if (is_scalar($val) || $val === null) {
+            $out = json_encode($val, JSON_THROW_ON_ERROR | JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
             $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
             $out = preg_replace('~\\\\([\\\\/])~s', '$1', $out); // unescape slashes
             if ($allowNl) {
@@ -240,7 +245,7 @@ abstract class RendererAbstract
         }
 
         array_pop($vendorRootArr); // assume parent directory as project directory
-        while (isset($filePathArr[0]) && isset($vendorRootArr[0]) && $filePathArr[0] === $vendorRootArr[0]) {
+        while (isset($filePathArr[0], $vendorRootArr[0]) && $filePathArr[0] === $vendorRootArr[0]) {
             array_shift($filePathArr);
             array_shift($vendorRootArr);
         }

@@ -36,9 +36,10 @@ trait HookTrait
     {
         if ($this->_hookOrigThis === $this) {
             return;
-        } elseif ($this->_hookOrigThis === null) {
-            $this->_hookOrigThis = $this;
+        }
 
+        if ($this->_hookOrigThis === null) {
+            $this->_hookOrigThis = $this;
             return;
         }
 

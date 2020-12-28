@@ -47,7 +47,7 @@ class Factory
             return $traceRenderer->tryRelativizePath($matches[0]);
         }, $trace);
         // echo (new Exception($msg))->getHtml();
-        'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
+        trigger_error($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), E_USER_DEPRECATED);
     }
 
     private function checkSeeFunc($seed): ?string
@@ -89,7 +89,7 @@ class Factory
                 if ($obj !== null) {
                     continue; // legacy behaviour
 
-                    throw new \Exception('Two or more objects specified as seed.');
+                    //throw new \Exception('Two or more objects specified as seed.');
                 }
 
                 $obj = $seed;
@@ -129,7 +129,7 @@ class Factory
 
         ksort($arguments, SORT_NUMERIC);
         if ($obj === null) {
-            $arguments = $arguments + $injection;
+            $arguments += $injection;
 
             return $arguments;
         }
@@ -203,7 +203,6 @@ class Factory
 
             $seed = $this->_mergeSeeds($seed, $defaults);
         }
-        unset($defaults);
 
         $arguments = array_filter($seed, 'is_int', ARRAY_FILTER_USE_KEY); // with numeric keys
         $injection = array_diff_key($seed, $arguments); // with string keys

@@ -158,8 +158,6 @@ trait DiContainerTrait
         }
 
         $seed = static::_fromSeedPrecheck($seed, true);
-        $object = Factory::factory($seed, $defaults);
-
-        return $object;
+        return Factory::factory($seed, $defaults);
     }
 }

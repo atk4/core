@@ -85,10 +85,15 @@ trait DebugTrait
      */
     public function userMessage(string $message, array $context = [])
     {
-        if (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \Atk4\Core\AppUserNotificationInterface) {
-            $this->getApp()->userNotification($message, $context);
-        } elseif (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \Psr\Log\LoggerInterface) {
-            $this->getApp()->log('warning', 'Could not notify user about: ' . $message, $context);
+        if (isset($this->_appScopeTrait) && $this->issetApp()) {
+            switch (true) {
+                case $this->getApp() instanceof \Atk4\Core\AppUserNotificationInterface:
+                    $this->getApp()->userNotification($message, $context);
+                    break;
+                case $this->getApp() instanceof \Psr\Log\LoggerInterface:
+                    $this->getApp()->log('warning', 'Could not notify user about: ' . $message, $context);
+                    break;
+            }
         } else {
             $this->_echo_stderr("Could not notify user about: {$message}\n");
         }

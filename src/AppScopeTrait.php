@@ -97,7 +97,7 @@ trait AppScopeTrait
      */
     public function setApp(object $app)
     {
-        if ($this->issetApp() && $this->getApp() !== $app && $this->getApp() instanceof \Atk4\Ui\App) {
+        if ($this->issetApp() && $this->getApp() !== $app && is_a($this->getApp(),"\\Atk4\\Ui\\App", true)) {
             if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
                 throw new Exception('App can not be replaced');
             }

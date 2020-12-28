@@ -65,7 +65,7 @@ trait ConfigTrait
 
                     break;
                 case 'json':
-                    $tempConfig = json_decode(file_get_contents($file), true);
+                    $tempConfig = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
 
                     break;
                 case 'yaml':
@@ -155,9 +155,9 @@ trait ConfigTrait
         // trick to return false because we need reference here
         $false = false;
 
-        $path = explode('/', $path);
+        $path_parts = explode('/', $path);
         $pos = &$this->config;
-        foreach ($path as $el) {
+        foreach ($path_parts as $el) {
             // need to return if not is array
             // before call array_key_exists and throw error
             if (!is_array($pos)) {

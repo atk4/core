@@ -50,7 +50,7 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
         return $string;
     }
 
-    private function atkExceptionParamsToString(Exception $e): string
+    private function atkExceptionParamsToString(\Throwable $e): string
     {
         $string = '';
         foreach ($e->getParams() as $param => $value) {
