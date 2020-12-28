@@ -42,4 +42,9 @@ class CollectionMock
     {
         $this->_removeFromCollection($name, 'fields');
     }
+
+    public function __clone()
+    {
+        $this->_cloneCollection('fields');
+    }
 }
