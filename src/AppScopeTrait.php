@@ -86,7 +86,6 @@ trait AppScopeTrait
     public function getApp()
     {
         $this->assertNoDirectAppAssignment();
-        $this->assertInstanceOfApp($this->_app);
 
         return $this->_app;
     }
@@ -99,7 +98,6 @@ trait AppScopeTrait
     public function setApp(object $app)
     {
         $this->assertNoDirectAppAssignment();
-        $this->assertInstanceOfApp($app);
         if ($this->issetApp() && $this->getApp() !== $app && $this->getApp() instanceof \Atk4\Ui\App) {
             if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
                 throw new Exception('App can not be replaced');
