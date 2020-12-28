@@ -63,18 +63,6 @@ trait AppScopeTrait
      */
     public $unique_hashes = [];
 
-    private function assertInstanceOfApp(object $app): void
-    {
-        // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
-        if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
-            return;
-        }
-
-        if (!$app instanceof \Atk4\Ui\App) {
-            throw new Exception('App must be instance of \Atk4\Ui\App');
-        }
-    }
-
     /**
      * To be removed in Jan 2021.
      */
@@ -112,7 +100,7 @@ trait AppScopeTrait
     {
         $this->assertNoDirectAppAssignment();
         $this->assertInstanceOfApp($app);
-        if ($this->issetApp() && $this->getApp() !== $app) {
+        if ($this->issetApp() && $this->getApp() !== $app && $this->getApp() instanceof \Atk4\Ui\App) {
             if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
                 throw new Exception('App can not be replaced');
             }
