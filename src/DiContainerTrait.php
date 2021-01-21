@@ -49,17 +49,48 @@ trait DiContainerTrait
      */
     public function setDefaults(array $properties, bool $passively = false)
     {
-        foreach ($properties as $key => $val) {
-            if (property_exists($this, $key)) {
-                if ($passively && $this->{$key} !== null) {
-                    continue;
+        foreach ($properties as $name => $val) {
+            if (is_int($name)) {
+                $this->setMissingProperty($name, $val);
+
+                continue;
+            }
+
+            $getterName = 'get' . ucfirst($name);
+            $setterName = 'set' . ucfirst($name);
+
+            $setterExists = method_exists($this, $setterName) && $setterName !== 'setDefaults';
+
+            if ($setterExists) { // when setter is declared, getter is expected to be declared too
+                $origValue = $this->{$getterName}();
+            } elseif (property_exists($this, $name)) {
+                $origValue = $this->{$name};
+            } else { // property may be magical
+                $isMissing = true;
+
+                try {
+                    $origValue = $this->{$name} ?? null;
+                    if ($origValue !== null) {
+                        $isMissing = false;
+                    }
+                } catch (\Exception $e) {
                 }
 
-                if ($val !== null) {
-                    $this->{$key} = $val;
+                if ($isMissing) {
+                    $this->setMissingProperty($name, $val);
                 }
-            } else {
-                $this->setMissingProperty($key, $val);
+            }
+
+            if ($passively && $origValue !== null) {
+                continue;
+            }
+
+            if ($val !== null) {
+                if ($setterExists) {
+                    $this->{$setterName}($val);
+                } else {
+                    $this->{$name} = $val;
+                }
             }
         }
 
