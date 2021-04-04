@@ -20,7 +20,6 @@ parameters:
         - '~^Call to an undefined method .+::setApp\(\)\.$~'
         - '~^Access to an undefined property .+::\$_appScopeTrait\.$~'
         - '~^Access to an undefined property .+::\$_app\.$~'
-        - '~^Access to an undefined property .+::\$unique_hashes\.$~'
         # for ContainerTrait.php
         - '~^Call to an undefined method .+::removeElement\(\)\.$~'
         # for DiContainerTrait.php
