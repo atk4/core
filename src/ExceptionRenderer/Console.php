@@ -43,8 +43,8 @@ class Console extends RendererAbstract
         }
 
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad((string) $key, 19, ' ', STR_PAD_LEFT);
-            $this->output .= PHP_EOL . "\e[91m" . $key . ': ' . static::toSafeString($val) . "\e[0m";
+            $key = str_pad((string) $key, 19, ' ', \STR_PAD_LEFT);
+            $this->output .= \PHP_EOL . "\e[91m" . $key . ': ' . static::toSafeString($val) . "\e[0m";
         }
     }
 
@@ -59,7 +59,7 @@ class Console extends RendererAbstract
         }
 
         foreach ($this->exception->getSolutions() as $key => $val) {
-            $this->output .= PHP_EOL . "\e[92mSolution: " . $val . "\e[0m";
+            $this->output .= \PHP_EOL . "\e[92mSolution: " . $val . "\e[0m";
         }
     }
 
@@ -94,8 +94,8 @@ class Console extends RendererAbstract
             }
 
             $tokens = [];
-            $tokens['{FILE}'] = str_pad(mb_substr($call['file_rel'], -40), 40, ' ', STR_PAD_LEFT);
-            $tokens['{LINE}'] = str_pad($call['line'], 4, ' ', STR_PAD_LEFT);
+            $tokens['{FILE}'] = str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT);
+            $tokens['{LINE}'] = str_pad($call['line'], 4, ' ', \STR_PAD_LEFT);
             $tokens['{OBJECT}'] = $call['object_formatted'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
             $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m" . $call['class'] . "::\e[0m" : '';
 
@@ -108,7 +108,7 @@ class Console extends RendererAbstract
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
                 if ($escape_frame) {
-                    $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . PHP_EOL . str_repeat(' ', 40) . implode(',' . PHP_EOL . str_repeat(' ', 40), array_map(function ($arg) {
+                    $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . \PHP_EOL . str_repeat(' ', 40) . implode(',' . \PHP_EOL . str_repeat(' ', 40), array_map(function ($arg) {
                         return static::toSafeString($arg);
                     }, $call['args'])) . ')';
                 } else {
@@ -131,7 +131,7 @@ class Console extends RendererAbstract
             return;
         }
 
-        $this->output .= PHP_EOL . "\e[1;45mCaused by Previous Exception:\e[0m" . PHP_EOL;
+        $this->output .= \PHP_EOL . "\e[1;45mCaused by Previous Exception:\e[0m" . \PHP_EOL;
 
         $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
         $this->output .= <<<TEXT

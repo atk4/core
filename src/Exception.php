@@ -36,7 +36,7 @@ class Exception extends \Exception
         parent::__construct($message, $code, $previous);
 
         // save trace but skip constructors of this exception
-        $trace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT);
+        $trace = debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT);
         for ($i = 0; $i < count($trace); ++$i) {
             $c = $trace[$i];
             if (isset($c['object']) && $c['object'] === $this && $c['function'] === '__construct') {

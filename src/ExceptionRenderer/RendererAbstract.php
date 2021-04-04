@@ -112,7 +112,7 @@ abstract class RendererAbstract
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {
-            $out = json_encode($val, JSON_PRESERVE_ZERO_FRACTION | JSON_UNESCAPED_UNICODE);
+            $out = json_encode($val, \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE);
             $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
             $out = preg_replace('~\\\\([\\\\/])~s', '$1', $out); // unescape slashes
             if ($allowNl) {

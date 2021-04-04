@@ -148,6 +148,6 @@ class Json extends RendererAbstract
             ];
         }
 
-        return (string) json_encode($this->json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        return (string) json_encode($this->json, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE);
     }
 }
