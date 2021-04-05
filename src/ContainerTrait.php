@@ -59,7 +59,7 @@ trait ContainerTrait
         }
         $obj = $this->_add_Container($obj, $args);
 
-        if (isset($obj->_initializerTrait)) {
+        if (TraitUtil::hasInitializerTrait($obj)) {
             if (!$obj->_initialized) {
                 $obj->invokeInit();
             }
@@ -81,12 +81,12 @@ trait ContainerTrait
     protected function _add_Container(object $element, $args = []): object
     {
         // Carry on reference to application if we have appScopeTraits set
-        if (isset($this->_appScopeTrait) && isset($element->_appScopeTrait)) {
+        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($element)) {
             $element->setApp($this->getApp());
         }
 
         // If element is not trackable, then we don't need to do anything with it
-        if (!isset($element->_trackableTrait)) {
+        if (!TraitUtil::hasTrackableTrait($element)) {
             return $element;
         }
 
@@ -125,7 +125,7 @@ trait ContainerTrait
 
         $element->setOwner($this);
         $element->short_name = $args[0];
-        if (isset($this->_nameTrait)) {
+        if (TraitUtil::hasNameTrait($this)) {
             $element->name = $this->_shorten($this->name . '_' . $element->short_name);
         }
         $this->elements[$element->short_name] = $element;
@@ -172,9 +172,11 @@ trait ContainerTrait
      */
     protected function _shorten(string $desired): string
     {
-        if (isset($this->_appScopeTrait)
+        if (
+            TraitUtil::hasAppScopeTrait($this)
             && isset($this->getApp()->max_name_length)
-            && mb_strlen($desired) > $this->getApp()->max_name_length) {
+            && mb_strlen($desired) > $this->getApp()->max_name_length
+        ) {
             $left = mb_strlen($desired) + 35 - $this->getApp()->max_name_length;
             $key = mb_substr($desired, 0, $left);
             $rest = mb_substr($desired, $left);

@@ -18,7 +18,6 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     public function testBasic()
     {
         $m = new ContainerMock();
-        $this->assertTrue(isset($m->_containerTrait));
 
         // add to return object
         $tr = $m->add($tr2 = new \StdClass());

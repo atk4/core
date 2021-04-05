@@ -119,12 +119,12 @@ trait TrackableTrait
      */
     public function destroy(): void
     {
-        if ($this->_owner !== null && isset($this->_owner->_containerTrait)) {
+        if ($this->_owner !== null && TraitUtil::hasContainerTrait($this->_owner)) {
             $this->_owner->removeElement($this->short_name);
 
             // GC remove reference to app is AppScope in use
-            if (isset($this->_appScopeTrait) && $this->issetApp()) {
-                $this->_app = null;
+            if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp()) {
+                $this->_app = null; // @phpstan-ignore-line
             }
 
             // GC : remove reference to owner

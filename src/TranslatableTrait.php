@@ -23,7 +23,7 @@ trait TranslatableTrait
      */
     public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
     {
-        if (isset($this->_appScopeTrait) && $this->issetApp() && method_exists($this->getApp(), '_')) {
+        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && method_exists($this->getApp(), '_')) {
             return $this->getApp()->_($message, $parameters, $domain, $locale);
         }
 

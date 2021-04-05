@@ -42,7 +42,7 @@ trait DebugTrait
 
         // if debug is enabled, then log it
         if ($this->debug) {
-            if (!isset($this->_appScopeTrait) || !$this->issetApp() || !$this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
+            if (!TraitUtil::hasAppScopeTrait($this) || !$this->issetApp() || !$this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
                 $message = '[' . static::class . ']: ' . $message;
             }
             $this->log(LogLevel::DEBUG, $message, $context);
@@ -61,7 +61,7 @@ trait DebugTrait
      */
     public function log($level, $message, array $context = [])
     {
-        if (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
+        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
             $this->getApp()->logger->log($level, $message, $context);
         } else {
             $this->_echo_stderr($message . "\n");
@@ -78,9 +78,9 @@ trait DebugTrait
      */
     public function userMessage(string $message, array $context = [])
     {
-        if (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \Atk4\Core\AppUserNotificationInterface) {
+        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp() instanceof \Atk4\Core\AppUserNotificationInterface) {
             $this->getApp()->userNotification($message, $context);
-        } elseif (isset($this->_appScopeTrait) && $this->issetApp() && $this->getApp() instanceof \Psr\Log\LoggerInterface) {
+        } elseif (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp() instanceof \Psr\Log\LoggerInterface) {
             $this->getApp()->log('warning', 'Could not notify user about: ' . $message, $context);
         } else {
             $this->_echo_stderr("Could not notify user about: {$message}\n");

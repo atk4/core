@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Core;
 
+// !!! INTENDED TO BE REMOVED LATER - ONLY FOR TRAIT IDENTIFICATION PROPERTIES TO INTERFACES MIGRATION !!!
+
 final class TraitUtil
 {
     /** @var bool[className][traitName] */
@@ -49,5 +51,65 @@ final class TraitUtil
         }
 
         return self::$_hasTraitMap[$class][$traitName];
+    }
+
+    /*
+     * ConfigTrait - not used
+     * DebugTrait - not used
+     * DynamicMethodTrait - not used
+     * FactoryTrait - not used
+     * StaticAddToTrait - not used
+     * TranslatableTrait - not used
+     *
+     * QuickExceptionTrait - QuickException will be removed, not used outside QuickException class
+     */
+
+    public static function hasAppScopeTrait(object $class): bool
+    {
+        return self::hasTrait($class, AppScopeTrait::class);
+    }
+
+    public static function hasContainerTrait(object $class): bool
+    {
+        return self::hasTrait($class, ContainerTrait::class);
+    }
+
+    /**
+     * Used in Factory and in ui/View only.
+     */
+    public static function hasDiContainerTrait(object $class): bool
+    {
+        return self::hasTrait($class, DiContainerTrait::class);
+    }
+
+    /**
+     * Used in DynamicMethodTrait only.
+     */
+    public static function hasHookTrait(object $class): bool
+    {
+        return self::hasTrait($class, HookTrait::class);
+    }
+
+    public static function hasInitializerTrait(object $class): bool
+    {
+        return self::hasTrait($class, InitializerTrait::class);
+    }
+
+    public static function hasNameTrait(object $class): bool
+    {
+        return self::hasTrait($class, NameTrait::class);
+    }
+
+    /**
+     * Used in ui\TableColumn\FilterModel\Generic only.
+     */
+    public static function hasSessionTrait(object $class): bool
+    {
+        return self::hasTrait($class, SessionTrait::class);
+    }
+
+    public static function hasTrackableTrait(object $class): bool
+    {
+        return self::hasTrait($class, TrackableTrait::class);
     }
 }

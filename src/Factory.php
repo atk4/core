@@ -142,7 +142,7 @@ class Factory
         }
 
         if (count($injection) > 0) {
-            if (!isset($obj->_DiContainerTrait)) {
+            if (!TraitUtil::hasDiContainerTrait($obj)) {
                 throw (new Exception('Property injection is possible only to objects that use \Atk4\Core\DiContainerTrait trait'))
                     ->addMoreInfo('object', $obj)
                     ->addMoreInfo('injection', $injection);
