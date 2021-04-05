@@ -7,7 +7,7 @@ namespace atk4\core;
 /**
  * This trait makes it possible to set name of your object.
  */
-interface IName
+interface NameInterface
 {
     /**
      * Unique object name.

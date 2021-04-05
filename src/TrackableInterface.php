@@ -9,7 +9,7 @@ namespace atk4\core;
  * then container will keep track of it. This method can also
  * specify desired name of the object.
  */
-interface ITrackable
+interface TrackableInterface
 {
     use NameTrait;
 

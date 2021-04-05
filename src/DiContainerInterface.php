@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace atk4\core;
 
-interface IDIContainer
+interface DiContainerInterface
 {
     /**
      * Call from __construct() to initialize the properties allowing
