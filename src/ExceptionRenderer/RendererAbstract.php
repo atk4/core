@@ -129,7 +129,7 @@ abstract class RendererAbstract
         }
 
         $out = '[';
-        $supressKeys = array_keys($val) === range(0, count($val) - 1);
+        $supressKeys = array_is_list($val);
         foreach ($val as $k => $v) {
             $kSafe = static::toSafeString($k);
             $vSafe = static::toSafeString($v, $allowNl, $maxDepth - 1);
