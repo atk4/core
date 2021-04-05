@@ -8,7 +8,7 @@ namespace Atk4\Core;
 
 final class TraitUtil
 {
-    /** @var bool[className][traitName] */
+    /** @var array<class-string, array<string, bool>> */
     private static $_hasTraitMap = [];
 
     private function __construct()
@@ -17,7 +17,7 @@ final class TraitUtil
     }
 
     /**
-     * @param object|string $class
+     * @param object|class-string $class
      */
     public static function hasTrait($class, string $traitName): bool
     {

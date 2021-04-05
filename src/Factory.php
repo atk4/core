@@ -160,6 +160,9 @@ class Factory
         return $obj;
     }
 
+    /**
+     * @param class-string $className
+     */
     protected function _newObject(string $className, array $ctorArgs): object
     {
         return new $className(...$ctorArgs);
