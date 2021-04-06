@@ -75,7 +75,6 @@ class DiContainerTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class FactoryDiMock2
 {
     use DiContainerTrait;
@@ -84,4 +83,3 @@ class FactoryDiMock2
     public $b = 'BBB';
     public $c;
 }
-// @codingStandardsIgnoreEnd

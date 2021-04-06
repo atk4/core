@@ -40,7 +40,6 @@ class InitializerTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class ContainerMock2
 {
     use core\ContainerTrait;
@@ -70,4 +69,3 @@ class BrokenInitializerMock extends _InitializerMock
         // do not call parent
     }
 }
-// @codingStandardsIgnoreEnd

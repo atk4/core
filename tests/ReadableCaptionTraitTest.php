@@ -25,9 +25,7 @@ class ReadableCaptionTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class ReadableCaptionMock
 {
     use ReadableCaptionTrait;
 }
-// @codingStandardsIgnoreEnd

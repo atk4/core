@@ -156,9 +156,7 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class ConfigMock
 {
     use ConfigTrait;
 }
-// @codingStandardsIgnoreEnd

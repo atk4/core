@@ -10,7 +10,6 @@ use Atk4\Core\DiContainerTrait;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
 
-// @codingStandardsIgnoreStart
 class StdSat extends \StdClass
 {
     use DiContainerTrait; // remove once PHP7.2 support is dropped
@@ -56,7 +55,6 @@ class DiConstructorMockSat
         $this->c = $name;
     }
 }
-// @codingStandardsIgnoreEnd
 
 /**
  * @coversDefaultClass \Atk4\Core\StaticAddToTrait

@@ -174,7 +174,6 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class DynamicMethodMock
 {
     use DynamicMethodTrait;
@@ -195,4 +194,3 @@ class GlobalMethodAppMock
 {
     use HookTrait;
 }
-// @codingStandardsIgnoreEnd

@@ -46,7 +46,6 @@ class AppScopeTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class AppScopeMock
 {
     use AppScopeTrait;
@@ -84,4 +83,3 @@ class AppScopeChildTrackable
     use AppScopeTrait;
     use TrackableTrait;
 }
-// @codingStandardsIgnoreEnd
