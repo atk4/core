@@ -127,7 +127,6 @@ class SessionTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class SessionMock
 {
     use NameTrait;
@@ -137,4 +136,3 @@ class SessionWithoutNameMock
 {
     use SessionTrait;
 }
-// @codingStandardsIgnoreEnd

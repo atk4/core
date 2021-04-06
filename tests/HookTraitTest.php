@@ -419,7 +419,6 @@ class HookTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class HookMock
 {
     use HookTrait;
@@ -440,4 +439,3 @@ class HookWithDynamicMethodMock extends HookMock
     {
     }
 }
-// @codingStandardsIgnoreEnd

@@ -148,15 +148,11 @@ class ExceptionTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class TrackableMock2
 {
     use TrackableTrait;
 }
 
-// @codingStandardsIgnoreEnd
-
-// @codingStandardsIgnoreStart
 class ExceptionTestThrowError extends Exception
 {
     public function getCustomExceptionTitle(): string
@@ -164,4 +160,3 @@ class ExceptionTestThrowError extends Exception
         throw new \Exception('just to cover __string');
     }
 }
-// @codingStandardsIgnoreEnd

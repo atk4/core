@@ -193,7 +193,6 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class TrackableMock
 {
     use core\TrackableTrait;
@@ -233,4 +232,3 @@ class ContainerAppMock
         }
     }
 }
-// @codingStandardsIgnoreEnd

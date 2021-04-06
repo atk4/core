@@ -188,7 +188,6 @@ class DebugTraitTest extends AtkPhpunit\TestCase
     }
 }
 
-// @codingStandardsIgnoreStart
 class DebugMock
 {
     use AppScopeTrait;
@@ -230,5 +229,3 @@ class PsrMock implements \Psr\Log\LoggerInterface
     use AppScopeTrait;
     use DebugTrait;
 }
-
-// @codingStandardsIgnoreEnd
