@@ -73,6 +73,13 @@ class DiContainerTraitTest extends AtkPhpunit\TestCase
         $m = new FactoryDiMock2();
         $m->setDefaults([], true);
     }
+
+    public function testInstanceOfBeforeConstructor()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Seed class is not a subtype of static class');
+        FactoryDiMockConstructorMustNeverBeCalled2::fromSeed([FactoryDiMockConstructorMustNeverBeCalled::class]);
+    }
 }
 
 class FactoryDiMock2
@@ -82,4 +89,17 @@ class FactoryDiMock2
     public $a = 'AAA';
     public $b = 'BBB';
     public $c;
+}
+
+class FactoryDiMockConstructorMustNeverBeCalled
+{
+    public function __construct()
+    {
+        throw new \Error('Contructor must never be called');
+    }
+}
+
+class FactoryDiMockConstructorMustNeverBeCalled2 extends FactoryDiMockConstructorMustNeverBeCalled
+{
+    use DiContainerTrait;
 }
