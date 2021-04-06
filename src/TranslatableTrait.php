@@ -12,13 +12,6 @@ use Atk4\Core\Translator\Translator;
 trait TranslatableTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_translatableTrait = true;
-
-    /**
      * Translates the given message.
      *
      * @param string      $message    The message to be translated
@@ -30,7 +23,7 @@ trait TranslatableTrait
      */
     public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
     {
-        if (isset($this->_appScopeTrait) && $this->issetApp() && method_exists($this->getApp(), '_')) {
+        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && method_exists($this->getApp(), '_')) {
             return $this->getApp()->_($message, $parameters, $domain, $locale);
         }
 

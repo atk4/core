@@ -47,20 +47,20 @@ trait CollectionTrait
         $this->{$collection}[$name] = $item;
 
         // Carry on reference to application if we have appScopeTraits set
-        if (isset($this->_appScopeTrait) && isset($item->_appScopeTrait)) {
+        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($item)) {
             $item->setApp($this->getApp());
         }
 
         // Calculate long "name" but only if both are trackables
-        if (isset($item->_trackableTrait)) {
+        if (TraitUtil::hasTrackableTrait($item)) {
             $item->short_name = $name;
             $item->setOwner($this);
-            if (isset($this->_trackableTrait)) {
+            if (TraitUtil::hasTrackableTrait($this)) {
                 $item->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
             }
         }
 
-        if (isset($item->_initializerTrait)) {
+        if (TraitUtil::hasInitializerTrait($item)) {
             if (!$item->_initialized) {
                 $item->invokeInit();
             }
@@ -99,7 +99,7 @@ trait CollectionTrait
     {
         $this->{$collectionName} = array_map(function ($item) {
             $item = clone $item;
-            if (isset($item->_trackableTrait) && $item->issetOwner()) {
+            if (TraitUtil::hasTrackableTrait($item) && $item->issetOwner()) {
                 $item->unsetOwner()->setOwner($this);
             }
 
@@ -154,8 +154,6 @@ trait CollectionTrait
 
                     public function shorten(?object $app, string $desired): string
                     {
-                        $this->_appScopeTrait = $app !== null;
-
                         try {
                             $this->setApp($app);
 
@@ -171,6 +169,6 @@ trait CollectionTrait
             return $factory->collectionTraitHelper;
         }, null, Factory::class)();
 
-        return $collectionTraitHelper->shorten($this->_appScopeTrait ? $this->getApp() : null, $desired);
+        return $collectionTraitHelper->shorten(TraitUtil::hasAppScopeTrait($this) ? $this->getApp() : null, $desired);
     }
 }

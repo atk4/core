@@ -7,13 +7,6 @@ namespace Atk4\Core;
 trait SessionTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_sessionTrait = true;
-
-    /**
      * Session container key.
      *
      * @var string
@@ -29,7 +22,7 @@ trait SessionTrait
     {
         // all methods use this method to start session, so we better check
         // NameTrait existence here in one place.
-        if (!isset($this->_nameTrait)) {
+        if (!TraitUtil::hasNameTrait($this)) {
             throw new Exception('Object should have NameTrait applied to use session');
         }
 

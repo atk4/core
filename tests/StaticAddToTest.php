@@ -64,7 +64,6 @@ class StaticAddToTest extends AtkPhpunit\TestCase
     public function testBasic()
     {
         $m = new ContainerMock();
-        $this->assertTrue(isset($m->_containerTrait));
 
         // add to return object
         $tr = StdSat::addTo($m);
@@ -98,7 +97,6 @@ class StaticAddToTest extends AtkPhpunit\TestCase
     public function testWithClassName()
     {
         $m = new ContainerMock();
-        $this->assertTrue(isset($m->_containerTrait));
 
         // the same class
         $tr = StdSat::addToWithCl($m, [StdSat::class]);

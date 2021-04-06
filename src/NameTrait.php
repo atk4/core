@@ -10,13 +10,6 @@ namespace Atk4\Core;
 trait NameTrait
 {
     /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_nameTrait = true;
-
-    /**
      * Unique object name.
      *
      * @var string

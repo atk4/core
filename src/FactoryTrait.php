@@ -7,10 +7,11 @@ namespace Atk4\Core;
 /** @deprecated will be removed in v2.5 */
 trait FactoryTrait
 {
-    /** @deprecated will be removed in v2.5 */
-    private $_factoryTrait = true;
-
-    /** @deprecated will be removed in v2.5 */
+    /**
+     * See \Atk4\Core\Factory::mergeSeeds().
+     *
+     * @deprecated will be removed in 2021-jun
+     */
     public function mergeSeeds(...$seeds)
     {
         'trigger_error'('Method mergeSeeds is deprecated. Use Factory::mergeSeeds instead', E_USER_DEPRECATED);

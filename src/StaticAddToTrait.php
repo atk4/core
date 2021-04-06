@@ -13,13 +13,6 @@ trait StaticAddToTrait
 {
     // use DiContainerTrait; // uncomment once PHP7.2 support is dropped
 
-    /**
-     * Check this property to see if trait is present in the object.
-     *
-     * @var bool
-     */
-    public $_staticAddToTrait = true;
-
     private static function _addTo_add(object $parent, object $object, array $addArgs, bool $skipAdd = false): void
     {
         if (!$skipAdd) {
