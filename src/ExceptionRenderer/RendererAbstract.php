@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\ExceptionRenderer;
 
 use Atk4\Core\Exception;
+use Atk4\Core\TraitUtil;
 use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use Atk4\Core\Translator\Translator;
@@ -94,9 +95,8 @@ abstract class RendererAbstract
         }
 
         if ($parsed['object'] !== null) {
-            $objProps = get_object_vars($parsed['object']);
-            $parsed['object_formatted'] = isset($objProps['_trackableTrait'])
-                ? $objProps['name']
+            $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
+                ? get_object_vars($parsed['object'])['name']
                 : get_class($parsed['object']);
         }
 
