@@ -31,7 +31,6 @@ return PhpCsFixer\Config::create()
             'equal' => false,
             'identical' => false,
         ],
-        'native_function_invocation' => false,
         'non_printable_character' => [
             'use_escape_sequences_in_strings' => true,
         ],
