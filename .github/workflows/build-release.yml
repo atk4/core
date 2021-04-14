@@ -3,7 +3,7 @@ name: Build Release
 on:
   push:
     branches:
-      - '*.build'
+      - '**\.build'
       - 'release/*'
       - '!**\.gen'
 
@@ -17,6 +17,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
+
+      - name: Install PHP dependencies
+        run: composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
       - name: Composer unset version
         run: composer config version --unset
@@ -37,7 +40,7 @@ jobs:
           '
 
       - name: Composer validate config
-        run: composer validate --strict
+        run: composer validate --strict --no-check-lock && composer normalize --dry-run --no-check-lock
 
       - name: Commit
         run: |

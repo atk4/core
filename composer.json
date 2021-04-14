@@ -9,6 +9,7 @@
         "agile toolkit"
     ],
     "homepage": "https://github.com/atk4/core",
+    "version": "dev-develop",
     "license": "MIT",
     "authors": [
         {
@@ -29,12 +30,6 @@
             "homepage": "https://mvorisek.cz/"
         }
     ],
-    "version": "dev-develop",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "sort-packages": true
-    },
     "require": {
         "php": ">=7.3.0",
         "ext-json": "*",
@@ -46,6 +41,7 @@
     },
     "require-dev": {
         "atk4/data": "dev-develop",
+        "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^2.17",
         "johnkary/phpunit-speedtrap": "^3.2",
         "phpstan/phpstan": "^0.12.58",
@@ -54,11 +50,15 @@
     },
     "require-dev-release": {
         "atk4/data": "~2.3.0",
+        "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^2.17",
         "johnkary/phpunit-speedtrap": "^3.2",
         "phpstan/phpstan": "^0.12.58",
         "phpunit/phpunit": ">=9.1",
         "symfony/contracts": ">=1.1"
+    },
+    "config": {
+        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -69,5 +69,7 @@
         "psr-4": {
             "Atk4\\Core\\Tests\\": "tests/"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
