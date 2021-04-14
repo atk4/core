@@ -1,12 +1,10 @@
-name: Unit Testing
+name: Unit
 
 on:
   pull_request:
-    branches: '**'
   push:
-    branches: '**'
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 0/2 * * *'
 
 jobs:
   smoke-test:
@@ -34,10 +32,6 @@ jobs:
         run: |
           if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
-
-      # trick composer that this is a "atk4/core:develop" dependency to install atk4/data
-      - name: Rename HEAD to develop for Composer
-        run: git switch -C develop HEAD
 
       - name: Setup cache 1/2
         id: composer-cache
@@ -81,7 +75,7 @@ jobs:
     name: Unit
     runs-on: ubuntu-latest
     container:
-      image: atk4/image:${{ matrix.php }} # https://github.com/atk4/image
+      image: atk4/image:${{ matrix.php }}
     strategy:
       fail-fast: false
       matrix:
@@ -102,10 +96,6 @@ jobs:
         run: |
           if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
-
-      # trick composer that this is a "atk4/core:develop" dependency to install atk4/data
-      - name: Rename HEAD to develop for Composer
-        run: git switch -C develop HEAD
 
       - name: Setup cache 1/2
         id: composer-cache
