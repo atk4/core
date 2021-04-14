@@ -1,73 +1,73 @@
 {
-  "name": "atk4/core",
-  "type": "library",
-  "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
-  "keywords": [
-    "php",
-    "framework",
-    "traits",
-    "agile toolkit"
-  ],
-  "homepage": "https://github.com/atk4/core",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Romans Malinovskis",
-      "email": "romans@agiletoolkit.org",
-      "homepage": "https://nearly.guru/"
+    "name": "atk4/core",
+    "type": "library",
+    "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
+    "keywords": [
+        "php",
+        "framework",
+        "traits",
+        "agile toolkit"
+    ],
+    "homepage": "https://github.com/atk4/core",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romans Malinovskis",
+            "email": "romans@agiletoolkit.org",
+            "homepage": "https://nearly.guru/"
+        },
+        {
+            "name": "Imants Horsts",
+            "homepage": "https://darkside.lv/"
+        },
+        {
+            "name": "Francesco Danti",
+            "homepage": "https://oracoltech.com/"
+        },
+        {
+            "name": "Michael Voříšek",
+            "homepage": "https://mvorisek.cz/"
+        }
+    ],
+    "version": "dev-develop",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
     },
-    {
-      "name": "Imants Horsts",
-      "homepage": "https://darkside.lv/"
+    "require": {
+        "php": ">=7.3.0",
+        "ext-json": "*",
+        "psr/log": "~1.0",
+        "symfony/polyfill-php74": "^1.17",
+        "symfony/polyfill-php80": "^1.17",
+        "symfony/polyfill-php81": "^1.22",
+        "symfony/yaml": "^3.4 || ^4.4 || ^5.1"
     },
-    {
-      "name": "Francesco Danti",
-      "homepage": "https://oracoltech.com/"
+    "require-dev": {
+        "atk4/data": "dev-develop",
+        "friendsofphp/php-cs-fixer": "^2.17",
+        "johnkary/phpunit-speedtrap": "^3.2",
+        "phpstan/phpstan": "^0.12.58",
+        "phpunit/phpunit": ">=9.1",
+        "symfony/contracts": ">=1.1"
     },
-    {
-      "name": "Michael Voříšek",
-      "homepage": "https://mvorisek.cz/"
+    "require-dev-release": {
+        "atk4/data": "~2.3.0",
+        "friendsofphp/php-cs-fixer": "^2.17",
+        "johnkary/phpunit-speedtrap": "^3.2",
+        "phpstan/phpstan": "^0.12.58",
+        "phpunit/phpunit": ">=9.1",
+        "symfony/contracts": ">=1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atk4\\Core\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Atk4\\Core\\Tests\\": "tests/"
+        }
     }
-  ],
-  "version": "dev-develop",
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "config": {
-    "sort-packages": true
-  },
-  "require": {
-    "php": ">=7.3.0",
-    "ext-json": "*",
-    "psr/log": "~1.0",
-    "symfony/polyfill-php74": "^1.17",
-    "symfony/polyfill-php80": "^1.17",
-    "symfony/polyfill-php81": "^1.22",
-    "symfony/yaml": ">=3.4"
-  },
-  "require-dev": {
-    "atk4/data": "dev-develop",
-    "friendsofphp/php-cs-fixer": "^2.17",
-    "johnkary/phpunit-speedtrap": "^3.2",
-    "phpstan/phpstan": "^0.12.58",
-    "phpunit/phpunit": ">=9.1",
-    "symfony/contracts": ">=1.1"
-  },
-  "require-dev-release": {
-    "atk4/data": "~2.3.0",
-    "friendsofphp/php-cs-fixer": "^2.17",
-    "johnkary/phpunit-speedtrap": "^3.2",
-    "phpstan/phpstan": "^0.12.58",
-    "phpunit/phpunit": ">=9.1",
-    "symfony/contracts": ">=1.1"
-  },
-  "autoload": {
-    "psr-4": {
-      "Atk4\\Core\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Atk4\\Core\\Tests\\": "tests/"
-    }
-  }
 }
