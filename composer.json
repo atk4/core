@@ -49,7 +49,7 @@
         "symfony/contracts": ">=1.1"
     },
     "require-dev-release": {
-        "atk4/data": "~2.3.0",
+        "atk4/data": "~2.4.0",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^2.17",
         "johnkary/phpunit-speedtrap": "^3.2",
