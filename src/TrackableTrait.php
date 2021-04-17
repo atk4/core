@@ -98,10 +98,10 @@ trait TrackableTrait
     {
         // can be anything, but better to build meaningful name
         $name = static::class;
-        if (strpos($name, 'class@anonymous') === 0) {
+        if ((new \ReflectionClass($name))->isAnonymous()) {
             $name = '';
             foreach (class_parents(static::class) as $v) {
-                if (strpos($v, 'class@anonymous') !== 0) {
+                if (!(new \ReflectionClass($v))->isAnonymous()) {
                     $name = $v;
 
                     break;
