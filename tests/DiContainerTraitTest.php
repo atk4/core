@@ -7,6 +7,7 @@ namespace Atk4\Core\Tests;
 use Atk4\Core\AtkPhpunit;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\Exception;
+use Atk4\Core\StaticPropNameTrait;
 
 /**
  * @coversDefaultClass \Atk4\Core\DiContainerTrait
@@ -79,6 +80,19 @@ class DiContainerTraitTest extends AtkPhpunit\TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Seed class is not a subtype of static class');
         FactoryDiMockConstructorMustNeverBeCalled2::fromSeed([FactoryDiMockConstructorMustNeverBeCalled::class]);
+    }
+
+    public function testHintablePropName()
+    {
+        $this->assertSame('u', get_class(new class() {
+            use StaticPropNameTrait;
+
+            /** @var int */
+            public $u;
+        })::propName()->u);
+
+        $this->assertSame('a', FactoryDiMock2::propName()->a);
+        $this->assertSame('undefined', FactoryDiMock2::propName()->undefined); // @phpstan-ignore-line
     }
 }
 
