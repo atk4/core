@@ -12,9 +12,6 @@ use Atk4\Core\AtkPhpunit;
  */
 class ContainerTraitTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testBasic()
     {
         $m = new ContainerMock();

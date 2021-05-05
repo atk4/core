@@ -32,9 +32,6 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(0, $result);
     }
 
-    /**
-     * Test constructor.
-     */
     public function testBasic()
     {
         $m = new HookMock();

@@ -12,9 +12,6 @@ use Atk4\Core\AtkPhpunit;
  */
 class CollectionTraitTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testBasic()
     {
         $m = new CollectionMock();

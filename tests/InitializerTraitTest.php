@@ -13,9 +13,6 @@ use Atk4\Core\Exception;
  */
 class InitializerTraitTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testBasic()
     {
         $m = new ContainerMock2();

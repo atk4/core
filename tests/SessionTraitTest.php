@@ -49,9 +49,6 @@ class SessionTraitTest extends AtkPhpunit\TestCase
         $m->startSession();
     }
 
-    /**
-     * Test constructor.
-     */
     public function testConstructor()
     {
         $m = new SessionMock();
