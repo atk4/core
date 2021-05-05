@@ -15,7 +15,7 @@ use Atk4\Core\HookTrait;
  */
 class DynamicMethodTraitTest extends AtkPhpunit\TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $m = new DynamicMethodMock();
         $m->addMethod('test', function () {
@@ -28,7 +28,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('Hello, world', $res);
     }
 
-    public function testException1()
+    public function testException1(): void
     {
         // can't call undefined method
         $this->expectException(Exception::class);
@@ -36,7 +36,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $m->unknownMethod();
     }
 
-    public function testException2()
+    public function testException2(): void
     {
         // can't call method without HookTrait or AppScope+Hook traits
         $this->expectException(Exception::class);
@@ -44,7 +44,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $m->unknownMethod();
     }
 
-    public function testException3()
+    public function testException3(): void
     {
         // can't add method without HookTrait
         $this->expectException(Exception::class);
@@ -54,7 +54,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testException4()
+    public function testException4(): void
     {
         // can't call method without HookTrait or AppScope+Hook traits
         $this->expectException(Exception::class);
@@ -66,7 +66,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
     /**
      * Test arguments.
      */
-    public function testArguments()
+    public function testArguments(): void
     {
         // simple method
         $m = new DynamicMethodMock();
@@ -84,7 +84,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
     /**
      * Can add, check and remove methods.
      */
-    public function testWithoutHookTrait()
+    public function testWithoutHookTrait(): void
     {
         $m = new DynamicMethodWithoutHookMock();
         $this->assertFalse($m->hasMethod('sum'));
@@ -92,7 +92,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->assertSame($m, $m->removeMethod('sum'));
     }
 
-    public function testDoubleMethodException()
+    public function testDoubleMethodException(): void
     {
         $this->expectException(Exception::class);
 
@@ -108,7 +108,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
     /**
      * Test removing dynamic method.
      */
-    public function testRemoveMethod()
+    public function testRemoveMethod(): void
     {
         // simple method
         $m = new DynamicMethodMock();
@@ -120,7 +120,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->assertFalse($m->hasMethod(('sum')));
     }
 
-    public function testGlobalMethodException1()
+    public function testGlobalMethodException1(): void
     {
         // can't add global method without AppScopeTrait and HookTrait
         $this->expectException(Exception::class);
@@ -133,7 +133,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
     /**
      * Test adding, checking, removing global method.
      */
-    public function testGlobalMethods()
+    public function testGlobalMethods(): void
     {
         $app = new GlobalMethodAppMock();
 
@@ -155,7 +155,7 @@ class DynamicMethodTraitTest extends AtkPhpunit\TestCase
         $this->assertFalse($m2->hasGlobalMethod('sum'));
     }
 
-    public function testDoubleGlobalMethodException()
+    public function testDoubleGlobalMethodException(): void
     {
         $this->expectException(Exception::class);
 

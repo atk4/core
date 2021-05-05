@@ -14,7 +14,7 @@ use Atk4\Core\HookTrait;
  */
 class HookTraitTest extends AtkPhpunit\TestCase
 {
-    public function testArguments()
+    public function testArguments(): void
     {
         $m = new HookMock();
 
@@ -32,7 +32,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(0, $result);
     }
 
-    public function testBasic()
+    public function testBasic(): void
     {
         $m = new HookMock();
         $result = 0;
@@ -48,7 +48,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(2, $result);
     }
 
-    public function testAdvanced()
+    public function testAdvanced(): void
     {
         $m = new HookMock();
         $result = 20;
@@ -76,7 +76,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->result += $inc;
     }
 
-    public function testHookException1()
+    public function testHookException1(): void
     {
         // wrong 2nd argument
         $m = new HookMock();
@@ -91,7 +91,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('parameter', $result);
     }
 
-    public function testOrder()
+    public function testOrder(): void
     {
         $m = new HookMock();
         $ind = $m->onHook('spot', function () {
@@ -144,7 +144,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         ], $ret);
     }
 
-    public function testMulti()
+    public function testMulti(): void
     {
         $obj = new HookMock();
 
@@ -165,7 +165,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame([9, 6], $res2);
     }
 
-    public function testArgs()
+    public function testArgs(): void
     {
         $obj = new HookMock();
 
@@ -191,7 +191,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame([6, 5, 13, 2315], $res2);
     }
 
-    public function testReferences()
+    public function testReferences(): void
     {
         $obj = new HookMock();
 
@@ -215,7 +215,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(2, $v);
     }
 
-    public function testBreakHook()
+    public function testBreakHook(): void
     {
         $m = new HookMock();
         $m->result = 0;
@@ -236,7 +236,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('stop', $ret);
     }
 
-    public function testBreakHookBrokenBy()
+    public function testBreakHookBrokenBy(): void
     {
         $m = new HookMock();
 
@@ -251,7 +251,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('stop', $brokenBy->getReturnValue());
     }
 
-    public function testExceptionInHook()
+    public function testExceptionInHook(): void
     {
         $this->expectException(Exception::class);
         $m = new HookMock();
@@ -263,7 +263,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $ret = $m->hook('inc');
     }
 
-    public function testOnHookShort()
+    public function testOnHookShort(): void
     {
         $m = new HookMock();
 
@@ -281,7 +281,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->hook('inc', ['y']);
     }
 
-    public function testCloningSafety()
+    public function testCloningSafety(): void
     {
         $makeMock = function () {
             return new class() extends HookMock {
@@ -334,7 +334,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $m->hook('inc');
     }
 
-    public function testOnHookDynamic()
+    public function testOnHookDynamic(): void
     {
         $m = new class() extends HookMock {
             public function makeCallback(): \Closure
@@ -380,7 +380,7 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(3, $mCloned->result);
     }
 
-    public function testPassByReference()
+    public function testPassByReference(): void
     {
         $value = 0;
         $m = new HookMock();

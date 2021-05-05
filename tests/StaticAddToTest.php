@@ -61,7 +61,7 @@ class DiConstructorMockSat
  */
 class StaticAddToTest extends AtkPhpunit\TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $m = new ContainerMock();
 
@@ -79,7 +79,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSat::addTo($m, $tr); // @phpstan-ignore-line
     }
 
-    public function testAssertInstanceOf()
+    public function testAssertInstanceOf(): void
     {
         // object is of the same class
         StdSat::assertInstanceOf(new StdSat());
@@ -94,7 +94,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         StdSat2::assertInstanceOf(new StdSat());
     }
 
-    public function testWithClassName()
+    public function testWithClassName(): void
     {
         $m = new ContainerMock();
 
@@ -119,7 +119,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $tr = StdSat::addToWithCl($m, [\stdClass::class]);
     }
 
-    public function testUniqueNames()
+    public function testUniqueNames(): void
     {
         $m = new ContainerMock();
 
@@ -141,7 +141,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
         $this->assertSame(3, $m->getElementCount());
     }
 
-    public function testFactoryMock()
+    public function testFactoryMock(): void
     {
         $m = new ContainerFactoryMockSat();
         $m1 = DiMockSat::addTo($m, ['a' => 'XXX', 'b' => 'YYY']);

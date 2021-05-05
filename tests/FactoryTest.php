@@ -15,7 +15,7 @@ use Atk4\Core\HookBreaker;
  */
 class FactoryTest extends AtkPhpunit\TestCase
 {
-    public function testMerge1()
+    public function testMerge1(): void
     {
         // string become array
         $this->assertSame(
@@ -51,7 +51,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         );
     }
 
-    public function testMerge2()
+    public function testMerge2(): void
     {
         // array argument merging
         $this->assertSame(
@@ -86,7 +86,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         Factory::mergeSeeds(['a1', 'a2'], $o);
     }
 
-    public function testMerge3()
+    public function testMerge3(): void
     {
         // key/value support
         $this->assertSame(
@@ -124,7 +124,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(5, $oo->foo);
     }
 
-    public function testMerge4()
+    public function testMerge4(): void
     {
         // array values don't overwrite but rather merge
         $o = new FactoryTestViewMock();
@@ -143,7 +143,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['red'], $oo->foo);
     }
 
-    public function testMerge5()
+    public function testMerge5(): void
     {
         // works even if more arguments present
         $o = new FactoryTestViewMock();
@@ -163,7 +163,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame('xx', $oo->foo);
     }
 
-    public function testMerge5b()
+    public function testMerge5b(): void
     {
         // and even if multiple objects are found
         $o = new FactoryTestViewMock();
@@ -176,7 +176,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['red', 'xx'], $oo->foo);
     }
 
-    public function testMerge6()
+    public function testMerge6(): void
     {
         $oo = Factory::mergeSeeds(['4' => 'four'], ['5' => 'five']);
         $this->assertSame(['4' => 'four', '5' => 'five'], $oo);
@@ -197,7 +197,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['4' => ['200']], $oo);
     }
 
-    public function testMergeFail1()
+    public function testMergeFail1(): void
     {
         // works even if more arguments present
         $this->expectException(Exception::class);
@@ -209,7 +209,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['red', 'green', 'xx'], $oo->foo);
     }
 
-    public function testMergeFail2()
+    public function testMergeFail2(): void
     {
         // works even if more arguments present
         $this->expectException(Exception::class);
@@ -221,7 +221,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['red', 'green', 'xx'], $oo->foo);
     }
 
-    public function testBasic()
+    public function testBasic(): void
     {
         $s1 = Factory::factory([FactoryTestMock::class]);
         $this->assertEmpty($s1->args);
@@ -236,7 +236,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame([null, 'world'], $s1->args);
     }
 
-    public function testInjection()
+    public function testInjection(): void
     {
         $s1 = Factory::factory(new FactoryTestDiMock(), null); // @phpstan-ignore-line
         $this->assertNotSame('bar', $s1->foo);
@@ -245,7 +245,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame('bar', $s1->foo);
     }
 
-    public function testArguments()
+    public function testArguments(): void
     {
         /*
         $s1 = Factory::factory([FactoryTestMock::class, 'hello']);
@@ -263,7 +263,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame('bar', $s1->foo);
     }
 
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'foo' => 'bar', 'world'], ['more', 'baz' => '', 'more', 'args']);
         $this->assertTrue($s1 instanceof FactoryTestDiMock);
@@ -274,7 +274,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $s1->setDefaults([]);
     }
 
-    public function testNull()
+    public function testNull(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'foo' => null, null, 'world'], ['more', 'foo' => 'bar', 'more', 'args']);
         $this->assertTrue($s1 instanceof FactoryTestDiMock);
@@ -300,14 +300,14 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['test'], $s1->args);
     }
 
-    public function testDefaultsObject()
+    public function testDefaultsObject(): void
     {
         // $this->expectException(Exception::class);
         $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
         $s1 = Factory::factory([new FactoryTestDiMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
     }
 
-    public function testMerge()
+    public function testMerge(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'world'], ['more', 'more', 'args']);
         $this->assertSame(['hello', 'world', 'args'], $s1->args);
@@ -316,49 +316,49 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['more', 'world', 'args'], $s1->args);
     }
 
-    public function testMerge7()
+    public function testMerge7(): void
     {
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo']);
         $this->assertNull($s1->def);
     }
 
-    public function testMerge8()
+    public function testMerge8(): void
     {
         $s1 = Factory::mergeSeeds(['foo', null, 'arg'], []);
         $this->assertSame(['foo', null, 'arg'], $s1);
     }
 
-    public function testSeedMustBe()
+    public function testSeedMustBe(): void
     {
         $this->expectException(Exception::class);
         $s1 = Factory::factory([], ['foo' => 'bar']);
     }
 
-    public function testClassMayNotBeEmpty()
+    public function testClassMayNotBeEmpty(): void
     {
         $this->expectException(\Error::class);
         $s1 = Factory::factory([''], [FactoryTestDiMock::class, 'test']);
     }
 
-    public function testMystBeDi()
+    public function testMystBeDi(): void
     {
         $this->expectException(Exception::class);
         $s1 = Factory::factory([FactoryTestMock::class, 'hello', 'foo' => 'bar', 'world']);
     }
 
-    public function testMustHaveProperty()
+    public function testMustHaveProperty(): void
     {
         $this->expectException(Exception::class);
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'xxx' => 'bar', 'world']);
     }
 
-    public function testGiveClassFirst()
+    public function testGiveClassFirst(): void
     {
         $this->expectException(Exception::class);
         $s1 = Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore-line
     }
 
-    public function testStringDefault()
+    public function testStringDefault(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class], ['hello']);
         $this->assertTrue($s1 instanceof FactoryTestDiMock);
@@ -373,7 +373,7 @@ class FactoryTest extends AtkPhpunit\TestCase
     /**
      * Cannot inject in non-DI.
      */
-    public function testNonDiInject()
+    public function testNonDiInject(): void
     {
         $this->expectException(Exception::class);
         $s1 = Factory::factory([FactoryTestMock::class], ['foo' => 'hello']);
@@ -384,7 +384,7 @@ class FactoryTest extends AtkPhpunit\TestCase
     /**
      * Test seed property merging.
      */
-    public function testPropertyMerging()
+    public function testPropertyMerging(): void
     {
         $s1 = Factory::factory(
             [FactoryTestDiMock::class, 'foo' => ['Button', 'icon' => 'red']],
@@ -398,7 +398,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         $this->assertSame(['Message', 'detail' => 'blah'], $s1->foo);
     }
 
-    public function testFactory()
+    public function testFactory(): void
     {
         $m = new FactoryFactoryMock();
 
@@ -420,7 +420,7 @@ class FactoryTest extends AtkPhpunit\TestCase
     /**
      * Object factory definition must use ["class name", "x"=>"y"] form.
      */
-    public function testFactoryException1()
+    public function testFactoryException1(): void
     {
         // wrong 1st parameter
         $this->expectException(Exception::class);
@@ -431,7 +431,7 @@ class FactoryTest extends AtkPhpunit\TestCase
     /**
      * Test factory parameters.
      */
-    public function testFactoryParameters()
+    public function testFactoryParameters(): void
     {
         $m = new FactoryFactoryDiMock();
 
@@ -486,7 +486,7 @@ class FactoryTest extends AtkPhpunit\TestCase
      * Object factory can not add not defined properties.
      * Receive as class name.
      */
-    public function testFactoryParametersException1()
+    public function testFactoryParametersException1(): void
     {
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);
@@ -498,7 +498,7 @@ class FactoryTest extends AtkPhpunit\TestCase
      * Object factory can not add not defined properties.
      * Receive as object.
      */
-    public function testFactoryParametersException2()
+    public function testFactoryParametersException2(): void
     {
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);

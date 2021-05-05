@@ -41,7 +41,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
         rmdir($sessionDir);
     }
 
-    public function testException1()
+    public function testException1(): void
     {
         // when try to start session without NameTrait
         $this->expectException(Exception::class);
@@ -49,7 +49,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
         $m->startSession();
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $m = new SessionMock();
 
@@ -63,7 +63,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
     /**
      * Test memorize().
      */
-    public function testMemorize()
+    public function testMemorize(): void
     {
         $m = new SessionMock();
         $m->name = 'test';
@@ -87,7 +87,7 @@ class SessionTraitTest extends AtkPhpunit\TestCase
     /**
      * Test learn(), recall(), forget().
      */
-    public function testLearnRecallForget()
+    public function testLearnRecallForget(): void
     {
         $m = new SessionMock();
         $m->name = 'test';

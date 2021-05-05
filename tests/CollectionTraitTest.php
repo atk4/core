@@ -12,7 +12,7 @@ use Atk4\Core\AtkPhpunit;
  */
 class CollectionTraitTest extends AtkPhpunit\TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $m = new CollectionMock();
         $m->addField('name');
@@ -31,7 +31,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Test Trackable and AppScope.
      */
-    public function testBasicWithApp()
+    public function testBasicWithApp(): void
     {
         $m = new CollectionMockWithApp();
         $m->setApp(new class() {
@@ -54,7 +54,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Bad collection name.
      */
-    public function testException1()
+    public function testException1(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -64,7 +64,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Bad object name.
      */
-    public function testException2()
+    public function testException2(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -74,7 +74,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Already existing object.
      */
-    public function testException3()
+    public function testException3(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -85,7 +85,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Can not remove non existant object.
      */
-    public function testException4()
+    public function testException4(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -95,7 +95,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Can not get non existant object.
      */
-    public function testException5()
+    public function testException5(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -105,7 +105,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Can not get non existant object.
      */
-    public function testException6()
+    public function testException6(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -120,7 +120,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $m = new CollectionMock();
         $m->addField('name');

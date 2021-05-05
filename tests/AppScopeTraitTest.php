@@ -15,7 +15,7 @@ use Atk4\Core\TrackableTrait;
  */
 class AppScopeTraitTest extends AtkPhpunit\TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $m = new AppScopeMock();
         $fakeApp = new \stdClass();
