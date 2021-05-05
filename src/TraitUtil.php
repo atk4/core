@@ -101,7 +101,7 @@ final class TraitUtil
     }
 
     /**
-     * Used in ui\TableColumn\FilterModel\Generic only.
+     * Used in Ui\TableColumn\FilterModel\Generic only.
      */
     public static function hasSessionTrait(object $class): bool
     {

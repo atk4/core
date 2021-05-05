@@ -12,7 +12,7 @@ things like:
 
  - determining name of the class with ability to override
  - passing argument to constructors
- - setting default property values 
+ - setting default property values
 
 Thanks to Factory trait, the following code::
 
@@ -132,7 +132,7 @@ Always try to keep things simple for others and also for yourself.
 Factory
 =======
 
-As mentioned juts above - at some point your "Seed" must be turned into Object. This 
+As mentioned juts above - at some point your "Seed" must be turned into Object. This
 is done by executing factory method.
 
 

@@ -8,8 +8,8 @@ use Atk4\Core;
 
 class TrackableContainerMock
 {
-    use core\ContainerTrait;
-    use core\TrackableTrait;
+    use Core\ContainerTrait;
+    use Core\TrackableTrait;
 
     public function getElementCount()
     {

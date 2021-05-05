@@ -238,7 +238,7 @@ class FactoryTest extends AtkPhpunit\TestCase
 
     public function testInjection()
     {
-        $s1 = Factory::factory(new FactoryTestDiMock(), null);
+        $s1 = Factory::factory(new FactoryTestDiMock(), null); // @phpstan-ignore-line
         $this->assertNotSame('bar', $s1->foo);
 
         $s1 = Factory::factory(new FactoryTestDiMock(), ['foo' => 'bar']);
@@ -355,7 +355,7 @@ class FactoryTest extends AtkPhpunit\TestCase
     public function testGiveClassFirst()
     {
         $this->expectException(Exception::class);
-        $s1 = Factory::factory(['foo' => 'bar'], new FactoryTestDiMock());
+        $s1 = Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore-line
     }
 
     public function testStringDefault()

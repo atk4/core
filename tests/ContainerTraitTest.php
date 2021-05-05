@@ -124,7 +124,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         // passing name with array key 'name'
         $m = new ContainerMock();
         $m2 = $m->add(new class() extends TrackableMock {
-            use core\DiContainerTrait;
+            use Core\DiContainerTrait;
         }, ['name' => 'foo']);
         $this->assertTrue($m->hasElement('foo'));
         $this->assertSame('foo', $m2->short_name);
@@ -132,7 +132,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
 
     public function testExceptionExists()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 'foo');
         $m->add(new TrackableMock(), 'foo');
@@ -149,7 +149,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
 
     public function testExceptionShortName()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m1 = new ContainerMock();
         $m2 = new ContainerMock();
         $m1foo = $m1->add(new TrackableMock(), 'foo');
@@ -161,9 +161,9 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
 
     public function testExceptionArg2()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
-        $m->add(new TrackableMock(), 123);
+        $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
     }
 
     public function testException3()
@@ -171,19 +171,19 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->expectException(\Error::class);
         $this->expectExceptionMessage(PHP_MAJOR_VERSION < 8 ? 'Class \'hello\' not found' : 'Class "hello" not found');
         $m = new ContainerMock();
-        $m->add(['hello'], 123);
+        $m->add(['hello'], 123); // @phpstan-ignore-line
     }
 
     public function testException4()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
         $el = $m->getElement('dont_exist');
     }
 
     public function testException5()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
         $m->removeElement('dont_exist');
     }
@@ -191,19 +191,19 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
 
 class TrackableMock
 {
-    use core\TrackableTrait;
+    use Core\TrackableTrait;
 }
 class ContainerFactoryMock
 {
-    use core\ContainerTrait;
-    use core\NameTrait;
+    use Core\ContainerTrait;
+    use Core\NameTrait;
 }
 
 class ContainerAppMock
 {
-    use core\AppScopeTrait;
-    use core\ContainerTrait;
-    use core\TrackableTrait;
+    use Core\AppScopeTrait;
+    use Core\ContainerTrait;
+    use Core\TrackableTrait;
 
     public function getElementCount()
     {

@@ -39,12 +39,12 @@ class InitializerTraitTest extends AtkPhpunit\TestCase
 
 class ContainerMock2
 {
-    use core\ContainerTrait;
+    use Core\ContainerTrait;
 }
 
 class _InitializerMock
 {
-    use core\InitializerTrait;
+    use Core\InitializerTrait;
 }
 
 class InitializerMock extends _InitializerMock
