@@ -31,7 +31,6 @@ trait SessionTrait
                 // @codeCoverageIgnoreStart - impossible to test
                 throw new Exception('Sessions are disabled on server');
                 // @codeCoverageIgnoreEnd
-                break;
             case PHP_SESSION_NONE:
                 session_start($options);
 
