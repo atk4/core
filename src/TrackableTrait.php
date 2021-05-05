@@ -16,14 +16,14 @@ trait TrackableTrait
     /**
      * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
      *
-     * @var object
+     * @var object|null
      */
     private $owner;
 
     /**
      * Link to (parent) object into which we added this object.
      *
-     * @var object
+     * @var object|null
      */
     private $_owner;
 

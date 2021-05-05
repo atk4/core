@@ -134,9 +134,7 @@ trait DiContainerTrait
         $seed = static::_fromSeedPrecheck($seed, false);
         $object = Factory::factory($seed, $defaults);
 
-        static::assertInstanceOf($object);
-
-        return $object;
+        return static::assertInstanceOf($object);
     }
 
     /**
@@ -155,6 +153,6 @@ trait DiContainerTrait
         $seed = static::_fromSeedPrecheck($seed, true);
         $object = Factory::factory($seed, $defaults);
 
-        return $object;
+        return $object; // @phpstan-ignore-line
     }
 }

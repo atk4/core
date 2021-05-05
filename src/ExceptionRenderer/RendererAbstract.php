@@ -234,7 +234,7 @@ abstract class RendererAbstract
         $filePathArr = explode(\DIRECTORY_SEPARATOR, ltrim($pathReal, '/\\'));
         $vendorRootArr = explode(\DIRECTORY_SEPARATOR, ltrim($this->getVendorDirectory(), '/\\'));
         if ($filePathArr[0] !== $vendorRootArr[0]) {
-            return $filePathArr;
+            return implode('/', $filePathArr);
         }
 
         array_pop($vendorRootArr); // assume parent directory as project directory
