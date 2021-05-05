@@ -60,7 +60,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      *
      * @return static
      */
-    public function setProtected(object $obj, string $name, &$value, bool $byReference = false)
+    public function setProtected(object $obj, string $name, &$value, bool $byReference = false): self
     {
         \Closure::bind(static function () use ($obj, $name, &$value, $byReference) {
             if ($byReference) {

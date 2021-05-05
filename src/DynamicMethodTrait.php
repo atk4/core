@@ -19,7 +19,7 @@ trait DynamicMethodTrait
      *
      * @return mixed
      */
-    public function __call(string $name, $args)
+    public function __call(string $name, array $args)
     {
         if ($ret = $this->tryCall($name, $args)) {
             return reset($ret);
@@ -44,7 +44,7 @@ trait DynamicMethodTrait
      *
      * @return mixed
      */
-    public function tryCall($name, $args)
+    public function tryCall(string $name, array $args)
     {
         if (TraitUtil::hasHookTrait($this) && $ret = $this->hook($this->buildMethodHookName($name, false), $args)) {
             return $ret;

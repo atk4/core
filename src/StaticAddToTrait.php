@@ -35,7 +35,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false)// :static supported by PHP8+
+    public static function addTo(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false): self
     {
         $object = static::fromSeed([static::class], $seed);
 
@@ -51,7 +51,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithCl(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false)// :static supported by PHP8+
+    public static function addToWithCl(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false): self
     {
         $object = static::fromSeed($seed);
 

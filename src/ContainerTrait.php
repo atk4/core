@@ -212,7 +212,7 @@ trait ContainerTrait
     /**
      * @param string $short_name Short name of the child element
      */
-    public function hasElement($short_name): bool
+    public function hasElement(string $short_name): bool
     {
         return isset($this->elements[$short_name]);
     }

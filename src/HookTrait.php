@@ -173,7 +173,7 @@ trait HookTrait
      *
      * @return static
      */
-    public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
+    public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false): self
     {
         if ($priority !== null) {
             if ($priorityIsIndex) {

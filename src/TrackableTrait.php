@@ -61,7 +61,7 @@ trait TrackableTrait
     /**
      * @return static
      */
-    public function setOwner(object $owner)
+    public function setOwner(object $owner): self
     {
         $this->assertNoDirectOwnerAssignment();
         if ($this->issetOwner()) {
@@ -78,7 +78,7 @@ trait TrackableTrait
      *
      * @return static
      */
-    public function unsetOwner()
+    public function unsetOwner(): self
     {
         $this->assertNoDirectOwnerAssignment();
         if (!$this->issetOwner()) {

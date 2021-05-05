@@ -103,7 +103,7 @@ trait AppScopeTrait
      *
      * @return static
      */
-    public function setApp(object $app)
+    public function setApp(object $app): self
     {
         $this->assertNoDirectAppAssignment();
         $this->assertInstanceOfApp($app);

@@ -78,7 +78,7 @@ trait DiContainerTrait
      *
      * @return static
      */
-    public static function assertInstanceOf(object $object)// :static supported by PHP8+
+    public static function assertInstanceOf(object $object): self
     {
         if (!($object instanceof static)) {
             throw (new Exception('Object is not an instance of static class'))
@@ -129,7 +129,7 @@ trait DiContainerTrait
      *
      * @return static
      */
-    public static function fromSeed($seed = [], $defaults = [])// :static supported by PHP8+
+    public static function fromSeed($seed = [], $defaults = []): self
     {
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
