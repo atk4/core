@@ -8,10 +8,8 @@ trait SessionTrait
 {
     /**
      * Session container key.
-     *
-     * @var string
      */
-    protected $session_key = '__atk_session';
+    protected string $session_key = '__atk_session';
 
     /**
      * Create new session.

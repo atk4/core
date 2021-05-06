@@ -8,8 +8,8 @@ use Atk4\Core\Exception;
 
 class Json extends RendererAbstract
 {
-    /** @var array */
-    protected $json = [
+    /** @var array<string, mixed> */
+    protected array $json = [
         'success' => false,
         'code' => 0,
         'message' => '',

@@ -15,24 +15,18 @@ trait TrackableTrait
 
     /**
      * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
-     *
-     * @var object|null
      */
-    private $owner;
+    private object $owner;
 
     /**
      * Link to (parent) object into which we added this object.
-     *
-     * @var object|null
      */
-    private $_owner;
+    private object $_owner;
 
     /**
      * Name of the object in owner's element array.
-     *
-     * @var string
      */
-    public $short_name;
+    public string $short_name;
 
     /**
      * To be removed in Jan 2021.

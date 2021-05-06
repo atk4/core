@@ -12,10 +12,8 @@ trait InitializerTrait
 {
     /**
      * To make sure you have called parent::init() properly.
-     *
-     * @var bool
      */
-    public $_initialized = false;
+    public bool $_initialized = false;
 
     /**
      * Initialize object. Always call parent::init(). Do not call directly.

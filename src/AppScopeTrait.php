@@ -41,10 +41,8 @@ trait AppScopeTrait
      * max_name_length defined.
      *
      * Minimum is 40
-     *
-     * @var int
      */
-    public $max_name_length = 60;
+    public int $max_name_length = 60;
 
     /**
      * As more names are shortened, the substituted part is being placed into
@@ -54,9 +52,9 @@ trait AppScopeTrait
      * this functionality is not essential and excluded from traits. You
      * can find it in a test suite.
      *
-     * @var array
+     * @var array<string, string>
      */
-    public $unique_hashes = [];
+    public array $unique_hashes = [];
 
     protected function assertInstanceOfApp(object $app): void
     {

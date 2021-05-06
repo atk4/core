@@ -18,10 +18,8 @@ trait ConfigTrait
 {
     /**
      * This property stores config values. Use getConfig() method to access its values.
-     *
-     * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * Read config file or files and store it in $config property.

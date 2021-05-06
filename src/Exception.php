@@ -11,25 +11,20 @@ use Atk4\Core\Translator\ITranslatorAdapter;
  */
 class Exception extends \Exception
 {
-    /** @var array */
-    public $params = [];
+    public array $params = [];
 
-    /** @var string */
-    protected $custom_exception_title = 'Critical Error';
+    protected string $custom_exception_title = 'Critical Error';
 
     /**
      * Most exceptions would be a cause by some other exception, Agile
      * Core will encapsulate them and allow you to access them anyway.
-     *
-     * @var array
      */
-    private $trace2; // because PHP's use of final() sucks!
+    private array $trace2; // because PHP's use of final() sucks!
 
     /** @var string[] */
-    private $solutions = []; // store solutions
+    private array $solutions = []; // store solutions
 
-    /** @var ITranslatorAdapter */
-    private $adapter;
+    private ITranslatorAdapter $adapter;
 
     public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
     {

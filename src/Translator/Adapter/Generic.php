@@ -16,8 +16,7 @@ class Generic implements ITranslatorAdapter
         setConfig as protected;
     }
 
-    /** @var array */
-    protected $definitions = [];
+    protected array $definitions = [];
 
     /**
      * {@inheritdoc}

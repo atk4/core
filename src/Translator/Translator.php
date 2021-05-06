@@ -18,17 +18,15 @@ class Translator
         setDefaults as protected _setDefaults;
     }
 
-    /** @var self */
-    private static $instance;
+    private static self $instance;
 
-    /** @var ITranslatorAdapter */
-    private $adapter;
+    private ITranslatorAdapter $adapter;
 
     /** @var string Default domain of translations */
-    protected $default_domain = 'atk';
+    protected string $default_domain = 'atk';
 
     /** @var string Default language of translations */
-    protected $default_locale = 'en';
+    protected string $default_locale = 'en';
 
     /**
      * Singleton no public constructor.

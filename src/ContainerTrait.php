@@ -14,14 +14,14 @@ trait ContainerTrait
      * short_name => object hash of children objects. If the child is not
      * trackable, then object will be set to "true" (to avoid extra reference).
      *
-     * @var array
+     * @var array<string, object>
      */
-    public $elements = [];
+    public array $elements = [];
 
     /**
      * @var int[]
      */
-    private $_element_name_counts = [];
+    private array $_element_name_counts = [];
 
     /**
      * Returns unique element name based on desired name.

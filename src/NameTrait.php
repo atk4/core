@@ -11,8 +11,6 @@ trait NameTrait
 {
     /**
      * Unique object name.
-     *
-     * @var string
      */
-    public $name;
+    public string $name;
 }

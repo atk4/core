@@ -9,10 +9,10 @@ use Psr\Log\LogLevel;
 trait DebugTrait
 {
     /** @var bool Is debug enabled? */
-    public $debug = false;
+    public bool $debug = false;
 
     /** @var array Helps debugTraceChange. */
-    protected $_prev_bt = [];
+    protected array $_prev_bt = [];
 
     /**
      * Outputs message to STDERR.

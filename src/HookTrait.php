@@ -11,19 +11,17 @@ trait HookTrait
      *
      * @var array<string, array<int, array{0: \Closure, 1?: array<int, mixed>}>>
      */
-    protected $hooks = [];
+    protected array $hooks = [];
 
     /**
      * Next hook index counter.
-     *
-     * @var int
      */
-    private $_hookIndexCounter = 0;
+    private int $_hookIndexCounter = 0;
 
     /**
      * @var static
      */
-    private $_hookOrigThis;
+    private self $_hookOrigThis;
 
     private function _rebindHooksIfCloned(): void
     {

@@ -20,11 +20,9 @@ abstract class RendererAbstract
     /** @var \Throwable|Exception|null */
     public $parent_exception;
 
-    /** @var string */
-    public $output = '';
+    public string $output = '';
 
-    /** @var ITranslatorAdapter|null */
-    public $adapter;
+    public ?ITranslatorAdapter $adapter;
 
     public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parent_exception = null)
     {
