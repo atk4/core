@@ -49,6 +49,10 @@ class AppScopeMock
     use ContainerTrait;
     use NameTrait;
 
+    /**
+     * @param mixed        $obj
+     * @param array|string $args
+     */
     public function add($obj, $args = []): object
     {
         return $this->_add_Container($obj, $args);
@@ -59,6 +63,10 @@ class AppScopeMock2
 {
     use ContainerTrait;
 
+    /**
+     * @param mixed        $obj
+     * @param array|string $args
+     */
     public function add($obj, $args = []): object
     {
         return $this->_add_Container($obj, $args);

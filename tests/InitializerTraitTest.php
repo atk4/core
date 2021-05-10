@@ -49,6 +49,7 @@ class _InitializerMock
 
 class InitializerMock extends _InitializerMock
 {
+    /** @var bool */
     public $result = false;
 
     protected function init(): void

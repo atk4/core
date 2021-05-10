@@ -205,26 +205,23 @@ class ContainerAppMock
     use Core\ContainerTrait;
     use Core\TrackableTrait;
 
-    public function getElementCount()
+    public function getElementCount(): int
     {
         return count($this->elements);
     }
 
-    public function unshortenName()
+    public function unshortenName(): string
     {
         $n = $this->name;
 
         $d = array_flip($this->getApp()->unique_hashes);
 
-        for ($x = 1; $x < 100; ++$x) {
-            @[$l, $r] = explode('__', $n);
-
-            if (!$r) {
-                return $l;
-            }
-
+        for ($x = 0; strpos($n, '__') !== false && $x < 100; ++$x) {
+            [$l, $r] = explode('__', $n);
             $l = $d[$l];
             $n = $l . $r;
         }
+
+        return $n;
     }
 }

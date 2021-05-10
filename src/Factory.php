@@ -50,6 +50,9 @@ class Factory
         'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), \E_USER_DEPRECATED);
     }
 
+    /**
+     * @param mixed $seed
+     */
     private function checkSeeFunc($seed): ?string
     {
         if (is_object($seed) || $seed === null) {
@@ -76,6 +79,11 @@ class Factory
         return 'non-existing/non-autoloadable (' . $seed[0] . ')';
     }
 
+    /**
+     * @param array|object|null ...$seeds
+     *
+     * @return array|object
+     */
     protected function _mergeSeeds(...$seeds)
     {
         // merge seeds but prefer seed over seed2
@@ -167,6 +175,10 @@ class Factory
         return new $className(...$ctorArgs);
     }
 
+    /**
+     * @param array|object $seed
+     * @param array        $defaults
+     */
     protected function _factory($seed, $defaults = []): object
     {
         if (is_object($defaults)) {
@@ -234,6 +246,8 @@ class Factory
      *
      * To learn more about mechanics of factory trait, see documentation
      *
+     * @param array|object|null ...$seeds
+     *
      * @return object|array if at least one seed is an object, will return object
      */
     final public static function mergeSeeds(...$seeds)
@@ -251,7 +265,8 @@ class Factory
      *
      * To learn more about mechanics of factory trait, see documentation
      *
-     * @param array $defaults
+     * @param array|object $seed
+     * @param array        $defaults
      */
     final public static function factory($seed, $defaults = []): object
     {

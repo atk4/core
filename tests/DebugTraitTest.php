@@ -121,9 +121,9 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(['hello user', []], $app->message);
     }
 
-    protected function triggerDebugTraceChange($o, $label)
+    protected function triggerDebugTraceChange(DebugMock $o, string $trace): void
     {
-        $o->debugTraceChange($label);
+        $o->debugTraceChange($trace);
     }
 
     public function testTraceChange(): void
@@ -195,7 +195,7 @@ class DebugMock
         _echo_stderr as __echo_stderr;
     }
 
-    protected function _echo_stderr($message)
+    protected function _echo_stderr(string $message): void
     {
         echo $message;
     }
@@ -205,9 +205,15 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
 {
     use \Psr\Log\LoggerTrait;
 
+    /** @var array<int, mixed>|null */
     public $log;
+    /** @var self */
     public $logger;
 
+    /**
+     * @param mixed  $level
+     * @param string $message
+     */
     public function log($level, $message, array $context = [])
     {
         $this->log = [$level, $message, $context];
@@ -216,6 +222,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
 
 class DebugAppMock2 implements \Atk4\Core\AppUserNotificationInterface
 {
+    /** @var array<int, mixed> */
     public $message;
 
     public function userNotification(string $message, array $context = []): void

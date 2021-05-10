@@ -10,5 +10,6 @@ class FieldMock
 {
     use DiContainerTrait;
 
+    /** @var string */
     public $name;
 }

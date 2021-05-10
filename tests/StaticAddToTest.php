@@ -36,8 +36,11 @@ class DiMockSat
     use DiContainerTrait;
     use StaticAddToTrait;
 
+    /** @var string */
     public $a = 'AAA';
+    /** @var string */
     public $b = 'BBB';
+    /** @var string */
     public $c;
 }
 
@@ -46,11 +49,14 @@ class DiConstructorMockSat
     use DiContainerTrait;
     use StaticAddToTrait;
 
+    /** @var string */
     public $a = 'AAA';
+    /** @var string */
     public $b = 'BBB';
+    /** @var string */
     public $c;
 
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->c = $name;
     }

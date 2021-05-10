@@ -12,6 +12,7 @@ use Atk4\Core\ConfigTrait;
  */
 class ConfigTraitTest extends AtkPhpunit\TestCase
 {
+    /** @var string */
     public $dir = __DIR__ . '/config_test';
 
     /**

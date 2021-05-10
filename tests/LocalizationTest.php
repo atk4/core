@@ -52,12 +52,8 @@ class LocalizationTest extends AtkPhpunit\TestCase
         } catch (Exception $e) {
             // emulate an external translator already configured
             $e->setTranslatorAdapter(new class() implements ITranslatorAdapter {
-                public function _(
-                    string $message,
-                    array $parameters = [],
-                    string $domain = null,
-                    string $locale = null
-                ): string {
+                public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
+                {
                     return 'external translator';
                 }
             });

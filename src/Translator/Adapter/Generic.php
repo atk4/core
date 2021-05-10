@@ -81,7 +81,7 @@ class Generic implements ITranslatorAdapter
     /**
      * @return array|string|null
      */
-    protected function getDefinition(string $message, $domain, ?string $locale)
+    protected function getDefinition(string $message, string $domain, ?string $locale)
     {
         $this->loadDefinitionAtk($locale); // need to be called before manual add
 

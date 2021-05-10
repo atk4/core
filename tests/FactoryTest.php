@@ -414,7 +414,7 @@ class FactoryTest extends AtkPhpunit\TestCase
         // from string seed
         // $this->expectException(Exception::class);
         $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
-        Factory::factory(FactoryFactoryMock::class);
+        Factory::factory(FactoryFactoryMock::class); // @phpstan-ignore-line
     }
 
     /**
@@ -510,10 +510,16 @@ class FactoryTest extends AtkPhpunit\TestCase
 
 class FactoryTestMock
 {
+    /** @var array<mixed> */
     public $args;
+    /** @var int|string|array<int, string> */
     public $foo;
+    /** @var int|string */
     public $baz = 0;
 
+    /**
+     * @param mixed ...$args
+     */
     public function __construct(...$args)
     {
         $this->args = $args;
@@ -530,8 +536,10 @@ class FactoryTestViewMock extends FactoryTestMock
     use DiContainerTrait {
         setDefaults as _setDefaults;
     }
-    public $def;
 
+    /**
+     * @return $this
+     */
     public function setDefaults(array $properties, bool $passively = false)
     {
         if (array_key_exists('foo', $properties)) {
@@ -552,18 +560,28 @@ class FactoryTestDefMock extends FactoryTestMock
     use DiContainerTrait {
         setDefaults as _setDefaults;
     }
+
+    /** @var array<string, mixed> */
     public $def;
 
+    /**
+     * @return $this
+     */
     public function setDefaults(array $properties, bool $passively = false)
     {
         $this->def = $properties;
+
+        return $this;
     }
 }
 
 class FactoryFactoryMock
 {
+    /** @var string */
     public $a = 'AAA';
+    /** @var string */
     public $b = 'BBB';
+    /** @var string */
     public $c;
 }
 
@@ -571,7 +589,10 @@ class FactoryFactoryDiMock
 {
     use DiContainerTrait;
 
+    /** @var string */
     public $a = 'AAA';
+    /** @var string */
     public $b = 'BBB';
+    /** @var string */
     public $c;
 }

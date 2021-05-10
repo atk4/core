@@ -8,9 +8,9 @@ use Atk4\Core\AtkPhpunit;
 
 abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
 {
-    abstract public function getTranslatableMock();
+    abstract public function getTranslatableMock(): object;
 
-    public function translate($message, $params, $context, $locale)
+    public function translate(string $message, array $params, string $context, string $locale): string
     {
         $mock = $this->getTranslatableMock();
 

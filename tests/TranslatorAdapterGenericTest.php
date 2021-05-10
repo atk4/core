@@ -12,7 +12,7 @@ use Atk4\Data\Locale;
 
 class TranslatorAdapterGenericTest extends TranslatorAdapterBase
 {
-    public function getTranslatableMock()
+    public function getTranslatableMock(): object
     {
         return new class() {
             use TranslatableTrait;

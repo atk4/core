@@ -65,16 +65,8 @@ class HookTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(1, $result);
     }
 
+    /** @var int */
     private $result = 0;
-
-    public function tst($obj = null, $inc = 1)
-    {
-        if ($obj === null) {
-            // because phpunit tries to execute this method
-            return;
-        }
-        $this->result += $inc;
-    }
 
     public function testHookException1(): void
     {
@@ -420,9 +412,10 @@ class HookMock
 {
     use HookTrait;
 
+    /** @var int */
     public $result = 0;
 
-    public function incrementResult()
+    public function incrementResult(): void
     {
         ++$this->result;
     }
@@ -432,7 +425,7 @@ class HookWithDynamicMethodMock extends HookMock
 {
     use \Atk4\Core\DynamicMethodTrait;
 
-    public function foo()
+    public function foo(): void
     {
     }
 }

@@ -145,6 +145,8 @@ trait ContainerTrait
      * Remove child element if it exists.
      *
      * @param string|object $short_name short name of the element
+     *
+     * @return $this
      */
     public function removeElement($short_name)
     {

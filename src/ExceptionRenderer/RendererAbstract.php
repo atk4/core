@@ -103,7 +103,10 @@ abstract class RendererAbstract
         return $parsed;
     }
 
-    public static function toSafeString($val, $allowNl = false, int $maxDepth = 2): string
+    /**
+     * @param mixed $val
+     */
+    public static function toSafeString($val, bool $allowNl = false, int $maxDepth = 2): string
     {
         if ($val instanceof \Closure) {
             return 'closure';
@@ -207,7 +210,7 @@ abstract class RendererAbstract
         return $trace;
     }
 
-    public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
+    public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         return $this->adapter
             ? $this->adapter->_($message, $parameters, $domain, $locale)

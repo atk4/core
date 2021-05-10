@@ -89,6 +89,11 @@ trait DiContainerTrait
         return $object;
     }
 
+    /**
+     * @param array|object $seed
+     *
+     * @return array|object
+     */
     private static function _fromSeedPrecheck($seed, bool $unsafe)// :self is too strict with unsafe behaviour
     {
         if (!is_object($seed)) {
@@ -119,7 +124,8 @@ trait DiContainerTrait
      * The best, typehinting-friendly, way to create an object if it should not be
      * immediately added to a parent (otherwise use addTo() method).
      *
-     * @param array|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed     the first element specifies a class name, other elements are seed
+     * @param array        $defaults
      *
      * @return static
      */
@@ -138,7 +144,8 @@ trait DiContainerTrait
     /**
      * Same as fromSeed(), but the new object is not asserted to be an instance of this class.
      *
-     * @param array|object $seed the first element specifies a class name, other elements are seed
+     * @param array|object $seed     the first element specifies a class name, other elements are seed
+     * @param array        $defaults
      *
      * @return static
      */
