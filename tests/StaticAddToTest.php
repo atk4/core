@@ -76,7 +76,7 @@ class StaticAddToTest extends AtkPhpunit\TestCase
 
         // not the same or extended class
         $this->expectException(\Atk4\Core\Exception::class);
-        $tr = StdSat::addTo($m, $tr);
+        $tr = StdSat::addTo($m, $tr); // @phpstan-ignore-line
     }
 
     public function testAssertInstanceOf()

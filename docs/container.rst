@@ -60,7 +60,7 @@ CollectionTrait
     This trait makes it possible for you to add child objects
     into your object, but unlike "ContainerTrait" you can use
     multiple collections stored as different array properties.
- 
+
     This class does not offer automatic naming, so if you try
     to add another element with same name, it will result in
     exception.
@@ -69,7 +69,7 @@ Example::
 
     class Form
     {
-        use core\CollectionTrait;
+        use Core\CollectionTrait;
 
         protected $fields = [];
 
@@ -121,7 +121,7 @@ Methods
 
     Return object if it exits in collection and false otherwise
 
-.. php:method:: _getFromCollection(string $name, string $collection)o    
+.. php:method:: _getFromCollection(string $name, string $collection)o
 
     Same as _hasInCollection but throws exception if element is not found
 

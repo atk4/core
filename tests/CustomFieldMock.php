@@ -16,7 +16,7 @@ class CustomFieldMock extends FieldMock
     }
     use TrackableTrait;
 
-    /** @var null verifying if init wal called */
+    /** @var bool verifying if init was called */
     public $var;
 
     protected function init(): void

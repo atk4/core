@@ -12,9 +12,6 @@ use Atk4\Core\AtkPhpunit;
  */
 class CollectionTraitTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testBasic()
     {
         $m = new CollectionMock();
@@ -59,7 +56,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
      */
     public function testException1()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->_addIntoCollection('foo', (object) [], ''); // empty collection name
     }
@@ -69,7 +66,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
      */
     public function testException2()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->_addIntoCollection('', (object) [], 'fields'); // empty object name
     }
@@ -79,7 +76,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
      */
     public function testException3()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->_addIntoCollection('foo', (object) [], 'fields');
         $m->_addIntoCollection('foo', (object) [], 'fields'); // already exists
@@ -90,7 +87,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
      */
     public function testException4()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->_removeFromCollection('dont_exist', 'fields'); // do not exist
     }
@@ -100,7 +97,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
      */
     public function testException5()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->_getFromCollection('dont_exist', 'fields'); // do not exist
     }
@@ -110,11 +107,11 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
      */
     public function testException6()
     {
-        $this->expectException(core\Exception::class);
+        $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->addField('test', new class() {
-            use core\DiContainerTrait;
-            use core\InitializerTrait;
+            use Core\DiContainerTrait;
+            use Core\InitializerTrait;
             public $name;
 
             protected function init(): void
@@ -141,6 +138,6 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
  */
 class CollectionMockWithApp extends CollectionMock
 {
-    use core\AppScopeTrait;
-    use core\TrackableTrait;
+    use Core\AppScopeTrait;
+    use Core\TrackableTrait;
 }

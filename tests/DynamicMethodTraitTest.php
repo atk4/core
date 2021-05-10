@@ -15,9 +15,6 @@ use Atk4\Core\HookTrait;
  */
 class DynamicMethodTraitTest extends AtkPhpunit\TestCase
 {
-    /**
-     * Test constructor.
-     */
     public function testConstruct()
     {
         $m = new DynamicMethodMock();

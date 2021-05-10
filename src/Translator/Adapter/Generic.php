@@ -79,7 +79,7 @@ class Generic implements ITranslatorAdapter
     }
 
     /**
-     * @return array|string
+     * @return array|string|null
      */
     protected function getDefinition(string $message, $domain, ?string $locale)
     {

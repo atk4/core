@@ -54,7 +54,7 @@ trait DebugTrait
     /**
      * Output log message.
      *
-     * @param string $level
+     * @param mixed  $level
      * @param string $message
      *
      * @return $this

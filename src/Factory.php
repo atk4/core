@@ -88,8 +88,7 @@ class Factory
             if (is_object($seed)) {
                 if ($obj !== null) {
                     continue; // legacy behaviour
-
-                    throw new \Exception('Two or more objects specified as seed.');
+                    // throw new \Exception('Two or more objects specified as seed.');
                 }
 
                 $obj = $seed;

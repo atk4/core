@@ -35,7 +35,7 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
 
         if (is_a($e->getClassName(), Exception::class, true)) {
             if ($e->getOriginalException() !== null) { // original exception is not available when run with process isolation
-                $string .= $this->atkExceptionParamsToString($e->getOriginalException());
+                $string .= $this->atkExceptionParamsToString($e->getOriginalException()); // @phpstan-ignore-line
             }
         }
 
