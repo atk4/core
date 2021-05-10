@@ -32,8 +32,6 @@ namespace Atk4\Core;
  */
 trait DiContainerTrait
 {
-    use StaticPropNameTrait;
-
     /**
      * Call from __construct() to initialize the properties allowing
      * developer to pass Dependency Injector Container.
