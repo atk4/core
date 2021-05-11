@@ -20,7 +20,7 @@ trait ReadableCaptionTrait
         $s = ucwords(preg_replace('/[^a-z0-9]+/i', ' ', $s));
 
         // and then run regex to split camelcased words too
-        $s = array_map('trim', preg_split('/^[^A-Z\d]+\K|[A-Z\d][^A-Z\d]+\K/', $s, -1, PREG_SPLIT_NO_EMPTY));
+        $s = array_map('trim', preg_split('/^[^A-Z\d]+\K|[A-Z\d][^A-Z\d]+\K/', $s, -1, \PREG_SPLIT_NO_EMPTY));
         $s = implode(' ', $s);
 
         return $s;

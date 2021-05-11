@@ -141,7 +141,7 @@ class ExceptionTest extends AtkPhpunit\TestCase
                         'message' => 'just to cover __string',
                     ],
                 ],
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+                \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
             ),
             $m->getJson()
         );

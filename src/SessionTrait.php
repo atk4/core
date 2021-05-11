@@ -27,11 +27,11 @@ trait SessionTrait
         }
 
         switch (session_status()) {
-            case PHP_SESSION_DISABLED:
+            case \PHP_SESSION_DISABLED:
                 // @codeCoverageIgnoreStart - impossible to test
                 throw new Exception('Sessions are disabled on server');
                 // @codeCoverageIgnoreEnd
-            case PHP_SESSION_NONE:
+            case \PHP_SESSION_NONE:
                 session_start($options);
 
                 break;
@@ -43,7 +43,7 @@ trait SessionTrait
      */
     public function destroySession()
     {
-        if (session_status() === PHP_SESSION_ACTIVE) {
+        if (session_status() === \PHP_SESSION_ACTIVE) {
             session_destroy();
             unset($_SESSION);
         }
