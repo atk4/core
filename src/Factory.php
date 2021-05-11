@@ -6,8 +6,7 @@ namespace Atk4\Core;
 
 class Factory
 {
-    /** @var Factory */
-    private static $_instance;
+    private static ?Factory $_instance = null;
 
     protected function __construct()
     {
