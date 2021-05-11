@@ -41,3 +41,6 @@ parameters:
 
         # PHPStan issue https://github.com/phpstan/phpstan/issues/4167
         - '~^Variable \$brokenBy in PHPDoc tag @var does not match assigned variable \$ret\.$~'
+
+        # PHPStan issue https://github.com/phpstan/phpstan/discussions/4985
+        - '~^Call to an undefined method Atk4\\Core\\Tests\\FieldMock::getOwner\(\)\.$~'
