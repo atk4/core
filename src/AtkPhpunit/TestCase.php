@@ -15,7 +15,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * NOTE: this method must only be used for low-level functionality, not
      * for general test-scripts.
      *
-     * @param mixed $args
+     * @param mixed ...$args
      *
      * @return mixed
      */

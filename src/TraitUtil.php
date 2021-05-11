@@ -57,7 +57,6 @@ final class TraitUtil
      * ConfigTrait - not used
      * DebugTrait - not used
      * DynamicMethodTrait - not used
-     * FactoryTrait - not used
      * StaticAddToTrait - not used
      * TranslatableTrait - not used
      *
