@@ -15,6 +15,8 @@ class TestCase extends \PHPUnit\Framework\TestCase
      * NOTE: this method must only be used for low-level functionality, not
      * for general test-scripts.
      *
+     * @param mixed ...$args
+     *
      * @return mixed
      */
     public function &callProtected(object $obj, string $name, ...$args)

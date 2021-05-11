@@ -11,7 +11,7 @@ class ContainerMock
     use Core\ContainerTrait;
     use Core\NameTrait;
 
-    public function getElementCount()
+    public function getElementCount(): int
     {
         return count($this->elements);
     }

@@ -8,7 +8,7 @@ use Atk4\Core\AppScopeTrait;
 use Atk4\Core\InitializerTrait;
 use Atk4\Core\TrackableTrait;
 
-class CustomFieldMock extends FieldMock
+class FieldMockCustom extends FieldMock
 {
     use AppScopeTrait;
     use InitializerTrait {

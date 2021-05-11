@@ -12,17 +12,19 @@ use Atk4\Core\AtkPhpunit;
  */
 class CollectionTraitTest extends AtkPhpunit\TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $m = new CollectionMock();
         $m->addField('name');
 
         $this->assertTrue($m->hasField('name'));
 
-        $m->addField('surname', [CustomFieldMock::class]);
+        $m->addField('surname', [FieldMockCustom::class]);
 
-        $this->assertSame(CustomFieldMock::class, get_class($m->getField('surname')));
-        $this->assertTrue($m->getField('surname')->var);
+        $this->assertSame(FieldMockCustom::class, get_class($m->getField('surname')));
+        /** @var FieldMockCustom $field */
+        $field = $m->getField('surname');
+        $this->assertTrue($field->var);
 
         $m->removeField('name');
         $this->assertFalse($m->hasField('name'));
@@ -31,30 +33,33 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Test Trackable and AppScope.
      */
-    public function testBasicWithApp()
+    public function testBasicWithApp(): void
     {
         $m = new CollectionMockWithApp();
         $m->setApp(new class() {
+            /** @var string */
             public $name = 'app';
+            /** @var int */
             public $max_name_length = 40;
         });
         $m->name = 'form';
 
-        $surname = $m->addField('surname', [CustomFieldMock::class]);
+        /** @var FieldMockCustom $surnameField */
+        $surnameField = $m->addField('surname', [FieldMockCustom::class]);
 
-        $this->assertSame('app', $surname->getApp()->name);
+        $this->assertSame('app', $surnameField->getApp()->name);
 
-        $this->assertSame('form-fields_surname', $surname->name);
-        $this->assertSame($surname->getOwner(), $m);
+        $this->assertSame('form-fields_surname', $surnameField->name);
+        $this->assertSame($m, $surnameField->getOwner());
 
-        $long = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [CustomFieldMock::class]);
-        $this->assertSame(40, strlen($long->name));
+        $longField = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [FieldMockCustom::class]);
+        $this->assertSame(40, strlen($longField->name));
     }
 
     /**
      * Bad collection name.
      */
-    public function testException1()
+    public function testException1(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -64,7 +69,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Bad object name.
      */
-    public function testException2()
+    public function testException2(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -74,7 +79,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Already existing object.
      */
-    public function testException3()
+    public function testException3(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -85,7 +90,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Can not remove non existant object.
      */
-    public function testException4()
+    public function testException4(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -95,7 +100,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Can not get non existant object.
      */
-    public function testException5()
+    public function testException5(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
@@ -105,13 +110,15 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
     /**
      * Can not get non existant object.
      */
-    public function testException6()
+    public function testException6(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new CollectionMock();
         $m->addField('test', new class() {
             use Core\DiContainerTrait;
             use Core\InitializerTrait;
+
+            /** @var string */
             public $name;
 
             protected function init(): void
@@ -120,16 +127,18 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
         });
     }
 
-    public function testClone()
+    public function testClone(): void
     {
         $m = new CollectionMock();
         $m->addField('name');
-        $m->addField('surname', [CustomFieldMock::class]);
+        $m->addField('surname', [FieldMockCustom::class]);
 
         $c = clone $m;
         $this->assertTrue($c->hasField('name'));
-        $this->assertSame(CustomFieldMock::class, get_class($c->getField('surname')));
-        $this->assertTrue($c->getField('surname')->var);
+        /** @var FieldMockCustom $field */
+        $field = $c->getField('surname');
+        $this->assertSame(FieldMockCustom::class, get_class($field));
+        $this->assertTrue($field->var);
     }
 }
 

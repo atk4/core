@@ -9,7 +9,7 @@ use Atk4\Core\TranslatableTrait;
 
 class TranslatorAdapterAppTest extends TranslatorAdapterBase
 {
-    public function getTranslatableMock()
+    public function getTranslatableMock(): object
     {
         $app = new class() {
             use TranslatableTrait;

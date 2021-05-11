@@ -14,7 +14,7 @@ use Atk4\Core\TraitUtil;
  */
 class TraitUtilTest extends AtkPhpunit\TestCase
 {
-    public function testHasTrait()
+    public function testHasTrait(): void
     {
         $this->assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, NameTrait::class));
         $this->assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, NameTrait::class));

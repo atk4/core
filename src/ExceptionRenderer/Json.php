@@ -110,7 +110,7 @@ class Json extends RendererAbstract
         $this->json['previous'] = $previous->json;
     }
 
-    protected function parseStackTraceCall($call): array
+    protected function parseStackTraceCall(array $call): array
     {
         return [
             'line' => $call['line'] ?? '',

@@ -12,7 +12,7 @@ use Atk4\Core\AtkPhpunit;
  */
 class ContainerTraitTest extends AtkPhpunit\TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $m = new ContainerMock();
 
@@ -26,7 +26,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertSame($tr, $tr3);
     }
 
-    public function testUniqueNames()
+    public function testUniqueNames(): void
     {
         $m = new ContainerMock();
 
@@ -48,7 +48,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(3, $m->getElementCount());
     }
 
-    public function testLongNames()
+    public function testLongNames(): void
     {
         $app = new ContainerAppMock();
         $app->setApp($app);
@@ -77,7 +77,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(2, $m->getElementCount());
     }
 
-    public function testLongNames2()
+    public function testLongNames2(): void
     {
         $app = new ContainerAppMock();
         $app->setApp($app);
@@ -108,7 +108,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertLessThanOrEqual($app->max_name_length, $max_len);
     }
 
-    public function testFactoryMock()
+    public function testFactoryMock(): void
     {
         $m = new ContainerFactoryMock();
         $m2 = $m->add([ContainerMock::class]);
@@ -119,7 +119,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('name', $m3->short_name);
     }
 
-    public function testArgs()
+    public function testArgs(): void
     {
         // passing name with array key 'name'
         $m = new ContainerMock();
@@ -130,7 +130,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('foo', $m2->short_name);
     }
 
-    public function testExceptionExists()
+    public function testExceptionExists(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
@@ -138,7 +138,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m->add(new TrackableMock(), 'foo');
     }
 
-    public function testDesiredName()
+    public function testDesiredName(): void
     {
         $m = new ContainerMock();
         $m->add(new TrackableMock(), ['desired_name' => 'foo']);
@@ -147,7 +147,7 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $this->assertTrue($m->hasElement('foo'));
     }
 
-    public function testExceptionShortName()
+    public function testExceptionShortName(): void
     {
         $this->expectException(Core\Exception::class);
         $m1 = new ContainerMock();
@@ -159,14 +159,14 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m2->add($m1foo);
     }
 
-    public function testExceptionArg2()
+    public function testExceptionArg2(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
     }
 
-    public function testException3()
+    public function testException3(): void
     {
         $this->expectException(\Error::class);
         $this->expectExceptionMessage(\PHP_MAJOR_VERSION < 8 ? 'Class \'hello\' not found' : 'Class "hello" not found');
@@ -174,14 +174,14 @@ class ContainerTraitTest extends AtkPhpunit\TestCase
         $m->add(['hello'], 123); // @phpstan-ignore-line
     }
 
-    public function testException4()
+    public function testException4(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
         $el = $m->getElement('dont_exist');
     }
 
-    public function testException5()
+    public function testException5(): void
     {
         $this->expectException(Core\Exception::class);
         $m = new ContainerMock();
@@ -205,26 +205,23 @@ class ContainerAppMock
     use Core\ContainerTrait;
     use Core\TrackableTrait;
 
-    public function getElementCount()
+    public function getElementCount(): int
     {
         return count($this->elements);
     }
 
-    public function unshortenName()
+    public function unshortenName(): string
     {
         $n = $this->name;
 
         $d = array_flip($this->getApp()->unique_hashes);
 
-        for ($x = 1; $x < 100; ++$x) {
-            @[$l, $r] = explode('__', $n);
-
-            if (!$r) {
-                return $l;
-            }
-
+        for ($x = 0; strpos($n, '__') !== false && $x < 100; ++$x) {
+            [$l, $r] = explode('__', $n);
             $l = $d[$l];
             $n = $l . $r;
         }
+
+        return $n;
     }
 }

@@ -13,7 +13,7 @@ use Atk4\Core\Exception;
  */
 class InitializerTraitTest extends AtkPhpunit\TestCase
 {
-    public function testBasic()
+    public function testBasic(): void
     {
         $m = new ContainerMock2();
         $i = $m->add(new InitializerMock());
@@ -21,14 +21,14 @@ class InitializerTraitTest extends AtkPhpunit\TestCase
         $this->assertTrue($i->result);
     }
 
-    public function testInitializerNotCalled()
+    public function testInitializerNotCalled(): void
     {
         $this->expectException(Exception::class);
         $m = new ContainerMock2();
         $m->add(new BrokenInitializerMock());
     }
 
-    public function testInitializedTwice()
+    public function testInitializedTwice(): void
     {
         $this->expectException(Exception::class);
         $m = new InitializerMock();
@@ -49,6 +49,7 @@ class _InitializerMock
 
 class InitializerMock extends _InitializerMock
 {
+    /** @var bool */
     public $result = false;
 
     protected function init(): void

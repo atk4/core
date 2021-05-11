@@ -17,6 +17,8 @@ trait SessionTrait
      * Create new session.
      *
      * @param array $options Options for session_start()
+     *
+     * @return $this
      */
     public function startSession(array $options = [])
     {
@@ -36,10 +38,14 @@ trait SessionTrait
 
                 break;
         }
+
+        return $this;
     }
 
     /**
      * Destroy existing session.
+     *
+     * @return $this
      */
     public function destroySession()
     {
@@ -47,6 +53,8 @@ trait SessionTrait
             session_destroy();
             unset($_SESSION);
         }
+
+        return $this;
     }
 
     /**
@@ -67,6 +75,8 @@ trait SessionTrait
 
     /**
      * Similar to memorize, but if value for key exist, will return it.
+     *
+     * @param mixed $default
      *
      * @return mixed Previously memorized data or $default
      */
@@ -90,6 +100,8 @@ trait SessionTrait
     /**
      * Returns session data for this object. If not previously set, then
      * $default is returned.
+     *
+     * @param mixed $default
      *
      * @return mixed Previously memorized data or $default
      */

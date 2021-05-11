@@ -16,7 +16,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
     /**
      * Test debug().
      */
-    public function testDebug()
+    public function testDebug(): void
     {
         $m = new DebugMock();
 
@@ -32,7 +32,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertTrue($m->debug);
     }
 
-    public function testDebugOutput()
+    public function testDebugOutput(): void
     {
         $this->expectOutputString("[Atk4\\Core\\Tests\\DebugMock]: debug test1\n");
 
@@ -42,7 +42,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->debug('debug test1');
     }
 
-    public function testDebugNoOutput()
+    public function testDebugNoOutput(): void
     {
         $this->expectOutputString('');
 
@@ -51,7 +51,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->debug('debug test2');
     }
 
-    public function testDebugApp()
+    public function testDebugApp(): void
     {
         $this->expectOutputString('');
 
@@ -67,7 +67,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(['debug', 'debug test2', []], $app->log);
     }
 
-    public function testLog1()
+    public function testLog1(): void
     {
         $this->expectOutputString("debug test3\n");
 
@@ -75,7 +75,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->log('warning', 'debug test3');
     }
 
-    public function testLog2()
+    public function testLog2(): void
     {
         $this->expectOutputString('');
 
@@ -89,7 +89,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(['warning', 'debug test3', []], $app->log);
     }
 
-    public function testMessage1()
+    public function testMessage1(): void
     {
         $this->expectOutputString("Could not notify user about: hello user\n");
 
@@ -97,7 +97,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $m->userMessage('hello user');
     }
 
-    public function testMessage2()
+    public function testMessage2(): void
     {
         $this->expectOutputString('');
         $app = new DebugAppMock();
@@ -109,7 +109,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(['warning', 'Could not notify user about: hello user', []], $app->log);
     }
 
-    public function testMessage3()
+    public function testMessage3(): void
     {
         $this->expectOutputString('');
         $app = new DebugAppMock2();
@@ -121,12 +121,12 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertSame(['hello user', []], $app->message);
     }
 
-    protected function triggerDebugTraceChange($o, $label)
+    protected function triggerDebugTraceChange(DebugMock $o, string $trace): void
     {
-        $o->debugTraceChange($label);
+        $o->debugTraceChange($trace);
     }
 
-    public function testTraceChange()
+    public function testTraceChange(): void
     {
         $app = new DebugAppMock();
 
@@ -157,7 +157,7 @@ class DebugTraitTest extends AtkPhpunit\TestCase
         $this->assertNull($app->log);
     }
 
-    public function testPsr()
+    public function testPsr(): void
     {
         $app = new DebugAppMock();
 
@@ -195,7 +195,7 @@ class DebugMock
         _echo_stderr as __echo_stderr;
     }
 
-    protected function _echo_stderr($message)
+    protected function _echo_stderr(string $message): void
     {
         echo $message;
     }
@@ -205,9 +205,15 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
 {
     use \Psr\Log\LoggerTrait;
 
+    /** @var array<int, mixed>|null */
     public $log;
+    /** @var self */
     public $logger;
 
+    /**
+     * @param mixed  $level
+     * @param string $message
+     */
     public function log($level, $message, array $context = [])
     {
         $this->log = [$level, $message, $context];
@@ -216,6 +222,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
 
 class DebugAppMock2 implements \Atk4\Core\AppUserNotificationInterface
 {
+    /** @var array<int, mixed> */
     public $message;
 
     public function userNotification(string $message, array $context = []): void

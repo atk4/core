@@ -11,12 +11,13 @@ class CollectionMock
 {
     use CollectionTrait;
 
+    /** @var array<string, FieldMock> */
     protected $fields = [];
 
     /**
-     * @return mixed|object
+     * @param array|object|null $seed
      */
-    public function addField($name, $seed = null)
+    public function addField(string $name, $seed = null): FieldMock
     {
         $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
@@ -25,20 +26,17 @@ class CollectionMock
         return $this->_addIntoCollection($name, $field, 'fields');
     }
 
-    public function hasField($name): bool
+    public function hasField(string $name): bool
     {
         return $this->_hasInCollection($name, 'fields');
     }
 
-    /**
-     * @return mixed
-     */
-    public function getField($name)
+    public function getField(string $name): FieldMock
     {
         return $this->_getFromCollection($name, 'fields');
     }
 
-    public function removeField($name)
+    public function removeField(string $name): void
     {
         $this->_removeFromCollection($name, 'fields');
     }

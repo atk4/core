@@ -21,7 +21,7 @@ trait TranslatableTrait
      *
      * @return string The translated string
      */
-    public function _($message, array $parameters = [], string $domain = null, string $locale = null): string
+    public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && method_exists($this->getApp(), '_')) {
             return $this->getApp()->_($message, $parameters, $domain, $locale);

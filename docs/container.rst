@@ -121,7 +121,7 @@ Methods
 
     Return object if it exits in collection and false otherwise
 
-.. php:method:: _getFromCollection(string $name, string $collection)o
+.. php:method:: _getFromCollection(string $name, string $collection)
 
     Same as _hasInCollection but throws exception if element is not found
 

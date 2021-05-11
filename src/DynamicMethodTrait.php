@@ -16,6 +16,8 @@ trait DynamicMethodTrait
      *
      * @param string $name Name of the method
      * @param array  $args Array of arguments to pass to this method
+     *
+     * @return mixed
      */
     public function __call(string $name, $args)
     {
@@ -98,6 +100,8 @@ trait DynamicMethodTrait
      * Remove dynamically registered method.
      *
      * @param string $name Name of the method
+     *
+     * @return $this
      */
     public function removeMethod(string $name)
     {

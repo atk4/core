@@ -15,7 +15,7 @@ use Atk4\Core\TrackableTrait;
  */
 class AppScopeTraitTest extends AtkPhpunit\TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $m = new AppScopeMock();
         $fakeApp = new \stdClass();
@@ -49,6 +49,10 @@ class AppScopeMock
     use ContainerTrait;
     use NameTrait;
 
+    /**
+     * @param mixed        $obj
+     * @param array|string $args
+     */
     public function add($obj, $args = []): object
     {
         return $this->_add_Container($obj, $args);
@@ -59,6 +63,10 @@ class AppScopeMock2
 {
     use ContainerTrait;
 
+    /**
+     * @param mixed        $obj
+     * @param array|string $args
+     */
     public function add($obj, $args = []): object
     {
         return $this->_add_Container($obj, $args);

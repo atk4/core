@@ -15,7 +15,7 @@ class ReadableCaptionTraitTest extends AtkPhpunit\TestCase
     /**
      * Test readableCaption method.
      */
-    public function testReadableCaption()
+    public function testReadableCaption(): void
     {
         $a = new ReadableCaptionMock();
 

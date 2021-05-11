@@ -12,12 +12,13 @@ use Atk4\Core\ConfigTrait;
  */
 class ConfigTraitTest extends AtkPhpunit\TestCase
 {
+    /** @var string */
     public $dir = __DIR__ . '/config_test';
 
     /**
      * Test file reader.
      */
-    public function testFileRead()
+    public function testFileRead(): void
     {
         // for php
         $a = [
@@ -80,28 +81,28 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $this->{'assertEquals'}($c, $this->getProtected($m, 'config'));
     }
 
-    public function testFileReadException()
+    public function testFileReadException(): void
     {
         $this->expectException(\Atk4\Core\Exception::class);
         $m = new ConfigMock();
         $m->readConfig('unknown_file.php');
     }
 
-    public function testFileBadFormatException()
+    public function testFileBadFormatException(): void
     {
         $this->expectException(\Atk4\Core\Exception::class);
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config_bad_format.php');
     }
 
-    public function testWrongFileFormatException()
+    public function testWrongFileFormatException(): void
     {
         $this->expectException(\Atk4\Core\Exception::class);
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.yml', 'wrong-format');
     }
 
-    public function testSetGetConfig()
+    public function testSetGetConfig(): void
     {
         $a = [
             'num' => 789,
@@ -147,7 +148,7 @@ class ConfigTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('default', $m->getConfig('arr/sub/three', 'default'));
     }
 
-    public function testCaseGetConfigPathThatNotExists()
+    public function testCaseGetConfigPathThatNotExists(): void
     {
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');

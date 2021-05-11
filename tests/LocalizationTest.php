@@ -13,7 +13,7 @@ use Atk4\Data\Persistence;
 
 class LocalizationTest extends AtkPhpunit\TestCase
 {
-    public function testTranslatableTrait()
+    public function testTranslatableTrait(): void
     {
         $trans = Translator::instance();
         $trans->setDefaultLocale('ru');
@@ -27,7 +27,7 @@ class LocalizationTest extends AtkPhpunit\TestCase
         }
     }
 
-    public function testTranslatableTrait2()
+    public function testTranslatableTrait2(): void
     {
         $adapter = new Generic();
         $adapter->setDefinitionSingle('Unable to determine persistence driver type from DSN', 'message is translated', 'en', 'atk');
@@ -42,7 +42,7 @@ class LocalizationTest extends AtkPhpunit\TestCase
         }
     }
 
-    public function testTranslatableExternal()
+    public function testTranslatableExternal(): void
     {
         $trans = Translator::instance();
         $trans->setDefaultLocale('ru');
@@ -52,12 +52,8 @@ class LocalizationTest extends AtkPhpunit\TestCase
         } catch (Exception $e) {
             // emulate an external translator already configured
             $e->setTranslatorAdapter(new class() implements ITranslatorAdapter {
-                public function _(
-                    string $message,
-                    array $parameters = [],
-                    string $domain = null,
-                    string $locale = null
-                ): string {
+                public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
+                {
                     return 'external translator';
                 }
             });

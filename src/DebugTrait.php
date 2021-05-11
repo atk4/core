@@ -123,10 +123,12 @@ trait DebugTrait
      * System is unusable.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function emergency($message, array $context = [])
     {
-        $this->log(LogLevel::EMERGENCY, $message, $context);
+        return $this->log(LogLevel::EMERGENCY, $message, $context);
     }
 
     /**
@@ -136,10 +138,12 @@ trait DebugTrait
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function alert($message, array $context = [])
     {
-        $this->log(LogLevel::ALERT, $message, $context);
+        return $this->log(LogLevel::ALERT, $message, $context);
     }
 
     /**
@@ -148,10 +152,12 @@ trait DebugTrait
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function critical($message, array $context = [])
     {
-        $this->log(LogLevel::CRITICAL, $message, $context);
+        return $this->log(LogLevel::CRITICAL, $message, $context);
     }
 
     /**
@@ -159,10 +165,12 @@ trait DebugTrait
      * be logged and monitored.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function error($message, array $context = [])
     {
-        $this->log(LogLevel::ERROR, $message, $context);
+        return $this->log(LogLevel::ERROR, $message, $context);
     }
 
     /**
@@ -172,20 +180,24 @@ trait DebugTrait
      * that are not necessarily wrong.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function warning($message, array $context = [])
     {
-        $this->log(LogLevel::WARNING, $message, $context);
+        return $this->log(LogLevel::WARNING, $message, $context);
     }
 
     /**
      * Normal but significant events.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function notice($message, array $context = [])
     {
-        $this->log(LogLevel::NOTICE, $message, $context);
+        return $this->log(LogLevel::NOTICE, $message, $context);
     }
 
     /**
@@ -194,9 +206,11 @@ trait DebugTrait
      * Example: User logs in, SQL logs.
      *
      * @param string $message
+     *
+     * @return $this
      */
     public function info($message, array $context = [])
     {
-        $this->log(LogLevel::INFO, $message, $context);
+        return $this->log(LogLevel::INFO, $message, $context);
     }
 }

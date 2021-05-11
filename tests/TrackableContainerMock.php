@@ -11,7 +11,7 @@ class TrackableContainerMock
     use Core\ContainerTrait;
     use Core\TrackableTrait;
 
-    public function getElementCount()
+    public function getElementCount(): int
     {
         return count($this->elements);
     }

@@ -16,6 +16,8 @@ trait AppScopeTrait
 {
     /**
      * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
+     *
+     * @var bool
      */
     private $app;
 

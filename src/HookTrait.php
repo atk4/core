@@ -9,7 +9,7 @@ trait HookTrait
     /**
      * Contains information about configured hooks (callbacks).
      *
-     * @var array
+     * @var array<string, array<int, array{0: \Closure, 1?: array<int, mixed>}>>
      */
     protected $hooks = [];
 
@@ -73,6 +73,8 @@ trait HookTrait
      * Lower priority is called sooner. If priority is negative,
      * then hooks will be executed in reverse order.
      *
+     * @param array<int, mixed> $args
+     *
      * @return int index under which the hook was added
      */
     public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
@@ -96,6 +98,8 @@ trait HookTrait
 
     /**
      * Same as onHook() except no $this is passed to the callback as the 1st argument.
+     *
+     * @param array<int, mixed> $args
      *
      * @return int index under which the hook was added
      */
@@ -122,6 +126,9 @@ trait HookTrait
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
+    /**
+     * @param array<int, mixed> $args
+     */
     private function makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, array $args, bool $isShort): \Closure
     {
         return function ($ignore, &...$args) use ($getFxThisFx, $fx, $isShort) {
@@ -137,6 +144,8 @@ trait HookTrait
     /**
      * Same as onHook() except $this of the callback is dynamically rebound before invoke.
      *
+     * @param array<int, mixed> $args
+     *
      * @return int index under which the hook was added
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
@@ -146,6 +155,8 @@ trait HookTrait
 
     /**
      * Same as makeHookDynamicFx() except no $this is passed to the callback as the 1st argument.
+     *
+     * @param array<int, mixed> $args
      *
      * @return int index under which the hook was added
      */
@@ -211,7 +222,9 @@ trait HookTrait
     /**
      * Execute all closures assigned to $hook_spot.
      *
-     * @return mixed Array of responses indexed by hook indexes or value specified to breakHook
+     * @param array<int, mixed> $args
+     *
+     * @return array<int, mixed>|mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
