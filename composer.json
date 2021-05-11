@@ -41,19 +41,19 @@
     "require-dev": {
         "atk4/data": "dev-develop",
         "ergebnis/composer-normalize": "^2.13",
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.2",
         "phpstan/phpstan": "^0.12.58",
-        "phpunit/phpunit": ">=9.1",
+        "phpunit/phpunit": ">=9.3",
         "symfony/contracts": ">=1.1"
     },
     "require-dev-release": {
         "atk4/data": "~3.0.0",
         "ergebnis/composer-normalize": "^2.13",
-        "friendsofphp/php-cs-fixer": "^2.17",
+        "friendsofphp/php-cs-fixer": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.2",
         "phpstan/phpstan": "^0.12.58",
-        "phpunit/phpunit": ">=9.1",
+        "phpunit/phpunit": ">=9.3",
         "symfony/contracts": ">=1.1"
     },
     "config": {
