@@ -11,7 +11,7 @@ namespace Atk4\Core;
  */
 trait StaticAddToTrait
 {
-    // use DiContainerTrait; // uncomment once PHP7.2 support is dropped
+    use DiContainerTrait;
 
     private static function _addTo_add(object $parent, object $object, array $addArgs, bool $skipAdd = false): void
     {

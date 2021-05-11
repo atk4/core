@@ -6,13 +6,11 @@ namespace Atk4\Core\Tests;
 
 use Atk4\Core\AtkPhpunit;
 use Atk4\Core\ContainerTrait;
-use Atk4\Core\DiContainerTrait;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
 
 class StdSat extends \StdClass
 {
-    use DiContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
 }
 
@@ -27,13 +25,11 @@ class ContainerFactoryMockSat
 
 class TrackableMockSat
 {
-    use DiContainerTrait; // remove once PHP7.2 support is dropped
     use StaticAddToTrait;
     use TrackableTrait;
 }
 class DiMockSat
 {
-    use DiContainerTrait;
     use StaticAddToTrait;
 
     /** @var string */
@@ -46,7 +42,6 @@ class DiMockSat
 
 class DiConstructorMockSat
 {
-    use DiContainerTrait;
     use StaticAddToTrait;
 
     /** @var string */
