@@ -50,7 +50,7 @@ class CollectionTraitTest extends AtkPhpunit\TestCase
         $this->assertSame('app', $surnameField->getApp()->name);
 
         $this->assertSame('form-fields_surname', $surnameField->name);
-        $this->assertSame($m, $surnameField->getOwner());
+        $this->assertSame($m, $surnameField->getOwner()); // @phpstan-ignore-error see https://github.com/phpstan/phpstan/discussions/4985
 
         $longField = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [FieldMockCustom::class]);
         $this->assertSame(40, strlen($longField->name));
