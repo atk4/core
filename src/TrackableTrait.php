@@ -53,6 +53,11 @@ trait TrackableTrait
 
     public function getOwner(): object
     {
+        gc_collect_cycles();
+        gc_collect_cycles();
+        gc_collect_cycles();
+        gc_collect_cycles();
+
         $this->assertNoDirectOwnerAssignment();
 
         return $this->_owner->get();
