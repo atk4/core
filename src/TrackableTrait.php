@@ -23,9 +23,9 @@ trait TrackableTrait
     /**
      * Link to (parent) object into which we added this object.
      *
-     * @var object|null
+     * @var \WeakReference<object>|null
      */
-    private $_owner;
+    private ?\WeakReference $_owner = null;
 
     /**
      * Name of the object in owner's element array.
@@ -55,7 +55,7 @@ trait TrackableTrait
     {
         $this->assertNoDirectOwnerAssignment();
 
-        return $this->_owner;
+        return $this->_owner->get();
     }
 
     /**
@@ -68,7 +68,7 @@ trait TrackableTrait
             throw new Exception('Owner already set');
         }
 
-        $this->_owner = $owner;
+        $this->_owner = \WeakReference::create($owner);
 
         return $this;
     }
@@ -119,8 +119,8 @@ trait TrackableTrait
      */
     public function destroy(): void
     {
-        if ($this->_owner !== null && TraitUtil::hasContainerTrait($this->_owner)) {
-            $this->_owner->removeElement($this->short_name);
+        if ($this->_owner !== null && TraitUtil::hasContainerTrait($this->getOwner())) {
+            $this->getOwner()->removeElement($this->short_name);
 
             // GC remove reference to app is AppScope in use
             if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp()) {
