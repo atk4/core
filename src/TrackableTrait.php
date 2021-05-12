@@ -60,7 +60,12 @@ trait TrackableTrait
 
         $this->assertNoDirectOwnerAssignment();
 
-        return $this->_owner->get();
+        $owner = $this->_owner->get();
+        if ($owner === null) {
+            throw new Exception('Owner object was set, but it was released from memory');
+        }
+
+        return $owner;
     }
 
     /**
