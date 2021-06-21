@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\Exception;
 use Atk4\Core\NameTrait;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\SessionTrait;
 
 /**
  * @coversDefaultClass \Atk4\Core\SessionTrait
  */
-class SessionTraitTest extends AtkPhpunit\TestCase
+class SessionTraitTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {

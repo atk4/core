@@ -61,7 +61,7 @@ trait AppScopeTrait
     protected function assertInstanceOfApp(object $app): void
     {
         // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
-        if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+        if (class_exists(\PHPUnit\Framework\TestCase::class, false) && !class_exists(\Atk4\Ui\App::class)) {
             return;
         }
 

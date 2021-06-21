@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\Exception;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
 /**
  * @coversDefaultClass \Atk4\Core\Exception
  */
-class ExceptionTest extends AtkPhpunit\TestCase
+class ExceptionTest extends TestCase
 {
     public function testBasic(): void
     {

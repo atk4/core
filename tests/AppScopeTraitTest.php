@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\AppScopeTrait;
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\ContainerTrait;
 use Atk4\Core\NameTrait;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
 /**
  * @coversDefaultClass \Atk4\Core\AppScopeTrait
  */
-class AppScopeTraitTest extends AtkPhpunit\TestCase
+class AppScopeTraitTest extends TestCase
 {
     public function testConstruct(): void
     {

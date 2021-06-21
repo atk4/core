@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 
-abstract class TranslatorAdapterBase extends AtkPhpunit\TestCase
+abstract class TranslatorAdapterBase extends TestCase
 {
     abstract public function getTranslatableMock(): object;
 

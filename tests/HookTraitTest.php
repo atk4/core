@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\Exception;
 use Atk4\Core\HookBreaker;
 use Atk4\Core\HookTrait;
+use Atk4\Core\Phpunit\TestCase;
 
 /**
  * @coversDefaultClass \Atk4\Core\HookTrait
  */
-class HookTraitTest extends AtkPhpunit\TestCase
+class HookTraitTest extends TestCase
 {
     public function testArguments(): void
     {

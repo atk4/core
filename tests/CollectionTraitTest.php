@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core;
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 
 /**
  * @coversDefaultClass \Atk4\Core\ContainerTrait
  */
-class CollectionTraitTest extends AtkPhpunit\TestCase
+class CollectionTraitTest extends TestCase
 {
     public function testBasic(): void
     {

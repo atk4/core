@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\AppScopeTrait;
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\HookTrait;
+use Atk4\Core\Phpunit\TestCase;
 
 /**
  * @coversDefaultClass \Atk4\Core\DynamicMethodTrait
  */
-class DynamicMethodTraitTest extends AtkPhpunit\TestCase
+class DynamicMethodTraitTest extends TestCase
 {
     public function testConstruct(): void
     {
