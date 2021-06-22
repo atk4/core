@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\Exception;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use Atk4\Core\Translator\Translator;
 use Atk4\Data\Persistence;
 
-class LocalizationTest extends AtkPhpunit\TestCase
+class LocalizationTest extends TestCase
 {
     public function testTranslatableTrait(): void
     {

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Core\tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\HookTrait;
 use Atk4\Core\NameTrait;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TraitUtil;
 
 /**
  * @coversDefaultClass \Atk4\Core\TraitUtil
  */
-class TraitUtilTest extends AtkPhpunit\TestCase
+class TraitUtilTest extends TestCase
 {
     public function testHasTrait(): void
     {

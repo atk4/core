@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\AppScopeTrait;
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\DebugTrait;
+use Atk4\Core\Phpunit\TestCase;
 
 /**
  * @coversDefaultClass \Atk4\Core\DebugTrait
  */
-class DebugTraitTest extends AtkPhpunit\TestCase
+class DebugTraitTest extends TestCase
 {
     /**
      * Test debug().

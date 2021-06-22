@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\Factory;
 use Atk4\Core\HookBreaker;
+use Atk4\Core\Phpunit\TestCase;
 
 /**
  * @coversDefaultClass \Atk4\Core\Factory
  */
-class FactoryTest extends AtkPhpunit\TestCase
+class FactoryTest extends TestCase
 {
     public function testMerge1(): void
     {

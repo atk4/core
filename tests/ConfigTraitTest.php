@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
 use Atk4\Core\ConfigTrait;
+use Atk4\Core\Phpunit\TestCase;
 
 /**
  * @coversDefaultClass \Atk4\Core\ConfigTrait
  */
-class ConfigTraitTest extends AtkPhpunit\TestCase
+class ConfigTraitTest extends TestCase
 {
     /** @var string */
     public $dir = __DIR__ . '/config_test';

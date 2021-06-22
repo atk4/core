@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\AtkPhpunit;
+use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\ReadableCaptionTrait;
 
 /**
  * @coversDefaultClass \Atk4\Core\ReadableCaptionTrait
  */
-class ReadableCaptionTraitTest extends AtkPhpunit\TestCase
+class ReadableCaptionTraitTest extends TestCase
 {
     /**
      * Test readableCaption method.
