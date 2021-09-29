@@ -302,8 +302,7 @@ class FactoryTest extends TestCase
 
     public function testDefaultsObject(): void
     {
-        // $this->expectException(Exception::class);
-        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
+        $this->expectException(Exception::class);
         $s1 = Factory::factory([new FactoryTestDiMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
     }
 
@@ -412,8 +411,7 @@ class FactoryTest extends TestCase
         $this->assertSame(FactoryFactoryMock::class, get_class($m1));
 
         // from string seed
-        // $this->expectException(Exception::class);
-        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
+        $this->expectException(Exception::class);
         Factory::factory(FactoryFactoryMock::class); // @phpstan-ignore-line
     }
 
@@ -477,8 +475,7 @@ class FactoryTest extends TestCase
         $this->assertSame('ZZZ', $m2->c);
 
         // as object wrapped in array
-        // $this->expectException(Exception::class);
-        $this->expectDeprecation(); // replace with line above once support is removed (expected in 2020-dec)
+        $this->expectException(Exception::class);
         Factory::factory([$m1]);
     }
 

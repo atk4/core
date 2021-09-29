@@ -22,33 +22,6 @@ class Factory
         return self::$_instance;
     }
 
-    protected function printDeprecatedWarningWithTrace(string $msg): void // remove once not used within this class
-    {
-        static $traceRenderer = null;
-        if ($traceRenderer === null) {
-            $traceRenderer = new class(new Exception()) extends ExceptionRenderer\Html {
-                public function tryRelativizePath(string $path): string
-                {
-                    try {
-                        return $this->makeRelativePath($path);
-                    } catch (Exception $e) {
-                    }
-
-                    return $path;
-                }
-            };
-        }
-
-        ob_start();
-        debug_print_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
-        $trace = preg_replace('~^#0.+?\n~', '', ob_get_clean());
-        $trace = preg_replace_callback('~[^\n\[\]<>]+\.php~', function ($matches) use ($traceRenderer) {
-            return $traceRenderer->tryRelativizePath($matches[0]);
-        }, $trace);
-        // echo (new Exception($msg))->getHtml();
-        'trigger_error'($msg . (!class_exists(\PHPUnit\Framework\Test::class, false) ? "\n" . $trace : ''), \E_USER_DEPRECATED);
-    }
-
     /**
      * @param mixed $seed
      */
@@ -109,11 +82,7 @@ class Factory
             }
 
             if ($this->checkSeeFunc($seed) !== null) {
-                // remove/do not accept other seed than object/array type after 2020-dec
-                // remove/do not accept seed with 1st argument other than valid class name (or null) after 2020-dec
-                $this->printDeprecatedWarningWithTrace(
-                    'Use of invalid/deprecated $seed' . $seedIndex . ' class name (' . $this->checkSeeFunc($seed) . '). Support will be removed shortly.'
-                );
+                throw new Exception('Use of invalid/deprecated $seed' . $seedIndex . ' class name (' . $this->checkSeeFunc($seed) . ') is not supported.');
             }
 
             if (!is_array($seed)) {
@@ -192,11 +161,10 @@ class Factory
             $seed = [];
         }
 
-        if ((!is_array($seed) && !is_object($seed)) || (!is_array($defaults) && !is_object($defaults))) { // remove/do not accept other seed than object/array type after 2020-dec
+        if ((!is_array($seed) && !is_object($seed)) || (!is_array($defaults) && !is_object($defaults))) {
             $varName = !is_array($seed) && !is_object($seed) ? 'seed' : 'defaults';
-            $this->printDeprecatedWarningWithTrace(
-                'Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is deprecated and support will be removed shortly.'
-            );
+
+            throw new Exception('Use of non-array seed ($' . $varName . ' type = ' . gettype(${$varName}) . ') is not supported.');
         }
 
         if (is_array($defaults)) {
@@ -210,10 +178,6 @@ class Factory
             $defaults[0] = $seed;
             $seed = $defaults;
         } else {
-            if (!is_array($seed)) {
-                $seed = [$seed];
-            }
-
             $seed = $this->_mergeSeeds($seed, $defaults);
         }
         unset($defaults);
