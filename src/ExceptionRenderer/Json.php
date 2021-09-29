@@ -133,7 +133,7 @@ class Json extends RendererAbstract
                 'code' => $this->exception->getCode(),
                 'message' => 'Error during json renderer: ' . $this->exception->getMessage(),
                 // avoid translation
-                //'message'  => $this->_($this->exception->getMessage()),
+                //'message' => $this->_($this->exception->getMessage()),
                 'title' => get_class($this->exception),
                 'class' => get_class($this->exception),
                 'params' => [],
