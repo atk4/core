@@ -353,7 +353,7 @@ class FactoryTest extends TestCase
 
     public function testGiveClassFirst(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\TypeError::class);
         $s1 = Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore-line
     }
 

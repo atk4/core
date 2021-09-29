@@ -31,11 +31,9 @@ trait StaticAddToTrait
      * $crud = $app->add(['Crud', 'displayFields' => ['name']]);
      *   but the first one design pattern is strongly recommended as it supports refactoring.
      *
-     * @param array $seed
-     *
      * @return static
      */
-    public static function addTo(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false)// :static supported by PHP8+
+    public static function addTo(object $parent, array $seed = [], array $addArgs = [], bool $skipAdd = false)// :static supported by PHP8+
     {
         $object = static::fromSeed([static::class], $seed);
 

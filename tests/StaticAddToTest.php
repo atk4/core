@@ -76,7 +76,7 @@ class StaticAddToTest extends TestCase
         $this->assertSame($tr, $tr3);
 
         // not the same or extended class
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(\TypeError::class);
         $tr = StdSat::addTo($m, $tr); // @phpstan-ignore-line
     }
 
