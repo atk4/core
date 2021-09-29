@@ -16,7 +16,7 @@ things like:
 
 Thanks to Factory trait, the following code::
 
-   $button = $app->add(['Button', 'A Label', 'icon'=>'book', 'action'=>My\Action::class]);
+   $button = $app->add(['Button', 'A Label', 'icon' => 'book', 'action' => My\Action::class]);
 
 can replace this::
 
@@ -32,7 +32,7 @@ Agile Toolkit 2.1 introduces support for a new syntax. It is functionally
 identical to a short-hand code, but your IDE will properly set type for
 a `$button` to be `class Button` instead of `class View`::
 
-    $button = Button::addTo($view, ['A Label', 'icon'=>'book', 'action'=>My\Action::class]);
+    $button = Button::addTo($view, ['A Label', 'icon' => 'book', 'action' => My\Action::class]);
 
 The traditional `$view->add` will remain available, there are no plans to
 remove that syntax.
@@ -77,7 +77,7 @@ This problem is solved in ATK with "Seeds".
 
 A Seed is an array consisting of class name/object, named and numeric arguments::
 
-   $seed = [Button::class, 'My Label', 'icon'=>'book'];
+   $seed = [Button::class, 'My Label', 'icon' => 'book'];
 
 Seed with and without class
 ---------------------------
@@ -85,7 +85,7 @@ Seed with and without class
 There are two types of seeds - with class name and without. The one above contains
 the class and is used when user needs a flexibility to specify a class::
 
-   $app->add(['Button', 'My Label', 'icon'=>'book']);
+   $app->add(['Button', 'My Label', 'icon' => 'book']);
 
 The other seed type is class-less and can be used in situations where there are no
 ambiguity about which class is used::
@@ -161,7 +161,7 @@ method and specifying a seed argument::
 
    $button = Factory::factory([Button::Class, 'A Label', 'icon' => ['book'], 'action' => new Action(..)]);
 
-Note that passing 'icon'=>['book'] will also use factory to initialize icon object.
+Note that passing 'icon' => ['book'] will also use factory to initialize icon object.
 
 Finally, if you are using IDE and type hinting, a preferred code would be::
 
@@ -173,7 +173,7 @@ commonly, however, you would use this through the add() method::
 
    use Atk4\Ui\Button;
 
-   $view->add([$button = new Button('A Label'), 'icon'=>['book'], 'action'=>new Action('..')]);
+   $view->add([$button = new Button('A Label'), 'icon' => ['book'], 'action' => new Action('..')]);
 
 Seed Components
 ---------------
@@ -216,7 +216,7 @@ array, then it's wrapped into [].
 
 Array that lacks class is called defaults, e.g.::
 
-    $defaults = ['Label', 'My Label', 'big red', 'icon'=>'book'];
+    $defaults = ['Label', 'My Label', 'big red', 'icon' => 'book'];
 
 You can pass defaults as second argument to :php:meth:`Factory::factory()`::
 
@@ -233,12 +233,12 @@ if you wish to change the label, but keep the class, use this::
 Finally, if you pass key/value pair inside seed with a value of ``null`` then
 default value will still be used::
 
-    $label = Factory::factory(['icon'=>null], $defaults);
+    $label = Factory::factory(['icon' => null], $defaults);
 
 This will result icon=book. If you wish to disable icon, you should use ``false``
 value::
 
-    $label = Factory::factory(['icon'=>false], $defaults);
+    $label = Factory::factory(['icon' => false], $defaults);
 
 With this it's handy to pass icon as an argument and don't worry if the null is
 used.
@@ -267,7 +267,7 @@ values. See my description below the example::
         }
     }
 
-    $button = Factory::factory([RedButton::class, 'icon'=>'cake'], ['icon'=>'thumbs up']);
+    $button = Factory::factory([RedButton::class, 'icon' => 'cake'], ['icon' => 'thumbs up']);
     // Question: what would be $button->icon value here?
 
 
@@ -277,7 +277,7 @@ The seed takes precedence, so icon='cake'.
 
 Factory will then create instance of RedButton with a default icon 'book'.
 It will then execute :php:meth:`DiContainerTrait::setDefaults` with the
-`['icon'=>'cake']` which will change value of $icon to `cake`.
+`['icon' => 'cake']` which will change value of $icon to `cake`.
 
 The `cake` will be the final value of the example above. Even though `init()`
 method is set to change the value of icon, the `init()` method is only executed
@@ -308,25 +308,25 @@ Some examples::
     Factory::mergeSeeds([null, 'Button Label'], ['Message', 'Message Label']);
     // Results in ['Message', 'Button Label']);
 
-    Factory::mergeSeeds(['null, 'Label1', 'icon'=>'book'], ['icon'=>'coin', 'Button'], ['class'=>['red']]);
-    // Results in ['Button', 'Label1', 'icon'=>'book', 'class'=>['red']]
+    Factory::mergeSeeds(['null, 'Label1', 'icon' => 'book'], ['icon' => 'coin', 'Button'], ['class' => ['red']]);
+    // Results in ['Button', 'Label1', 'icon' => 'book', 'class' => ['red']]
 
 Seed merging can also be used to merge defaults::
 
-    Factory::mergeSeeds(['label 1'], ['icon'=>'book']);
-    // results in ['label 1', 'icon'=>'book']
+    Factory::mergeSeeds(['label 1'], ['icon' => 'book']);
+    // results in ['label 1', 'icon' => 'book']
 
 When object is passed, it will take precedence and absorb all named arguments::
 
     Factory::mergeSeeds(
-        ['null, 'Label1', 'icon'=>'book'],
-        ['icon'=>'coin', 'Button'],
+        ['null, 'Label1', 'icon' => 'book'],
+        ['icon' => 'coin', 'Button'],
         new Message('foobar'),
-        ['class'=>['red']]
+        ['class' => ['red']]
     );
     // result is
     // $obj = new Message('foobar');
-    // $obj->setDefaults(['icon'=>'book', 'class'=>['red']);
+    // $obj->setDefaults(['icon' => 'book', 'class' => ['red']);
 
 If multiple objects are specified then early ones take precedence while still
 absorbing all named arguments.
@@ -360,7 +360,7 @@ Specify Icon for a Button
 As you may know, Button class has icon property, which may be specified as a
 string, seed or object::
 
-    $button = $app->add(['Button', 'icon'=>'book']);
+    $button = $app->add(['Button', 'icon' => 'book']);
 
 Well, to implement the button internally, render method uses this::
 
@@ -432,7 +432,7 @@ ways to use addButton()::
     $form->addButton('click me');
     // Adds a regular button with specified label, as expected
 
-    $form->addButton(['click me', 'red', 'icon'=>'book']);
+    $form->addButton(['click me', 'red', 'icon' => 'book']);
     // Specify class of a button and also icon
 
     $form->addButton(new MyButton('click me'));
@@ -440,7 +440,7 @@ ways to use addButton()::
 
 A same logic can be applied to addField::
 
-    $model->addField('is_vip', ['type'=>'boolean']);
+    $model->addField('is_vip', ['type' => 'boolean']);
     // class = Field, type = boolean
 
     $model->addField('is_vip', ['boolean'])

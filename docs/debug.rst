@@ -37,7 +37,7 @@ Information logged through debug like this on any object that implements
 DebugTrait::
 
     $this->debug('Things are bad');
-    $this->debug('User {user} created', ['user'=>$user]);
+    $this->debug('User {user} created', ['user' => $user]);
 
 The Application itself can use DebugTrait too and normally should do, making it
 possible to use ``$this->getApp()->debug()``.

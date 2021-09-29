@@ -21,7 +21,7 @@ namespace Atk4\Core;
  * Several classes may opt to extend setDefaults, for example in Agile UI
  * setDefaults is extended to support classes and content:
  *
- * $segment->setDefaults(['Hello There', 'red', 'ui'=>'segment']);
+ * $segment->setDefaults(['Hello There', 'red', 'ui' => 'segment']);
  *
  * WARNING: Do not use this trait unless you have a lot of properties
  * to inject. Also follow the guidelines on
