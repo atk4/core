@@ -98,11 +98,11 @@ trait ContainerTrait
             throw (new Exception('Second argument must be array'))
                 ->addMoreInfo('arg2', $args);
         } elseif (isset($args['desired_name'])) {
-            // passed as ['desired_name'=>'foo'];
+            // passed as ['desired_name' => 'foo'];
             $args[0] = $this->_unique_element($args['desired_name']);
             unset($args['desired_name']);
         } elseif (isset($args['name'])) {
-            // passed as ['name'=>'foo'];
+            // passed as ['name' => 'foo'];
             $args[0] = $args['name'];
             unset($args['name']);
         } elseif (isset($element->short_name)) {

@@ -418,7 +418,7 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * Object factory definition must use ["class name", "x"=>"y"] form.
+     * Object factory definition must use ["class name", "x" => "y"] form.
      */
     public function testFactoryException1(): void
     {

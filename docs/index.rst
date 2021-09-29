@@ -91,7 +91,7 @@ In this scenario, even though a new object is added, we don't do it ourselves.
 We simply specify some information on how to create and what properties to
 inject into the object::
 
-    $field = $form->add([\Atk4\Ui\FormField\Password::class, 'icon'=>['lock', 'circular inverted'], 'width'=>4);
+    $field = $form->add([\Atk4\Ui\FormField\Password::class, 'icon' => ['lock', 'circular inverted'], 'width' => 4);
 
 The above code will determine the correct object to implement Password inside
 Form, instantiate it and then even add Icon object which is also defined through
@@ -196,7 +196,7 @@ class to define a business object, such as - ShoppingBag::
 
             $this->hasOne('user_id', new User());
             $this->hasMany('Items', new Item())
-                ->addField('total_price', ['aggregate'=>'sum', 'field'=>'price']);
+                ->addField('total_price', ['aggregate' => 'sum', 'field' => 'price']);
         }
     }
 

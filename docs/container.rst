@@ -77,7 +77,7 @@ Example::
         {
             $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-            $field = Factory::factory($seed, ['name'=>$name]);
+            $field = Factory::factory($seed, ['name' => $name]);
 
             return $this->_addIntoCollection($name, $field, 'fields');
         }
@@ -215,8 +215,8 @@ Methods
 
         $args = ['child_name'];
         $args = 'child_name';
-        $args = ['child_name', 'db'=>$mydb];
-        $args = ['name'=>'child_name'];  // obsolete, backward-compatible
+        $args = ['child_name', 'db' => $mydb];
+        $args = ['name' => 'child_name'];  // obsolete, backward-compatible
 
     Method will return the object. Will throw exception if child with same
     name already exist.
@@ -290,8 +290,8 @@ Methods
     Normally object will try to be named after it's class, if the name is omitted.
     You can override this method to implement a different mechanics.
 
-    If you pass 'desired_name'=>'heh' to a constructor, then it will affect the
-    preferred name returned by this method. Unlike 'name'=>'heh' it won't fail
+    If you pass 'desired_name' => 'heh' to a constructor, then it will affect the
+    preferred name returned by this method. Unlike 'name' => 'heh' it won't fail
     if another element with this name exists, but will add '_2' postfix.
 
 .. php:method:: destroy
