@@ -85,8 +85,6 @@ abstract class RendererAbstract
             'args' => $call['args'] ?? [],
             'class_formatted' => null,
             'object_formatted' => null,
-            'file_formatted' => null,
-            'line_formatted' => null,
         ];
 
         try {
