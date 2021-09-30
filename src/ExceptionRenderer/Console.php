@@ -96,8 +96,8 @@ class Console extends RendererAbstract
             $tokens = [];
             $tokens['{FILE}'] = str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT);
             $tokens['{LINE}'] = str_pad($call['line'], 4, ' ', \STR_PAD_LEFT);
-            $tokens['{OBJECT}'] = $call['object_formatted'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
-            $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m" . $call['class'] . "::\e[0m" : '';
+            $tokens['{OBJECT}'] = $call['object'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
+            $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m" . $call['class_formatted'] . "::\e[0m" : '';
 
             $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];

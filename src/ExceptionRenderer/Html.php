@@ -148,7 +148,7 @@ class Html extends RendererAbstract
             $tokens['{INDEX}'] = $index === 'self' ? '' : $index + 1;
             $tokens['{FILE_LINE}'] = $call['file_rel'] !== '' ? $call['file_rel'] . ':' . $call['line'] : '';
             $tokens['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
-            $tokens['{CLASS}'] = $call['class'] !== false ? $call['class'] . '::' : '';
+            $tokens['{CLASS}'] = $call['class'] !== false ? $call['class_formatted'] . '::' : '';
             $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];
