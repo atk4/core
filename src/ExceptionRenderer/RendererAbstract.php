@@ -83,9 +83,8 @@ abstract class RendererAbstract
             'object' => $call['object'] ?? null,
             'function' => $call['function'] ?? null,
             'args' => $call['args'] ?? [],
+            'class_formatted' => null,
             'object_formatted' => null,
-            'file_formatted' => null,
-            'line_formatted' => null,
         ];
 
         try {
@@ -94,10 +93,14 @@ abstract class RendererAbstract
             $parsed['file_rel'] = $parsed['file'];
         }
 
+        if ($parsed['class'] !== null) {
+            $parsed['class_formatted'] = str_replace("\0", ' ', $this->tryRelativizePathsInString($parsed['class']));
+        }
+
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
                 ? get_object_vars($parsed['object'])['name']
-                : get_class($parsed['object']);
+                : str_replace("\0", ' ', $this->tryRelativizePathsInString(get_class($parsed['object'])));
         }
 
         return $parsed;
