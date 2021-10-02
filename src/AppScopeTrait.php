@@ -60,12 +60,16 @@ trait AppScopeTrait
 
     protected function assertInstanceOfApp(object $app): void
     {
-        // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
-        if (class_exists(\PHPUnit\Framework\TestCase::class, false) && !class_exists(\Atk4\Ui\App::class)) {
-            return;
-        }
-
         if (!$app instanceof \Atk4\Ui\App) {
+            // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
+            if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+                foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
+                    if (str_starts_with($frame['class'] ?? '', 'Atk4\Core\Tests\\')) {
+                        return;
+                    }
+                }
+            }
+
             throw new Exception('App must be instance of \Atk4\Ui\App');
         }
     }
