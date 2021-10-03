@@ -14,14 +14,14 @@ namespace Atk4\Core;
  */
 trait WarnDynamicPropertyTrait
 {
-    protected function warnIfPropertyDoesNotExist(string $name): void
+    protected function warnPropertyDoesNotExist(string $name): void
     {
         'trigger_error'('Property ' . static::class . '::$' . $name . ' does not exist', \E_USER_DEPRECATED);
     }
 
     public function __isset(string $name): bool
     {
-        $this->warnIfPropertyDoesNotExist($name);
+        $this->warnPropertyDoesNotExist($name);
 
         return isset($this->{$name});
     }
@@ -31,7 +31,7 @@ trait WarnDynamicPropertyTrait
      */
     public function &__get(string $name)
     {
-        $this->warnIfPropertyDoesNotExist($name);
+        $this->warnPropertyDoesNotExist($name);
 
         return $this->{$name};
     }
@@ -41,14 +41,14 @@ trait WarnDynamicPropertyTrait
      */
     public function __set(string $name, $value): void
     {
-        $this->warnIfPropertyDoesNotExist($name);
+        $this->warnPropertyDoesNotExist($name);
 
         $this->{$name} = $value;
     }
 
     public function __unset(string $name): void
     {
-        $this->warnIfPropertyDoesNotExist($name);
+        $this->warnPropertyDoesNotExist($name);
 
         unset($this->{$name});
     }
