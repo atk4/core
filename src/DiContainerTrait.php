@@ -32,6 +32,8 @@ namespace Atk4\Core;
  */
 trait DiContainerTrait
 {
+    use WarnDynamicPropertyTrait;
+
     /**
      * Call from __construct() to initialize the properties allowing
      * developer to pass Dependency Injector Container.
