@@ -16,7 +16,8 @@ trait WarnDynamicPropertyTrait
 {
     protected function warnIfPropertyDoesNotExist(string $name): void
     {
-        if (!property_exists($this, $name)) {
+        // if (!property_exists($this, $name)) { //  does not work with unset properties
+        if (!array_key_exists($name, (array) $this)) {
             'trigger_error'('Property ' . static::class . '::$' . $name . ' does not exist', \E_USER_DEPRECATED);
         }
     }
