@@ -29,7 +29,7 @@ trait WarnDynamicPropertyTrait
     /**
      * @return mixed
      */
-    public function __get(string $name)
+    public function &__get(string $name)
     {
         $this->warnIfPropertyDoesNotExist($name);
 
