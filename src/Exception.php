@@ -11,6 +11,8 @@ use Atk4\Core\Translator\ITranslatorAdapter;
  */
 class Exception extends \Exception
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var array */
     public $params = [];
 
