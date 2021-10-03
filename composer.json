@@ -39,7 +39,6 @@
         "symfony/yaml": "^3.4 || ^4.4 || ^5.1"
     },
     "require-dev": {
-        "atk4/data": "dev-develop",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.3",
@@ -48,7 +47,6 @@
         "symfony/contracts": ">=1.1"
     },
     "require-dev-release": {
-        "atk4/data": "~3.1.0",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.3",
