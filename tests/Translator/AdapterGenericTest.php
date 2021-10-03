@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Core\Tests;
+namespace Atk4\Core\Tests\Translator;
 
 use Atk4\Core\Exception;
 use Atk4\Core\TranslatableTrait;
@@ -10,7 +10,7 @@ use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\Translator;
 use Atk4\Data\Locale;
 
-class TranslatorAdapterGenericTest extends TranslatorAdapterBase
+class AdapterGenericTest extends AdapterBaseTest
 {
     public function getTranslatableMock(): object
     {
