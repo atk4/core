@@ -5,10 +5,30 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests\Translator;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Core\Translator\Adapter\Generic;
+use Atk4\Core\Translator\Translator;
 
 abstract class AdapterBaseTest extends TestCase
 {
     abstract public function getTranslatableMock(): object;
+
+    protected function setUp(): void
+    {
+        $adapter = new Generic();
+        $adapter->addDefinitionFromArray([
+            'Field requires array for defaults' => 'Field requires array for defaults',
+            'Unable to serialize field value on load' => 'Unable to serialize field value on load ({{field}})',
+        ], 'en', 'atk');
+        $adapter->addDefinitionFromArray([
+            'Field requires array for defaults' => 'Il campo richiede un array per i valori predefiniti',
+            'Test with plural' => [
+                'zero' => 'Test zero',
+                'one' => 'Test è uno',
+                'other' => 'Test sono {{count}}',
+            ],
+        ], 'it', 'atk');
+        Translator::instance()->setAdapter($adapter);
+    }
 
     public function translate(string $message, array $params, string $context, string $locale): string
     {
@@ -23,6 +43,9 @@ abstract class AdapterBaseTest extends TestCase
 
         $actual = $this->translate($message, [], 'atk', 'en');
         $this->assertSame($message, $actual);
+
+        $actual = $this->translate($message, [], 'atk', 'it');
+        $this->assertSame('Il campo richiede un array per i valori predefiniti', $actual);
     }
 
     public function testSubstitution(): void

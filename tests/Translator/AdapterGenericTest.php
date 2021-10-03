@@ -8,7 +8,6 @@ use Atk4\Core\Exception;
 use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\Translator;
-use Atk4\Data\Locale;
 
 class AdapterGenericTest extends AdapterBaseTest
 {
@@ -59,9 +58,6 @@ class AdapterGenericTest extends AdapterBaseTest
     public function testAdapter(): void
     {
         $adapter = new Generic();
-
-        // just to cover method addDefinitionFromFile
-        $adapter->addDefinitionFromFile(Locale::getPath() . '/en/atk.php', 'en', 'atk', 'php');
 
         $adapter->setDefinitionSingle('test', 'custom definition', 'en', 'other');
 

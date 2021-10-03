@@ -6,7 +6,6 @@ namespace Atk4\Core\Translator\Adapter;
 
 use Atk4\Core\ConfigTrait;
 use Atk4\Core\Translator\ITranslatorAdapter;
-use Atk4\Data\Locale;
 
 class Generic implements ITranslatorAdapter
 {
@@ -83,44 +82,19 @@ class Generic implements ITranslatorAdapter
      */
     protected function getDefinition(string $message, string $domain, ?string $locale)
     {
-        $this->loadDefinitionAtk($locale); // need to be called before manual add
-
         return $this->definitions[$locale][$domain][$message] ?? null;
     }
 
-    protected function loadDefinitionAtk(string $locale): void
+    public function addDefinitionFromArray(array $data, string $locale, string $domain): void
     {
-        if (isset($this->definitions[$locale]['atk'])) {
-            return;
-        }
-
-        $this->definitions[$locale]['atk'] = [];
-
-        if (class_exists(\Atk4\Data\Locale::class)) {
-            $path = Locale::getPath();
-            $this->addDefinitionFromFile($path . '/' . $locale . '/atk.php', $locale, 'atk', 'php');
-        }
-    }
-
-    /**
-     * Load definitions from file.
-     */
-    public function addDefinitionFromFile(string $file, string $locale, string $domain, string $format): void
-    {
-        $this->loadDefinitionAtk($locale); // need to be called before manual add
-
-        $this->readConfig($file, $format);
-
         $this->definitions = array_replace_recursive(
             $this->definitions,
             [
                 $locale => [
-                    $domain => $this->config,
+                    $domain => $data,
                 ],
             ]
         );
-
-        $this->config = [];
     }
 
     /**
@@ -132,8 +106,6 @@ class Generic implements ITranslatorAdapter
      */
     public function setDefinitionSingle(string $key, $definition, string $locale = 'en', string $domain = 'atk')
     {
-        $this->loadDefinitionAtk($locale); // need to be called before manual add
-
         if (is_string($definition)) {
             $definition = [$definition];
         }
