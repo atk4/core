@@ -40,7 +40,7 @@ trait TrackableTrait
     private function assertNoDirectOwnerAssignment(): void
     {
         if ($this->owner !== null) {
-            throw new Exception('Owner can not be assigned directly');
+            throw new Exception('Owner cannot be assigned directly');
         }
     }
 

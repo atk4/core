@@ -80,7 +80,7 @@ trait AppScopeTrait
     private function assertNoDirectAppAssignment(): void
     {
         if ($this->app !== null) {
-            throw new Exception('App can not be assigned directly');
+            throw new Exception('App cannot be assigned directly');
         }
     }
 
@@ -113,7 +113,7 @@ trait AppScopeTrait
         $this->assertInstanceOfApp($app);
         if ($this->issetApp() && $this->getApp() !== $app) {
             if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
-                throw new Exception('App can not be replaced');
+                throw new Exception('App cannot be replaced');
             }
         }
 
