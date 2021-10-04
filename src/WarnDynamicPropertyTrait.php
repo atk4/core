@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Core;
 
 /**
- * This trait implements https://github.com/php/php-src/pull/7390 .
- *
- * We also add this trait to the most commonly used DiContainerTrait trait to help the developer
- * to discover removed/renamed properties and/or general typos.
- *
- * Remove once PHP 8.1 is no longer supported (the PR above is expected to be merged into PHP 8.2).
+ * This trait implements https://github.com/php/php-src/pull/7390 for lower PHP versions
+ * and also emit a warning when isset() is called on undefined variable.
  */
 trait WarnDynamicPropertyTrait
 {
