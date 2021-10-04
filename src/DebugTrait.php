@@ -103,9 +103,9 @@ trait DebugTrait
     public function debugTraceChange(string $trace = 'default'): void
     {
         $bt = [];
-        foreach (debug_backtrace() as $line) {
-            if (isset($line['file'])) {
-                $bt[] = $line['file'] . ':' . $line['line'];
+        foreach (debug_backtrace() as $frame) {
+            if (isset($frame['file'])) {
+                $bt[] = $frame['file'] . ':' . $frame['line'];
             }
         }
 

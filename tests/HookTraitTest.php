@@ -322,7 +322,7 @@ class HookTraitTest extends TestCase
         $m->onHook('inc', (clone $m)->makeCallback());
         $m = clone $m;
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object can not be cloned with hook bound to a different object than this');
+        $this->expectExceptionMessage('Object cannot be cloned with hook bound to a different object than this');
         $m->hook('inc');
     }
 

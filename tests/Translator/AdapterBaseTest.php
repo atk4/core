@@ -2,13 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Core\Tests;
+namespace Atk4\Core\Tests\Translator;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Core\Translator\Adapter\Generic;
+use Atk4\Core\Translator\Translator;
 
-abstract class TranslatorAdapterBase extends TestCase
+abstract class AdapterBaseTest extends TestCase
 {
     abstract public function getTranslatableMock(): object;
+
+    protected function setUp(): void
+    {
+        $adapter = new Generic();
+        $adapter->addDefinitionFromArray([
+            'Field requires array for defaults' => 'Field requires array for defaults',
+            'Unable to serialize field value on load' => 'Unable to serialize field value on load ({{field}})',
+        ], 'en', 'atk');
+        $adapter->addDefinitionFromArray([
+            'Field requires array for defaults' => 'Il campo richiede un array per i valori predefiniti',
+            'Test with plural' => [
+                'zero' => 'Test zero',
+                'one' => 'Test è uno',
+                'other' => 'Test sono {{count}}',
+            ],
+        ], 'it', 'atk');
+        Translator::instance()->setAdapter($adapter);
+    }
 
     public function translate(string $message, array $params, string $context, string $locale): string
     {
@@ -17,33 +37,15 @@ abstract class TranslatorAdapterBase extends TestCase
         return $mock->_($message, $params, $context, $locale);
     }
 
-    /* DEFINITIONS
-    [
-        'Field requires array for defaults' => 'Field requires array for defaults',
-        'Field value can not be base64 encoded because it is not of string type' => 'Field value can not be base64 encoded because it is not of string type ({{field}})',
-        'Mandatory field value cannot be null' => 'Mandatory field value cannot be null ({{field}})',
-        'Model is already related to another persistence' => 'Model is already related to another persistence',
-        'Must not be null' => 'Must not be null',
-        'Test with plural' => [
-            'zero' => 'Test zero',
-            'one' => 'Test is one',
-            'other' => 'Test are {{count}}',
-        ],
-        'There was error while decoding JSON' => 'There was error while decoding JSON',
-        'Unable to determine persistence driver type from DSN' => 'Unable to determine persistence driver type from DSN',
-        'Unable to serialize field value on load' => 'Unable to serialize field value on load ({{field}})',
-        'Unable to serialize field value on save' => 'Unable to serialize field value on save ({{field}})',
-        'Unable to typecast field value on load' => 'Unable to typecast field value on load ({{field}})',
-        'Unable to typecast field value on save' => 'Unable to typecast field value on save ({{field}})',
-    ];
-    */
-
     public function testBase(): void
     {
         $message = 'Field requires array for defaults';
 
         $actual = $this->translate($message, [], 'atk', 'en');
         $this->assertSame($message, $actual);
+
+        $actual = $this->translate($message, [], 'atk', 'it');
+        $this->assertSame('Il campo richiede un array per i valori predefiniti', $actual);
     }
 
     public function testSubstitution(): void

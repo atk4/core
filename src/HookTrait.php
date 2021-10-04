@@ -50,7 +50,7 @@ trait HookTrait
                         // but instead we should throw once the closure this object is cloned
                         // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
                         if (get_class($fxThis) === get_class($this->_hookOrigThis) || preg_match('~^Atk4\\\\(?:Core|Dsql|Data)~', get_class($fxThis))) {
-                            throw (new Exception('Object can not be cloned with hook bound to a different object than this'))
+                            throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
                                 ->addMoreInfo('closure_file', $fxRefl->getFileName())
                                 ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
                         }
@@ -134,7 +134,7 @@ trait HookTrait
         return function ($ignore, &...$args) use ($getFxThisFx, $fx, $isShort) {
             $fxThis = $getFxThisFx($this);
             if ($fxThis === null) {
-                throw new Exception('New $this can not be null');
+                throw new Exception('New $this cannot be null');
             }
 
             return \Closure::bind($fx, $fxThis)(...($isShort ? [] : [$this]), ...$args);

@@ -89,7 +89,7 @@ class Factory
 
         unset($arguments[0]); // the first argument specifies a class name
         if (count($arguments) > 0) {
-            throw (new Exception('Constructor arguments can not be injected into existing object'))
+            throw (new Exception('Constructor arguments cannot be injected into existing object'))
                 ->addMoreInfo('object', $obj)
                 ->addMoreInfo('arguments', $arguments);
         }

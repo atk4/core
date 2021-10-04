@@ -76,7 +76,7 @@ trait DiContainerTrait
      * Return the argument and assert it is instance of current class.
      *
      * The best, typehinting-friendly, way to annotate object type if it not defined
-     * at method header or strong typing in method header can not be used.
+     * at method header or strong typing in method header cannot be used.
      *
      * @return static
      */

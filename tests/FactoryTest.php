@@ -480,7 +480,7 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * Object factory can not add not defined properties.
+     * Object factory cannot add not defined properties.
      * Receive as class name.
      */
     public function testFactoryParametersException1(): void
@@ -492,7 +492,7 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * Object factory can not add not defined properties.
+     * Object factory cannot add not defined properties.
      * Receive as object.
      */
     public function testFactoryParametersException2(): void

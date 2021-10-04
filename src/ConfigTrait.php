@@ -45,7 +45,7 @@ trait ConfigTrait
         $configs = [];
         foreach ($files as $file) {
             if (!is_readable($file)) {
-                throw (new Exception('Can not read config file'))
+                throw (new Exception('Cannot read config file'))
                     ->addMoreInfo('file', $file)
                     ->addMoreInfo('format', $format);
             }

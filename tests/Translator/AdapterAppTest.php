@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Core\Tests;
+namespace Atk4\Core\Tests\Translator;
 
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\TranslatableTrait;
 
-class TranslatorAdapterAppTest extends TranslatorAdapterBase
+class AdapterAppTest extends AdapterBaseTest
 {
     public function getTranslatableMock(): object
     {
