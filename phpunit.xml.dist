@@ -1,10 +1,4 @@
 <phpunit bootstrap="vendor/autoload.php" colors="true" stderr="true">
-    <php>
-        <var name="DB_DSN" value="sqlite::memory:" />
-        <var name="DB_USER" value="" />
-        <var name="DB_PASSWD" value="" />
-        <var name="DB_DBNAME" value="" />
-    </php>
     <testsuites>
         <testsuite name="tests">
             <directory>tests</directory>
@@ -22,7 +16,7 @@
             <file>src/Phpunit/TestCase.php</file>
         </exclude>
         <report>
-            <clover outputFile="build/logs/clover.xml" />
+            <php outputFile="coverage/phpunit.cov" />
         </report>
     </coverage>
 </phpunit>

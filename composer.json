@@ -32,7 +32,6 @@
     ],
     "require": {
         "php": ">=7.4 <8.2",
-        "ext-json": "*",
         "psr/log": "~1.0",
         "symfony/polyfill-php80": "^1.17",
         "symfony/polyfill-php81": "^1.22",
@@ -43,14 +42,7 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/phpstan": "^0.12.58",
-        "phpunit/phpunit": "^9.5.5",
-        "symfony/contracts": ">=1.1"
-    },
-    "require-dev-release": {
-        "ergebnis/composer-normalize": "^2.13",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "johnkary/phpunit-speedtrap": "^3.3",
-        "phpstan/phpstan": "^0.12.58",
+        "phpunit/phpcov": "*",
         "phpunit/phpunit": "^9.5.5",
         "symfony/contracts": ">=1.1"
     },
