@@ -37,7 +37,7 @@ trait StaticAddToTrait
     {
         $object = static::fromSeed([static::class], $seed);
 
-        static::_addTo_add($parent, $object, $addArgs, $skipAdd);
+        self::_addTo_add($parent, $object, $addArgs, $skipAdd);
 
         return $object;
     }
@@ -53,7 +53,7 @@ trait StaticAddToTrait
     {
         $object = static::fromSeed($seed);
 
-        static::_addTo_add($parent, $object, $addArgs, $skipAdd);
+        self::_addTo_add($parent, $object, $addArgs, $skipAdd);
 
         return $object;
     }
@@ -69,7 +69,7 @@ trait StaticAddToTrait
     {
         $object = static::fromSeedUnsafe($seed);
 
-        static::_addTo_add($parent, $object, $addArgs, $skipAdd);
+        self::_addTo_add($parent, $object, $addArgs, $skipAdd);
 
         return $object;
     }

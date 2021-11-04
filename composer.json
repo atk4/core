@@ -41,7 +41,8 @@
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
         "johnkary/phpunit-speedtrap": "^3.3",
-        "phpstan/phpstan": "^0.12.58",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^1.0",
         "phpunit/phpunit": "^9.5.5",
         "symfony/contracts": ">=1.1"
     },

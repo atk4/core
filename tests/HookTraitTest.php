@@ -65,9 +65,6 @@ class HookTraitTest extends TestCase
         $this->assertSame(1, $result);
     }
 
-    /** @var int */
-    private $result = 0;
-
     public function testHookException1(): void
     {
         // wrong 2nd argument
