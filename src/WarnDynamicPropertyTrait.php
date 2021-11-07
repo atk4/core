@@ -12,7 +12,7 @@ trait WarnDynamicPropertyTrait
 {
     protected function warnPropertyDoesNotExist(string $name): void
     {
-        'trigger_error'('Property ' . static::class . '::$' . $name . ' does not exist', \E_USER_DEPRECATED);
+        'trigger_error'('Property ' . static::class . '::$' . $name . ' does not exist', \E_USER_WARNING);
     }
 
     public function __isset(string $name): bool
