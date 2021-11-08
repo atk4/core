@@ -21,43 +21,39 @@ trait DynamicMethodTrait
      */
     public function __call(string $name, $args)
     {
-        if ($ret = $this->tryCall($name, $args)) {
-            return reset($ret);
+        $hookName = $this->buildMethodHookName($name, false);
+        if (TraitUtil::hasHookTrait($this) && $this->hookHasCallbacks($hookName)) {
+            $result = $this->hook($hookName, $args);
+
+            return reset($result);
         }
 
-        throw (new Exception('Method ' . $name . ' is not defined for this object'))
+        if (TraitUtil::hasAppScopeTrait($this)) {
+            $hookName = $this->buildMethodHookName($name, true);
+            if (TraitUtil::hasHookTrait($this->getApp()) && $this->getApp()->hookHasCallbacks($hookName)) {
+                array_unshift($args, $this);
+                $result = $this->getApp()->hook($hookName, $args);
+
+                return reset($result);
+            }
+        }
+
+        $isDeclared = false;
+        $class = static::class;
+        do {
+            if (method_exists($class, $name)) {
+                $isDeclared = true;
+            }
+        } while ($class = get_parent_class($class));
+
+        throw (new Exception('Method ' . $name . ' ' . ($isDeclared ? 'has limited visibility' : 'is not defined for this object')))
             ->addMoreInfo('class', static::class)
-            ->addMoreInfo('method', $name)
-            ->addMoreInfo('args', $args);
+            ->addMoreInfo('method', $name);
     }
 
     private function buildMethodHookName(string $name, bool $isGlobal): string
     {
         return '__atk__method__' . ($isGlobal ? 'g' : 'l') . '__' . $name;
-    }
-
-    /**
-     * Tries to call dynamic method.
-     *
-     * @param string $name Name of the method
-     * @param array  $args Array of arguments to pass to this method
-     *
-     * @return mixed
-     */
-    public function tryCall($name, $args)
-    {
-        if (TraitUtil::hasHookTrait($this) && $ret = $this->hook($this->buildMethodHookName($name, false), $args)) {
-            return $ret;
-        }
-
-        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasHookTrait($this->getApp())) {
-            array_unshift($args, $this);
-            if ($ret = $this->getApp()->hook($this->buildMethodHookName($name, true), $args)) {
-                return $ret;
-            }
-        }
-
-        return null;
     }
 
     /**

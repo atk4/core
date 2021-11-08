@@ -28,39 +28,39 @@ class DynamicMethodTraitTest extends TestCase
         $this->assertSame('Hello, world', $res);
     }
 
-    public function testException1(): void
+    public function testExceptionUndefined(): void
     {
-        // can't call undefined method
-        $this->expectException(Exception::class);
         $m = new DynamicMethodMock();
+
+        $this->expectException(Exception::class);
         $m->unknownMethod();
     }
 
-    public function testException2(): void
+    public function testExceptionUndefinedWithoutHookTrait(): void
     {
-        // can't call method without HookTrait or AppScope+Hook traits
-        $this->expectException(Exception::class);
         $m = new DynamicMethodWithoutHookMock();
+
+        $this->expectException(Exception::class);
         $m->unknownMethod();
     }
 
-    public function testException3(): void
+    public function testExceptionUndefinedWithoutHookTrait2(): void
     {
-        // can't add method without HookTrait
+        $m = new GlobalMethodObjectMock();
+        $m->setApp(new GlobalMethodAppMock());
+
         $this->expectException(Exception::class);
+        $m->unknownMethod();
+    }
+
+    public function testExceptionAddWithoutHookTrait(): void
+    {
         $m = new DynamicMethodWithoutHookMock();
+
+        $this->expectException(Exception::class);
         $m->addMethod('sum', function ($m, $a, $b) {
             return $a + $b;
         });
-    }
-
-    public function testException4(): void
-    {
-        // can't call method without HookTrait or AppScope+Hook traits
-        $this->expectException(Exception::class);
-        $m = new GlobalMethodObjectMock();
-        $m->setApp(new GlobalMethodAppMock());
-        $m->unknownMethod();
     }
 
     /**
