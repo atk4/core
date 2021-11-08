@@ -172,9 +172,9 @@ Container Trait
             $parent->removeElement('child1');
         }
 
-        $parent->each(function($child) {
+        foreach ($parent as $child) {
             $child->doSomething();
-        });
+        }
 
     Child object names will be derived from the parent name.
 
