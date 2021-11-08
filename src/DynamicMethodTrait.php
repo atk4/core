@@ -38,17 +38,18 @@ trait DynamicMethodTrait
             }
         }
 
-        $isDeclared = false;
         $class = static::class;
         do {
             if (method_exists($class, $name)) {
-                $isDeclared = true;
+                $methodRefl = new \ReflectionMethod($class, $name);
+                $visibility = $methodRefl->isPrivate() ? 'private' : ($methodRefl->isProtected() ? 'protected' : 'unknown');
+
+                throw new \Error('Call to ' . $visibility . ' method ' . $class . '::' . $name . '()');
             }
         } while ($class = get_parent_class($class));
+        $class = static::class;
 
-        throw (new Exception('Method ' . $name . ' ' . ($isDeclared ? 'has limited visibility' : 'is not defined for this object')))
-            ->addMoreInfo('class', static::class)
-            ->addMoreInfo('method', $name);
+        throw new \Error('Call to undefined method ' . $class . '::' . $name . '()');
     }
 
     private function buildMethodHookName(string $name, bool $isGlobal): string

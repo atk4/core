@@ -28,19 +28,38 @@ class DynamicMethodTraitTest extends TestCase
         $this->assertSame('Hello, world', $res);
     }
 
-    public function testExceptionUndefined(): void
+    public function testExceptionUndefinedMethod(): void
     {
         $m = new DynamicMethodMock();
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to undefined method ' . DynamicMethodMock::class . '::unknownMethod()');
         $m->unknownMethod();
+    }
+
+    public function testExceptionPrivateMethod(): void
+    {
+        $m = new DynamicMethodMock();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to private method ' . DynamicMethodMock::class . '::privateMethod()');
+        $m->privateMethod();
+    }
+
+    public function testExceptionProtectedMethod(): void
+    {
+        $m = new DynamicMethodMock();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to protected method ' . DynamicMethodMock::class . '::protectedMethod()');
+        $m->protectedMethod();
     }
 
     public function testExceptionUndefinedWithoutHookTrait(): void
     {
         $m = new DynamicMethodWithoutHookMock();
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Error::class);
         $m->unknownMethod();
     }
 
@@ -49,7 +68,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new GlobalMethodObjectMock();
         $m->setApp(new GlobalMethodAppMock());
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Error::class);
         $m->unknownMethod();
     }
 
@@ -175,6 +194,15 @@ class DynamicMethodMock
 {
     use DynamicMethodTrait;
     use HookTrait;
+
+    private function privateMethod(): void
+    {
+    }
+
+    protected function protectedMethod(): void
+    {
+        $this->privateMethod();
+    }
 }
 class DynamicMethodWithoutHookMock
 {
