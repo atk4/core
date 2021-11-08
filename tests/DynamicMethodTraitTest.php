@@ -45,7 +45,7 @@ class DynamicMethodTraitTest extends TestCase
         $this->expectExceptionMessage(
             'Call to private method ' . DynamicMethodMock::class . '::privateMethod() from scope ' . static::class
         );
-        $m->privateMethod();
+        $m->__call('privateMethod', []);
     }
 
     public function testExceptionProtectedMethod(): void
@@ -56,8 +56,8 @@ class DynamicMethodTraitTest extends TestCase
         $this->expectExceptionMessage(
             'Call to protected method ' . DynamicMethodMock::class . '::protectedMethod() from global scope'
         );
-        \Closure::bind(function() use ($m) {
-            $m->protectedMethod();
+        \Closure::bind(function () use ($m) {
+            $m->protectedMethod(); // @phpstan-ignore-line
         }, null, null)();
     }
 

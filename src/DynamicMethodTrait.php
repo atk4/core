@@ -19,7 +19,7 @@ trait DynamicMethodTrait
      *
      * @return mixed
      */
-    public function __call(string $name, $args)
+    public function __call(string $name, array $args)
     {
         $hookName = $this->buildMethodHookName($name, false);
         if (TraitUtil::hasHookTrait($this) && $this->hookHasCallbacks($hookName)) {
