@@ -42,7 +42,9 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to private method ' . DynamicMethodMock::class . '::privateMethod()');
+        $this->expectExceptionMessage(
+            'Call to private method ' . DynamicMethodMock::class . '::privateMethod() from scope ' . static::class
+        );
         $m->privateMethod();
     }
 
@@ -51,8 +53,12 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to protected method ' . DynamicMethodMock::class . '::protectedMethod()');
-        $m->protectedMethod();
+        $this->expectExceptionMessage(
+            'Call to protected method ' . DynamicMethodMock::class . '::protectedMethod() from global scope'
+        );
+        \Closure::bind(function() use ($m) {
+            $m->protectedMethod();
+        }, null, null)();
     }
 
     public function testExceptionUndefinedWithoutHookTrait(): void

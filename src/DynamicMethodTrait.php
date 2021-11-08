@@ -38,13 +38,19 @@ trait DynamicMethodTrait
             }
         }
 
+        // match native PHP behaviour as much as possible
+        // https://3v4l.org/eAv7t
         $class = static::class;
         do {
             if (method_exists($class, $name)) {
                 $methodRefl = new \ReflectionMethod($class, $name);
-                $visibility = $methodRefl->isPrivate() ? 'private' : ($methodRefl->isProtected() ? 'protected' : 'unknown');
+                $visibility = $methodRefl->isPrivate()
+                    ? 'private'
+                    : ($methodRefl->isProtected() ? 'protected' : 'unknown');
+                $fromScope = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['class'] ?? null;
 
-                throw new \Error('Call to ' . $visibility . ' method ' . $class . '::' . $name . '()');
+                throw new \Error('Call to ' . $visibility . ' method ' . $class . '::' . $name . '() from '
+                    . ($fromScope ? 'scope ' . $fromScope : 'global scope'));
             }
         } while ($class = get_parent_class($class));
         $class = static::class;
