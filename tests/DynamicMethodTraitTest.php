@@ -28,39 +28,64 @@ class DynamicMethodTraitTest extends TestCase
         $this->assertSame('Hello, world', $res);
     }
 
-    public function testException1(): void
+    public function testExceptionUndefinedMethod(): void
     {
-        // can't call undefined method
-        $this->expectException(Exception::class);
         $m = new DynamicMethodMock();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to undefined method ' . DynamicMethodMock::class . '::unknownMethod()');
         $m->unknownMethod();
     }
 
-    public function testException2(): void
+    public function testExceptionPrivateMethod(): void
     {
-        // can't call method without HookTrait or AppScope+Hook traits
-        $this->expectException(Exception::class);
+        $m = new DynamicMethodMock();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage(
+            'Call to private method ' . DynamicMethodMock::class . '::privateMethod() from scope ' . static::class
+        );
+        $m->__call('privateMethod', []);
+    }
+
+    public function testExceptionProtectedMethod(): void
+    {
+        $m = new DynamicMethodMock();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage(
+            'Call to protected method ' . DynamicMethodMock::class . '::protectedMethod() from global scope'
+        );
+        \Closure::bind(function () use ($m) {
+            $m->protectedMethod(); // @phpstan-ignore-line
+        }, null, null)();
+    }
+
+    public function testExceptionUndefinedWithoutHookTrait(): void
+    {
         $m = new DynamicMethodWithoutHookMock();
+
+        $this->expectException(\Error::class);
         $m->unknownMethod();
     }
 
-    public function testException3(): void
+    public function testExceptionUndefinedWithoutHookTrait2(): void
     {
-        // can't add method without HookTrait
-        $this->expectException(Exception::class);
+        $m = new GlobalMethodObjectMock();
+        $m->setApp(new GlobalMethodAppMock());
+
+        $this->expectException(\Error::class);
+        $m->unknownMethod();
+    }
+
+    public function testExceptionAddWithoutHookTrait(): void
+    {
         $m = new DynamicMethodWithoutHookMock();
+
+        $this->expectException(Exception::class);
         $m->addMethod('sum', function ($m, $a, $b) {
             return $a + $b;
         });
-    }
-
-    public function testException4(): void
-    {
-        // can't call method without HookTrait or AppScope+Hook traits
-        $this->expectException(Exception::class);
-        $m = new GlobalMethodObjectMock();
-        $m->setApp(new GlobalMethodAppMock());
-        $m->unknownMethod();
     }
 
     /**
@@ -175,6 +200,15 @@ class DynamicMethodMock
 {
     use DynamicMethodTrait;
     use HookTrait;
+
+    private function privateMethod(): void
+    {
+    }
+
+    protected function protectedMethod(): void
+    {
+        $this->privateMethod();
+    }
 }
 class DynamicMethodWithoutHookMock
 {
