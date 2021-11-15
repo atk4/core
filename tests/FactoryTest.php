@@ -531,7 +531,7 @@ class FactoryTestDiMock extends FactoryTestMock
 class FactoryTestViewMock extends FactoryTestMock
 {
     use DiContainerTrait {
-        setDefaults as _setDefaults;
+        setDefaults as private _setDefaults;
     }
 
     /**
@@ -555,7 +555,7 @@ class FactoryTestViewMock extends FactoryTestMock
 class FactoryTestDefMock extends FactoryTestMock
 {
     use DiContainerTrait {
-        setDefaults as _setDefaults;
+        setDefaults as private _setDefaults;
     }
 
     /** @var array<string, mixed> */

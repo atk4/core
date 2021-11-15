@@ -88,7 +88,7 @@ This is done by overriding setMissingProperty method::
 
     class MyObj {
         use DiContainerTrait {
-            setMissingProperty as _setMissingProperty;
+            setMissingProperty as private _setMissingProperty;
         }
 
         function __construct($defaults = []) {

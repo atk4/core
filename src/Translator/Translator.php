@@ -10,12 +10,11 @@ use Atk4\Core\Translator\Adapter\Generic;
 
 /**
  * Translator is a bridge
- * -.
  */
 class Translator
 {
     use DiContainerTrait {
-        setDefaults as protected _setDefaults;
+        setDefaults as private _setDefaults;
     }
 
     /** @var self */

@@ -59,7 +59,7 @@ trait TrackableTrait
     }
 
     /**
-     * @return static
+     * @return $this
      */
     public function setOwner(object $owner)
     {
@@ -76,7 +76,7 @@ trait TrackableTrait
     /**
      * Should be used only when object is cloned.
      *
-     * @return static
+     * @return $this
      */
     public function unsetOwner()
     {
