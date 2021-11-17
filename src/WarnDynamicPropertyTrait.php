@@ -12,7 +12,18 @@ trait WarnDynamicPropertyTrait
 {
     protected function warnPropertyDoesNotExist(string $name): void
     {
-        'trigger_error'('Property ' . static::class . '::$' . $name . ' does not exist', \E_USER_WARNING);
+        // match native PHP behaviour as much as possible
+        // https://3v4l.org/2KR3m
+        $class = static::class;
+        try {
+            $propRefl = new \ReflectionProperty($class, $name);
+            if (!$propRefl->isPrivate()) {
+                throw new \Error('Cannot access protected property ' . $class . '::$' . $name);
+            }
+        } catch (\ReflectionException $e) {
+        }
+
+        'trigger_error'('Undefined property: ' . $class . '::$' . $name, \E_USER_WARNING);
     }
 
     public function __isset(string $name): bool

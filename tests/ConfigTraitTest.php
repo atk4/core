@@ -15,9 +15,6 @@ class ConfigTraitTest extends TestCase
     /** @var string */
     public $dir = __DIR__ . '/config_test';
 
-    /**
-     * Test file reader.
-     */
     public function testFileRead(): void
     {
         // for php
@@ -67,18 +64,17 @@ class ConfigTraitTest extends TestCase
         // default config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');
-        $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($a, $m->getConfigProp());
 
         // json config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.json', 'json');
-        $this->{'assertEquals'}($b, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($b, $m->getConfigProp());
 
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.yml', 'yaml');
-        //var_dump($this->getProtected($m, 'config'));
-        $this->{'assertEquals'}($c, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($c, $m->getConfigProp());
     }
 
     public function testFileReadException(): void
@@ -138,7 +134,7 @@ class ConfigTraitTest extends TestCase
             'arr/sub/two' => 'another',     // add one more in deep structure
             'arr' => ['foo' => 'bar'], // merge arrays
         ]);
-        $this->{'assertEquals'}($a, $this->getProtected($m, 'config'));
+        $this->{'assertEquals'}($a, $m->getConfigProp());
 
         // test getConfig
         $this->assertSame(789, $m->getConfig('num'));
@@ -160,4 +156,9 @@ class ConfigTraitTest extends TestCase
 class ConfigMock
 {
     use ConfigTrait;
+
+    public function getConfigProp(): array
+    {
+        return $this->config;
+    }
 }

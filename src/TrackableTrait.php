@@ -14,13 +14,6 @@ trait TrackableTrait
     use NameTrait;
 
     /**
-     * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
-     *
-     * @var object|null
-     */
-    private $owner;
-
-    /**
      * Link to (parent) object into which we added this object.
      *
      * @var object|null
@@ -34,27 +27,13 @@ trait TrackableTrait
      */
     public $short_name;
 
-    /**
-     * To be removed in Jan 2021.
-     */
-    private function assertNoDirectOwnerAssignment(): void
-    {
-        if ($this->owner !== null) {
-            throw new Exception('Owner cannot be assigned directly');
-        }
-    }
-
     public function issetOwner(): bool
     {
-        $this->assertNoDirectOwnerAssignment();
-
         return $this->_owner !== null;
     }
 
     public function getOwner(): object
     {
-        $this->assertNoDirectOwnerAssignment();
-
         return $this->_owner;
     }
 
@@ -63,7 +42,6 @@ trait TrackableTrait
      */
     public function setOwner(object $owner)
     {
-        $this->assertNoDirectOwnerAssignment();
         if ($this->issetOwner()) {
             throw new Exception('Owner already set');
         }
@@ -80,7 +58,6 @@ trait TrackableTrait
      */
     public function unsetOwner()
     {
-        $this->assertNoDirectOwnerAssignment();
         if (!$this->issetOwner()) {
             throw new Exception('Owner not set');
         }

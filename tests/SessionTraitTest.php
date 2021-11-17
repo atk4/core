@@ -11,12 +11,15 @@ use Atk4\Core\SessionTrait;
 
 /**
  * @coversDefaultClass \Atk4\Core\SessionTrait
+ *
+ * @group require_session
+ * @runTestsInSeparateProcesses
  */
 class SessionTraitTest extends TestCase
 {
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
         session_abort();
         $sessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
@@ -26,10 +29,8 @@ class SessionTraitTest extends TestCase
         ini_set('session.save_path', $sessionDir);
     }
 
-    public static function tearDownAfterClass(): void
+    protected function tearDown(): void
     {
-        parent::tearDownAfterClass();
-
         session_abort();
         $sessionDir = ini_get('session.save_path');
         foreach (scandir($sessionDir) as $f) {
@@ -39,6 +40,8 @@ class SessionTraitTest extends TestCase
         }
 
         rmdir($sessionDir);
+
+        parent::tearDown();
     }
 
     public function testException1(): void
