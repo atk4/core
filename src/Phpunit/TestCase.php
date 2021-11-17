@@ -6,17 +6,19 @@ namespace Atk4\Core\Phpunit;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 
+use PHPUnit\Framework\TestCase as BaseTestCase;
+
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
  */
-class TestCase extends \PHPUnit\Framework\TestCase
+abstract class TestCase extends BaseTestCase
 {
     use WarnDynamicPropertyTrait;
 
     protected function tearDown(): void
     {
         // remove once https://github.com/sebastianbergmann/phpunit/issues/4705 is fixed
-        foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(\PHPUnit\Framework\TestCase::class))) as $k) {
+        foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class))) as $k) {
             if (!is_scalar($this->{$k})) {
                 $this->{$k} = null;
             }
@@ -92,14 +94,5 @@ class TestCase extends \PHPUnit\Framework\TestCase
         }, null, $obj)();
 
         return $this;
-    }
-
-    /**
-     * Fake test. Otherwise phpunit gives warning that there are no tests in here.
-     *
-     * @doesNotPerformAssertions
-     */
-    public function testFake(): void
-    {
     }
 }
