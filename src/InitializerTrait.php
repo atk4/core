@@ -10,23 +10,31 @@ namespace Atk4\Core;
  */
 trait InitializerTrait
 {
-    /**
-     * To make sure you have called parent::init() properly.
-     *
-     * @var bool
-     */
-    public $_initialized = false;
+    /** @var bool */
+    private $_initialized = false;
 
     /**
      * Initialize object. Always call parent::init(). Do not call directly.
      */
     protected function init(): void
     {
-        if ($this->_initialized) {
-            throw (new Exception('Attempting to initialize twice'))
+        if ($this->isInitialized()) {
+            throw (new Exception('Object already initialized'))
                 ->addMoreInfo('this', $this);
         }
         $this->_initialized = true;
+    }
+
+    public function isInitialized(): bool
+    {
+        return $this->_initialized;
+    }
+
+    public function assertIsInitialized(): void
+    {
+        if (!$this->isInitialized()) {
+            throw new Exception('Object was not initialized');
+        }
     }
 
     /**
@@ -40,5 +48,7 @@ trait InitializerTrait
         }
 
         $this->init();
+
+        $this->assertIsInitialized();
     }
 }
