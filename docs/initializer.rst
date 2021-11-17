@@ -37,13 +37,6 @@ Declare a object class in your framework::
         }
     }
 
-Properties
-==========
-
-.. php:attr:: _initialized
-
-    Internal property to make sure you have called parent::init() properly.
-
 Methods
 =======
 

@@ -18,9 +18,6 @@ class Generic implements ITranslatorAdapter
     /** @var array */
     protected $definitions = [];
 
-    /**
-     * {@inheritdoc}
-     */
     public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         $definition = $this->getDefinition($message, $domain ?? 'atk', $locale ?? 'en');

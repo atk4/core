@@ -192,7 +192,7 @@ class DebugMock
 {
     use AppScopeTrait;
     use DebugTrait {
-        _echo_stderr as __echo_stderr;
+        _echo_stderr as private __echo_stderr;
     }
 
     protected function _echo_stderr(string $message): void

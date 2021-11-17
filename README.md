@@ -39,7 +39,6 @@ composer require atk4/core
 
 Agile Core is part of [Agile Toolkit - PHP UI Framework](http://agiletoolkit.org). If you like this project, you should also look into:
 
-- [DSQL](https://github.com/atk4/dsql) - [![GitHub release](https://img.shields.io/github/release/atk4/dsql.svg?label=DSQL)]()
 - [Agile Data](https://github.com/atk4/data) - [![GitHub release](https://img.shields.io/github/release/atk4/data.svg?label=Agile+Data)]()
 - [Agile UI](https://github.com/atk4/ui) - [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg?label=Agile+UI)]()
 

@@ -13,41 +13,60 @@ use Atk4\Core\Phpunit\TestCase;
  */
 class InitializerTraitTest extends TestCase
 {
-    public function testBasic(): void
+    public function testInit(): void
     {
-        $m = new ContainerMock2();
-        $i = $m->add(new InitializerMock());
-
-        $this->assertTrue($i->result);
+        $m = new InitializerMock();
+        $this->assertFalse($m->isInitialized());
+        $m->invokeInit();
+        $this->assertTrue($m->isInitialized());
+        $this->assertTrue($m->result);
+        $m->assertIsInitialized();
     }
 
-    public function testInitializerNotCalled(): void
+    public function testInitCalledFromAdd(): void
     {
-        $this->expectException(Exception::class);
-        $m = new ContainerMock2();
-        $m->add(new BrokenInitializerMock());
+        $container = new class() {
+            use Core\ContainerTrait;
+        };
+
+        $m = new InitializerMock();
+        $container->add($m);
+        $this->assertTrue($m->isInitialized());
+        $this->assertTrue($m->result);
+        $m->assertIsInitialized();
     }
 
-    public function testInitializedTwice(): void
+    public function testInitNotCalled(): void
     {
+        $m = new InitializerMock();
         $this->expectException(Exception::class);
+        $this->assertFalse($m->isInitialized());
+        $m->assertIsInitialized();
+    }
+
+    public function testInitBroken(): void
+    {
+        $m = new InitializerMockBroken();
+        $this->expectException(Exception::class);
+        $m->invokeInit();
+    }
+
+    public function testInitCalledTwice(): void
+    {
         $m = new InitializerMock();
         $m->invokeInit();
+        $this->assertTrue($m->isInitialized());
+        $this->expectException(Exception::class);
         $m->invokeInit();
     }
 }
 
-class ContainerMock2
-{
-    use Core\ContainerTrait;
-}
-
-class _InitializerMock
+abstract class AbstractInitializerMock
 {
     use Core\InitializerTrait;
 }
 
-class InitializerMock extends _InitializerMock
+class InitializerMock extends AbstractInitializerMock
 {
     /** @var bool */
     public $result = false;
@@ -60,7 +79,7 @@ class InitializerMock extends _InitializerMock
     }
 }
 
-class BrokenInitializerMock extends _InitializerMock
+class InitializerMockBroken extends AbstractInitializerMock
 {
     protected function init(): void
     {

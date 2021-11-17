@@ -67,10 +67,7 @@ class Json extends RendererAbstract
 
     protected function processStackTrace(): void
     {
-        $this->output .= <<<'HTML'
-            <span style="color:sandybrown">Stack Trace:</span>
-
-            HTML;
+        $this->output .= '<span style="color:sandybrown">Stack Trace:</span>' . "\n";
 
         $this->processStackTraceInternal();
     }
@@ -116,7 +113,7 @@ class Json extends RendererAbstract
             'line' => $call['line'] ?? '',
             'file' => $call['file'] ?? '',
             'class' => $call['class'] ?? null,
-            'object' => ($call['object'] ?? null) !== null ? ($call['object']->name ?? get_class($call['object'])) : null,
+            'object' => ($call['object'] ?? null) !== null ? $this->toSafeString($call['object']) : null,
             'function' => $call['function'] ?? null,
             'args' => $call['args'] ?? [],
         ];
