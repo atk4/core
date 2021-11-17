@@ -9,7 +9,7 @@ namespace Atk4\Core;
 final class TraitUtil
 {
     /** @var array<class-string, array<string, bool>> */
-    private static $_hasTraitMap = [];
+    private static $_hasTraitCache = [];
 
     private function __construct()
     {
@@ -31,7 +31,7 @@ final class TraitUtil
             throw new Exception('Core::hasTrait is not indended for use with other than \Atk4\Core\* traits.');
         }
 
-        if (!isset(self::$_hasTraitMap[$class][$traitName])) {
+        if (!isset(self::$_hasTraitCache[$class][$traitName])) {
             $getUsesFunc = function (string $trait) use (&$getUsesFunc): array {
                 $uses = class_uses($trait);
                 foreach ($uses as $use) {
@@ -47,10 +47,10 @@ final class TraitUtil
             }
             $uses = array_unique($uses);
 
-            self::$_hasTraitMap[$class][$traitName] = in_array($traitName, $uses, true);
+            self::$_hasTraitCache[$class][$traitName] = in_array($traitName, $uses, true);
         }
 
-        return self::$_hasTraitMap[$class][$traitName];
+        return self::$_hasTraitCache[$class][$traitName];
     }
 
     /*

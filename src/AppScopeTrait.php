@@ -15,13 +15,6 @@ namespace Atk4\Core;
 trait AppScopeTrait
 {
     /**
-     * @internal to be removed in Jan 2021, keep until then to prevent wrong assignments
-     *
-     * @var bool
-     */
-    private $app;
-
-    /**
      * Always points to current application.
      *
      * @var \Atk4\Ui\App
@@ -74,20 +67,8 @@ trait AppScopeTrait
         }
     }
 
-    /**
-     * To be removed in Jan 2021.
-     */
-    private function assertNoDirectAppAssignment(): void
-    {
-        if ($this->app !== null) {
-            throw new Exception('App cannot be assigned directly');
-        }
-    }
-
     public function issetApp(): bool
     {
-        $this->assertNoDirectAppAssignment();
-
         return $this->_app !== null;
     }
 
@@ -96,7 +77,6 @@ trait AppScopeTrait
      */
     public function getApp()
     {
-        $this->assertNoDirectAppAssignment();
         $this->assertInstanceOfApp($this->_app);
 
         return $this->_app;
@@ -109,7 +89,6 @@ trait AppScopeTrait
      */
     public function setApp(object $app)
     {
-        $this->assertNoDirectAppAssignment();
         $this->assertInstanceOfApp($app);
         if ($this->issetApp() && $this->getApp() !== $app) {
             if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
