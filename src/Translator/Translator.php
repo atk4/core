@@ -9,7 +9,7 @@ use Atk4\Core\Exception;
 use Atk4\Core\Translator\Adapter\Generic;
 
 /**
- * Translator is a bridge
+ * Translator is a bridge.
  */
 class Translator
 {
