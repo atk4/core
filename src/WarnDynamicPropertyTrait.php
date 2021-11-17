@@ -20,7 +20,8 @@ trait WarnDynamicPropertyTrait
             if (!$propRefl->isPrivate()) {
                 throw new \Error('Cannot access protected property ' . $class . '::$' . $name);
             }
-        } catch (\ReflectionException $e) { }
+        } catch (\ReflectionException $e) {
+        }
 
         'trigger_error'('Undefined property: ' . $class . '::$' . $name, \E_USER_WARNING);
     }

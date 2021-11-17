@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Core\Phpunit;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
-
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**

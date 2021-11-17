@@ -17,7 +17,7 @@ use Atk4\Core\SessionTrait;
  */
 class SessionTraitTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -29,7 +29,7 @@ class SessionTraitTest extends TestCase
         ini_set('session.save_path', $sessionDir);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         session_abort();
         $sessionDir = ini_get('session.save_path');
