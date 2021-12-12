@@ -1,16 +1,15 @@
 {
     "name": "atk4/core",
-    "type": "library",
     "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "php",
         "framework",
         "traits",
         "agile toolkit"
     ],
-    "homepage": "https://github.com/atk4/core",
     "version": "dev-develop",
-    "license": "MIT",
     "authors": [
         {
             "name": "Romans Malinovskis",
@@ -30,6 +29,7 @@
             "homepage": "https://mvorisek.cz/"
         }
     ],
+    "homepage": "https://github.com/atk4/core",
     "require": {
         "php": ">=7.4 <8.2",
         "psr/log": "^1.0",
@@ -47,9 +47,8 @@
         "phpunit/phpunit": "^9.5.5",
         "symfony/contracts": ">=1.1"
     },
-    "config": {
-        "sort-packages": true
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Atk4\\Core\\": "src/"
@@ -60,6 +59,7 @@
             "Atk4\\Core\\Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "config": {
+        "sort-packages": true
+    }
 }
