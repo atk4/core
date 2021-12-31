@@ -20,9 +20,7 @@ trait HookTrait
      */
     private $_hookIndexCounter = 0;
 
-    /**
-     * @var static
-     */
+    /** @var static */
     private $_hookOrigThis;
 
     private function _rebindHooksIfCloned(): void
