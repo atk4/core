@@ -13,18 +13,10 @@ trait TrackableTrait
 {
     use NameTrait;
 
-    /**
-     * Link to (parent) object into which we added this object.
-     *
-     * @var object|null
-     */
+    /** @var object|null Link to (parent) object into which we added this object. */
     private $_owner;
 
-    /**
-     * Name of the object in owner's element array.
-     *
-     * @var string
-     */
+    /** @var string Name of the object in owner's element array. */
     public $short_name;
 
     public function issetOwner(): bool

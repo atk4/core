@@ -9,10 +9,6 @@ namespace Atk4\Core;
  */
 trait NameTrait
 {
-    /**
-     * Unique object name.
-     *
-     * @var string
-     */
+    /** @var string Unique object name. */
     public $name;
 }

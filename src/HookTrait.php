@@ -13,11 +13,7 @@ trait HookTrait
      */
     protected $hooks = [];
 
-    /**
-     * Next hook index counter.
-     *
-     * @var int
-     */
+    /** @var int Next hook index counter. */
     private $_hookIndexCounter = 0;
 
     /** @var static */
