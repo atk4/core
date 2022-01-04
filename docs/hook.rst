@@ -157,11 +157,11 @@ Remember that adding breaking hook with a lower priority can prevent other
 call-backs from being executed::
 
 
-    $obj->onHook('test', function($obj){
+    $obj->onHook('test', function($obj) {
         $obj->breakHook("break1");
     });
 
-    $obj->onHook('test', function($obj){
+    $obj->onHook('test', function($obj) {
         $obj->breakHook("break2");
     }, [], -5);
 
