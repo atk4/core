@@ -18,9 +18,7 @@ trait ContainerTrait
      */
     public $elements = [];
 
-    /**
-     * @var int[]
-     */
+    /** @var int[] */
     private $_element_name_counts = [];
 
     /**

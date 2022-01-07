@@ -9,9 +9,7 @@ namespace Atk4\Core;
  */
 class HookBreaker extends Exception
 {
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     protected $returnValue;
 
     /**

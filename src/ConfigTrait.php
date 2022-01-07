@@ -16,11 +16,7 @@ namespace Atk4\Core;
  */
 trait ConfigTrait
 {
-    /**
-     * This property stores config values. Use getConfig() method to access its values.
-     *
-     * @var array
-     */
+    /** @var array This property stores config values. Use getConfig() method to access its values. */
     protected $config = [];
 
     /**

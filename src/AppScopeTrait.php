@@ -14,11 +14,7 @@ namespace Atk4\Core;
  */
 trait AppScopeTrait
 {
-    /**
-     * Always points to current application.
-     *
-     * @var \Atk4\Ui\App
-     */
+    /** @var \Atk4\Ui\App Always points to current application. */
     private $_app;
 
     /**

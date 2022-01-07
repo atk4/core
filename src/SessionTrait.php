@@ -6,11 +6,7 @@ namespace Atk4\Core;
 
 trait SessionTrait
 {
-    /**
-     * Session container key.
-     *
-     * @var string
-     */
+    /** @var string Session container key. */
     protected $session_key = '__atk_session';
 
     /**
