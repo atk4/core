@@ -18,9 +18,9 @@ abstract class TestCase extends BaseTestCase
     {
         // remove once https://github.com/sebastianbergmann/phpunit/issues/4705 is fixed
         foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class))) as $k) {
-            if (!is_scalar($this->{$k})) {
-                $this->{$k} = null;
-            }
+            $this->{$k} = \PHP_MAJOR_VERSION < 8
+                ? (new \ReflectionProperty(static::class, $k))->getDeclaringClass()->getDefaultProperties()[$k]
+                : (null ?? (new \ReflectionProperty(static::class, $k))->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
         }
 
         // once PHP 8.0 support is dropped, needed only once, see:
