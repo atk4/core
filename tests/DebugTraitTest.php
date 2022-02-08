@@ -89,38 +89,6 @@ class DebugTraitTest extends TestCase
         $this->assertSame(['warning', 'debug test3', []], $app->log);
     }
 
-    public function testMessage1(): void
-    {
-        $this->expectOutputString("Could not notify user about: hello user\n");
-
-        $m = new DebugMock();
-        $m->userMessage('hello user');
-    }
-
-    public function testMessage2(): void
-    {
-        $this->expectOutputString('');
-        $app = new DebugAppMock();
-
-        $m = new DebugMock();
-        $m->setApp($app);
-        $m->userMessage('hello user');
-
-        $this->assertSame(['warning', 'Could not notify user about: hello user', []], $app->log);
-    }
-
-    public function testMessage3(): void
-    {
-        $this->expectOutputString('');
-        $app = new DebugAppMock2();
-
-        $m = new DebugMock();
-        $m->setApp($app);
-        $m->userMessage('hello user');
-
-        $this->assertSame(['hello user', []], $app->message);
-    }
-
     protected function triggerDebugTraceChange(DebugMock $o, string $trace): void
     {
         $o->debugTraceChange($trace);
@@ -161,7 +129,7 @@ class DebugTraitTest extends TestCase
     {
         $app = new DebugAppMock();
 
-        $m = new PsrMock();
+        $m = new DebugPsrMock();
         $app->logger = $app;
         $m->setApp($app);
 
@@ -220,18 +188,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     }
 }
 
-class DebugAppMock2 implements \Atk4\Core\AppUserNotificationInterface
-{
-    /** @var array<int, mixed> */
-    public $message;
-
-    public function userNotification(string $message, array $context = []): void
-    {
-        $this->message = [$message, $context];
-    }
-}
-
-class PsrMock implements \Psr\Log\LoggerInterface
+class DebugPsrMock implements \Psr\Log\LoggerInterface
 {
     use AppScopeTrait;
     use DebugTrait;

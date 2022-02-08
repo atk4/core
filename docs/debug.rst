@@ -64,24 +64,6 @@ Log method will log message every time. DebugTrait implements the ``log()``
 method which will either display information on the STDOUT (if ``$this->getApp()``
 does not exist or does not implement PSR-3)
 
-Message
--------
-
-This method is for messages that are specifically targeted at the user. For
-critical messages you should use Exceptions, but when things are not that bad,
-you can use message::
-
-    $this->message('Your last login was on {date}', ['date' => $date]);
-
-The task of the application is to route the message to the user and make sure he
-acknowledges it such as by using interface notifications alert or Growl message.
-
-Messages are logged with LogLevel NOTICE if PSR-3 is implemented, but
-additionally, if your application implements ``AppUserNotificationInterface``,
-then ``$app->userNotification($message, array $context = [])`` will be executed,
-which is responsible for caching messages, relaying it to user and collecting
-acknowledgments.
-
 debugTraceChange
 ----------------
 
