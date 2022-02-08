@@ -80,7 +80,7 @@ class SessionTraitTest extends TestCase
         $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
 
         // value as object
-        $o = new \StdClass();
+        $o = new \stdClass();
         $m->memorize('foo', $o);
         $this->assertSame($o, $_SESSION['__atk_session'][$m->name]['foo']);
 

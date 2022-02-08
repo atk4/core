@@ -9,7 +9,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
 
-class StdSat extends \StdClass
+class StdSat extends \stdClass
 {
     use StaticAddToTrait;
 }

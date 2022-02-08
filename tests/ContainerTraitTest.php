@@ -17,7 +17,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         // add to return object
-        $tr = $m->add($tr2 = new \StdClass());
+        $tr = $m->add($tr2 = new \stdClass());
         $this->assertSame($tr, $tr2);
 
         // trackable object can be referenced by name
@@ -72,7 +72,7 @@ class ContainerTraitTest extends TestCase
         $m->removeElement($x);
 
         $this->assertSame(2, $m->getElementCount());
-        $m->add(new \StdClass());
+        $m->add(new \stdClass());
 
         $this->assertSame(2, $m->getElementCount());
     }
