@@ -71,25 +71,6 @@ trait DebugTrait
     }
 
     /**
-     * Output message that needs to be acknowledged by application user. Make sure
-     * that $context does not contain any sensitive information.
-     *
-     * @return $this
-     */
-    public function userMessage(string $message, array $context = [])
-    {
-        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp() instanceof \Atk4\Core\AppUserNotificationInterface) {
-            $this->getApp()->userNotification($message, $context);
-        } elseif (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp() instanceof \Psr\Log\LoggerInterface) {
-            $this->getApp()->log('warning', 'Could not notify user about: ' . $message, $context);
-        } else {
-            $this->_echo_stderr("Could not notify user about: {$message}\n");
-        }
-
-        return $this;
-    }
-
-    /**
      * Method designed to intercept one of the hardest-to-debug situations within Agile Toolkit.
      *
      * Suppose you define a hook and the hook needs to be called only once, but somehow it is
