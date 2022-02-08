@@ -99,14 +99,6 @@ final class TraitUtil
         return self::hasTrait($class, NameTrait::class);
     }
 
-    /**
-     * Used in Ui\TableColumn\FilterModel\Generic only.
-     */
-    public static function hasSessionTrait(object $class): bool
-    {
-        return self::hasTrait($class, SessionTrait::class);
-    }
-
     public static function hasTrackableTrait(object $class): bool
     {
         return self::hasTrait($class, TrackableTrait::class);
