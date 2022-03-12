@@ -14,7 +14,7 @@ trait ReadableCaptionTrait
      */
     public function readableCaption(string $s): string
     {
-        //$s = 'this\\ _isNASA_MyBigBull shit_123\Foo';
+        // $s = 'this\\ _isNASA_MyBigBull shit_123\Foo';
 
         // first remove not allowed characters and uppercase words
         $s = ucwords(preg_replace('/[^a-z0-9]+/i', ' ', $s));

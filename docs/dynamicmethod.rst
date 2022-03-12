@@ -39,7 +39,7 @@ be object itself. Dynamic method will also receive all arguments which are
 given when you call this dynamic method::
 
     $m->addMethod('sum', function($m, $a, $b) { return $a + $b; });
-    echo $m->sum(3,5);
+    echo $m->sum(3, 5);
     // 8
 
 Properties
