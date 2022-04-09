@@ -132,16 +132,16 @@ class Html extends RendererAbstract
             </tr>
         ';
 
-        $in_atk = true;
-        $short_trace = $this->getStackTrace(true);
-        $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
-        foreach ($short_trace as $index => $call) {
+        $inAtk = true;
+        $shortTrace = $this->getStackTrace(true);
+        $isShortened = end($shortTrace) && key($shortTrace) !== 0 && key($shortTrace) !== 'self';
+        foreach ($shortTrace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
-            $escape_frame = false;
-            if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
-                $escape_frame = true;
-                $in_atk = false;
+            $escapeFrame = false;
+            if ($inAtk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
+                $escapeFrame = true;
+                $inAtk = false;
             }
 
             $tokens = [];
@@ -149,7 +149,7 @@ class Html extends RendererAbstract
             $tokens['{FILE_LINE}'] = $call['file_rel'] !== '' ? $call['file_rel'] . ':' . $call['line'] : '';
             $tokens['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
             $tokens['{CLASS}'] = $call['class'] !== false ? $call['class_formatted'] . '::' : '';
-            $tokens['{CSS_CLASS}'] = $escape_frame ? 'negative' : '';
+            $tokens['{CSS_CLASS}'] = $escapeFrame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];
 
@@ -158,7 +158,7 @@ class Html extends RendererAbstract
             } elseif (count($call['args']) === 0) {
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
-                if ($escape_frame) {
+                if ($escapeFrame) {
                     $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', array_map(function ($arg) {
                         return htmlentities(static::toSafeString($arg, false, 1));
                     }, $call['args'])) . ')';
@@ -170,7 +170,7 @@ class Html extends RendererAbstract
             $this->output .= $this->replaceTokens($tokens, $text);
         }
 
-        if ($is_shortened) {
+        if ($isShortened) {
             $this->output .= '
                 <tr>
                     <td style="text-align: right">...</td>

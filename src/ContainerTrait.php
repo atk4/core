@@ -120,7 +120,7 @@ trait ContainerTrait
         $element->setOwner($this);
         $element->short_name = $args[0];
         if (TraitUtil::hasNameTrait($this)) {
-            $element->name = $this->_shorten($this->name . '_' . $element->short_name);
+            $element->name = $this->_shorten((string) $this->name, $element->short_name, $element->name);
         }
         $this->elements[$element->short_name] = $element;
 
@@ -161,18 +161,21 @@ trait ContainerTrait
 
     /**
      * Method used internally for shortening object names.
-     *
-     * @param string $desired desired name of new object
-     *
-     * @return string shortened name of new object
      */
-    protected function _shorten(string $desired): string
+    protected function _shorten(string $ownerName, string $itemShortName, ?string $origItemName): string
     {
+        $desired = $origItemName ?? $ownerName . '_' . $itemShortName;
+
         if (
             TraitUtil::hasAppScopeTrait($this)
             && isset($this->getApp()->max_name_length)
             && mb_strlen($desired) > $this->getApp()->max_name_length
         ) {
+            if ($origItemName !== null) {
+                throw (new Exception('Element has too long desired name'))
+                    ->addMoreInfo('name', $origItemName);
+            }
+
             $left = mb_strlen($desired) + 35 - $this->getApp()->max_name_length;
             $key = mb_substr($desired, 0, $left);
             $rest = mb_substr($desired, $left);

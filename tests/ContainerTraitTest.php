@@ -108,6 +108,36 @@ class ContainerTraitTest extends TestCase
         $this->assertLessThanOrEqual($app->max_name_length, $max_len);
     }
 
+    public function testPreservePresetNames(): void
+    {
+        $app = new ContainerAppMock();
+        $app->setApp($app);
+        $app->name = 'r';
+        $app->max_name_length = 40;
+
+        $createTrackableMockFx = function (string $name, bool $isLongName = false) {
+            return new class($name, $isLongName) extends TrackableMock {
+                public function __construct(string $name, bool $isLongName)
+                {
+                    if ($isLongName) {
+                        $this->name = $name;
+                    } else {
+                        $this->short_name = $name;
+                    }
+                }
+            };
+        };
+
+        $this->assertSame('r_foo', $app->add($createTrackableMockFx('foo'))->name);
+        $this->assertSame('r_bar', $app->add($createTrackableMockFx('bar'))->name);
+        $this->assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
+        $this->assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
+
+        $this->assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
+        $this->expectException(Core\Exception::class);
+        $this->assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
+    }
+
     public function testFactoryMock(): void
     {
         $m = new ContainerFactoryMock();

@@ -81,16 +81,16 @@ class Console extends RendererAbstract
 
             TEXT;
 
-        $in_atk = true;
-        $short_trace = $this->getStackTrace(true);
-        $is_shortened = end($short_trace) && key($short_trace) !== 0 && key($short_trace) !== 'self';
-        foreach ($short_trace as $index => $call) {
+        $inAtk = true;
+        $shortTrace = $this->getStackTrace(true);
+        $isShortened = end($shortTrace) && key($shortTrace) !== 0 && key($shortTrace) !== 'self';
+        foreach ($shortTrace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
-            $escape_frame = false;
-            if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
-                $escape_frame = true;
-                $in_atk = false;
+            $escapeFrame = false;
+            if ($inAtk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
+                $escapeFrame = true;
+                $inAtk = false;
             }
 
             $tokens = [];
@@ -99,7 +99,7 @@ class Console extends RendererAbstract
             $tokens['{OBJECT}'] = $call['object'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
             $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m" . $call['class_formatted'] . "::\e[0m" : '';
 
-            $tokens['{FUNCTION_COLOR}'] = $escape_frame ? "\e[0;31m" : "\e[0;33m";
+            $tokens['{FUNCTION_COLOR}'] = $escapeFrame ? "\e[0;31m" : "\e[0;33m";
             $tokens['{FUNCTION}'] = $call['function'];
 
             if ($index === 'self') {
@@ -107,7 +107,7 @@ class Console extends RendererAbstract
             } elseif (count($call['args']) === 0) {
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
-                if ($escape_frame) {
+                if ($escapeFrame) {
                     $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . \PHP_EOL . str_repeat(' ', 40) . implode(',' . \PHP_EOL . str_repeat(' ', 40), array_map(function ($arg) {
                         return static::toSafeString($arg);
                     }, $call['args'])) . ')';
@@ -119,7 +119,7 @@ class Console extends RendererAbstract
             $this->output .= $this->replaceTokens($tokens, $text);
         }
 
-        if ($is_shortened) {
+        if ($isShortened) {
             $this->output .= '...
             ';
         }
