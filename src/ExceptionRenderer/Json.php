@@ -74,18 +74,18 @@ class Json extends RendererAbstract
 
     protected function processStackTraceInternal(): void
     {
-        $in_atk = true;
+        $inAtk = true;
         $trace = $this->getStackTrace(false);
         foreach ($trace as $index => $call) {
             $call = $this->parseStackTraceCall($call);
 
-            $escape_frame = false;
-            if ($in_atk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
-                $escape_frame = true;
-                $in_atk = false;
+            $escapeFrame = false;
+            if ($inAtk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
+                $escapeFrame = true;
+                $inAtk = false;
             }
 
-            if ($escape_frame) {
+            if ($escapeFrame) {
                 $call['args'] = array_map(function ($arg) {
                     return static::toSafeString($arg);
                 }, $call['args']);
