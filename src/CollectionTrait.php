@@ -56,7 +56,7 @@ trait CollectionTrait
             $item->short_name = $name;
             $item->setOwner($this);
             if (TraitUtil::hasTrackableTrait($this)) {
-                $item->name = $this->_shorten_ml($this->name . '-' . $collection . '_' . $name);
+                $item->name = $this->_shorten_ml($this->name . '-' . $collection, $item->short_name, $item->name);
             }
         }
 
@@ -129,14 +129,11 @@ trait CollectionTrait
     }
 
     /**
-     * Method used internally for shortening object names
+     * Method used internally for shortening object names.
+     *
      * Identical implementation to ContainerTrait::_shorten.
-     *
-     * @param string $desired desired name of the object
-     *
-     * @return string shortened name
      */
-    protected function _shorten_ml(string $desired): string
+    protected function _shorten_ml(string $ownerName, string $itemShortName, ?string $origItemName): string
     {
         // ugly hack to deduplicate code
         $collectionTraitHelper = \Closure::bind(function () {
@@ -147,12 +144,12 @@ trait CollectionTrait
                     use AppScopeTrait;
                     use ContainerTrait;
 
-                    public function shorten(?object $app, string $desired): string
+                    public function shorten(?object $app, string $ownerName, string $itemShortName, ?string $origItemName): string
                     {
                         try {
                             $this->setApp($app);
 
-                            return $this->_shorten($desired);
+                            return $this->_shorten($ownerName, $itemShortName, $origItemName);
                         } finally {
                             $this->_app = null; // important for GC
                         }
@@ -164,6 +161,6 @@ trait CollectionTrait
             return $factory->collectionTraitHelper;
         }, null, Factory::class)();
 
-        return $collectionTraitHelper->shorten(TraitUtil::hasAppScopeTrait($this) ? $this->getApp() : null, $desired);
+        return $collectionTraitHelper->shorten(TraitUtil::hasAppScopeTrait($this) ? $this->getApp() : null, $ownerName, $itemShortName, $origItemName);
     }
 }

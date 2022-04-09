@@ -21,7 +21,10 @@ class CollectionMock
     {
         $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-        $field = Factory::factory($seed, ['name' => $name]);
+        $field = Factory::factory($seed);
+
+        $shortNameProp = $field instanceof FieldMockCustom ? 'short_name' : 'name';
+        Factory::factory($seed, [$shortNameProp => $name]);
 
         return $this->_addIntoCollection($name, $field, 'fields');
     }

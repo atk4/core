@@ -125,7 +125,7 @@ Methods
 
     Same as _hasInCollection but throws exception if element is not found
 
-.. php:method:: _shorten_ml($desired)
+.. php:method:: _shorten_ml($string $ownerName, string $itemShortName)
 
     Implements name shortening
 
@@ -227,9 +227,9 @@ Methods
     or the object itself. This will be called if :php:meth:`TrackableTrait::destroy`
     is called.
 
-.. php:method:: _shorten($desired)
+.. php:method:: _shorten($string $ownerName, string $itemShortName)
 
-    Given the desired $name, this method will attempt to shorten the length
+    Given the long owner name and short child name, this method will attempt to shorten the length
     of your children. The reason for shortening a name is to impose reasonable
     limits on overly long names. Name can be used as key in the GET argument
     or form field, so for a longer names they will be shortened.
