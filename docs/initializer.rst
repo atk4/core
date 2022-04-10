@@ -15,9 +15,9 @@ Declare a object class in your framework::
 
     class FormField {
         use AppScopeTrait;
-        use TrackableTrait;
         use InitializerTrait;
-
+        use NameTrait;
+        use TrackableTrait;
     }
 
     class FormField_Input extends FormField {
@@ -51,10 +51,11 @@ class::
 
     class FormField {
         use AppScopeTrait;
-        use TrackableTrait;
         use InitializerTrait {
             init as _init
         }
+        use TrackableTrait;
+        use NameTrait;
 
         public $value = null;
 

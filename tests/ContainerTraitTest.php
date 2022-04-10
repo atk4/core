@@ -117,6 +117,8 @@ class ContainerTraitTest extends TestCase
 
         $createTrackableMockFx = function (string $name, bool $isLongName = false) {
             return new class($name, $isLongName) extends TrackableMock {
+                use Core\NameTrait;
+
                 public function __construct(string $name, bool $isLongName)
                 {
                     if ($isLongName) {
@@ -155,6 +157,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
         $m2 = $m->add(new class() extends TrackableMock {
             use Core\DiContainerTrait;
+            use Core\NameTrait;
         }, ['name' => 'foo']);
         $this->assertTrue($m->hasElement('foo'));
         $this->assertSame('foo', $m2->short_name);
@@ -233,6 +236,7 @@ class ContainerAppMock
 {
     use Core\AppScopeTrait;
     use Core\ContainerTrait;
+    use Core\NameTrait;
     use Core\TrackableTrait;
 
     public function getElementCount(): int
