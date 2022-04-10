@@ -11,8 +11,6 @@ namespace Atk4\Core;
  */
 trait TrackableTrait
 {
-    use NameTrait;
-
     /** @var object|null Link to (parent) object into which we added this object. */
     private $_owner;
 

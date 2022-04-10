@@ -142,11 +142,9 @@ class CollectionTraitTest extends TestCase
     }
 }
 
-/**
- * Adds support for apptrait and trackable.
- */
 class CollectionMockWithApp extends CollectionMock
 {
     use Core\AppScopeTrait;
+    use Core\NameTrait;
     use Core\TrackableTrait;
 }

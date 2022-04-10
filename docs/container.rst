@@ -19,8 +19,8 @@ elements inside container::
     $object->add(new AnoterObject(), 'test');
     $another_object = $object->getElement('test');
 
-If you additionally use :php:trait:`TrackableTrait` then your objects
-also receive unique "name". From example above:
+If you additionally use :php:trait:`TrackableTrait` together with :php:trait:`NameTrait`
+then your objects also receive unique "name". From example above:
 
 * $object->name == "app_object_4"
 * $another_object->name == "app_object_4_test"
@@ -155,6 +155,7 @@ Container Trait
 
         class MyItem  {
             use Atk4\Core\TrackableTrait;
+            use Atk4\Core\NameTrait;
         }
 
         Now the instances of MyItem can be added to instances of MyContainer
@@ -185,8 +186,8 @@ Properties
 
     Contains a list of objects that have been "added" into the current
     container. The key is a "shot_name" of the child. The actual link to
-    the element will be only present if child uses trait "TrackableTrait",
-    otherwise the value of array key will be "true".
+    the element will be only present if child uses both :php:trait:`TrackableTrait`
+    and :php:trait:`NameTrait` traits, otherwise the value of array key will be "true".
 
 Methods
 -------

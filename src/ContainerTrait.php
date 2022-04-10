@@ -119,7 +119,7 @@ trait ContainerTrait
 
         $element->setOwner($this);
         $element->short_name = $args[0];
-        if (TraitUtil::hasNameTrait($this)) {
+        if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($element)) {
             $element->name = $this->_shorten((string) $this->name, $element->short_name, $element->name);
         }
         $this->elements[$element->short_name] = $element;
