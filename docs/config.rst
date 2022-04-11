@@ -41,8 +41,8 @@ Configuration is defined as a return statement
         'var A' => new UserClass(),
         'var B' => 2,
         'var C' => [
-            '2nd-level' => 'var D'
-        ]
+            '2nd-level' => 'var D',
+        ],
     ];
 
 JSON

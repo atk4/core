@@ -104,7 +104,7 @@ which will automatically catch any unhandled exception then pass it to :php:meth
 
 If you do not instantiate App, or set it up without automatic exception catching::
 
-    $app = new \Atk4\Ui\App(['catch_exceptions' = false]);
+    $app = new \Atk4\Ui\App(['catchExceptions' => false]);
 
 then you might want to output message details yourself.
 
