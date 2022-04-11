@@ -17,13 +17,13 @@ You will be able to use :php:meth:`ContainerTrait::getElement()` to access
 elements inside container::
 
     $object->add(new AnoterObject(), 'test');
-    $another_object = $object->getElement('test');
+    $anotherObject = $object->getElement('test');
 
 If you additionally use :php:trait:`TrackableTrait` together with :php:trait:`NameTrait`
 then your objects also receive unique "name". From example above:
 
 * $object->name == "app_object_4"
-* $another_object->name == "app_object_4_test"
+* $anotherObject->name == "app_object_4_test"
 
 
 
@@ -125,7 +125,7 @@ Methods
 
     Same as _hasInCollection but throws exception if element is not found
 
-.. php:method:: _shorten_ml($string $ownerName, string $itemShortName)
+.. php:method:: _shortenMl($string $ownerName, string $itemShortName)
 
     Implements name shortening
 
@@ -149,7 +149,7 @@ Container Trait
             use Atk4\Core\ContainerTrait;
 
             function add($obq, $args = []) {
-                return $this->_add_Container($obj, $args);
+                return $this->_addContainer($obj, $args);
             }
         }
 
@@ -196,7 +196,7 @@ Methods
 
     If you are using ContainerTrait only, then you can safely use this add()
     method. If you are also using factory, or initializer then redefine add()
-    and call _add_Container, _add_Factory,.
+    and call _addContainer, _addFactory,.
 
 .. php:method:: _addContainer($element, $args)
 
@@ -209,7 +209,7 @@ Methods
 
         function add($obj, $args = [])
         {
-            return $this->_add_Container($obj, $args);
+            return $this->_addContainer($obj, $args);
         }
 
     $args be in few forms::
@@ -222,9 +222,9 @@ Methods
     Method will return the object. Will throw exception if child with same
     name already exist.
 
-.. php:method:: removeElement($short_name)
+.. php:method:: removeElement($shortName)
 
-    Will remove element from $elements. You can pass either short_name
+    Will remove element from $elements. You can pass either shortName
     or the object itself. This will be called if :php:meth:`TrackableTrait::destroy`
     is called.
 
@@ -238,17 +238,17 @@ Methods
     This method will only be used if current object has :php:trait:`AppScope`,
     since the application is responsible for keeping shortenings.
 
-.. php:method:: getElement($short_name)
+.. php:method:: getElement($shortName)
 
     Given a short-name of the element, will return the object. Throws exception
-    if object with such short_name does not exist.
+    if object with such shortName does not exist.
 
-.. php:method:: hasElement($short_name)
+.. php:method:: hasElement($shortName)
 
     Given a short-name of the element, will return true if object with
-    such short_name exists, otherwise false.
+    such shortName exists, otherwise false.
 
-.. php:method:: _unique_element
+.. php:method:: _uniqueElementName
 
     Internal method to create unique name for an element.
 
@@ -278,9 +278,9 @@ Properties
     Will point to object which has add()ed this object. If multiple objects
     have added this object, then this will point to the most recent one.
 
-.. php:attr:: short_name
+.. php:attr:: shortName
 
-    When you add item into the owner, the "short_name" will contain short name
+    When you add item into the owner, the "shortName" will contain short name
     of this item.
 
 Methods

@@ -21,7 +21,7 @@ Properties
 
     Always points to current Application object
 
-.. php:attr:: max_name_length
+.. php:attr:: maxNameLength
 
     When using mechanism for ContainerTrait, they inherit name of the parent to
     generate unique name for a child. In a framework it makes sense if you have
@@ -30,11 +30,11 @@ Properties
 
     Unfortunately if those keys become too long it may be a problem, so
     ContainerTrait contains a mechanism for auto-shortening the name based
-    around max_name_length. The mechanism does only work if AppScopeTrait is
-    used, $app property is set and has a max_name_length defined.
+    around maxNameLength. The mechanism does only work if AppScopeTrait is
+    used, $app property is set and has a maxNameLength defined.
     Minimum value is 40.
 
-.. php:attr:: unique_hashes
+.. php:attr:: uniqueNameHashes
 
     As more names are shortened, the substituted part is being placed into
     this hash and the value contains the new key. This helps to avoid creating

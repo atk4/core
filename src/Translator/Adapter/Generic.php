@@ -51,25 +51,25 @@ class Generic implements ITranslatorAdapter
      */
     protected function processMessagePlural($definition, array $parameters = [], int $count = 1): string
     {
-        $definitions_forms = is_array($definition) ? $definition : explode('|', $definition);
-        $found_definition = null;
+        $definitionsForms = is_array($definition) ? $definition : explode('|', $definition);
+        $foundDefinition = null;
         switch ((int) $count) {
             case 0:
-                $found_definition = $definitions_forms['zero'] ?? end($definitions_forms);
+                $foundDefinition = $definitionsForms['zero'] ?? end($definitionsForms);
 
                 break;
             case 1:
-                $found_definition = $definitions_forms['one'] ?? null;
+                $foundDefinition = $definitionsForms['one'] ?? null;
 
                 break;
             default:
-                $found_definition = $definitions_forms['other'] ?? null;
+                $foundDefinition = $definitionsForms['other'] ?? null;
 
                 break;
         }
 
         // if no definition found get the first from array
-        $definition = $found_definition ?? array_shift($definitions_forms);
+        $definition = $foundDefinition ?? array_shift($definitionsForms);
 
         return $this->processMessage($definition, $parameters);
     }

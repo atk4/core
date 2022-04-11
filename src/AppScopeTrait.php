@@ -25,15 +25,15 @@ trait AppScopeTrait
      *
      * Unfortunately if those keys become too long it may be a problem,
      * so ContainerTrait contains a mechanism for auto-shortening the
-     * name based around max_name_length. The mechanism does only work
+     * name based around maxNameLength. The mechanism does only work
      * if AppScopeTrait is used, $app property is set and has a
-     * max_name_length defined.
+     * maxNameLength defined.
      *
      * Minimum is 40
      *
      * @var int
      */
-    public $max_name_length = 60;
+    public $maxNameLength = 60;
 
     /**
      * As more names are shortened, the substituted part is being placed into
@@ -45,7 +45,7 @@ trait AppScopeTrait
      *
      * @var array
      */
-    public $unique_hashes = [];
+    public $uniqueNameHashes = [];
 
     protected function assertInstanceOfApp(object $app): void
     {
@@ -87,7 +87,7 @@ trait AppScopeTrait
     {
         $this->assertInstanceOfApp($app);
         if ($this->issetApp() && $this->getApp() !== $app) {
-            if ($this->getApp()->catch_exceptions || $this->getApp()->always_run) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
+            if ($this->getApp()->catchExceptions || $this->getApp()->alwaysRun) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
                 throw new Exception('App cannot be replaced');
             }
         }

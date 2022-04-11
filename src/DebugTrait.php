@@ -12,16 +12,16 @@ trait DebugTrait
     public $debug = false;
 
     /** @var array Helps debugTraceChange. */
-    protected $_prev_bt = [];
+    protected $_prevTrace = [];
 
     /**
      * Outputs message to STDERR.
      *
      * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
      */
-    protected function _echo_stderr(string $message): void
+    protected function _echoStderr(string $message): void
     {
-        file_put_contents('php://stderr', $message);
+        file_put_contents('php://stderr', $message, \FILE_APPEND);
     }
 
     /**
@@ -64,7 +64,7 @@ trait DebugTrait
         if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
             $this->getApp()->logger->log($level, $message, $context);
         } else {
-            $this->_echo_stderr($message . "\n");
+            $this->_echoStderr($message . "\n");
         }
 
         return $this;
@@ -90,14 +90,14 @@ trait DebugTrait
             }
         }
 
-        if (isset($this->_prev_bt[$trace]) && array_diff($this->_prev_bt[$trace], $bt)) {
-            $d1 = array_diff($this->_prev_bt[$trace], $bt);
-            $d2 = array_diff($bt, $this->_prev_bt[$trace]);
+        if (isset($this->_prevTrace[$trace]) && array_diff($this->_prevTrace[$trace], $bt)) {
+            $d1 = array_diff($this->_prevTrace[$trace], $bt);
+            $d2 = array_diff($bt, $this->_prevTrace[$trace]);
 
             $this->log('debug', 'Call path for ' . $trace . ' has diverged (was ' . implode(', ', $d1) . ', now ' . implode(', ', $d2) . ")\n");
         }
 
-        $this->_prev_bt[$trace] = $bt;
+        $this->_prevTrace[$trace] = $bt;
     }
 
     /**

@@ -62,7 +62,7 @@ trait HookTrait
     }
 
     /**
-     * Add another callback to be executed during hook($hook_spot);.
+     * Add another callback to be executed during hook($spot);.
      *
      * Lower priority is called sooner. If priority is negative,
      * then hooks will be executed in reverse order.
@@ -214,7 +214,7 @@ trait HookTrait
     }
 
     /**
-     * Execute all closures assigned to $hook_spot.
+     * Execute all closures assigned to $spot.
      *
      * @param array<int, mixed> $args
      *

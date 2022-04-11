@@ -99,7 +99,7 @@ If you want, you can wrap your code inside try / catch block::
         // handle exception
     }
 
-The other option is to use automatic exception catching, (:php:attr:`\Atk4\Ui\App::catch_exceptions`)
+The other option is to use automatic exception catching, (:php:attr:`\Atk4\Ui\App::catchExceptions`)
 which will automatically catch any unhandled exception then pass it to :php:meth:`\Atk4\Ui\App::caughtException()`.
 
 If you do not instantiate App, or set it up without automatic exception catching::

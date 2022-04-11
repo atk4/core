@@ -451,7 +451,7 @@ A same logic can be applied to addField::
 
 and the implementation uses factory's default::
 
-    $field = Factory::factory($this->_field_class);
+    $field = Factory::factory($this->fieldSeed);
 
 Normally the field class property is a string, which will be used, but it can
 also be array.

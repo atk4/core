@@ -11,7 +11,7 @@ namespace Atk4\Core;
 trait ContainerTrait
 {
     /**
-     * short_name => object hash of children objects. If the child is not
+     * shortName => object hash of children objects. If the child is not
      * trackable, then object will be set to "true" (to avoid extra reference).
      *
      * @var array
@@ -19,18 +19,18 @@ trait ContainerTrait
     public $elements = [];
 
     /** @var int[] */
-    private $_element_name_counts = [];
+    private $_elementNameCounts = [];
 
     /**
      * Returns unique element name based on desired name.
      */
-    public function _unique_element(string $desired): string
+    public function _uniqueElementName(string $desired): string
     {
-        if (!isset($this->_element_name_counts[$desired])) {
-            $this->_element_name_counts[$desired] = 1;
+        if (!isset($this->_elementNameCounts[$desired])) {
+            $this->_elementNameCounts[$desired] = 1;
             $postfix = '';
         } else {
-            $postfix = '_' . (++$this->_element_name_counts[$desired]);
+            $postfix = '_' . (++$this->_elementNameCounts[$desired]);
         }
 
         return $desired . $postfix;
@@ -39,8 +39,7 @@ trait ContainerTrait
     /**
      * If you are using ContainerTrait only, then you can safely
      * use this add() method. If you are also using factory, or
-     * initializer then redefine add() and call
-     * _add_Container, _add_Factory,.
+     * initializer then redefine add() and call _addContainer, _addFactory,.
      *
      * @param mixed        $obj
      * @param array|string $args
@@ -55,7 +54,7 @@ trait ContainerTrait
         } else {
             $obj = Factory::factory($obj);
         }
-        $obj = $this->_add_Container($obj, $args);
+        $obj = $this->_addContainer($obj, $args);
 
         if (TraitUtil::hasInitializerTrait($obj)) {
             if (!$obj->isInitialized()) {
@@ -72,7 +71,7 @@ trait ContainerTrait
      *
      * @param array|string $args
      */
-    protected function _add_Container(object $element, $args = []): object
+    protected function _addContainer(object $element, $args = []): object
     {
         // Carry on reference to application if we have appScopeTraits set
         if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($element)) {
@@ -93,19 +92,19 @@ trait ContainerTrait
                 ->addMoreInfo('arg2', $args);
         } elseif (isset($args['desired_name'])) {
             // passed as ['desired_name' => 'foo'];
-            $args[0] = $this->_unique_element($args['desired_name']);
+            $args[0] = $this->_uniqueElementName($args['desired_name']);
             unset($args['desired_name']);
         } elseif (isset($args['name'])) {
             // passed as ['name' => 'foo'];
             $args[0] = $args['name'];
             unset($args['name']);
-        } elseif (isset($element->short_name)) {
+        } elseif (isset($element->shortName)) {
             // element has a name already
-            $args[0] = $this->_unique_element($element->short_name);
+            $args[0] = $this->_uniqueElementName($element->shortName);
         } else {
             // ask element on his preferred name, then make it unique.
             $cn = $element->getDesiredName();
-            $args[0] = $this->_unique_element($cn);
+            $args[0] = $this->_uniqueElementName($cn);
         }
 
         // Maybe element already exists
@@ -118,11 +117,11 @@ trait ContainerTrait
         }
 
         $element->setOwner($this);
-        $element->short_name = $args[0];
+        $element->shortName = $args[0];
         if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($element)) {
-            $element->name = $this->_shorten((string) $this->name, $element->short_name, $element->name);
+            $element->name = $this->_shorten((string) $this->name, $element->shortName, $element->name);
         }
-        $this->elements[$element->short_name] = $element;
+        $this->elements[$element->shortName] = $element;
 
         unset($args[0]);
         unset($args['name']);
@@ -138,23 +137,23 @@ trait ContainerTrait
     /**
      * Remove child element if it exists.
      *
-     * @param string|object $short_name short name of the element
+     * @param string|object $shortName short name of the element
      *
      * @return $this
      */
-    public function removeElement($short_name)
+    public function removeElement($shortName)
     {
-        if (is_object($short_name)) {
-            $short_name = $short_name->short_name;
+        if (is_object($shortName)) {
+            $shortName = $shortName->shortName;
         }
 
-        if (!isset($this->elements[$short_name])) {
+        if (!isset($this->elements[$shortName])) {
             throw (new Exception('Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..'))
                 ->addMoreInfo('parent', $this)
-                ->addMoreInfo('name', $short_name);
+                ->addMoreInfo('name', $shortName);
         }
 
-        unset($this->elements[$short_name]);
+        unset($this->elements[$shortName]);
 
         return $this;
     }
@@ -168,22 +167,22 @@ trait ContainerTrait
 
         if (
             TraitUtil::hasAppScopeTrait($this)
-            && isset($this->getApp()->max_name_length)
-            && mb_strlen($desired) > $this->getApp()->max_name_length
+            && isset($this->getApp()->maxNameLength)
+            && mb_strlen($desired) > $this->getApp()->maxNameLength
         ) {
             if ($origItemName !== null) {
                 throw (new Exception('Element has too long desired name'))
                     ->addMoreInfo('name', $origItemName);
             }
 
-            $left = mb_strlen($desired) + 35 - $this->getApp()->max_name_length;
+            $left = mb_strlen($desired) + 35 - $this->getApp()->maxNameLength;
             $key = mb_substr($desired, 0, $left);
             $rest = mb_substr($desired, $left);
 
-            if (!isset($this->getApp()->unique_hashes[$key])) {
-                $this->getApp()->unique_hashes[$key] = '_' . md5($key);
+            if (!isset($this->getApp()->uniqueNameHashes[$key])) {
+                $this->getApp()->uniqueNameHashes[$key] = '_' . md5($key);
             }
-            $desired = $this->getApp()->unique_hashes[$key] . '__' . $rest;
+            $desired = $this->getApp()->uniqueNameHashes[$key] . '__' . $rest;
         }
 
         return $desired;
@@ -193,24 +192,24 @@ trait ContainerTrait
      * Find child element by its short name. Use in chaining.
      * Exception if not found.
      *
-     * @param string $short_name Short name of the child element
+     * @param string $shortName Short name of the child element
      */
-    public function getElement(string $short_name): object
+    public function getElement(string $shortName): object
     {
-        if (!isset($this->elements[$short_name])) {
+        if (!isset($this->elements[$shortName])) {
             throw (new Exception('Child element not found'))
                 ->addMoreInfo('parent', $this)
-                ->addMoreInfo('element', $short_name);
+                ->addMoreInfo('element', $shortName);
         }
 
-        return $this->elements[$short_name];
+        return $this->elements[$shortName];
     }
 
     /**
-     * @param string $short_name Short name of the child element
+     * @param string $shortName Short name of the child element
      */
-    public function hasElement($short_name): bool
+    public function hasElement($shortName): bool
     {
-        return isset($this->elements[$short_name]);
+        return isset($this->elements[$shortName]);
     }
 }

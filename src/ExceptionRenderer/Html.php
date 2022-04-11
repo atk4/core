@@ -53,7 +53,7 @@ class Html extends RendererAbstract
         $tokens = [
             '{PARAMS}' => '',
         ];
-        $text_inner = '
+        $textInner = '
                     <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>';
         foreach ($this->exception->getParams() as $key => $val) {
             $key = htmlentities($key);
@@ -64,7 +64,7 @@ class Html extends RendererAbstract
                     '{KEY}' => $key,
                     '{VAL}' => $val,
                 ],
-                $text_inner
+                $textInner
             );
         }
 
@@ -95,10 +95,10 @@ class Html extends RendererAbstract
         $tokens = [
             '{SOLUTIONS}' => '',
         ];
-        $text_inner = '
+        $textInner = '
                     <tr><td>{VAL}</td></tr>';
         foreach ($exception->getSolutions() as $key => $val) {
-            $tokens['{SOLUTIONS}'] .= $this->replaceTokens(['{VAL}' => htmlentities($val)], $text_inner);
+            $tokens['{SOLUTIONS}'] .= $this->replaceTokens(['{VAL}' => htmlentities($val)], $textInner);
         }
 
         $this->output .= $this->replaceTokens($tokens, $text);

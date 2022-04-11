@@ -17,7 +17,7 @@ class Exception extends \Exception
     public $params = [];
 
     /** @var string */
-    protected $custom_exception_title = 'Critical Error';
+    protected $customExceptionTitle = 'Critical Error';
 
     /**
      * Most exceptions would be a cause by some other exception, Agile
@@ -163,11 +163,11 @@ class Exception extends \Exception
     }
 
     /**
-     * Get the custom Exception title, if defined in $custom_exception_title.
+     * Get the custom Exception title, if defined in $customExceptionTitle.
      */
     public function getCustomExceptionTitle(): string
     {
-        return $this->custom_exception_title;
+        return $this->customExceptionTitle;
     }
 
     /**

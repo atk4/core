@@ -13,7 +13,7 @@ trait StaticAddToTrait
 {
     use DiContainerTrait;
 
-    private static function _addTo_add(object $parent, object $object, array $addArgs, bool $skipAdd = false): void
+    private static function _addToAdd(object $parent, object $object, array $addArgs, bool $skipAdd = false): void
     {
         if (!$skipAdd) {
             $parent->add($object, ...$addArgs);
@@ -37,7 +37,7 @@ trait StaticAddToTrait
     {
         $object = static::fromSeed([static::class], $seed);
 
-        self::_addTo_add($parent, $object, $addArgs, $skipAdd);
+        self::_addToAdd($parent, $object, $addArgs, $skipAdd);
 
         return $object;
     }
@@ -53,7 +53,7 @@ trait StaticAddToTrait
     {
         $object = static::fromSeed($seed);
 
-        self::_addTo_add($parent, $object, $addArgs, $skipAdd);
+        self::_addToAdd($parent, $object, $addArgs, $skipAdd);
 
         return $object;
     }
@@ -69,7 +69,7 @@ trait StaticAddToTrait
     {
         $object = static::fromSeedUnsafe($seed);
 
-        self::_addTo_add($parent, $object, $addArgs, $skipAdd);
+        self::_addToAdd($parent, $object, $addArgs, $skipAdd);
 
         return $object;
     }

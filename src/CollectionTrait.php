@@ -53,10 +53,10 @@ trait CollectionTrait
 
         // Calculate long "name" but only if both are trackables
         if (TraitUtil::hasTrackableTrait($item)) {
-            $item->short_name = $name;
+            $item->shortName = $name;
             $item->setOwner($this);
             if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($item)) {
-                $item->name = $this->_shorten_ml($this->name . '-' . $collection, $item->short_name, $item->name);
+                $item->name = $this->_shortenMl($this->name . '-' . $collection, $item->shortName, $item->name);
             }
         }
 
@@ -133,7 +133,7 @@ trait CollectionTrait
      *
      * Identical implementation to ContainerTrait::_shorten.
      */
-    protected function _shorten_ml(string $ownerName, string $itemShortName, ?string $origItemName): string
+    protected function _shortenMl(string $ownerName, string $itemShortName, ?string $origItemName): string
     {
         // ugly hack to deduplicate code
         $collectionTraitHelper = \Closure::bind(function () {
