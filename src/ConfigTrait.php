@@ -113,18 +113,18 @@ trait ConfigTrait
     /**
      * Get configuration element.
      *
-     * @param string $path          path to configuration element
-     * @param mixed  $default_value Default value returned if element don't exist
+     * @param string $path         path to configuration element
+     * @param mixed  $defaultValue Default value returned if element don't exist
      *
      * @return mixed
      */
-    public function getConfig(string $path, $default_value = null)
+    public function getConfig(string $path, $defaultValue = null)
     {
         $pos = &$this->_lookupConfigElement($path, false);
 
         // path element don't exist - return default value
         if ($pos === false) {
-            return $default_value;
+            return $defaultValue;
         }
 
         return $pos;
@@ -133,13 +133,13 @@ trait ConfigTrait
     /**
      * Internal method to lookup config element by given path.
      *
-     * @param string $path            Path to navigate to
-     * @param bool   $create_elements Should we create elements it they don't exist
+     * @param string $path           Path to navigate to
+     * @param bool   $createElements Should we create elements it they don't exist
      *
-     * @return array|false Pointer to element in $this->config or false is element don't exist and $create_elements===false
-     *                     Returns false if element don't exist and $create_elements===false
+     * @return array|false Pointer to element in $this->config or false is element don't exist and $createElements === false
+     *                     Returns false if element don't exist and $createElements === false
      */
-    private function &_lookupConfigElement(string $path, bool $create_elements = false)
+    private function &_lookupConfigElement(string $path, bool $createElements = false)
     {
         // trick to return false because we need reference here
         $false = false;
@@ -154,11 +154,11 @@ trait ConfigTrait
             }
 
             // create empty element if it doesn't exist
-            if (!array_key_exists($el, $pos) && $create_elements) {
+            if (!array_key_exists($el, $pos) && $createElements) {
                 $pos[$el] = [];
             }
             // if it still doesn't exist, then just return false (no error)
-            if (!array_key_exists($el, $pos) && !$create_elements) {
+            if (!array_key_exists($el, $pos) && !$createElements) {
                 return $false;
             }
 

@@ -40,7 +40,7 @@ class CollectionTraitTest extends TestCase
             /** @var string */
             public $name = 'app';
             /** @var int */
-            public $max_name_length = 40;
+            public $maxNameLength = 40;
         });
         $m->name = 'form';
 

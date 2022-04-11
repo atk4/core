@@ -43,7 +43,7 @@ class AdapterGenericTest extends AdapterBaseTest
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
-            'default_domain' => 123, // just to throw exception
+            'defaultDomain' => 123, // just to throw exception
         ]);
     }
 
@@ -51,7 +51,7 @@ class AdapterGenericTest extends AdapterBaseTest
     {
         $this->expectException(Exception::class);
         Translator::instance()->setDefaults([
-            'default_locale' => 123, // just to throw exception
+            'defaultLocale' => 123, // just to throw exception
         ]);
     }
 
@@ -89,8 +89,8 @@ class AdapterGenericTest extends AdapterBaseTest
         // test plurals
         Translator::instance()->setDefaults([
             'adapter' => $adapter,
-            'default_domain' => 'other',
-            'default_locale' => 'en',
+            'defaultDomain' => 'other',
+            'defaultLocale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [
@@ -111,8 +111,8 @@ class AdapterGenericTest extends AdapterBaseTest
         // test plurals
         Translator::instance()->setDefaults([
             'adapter' => $adapter,
-            'default_domain' => 'other',
-            'default_locale' => 'en',
+            'defaultDomain' => 'other',
+            'defaultLocale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [
@@ -132,8 +132,8 @@ class AdapterGenericTest extends AdapterBaseTest
         // test plurals
         Translator::instance()->setDefaults([
             'adapter' => $adapter,
-            'default_domain' => 'other',
-            'default_locale' => 'en',
+            'defaultDomain' => 'other',
+            'defaultLocale' => 'en',
         ]);
 
         $adapter->setDefinitionSingle('test', [

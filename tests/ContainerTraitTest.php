@@ -52,7 +52,7 @@ class ContainerTraitTest extends TestCase
     {
         $app = new ContainerAppMock();
         $app->setApp($app);
-        $app->max_name_length = 40;
+        $app->maxNameLength = 40;
         $m = $app->add(new ContainerAppMock(), 'quick-brown-fox');
         $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
         $m = $m->add(new ContainerAppMock(), 'then-they-go-out-for-a-pint');
@@ -66,8 +66,8 @@ class ContainerTraitTest extends TestCase
             $m->unshortenName($this)
         );
 
-        $this->assertLessThan(5, count($app->unique_hashes));
-        $this->assertGreaterThan(2, count($app->unique_hashes));
+        $this->assertLessThan(5, count($app->uniqueNameHashes));
+        $this->assertGreaterThan(2, count($app->uniqueNameHashes));
 
         $m->removeElement($x);
 
@@ -81,31 +81,31 @@ class ContainerTraitTest extends TestCase
     {
         $app = new ContainerAppMock();
         $app->setApp($app);
-        $app->max_name_length = 40;
+        $app->maxNameLength = 40;
         $app->name = 'my-app-name-is-pretty-long';
 
-        $max_len = 0;
-        $min_len_v = '';
-        $min_len = 99;
-        $max_len_v = '';
+        $minLength = 9999;
+        $minLengthValue = '';
+        $maxLength = 0;
+        $maxLengthValue = '';
 
         for ($x = 1; $x < 100; ++$x) {
             $sh = str_repeat('x', $x);
             $m = $app->add(new ContainerAppMock(), $sh);
-            if (strlen($m->name) > $max_len) {
-                $max_len = strlen($m->name);
-                $max_len_v = $m->name;
+            if (strlen($m->name) > $maxLength) {
+                $maxLength = strlen($m->name);
+                $maxLengthValue = $m->name;
             }
-            if (strlen($m->name) < $min_len) {
-                $min_len = strlen($m->name);
-                $min_len_v = $m->name;
+            if (strlen($m->name) < $minLength) {
+                $minLength = strlen($m->name);
+                $minLengthValue = $m->name;
             }
         }
 
         // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        $this->assertGreaterThanOrEqual(15, $min_len);
+        $this->assertGreaterThanOrEqual(15, $minLength);
         // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        $this->assertLessThanOrEqual($app->max_name_length, $max_len);
+        $this->assertLessThanOrEqual($app->maxNameLength, $maxLength);
     }
 
     public function testPreservePresetNames(): void
@@ -113,7 +113,7 @@ class ContainerTraitTest extends TestCase
         $app = new ContainerAppMock();
         $app->setApp($app);
         $app->name = 'r';
-        $app->max_name_length = 40;
+        $app->maxNameLength = 40;
 
         $createTrackableMockFx = function (string $name, bool $isLongName = false) {
             return new class($name, $isLongName) extends TrackableMock {
@@ -124,7 +124,7 @@ class ContainerTraitTest extends TestCase
                     if ($isLongName) {
                         $this->name = $name;
                     } else {
-                        $this->short_name = $name;
+                        $this->shortName = $name;
                     }
                 }
             };
@@ -148,7 +148,7 @@ class ContainerTraitTest extends TestCase
 
         $m3 = $m->add([TrackableContainerMock::class], 'name');
         $this->assertSame(TrackableContainerMock::class, get_class($m3));
-        $this->assertSame('name', $m3->short_name);
+        $this->assertSame('name', $m3->shortName);
     }
 
     public function testArgs(): void
@@ -160,7 +160,7 @@ class ContainerTraitTest extends TestCase
             use Core\NameTrait;
         }, ['name' => 'foo']);
         $this->assertTrue($m->hasElement('foo'));
-        $this->assertSame('foo', $m2->short_name);
+        $this->assertSame('foo', $m2->shortName);
     }
 
     public function testExceptionExists(): void
@@ -248,7 +248,7 @@ class ContainerAppMock
     {
         $n = $this->name;
 
-        $d = array_flip($this->getApp()->unique_hashes);
+        $d = array_flip($this->getApp()->uniqueNameHashes);
 
         for ($x = 0; strpos($n, '__') !== false && $x < 100; ++$x) {
             [$l, $r] = explode('__', $n);

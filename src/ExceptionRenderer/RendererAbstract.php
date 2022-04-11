@@ -18,7 +18,7 @@ abstract class RendererAbstract
     public $exception;
 
     /** @var \Throwable|Exception|null */
-    public $parent_exception;
+    public $parentException;
 
     /** @var string */
     public $output = '';
@@ -26,11 +26,11 @@ abstract class RendererAbstract
     /** @var ITranslatorAdapter|null */
     public $adapter;
 
-    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parent_exception = null)
+    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parentException = null)
     {
         $this->adapter = $adapter;
         $this->exception = $exception;
-        $this->parent_exception = $parent_exception;
+        $this->parentException = $parentException;
     }
 
     abstract protected function processHeader(): void;
@@ -114,7 +114,7 @@ abstract class RendererAbstract
         if ($val instanceof \Closure) {
             return 'closure';
         } elseif (is_object($val)) {
-            return get_class($val) . (\Atk4\Core\TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? get_object_vars($val)['short_name']) . ')' : '');
+            return get_class($val) . (\Atk4\Core\TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? get_object_vars($val)['shortName']) . ')' : '');
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {
@@ -184,20 +184,20 @@ abstract class RendererAbstract
         };
 
         $trace = $custTraceFunc($this->exception);
-        $parent_trace = $shorten && $this->parent_exception !== null ? $custTraceFunc($this->parent_exception) : [];
+        $parentTrace = $shorten && $this->parentException !== null ? $custTraceFunc($this->parentException) : [];
 
-        $both_atk = $this->exception instanceof Exception && $this->parent_exception instanceof Exception;
-        $c = min(count($trace), count($parent_trace));
+        $bothAtk = $this->exception instanceof Exception && $this->parentException instanceof Exception;
+        $c = min(count($trace), count($parentTrace));
         for ($i = 0; $i < $c; ++$i) {
             $cv = $this->parseStackTraceCall($trace[$i]);
-            $pv = $this->parseStackTraceCall($parent_trace[$i]);
+            $pv = $this->parseStackTraceCall($parentTrace[$i]);
 
             if ($cv['line'] === $pv['line']
                     && $cv['file'] === $pv['file']
                     && $cv['class'] === $pv['class']
-                    && (!$both_atk || $cv['object'] === $pv['object'])
+                    && (!$bothAtk || $cv['object'] === $pv['object'])
                     && $cv['function'] === $pv['function']
-                    && (!$both_atk || $cv['args'] === $pv['args'])) {
+                    && (!$bothAtk || $cv['args'] === $pv['args'])) {
                 unset($trace[$i]);
             } else {
                 break;

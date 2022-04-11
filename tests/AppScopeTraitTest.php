@@ -55,7 +55,7 @@ class AppScopeMock
      */
     public function add($obj, $args = []): object
     {
-        return $this->_add_Container($obj, $args);
+        return $this->_addContainer($obj, $args);
     }
 }
 
@@ -69,7 +69,7 @@ class AppScopeMock2
      */
     public function add($obj, $args = []): object
     {
-        return $this->_add_Container($obj, $args);
+        return $this->_addContainer($obj, $args);
     }
 }
 

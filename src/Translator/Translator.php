@@ -24,10 +24,10 @@ class Translator
     private $adapter;
 
     /** @var string Default domain of translations */
-    protected $default_domain = 'atk';
+    protected $defaultDomain = 'atk';
 
     /** @var string Default language of translations */
-    protected $default_locale = 'en';
+    protected $defaultLocale = 'en';
 
     /**
      * Singleton no public constructor.
@@ -50,12 +50,12 @@ class Translator
             throw new Exception('$adapter must be an instance of ITranslatorAdapter');
         }
 
-        if (!is_string($properties['default_domain'] ?? '')) {
-            throw new Exception('default_domain must be string');
+        if (!is_string($properties['defaultDomain'] ?? '')) {
+            throw new Exception('defaultDomain must be string');
         }
 
-        if (!is_string($properties['default_locale'] ?? '')) {
-            throw new Exception('default_locale must be string');
+        if (!is_string($properties['defaultLocale'] ?? '')) {
+            throw new Exception('defaultLocale must be string');
         }
 
         $this->_setDefaults($properties);
@@ -63,14 +63,14 @@ class Translator
 
     public function setDefaultLocale(string $locale): self
     {
-        $this->default_locale = $locale;
+        $this->defaultLocale = $locale;
 
         return $this;
     }
 
-    public function setDefaultDomain(string $default_domain): self
+    public function setDefaultDomain(string $defaultDomain): self
     {
-        $this->default_domain = $default_domain;
+        $this->defaultDomain = $defaultDomain;
 
         return $this;
     }
@@ -143,6 +143,6 @@ class Translator
      */
     public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
     {
-        return $this->getAdapter()->_($message, $parameters, $domain ?? $this->default_domain, $locale ?? $this->default_locale);
+        return $this->getAdapter()->_($message, $parameters, $domain ?? $this->defaultDomain, $locale ?? $this->defaultLocale);
     }
 }

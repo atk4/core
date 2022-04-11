@@ -15,7 +15,7 @@ trait TrackableTrait
     private $_owner;
 
     /** @var string Name of the object in owner's element array. */
-    public $short_name;
+    public $shortName;
 
     public function issetOwner(): bool
     {
@@ -87,7 +87,7 @@ trait TrackableTrait
     public function destroy(): void
     {
         if ($this->_owner !== null && TraitUtil::hasContainerTrait($this->_owner)) {
-            $this->_owner->removeElement($this->short_name);
+            $this->_owner->removeElement($this->shortName);
 
             // GC remove reference to app is AppScope in use
             if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp()) {

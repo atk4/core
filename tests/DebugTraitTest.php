@@ -159,11 +159,9 @@ class DebugTraitTest extends TestCase
 class DebugMock
 {
     use AppScopeTrait;
-    use DebugTrait {
-        _echo_stderr as private __echo_stderr;
-    }
+    use DebugTrait;
 
-    protected function _echo_stderr(string $message): void
+    protected function _echoStderr(string $message): void
     {
         echo $message;
     }
