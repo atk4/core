@@ -250,7 +250,7 @@ class ContainerAppMock
 
         $d = array_flip($this->getApp()->uniqueNameHashes);
 
-        for ($x = 0; strpos($n, '__') !== false && $x < 100; ++$x) {
+        for ($x = 0; str_contains($n, '__') && $x < 100; ++$x) {
             [$l, $r] = explode('__', $n);
             $l = $d[$l];
             $n = $l . $r;

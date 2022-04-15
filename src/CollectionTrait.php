@@ -139,8 +139,7 @@ trait CollectionTrait
         $collectionTraitHelper = \Closure::bind(function () {
             $factory = Factory::getInstance();
             if (!property_exists($factory, 'collectionTraitHelper')) {
-                // @phpstan-ignore-next-line
-                $factory->collectionTraitHelper = new class() {
+                $collectionTraitHelper = new class() {
                     use AppScopeTrait;
                     use ContainerTrait;
 
@@ -155,6 +154,9 @@ trait CollectionTrait
                         }
                     }
                 };
+
+                // @phpstan-ignore-next-line
+                @$factory->collectionTraitHelper = $collectionTraitHelper;
             }
 
             // @phpstan-ignore-next-line

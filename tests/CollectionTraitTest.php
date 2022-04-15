@@ -41,6 +41,8 @@ class CollectionTraitTest extends TestCase
             public $name = 'app';
             /** @var int */
             public $maxNameLength = 40;
+            /** @var array */
+            public $uniqueNameHashes = [];
         });
         $m->name = 'form';
 

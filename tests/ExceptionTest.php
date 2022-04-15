@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\Exception;
+use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
@@ -57,6 +58,16 @@ class ExceptionTest extends TestCase
 
         $ret = $m->toString(new \stdClass());
         $this->assertSame('stdClass', $ret);
+
+        $a = new TrackableMock();
+        $a->shortName = 'foo';
+        $ret = $m->toString($a);
+        $this->assertSame(TrackableMock::class . ' (foo)', $ret);
+
+        $a = new TrackableMock2();
+        $a->shortName = 'foo';
+        $ret = $m->toString($a);
+        $this->assertSame(TrackableMock2::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
@@ -150,6 +161,7 @@ class ExceptionTest extends TestCase
 
 class TrackableMock2
 {
+    use NameTrait;
     use TrackableTrait;
 }
 

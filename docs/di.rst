@@ -45,7 +45,7 @@ editing solution, but suppose you want to use custom form object::
 
     $crud = new Crud([
         'formEdit' => new MyForm(),
-        'formAdd' => new MyForm()
+        'formAdd' => new MyForm(),
     ]);
 
 In this scenario you can't pass all of the properties to the constructor, and
