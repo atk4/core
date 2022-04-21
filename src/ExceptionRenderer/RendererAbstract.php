@@ -99,7 +99,7 @@ abstract class RendererAbstract
 
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
-                ? get_object_vars($parsed['object'])['name']
+                ? get_object_vars($parsed['object'])['name'] ?? get_object_vars($parsed['object'])['shortName']
                 : str_replace("\0", ' ', $this->tryRelativizePathsInString(get_class($parsed['object'])));
         }
 
