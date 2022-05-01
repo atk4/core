@@ -135,7 +135,7 @@ class Factory
         }
 
         if ((!is_array($seed) && !is_object($seed))) {
-            throw new Exception('Use of non-array seed ($seed type = ' . gettype($seed) . ') is not supported.');
+            throw new Exception('Use of non-array seed ($seed type = ' . gettype($seed) . ') is not supported');
         }
 
         array_unshift($defaults, null); // insert argument 0

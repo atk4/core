@@ -62,7 +62,7 @@ trait ConfigTrait
 
                     break;
                 default:
-                    throw (new Exception('Unknown Format. Allowed formats: php, json, yml.'))
+                    throw (new Exception('Unknown Format. Allowed formats: php, json, yml'))
                         ->addMoreInfo('file', $file)
                         ->addMoreInfo('format', $format);
             }
