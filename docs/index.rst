@@ -152,7 +152,7 @@ Hook-based dynamic Methods
 dynamically.
 That's like a "trait" feature of a PHP, but implemented in run-time::
 
-    $object->addMethod('test', function($o, $args) { echo 'hello, '.$args[0]; } );
+    $object->addMethod('test', function($o, $args) { echo 'hello, ' . $args[0]; } );
     $object->test('world');
     // outputs: hello, world
 

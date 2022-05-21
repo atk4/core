@@ -10,7 +10,7 @@ Introduction
 Adds ability to add methods into objects dynamically. That's like a "trait"
 feature of a PHP, but implemented in run-time::
 
-    $object->addMethod('test', function($o, $args) { echo 'hello, '.$args[0]; });
+    $object->addMethod('test', function($o, $args) { echo 'hello, ' . $args[0]; });
     $object->test('world');
 
 Global Methods
@@ -21,7 +21,7 @@ implements :php:trait:`HookTrait` then executing $object->test() will also
 look for globally-registered method inside the application::
 
     $object->getApp()->addGlobalMethod('test', function($app, $o, $args) {
-        echo 'hello, '.$args[0];
+        echo 'hello, ' . $args[0];
     });
 
     $object->test('world');

@@ -45,6 +45,10 @@ trait DiContainerTrait
     public function setDefaults(array $properties, bool $passively = false)
     {
         foreach ($properties as $key => $val) {
+            if (is_int($key)) {
+                $key = (string) $key;
+            }
+
             if (property_exists($this, $key)) {
                 if ($passively && $this->{$key} !== null) {
                     continue;

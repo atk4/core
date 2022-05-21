@@ -22,18 +22,18 @@ class DiContainerTraitTest extends TestCase
         StdSat2::fromSeed([StdSat::class]);
     }
 
-    public function testNoPropExNumeric(): void
-    {
-        $this->expectException(\Error::class);
-        $m = new FactoryDiMock2();
-        $m->setDefaults([5 => 'qwerty']);
-    }
-
     public function testNoPropExStandard(): void
     {
         $this->expectException(Exception::class);
         $m = new FactoryDiMock2();
         $m->setDefaults(['not_exist' => 'qwerty']);
+    }
+
+    public function testNoPropExNumeric(): void
+    {
+        $this->expectException(Exception::class);
+        $m = new FactoryDiMock2();
+        $m->setDefaults([5 => 'qwerty']);
     }
 
     public function testProperties(): void
