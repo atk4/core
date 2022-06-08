@@ -30,7 +30,7 @@ The framework or application would typically execute hooks like this::
 
 You can register multiple call-backs to be executed for the requested `spot`::
 
-    $obj->onHook('spot', function($obj) { echo "Hook 'spot' is called!"; });
+    $obj->onHook('spot', function ($obj) { echo "Hook 'spot' is called!"; });
 
 Adding callbacks
 ================
@@ -52,7 +52,7 @@ In this case a method with same name as $spot will be used as callback::
     {
         parent::init();
 
-        $this->onHookShort($spot, function(...$args) {
+        $this->onHookShort($spot, function (...$args) {
             $this->beforeUpdate(...$args);
         });
     }
@@ -94,11 +94,11 @@ use negative priority, then hooks will be executed in reverse order::
 execute all hooks in order. Hooks can also return some values and those values
 will be placed in array and returned by hook()::
 
-    $mul = function($obj, $a, $b) {
+    $mul = function ($obj, $a, $b) {
         return $a*$b;
     };
 
-    $add = function($obj, $a, $b) {
+    $add = function ($obj, $a, $b) {
         return $a+$b;
     };
 
@@ -125,7 +125,7 @@ You can also use key declarations if you wish to override arguments::
 
     // continue from above example
 
-    $pow = function($obj, $a, $b, $power) {
+    $pow = function ($obj, $a, $b, $power) {
         return pow($a, $power)+$pow($b, $power);
     }
 
@@ -157,11 +157,11 @@ Remember that adding breaking hook with a lower priority can prevent other
 call-backs from being executed::
 
 
-    $obj->onHook('test', function($obj) {
+    $obj->onHook('test', function ($obj) {
         $obj->breakHook("break1");
     });
 
-    $obj->onHook('test', function($obj) {
+    $obj->onHook('test', function ($obj) {
         $obj->breakHook("break2");
     }, [], -5);
 
@@ -182,7 +182,7 @@ value is set it may call normalization hook (methods will change $value)::
         $this->data[$field] = $value;
     }
 
-    $m->onHook('normalize', function(&$a) { $a = trim($a); });
+    $m->onHook('normalize', function (&$a) { $a = trim($a); });
 
 Checking if hook has callbacks
 ==============================
