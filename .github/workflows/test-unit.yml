@@ -60,6 +60,8 @@ jobs:
         if: matrix.type == 'CodingStyle'
         run: |
           vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --verbose
+          composer config --unset version && composer config --unset require-release
+          composer validate --strict --no-check-lock && composer normalize --dry-run --no-check-lock
 
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
