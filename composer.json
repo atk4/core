@@ -35,7 +35,8 @@
         "psr/log": "^1.0",
         "symfony/polyfill-php80": "^1.17",
         "symfony/polyfill-php81": "^1.22",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5.1"
+        "symfony/polyfill-php82": "^1.26",
+        "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.13",
