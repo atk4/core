@@ -25,17 +25,19 @@ abstract class TestCase extends BaseTestCase
         $classRefl = new \ReflectionClass(static::class);
         foreach ($classRefl->getMethods() as $methodRefl) {
             $methodDoc = $methodRefl->getDocComment();
-            if ($methodDoc !== false && preg_match('~@dataProvider[ \t]+([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $methodDoc, $matches)) {
-                $providerClassRefl = $matches[1] === '' ? $classRefl : new \ReflectionClass($matches[1]);
-                $providerMethodRefl = $providerClassRefl->getMethod($matches[2]);
-                $key = $providerClassRefl->getName() . '::' . $providerMethodRefl->getName();
-                if (!isset($staticClass::$processedMethods[$key])) {
-                    $staticClass::$processedMethods[static::class] = true;
-                    $providerInstance = $providerClassRefl->newInstanceWithoutConstructor();
-                    $provider = $providerMethodRefl->invoke($providerInstance);
-                    if (!is_array($provider)) {
-                        // yield all provider data
-                        iterator_to_array($provider);
+            if ($methodDoc !== false && preg_match_all('~@dataProvider[ \t]+([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $methodDoc, $matchesAll, \PREG_SET_ORDER)) {
+                foreach ($matchesAll as $matches) {
+                    $providerClassRefl = $matches[1] === '' ? $classRefl : new \ReflectionClass($matches[1]);
+                    $providerMethodRefl = $providerClassRefl->getMethod($matches[2]);
+                    $key = $providerClassRefl->getName() . '::' . $providerMethodRefl->getName();
+                    if (!isset($staticClass::$processedMethods[$key])) {
+                        $staticClass::$processedMethods[$key] = true;
+                        $providerInstance = $providerClassRefl->newInstanceWithoutConstructor();
+                        $provider = $providerMethodRefl->invoke($providerInstance);
+                        if (!is_array($provider)) {
+                            // yield all provider data
+                            iterator_to_array($provider);
+                        }
                     }
                 }
             }
