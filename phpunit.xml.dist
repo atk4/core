@@ -9,12 +9,9 @@
     </listeners>
     <coverage>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory>src</directory>
+            <directory>tests</directory>
         </include>
-        <exclude>
-            <file>src/Phpunit/ResultPrinter.php</file>
-            <file>src/Phpunit/TestCase.php</file>
-        </exclude>
         <report>
             <php outputFile="coverage/phpunit.cov" />
         </report>

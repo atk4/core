@@ -9,9 +9,6 @@ use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
-/**
- * @coversDefaultClass \Atk4\Core\Exception
- */
 class ExceptionTest extends TestCase
 {
     public function testBasic(): void

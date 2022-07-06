@@ -14,8 +14,40 @@ abstract class TestCase extends BaseTestCase
 {
     use WarnDynamicPropertyTrait;
 
+    protected function setUp(): void
+    {
+        // rerun data providers to fix coverage when coverage for test files is enabled
+        // https://github.com/sebastianbergmann/php-code-coverage/issues/920
+        $staticClass = get_class(new class() {
+            /** @var array<string, true> */
+            public static $processedMethods = [];
+        });
+        $classRefl = new \ReflectionClass(static::class);
+        foreach ($classRefl->getMethods() as $methodRefl) {
+            $methodDoc = $methodRefl->getDocComment();
+            if ($methodDoc !== false && preg_match('~@dataProvider[ \t]+([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $methodDoc, $matches)) {
+                $providerClassRefl = $matches[1] === '' ? $classRefl : new \ReflectionClass($matches[1]);
+                $providerMethodRefl = $providerClassRefl->getMethod($matches[2]);
+                $key = $providerClassRefl->getName() . '::' . $providerMethodRefl->getName();
+                if (!isset($staticClass::$processedMethods[$key])) {
+                    $staticClass::$processedMethods[static::class] = true;
+                    $providerInstance = $providerClassRefl->newInstanceWithoutConstructor();
+                    $provider = $providerMethodRefl->invoke($providerInstance);
+                    if (!is_array($provider)) {
+                        // yield all provider data
+                        iterator_to_array($provider);
+                    }
+                }
+            }
+        }
+
+        parent::setUp();
+    }
+
     protected function tearDown(): void
     {
+        parent::tearDown();
+
         // remove once https://github.com/sebastianbergmann/phpunit/issues/4705 is fixed
         foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class))) as $k) {
             $this->{$k} = \PHP_MAJOR_VERSION < 8

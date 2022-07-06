@@ -57,9 +57,6 @@ class DiConstructorMockSat
     }
 }
 
-/**
- * @coversDefaultClass \Atk4\Core\StaticAddToTrait
- */
 class StaticAddToTest extends TestCase
 {
     public function testBasic(): void

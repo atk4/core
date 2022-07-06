@@ -7,9 +7,6 @@ namespace Atk4\Core\Tests;
 use Atk4\Core\ConfigTrait;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\ConfigTrait
- */
 class ConfigTraitTest extends TestCase
 {
     /** @var string */

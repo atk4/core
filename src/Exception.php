@@ -143,8 +143,6 @@ class Exception extends \Exception
     /**
      * Add a suggested/possible solution to the exception.
      *
-     * @TODO can be added more features? usually we are out of App
-     *
      * @return $this
      */
     public function addSolution(string $solution): self

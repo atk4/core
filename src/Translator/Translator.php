@@ -75,21 +75,11 @@ class Translator
         return $this;
     }
 
-    /**
-     * No clone.
-     *
-     * @codeCoverageIgnore
-     */
     protected function __clone()
     {
         throw new Exception('Translator cannot be cloned');
     }
 
-    /**
-     * No serialize.
-     *
-     * @codeCoverageIgnore
-     */
     public function __wakeup(): void
     {
         throw new Exception('Translator cannot be serialized');
@@ -119,8 +109,6 @@ class Translator
 
     /**
      * Get the adapter.
-     *
-     * @TODO should remain private?
      */
     private function getAdapter(): ITranslatorAdapter
     {

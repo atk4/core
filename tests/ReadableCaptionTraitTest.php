@@ -7,9 +7,6 @@ namespace Atk4\Core\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\ReadableCaptionTrait;
 
-/**
- * @coversDefaultClass \Atk4\Core\ReadableCaptionTrait
- */
 class ReadableCaptionTraitTest extends TestCase
 {
     /**

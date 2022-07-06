@@ -10,9 +10,6 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookBreaker;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\Factory
- */
 class FactoryTest extends TestCase
 {
     public function testMerge1(): void

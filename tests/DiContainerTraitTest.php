@@ -8,9 +8,6 @@ use Atk4\Core\DiContainerTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\DiContainerTrait
- */
 class DiContainerTraitTest extends TestCase
 {
     public function testFromSeed(): void

@@ -9,9 +9,6 @@ use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TraitUtil;
 
-/**
- * @coversDefaultClass \Atk4\Core\TraitUtil
- */
 class TraitUtilTest extends TestCase
 {
     public function testHasTrait(): void
