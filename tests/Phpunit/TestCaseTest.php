@@ -13,7 +13,7 @@ class TestCaseTest extends TestCase
 
     private function coverCoverageFromProvider(): void
     {
-        self::$providerCallCounter++;
+        ++self::$providerCallCounter;
     }
 
     /**
