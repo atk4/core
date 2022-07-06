@@ -10,9 +10,6 @@ use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
-/**
- * @coversDefaultClass \Atk4\Core\AppScopeTrait
- */
 class AppScopeTraitTest extends TestCase
 {
     public function testConstruct(): void

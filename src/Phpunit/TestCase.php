@@ -16,6 +16,8 @@ abstract class TestCase extends BaseTestCase
 
     protected function tearDown(): void
     {
+        parent::tearDown();
+
         // remove once https://github.com/sebastianbergmann/phpunit/issues/4705 is fixed
         foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class))) as $k) {
             $this->{$k} = \PHP_MAJOR_VERSION < 8

@@ -16,8 +16,6 @@ trait DebugTrait
 
     /**
      * Outputs message to STDERR.
-     *
-     * @codeCoverageIgnore - replaced with "echo" which can be intercepted by test-suite
      */
     protected function _echoStderr(string $message): void
     {

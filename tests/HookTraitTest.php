@@ -9,9 +9,6 @@ use Atk4\Core\HookBreaker;
 use Atk4\Core\HookTrait;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\HookTrait
- */
 class HookTraitTest extends TestCase
 {
     public function testArguments(): void

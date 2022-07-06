@@ -8,9 +8,6 @@ use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DebugTrait;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\DebugTrait
- */
 class DebugTraitTest extends TestCase
 {
     /**

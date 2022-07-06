@@ -10,9 +10,6 @@ use Atk4\Core\Exception;
 use Atk4\Core\HookTrait;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\DynamicMethodTrait
- */
 class DynamicMethodTraitTest extends TestCase
 {
     public function testConstruct(): void

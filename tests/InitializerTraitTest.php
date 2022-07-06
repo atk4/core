@@ -8,9 +8,6 @@ use Atk4\Core;
 use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 
-/**
- * @coversDefaultClass \Atk4\Core\InitializerTrait
- */
 class InitializerTraitTest extends TestCase
 {
     public function testInit(): void
