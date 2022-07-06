@@ -17,15 +17,23 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @dataProvider provideProviderCoverage
+     * @dataProvider provideProviderCoverage1
+     * @dataProvider provideProviderCoverage2
      */
-    public function testProviderCoverage(string $v): void
+    public function testProviderCoverage1(string $v): void
     {
-        $this->assertGreaterThan(1, self::$providerCallCounter);
-        $this->assertTrue(in_array($v, ['x', 'y'], true));
+        if ($v === 'y') {
+            $this->assertSame(2, self::$providerCallCounter);
+        }
+        $this->assertTrue(in_array($v, ['a', 'x', 'y'], true));
     }
 
-    public function provideProviderCoverage(): \Traversable
+    public function provideProviderCoverage1(): \Traversable
+    {
+        yield ['a'];
+    }
+
+    public function provideProviderCoverage2(): \Traversable
     {
         yield ['x'];
         $this->coverCoverageFromProvider();
