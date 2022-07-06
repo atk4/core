@@ -18,7 +18,10 @@ class ReadableCaptionTraitTest extends TestCase
 
         $this->assertSame('User Defined Entity', $a->readableCaption('userDefinedEntity'));
         $this->assertSame('New NASA Module', $a->readableCaption('newNASA_module'));
-        $this->assertSame('This Is NASA My Big Bull Shit 123 Foo', $a->readableCaption('this\\ _isNASA_MyBigBull shit_123\Foo'));
+        $this->assertSame('This Is NASA My Big Bull Shit 123 Foo', $a->readableCaption('this\ _isNASA_MyBigBull shit_123\Foo'));
+
+        $this->assertSame('ID', $a->readableCaption('id'));
+        $this->assertSame('Account ID', $a->readableCaption('account_id'));
     }
 }
 
