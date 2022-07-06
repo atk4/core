@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
 {
     use WarnDynamicPropertyTrait;
 
-    public static function setUpBeforeClass(): void
+    protected function setUp(): void
     {
         // rerun data providers to fix coverage when coverage for test files is enabled
         // https://github.com/sebastianbergmann/php-code-coverage/issues/920
@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
             }
         }
 
-        parent::setUpBeforeClass();
+        parent::setUp();
     }
 
     protected function tearDown(): void
