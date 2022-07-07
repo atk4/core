@@ -22,10 +22,7 @@ class TestCaseTest extends TestCase
      */
     public function testProviderCoverage1(string $v): void
     {
-        if ($v === 'y') {
-            $this->assertSame(2, self::$providerCallCounter);
-        }
-        $this->assertTrue(in_array($v, ['a', 'x', 'y'], true));
+        $this->markTestIncomplete('test II');
     }
 
     public function provideProviderCoverage1(): \Traversable
