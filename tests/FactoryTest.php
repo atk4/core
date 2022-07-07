@@ -130,6 +130,10 @@ class FactoryTest extends TestCase
         $this->assertSame($o, $oo);
         $this->assertSame(['red', 'green'], $oo->foo);
 
+        $oo = Factory::mergeSeeds($o, ['foo' => ['white']]);
+        $this->assertSame($o, $oo);
+        $this->assertSame(['white', 'red', 'green'], $oo->foo);
+
         // still we don't care if they are to the right of the object
         $o = new FactoryTestDiMock();
         $o->foo = ['red'];
@@ -180,28 +184,13 @@ class FactoryTest extends TestCase
         $this->assertSame(['4' => ['200']], $oo);
     }
 
-    public function testMergeFail1(): void
+    public function testMergeNoDiFail(): void
     {
-        // works even if more arguments present
-        $this->expectException(Exception::class);
         $o = new FactoryTestMock();
         $o->foo = ['red'];
+
+        $this->expectException(Exception::class);
         $oo = Factory::mergeSeeds($o, ['foo' => 5]);
-
-        $this->assertSame($o, $oo);
-        $this->assertSame(['red', 'green', 'xx'], $oo->foo);
-    }
-
-    public function testMergeFail2(): void
-    {
-        // works even if more arguments present
-        $this->expectException(Exception::class);
-        $o = new FactoryTestMock();
-        $o->foo = ['red'];
-        $oo = Factory::mergeSeeds(['foo' => ['xx']], ['foo' => ['green']], $o);
-
-        $this->assertSame($o, $oo);
-        $this->assertSame(['red', 'green', 'xx'], $oo->foo);
     }
 
     public function testBasic(): void
@@ -302,6 +291,8 @@ class FactoryTest extends TestCase
     {
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo']);
         $this->assertNull($s1->def);
+        $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo' => 'x']);
+        $this->assertSame(['foo' => 'x'], $s1->def);
     }
 
     public function testMerge8(): void
@@ -359,8 +350,6 @@ class FactoryTest extends TestCase
     {
         $this->expectException(Exception::class);
         $s1 = Factory::factory([FactoryTestMock::class], ['foo' => 'hello']);
-        $this->assertTrue($s1 instanceof FactoryTestDiMock);
-        $this->assertSame(['hello'], $s1->args);
     }
 
     /**
