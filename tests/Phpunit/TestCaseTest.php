@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests\Phpunit;
 
 use Atk4\Core\Phpunit\TestCase;
+use PHPUnit\Framework\TestCase as PhpunitTestCase;
+use PHPUnit\Runner\BaseTestRunner;
 
 class TestCaseTest extends TestCase
 {
@@ -38,5 +40,16 @@ class TestCaseTest extends TestCase
         yield ['x'];
         $this->coverCoverageFromProvider();
         yield ['y'];
+    }
+
+    public function testCoverageImplForTestMarkedAsIncomplete(): void
+    {
+        $testStatusOrig = \Closure::bind(fn () => $this->status, $this, PhpunitTestCase::class)();
+        \Closure::bind(fn () => $this->status = BaseTestRunner::STATUS_INCOMPLETE, $this, PhpunitTestCase::class)();
+        try {
+            $this->tearDown();
+        } finally {
+            \Closure::bind(fn () => $this->status = $testStatusOrig, $this, PhpunitTestCase::class)();
+        }
     }
 }
