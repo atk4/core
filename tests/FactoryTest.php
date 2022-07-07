@@ -39,13 +39,12 @@ class FactoryTest extends TestCase
             Factory::mergeSeeds(null, ['two'], $o, ['four'])
         );
 
-        // if more than one object, leftmost is returned
+        // but 2 or more objects throw
         $o1 = new FactoryTestDiMock();
         $o2 = new FactoryTestDiMock();
-        $this->assertSame(
-            $o2,
-            Factory::mergeSeeds(null, ['two'], $o2, $o1, ['four'])
-        );
+
+        $this->expectException(Exception::class);
+        Factory::mergeSeeds(null, ['two'], $o2, $o1, ['four']);
     }
 
     public function testMerge2(): void
@@ -158,19 +157,6 @@ class FactoryTest extends TestCase
 
         $this->assertSame($o, $oo);
         $this->assertSame('xx', $oo->foo);
-    }
-
-    public function testMerge5b(): void
-    {
-        // and even if multiple objects are found
-        $o = new FactoryTestViewMock();
-        $o->foo = ['red'];
-        $o2 = new FactoryTestViewMock();
-        $o2->foo = ['yellow'];
-        $oo = Factory::mergeSeeds(['foo' => ['xx']], $o, ['foo' => ['green']], $o2, ['foo' => ['cyan']]);
-
-        $this->assertSame($o, $oo);
-        $this->assertSame(['red', 'xx'], $oo->foo);
     }
 
     public function testMerge6(): void
