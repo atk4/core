@@ -74,8 +74,8 @@ abstract class TestCase extends BaseTestCase
         }
 
         // fix coverage for skipped/incomplete tests
-        // https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830
-        // https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857
+        // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830
+        // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857
         if (in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true)) {
             $coverage = $this->getTestResultObject()->getCodeCoverage();
             if ($coverage !== null) {
