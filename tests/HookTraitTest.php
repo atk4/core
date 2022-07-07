@@ -11,24 +11,6 @@ use Atk4\Core\Phpunit\TestCase;
 
 class HookTraitTest extends TestCase
 {
-    public function testArguments(): void
-    {
-        $m = new HookMock();
-
-        $result = 0;
-        $m->onHook('test1', function () use (&$result) {
-            ++$result;
-        }, [0]);
-
-        $this->assertSame(0, $result);
-
-        $m->onHook('test1', function () use (&$result) {
-            ++$result;
-        }, [5]);
-
-        $this->assertSame(0, $result);
-    }
-
     public function testBasic(): void
     {
         $m = new HookMock();
