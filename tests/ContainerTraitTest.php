@@ -229,6 +229,12 @@ class ContainerFactoryMock
     use Core\NameTrait;
 }
 
+class TrackableContainerMock
+{
+    use Core\ContainerTrait;
+    use Core\TrackableTrait;
+}
+
 class ContainerAppMock
 {
     use Core\AppScopeTrait;
