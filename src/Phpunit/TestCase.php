@@ -6,7 +6,10 @@ namespace Atk4\Core\Phpunit;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use PHPUnit\Framework\TestResult;
+use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BaseTestRunner;
+use PHPUnit\Runner\TestListenerAdapter;
 use PHPUnit\Util\Test as TestUtil;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
@@ -69,8 +72,41 @@ abstract class TestCase extends BaseTestCase
 
         // fix coverage when no assertion is expected
         // https://github.com/sebastianbergmann/phpunit/pull/5010
-        if ($this->getStatus() === BaseTestRunner::STATUS_PASSED && $this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()) {
-            $this->getTestResultObject()->beStrictAboutTestsThatDoNotTestAnything(false);
+        if ($this->getStatus() === BaseTestRunner::STATUS_PASSED
+            && $this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()
+            && $this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything()
+        ) {
+            $testResult = $this->getTestResultObject();
+            $afterHookTest = new class($testResult) implements AfterTestHook {
+                /** @var TestResult */
+                public $testResult;
+
+                public function __construct(TestResult $testResult)
+                {
+                    $this->testResult = $testResult;
+                }
+
+                public function executeAfterTest(string $test, float $time): void
+                {
+                    $this->testResult->beStrictAboutTestsThatDoNotTestAnything(true);
+                }
+            };
+            $alreadyAdded = false;
+            foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) {
+                if ($listener instanceof TestListenerAdapter) {
+                    foreach (\Closure::bind(fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
+                        if (get_class($hook) === get_class($afterHookTest)) {
+                            $alreadyAdded = true;
+                        }
+                    }
+                }
+            }
+            if (!$alreadyAdded) {
+                $testListenerAdapter = new TestListenerAdapter();
+                $testListenerAdapter->add($afterHookTest);
+                $testResult->addListener($testListenerAdapter);
+            }
+            $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
         }
 
         // fix coverage for skipped/incomplete tests
