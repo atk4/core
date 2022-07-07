@@ -63,6 +63,12 @@ abstract class TestCase extends BaseTestCase
             gc_collect_cycles();
         }
         gc_collect_cycles();
+
+        // fix coverage when no assertion is expected
+        // https://github.com/sebastianbergmann/phpunit/pull/5010
+        if ($this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()) {
+            $this->getTestResultObject()->beStrictAboutTestsThatDoNotTestAnything(false);
+        }
     }
 
     /**
