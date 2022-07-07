@@ -62,10 +62,6 @@ class Factory
                 throw new Exception('Seed class "' . $seed[0] . '" not found');
             }*/
 
-            if (!is_array($seed)) {
-                $seed = [$seed];
-            }
-
             foreach ($seed as $k => $v) {
                 if (is_int($k)) {
                     if (!isset($arguments[$k])) {
@@ -127,10 +123,6 @@ class Factory
     {
         if ($defaults === null) { // should be deprecated soon (with [] default value)
             $defaults = [];
-        }
-
-        if ($seed === null) { // should be deprecated soon
-            $seed = [];
         }
 
         if ((!is_array($seed) && !is_object($seed))) {
