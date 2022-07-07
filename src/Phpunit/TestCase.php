@@ -92,7 +92,7 @@ abstract class TestCase extends BaseTestCase
                 }
             };
             $alreadyAdded = false;
-            foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) {
+            foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
                 if ($listener instanceof TestListenerAdapter) {
                     foreach (\Closure::bind(fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
                         if (get_class($hook) === get_class($afterHookTest)) {
@@ -104,7 +104,7 @@ abstract class TestCase extends BaseTestCase
             if (!$alreadyAdded) {
                 $testListenerAdapter = new TestListenerAdapter();
                 $testListenerAdapter->add($afterHookTest);
-                $testResult->addListener($testListenerAdapter);
+                $testResult->addListener($testListenerAdapter); // @phpstan-ignore-line
             }
             $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
         }
