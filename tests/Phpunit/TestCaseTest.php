@@ -24,6 +24,8 @@ class TestCaseTest extends TestCase
     {
         if ($v === 'y') {
             $this->assertSame(2, self::$providerCallCounter);
+        } else {
+            $this->markTestIncomplete('test');
         }
         $this->assertTrue(in_array($v, ['a', 'x', 'y'], true));
     }
