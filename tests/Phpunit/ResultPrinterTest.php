@@ -56,12 +56,12 @@ class ResultPrinterTest extends TestCase
                         ]
                     ]
 
-                self.php:36
+                self.php:32
 
                 Caused by
                 Error: Inner Exception
 
-                self.php:35
+                self.php:31
                 EOF . "\n", // NL in the string is not parsed by Netbeans, see https://github.com/apache/netbeans/issues/4345
             str_replace(__FILE__, 'self.php', $res)
         );
