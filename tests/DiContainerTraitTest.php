@@ -73,6 +73,10 @@ class DiContainerTraitTest extends TestCase
 
     public function testInstanceOfBeforeConstructor(): void
     {
+        try {
+            new FactoryDiMockConstructorMustNeverBeCalled();
+        } catch (\Error $e) {
+        }
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Seed class is not a subtype of static class');
         FactoryDiMockConstructorMustNeverBeCalled2::fromSeed([FactoryDiMockConstructorMustNeverBeCalled::class]);

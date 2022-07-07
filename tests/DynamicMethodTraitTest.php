@@ -12,6 +12,18 @@ use Atk4\Core\Phpunit\TestCase;
 
 class DynamicMethodTraitTest extends TestCase
 {
+    public function createSumFx(bool $forGlobal = false): \Closure
+    {
+        // fix broken indentation once https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/6463 is fixed
+        return $forGlobal
+            ? function ($m, $obj, $a, $b) {
+                return $a + $b;
+            }
+        : function ($m, $a, $b) {
+            return $a + $b;
+        };
+    }
+
     public function testConstruct(): void
     {
         $m = new DynamicMethodMock();
@@ -39,9 +51,8 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage(
-            'Call to private method ' . DynamicMethodMock::class . '::privateMethod() from scope ' . static::class
-        );
+        $this->expectExceptionMessage('Call to private method ' . DynamicMethodMock::class
+            . '::privateMethod() from scope ' . static::class);
         $m->__call('privateMethod', []);
     }
 
@@ -49,10 +60,13 @@ class DynamicMethodTraitTest extends TestCase
     {
         $m = new DynamicMethodMock();
 
+        \Closure::bind(function () use ($m) {
+            $m->protectedMethod();
+        }, null, DynamicMethodMock::class)();
+
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage(
-            'Call to protected method ' . DynamicMethodMock::class . '::protectedMethod() from global scope'
-        );
+        $this->expectExceptionMessage('Call to protected method ' . DynamicMethodMock::class
+            . '::protectedMethod() from global scope');
         \Closure::bind(function () use ($m) {
             $m->protectedMethod(); // @phpstan-ignore-line
         }, null, null)();
@@ -80,21 +94,14 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodWithoutHookMock();
 
         $this->expectException(Exception::class);
-        $m->addMethod('sum', function ($m, $a, $b) {
-            return $a + $b;
-        });
+        $m->addMethod('sum', $this->createSumFx());
     }
 
-    /**
-     * Test arguments.
-     */
     public function testArguments(): void
     {
         // simple method
         $m = new DynamicMethodMock();
-        $m->addMethod('sum', function ($m, $a, $b) {
-            return $a + $b;
-        });
+        $m->addMethod('sum', $this->createSumFx());
         $res = $m->sum(3, 5);
         $this->assertSame(8, $res);
 
@@ -116,15 +123,11 @@ class DynamicMethodTraitTest extends TestCase
 
     public function testDoubleMethodException(): void
     {
-        $this->expectException(Exception::class);
-
         $m = new DynamicMethodMock();
-        $m->addMethod('sum', function ($m, $a, $b) {
-            return $a + $b;
-        });
-        $m->addMethod('sum', function ($m, $a, $b) {
-            return $a + $b;
-        });
+        $m->addMethod('sum', $this->createSumFx());
+
+        $this->expectException(Exception::class);
+        $m->addMethod('sum', $this->createSumFx());
     }
 
     /**
@@ -134,9 +137,7 @@ class DynamicMethodTraitTest extends TestCase
     {
         // simple method
         $m = new DynamicMethodMock();
-        $m->addMethod('sum', function ($m, $a, $b) {
-            return $a + $b;
-        });
+        $m->addMethod('sum', $this->createSumFx());
         $this->assertTrue($m->hasMethod(('sum')));
         $m->removeMethod('sum');
         $this->assertFalse($m->hasMethod(('sum')));
@@ -145,11 +146,10 @@ class DynamicMethodTraitTest extends TestCase
     public function testGlobalMethodException1(): void
     {
         // can't add global method without AppScopeTrait and HookTrait
-        $this->expectException(Exception::class);
         $m = new DynamicMethodMock();
-        $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
-            return $a + $b;
-        });
+
+        $this->expectException(Exception::class);
+        $m->addGlobalMethod('sum', $this->createSumFx(true));
     }
 
     /**
@@ -158,16 +158,12 @@ class DynamicMethodTraitTest extends TestCase
     public function testGlobalMethods(): void
     {
         $app = new GlobalMethodAppMock();
-
         $m = new GlobalMethodObjectMock();
         $m->setApp($app);
-
         $m2 = new GlobalMethodObjectMock();
         $m2->setApp($app);
 
-        $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
-            return $a + $b;
-        });
+        $m->addGlobalMethod('sum', $this->createSumFx(true));
         $this->assertTrue($m->hasGlobalMethod('sum'));
 
         $res = $m2->sum(3, 5);
@@ -179,17 +175,13 @@ class DynamicMethodTraitTest extends TestCase
 
     public function testDoubleGlobalMethodException(): void
     {
-        $this->expectException(Exception::class);
-
         $m = new GlobalMethodObjectMock();
         $m->setApp(new GlobalMethodAppMock());
 
-        $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
-            return $a + $b;
-        });
-        $m->addGlobalMethod('sum', function ($m, $obj, $a, $b) {
-            return $a + $b;
-        });
+        $m->addGlobalMethod('sum', $this->createSumFx(true));
+
+        $this->expectException(Exception::class);
+        $m->addGlobalMethod('sum', $this->createSumFx(true));
     }
 }
 

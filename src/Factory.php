@@ -38,8 +38,7 @@ class Factory
         foreach ($seeds as $seedIndex => $seed) {
             if (is_object($seed)) {
                 if ($obj !== null) {
-                    continue; // legacy behaviour
-                    // throw new Exception('Two or more objects specified as seed');
+                    throw new Exception('Two or more objects specified as seed');
                 }
 
                 $obj = $seed;
@@ -62,10 +61,6 @@ class Factory
             } /*elseif (!class_exists($seed[0])) {
                 throw new Exception('Seed class "' . $seed[0] . '" not found');
             }*/
-
-            if (!is_array($seed)) {
-                $seed = [$seed];
-            }
 
             foreach ($seed as $k => $v) {
                 if (is_int($k)) {
@@ -128,10 +123,6 @@ class Factory
     {
         if ($defaults === null) { // should be deprecated soon (with [] default value)
             $defaults = [];
-        }
-
-        if ($seed === null) { // should be deprecated soon
-            $seed = [];
         }
 
         if ((!is_array($seed) && !is_object($seed))) {
