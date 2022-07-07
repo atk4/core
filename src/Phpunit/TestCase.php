@@ -85,10 +85,6 @@ abstract class TestCase extends BaseTestCase
                     $linesToBeUsed = TestUtil::getLinesToBeUsed(static::class, $this->getName(false));
                     $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
                     $coverage->start($coverageId);
-
-                    // DEBUG cov
-                    $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
-                    $coverage->start($coverageId);
                 }
             }
         }
