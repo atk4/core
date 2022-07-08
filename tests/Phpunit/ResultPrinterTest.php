@@ -41,7 +41,7 @@ class ResultPrinterTest extends TestCase
             public static int $counter = 0;
         });
         if (++$staticClass::$counter > 2) {
-            // allow this test to be run max. twice, phpunit new ExceptionWrapper() is leaking memory,
+            // allow this test to be run max. twice, new ExceptionWrapper() is leaking memory,
             // see https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/ExceptionWrapper.php#L112
             // https://github.com/sebastianbergmann/phpunit/pull/5012
             return;

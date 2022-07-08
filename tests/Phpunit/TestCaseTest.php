@@ -53,15 +53,15 @@ class TestCaseTest extends TestCase
             public static int $counter = 0;
         });
         if ($v === 'a' && ++$staticClass::$counter > 1) {
-            // allow phpunit TestCase::runBare() to be run more than once
+            // allow TestCase::runBare() to be run more than once
             return;
         }
 
         $this->assertTrue($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
 
         if ($v === 'b') {
-            // make sure phpunit TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
-            // after this test using phpunit AfterTestHook hook
+            // make sure TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
+            // after this test by AfterTestHook hook added in our TestCase
             return;
         }
 
