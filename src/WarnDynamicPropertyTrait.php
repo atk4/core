@@ -17,7 +17,7 @@ trait WarnDynamicPropertyTrait
         $class = static::class;
         try {
             $propRefl = new \ReflectionProperty($class, $name);
-            if (!$propRefl->isPrivate()) {
+            if (!$propRefl->isPrivate() && !$propRefl->isPublic()) {
                 throw new \Error('Cannot access protected property ' . $class . '::$' . $name);
             }
         } catch (\ReflectionException $e) {
