@@ -28,7 +28,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
             $this->expectException(WarnError::class);
             $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$xxx');
-            isset($test->xxx);
+            isset($test->xxx); // @phpstan-ignore-line
         });
     }
 
@@ -39,7 +39,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
             $this->expectException(WarnError::class);
             $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$xxx');
-            $test->xxx;
+            $test->xxx; // @phpstan-ignore-line
         });
     }
 
@@ -50,7 +50,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
             $this->expectException(WarnError::class);
             $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$xxx');
-            $test->xxx = 5;
+            $test->xxx = 5; // @phpstan-ignore-line
         });
     }
 
@@ -61,7 +61,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
             $this->expectException(WarnError::class);
             $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$xxx');
-            unset($test->{'xxx'});
+            unset($test->{'xxx'}); // @phpstan-ignore-line
         });
     }
 
