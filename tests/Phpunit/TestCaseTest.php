@@ -63,7 +63,7 @@ class TestCaseTest extends TestCase
 
         if ($v === 'b') {
             // make sure TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
-            // after this test by AfterTestHook hook added in our TestCase
+            // after this test by AfterTestHook hook added by our TestCase
             return;
         }
 
