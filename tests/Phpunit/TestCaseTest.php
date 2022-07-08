@@ -10,8 +10,7 @@ use PHPUnit\Runner\BaseTestRunner;
 
 class TestCaseTest extends TestCase
 {
-    /** @var int */
-    private static $providerCallCounter = 0;
+    private static int $providerCallCounter = 0;
 
     private function coverCoverageFromProvider(): void
     {
@@ -49,11 +48,20 @@ class TestCaseTest extends TestCase
     public function testCoverageImplForDoesNotPerformAssertions(string $v): void
     {
         $this->assertFalse($this->doesNotPerformAssertions());
+
+        $staticClass = get_class(new class() {
+            public static int $counter = 0;
+        });
+        if ($v === 'a' && ++$staticClass::$counter > 1) {
+            // allow phpunit TestCase::runBare() to be run more than once
+            return;
+        }
+
         $this->assertTrue($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
 
         if ($v === 'b') {
-            // make sure TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
-            // after this test using phpunit AfterTestHook
+            // make sure phpunit TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
+            // after this test using phpunit AfterTestHook hook
             return;
         }
 
@@ -69,6 +77,7 @@ class TestCaseTest extends TestCase
         } finally {
             \Closure::bind(fn () => $this->status = $testStatusOrig, $this, PhpunitTestCase::class)();
         }
+
         $this->assertFalse($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
     }
 
