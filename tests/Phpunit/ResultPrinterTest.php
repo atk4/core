@@ -44,7 +44,9 @@ class ResultPrinterTest extends TestCase
             // allow this test to be run max. twice, new ExceptionWrapper() is leaking memory,
             // see https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/ExceptionWrapper.php#L112
             // https://github.com/sebastianbergmann/phpunit/pull/5012
+            // @codeCoverageIgnoreStart
             return;
+            // @codeCoverageIgnoreEnd
         }
 
         $res = $this->printAndReturnDefectTrace(ResultPrinter::class, new ExceptionWrapper($exception));

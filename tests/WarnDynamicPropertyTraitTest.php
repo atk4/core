@@ -23,6 +23,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
     public function testIssetException(): void
     {
+        $this->runWithErrorConvertedToException(fn () => null);
         $this->runWithErrorConvertedToException(function () {
             $test = new ClassWithWarnDynamicPropertyTrait();
 

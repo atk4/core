@@ -54,7 +54,9 @@ class TestCaseTest extends TestCase
         });
         if ($v === 'a' && ++$staticClass::$counter > 1) {
             // allow TestCase::runBare() to be run more than once
+            // @codeCoverageIgnoreStart
             return;
+            // @codeCoverageIgnoreEnd
         }
 
         $this->assertTrue($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
