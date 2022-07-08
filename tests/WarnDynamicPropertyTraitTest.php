@@ -61,7 +61,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
             $this->expectException(WarnError::class);
             $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$xxx');
-            unset($test->xxx);
+            unset($test->{'xxx'});
         });
     }
 
