@@ -6,6 +6,12 @@ namespace Atk4\Core\Phpunit;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
+use PHPUnit\Framework\TestResult;
+use PHPUnit\Runner\AfterTestHook;
+use PHPUnit\Runner\BaseTestRunner;
+use PHPUnit\Runner\TestListenerAdapter;
+use PHPUnit\Util\Test as TestUtil;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
@@ -66,8 +72,57 @@ abstract class TestCase extends BaseTestCase
 
         // fix coverage when no assertion is expected
         // https://github.com/sebastianbergmann/phpunit/pull/5010
-        if ($this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()) {
-            $this->getTestResultObject()->beStrictAboutTestsThatDoNotTestAnything(false);
+        if ($this->getStatus() === BaseTestRunner::STATUS_PASSED
+            && $this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()
+            && $this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything()
+        ) {
+            $testResult = $this->getTestResultObject();
+            $afterHookTest = new class($testResult) implements AfterTestHook {
+                /** @var TestResult */
+                public $testResult;
+
+                public function __construct(TestResult $testResult)
+                {
+                    $this->testResult = $testResult;
+                }
+
+                public function executeAfterTest(string $test, float $time): void
+                {
+                    $this->testResult->beStrictAboutTestsThatDoNotTestAnything(true);
+                }
+            };
+            $alreadyAdded = false;
+            foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
+                if ($listener instanceof TestListenerAdapter) {
+                    foreach (\Closure::bind(fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
+                        if (get_class($hook) === get_class($afterHookTest)) {
+                            $alreadyAdded = true;
+                        }
+                    }
+                }
+            }
+            if (!$alreadyAdded) {
+                $testListenerAdapter = new TestListenerAdapter();
+                $testListenerAdapter->add($afterHookTest);
+                $testResult->addListener($testListenerAdapter); // @phpstan-ignore-line
+            }
+            $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
+        }
+
+        // fix coverage for skipped/incomplete tests
+        // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830
+        // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857
+        if (in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true)) {
+            $coverage = $this->getTestResultObject()->getCodeCoverage();
+            if ($coverage !== null) {
+                $coverageId = \Closure::bind(fn () => $coverage->currentId, null, CodeCoverage::class)();
+                if ($coverageId !== null) { // @phpstan-ignore-line https://github.com/sebastianbergmann/php-code-coverage/pull/923
+                    $linesToBeCovered = TestUtil::getLinesToBeCovered(static::class, $this->getName(false));
+                    $linesToBeUsed = TestUtil::getLinesToBeUsed(static::class, $this->getName(false));
+                    $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
+                    $coverage->start($coverageId);
+                }
+            }
         }
     }
 
