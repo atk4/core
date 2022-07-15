@@ -125,7 +125,7 @@ class Factory
             $defaults = [];
         }
 
-        if ((!is_array($seed) && !is_object($seed))) {
+        if (!is_array($seed) && !is_object($seed)) {
             throw new Exception('Use of non-array seed ($seed type = ' . gettype($seed) . ') is not supported');
         }
 

@@ -27,7 +27,7 @@ if you need an element that is declared inside an array you can use a special sy
 
 Element in config can be defined even manually :
 
-    $object->setConfig('element_key',$element);
+    $object->setConfig('element_key', $element);
 
 
 Supported Formats

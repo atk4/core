@@ -138,9 +138,9 @@ class DynamicMethodTraitTest extends TestCase
         // simple method
         $m = new DynamicMethodMock();
         $m->addMethod('sum', $this->createSumFx());
-        $this->assertTrue($m->hasMethod(('sum')));
+        $this->assertTrue($m->hasMethod('sum'));
         $m->removeMethod('sum');
-        $this->assertFalse($m->hasMethod(('sum')));
+        $this->assertFalse($m->hasMethod('sum'));
     }
 
     public function testGlobalMethodException1(): void

@@ -39,7 +39,7 @@ trait ContainerTrait
     /**
      * If you are using ContainerTrait only, then you can safely
      * use this add() method. If you are also using factory, or
-     * initializer then redefine add() and call _addContainer, _addFactory,.
+     * initializer then redefine add() and call _addContainer, _addFactory.
      *
      * @param mixed        $obj
      * @param array|string $args
