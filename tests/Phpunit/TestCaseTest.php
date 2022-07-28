@@ -4,46 +4,115 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests\Phpunit;
 
+use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
 use PHPUnit\Runner\BaseTestRunner;
 
 class TestCaseTest extends TestCase
 {
-    private static int $providerCallCounter = 0;
+    private static int $activeObjectsCounter = 0;
 
-    private function coverCoverageFromProvider(): void
+    /** @var object|'default' */
+    private $object = 'default';
+
+    private static int $providerCoverageCallCounter = 0;
+
+    protected function createAndCountObject(): object
     {
-        ++self::$providerCallCounter;
+        $destructFx = function () {
+            --self::$activeObjectsCounter;
+        };
+
+        $object = new class($destructFx) {
+            public \Closure $destructFx;
+
+            public function __construct(\Closure $destructFx)
+            {
+                $this->destructFx = $destructFx;
+            }
+
+            public function __destruct()
+            {
+                ($this->destructFx)();
+            }
+        };
+        ++self::$activeObjectsCounter;
+
+        return $object;
     }
 
     /**
-     * @dataProvider provideProviderCoverage1
-     * @dataProvider provideProviderCoverage2
+     * @dataProvider provideProviderAb
      */
-    public function testProviderCoverage(string $v): void
+    public function testObjectsAreReleasedAfterTest(string $v): void
     {
-        if ($v === 'y') {
-            $this->assertSame(2, self::$providerCallCounter);
+        $this->assertSame(0, self::$activeObjectsCounter);
+        $this->assertSame('default', $this->object);
+
+        if ($v === 'a') {
+            $o = $this->createAndCountObject();
+            $this->assertSame(1, self::$activeObjectsCounter);
+            $o = null;
+            $this->assertSame(0, self::$activeObjectsCounter);
+            $this->object = $this->createAndCountObject();
+            $this->assertSame(1, self::$activeObjectsCounter);
         }
-        $this->assertTrue(in_array($v, ['a', 'b', 'x', 'y'], true));
     }
 
-    public function provideProviderCoverage1(): \Traversable
+    public function testObjectsAreReleasedAfterFailedTest(): void
+    {
+        $this->assertSame(0, self::$activeObjectsCounter);
+
+        $throwFx = function (object $arg): never {
+            throw (new Exception())
+                ->addMoreInfo('x', $this->createAndCountObject());
+        };
+        $e = null;
+        try {
+            $throwFx($this->createAndCountObject());
+        } catch (\Exception $e) {
+            $e = new \Error('wrap', 0, $e);
+        }
+        $this->assertSame(2, self::$activeObjectsCounter);
+
+        $e2 = null;
+        try {
+            $this->onNotSuccessfulTest($e);
+        } catch (\Error $e2) {
+        }
+        $this->assertSame($e, $e2);
+
+        $this->assertSame(0, self::$activeObjectsCounter);
+    }
+
+    public function provideProviderAb(): \Traversable
     {
         yield ['a'];
         yield ['b'];
     }
 
-    public function provideProviderCoverage2(): \Traversable
+    /**
+     * @dataProvider provideProviderAb
+     * @dataProvider provideProviderCoverage
+     */
+    public function testProviderCoverage(string $v): void
+    {
+        if ($v === 'y') {
+            $this->assertSame(2, self::$providerCoverageCallCounter);
+        }
+        $this->assertTrue(in_array($v, ['a', 'b', 'x', 'y'], true));
+    }
+
+    public function provideProviderCoverage(): \Traversable
     {
         yield ['x'];
-        $this->coverCoverageFromProvider();
+        ++self::$providerCoverageCallCounter;
         yield ['y'];
     }
 
     /**
-     * @dataProvider provideProviderCoverage1
+     * @dataProvider provideProviderAb
      */
     public function testCoverageImplForDoesNotPerformAssertions(string $v): void
     {

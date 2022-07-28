@@ -11,7 +11,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 {
     protected function runWithErrorConvertedToException(\Closure $fx): void
     {
-        set_error_handler(function (int $errno, string $errstr): void {
+        set_error_handler(function (int $errno, string $errstr) {
             throw new WarnError($errstr);
         });
         try {
@@ -68,16 +68,18 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
     public function testGetSetPublicProperty(): void
     {
-        $test = new ClassWithWarnDynamicPropertyTrait();
-        $this->assertTrue(isset($test->params)); // @phpstan-ignore-line
-        $test->params = ['foo'];
-        $this->assertSame(['foo'], $test->params);
-        unset($test->{'params'});
+        $test = new class() extends ClassWithWarnDynamicPropertyTrait {
+            public bool $p = false;
+        };
+        $this->assertFalse($test->p);
+        $test->p = true;
+        $this->assertTrue($test->p);
+        unset($test->{'p'});
 
         $this->runWithErrorConvertedToException(function () use ($test) {
             $this->expectException(WarnError::class);
-            $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$params');
-            $test->params; // @phpstan-ignore-line
+            $this->expectErrorMessage('Undefined property: Atk4\Core\Exception@anonymous::$p');
+            $test->p; // @phpstan-ignore-line
         });
     }
 
@@ -94,11 +96,35 @@ class WarnDynamicPropertyTraitTest extends TestCase
     {
         $this->runWithErrorConvertedToException(function () {
             $test = new ClassWithWarnDynamicPropertyTrait();
+            $this->assertTrue((new \ReflectionClass(get_parent_class($test)))->hasProperty('trace'));
 
             $this->expectException(WarnError::class);
-            $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$trace2');
-            $test->trace2; // @phpstan-ignore-line
+            $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$trace');
+            $test->trace; // @phpstan-ignore-line
         });
+    }
+
+    public function testGetSetWithWarningSuppressed(): void
+    {
+        $test = new class() extends ClassWithWarnDynamicPropertyTrait {
+            public bool $p = false;
+        };
+
+        set_error_handler(function () {
+            return true;
+        });
+        try {
+            $this->assertTrue($test->__isset('p'));
+            $this->assertFalse($test->p);
+            $this->assertFalse($test->__get('p'));
+            $test->__set('p', true);
+            $this->assertTrue($test->p);
+            $this->assertTrue($test->__get('p'));
+            $test->__unset('p');
+            $this->assertFalse($test->__isset('p'));
+        } finally {
+            restore_error_handler();
+        }
     }
 }
 

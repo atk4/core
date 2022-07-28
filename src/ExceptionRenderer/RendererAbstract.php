@@ -99,7 +99,7 @@ abstract class RendererAbstract
 
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
-                ? get_object_vars($parsed['object'])['name'] ?? get_object_vars($parsed['object'])['shortName']
+                ? get_object_vars($parsed['object'])['name'] ?? $parsed['object']->shortName
                 : str_replace("\0", ' ', $this->tryRelativizePathsInString(get_class($parsed['object'])));
         }
 
@@ -114,7 +114,7 @@ abstract class RendererAbstract
         if ($val instanceof \Closure) {
             return 'closure';
         } elseif (is_object($val)) {
-            return get_class($val) . (\Atk4\Core\TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? get_object_vars($val)['shortName']) . ')' : '');
+            return get_class($val) . (\Atk4\Core\TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? $val->shortName) . ')' : '');
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {
@@ -176,9 +176,7 @@ abstract class RendererAbstract
     protected function getStackTrace(bool $shorten): array
     {
         $custTraceFunc = function (\Throwable $ex) {
-            $trace = $ex instanceof Exception
-                ? $ex->getMyTrace()
-                : $ex->getTrace();
+            $trace = $ex->getTrace();
 
             return count($trace) > 0 ? array_combine(range(count($trace) - 1, 0, -1), $trace) : [];
         };

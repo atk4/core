@@ -23,7 +23,7 @@ trait WarnDynamicPropertyTrait
         } catch (\ReflectionException $e) {
         }
 
-        'trigger_error'('Undefined property: ' . $class . '::$' . $name, \E_USER_WARNING);
+        'trigger_error'('Undefined property: ' . get_debug_type($this) . '::$' . $name, \E_USER_WARNING);
     }
 
     public function __isset(string $name): bool
