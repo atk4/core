@@ -56,11 +56,22 @@ abstract class TestCase extends BaseTestCase
     {
         parent::tearDown();
 
-        // remove once https://github.com/sebastianbergmann/phpunit/issues/4705 is fixed
-        foreach (array_keys(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class))) as $k) {
-            $this->{$k} = \PHP_MAJOR_VERSION < 8
-                ? (new \ReflectionProperty(static::class, $k))->getDeclaringClass()->getDefaultProperties()[$k]
-                : (null ?? (new \ReflectionProperty(static::class, $k))->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
+        // release objects from TestCase instance as it is never released
+        // https://github.com/sebastianbergmann/phpunit/issues/4705
+        $classes = [];
+        $class = static::class;
+        do {
+            $classes[] = $class;
+            $class = get_parent_class($class);
+        } while ($class !== BaseTestCase::class);
+        foreach (array_reverse($classes) as $class) {
+            \Closure::bind(function () use ($class) {
+                foreach (array_keys(array_intersect_key(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class)), get_class_vars($class))) as $k) {
+                    $this->{$k} = \PHP_MAJOR_VERSION < 8
+                        ? (new \ReflectionProperty($class, $k))->getDeclaringClass()->getDefaultProperties()[$k]
+                        : (null ?? (new \ReflectionProperty($class, $k))->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
+                }
+            }, $this, $class)();
         }
 
         // once PHP 8.0 support is dropped, needed only once, see:
@@ -89,23 +100,22 @@ abstract class TestCase extends BaseTestCase
                 public function executeAfterTest(string $test, float $time): void
                 {
                     $this->testResult->beStrictAboutTestsThatDoNotTestAnything(true);
-                }
-            };
-            $alreadyAdded = false;
-            foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
-                if ($listener instanceof TestListenerAdapter) {
-                    foreach (\Closure::bind(fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
-                        if (get_class($hook) === get_class($afterHookTest)) {
-                            $alreadyAdded = true;
+
+                    $testResult = $this->testResult;
+                    foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
+                        if ($listener instanceof TestListenerAdapter) {
+                            foreach (\Closure::bind(fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
+                                if ($hook === $this) {
+                                    $this->testResult->removeListener($listener); // @phpstan-ignore-line
+                                }
+                            }
                         }
                     }
                 }
-            }
-            if (!$alreadyAdded) {
-                $testListenerAdapter = new TestListenerAdapter();
-                $testListenerAdapter->add($afterHookTest);
-                $testResult->addListener($testListenerAdapter); // @phpstan-ignore-line
-            }
+            };
+            $testListenerAdapter = new TestListenerAdapter();
+            $testListenerAdapter->add($afterHookTest);
+            $testResult->addListener($testListenerAdapter); // @phpstan-ignore-line
             $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
         }
 
@@ -124,6 +134,56 @@ abstract class TestCase extends BaseTestCase
                 }
             }
         }
+    }
+
+    private function releaseObjectsFromExceptionTrace(\Throwable $e): void
+    {
+        $replaceObjectsFx = function ($v) use (&$replaceObjectsFx) {
+            if (is_object($v) && !$v instanceof \DateTimeInterface) {
+                $v = 'object of ' . get_debug_type($v) . ' class unreferenced by ' . self::class;
+            } elseif (is_array($v)) {
+                $v = array_map($replaceObjectsFx, $v);
+            }
+
+            return $v;
+        };
+
+        $traceReflectionProperty = new \ReflectionProperty($e instanceof \Exception ? \Exception::class : \Error::class, 'trace');
+        $paramsReflectionProperty = $e instanceof \Atk4\Core\Exception ? new \ReflectionProperty(\Atk4\Core\Exception::class, 'params') : null;
+        $traceReflectionProperty->setAccessible(true);
+        if ($paramsReflectionProperty !== null) {
+            $paramsReflectionProperty->setAccessible(true);
+        }
+        try {
+            $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
+            if ($paramsReflectionProperty !== null) {
+                $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
+            }
+        } finally {
+            $traceReflectionProperty->setAccessible(false);
+            if ($paramsReflectionProperty !== null) {
+                $paramsReflectionProperty->setAccessible(false);
+            }
+        }
+
+        if ($e->getPrevious() !== null) {
+            $this->releaseObjectsFromExceptionTrace($e->getPrevious());
+        }
+    }
+
+    protected function onNotSuccessfulTest(\Throwable $e): void
+    {
+        // release objects from uncaught exception as it is never released
+        $this->releaseObjectsFromExceptionTrace($e);
+
+        // once PHP 8.0 support is dropped, needed only once, see:
+        // https://github.com/php/php-src/commit/b58d74547f7700526b2d7e632032ed808abab442
+        if (\PHP_VERSION_ID < 80100) {
+            gc_collect_cycles();
+        }
+        gc_collect_cycles();
+
+        parent::onNotSuccessfulTest($e);
     }
 
     /**

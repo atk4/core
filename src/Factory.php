@@ -6,6 +6,8 @@ namespace Atk4\Core;
 
 class Factory
 {
+    use WarnDynamicPropertyTrait;
+
     private static ?Factory $_instance = null;
 
     protected function __construct()

@@ -13,22 +13,14 @@ class Exception extends \Exception
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var array */
-    public $params = [];
-
     /** @var string */
     protected $customExceptionTitle = 'Critical Error';
 
-    /**
-     * Most exceptions would be a cause by some other exception, Agile
-     * Core will encapsulate them and allow you to access them anyway.
-     *
-     * @var array
-     */
-    private $trace2; // because PHP's use of final() sucks!
+    /** @var array */
+    private $params = [];
 
     /** @var string[] */
-    private $solutions = []; // store solutions
+    private $solutions = [];
 
     /** @var ITranslatorAdapter */
     private $adapter;
@@ -40,12 +32,18 @@ class Exception extends \Exception
         // save trace but skip constructors of this exception
         $trace = debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT);
         for ($i = 0; $i < count($trace); ++$i) {
-            $c = $trace[$i];
-            if (isset($c['object']) && $c['object'] === $this && $c['function'] === '__construct') {
+            $frame = $trace[$i];
+            if (isset($frame['object']) && $frame['object'] === $this && $frame['function'] === '__construct') {
                 array_shift($trace);
             }
         }
-        $this->trace2 = $trace;
+        $traceReflectionProperty = new \ReflectionProperty(parent::class, 'trace');
+        $traceReflectionProperty->setAccessible(true);
+        try {
+            $traceReflectionProperty->setValue($this, $trace);
+        } finally {
+            $traceReflectionProperty->setAccessible(false);
+        }
     }
 
     /**
@@ -59,14 +57,6 @@ class Exception extends \Exception
         $this->message = $message;
 
         return $this;
-    }
-
-    /**
-     * Return trace array.
-     */
-    public function getMyTrace(): array
-    {
-        return $this->trace2;
     }
 
     /**
