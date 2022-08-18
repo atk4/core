@@ -13,26 +13,29 @@ object is linked up into the environment.
 
 Declare a object class in your framework::
 
-    class FormField {
+    class FormField
+    {
         use AppScopeTrait;
         use InitializerTrait;
         use NameTrait;
         use TrackableTrait;
     }
 
-    class FormField_Input extends FormField {
-
+    class FormField_Input extends FormField
+    {
         public $value = null;
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
-            if($_POST[$this->name) {
+            if ($_POST[$this->name) {
                 $this->value = $_POST[$this->name];
             }
         }
 
-        function render() {
+        public function render()
+        {
             return '<input name="' . $this->name . '" value="' . $value . '"/>';
         }
     }
@@ -49,7 +52,8 @@ Methods
 If you wish to use traits class and extend it, you can use this in your base
 class::
 
-    class FormField {
+    class FormField
+    {
         use AppScopeTrait;
         use InitializerTrait {
             init as _init
@@ -59,8 +63,9 @@ class::
 
         public $value = null;
 
-        protected function init(): void {
-            $this->_init();   // call init of InitializerTrait
+        protected function init(): void
+        {
+            $this->_init(); // call init of InitializerTrait
 
             if ($_POST[$this->name) {
                 $this->value = $_POST[$this->name];

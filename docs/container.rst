@@ -105,8 +105,10 @@ Methods
 
     Adds a new element into collection::
 
-        function addField($name, $definition) {
+        public function addField($name, $definition)
+        {
             $field = Factory::factory($definition, []);
+
             return $this->_addIntoCollection($name, $field, 'fields');
         }
 
@@ -145,15 +147,18 @@ Container Trait
     by implementing containers, you can use :php:trait:`ContainerTrait`.
     Example::
 
-        class MyContainer extends OtherClass {
+        class MyContainer extends OtherClass
+        {
             use Atk4\Core\ContainerTrait;
 
-            function add($obq, $args = []) {
+            public function add($obq, $args = [])
+            {
                 return $this->_addContainer($obj, $args);
             }
         }
 
-        class MyItem  {
+        class MyItem
+        {
             use Atk4\Core\TrackableTrait;
             use Atk4\Core\NameTrait;
         }
@@ -207,7 +212,7 @@ Methods
 
     Your minimum code should be::
 
-        function add($obj, $args = [])
+        public function add($obj, $args = [])
         {
             return $this->_addContainer($obj, $args);
         }
@@ -217,7 +222,7 @@ Methods
         $args = ['child_name'];
         $args = 'child_name';
         $args = ['child_name', 'db' => $mydb];
-        $args = ['name' => 'child_name'];  // obsolete, backward-compatible
+        $args = ['name' => 'child_name']; // obsolete, backward-compatible
 
     Method will return the object. Will throw exception if child with same
     name already exist.

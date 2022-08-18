@@ -60,7 +60,7 @@ class TestCaseTest extends TestCase
         }
     }
 
-    public function testObjectsAreReleasedAfterFailedTest(): void
+    public function testObjectsAreReleasedFromUncaughtException(): void
     {
         $this->assertSame(0, self::$activeObjectsCounter);
 

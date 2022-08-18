@@ -39,11 +39,7 @@ class Exception extends \Exception
         }
         $traceReflectionProperty = new \ReflectionProperty(parent::class, 'trace');
         $traceReflectionProperty->setAccessible(true);
-        try {
-            $traceReflectionProperty->setValue($this, $trace);
-        } finally {
-            $traceReflectionProperty->setAccessible(false);
-        }
+        $traceReflectionProperty->setValue($this, $trace);
     }
 
     /**

@@ -78,6 +78,7 @@ class FactoryTest extends TestCase
         // but constructor arguments (except silently ignored class name)
         // for already instanced object are not valid
         $o = new FactoryTestDiMock();
+
         $this->expectException(Exception::class);
         Factory::mergeSeeds(['a1', 'a2'], $o);
     }

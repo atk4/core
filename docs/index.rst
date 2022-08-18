@@ -31,7 +31,7 @@ using containers:
 
 The natural solution to the problem is to create array like this::
 
-   public $fields = [];
+    public $fields = [];
 
 After that you would need to create code for adding objects into container, removing,
 verify their existence etc.
@@ -39,22 +39,23 @@ verify their existence etc.
 :php:trait:`CollectionTrait` implements several handy methods which can be used
 to create necessary methods with minimum code footprint::
 
-   class Form {
-       use CollectionTrait;
+    class Form
+    {
+        use CollectionTrait;
 
-       public $fields = [];
+        public $fields = [];
 
-       public function addField($name, $seed = null)
-       {
-           $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
+        public function addField($name, $seed = null)
+        {
+            $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-           $field = Factory::factory($seed, ['name' => $name]);
+            $field = Factory::factory($seed, ['name' => $name]);
 
-           return $this->_addIntoCollection($name, $field, 'fields');
-       }
+            return $this->_addIntoCollection($name, $field, 'fields');
+        }
 
-       // hasField, getField, removeField also can be added, see further docs.
-   }
+        // hasField, getField, removeField also can be added, see further docs.
+    }
 
 Traits add multiple checks to prevert collisions between existing objects, call
 init() method, carry over $app and set $owner properties and calculate 'name'
@@ -134,11 +135,14 @@ and triggering callbacks::
 
     $object = new AnyClass();
 
-    $object->onHook('test', function ($o) { echo 'hello'; }
-    $object->onHook('test', function ($o) { echo 'world'; }
+    $object->onHook('test', function ($o) {
+        echo 'hello';
+    });
+    $object->onHook('test', function ($o) {
+        echo 'world';
+    });
 
-    $object->hook('test');
-    // outputs: helloworld
+    $object->hook('test'); // outputs: helloworld
 
 .. toctree::
     :maxdepth: 3
@@ -152,9 +156,10 @@ Hook-based dynamic Methods
 dynamically.
 That's like a "trait" feature of a PHP, but implemented in run-time::
 
-    $object->addMethod('test', function ($o, $args) { echo 'hello, ' . $args[0]; } );
-    $object->test('world');
-    // outputs: hello, world
+    $object->addMethod('test', function ($o, $args) {
+        echo 'hello, ' . $args[0];
+    });
+    $object->test('world'); // outputs: hello, world
 
 There are also methods for removing and checking if methods exists, so::
 
@@ -167,7 +172,8 @@ There are also methods for removing and checking if methods exists, so::
 
 The implementation of dynamic methods relies on Hook trait, so to use it::
 
-    class AnyClass extends OtherClass {
+    class AnyClass extends OtherClass
+    {
         use HookTrait;
         use DynamicMethodTrait;
 
@@ -188,10 +194,12 @@ for object modeling.
 You may extend [Model](http://agile-data.readthedocs.io/en/develop/model.html)
 class to define a business object, such as - ShoppingBag::
 
-    class ShoppingBag extends \Atk4\Data\Model {
+    class ShoppingBag extends \Atk4\Data\Model
+    {
         public $table = 'shopping_bag';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->hasOne('user_id', new User());

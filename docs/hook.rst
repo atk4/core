@@ -30,7 +30,9 @@ The framework or application would typically execute hooks like this::
 
 You can register multiple call-backs to be executed for the requested `spot`::
 
-    $obj->onHook('spot', function ($obj) { echo "Hook 'spot' is called!"; });
+    $obj->onHook('spot', function ($obj) {
+        echo "Hook 'spot' is called!";
+    });
 
 Adding callbacks
 ================
@@ -57,7 +59,7 @@ In this case a method with same name as $spot will be used as callback::
         });
     }
 
-    function beforeUpdate()
+    protected function beforeUpdate()
     {
         // will be called from the hook
     }
@@ -73,20 +75,20 @@ hook with priority 1 it will always be executed before any hooks with priority
 Normally hooks are executed in the same order as they are added, however if you
 use negative priority, then hooks will be executed in reverse order::
 
-    $obj->onHook('spot', third,    [], -1);
+    $obj->onHook('spot', third, [], -1);
 
-    $obj->onHook('spot', second,   [], -5);
-    $obj->onHook('spot', first,    [], -5);
+    $obj->onHook('spot', second, [], -5);
+    $obj->onHook('spot', first, [], -5);
 
-    $obj->onHook('spot', fourth,   [], 0);
-    $obj->onHook('spot', fifth,    [], 0);
+    $obj->onHook('spot', fourth, [], 0);
+    $obj->onHook('spot', fifth, [], 0);
 
-    $obj->onHook('spot', ten,      [], 1000);
+    $obj->onHook('spot', ten, [], 1000);
 
-    $obj->onHook('spot', sixth,    [], 2);
-    $obj->onHook('spot', seventh,  [], 5);
+    $obj->onHook('spot', sixth, [], 2);
+    $obj->onHook('spot', seventh, [], 5);
     $obj->onHook('spot', eight);
-    $obj->onHook('spot', nine,     [], 5);
+    $obj->onHook('spot', nine, [], 5);
 
 
 .. php:method:: hook($spot, $args = null)
@@ -177,12 +179,14 @@ Using references in hooks
 In some cases you want hook to change certain value. For example when model
 value is set it may call normalization hook (methods will change $value)::
 
-    function set($field, $value) {
+    public function set($field, $value) {
         $this->hook('normalize', [&$value]);
         $this->data[$field] = $value;
     }
 
-    $m->onHook('normalize', function (&$a) { $a = trim($a); });
+    $m->onHook('normalize', function (&$a) {
+        $a = trim($a);
+    });
 
 Checking if hook has callbacks
 ==============================

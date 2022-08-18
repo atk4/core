@@ -64,8 +64,9 @@ trait HookTrait
     /**
      * Add another callback to be executed during hook($spot);.
      *
-     * Lower priority is called sooner. If priority is negative,
-     * then hooks will be executed in reverse order.
+     * Lower priority is called sooner.
+     *
+     * If priority is negative, then hook is prepended (executed first for the same priority).
      *
      * @param array<int, mixed> $args
      *

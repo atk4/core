@@ -149,21 +149,12 @@ abstract class TestCase extends BaseTestCase
         };
 
         $traceReflectionProperty = new \ReflectionProperty($e instanceof \Exception ? \Exception::class : \Error::class, 'trace');
-        $paramsReflectionProperty = $e instanceof \Atk4\Core\Exception ? new \ReflectionProperty(\Atk4\Core\Exception::class, 'params') : null;
         $traceReflectionProperty->setAccessible(true);
-        if ($paramsReflectionProperty !== null) {
+        $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
+        if ($e instanceof \Atk4\Core\Exception) {
+            $paramsReflectionProperty = new \ReflectionProperty(\Atk4\Core\Exception::class, 'params');
             $paramsReflectionProperty->setAccessible(true);
-        }
-        try {
-            $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
-            if ($paramsReflectionProperty !== null) {
-                $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
-            }
-        } finally {
-            $traceReflectionProperty->setAccessible(false);
-            if ($paramsReflectionProperty !== null) {
-                $paramsReflectionProperty->setAccessible(false);
-            }
+            $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
         }
 
         if ($e->getPrevious() !== null) {

@@ -34,7 +34,8 @@ The other option is to supply error is:
         try {
             $field->validate();
         } catch (Validation_Exception $e) {
-            $e->addMoreInfo('field', $field);
+            $e->addMoreInfo('field', $field
+
             throw $e;
         }
 

@@ -191,11 +191,12 @@ abstract class RendererAbstract
             $pv = $this->parseStackTraceCall($parentTrace[$i]);
 
             if ($cv['line'] === $pv['line']
-                    && $cv['file'] === $pv['file']
-                    && $cv['class'] === $pv['class']
-                    && (!$bothAtk || $cv['object'] === $pv['object'])
-                    && $cv['function'] === $pv['function']
-                    && (!$bothAtk || $cv['args'] === $pv['args'])) {
+                && $cv['file'] === $pv['file']
+                && $cv['class'] === $pv['class']
+                && (!$bothAtk || $cv['object'] === $pv['object'])
+                && $cv['function'] === $pv['function']
+                && (!$bothAtk || $cv['args'] === $pv['args'])
+            ) {
                 unset($trace[$i]);
             } else {
                 break;
