@@ -121,14 +121,14 @@ class ConfigTraitTest extends TestCase
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');
 
-        $m->setConfig('num', 789);       // overwrite
-        $m->setConfig('name', 'John');   // add
+        $m->setConfig('num', 789); // overwrite
+        $m->setConfig('name', 'John'); // add
         $m->setConfig([
-            'obj' => null,          // overwrite
-            'arr/txt' => 'qwerty',      // overwrite
-            'arr/name' => 'Jane',        // add
-            'arr/sub/one' => 'more',        // add in deep structure
-            'arr/sub/two' => 'another',     // add one more in deep structure
+            'obj' => null, // overwrite
+            'arr/txt' => 'qwerty', // overwrite
+            'arr/name' => 'Jane', // add
+            'arr/sub/one' => 'more', // add in deep structure
+            'arr/sub/two' => 'another', // add one more in deep structure
             'arr' => ['foo' => 'bar'], // merge arrays
         ]);
         $this->{'assertEquals'}($a, $m->getConfigProp());

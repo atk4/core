@@ -18,7 +18,8 @@ trait CollectionTrait
     /**
      * Use this method trait like this:.
      *
-     * function addField($name, $definition) {
+     * function addField($name, $definition)
+     * {
      *     $field = Field::fromSeed($seed);
      *
      *     return $this->_addIntoCollection($name, $field, 'fields');

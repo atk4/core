@@ -67,9 +67,17 @@ abstract class TestCase extends BaseTestCase
         foreach (array_reverse($classes) as $class) {
             \Closure::bind(function () use ($class) {
                 foreach (array_keys(array_intersect_key(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class)), get_class_vars($class))) as $k) {
-                    $this->{$k} = \PHP_MAJOR_VERSION < 8
-                        ? (new \ReflectionProperty($class, $k))->getDeclaringClass()->getDefaultProperties()[$k]
-                        : (null ?? (new \ReflectionProperty($class, $k))->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
+                    $reflectionProperty = new \ReflectionProperty($class, $k);
+                    if (\PHP_MAJOR_VERSION < 8
+                        ? array_key_exists($k, $reflectionProperty->getDeclaringClass()->getDefaultProperties())
+                        : (null ?? $reflectionProperty->hasDefaultValue()) // @phpstan-ignore-line for PHP 7.x
+                    ) {
+                        $this->{$k} = \PHP_MAJOR_VERSION < 8
+                            ? $reflectionProperty->getDeclaringClass()->getDefaultProperties()[$k]
+                            : (null ?? $reflectionProperty->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
+                    } else {
+                        unset($this->{$k});
+                    }
                 }
             }, $this, $class)();
         }
@@ -126,7 +134,7 @@ abstract class TestCase extends BaseTestCase
             $coverage = $this->getTestResultObject()->getCodeCoverage();
             if ($coverage !== null) {
                 $coverageId = \Closure::bind(fn () => $coverage->currentId, null, CodeCoverage::class)();
-                if ($coverageId !== null) { // @phpstan-ignore-line https://github.com/sebastianbergmann/php-code-coverage/pull/923
+                if ($coverageId !== null) {
                     $linesToBeCovered = TestUtil::getLinesToBeCovered(static::class, $this->getName(false));
                     $linesToBeUsed = TestUtil::getLinesToBeUsed(static::class, $this->getName(false));
                     $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
@@ -149,21 +157,12 @@ abstract class TestCase extends BaseTestCase
         };
 
         $traceReflectionProperty = new \ReflectionProperty($e instanceof \Exception ? \Exception::class : \Error::class, 'trace');
-        $paramsReflectionProperty = $e instanceof \Atk4\Core\Exception ? new \ReflectionProperty(\Atk4\Core\Exception::class, 'params') : null;
         $traceReflectionProperty->setAccessible(true);
-        if ($paramsReflectionProperty !== null) {
+        $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
+        if ($e instanceof \Atk4\Core\Exception) {
+            $paramsReflectionProperty = new \ReflectionProperty(\Atk4\Core\Exception::class, 'params');
             $paramsReflectionProperty->setAccessible(true);
-        }
-        try {
-            $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
-            if ($paramsReflectionProperty !== null) {
-                $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
-            }
-        } finally {
-            $traceReflectionProperty->setAccessible(false);
-            if ($paramsReflectionProperty !== null) {
-                $paramsReflectionProperty->setAccessible(false);
-            }
+            $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
         }
 
         if ($e->getPrevious() !== null) {

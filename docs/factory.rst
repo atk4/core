@@ -16,14 +16,14 @@ things like:
 
 Thanks to Factory trait, the following code::
 
-   $button = $app->add(['Button', 'A Label', 'icon' => 'book', 'action' => My\Action::class]);
+    $button = $app->add(['Button', 'A Label', 'icon' => 'book', 'action' => My\Action::class]);
 
 can replace this::
 
-   $button = new \Atk4\Ui\Button('A Label');
-   $button->icon = new \Atk4\Ui\Icon('book');
-   $button->action = new My\Action();
-   $app->add($button);
+    $button = new \Atk4\Ui\Button('A Label');
+    $button->icon = new \Atk4\Ui\Icon('book');
+    $button->action = new My\Action();
+    $app->add($button);
 
 Type Hinting
 ------------
@@ -48,11 +48,11 @@ Seed
 Using "class" as opposed to initialized object yields many performance gains,
 as initialization of the class may be delayed until it's required. For instance::
 
-   $model->hasMany('Invoices', Invoice::class);
+    $model->hasMany('Invoices', Invoice::class);
 
-   // is faster than
+    // is faster than
 
-   $model->hasMany('Invoices', new Invoice());
+    $model->hasMany('Invoices', new Invoice());
 
 That is due to the fact that creating instance of "Invoice" class is not required
 until you actually traverse into it using `$model->ref('Invoices')` and can offer
@@ -61,14 +61,14 @@ into the object.
 
 Suppose you want to add a button with an icon::
 
-   $button = $view->add('Button');
-   $button->icon = new Icon('book');
+    $button = $view->add('Button');
+    $button->icon = new Icon('book');
 
 It's possible that some call-back execution will come before button rendering, so
 it's better to replace icon with the class::
 
-   $button = $view->add('Button');
-   $button->icon = Icon::class;
+    $button = $view->add('Button');
+    $button->icon = Icon::class;
 
 In this case, however - it is no longer possible to pass the "book" parameter to
 the constructor of the Icon class.
@@ -77,7 +77,7 @@ This problem is solved in ATK with "Seeds".
 
 A Seed is an array consisting of class name/object, named and numeric arguments::
 
-   $seed = [Button::class, 'My Label', 'icon' => 'book'];
+    $seed = [Button::class, 'My Label', 'icon' => 'book'];
 
 Seed with and without class
 ---------------------------
@@ -85,23 +85,23 @@ Seed with and without class
 There are two types of seeds - with class name and without. The one above contains
 the class and is used when user needs a flexibility to specify a class::
 
-   $app->add(['Button', 'My Label', 'icon' => 'book']);
+    $app->add(['Button', 'My Label', 'icon' => 'book']);
 
 The other seed type is class-less and can be used in situations where there are no
 ambiguity about which class is used::
 
-   $button->icon = ['book'];
+    $button->icon = ['book'];
 
 Either of those seeds can be replaced with the Object::
 
-   $button = $app->add(new Button('My Label'));
-   $button->icon = new Icon('book');
+    $button = $app->add(new Button('My Label'));
+    $button->icon = new Icon('book');
 
 If seed is a string then it would be treated as class name. For a class-less seed
 it would be treaded as a first argument to the construcor::
 
-   $button = $app->add('Button');
-   $button->icon = 'book';
+    $button = $app->add('Button');
+    $button->icon = 'book';
 
 Lifecycle of argument-bound seed
 --------------------------------
@@ -157,23 +157,23 @@ e.g. ``Action`` may have to be configured individually.
 Agile Core implements a mechanism to make that possible through using Factory::factory()
 method and specifying a seed argument::
 
-   use Atk4\Ui\Button;
+    use Atk4\Ui\Button;
 
-   $button = Factory::factory([Button::Class, 'A Label', 'icon' => ['book'], 'action' => new Action(..)]);
+    $button = Factory::factory([Button::Class, 'A Label', 'icon' => ['book'], 'action' => new Action(..)]);
 
 Note that passing 'icon' => ['book'] will also use factory to initialize icon object.
 
 Finally, if you are using IDE and type hinting, a preferred code would be::
 
-   use Atk4\Ui\Button;
-   Factory::factory($button = new Button('A Label'), ['icon' => ['book'], 'action' => new Action(..)]);
+    use Atk4\Ui\Button;
+    Factory::factory($button = new Button('A Label'), ['icon' => ['book'], 'action' => new Action(..)]);
 
 This will properly set type to $button variable, while still setting properties for icon/action. More
 commonly, however, you would use this through the add() method::
 
-   use Atk4\Ui\Button;
+    use Atk4\Ui\Button;
 
-   $view->add([$button = new Button('A Label'), 'icon' => ['book'], 'action' => new Action('..')]);
+    $view->add([$button = new Button('A Label'), 'icon' => ['book'], 'action' => new Action('..')]);
 
 Seed Components
 ---------------
@@ -202,7 +202,7 @@ Class-less seeds
 You cannot create object from a class-less seed, simply because factory would not know which class
 to use. However it can be passed as a second argument to the factory::
 
-   $this->icon = Factory::factory([Icon::class, 'book'], $this->icon);
+    $this->icon = Factory::factory([Icon::class, 'book'], $this->icon);
 
 This will use class icon and first argument 'book' as default, but would use exitsing seed version if
 it was specified. Also it will preserve the object value of an icon.
@@ -257,10 +257,12 @@ precedence:
 The next example will help you understand the precedence of different argument
 values. See my description below the example::
 
-    class RedButton extends Button {
+    class RedButton extends Button
+    {
         protected $icon = 'book';
 
-        protected function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             $this->icon = 'right arrow';
@@ -418,7 +420,8 @@ Model::addField, Form::addButton, FormLayout::addHeader imply that the class of
 an added object is known so the argument you specify to those methods ends up
 being a factory's $default::
 
-    function addButton($label) {
+    public function addButton($label)
+    {
         return $this->add(
             Factory::factory([Button::class, null, 'secondary'], $label);
             'Buttons'

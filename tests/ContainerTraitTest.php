@@ -133,6 +133,7 @@ class ContainerTraitTest extends TestCase
         $this->assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
 
         $this->assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
+
         $this->expectException(Core\Exception::class);
         $this->assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
     }

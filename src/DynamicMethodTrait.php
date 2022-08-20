@@ -72,7 +72,6 @@ trait DynamicMethodTrait
      */
     public function addMethod(string $name, \Closure $fx)
     {
-        // HookTrait is mandatory
         if (!TraitUtil::hasHookTrait($this)) {
             throw new Exception('Object must use hookTrait for Dynamic Methods to work');
         }
@@ -137,7 +136,6 @@ trait DynamicMethodTrait
      */
     public function addGlobalMethod(string $name, \Closure $fx): void
     {
-        // AppScopeTrait and HookTrait for app are mandatory
         if (!TraitUtil::hasAppScopeTrait($this) || !TraitUtil::hasHookTrait($this->getApp())) {
             throw new Exception('You need AppScopeTrait and HookTrait traits, see docs');
         }
@@ -157,8 +155,7 @@ trait DynamicMethodTrait
      */
     public function hasGlobalMethod(string $name): bool
     {
-        return
-            TraitUtil::hasAppScopeTrait($this)
+        return TraitUtil::hasAppScopeTrait($this)
             && TraitUtil::hasHookTrait($this->getApp())
             && $this->getApp()->hookHasCallbacks($this->buildMethodHookName($name, true));
     }

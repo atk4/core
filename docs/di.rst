@@ -14,7 +14,7 @@ dependencies on another object/class. For instance::
 
     $book = new Book();
     $book->name = 'foo';
-    $book->save();         // saves somewhere??
+    $book->save(); // saves somewhere??
 
 The above code uses some ORM notation and the book record is saved into the
 database. But how does Book object know about the database? Some frameworks
@@ -70,10 +70,12 @@ How to use DiContainerTrait
 Calling this method will set object's properties. If any specified property
 is undefined then it will be skipped. Here is how you should use trait::
 
-    class MyObj {
+    class MyObj
+    {
         use DiContainerTrait;
 
-        function __construct($defaults = []) {
+        public function __construct($defaults = [])
+        {
             $this->setDefaults($defaults, true);
         }
     }
@@ -86,16 +88,19 @@ like this::
 
 This is done by overriding setMissingProperty method::
 
-    class MyObj {
+    class MyObj
+    {
         use DiContainerTrait {
             setMissingProperty as private _setMissingProperty;
         }
 
-        function __construct($defaults = []) {
+        public function __construct($defaults = [])
+        {
             $this->setDefaults($defaults, true);
         }
 
-        function setMissingProperty($key, $value) {
+        protected function setMissingProperty($key, $value)
+        {
             // do something with $key / $value
 
             // will either cause exception or will ignorance

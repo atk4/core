@@ -15,6 +15,8 @@ class TestCaseTest extends TestCase
 
     /** @var object|'default' */
     private $object = 'default';
+    private ?object $objectTyped = null;
+    public object $objectTypedNoDefault; // cannot be private/protected until https://github.com/php/php-src/issues/9389 is implemented and no unset is needed for property uninitialization, valid for burn testing only
 
     private static int $providerCoverageCallCounter = 0;
 
@@ -49,6 +51,10 @@ class TestCaseTest extends TestCase
     {
         $this->assertSame(0, self::$activeObjectsCounter);
         $this->assertSame('default', $this->object);
+        $this->assertNull($this->objectTyped);
+        $reflectionProperty = new \ReflectionProperty($this, 'objectTypedNoDefault');
+        $reflectionProperty->setAccessible(true);
+        $this->assertFalse($reflectionProperty->isInitialized($this));
 
         if ($v === 'a') {
             $o = $this->createAndCountObject();
@@ -57,10 +63,17 @@ class TestCaseTest extends TestCase
             $this->assertSame(0, self::$activeObjectsCounter);
             $this->object = $this->createAndCountObject();
             $this->assertSame(1, self::$activeObjectsCounter);
+
+            $this->object = $this->createAndCountObject();
+            $this->objectTyped = $this->createAndCountObject();
+            // @ is needed because of https://github.com/php/php-src/issues/9389 for burn testing
+            @$this->objectTypedNoDefault = $this->createAndCountObject();
+            $this->assertNotNull($this->objectTypedNoDefault); // remove once https://github.com/phpstan/phpstan/issues/7818 is fixed
+            $this->assertSame(3, self::$activeObjectsCounter);
         }
     }
 
-    public function testObjectsAreReleasedAfterFailedTest(): void
+    public function testObjectsAreReleasedFromUncaughtException(): void
     {
         $this->assertSame(0, self::$activeObjectsCounter);
 

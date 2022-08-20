@@ -165,8 +165,7 @@ trait ContainerTrait
     {
         $desired = $origItemName ?? $ownerName . '_' . $itemShortName;
 
-        if (
-            TraitUtil::hasAppScopeTrait($this)
+        if (TraitUtil::hasAppScopeTrait($this)
             && isset($this->getApp()->maxNameLength)
             && mb_strlen($desired) > $this->getApp()->maxNameLength
         ) {
