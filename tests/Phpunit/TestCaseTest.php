@@ -65,6 +65,7 @@ class TestCaseTest extends TestCase
             $this->object = $this->createAndCountObject();
             $this->objectTyped = $this->createAndCountObject();
             $this->objectTypedNoDefault = $this->createAndCountObject();
+            $this->assertNotNull($this->objectTypedNoDefault); // remove once https://github.com/phpstan/phpstan/issues/7818 is fixed
             $this->assertSame(3, self::$activeObjectsCounter);
         }
     }
