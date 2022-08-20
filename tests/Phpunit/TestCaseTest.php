@@ -16,7 +16,7 @@ class TestCaseTest extends TestCase
     /** @var object|'default' */
     private $object = 'default';
     private ?object $objectTyped = null;
-    private object $objectTypedNoDefault;
+    public object $objectTypedNoDefault; // cannot be private/protected until https://github.com/php/php-src/issues/9389 is implemented and no unset is needed for property uninitialization, valid for burn testing only
 
     private static int $providerCoverageCallCounter = 0;
 
@@ -66,7 +66,8 @@ class TestCaseTest extends TestCase
 
             $this->object = $this->createAndCountObject();
             $this->objectTyped = $this->createAndCountObject();
-            $this->objectTypedNoDefault = $this->createAndCountObject();
+            // @ is needed because of https://github.com/php/php-src/issues/9389 for burn testing
+            @$this->objectTypedNoDefault = $this->createAndCountObject();
             $this->assertNotNull($this->objectTypedNoDefault); // remove once https://github.com/phpstan/phpstan/issues/7818 is fixed
             $this->assertSame(3, self::$activeObjectsCounter);
         }
