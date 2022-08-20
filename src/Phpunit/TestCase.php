@@ -134,7 +134,7 @@ abstract class TestCase extends BaseTestCase
             $coverage = $this->getTestResultObject()->getCodeCoverage();
             if ($coverage !== null) {
                 $coverageId = \Closure::bind(fn () => $coverage->currentId, null, CodeCoverage::class)();
-                if ($coverageId !== null) { // @phpstan-ignore-line https://github.com/sebastianbergmann/php-code-coverage/pull/923
+                if ($coverageId !== null) {
                     $linesToBeCovered = TestUtil::getLinesToBeCovered(static::class, $this->getName(false));
                     $linesToBeUsed = TestUtil::getLinesToBeUsed(static::class, $this->getName(false));
                     $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
