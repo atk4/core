@@ -15,6 +15,8 @@ class TestCaseTest extends TestCase
 
     /** @var object|'default' */
     private $object = 'default';
+    private ?object $objectTyped = null;
+    private object $objectTypedNoDefault;
 
     private static int $providerCoverageCallCounter = 0;
 
@@ -49,6 +51,8 @@ class TestCaseTest extends TestCase
     {
         $this->assertSame(0, self::$activeObjectsCounter);
         $this->assertSame('default', $this->object);
+        $this->assertNull($this->objectTyped);
+        $this->assertFalse((new \ReflectionProperty($this, 'objectTypedNoDefault'))->isInitialized($this));
 
         if ($v === 'a') {
             $o = $this->createAndCountObject();
@@ -57,6 +61,11 @@ class TestCaseTest extends TestCase
             $this->assertSame(0, self::$activeObjectsCounter);
             $this->object = $this->createAndCountObject();
             $this->assertSame(1, self::$activeObjectsCounter);
+
+            $this->object = $this->createAndCountObject();
+            $this->objectTyped = $this->createAndCountObject();
+            $this->objectTypedNoDefault = $this->createAndCountObject();
+            $this->assertSame(3, self::$activeObjectsCounter);
         }
     }
 

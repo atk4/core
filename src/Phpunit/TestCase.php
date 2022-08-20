@@ -67,9 +67,17 @@ abstract class TestCase extends BaseTestCase
         foreach (array_reverse($classes) as $class) {
             \Closure::bind(function () use ($class) {
                 foreach (array_keys(array_intersect_key(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class)), get_class_vars($class))) as $k) {
-                    $this->{$k} = \PHP_MAJOR_VERSION < 8
-                        ? (new \ReflectionProperty($class, $k))->getDeclaringClass()->getDefaultProperties()[$k]
-                        : (null ?? (new \ReflectionProperty($class, $k))->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
+                    $reflectionProperty = new \ReflectionProperty($class, $k);
+                    if (\PHP_MAJOR_VERSION < 8
+                        ? array_key_exists($k, $reflectionProperty->getDeclaringClass()->getDefaultProperties())
+                        : (null ?? $reflectionProperty->hasDefaultValue()) // @phpstan-ignore-line for PHP 7.x
+                    ) {
+                        $this->{$k} = \PHP_MAJOR_VERSION < 8
+                            ? $reflectionProperty->getDeclaringClass()->getDefaultProperties()[$k]
+                            : (null ?? $reflectionProperty->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
+                    } else {
+                        unset($this->{$k});
+                    }
                 }
             }, $this, $class)();
         }
