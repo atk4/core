@@ -52,7 +52,9 @@ class TestCaseTest extends TestCase
         $this->assertSame(0, self::$activeObjectsCounter);
         $this->assertSame('default', $this->object);
         $this->assertNull($this->objectTyped);
-        $this->assertFalse((new \ReflectionProperty($this, 'objectTypedNoDefault'))->isInitialized($this));
+        $reflectionProperty = new \ReflectionProperty($this, 'objectTypedNoDefault');
+        $reflectionProperty->setAccessible(true);
+        $this->assertFalse($reflectionProperty->isInitialized($this));
 
         if ($v === 'a') {
             $o = $this->createAndCountObject();
