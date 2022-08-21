@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\Filter;
 
 /**
- * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
+ * Custom PHPUnit ResultPrinter for atk4 repos.
  */
 class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
 {

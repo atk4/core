@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core;
 
 /**
- * Special exception for HookTrait->breakHook method.
+ * Special exception for HookTrait::breakHook() method.
  */
 class HookBreaker extends Exception
 {

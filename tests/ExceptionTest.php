@@ -17,7 +17,6 @@ class ExceptionTest extends TestCase
             ->addMoreInfo('a1', 111)
             ->addMoreInfo('a2', 222);
 
-        // params
         $this->assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
 
         $m = new Exception('PrevError');
@@ -25,7 +24,6 @@ class ExceptionTest extends TestCase
         $m->addMoreInfo('a1', 222);
         $m->addMoreInfo('a2', 333);
 
-        // params
         $this->assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
 
         // get HTML

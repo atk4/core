@@ -10,9 +10,6 @@ use Atk4\Core\Phpunit\TestCase;
 
 class DebugTraitTest extends TestCase
 {
-    /**
-     * Test debug().
-     */
     public function testDebug(): void
     {
         $m = new DebugMock();

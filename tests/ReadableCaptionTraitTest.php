@@ -9,9 +9,6 @@ use Atk4\Core\ReadableCaptionTrait;
 
 class ReadableCaptionTraitTest extends TestCase
 {
-    /**
-     * Test readableCaption method.
-     */
     public function testReadableCaption(): void
     {
         $a = new ReadableCaptionMock();
