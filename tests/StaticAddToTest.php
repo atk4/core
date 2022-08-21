@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\ContainerTrait;
+use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
@@ -74,7 +75,7 @@ class StaticAddToTest extends TestCase
 
         // not the same or extended class
         $this->expectException(\TypeError::class);
-        $tr = StdSat::addTo($m, $tr); // @phpstan-ignore-line
+        StdSat::addTo($m, $tr); // @phpstan-ignore-line
     }
 
     public function testAssertInstanceOf(): void
@@ -88,7 +89,7 @@ class StaticAddToTest extends TestCase
         StdSat::assertInstanceOf(new StdSat2());
 
         // object is not a subtype
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         StdSat2::assertInstanceOf(new StdSat());
     }
 
@@ -113,8 +114,8 @@ class StaticAddToTest extends TestCase
         $this->assertSame(\stdClass::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
-        $this->expectException(\Atk4\Core\Exception::class);
-        $tr = StdSat::addToWithCl($m, [\stdClass::class]);
+        $this->expectException(Exception::class);
+        StdSat::addToWithCl($m, [\stdClass::class]);
     }
 
     public function testUniqueNames(): void

@@ -114,7 +114,7 @@ abstract class RendererAbstract
         if ($val instanceof \Closure) {
             return 'closure';
         } elseif (is_object($val)) {
-            return get_class($val) . (\Atk4\Core\TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? $val->shortName) . ')' : '');
+            return get_class($val) . (TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? $val->shortName) . ')' : '');
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
+use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\HookBreaker;
 use Atk4\Core\HookTrait;
@@ -221,14 +222,15 @@ class HookTraitTest extends TestCase
 
     public function testExceptionInHook(): void
     {
-        $this->expectException(Exception::class);
         $m = new HookMock();
         $m->result = 0;
 
         $m->onHook('inc', function ($obj) {
             throw new \Atk4\Core\Exception('stuff went wrong');
         });
-        $ret = $m->hook('inc');
+
+        $this->expectException(Exception::class);
+        $m->hook('inc');
     }
 
     public function testOnHookShort(): void
@@ -400,7 +402,7 @@ class HookMock
 
 class HookWithDynamicMethodMock extends HookMock
 {
-    use \Atk4\Core\DynamicMethodTrait;
+    use DynamicMethodTrait;
 
     public function foo(): void
     {

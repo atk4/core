@@ -191,7 +191,7 @@ class FactoryTest extends TestCase
         $o->foo = ['red'];
 
         $this->expectException(Exception::class);
-        $oo = Factory::mergeSeeds($o, ['foo' => 5]);
+        Factory::mergeSeeds($o, ['foo' => 5]);
     }
 
     public function testBasic(): void
@@ -276,7 +276,7 @@ class FactoryTest extends TestCase
     public function testDefaultsObject(): void
     {
         $this->expectException(Exception::class);
-        $s1 = Factory::factory([new FactoryTestDiMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
+        Factory::factory([new FactoryTestDiMock(), 'foo' => 'bar'], ['baz' => '', 'foo' => 'default']);
     }
 
     public function testMerge(): void
@@ -305,31 +305,31 @@ class FactoryTest extends TestCase
     public function testSeedMustBe(): void
     {
         $this->expectException(Exception::class);
-        $s1 = Factory::factory([], ['foo' => 'bar']);
+        Factory::factory([], ['foo' => 'bar']);
     }
 
     public function testClassMayNotBeEmpty(): void
     {
         $this->expectException(\Error::class);
-        $s1 = Factory::factory([''], [FactoryTestDiMock::class, 'test']);
+        Factory::factory([''], [FactoryTestDiMock::class, 'test']);
     }
 
     public function testMystBeDi(): void
     {
         $this->expectException(Exception::class);
-        $s1 = Factory::factory([FactoryTestMock::class, 'hello', 'foo' => 'bar', 'world']);
+        Factory::factory([FactoryTestMock::class, 'hello', 'foo' => 'bar', 'world']);
     }
 
     public function testMustHaveProperty(): void
     {
         $this->expectException(Exception::class);
-        $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'xxx' => 'bar', 'world']);
+        Factory::factory([FactoryTestDiMock::class, 'hello', 'xxx' => 'bar', 'world']);
     }
 
     public function testGiveClassFirst(): void
     {
         $this->expectException(\TypeError::class);
-        $s1 = Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore-line
+        Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore-line
     }
 
     public function testStringDefault(): void
@@ -350,7 +350,7 @@ class FactoryTest extends TestCase
     public function testNonDiInject(): void
     {
         $this->expectException(Exception::class);
-        $s1 = Factory::factory([FactoryTestMock::class], ['foo' => 'hello']);
+        Factory::factory([FactoryTestMock::class], ['foo' => 'hello']);
     }
 
     /**
@@ -461,7 +461,7 @@ class FactoryTest extends TestCase
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);
         $m = new FactoryFactoryMock();
-        $m1 = Factory::factory([FactoryFactoryMock::class], ['not_exist' => 'test']);
+        Factory::factory([FactoryFactoryMock::class], ['not_exist' => 'test']);
     }
 
     /**
@@ -474,7 +474,7 @@ class FactoryTest extends TestCase
         $this->expectException(Exception::class);
         $m = new FactoryFactoryMock();
         $m1 = Factory::factory([FactoryFactoryMock::class]);
-        $m2 = Factory::factory($m1, ['not_exist' => 'test']);
+        Factory::factory($m1, ['not_exist' => 'test']);
     }
 }
 

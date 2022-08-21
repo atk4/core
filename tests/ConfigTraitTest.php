@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\ConfigTrait;
+use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 
 class ConfigTraitTest extends TestCase
@@ -76,21 +77,21 @@ class ConfigTraitTest extends TestCase
 
     public function testFileReadException(): void
     {
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig('unknown_file.php');
     }
 
     public function testFileBadFormatException(): void
     {
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config_bad_format.php');
     }
 
     public function testWrongFileFormatException(): void
     {
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.yml', 'wrong-format');
     }
