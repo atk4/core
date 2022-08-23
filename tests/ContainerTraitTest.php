@@ -194,7 +194,11 @@ class ContainerTraitTest extends TestCase
     {
         $m = new ContainerMock();
 
-        $this->expectWarning();
+        if (\PHP_MAJOR_VERSION === 7) {
+            $this->expectWarning();
+        } else {
+            $this->expectException(\TypeError::class);
+        }
         $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
     }
 
