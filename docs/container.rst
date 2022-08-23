@@ -151,9 +151,11 @@ Container Trait
         {
             use Atk4\Core\ContainerTrait;
 
-            public function add($obq, $args = [])
+            public function add(object $obq, $args = []): object
             {
-                return $this->_addContainer($obj, $args);
+                $this->_addContainer($obj, is_string($args) ? ['name' => $args] : $args);
+
+                return $obj;
             }
         }
 
@@ -203,7 +205,7 @@ Methods
     method. If you are also using factory, or initializer then redefine add()
     and call _addContainer, _addFactory,.
 
-.. php:method:: _addContainer($element, $args)
+.. php:method:: _addContainer(object $element, array $args): void
 
     Add element into container. Normally you should create a method
     add() inside your class that will execute this method. Because
@@ -212,9 +214,11 @@ Methods
 
     Your minimum code should be::
 
-        public function add($obj, $args = [])
+        public function add(object $obj, $args = []): object
         {
-            return $this->_addContainer($obj, $args);
+            $this->_addContainer($obj, is_string($args) ? ['name' => $args] : $args);
+
+            return $obj;
         }
 
     $args be in few forms::

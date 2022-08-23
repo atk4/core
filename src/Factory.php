@@ -127,8 +127,8 @@ class Factory
             $defaults = [];
         }
 
-        if (!is_array($seed) && !is_object($seed)) {
-            throw new Exception('Use of non-array seed ($seed type = ' . gettype($seed) . ') is not supported');
+        if (!is_array($seed) && !is_object($seed)) { // @phpstan-ignore-line
+            throw new Exception('Use of non-array (' . gettype($seed) . ') seed is not supported');
         }
 
         array_unshift($defaults, null); // insert argument 0

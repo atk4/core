@@ -194,7 +194,7 @@ class ContainerTraitTest extends TestCase
     {
         $m = new ContainerMock();
 
-        $this->expectException(Core\Exception::class);
+        $this->expectWarning();
         $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
     }
 
@@ -204,7 +204,7 @@ class ContainerTraitTest extends TestCase
 
         $this->expectException(\Error::class);
         $this->expectExceptionMessage(\PHP_MAJOR_VERSION < 8 ? 'Class \'hello\' not found' : 'Class "hello" not found');
-        $m->add(['hello'], 123); // @phpstan-ignore-line
+        $m->add(['hello']);
     }
 
     public function testException4(): void
