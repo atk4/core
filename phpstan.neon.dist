@@ -5,9 +5,6 @@ parameters:
     excludePaths:
         - vendor/
 
-    # TODO review once we drop PHP 7.x support
-    treatPhpDocTypesAsCertain: false
-
     # some extra rules
     checkAlwaysTrueCheckTypeFunctionCall: true
     checkAlwaysTrueInstanceof: true
