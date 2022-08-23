@@ -11,12 +11,12 @@ namespace Atk4\Core;
 trait ContainerTrait
 {
     /**
-     * shortName => object hash of children objects. If the child is not
+     * Element shortName => object hash of children objects. If the child is not
      * trackable, then object will be set to "true" (to avoid extra reference).
      *
-     * @var array
+     * @var array<string, object>
      */
-    public $elements = [];
+    public array $elements = [];
 
     /** @var int[] */
     private $_elementNameCounts = [];
@@ -41,7 +41,7 @@ trait ContainerTrait
      * use this add() method. If you are also using factory, or
      * initializer then redefine add() and call _addContainer, _addFactory.
      *
-     * @param mixed        $obj
+     * @param object|array $obj
      * @param array|string $args
      */
     public function add($obj, $args = []): object
@@ -98,7 +98,7 @@ trait ContainerTrait
             // passed as ['name' => 'foo'];
             $args[0] = $args['name'];
             unset($args['name']);
-        } elseif (isset($element->shortName)) {
+        } elseif ($element->shortName !== null) {
             // element has a name already
             $args[0] = $this->_uniqueElementName($element->shortName);
         } else {

@@ -197,10 +197,10 @@ class FactoryTest extends TestCase
     public function testBasic(): void
     {
         $s1 = Factory::factory([FactoryTestMock::class]);
-        $this->assertEmpty($s1->args);
+        $this->assertSame([], $s1->args);
 
         $s1 = Factory::factory(new FactoryTestMock());
-        $this->assertEmpty($s1->args);
+        $this->assertSame([], $s1->args);
 
         $s1 = Factory::factory(new FactoryTestMock('hello', 'world'));
         $this->assertSame(['hello', 'world'], $s1->args);
