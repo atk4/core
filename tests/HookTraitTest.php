@@ -213,7 +213,6 @@ class HookTraitTest extends TestCase
             $m->breakHook('stop');
         });
 
-        /** @var HookBreaker $brokenBy */
         $ret = $m->hook('inc', [], $brokenBy);
         $this->assertSame('stop', $ret);
         $this->assertInstanceOf(HookBreaker::class, $brokenBy);

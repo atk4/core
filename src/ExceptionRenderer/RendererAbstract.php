@@ -10,6 +10,9 @@ use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use Atk4\Core\Translator\Translator;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 abstract class RendererAbstract
 {
     use TranslatableTrait;

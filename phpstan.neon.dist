@@ -3,8 +3,6 @@ parameters:
     paths:
         - ./
     excludePaths:
-        - cache/
-        - build/
         - vendor/
 
     # TODO review once we drop PHP 7.x support
@@ -23,21 +21,23 @@ parameters:
     checkMissingIterableValueType: false # TODO
 
     ignoreErrors:
-        - '~^Unsafe usage of new static\(\)\.$~'
+        # fix unresolveable atk4/ui \Atk4\Ui\App class
+        - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
-        # fix unresolved \Atk4\Ui\App class
-        - '~^(.+(?<!\w)Atk4\\Ui\\App.+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
+        -
+            path: 'src\CollectionTrait.php'
+            message: '~^Access to an undefined property .+::\$name\.$~'
+            count: 1
+        -
+            path: 'src\ContainerTrait.php'
+            message: '~^Access to an undefined property .+::\$name\.$~'
+            count: 5
 
-        # for HookTrait.php
-        - '~^Call to an undefined method .+::onHook\(\)\.$~'
-        - '~^Call to an undefined method .+::removeHook\(\)\.$~'
-        - '~^Call to an undefined method .+::hookHasCallbacks\(\)\.$~'
-        - '~^Call to an undefined method .+::hook\(\)\.$~'
-        # for NameTrait.php
-        - '~^Access to an undefined property .+::\$name\.$~'
-
-        - '~^Cannot access property \$(foo|def) on array\|object\.$~'
-        - '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
-
-        # PHPStan issue https://github.com/phpstan/phpstan/issues/4167
-        - '~^Variable \$brokenBy in PHPDoc tag @var does not match assigned variable \$ret\.$~'
+        -
+            path: 'tests\DynamicMethodTraitTest.php'
+            message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
+            count: 35
+        -
+            path: 'tests\FactoryTest.php'
+            message: '~^Cannot access property \$(foo|def) on array\|object\.$~'
+            count: 10

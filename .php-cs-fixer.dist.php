@@ -2,11 +2,7 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__])
-    ->exclude([
-        'cache',
-        'build',
-        'vendor',
-    ]);
+    ->exclude(['vendor']);
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
