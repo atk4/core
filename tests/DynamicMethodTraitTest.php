@@ -31,10 +31,10 @@ class DynamicMethodTraitTest extends TestCase
             return 'world';
         });
 
-        $this->assertTrue($m->hasMethod('test'));
+        static::assertTrue($m->hasMethod('test'));
 
         $res = 'Hello, ' . $m->test();
-        $this->assertSame('Hello, world', $res);
+        static::assertSame('Hello, world', $res);
     }
 
     public function testExceptionUndefinedMethod(): void
@@ -103,11 +103,11 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodMock();
         $m->addMethod('sum', $this->createSumFx());
         $res = $m->sum(3, 5);
-        $this->assertSame(8, $res);
+        static::assertSame(8, $res);
 
         $m = new DynamicMethodMock();
         $m->addMethod('getElementCount', \Closure::fromCallable([new ContainerMock(), 'getElementCount']));
-        $this->assertSame(0, $m->getElementCount());
+        static::assertSame(0, $m->getElementCount());
     }
 
     /**
@@ -116,9 +116,9 @@ class DynamicMethodTraitTest extends TestCase
     public function testWithoutHookTrait(): void
     {
         $m = new DynamicMethodWithoutHookMock();
-        $this->assertFalse($m->hasMethod('sum'));
+        static::assertFalse($m->hasMethod('sum'));
 
-        $this->assertSame($m, $m->removeMethod('sum'));
+        static::assertSame($m, $m->removeMethod('sum'));
     }
 
     public function testDoubleMethodException(): void
@@ -138,9 +138,9 @@ class DynamicMethodTraitTest extends TestCase
         // simple method
         $m = new DynamicMethodMock();
         $m->addMethod('sum', $this->createSumFx());
-        $this->assertTrue($m->hasMethod('sum'));
+        static::assertTrue($m->hasMethod('sum'));
         $m->removeMethod('sum');
-        $this->assertFalse($m->hasMethod('sum'));
+        static::assertFalse($m->hasMethod('sum'));
     }
 
     public function testGlobalMethodException1(): void
@@ -164,13 +164,13 @@ class DynamicMethodTraitTest extends TestCase
         $m2->setApp($app);
 
         $m->addGlobalMethod('sum', $this->createSumFx(true));
-        $this->assertTrue($m->hasGlobalMethod('sum'));
+        static::assertTrue($m->hasGlobalMethod('sum'));
 
         $res = $m2->sum(3, 5);
-        $this->assertSame(8, $res);
+        static::assertSame(8, $res);
 
         $m->removeGlobalMethod('sum');
-        $this->assertFalse($m2->hasGlobalMethod('sum'));
+        static::assertFalse($m2->hasGlobalMethod('sum'));
     }
 
     public function testDoubleGlobalMethodException(): void

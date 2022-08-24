@@ -14,16 +14,16 @@ class DebugTraitTest extends TestCase
     {
         $m = new DebugMock();
 
-        $this->assertFalse($m->debug);
+        static::assertFalse($m->debug);
 
         $m->debug();
-        $this->assertTrue($m->debug);
+        static::assertTrue($m->debug);
 
         $m->debug(false);
-        $this->assertFalse($m->debug);
+        static::assertFalse($m->debug);
 
         $m->debug(true);
-        $this->assertTrue($m->debug);
+        static::assertTrue($m->debug);
     }
 
     public function testDebugOutput(): void
@@ -58,7 +58,7 @@ class DebugTraitTest extends TestCase
 
         $m->debug('debug test2');
 
-        $this->assertSame(['debug', 'debug test2', []], $app->log);
+        static::assertSame(['debug', 'debug test2', []], $app->log);
     }
 
     public function testLog1(): void
@@ -80,7 +80,7 @@ class DebugTraitTest extends TestCase
         $m->setApp($app);
         $m->log('warning', 'debug test3');
 
-        $this->assertSame(['warning', 'debug test3', []], $app->log);
+        static::assertSame(['warning', 'debug test3', []], $app->log);
     }
 
     protected function triggerDebugTraceChange(DebugMock $o, string $trace): void
@@ -104,10 +104,10 @@ class DebugTraitTest extends TestCase
         preg_match($pattern, $app->log[1], $matches);
 
         // Changes detected
-        $this->assertTrue(is_array($matches));
-        $this->assertSame(5, count($matches));
-        $this->assertSame($matches[1], $matches[3]);
-        $this->assertSame((string) ($matches[2] + 1), $matches[4]);
+        static::assertTrue(is_array($matches));
+        static::assertSame(5, count($matches));
+        static::assertSame($matches[1], $matches[3]);
+        static::assertSame((string) ($matches[2] + 1), $matches[4]);
 
         $app->log = null;
 
@@ -116,7 +116,7 @@ class DebugTraitTest extends TestCase
         }
 
         // No changes in the trace change detected
-        $this->assertNull($app->log);
+        static::assertNull($app->log);
     }
 
     public function testPsr(): void
@@ -128,25 +128,25 @@ class DebugTraitTest extends TestCase
         $m->setApp($app);
 
         $m->info('i', ['x']);
-        $this->assertSame(['info', 'i', ['x']], $app->log);
+        static::assertSame(['info', 'i', ['x']], $app->log);
 
         $m->warning('t', ['x']);
-        $this->assertSame(['warning', 't', ['x']], $app->log);
+        static::assertSame(['warning', 't', ['x']], $app->log);
 
         $m->emergency('em', ['x', 'y']);
-        $this->assertSame(['emergency', 'em', ['x', 'y']], $app->log);
+        static::assertSame(['emergency', 'em', ['x', 'y']], $app->log);
 
         $m->alert('al', ['x']);
-        $this->assertSame(['alert', 'al', ['x']], $app->log);
+        static::assertSame(['alert', 'al', ['x']], $app->log);
 
         $m->critical('cr', ['x']);
-        $this->assertSame(['critical', 'cr', ['x']], $app->log);
+        static::assertSame(['critical', 'cr', ['x']], $app->log);
 
         $m->error('er', ['x']);
-        $this->assertSame(['error', 'er', ['x']], $app->log);
+        static::assertSame(['error', 'er', ['x']], $app->log);
 
         $m->notice('nt', ['x']);
-        $this->assertSame(['notice', 'nt', ['x']], $app->log);
+        static::assertSame(['notice', 'nt', ['x']], $app->log);
     }
 }
 

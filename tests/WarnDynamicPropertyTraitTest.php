@@ -71,9 +71,9 @@ class WarnDynamicPropertyTraitTest extends TestCase
         $test = new class() extends ClassWithWarnDynamicPropertyTrait {
             public bool $p = false;
         };
-        $this->assertFalse($test->p);
+        static::assertFalse($test->p);
         $test->p = true;
-        $this->assertTrue($test->p);
+        static::assertTrue($test->p);
         unset($test->{'p'});
 
         $this->runWithErrorConvertedToException(function () use ($test) {
@@ -96,7 +96,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
     {
         $this->runWithErrorConvertedToException(function () {
             $test = new ClassWithWarnDynamicPropertyTrait();
-            $this->assertTrue((new \ReflectionClass(get_parent_class($test)))->hasProperty('trace'));
+            static::assertTrue((new \ReflectionClass(get_parent_class($test)))->hasProperty('trace'));
 
             $this->expectException(WarnError::class);
             $this->expectErrorMessage('Undefined property: Atk4\Core\Exception::$trace');
@@ -114,14 +114,14 @@ class WarnDynamicPropertyTraitTest extends TestCase
             return true;
         });
         try {
-            $this->assertTrue($test->__isset('p'));
-            $this->assertFalse($test->p);
-            $this->assertFalse($test->__get('p'));
+            static::assertTrue($test->__isset('p'));
+            static::assertFalse($test->p);
+            static::assertFalse($test->__get('p'));
             $test->__set('p', true);
-            $this->assertTrue($test->p);
-            $this->assertTrue($test->__get('p'));
+            static::assertTrue($test->p);
+            static::assertTrue($test->__get('p'));
             $test->__unset('p');
-            $this->assertFalse($test->__isset('p'));
+            static::assertFalse($test->__isset('p'));
         } finally {
             restore_error_handler();
         }

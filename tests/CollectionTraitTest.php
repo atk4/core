@@ -14,17 +14,17 @@ class CollectionTraitTest extends TestCase
         $m = new CollectionMock();
         $m->addField('name');
 
-        $this->assertTrue($m->hasField('name'));
+        static::assertTrue($m->hasField('name'));
 
         $m->addField('surname', [FieldMockCustom::class]);
 
-        $this->assertSame(FieldMockCustom::class, get_class($m->getField('surname')));
+        static::assertSame(FieldMockCustom::class, get_class($m->getField('surname')));
         /** @var FieldMockCustom $field */
         $field = $m->getField('surname');
-        $this->assertTrue($field->var);
+        static::assertTrue($field->var);
 
         $m->removeField('name');
-        $this->assertFalse($m->hasField('name'));
+        static::assertFalse($m->hasField('name'));
     }
 
     /**
@@ -46,13 +46,13 @@ class CollectionTraitTest extends TestCase
         /** @var FieldMockCustom $surnameField */
         $surnameField = $m->addField('surname', [FieldMockCustom::class]);
 
-        $this->assertSame('app', $surnameField->getApp()->name);
+        static::assertSame('app', $surnameField->getApp()->name);
 
-        $this->assertSame('form-fields_surname', $surnameField->name);
-        $this->assertSame($m, $surnameField->getOwner());
+        static::assertSame('form-fields_surname', $surnameField->name);
+        static::assertSame($m, $surnameField->getOwner());
 
         $longField = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [FieldMockCustom::class]);
-        $this->assertSame(40, strlen($longField->name));
+        static::assertSame(40, strlen($longField->name));
     }
 
     /**
@@ -133,11 +133,11 @@ class CollectionTraitTest extends TestCase
         $m->addField('surname', [FieldMockCustom::class]);
 
         $c = clone $m;
-        $this->assertTrue($c->hasField('name'));
+        static::assertTrue($c->hasField('name'));
         /** @var FieldMockCustom $field */
         $field = $c->getField('surname');
-        $this->assertSame(FieldMockCustom::class, get_class($field));
-        $this->assertTrue($field->var);
+        static::assertSame(FieldMockCustom::class, get_class($field));
+        static::assertTrue($field->var);
     }
 }
 

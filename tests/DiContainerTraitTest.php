@@ -12,8 +12,8 @@ class DiContainerTraitTest extends TestCase
 {
     public function testFromSeed(): void
     {
-        $this->assertSame(StdSat::class, get_class(StdSat::fromSeed([StdSat::class])));
-        $this->assertSame(StdSat2::class, get_class(StdSat::fromSeed([StdSat2::class])));
+        static::assertSame(StdSat::class, get_class(StdSat::fromSeed([StdSat::class])));
+        static::assertSame(StdSat2::class, get_class(StdSat::fromSeed([StdSat2::class])));
 
         $this->expectException(Exception::class);
         StdSat2::fromSeed([StdSat::class]);
@@ -38,11 +38,11 @@ class DiContainerTraitTest extends TestCase
         $m = new FactoryDiMock2();
 
         $m->setDefaults(['a' => 'foo', 'c' => 'bar']);
-        $this->assertSame([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
+        static::assertSame([$m->a, $m->b, $m->c], ['foo', 'BBB', 'bar']);
 
         $m = new FactoryDiMock2();
         $m->setDefaults(['a' => null, 'c' => false]);
-        $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+        static::assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
     }
 
     public function testPropertiesPassively(): void
@@ -50,16 +50,16 @@ class DiContainerTraitTest extends TestCase
         $m = new FactoryDiMock2();
 
         $m->setDefaults(['a' => 'foo', 'c' => 'bar'], true);
-        $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', 'bar']);
+        static::assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', 'bar']);
 
         $m = new FactoryDiMock2();
         $m->setDefaults(['a' => null, 'c' => false], true);
-        $this->assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+        static::assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
 
         $m = new FactoryDiMock2();
         $m->a = ['foo'];
         $m->setDefaults(['a' => ['bar']], true);
-        $this->assertSame([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
+        static::assertSame([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
     }
 
     /**
