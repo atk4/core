@@ -82,12 +82,11 @@ trait ContainerTrait
         } elseif (isset($args['name'])) {
             $name = $args['name'];
             unset($args['name']);
-        } elseif ($element->shortName !== null) { // element has a name already
+        } elseif ($element->shortName !== null) {
             $name = $this->_uniqueElementName($element->shortName);
         } else {
-            // ask element on his preferred name, then make it unique.
-            $cn = $element->getDesiredName();
-            $name = $this->_uniqueElementName($cn);
+            $desiredName = $element->getDesiredName();
+            $name = $this->_uniqueElementName($desiredName);
         }
 
         if ($args !== []) {
