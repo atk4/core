@@ -179,7 +179,8 @@ Using references in hooks
 In some cases you want hook to change certain value. For example when model
 value is set it may call normalization hook (methods will change $value)::
 
-    public function set($field, $value) {
+    public function set($field, $value)
+    {
         $this->hook('normalize', [&$value]);
         $this->data[$field] = $value;
     }

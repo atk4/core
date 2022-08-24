@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\ConfigTrait;
+use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 
 class ConfigTraitTest extends TestCase
@@ -61,36 +62,36 @@ class ConfigTraitTest extends TestCase
         // default config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');
-        $this->{'assertEquals'}($a, $m->getConfigProp());
+        static::{'assertEquals'}($a, $m->getConfigProp());
 
         // json config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.json', 'json');
-        $this->{'assertEquals'}($b, $m->getConfigProp());
+        static::{'assertEquals'}($b, $m->getConfigProp());
 
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.yml', 'yaml');
-        $this->{'assertEquals'}($c, $m->getConfigProp());
+        static::{'assertEquals'}($c, $m->getConfigProp());
     }
 
     public function testFileReadException(): void
     {
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig('unknown_file.php');
     }
 
     public function testFileBadFormatException(): void
     {
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config_bad_format.php');
     }
 
     public function testWrongFileFormatException(): void
     {
-        $this->expectException(\Atk4\Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.yml', 'wrong-format');
     }
@@ -131,14 +132,14 @@ class ConfigTraitTest extends TestCase
             'arr/sub/two' => 'another', // add one more in deep structure
             'arr' => ['foo' => 'bar'], // merge arrays
         ]);
-        $this->{'assertEquals'}($a, $m->getConfigProp());
+        static::{'assertEquals'}($a, $m->getConfigProp());
 
         // test getConfig
-        $this->assertSame(789, $m->getConfig('num'));
-        $this->assertNull($m->getConfig('unknown'));
-        $this->assertSame('default', $m->getConfig('unknown', 'default'));
-        $this->assertSame('another', $m->getConfig('arr/sub/two', 'default'));
-        $this->assertSame('default', $m->getConfig('arr/sub/three', 'default'));
+        static::assertSame(789, $m->getConfig('num'));
+        static::assertNull($m->getConfig('unknown'));
+        static::assertSame('default', $m->getConfig('unknown', 'default'));
+        static::assertSame('another', $m->getConfig('arr/sub/two', 'default'));
+        static::assertSame('default', $m->getConfig('arr/sub/three', 'default'));
     }
 
     public function testCaseGetConfigPathThatNotExists(): void
@@ -146,7 +147,7 @@ class ConfigTraitTest extends TestCase
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');
         $excepted = $m->getConfig('arr/num/notExists');
-        $this->assertNull($excepted);
+        static::assertNull($excepted);
     }
 }
 

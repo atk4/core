@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Core\Phpunit;
 
 use Atk4\Core\Exception;
+use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use PHPUnit\Framework\ExceptionWrapper;
 use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\Filter;
 
 /**
- * Generic ResultPrinter for PHPUnit tests of ATK4 repos.
+ * Custom PHPUnit ResultPrinter for atk4 repos.
  */
 class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
 {
@@ -54,7 +55,7 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
     {
         $string = '';
         foreach ($e->getParams() as $param => $value) {
-            $valueStr = \Atk4\Core\ExceptionRenderer\RendererAbstract::toSafeString($value, true);
+            $valueStr = RendererAbstract::toSafeString($value, true);
             $string .= '  ' . $param . ': ' . str_replace("\n", "\n" . '    ', $valueStr) . "\n";
         }
 

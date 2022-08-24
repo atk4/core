@@ -103,7 +103,7 @@ trait DiContainerTrait
     private static function _fromSeedPrecheck($seed, bool $unsafe)// :self is too strict with unsafe behaviour
     {
         if (!is_object($seed)) {
-            if (!is_array($seed)) {
+            if (!is_array($seed)) { // @phpstan-ignore-line
                 throw (new Exception('Seed must be an array or an object'))
                     ->addMoreInfo('seed_type', gettype($seed));
             }

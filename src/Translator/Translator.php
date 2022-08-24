@@ -9,7 +9,7 @@ use Atk4\Core\Exception;
 use Atk4\Core\Translator\Adapter\Generic;
 
 /**
- * Translator is a bridge.
+ * @phpstan-consistent-constructor
  */
 class Translator
 {
@@ -32,7 +32,7 @@ class Translator
     /**
      * Singleton no public constructor.
      */
-    protected function __construct()
+    private function __construct()
     {
     }
 
@@ -85,9 +85,6 @@ class Translator
         throw new Exception('Translator cannot be serialized');
     }
 
-    /**
-     * Is a singleton and need a method to access the instance.
-     */
     public static function instance(): self
     {
         if (self::$instance === null) {
@@ -97,9 +94,6 @@ class Translator
         return self::$instance;
     }
 
-    /**
-     * Set the Translator Adapter.
-     */
     public function setAdapter(ITranslatorAdapter $translator): self
     {
         $this->adapter = $translator;
@@ -107,9 +101,6 @@ class Translator
         return $this;
     }
 
-    /**
-     * Get the adapter.
-     */
     private function getAdapter(): ITranslatorAdapter
     {
         if ($this->adapter === null) {

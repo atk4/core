@@ -53,15 +53,11 @@ final class TraitUtil
         return self::$_hasTraitCache[$class][$traitName];
     }
 
-    /*
-     * ConfigTrait - not used
-     * DebugTrait - not used
-     * DynamicMethodTrait - not used
-     * StaticAddToTrait - not used
-     * TranslatableTrait - not used
-     *
-     * QuickExceptionTrait - QuickException will be removed, not used outside QuickException class
-     */
+    // ConfigTrait - not used
+    // DebugTrait - not used
+    // DynamicMethodTrait - not used
+    // StaticAddToTrait - not used
+    // TranslatableTrait - not used
 
     public static function hasAppScopeTrait(object $class): bool
     {

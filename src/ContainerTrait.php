@@ -11,12 +11,12 @@ namespace Atk4\Core;
 trait ContainerTrait
 {
     /**
-     * shortName => object hash of children objects. If the child is not
+     * Element shortName => object hash of children objects. If the child is not
      * trackable, then object will be set to "true" (to avoid extra reference).
      *
-     * @var array
+     * @var array<string, object>
      */
-    public $elements = [];
+    public array $elements = [];
 
     /** @var int[] */
     private $_elementNameCounts = [];
@@ -41,20 +41,14 @@ trait ContainerTrait
      * use this add() method. If you are also using factory, or
      * initializer then redefine add() and call _addContainer, _addFactory.
      *
-     * @param mixed        $obj
+     * @param object|array $obj
      * @param array|string $args
      */
     public function add($obj, $args = []): object
     {
-        if (is_array($args)) {
-            $args1 = $args;
-            unset($args1['desired_name']);
-            unset($args1[0]);
-            $obj = Factory::factory($obj, $args1);
-        } else {
-            $obj = Factory::factory($obj);
-        }
-        $obj = $this->_addContainer($obj, $args);
+        $obj = Factory::factory($obj, is_string($args) ? [] : array_diff_key($args, [true, 'desired_name' => true]));
+
+        $this->_addContainer($obj, is_string($args) ? ['name' => $args] : $args);
 
         if (TraitUtil::hasInitializerTrait($obj)) {
             if (!$obj->isInitialized()) {
@@ -68,10 +62,8 @@ trait ContainerTrait
     /**
      * Extension to add() method which will perform linking of
      * the object with the current class.
-     *
-     * @param array|string $args
      */
-    protected function _addContainer(object $element, $args = []): object
+    protected function _addContainer(object $element, array $args): void
     {
         // Carry on reference to application if we have appScopeTraits set
         if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($element)) {
@@ -80,58 +72,44 @@ trait ContainerTrait
 
         // If element is not trackable, then we don't need to do anything with it
         if (!TraitUtil::hasTrackableTrait($element)) {
-            return $element;
+            return;
         }
 
         // Normalize the arguments, bring name out
-        if (is_string($args)) {
-            // passed as string
-            $args = [$args];
-        } elseif (!is_array($args) && $args !== null) {
-            throw (new Exception('Second argument must be array'))
-                ->addMoreInfo('arg2', $args);
-        } elseif (isset($args['desired_name'])) {
-            // passed as ['desired_name' => 'foo'];
-            $args[0] = $this->_uniqueElementName($args['desired_name']);
+        if (isset($args['desired_name'])) {
+            $name = $this->_uniqueElementName($args['desired_name']);
             unset($args['desired_name']);
         } elseif (isset($args['name'])) {
-            // passed as ['name' => 'foo'];
-            $args[0] = $args['name'];
+            $name = $args['name'];
             unset($args['name']);
-        } elseif (isset($element->shortName)) {
-            // element has a name already
-            $args[0] = $this->_uniqueElementName($element->shortName);
+        } elseif ($element->shortName !== null) {
+            $name = $this->_uniqueElementName($element->shortName);
         } else {
-            // ask element on his preferred name, then make it unique.
-            $cn = $element->getDesiredName();
-            $args[0] = $this->_uniqueElementName($cn);
+            $desiredName = $element->getDesiredName();
+            $name = $this->_uniqueElementName($desiredName);
+        }
+
+        if ($args !== []) {
+            throw (new Exception('Add args for DI are no longer supported'))
+                ->addMoreInfo('arg', $args);
         }
 
         // Maybe element already exists
-        if (isset($this->elements[$args[0]])) {
+        if (isset($this->elements[$name])) {
             throw (new Exception('Element with requested name already exists'))
                 ->addMoreInfo('element', $element)
-                ->addMoreInfo('name', $args[0])
+                ->addMoreInfo('name', $name)
                 ->addMoreInfo('this', $this)
                 ->addMoreInfo('arg2', $args);
         }
 
         $element->setOwner($this);
-        $element->shortName = $args[0];
+        $element->shortName = $name;
         if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($element)) {
             $element->name = $this->_shorten((string) $this->name, $element->shortName, $element->name);
         }
+
         $this->elements[$element->shortName] = $element;
-
-        unset($args[0]);
-        unset($args['name']);
-        foreach ($args as $key => $arg) {
-            if ($arg !== null) {
-                $element->{$key} = $arg;
-            }
-        }
-
-        return $element;
     }
 
     /**

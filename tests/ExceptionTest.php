@@ -17,59 +17,57 @@ class ExceptionTest extends TestCase
             ->addMoreInfo('a1', 111)
             ->addMoreInfo('a2', 222);
 
-        // params
-        $this->assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
+        static::assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
 
         $m = new Exception('PrevError');
         $m = new Exception('TestIt', 123, $m);
         $m->addMoreInfo('a1', 222);
         $m->addMoreInfo('a2', 333);
 
-        // params
-        $this->assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
+        static::assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
 
         // get HTML
         $ret = $m->getHtml();
-        $this->assertMatchesRegularExpression('/TestIt/', $ret);
-        $this->assertMatchesRegularExpression('/PrevError/', $ret);
-        $this->assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('/TestIt/', $ret);
+        static::assertMatchesRegularExpression('/PrevError/', $ret);
+        static::assertMatchesRegularExpression('/333/', $ret);
 
         // get colorful text
         $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/TestIt/', $ret);
-        $this->assertMatchesRegularExpression('/PrevError/', $ret);
-        $this->assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('/TestIt/', $ret);
+        static::assertMatchesRegularExpression('/PrevError/', $ret);
+        static::assertMatchesRegularExpression('/333/', $ret);
 
         // get JSON
         $ret = $m->getJson();
-        $this->assertMatchesRegularExpression('/TestIt/', $ret);
-        $this->assertMatchesRegularExpression('/PrevError/', $ret);
-        $this->assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('/TestIt/', $ret);
+        static::assertMatchesRegularExpression('/PrevError/', $ret);
+        static::assertMatchesRegularExpression('/333/', $ret);
 
         // to string
         $ret = $m->toString(1);
-        $this->assertSame('1', $ret);
+        static::assertSame('1', $ret);
 
         $ret = $m->toString('abc');
-        $this->assertSame('\'abc\'', $ret);
+        static::assertSame('\'abc\'', $ret);
 
         $ret = $m->toString(new \stdClass());
-        $this->assertSame('stdClass', $ret);
+        static::assertSame('stdClass', $ret);
 
         $a = new TrackableMock();
         $a->shortName = 'foo';
         $ret = $m->toString($a);
-        $this->assertSame(TrackableMock::class . ' (foo)', $ret);
+        static::assertSame(TrackableMock::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->shortName = 'foo';
         $ret = $m->toString($a);
-        $this->assertSame(TrackableMock2::class . ' (foo)', $ret);
+        static::assertSame(TrackableMock2::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
         $ret = $m->toString($a);
-        $this->assertSame(TrackableMock2::class . ' (foo)', $ret);
+        static::assertSame(TrackableMock2::class . ' (foo)', $ret);
     }
 
     public function testMore(): void
@@ -80,16 +78,16 @@ class ExceptionTest extends TestCase
         $m->setMessage('bumbum');
 
         $ret = $m->getHtml();
-        $this->assertMatchesRegularExpression('/Classic/', $ret);
-        $this->assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('/Classic/', $ret);
+        static::assertMatchesRegularExpression('/bumbum/', $ret);
 
         $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/Classic/', $ret);
-        $this->assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('/Classic/', $ret);
+        static::assertMatchesRegularExpression('/bumbum/', $ret);
 
         $ret = $m->getJson();
-        $this->assertMatchesRegularExpression('/Classic/', $ret);
-        $this->assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('/Classic/', $ret);
+        static::assertMatchesRegularExpression('/bumbum/', $ret);
     }
 
     public function testSolution(): void
@@ -98,13 +96,13 @@ class ExceptionTest extends TestCase
         $m->addSolution('One Solution');
 
         $ret = $m->getHtml();
-        $this->assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('/One Solution/', $ret);
 
         $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('/One Solution/', $ret);
 
         $ret = $m->getJson();
-        $this->assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('/One Solution/', $ret);
     }
 
     public function testSolution2(): void
@@ -113,15 +111,15 @@ class ExceptionTest extends TestCase
             ->addSolution('1st Solution');
 
         $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/1st Solution/', $ret);
+        static::assertMatchesRegularExpression('/1st Solution/', $ret);
 
         $m = (new Exception('Exception with solution'))
             ->addSolution('1st Solution')
             ->addSolution('2nd Solution');
 
         $ret = $m->getColorfulText();
-        $this->assertMatchesRegularExpression('/1st Solution/', $ret);
-        $this->assertMatchesRegularExpression('/2nd Solution/', $ret);
+        static::assertMatchesRegularExpression('/1st Solution/', $ret);
+        static::assertMatchesRegularExpression('/2nd Solution/', $ret);
     }
 
     public function testExceptionFallback(): void
@@ -129,9 +127,9 @@ class ExceptionTest extends TestCase
         $m = new ExceptionTestThrowError('test', 2);
         $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionTestThrowError::class . '(2): test !!';
-        $this->assertSame($expectedFallbackText, $m->getHtml());
-        $this->assertSame($expectedFallbackText, $m->getColorfulText());
-        $this->assertSame(
+        static::assertSame($expectedFallbackText, $m->getHtml());
+        static::assertSame($expectedFallbackText, $m->getColorfulText());
+        static::assertSame(
             json_encode(
                 [
                     'success' => false,

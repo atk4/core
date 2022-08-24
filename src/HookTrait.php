@@ -223,9 +223,9 @@ trait HookTrait
      */
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
-        $this->_rebindHooksIfCloned();
-
         $brokenBy = null;
+
+        $this->_rebindHooksIfCloned();
 
         $return = [];
 
