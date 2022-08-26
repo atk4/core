@@ -86,7 +86,7 @@ trait DiContainerTrait
      */
     public static function assertInstanceOf(object $object)// :static supported by PHP8+
     {
-        if (!($object instanceof static)) {
+        if (!$object instanceof static) {
             throw (new Exception('Object is not an instance of static class'))
                 ->addMoreInfo('static_class', static::class)
                 ->addMoreInfo('object_class', get_class($object));

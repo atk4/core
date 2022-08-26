@@ -46,7 +46,7 @@ class Translator
         }
 
         $adapter = $properties['adapter'] ?? null;
-        if ($adapter !== null && !($adapter instanceof ITranslatorAdapter)) {
+        if ($adapter !== null && !$adapter instanceof ITranslatorAdapter) {
             throw new Exception('$adapter must be an instance of ITranslatorAdapter');
         }
 
