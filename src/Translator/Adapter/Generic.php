@@ -53,7 +53,7 @@ class Generic implements ITranslatorAdapter
     {
         $definitionsForms = is_array($definition) ? $definition : explode('|', $definition);
         $foundDefinition = null;
-        switch ((int) $count) {
+        switch ($count) {
             case 0:
                 $foundDefinition = $definitionsForms['zero'] ?? end($definitionsForms);
 

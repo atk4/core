@@ -13,19 +13,10 @@ parameters:
 
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
-        - '~^Variable (property access|method call) on .+\.~'
+        - '~^Variable (static )?(property access|method call) on .+\.~'
 
         # fix unresolveable atk4/ui \Atk4\Ui\App class
         - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
-
-        -
-            path: 'src\CollectionTrait.php'
-            message: '~^Access to an undefined property .+::\$name\.$~'
-            count: 1
-        -
-            path: 'src\ContainerTrait.php'
-            message: '~^Access to an undefined property .+::\$name\.$~'
-            count: 5
 
         -
             path: 'tests\DynamicMethodTraitTest.php'

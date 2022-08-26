@@ -113,7 +113,7 @@ class Json extends RendererAbstract
             'line' => $call['line'] ?? '',
             'file' => $call['file'] ?? '',
             'class' => $call['class'] ?? null,
-            'object' => ($call['object'] ?? null) !== null ? $this->toSafeString($call['object']) : null,
+            'object' => ($call['object'] ?? null) !== null ? static::toSafeString($call['object']) : null,
             'function' => $call['function'] ?? null,
             'args' => $call['args'] ?? [],
         ];

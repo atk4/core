@@ -85,7 +85,7 @@ trait ConfigTrait
      * Manually set configuration option.
      *
      * @param string|array $paths Path to configuration element to set or array of [path => value]
-     * @param mixed        $value Value to set
+     * @param ($paths is array ? never : mixed) $value Value to set
      *
      * @return $this
      */
@@ -94,6 +94,7 @@ trait ConfigTrait
         if (!is_array($paths)) {
             $paths = [$paths => $value];
         }
+        unset($value);
 
         foreach ($paths as $path => $value) {
             $pos = &$this->_lookupConfigElement($path, true);

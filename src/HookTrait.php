@@ -173,6 +173,8 @@ trait HookTrait
         if ($priority !== null) {
             if ($priorityIsIndex) {
                 $index = $priority;
+                unset($priority);
+
                 foreach (array_keys($this->hooks[$spot]) as $priority) {
                     unset($this->hooks[$spot][$priority][$index]);
                 }
@@ -202,6 +204,8 @@ trait HookTrait
 
         if ($priorityIsIndex) {
             $index = $priority;
+            unset($priority);
+
             foreach (array_keys($this->hooks[$spot]) as $priority) {
                 if (isset($this->hooks[$spot][$priority][$index])) {
                     return true;

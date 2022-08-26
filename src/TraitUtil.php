@@ -42,8 +42,8 @@ final class TraitUtil
             };
 
             $uses = [];
-            foreach (array_reverse(class_parents($class) ?: []) + [-1 => $class] as $class) {
-                $uses += $getUsesFunc($class);
+            foreach (array_reverse(class_parents($class)) + [-1 => $class] as $v) {
+                $uses += $getUsesFunc($v);
             }
             $uses = array_unique($uses);
 
