@@ -1,19 +1,20 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+
 parameters:
     level: 6
     paths:
         - ./
     excludePaths:
         - vendor/
-    strictRules:
-        booleansInConditions: false
-        noVariableVariables: false
-
-    # some extra rules
-    # TODO checkMissingClosureNativeReturnTypehintRule: true
-    checkTooWideReturnTypesInProtectedAndPublicMethods: true
-    checkMissingIterableValueType: false # TODO
 
     ignoreErrors:
+        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
+
+        # relax strict rules
+        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
+        - '~^Variable (property access|method call) on .+\.~'
+
         # fix unresolveable atk4/ui \Atk4\Ui\App class
         - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
