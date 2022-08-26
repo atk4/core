@@ -11,10 +11,10 @@ trait HookTrait
      *
      * @var array<string, array<int, array{0: \Closure, 1?: array<int, mixed>}>>
      */
-    protected $hooks = [];
+    protected array $hooks = [];
 
-    /** @var int Next hook index counter. */
-    private $_hookIndexCounter = 0;
+    /** Next hook index counter. */
+    private int $_hookIndexCounter = 0;
 
     /** @var static */
     private $_hookOrigThis;
@@ -228,11 +228,9 @@ trait HookTrait
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
         $brokenBy = null;
-
         $this->_rebindHooksIfCloned();
 
         $return = [];
-
         if (isset($this->hooks[$spot])) {
             krsort($this->hooks[$spot]); // lower priority is called sooner
             $hooksBackup = $this->hooks[$spot];
