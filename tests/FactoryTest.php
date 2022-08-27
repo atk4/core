@@ -508,6 +508,8 @@ class FactoryTestViewMock extends FactoryTestMock
     }
 
     /**
+     * @param array<string, mixed> $properties
+     *
      * @return $this
      */
     public function setDefaults(array $properties, bool $passively = false)
@@ -535,6 +537,8 @@ class FactoryTestDefMock extends FactoryTestMock
     public $def;
 
     /**
+     * @param array<string, mixed> $properties
+     *
      * @return $this
      */
     public function setDefaults(array $properties, bool $passively = false)

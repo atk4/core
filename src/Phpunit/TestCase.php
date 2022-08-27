@@ -64,6 +64,7 @@ abstract class TestCase extends BaseTestCase
             $classes[] = $class;
             $class = get_parent_class($class);
         } while ($class !== BaseTestCase::class);
+        unset($class);
         foreach (array_reverse($classes) as $class) {
             \Closure::bind(function () use ($class) {
                 foreach (array_keys(array_intersect_key(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class)), get_class_vars($class))) as $k) {

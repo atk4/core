@@ -18,7 +18,7 @@ trait ContainerTrait
      */
     public array $elements = [];
 
-    /** @var int[] */
+    /** @var array<string, int> */
     private $_elementNameCounts = [];
 
     /**
@@ -41,8 +41,8 @@ trait ContainerTrait
      * use this add() method. If you are also using factory, or
      * initializer then redefine add() and call _addContainer, _addFactory.
      *
-     * @param object|array $obj
-     * @param array|string $args
+     * @param object|array<mixed, mixed> $obj
+     * @param array<mixed, mixed>|string $args
      */
     public function add($obj, $args = []): object
     {
@@ -62,6 +62,8 @@ trait ContainerTrait
     /**
      * Extension to add() method which will perform linking of
      * the object with the current class.
+     *
+     * @param array{desired_name?: string, name?: string} $args
      */
     protected function _addContainer(object $element, array $args): void
     {
@@ -106,7 +108,7 @@ trait ContainerTrait
         $element->setOwner($this);
         $element->shortName = $name;
         if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($element)) {
-            $element->name = $this->_shorten((string) $this->name, $element->shortName, $element->name);
+            $element->name = $this->_shorten($this->name ?: '', $element->shortName, $element->name); // @phpstan-ignore-line
         }
 
         $this->elements[$element->shortName] = $element;

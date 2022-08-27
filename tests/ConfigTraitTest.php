@@ -155,6 +155,9 @@ class ConfigMock
 {
     use ConfigTrait;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getConfigProp(): array
     {
         return $this->config;

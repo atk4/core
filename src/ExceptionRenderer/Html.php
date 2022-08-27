@@ -20,7 +20,7 @@ class Html extends RendererAbstract
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens($tokens, '
+        $this->output .= $this->replaceTokens('
             <div class="ui negative icon message">
                 <i class="warning sign icon"></i>
                 <div class="content">
@@ -29,7 +29,7 @@ class Html extends RendererAbstract
                     {MESSAGE}
                 </div>
             </div>
-        ');
+        ', $tokens);
     }
 
     protected function processParams(): void
@@ -59,16 +59,13 @@ class Html extends RendererAbstract
             $key = htmlentities($key);
             $val = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', htmlentities(static::toSafeString($val, true))) . '</span>';
 
-            $tokens['{PARAMS}'] .= $this->replaceTokens(
-                [
-                    '{KEY}' => $key,
-                    '{VAL}' => $val,
-                ],
-                $textInner
-            );
+            $tokens['{PARAMS}'] .= $this->replaceTokens($textInner, [
+                '{KEY}' => $key,
+                '{VAL}' => $val,
+            ]);
         }
 
-        $this->output .= $this->replaceTokens($tokens, $text);
+        $this->output .= $this->replaceTokens($text, $tokens);
     }
 
     protected function processSolutions(): void
@@ -98,10 +95,10 @@ class Html extends RendererAbstract
         $textInner = '
                     <tr><td>{VAL}</td></tr>';
         foreach ($exception->getSolutions() as $key => $val) {
-            $tokens['{SOLUTIONS}'] .= $this->replaceTokens(['{VAL}' => htmlentities($val)], $textInner);
+            $tokens['{SOLUTIONS}'] .= $this->replaceTokens($textInner, ['{VAL}' => htmlentities($val)]);
         }
 
-        $this->output .= $this->replaceTokens($tokens, $text);
+        $this->output .= $this->replaceTokens($text, $tokens);
     }
 
     protected function processStackTrace(): void
@@ -136,7 +133,7 @@ class Html extends RendererAbstract
         $shortTrace = $this->getStackTrace(true);
         $isShortened = end($shortTrace) && key($shortTrace) !== 0 && key($shortTrace) !== 'self';
         foreach ($shortTrace as $index => $call) {
-            $call = $this->parseStackTraceCall($call);
+            $call = $this->parseStackTraceFrame($call);
 
             $escapeFrame = false;
             if ($inAtk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
@@ -167,7 +164,7 @@ class Html extends RendererAbstract
                 }
             }
 
-            $this->output .= $this->replaceTokens($tokens, $text);
+            $this->output .= $this->replaceTokens($text, $tokens);
         }
 
         if ($isShortened) {

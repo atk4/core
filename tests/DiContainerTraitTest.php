@@ -30,7 +30,7 @@ class DiContainerTraitTest extends TestCase
     {
         $this->expectException(Exception::class);
         $m = new FactoryDiMock2();
-        $m->setDefaults([5 => 'qwerty']);
+        $m->setDefaults([5 => 'qwerty']); // @phpstan-ignore-line
     }
 
     public function testProperties(): void

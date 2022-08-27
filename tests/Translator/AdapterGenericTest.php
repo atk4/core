@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests\Translator;
 
-use Atk4\Core\Exception;
 use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\Translator;
@@ -21,38 +20,6 @@ class AdapterGenericTest extends AdapterBaseTest
     public function testExceptionDiNotFound(): void
     {
         static::assertSame('no key return self', Translator::instance()->_('no key return self'));
-    }
-
-    public function testExceptionDiInstance(): void
-    {
-        $this->expectException(Exception::class);
-        Translator::instance()->setDefaults([
-            'instance' => 'just to throw exception',
-        ]);
-    }
-
-    public function testExceptionDiAdapter(): void
-    {
-        $this->expectException(Exception::class);
-        Translator::instance()->setDefaults([
-            'adapter' => 'just to throw exception',
-        ]);
-    }
-
-    public function testExceptionDiDefaultDomain(): void
-    {
-        $this->expectException(Exception::class);
-        Translator::instance()->setDefaults([
-            'defaultDomain' => 123, // just to throw exception
-        ]);
-    }
-
-    public function testExceptionDiDefaultLocale(): void
-    {
-        $this->expectException(Exception::class);
-        Translator::instance()->setDefaults([
-            'defaultLocale' => 123, // just to throw exception
-        ]);
     }
 
     public function testAdapter(): void

@@ -105,7 +105,7 @@ class DebugTraitTest extends TestCase
 
         // Changes detected
         static::assertTrue(is_array($matches));
-        static::assertSame(5, count($matches));
+        static::assertCount(5, $matches);
         static::assertSame($matches[1], $matches[3]);
         static::assertSame((string) ($matches[2] + 1), $matches[4]);
 

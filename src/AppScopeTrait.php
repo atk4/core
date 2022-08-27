@@ -29,11 +29,9 @@ trait AppScopeTrait
      * if AppScopeTrait is used, $app property is set and has a
      * maxNameLength defined.
      *
-     * Minimum is 40
-     *
-     * @var int
+     * @var int<40, max>
      */
-    public $maxNameLength = 60;
+    public int $maxNameLength = 60;
 
     /**
      * As more names are shortened, the substituted part is being placed into
@@ -43,9 +41,9 @@ trait AppScopeTrait
      * this functionality is not essential and excluded from traits. You
      * can find it in a test suite.
      *
-     * @var array
+     * @var array<string, string>
      */
-    public $uniqueNameHashes = [];
+    public array $uniqueNameHashes = [];
 
     protected function assertInstanceOfApp(object $app): void
     {

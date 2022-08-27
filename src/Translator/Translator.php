@@ -13,52 +13,23 @@ use Atk4\Core\Translator\Adapter\Generic;
  */
 class Translator
 {
-    use DiContainerTrait {
-        setDefaults as private _setDefaults;
-    }
+    use DiContainerTrait;
 
-    /** @var self */
-    private static $instance;
+    private static ?self $instance = null;
 
-    /** @var ITranslatorAdapter */
-    private $adapter;
+    private ?ITranslatorAdapter $adapter = null;
 
-    /** @var string Default domain of translations */
-    protected $defaultDomain = 'atk';
+    /** Default domain of translations */
+    protected string $defaultDomain = 'atk';
 
-    /** @var string Default language of translations */
-    protected $defaultLocale = 'en';
+    /** Default language of translations */
+    protected string $defaultLocale = 'en';
 
     /**
      * Singleton no public constructor.
      */
     private function __construct()
     {
-    }
-
-    /**
-     * Set property like dependency injection.
-     */
-    public function setDefaults(array $properties, bool $passively = false): void
-    {
-        if (null !== ($properties['instance'] ?? null)) {
-            throw new Exception('$instance cannot be replaced');
-        }
-
-        $adapter = $properties['adapter'] ?? null;
-        if ($adapter !== null && !($adapter instanceof ITranslatorAdapter)) {
-            throw new Exception('$adapter must be an instance of ITranslatorAdapter');
-        }
-
-        if (!is_string($properties['defaultDomain'] ?? '')) {
-            throw new Exception('defaultDomain must be string');
-        }
-
-        if (!is_string($properties['defaultLocale'] ?? '')) {
-            throw new Exception('defaultLocale must be string');
-        }
-
-        $this->_setDefaults($properties);
     }
 
     public function setDefaultLocale(string $locale): self
@@ -113,10 +84,10 @@ class Translator
     /**
      * Translate the given message.
      *
-     * @param string      $message    The message to be translated
-     * @param array       $parameters Array of parameters used to translate message
-     * @param string|null $domain     The domain for the message or null to use the default
-     * @param string|null $locale     The locale or null to use the default
+     * @param string               $message    The message to be translated
+     * @param array<string, mixed> $parameters Array of parameters used to translate message
+     * @param string|null          $domain     The domain for the message or null to use the default
+     * @param string|null          $locale     The locale or null to use the default
      *
      * @return string The translated string
      */

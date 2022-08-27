@@ -1,3 +1,6 @@
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+
 parameters:
     level: 6
     paths:
@@ -5,36 +8,19 @@ parameters:
     excludePaths:
         - vendor/
 
-    # some extra rules
-    checkAlwaysTrueCheckTypeFunctionCall: true
-    checkAlwaysTrueInstanceof: true
-    checkAlwaysTrueStrictComparison: true
-    checkExplicitMixedMissingReturn: true
-    checkFunctionNameCase: true
-    # TODO checkMissingClosureNativeReturnTypehintRule: true
-    reportMaybesInMethodSignatures: true
-    reportStaticMethodSignatures: true
-    checkTooWideReturnTypesInProtectedAndPublicMethods: true
-    checkMissingIterableValueType: false # TODO
-
     ignoreErrors:
+        # relax strict rules
+        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
+        - '~^Variable (static )?(property access|method call) on .+\.~'
+
         # fix unresolveable atk4/ui \Atk4\Ui\App class
         - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
         -
-            path: 'src\CollectionTrait.php'
-            message: '~^Access to an undefined property .+::\$name\.$~'
-            count: 1
-        -
-            path: 'src\ContainerTrait.php'
-            message: '~^Access to an undefined property .+::\$name\.$~'
-            count: 5
-
-        -
-            path: 'tests\DynamicMethodTraitTest.php'
+            path: 'tests/DynamicMethodTraitTest.php'
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
             count: 35
         -
-            path: 'tests\FactoryTest.php'
+            path: 'tests/FactoryTest.php'
             message: '~^Cannot access property \$(foo|def) on array\|object\.$~'
             count: 10

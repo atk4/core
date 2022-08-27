@@ -64,7 +64,7 @@ abstract class RendererAbstract
 
             return $this->output;
         } catch (\Throwable $e) {
-            // fallback if Exception occur in renderer
+            // fallback if Exception occurred during rendering
             return '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
                 . get_class($this->exception)
                 . ($this->exception->getCode() !== 0 ? '(' . $this->exception->getCode() . ')' : '')
@@ -72,20 +72,28 @@ abstract class RendererAbstract
         }
     }
 
-    protected function replaceTokens(array $tokens, string $text): string
+    /**
+     * @param array<string, string> $tokens
+     */
+    protected function replaceTokens(string $text, array $tokens): string
     {
         return str_replace(array_keys($tokens), array_values($tokens), $text);
     }
 
-    protected function parseStackTraceCall(array $call): array
+    /**
+     * @param array<string, mixed> $frame
+     *
+     * @return array<string, mixed>
+     */
+    protected function parseStackTraceFrame(array $frame): array
     {
         $parsed = [
-            'line' => (string) ($call['line'] ?? ''),
-            'file' => (string) ($call['file'] ?? ''),
-            'class' => $call['class'] ?? null,
-            'object' => $call['object'] ?? null,
-            'function' => $call['function'] ?? null,
-            'args' => $call['args'] ?? [],
+            'line' => (string) ($frame['line'] ?? ''),
+            'file' => (string) ($frame['file'] ?? ''),
+            'class' => $frame['class'] ?? null,
+            'object' => $frame['object'] ?? null,
+            'function' => $frame['function'] ?? null,
+            'args' => $frame['args'] ?? [],
             'class_formatted' => null,
             'object_formatted' => null,
         ];
@@ -175,6 +183,8 @@ abstract class RendererAbstract
     /**
      * Returns stack trace and reindex it from the first call. If shortening is allowed,
      * shorten the stack trace if it starts with the parent one.
+     *
+     * @return array<int|'self', array<string, mixed>>
      */
     protected function getStackTrace(bool $shorten): array
     {
@@ -190,8 +200,8 @@ abstract class RendererAbstract
         $bothAtk = $this->exception instanceof Exception && $this->parentException instanceof Exception;
         $c = min(count($trace), count($parentTrace));
         for ($i = 0; $i < $c; ++$i) {
-            $cv = $this->parseStackTraceCall($trace[$i]);
-            $pv = $this->parseStackTraceCall($parentTrace[$i]);
+            $cv = $this->parseStackTraceFrame($trace[$i]);
+            $pv = $this->parseStackTraceFrame($parentTrace[$i]);
 
             if ($cv['line'] === $pv['line']
                 && $cv['file'] === $pv['file']
@@ -215,6 +225,9 @@ abstract class RendererAbstract
         return $trace;
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         return $this->adapter

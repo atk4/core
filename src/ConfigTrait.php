@@ -16,8 +16,8 @@ namespace Atk4\Core;
  */
 trait ConfigTrait
 {
-    /** @var array This property stores config values. Use getConfig() method to access its values. */
-    protected $config = [];
+    /** @var array<string, mixed> This property stores config values. Use getConfig() method to access its values. */
+    protected array $config = [];
 
     /**
      * Read config file or files and store it in $config property.
@@ -27,8 +27,8 @@ trait ConfigTrait
      *  json        - JSON file with {'foo':'bar'} structure
      *  yaml        - YAML file with yaml structure
      *
-     * @param string|array $files  One or more filenames
-     * @param string       $format Optional format for config files
+     * @param string|array<int, string> $files  One or more filenames
+     * @param string                    $format Optional format for config files
      *
      * @return $this
      */
@@ -84,8 +84,8 @@ trait ConfigTrait
     /**
      * Manually set configuration option.
      *
-     * @param string|array $paths Path to configuration element to set or array of [path => value]
-     * @param mixed        $value Value to set
+     * @param string|array<string, mixed> $paths Path to configuration element to set or array of [path => value]
+     * @param ($paths is array ? never : mixed) $value Value to set
      *
      * @return $this
      */
@@ -94,6 +94,7 @@ trait ConfigTrait
         if (!is_array($paths)) {
             $paths = [$paths => $value];
         }
+        unset($value);
 
         foreach ($paths as $path => $value) {
             $pos = &$this->_lookupConfigElement($path, true);
@@ -136,30 +137,21 @@ trait ConfigTrait
      * @param string $path           Path to navigate to
      * @param bool   $createElements Should we create elements it they don't exist
      *
-     * @return array|false Pointer to element in $this->config or false is element don't exist and $createElements === false
-     *                     Returns false if element don't exist and $createElements === false
+     * @return mixed|false Pointer to element in $this->config or false is element don't exist and $createElements === false
      */
     private function &_lookupConfigElement(string $path, bool $createElements = false)
     {
-        // trick to return false because we need reference here
-        $false = false;
-
         $path = explode('/', $path);
         $pos = &$this->config;
         foreach ($path as $el) {
-            // need to return if not is array
-            // before call array_key_exists and throw error
-            if (!is_array($pos)) {
-                return $false;
-            }
+            if (!is_array($pos) || !array_key_exists($el, $pos)) {
+                if (!is_array($pos) || !$createElements) {
+                    $res = false;
 
-            // create empty element if it doesn't exist
-            if (!array_key_exists($el, $pos) && $createElements) {
+                    return $res;
+                }
+
                 $pos[$el] = [];
-            }
-            // if it still doesn't exist, then just return false (no error)
-            if (!array_key_exists($el, $pos) && !$createElements) {
-                return $false;
             }
 
             $pos = &$pos[$el];
