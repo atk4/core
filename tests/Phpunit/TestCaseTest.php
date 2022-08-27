@@ -99,6 +99,9 @@ class TestCaseTest extends TestCase
         static::assertSame(0, self::$activeObjectsCounter);
     }
 
+    /**
+     * @return \Traversable<int, array<int, mixed>>
+     */
     public function provideProviderAb(): \Traversable
     {
         yield ['a'];
@@ -117,6 +120,9 @@ class TestCaseTest extends TestCase
         static::assertTrue(in_array($v, ['a', 'b', 'x', 'y'], true));
     }
 
+    /**
+     * @return \Traversable<int, array<int, mixed>>
+     */
     public function provideProviderCoverage(): \Traversable
     {
         yield ['x'];

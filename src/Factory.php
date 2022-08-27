@@ -25,9 +25,9 @@ class Factory
     }
 
     /**
-     * @param array|object|null ...$seeds
+     * @param array<mixed>|object|null ...$seeds
      *
-     * @return array|object
+     * @return array<mixed>|object
      */
     protected function _mergeSeeds(...$seeds)
     {
@@ -111,7 +111,8 @@ class Factory
     }
 
     /**
-     * @param class-string $className
+     * @param class-string      $className
+     * @param array<int, mixed> $ctorArgs
      */
     protected function _newObject(string $className, array $ctorArgs): object
     {
@@ -119,7 +120,8 @@ class Factory
     }
 
     /**
-     * @param array|object $seed
+     * @param array<mixed>|object $seed
+     * @param array<mixed>        $defaults
      */
     protected function _factory($seed, array $defaults = null): object
     {
@@ -169,9 +171,9 @@ class Factory
      *
      * To learn more about mechanics of factory trait, see documentation
      *
-     * @param array|object|null ...$seeds
+     * @param array<mixed>|object|null ...$seeds
      *
-     * @return object|array if at least one seed is an object, will return object
+     * @return object|array<mixed> if at least one seed is an object, will return object
      */
     final public static function mergeSeeds(...$seeds)
     {
@@ -188,8 +190,8 @@ class Factory
      *
      * To learn more about mechanics of factory trait, see documentation
      *
-     * @param array|object $seed
-     * @param array        $defaults
+     * @param array<mixed>|object $seed
+     * @param array<mixed>        $defaults
      */
     final public static function factory($seed, $defaults = []): object
     {

@@ -14,8 +14,8 @@ trait DynamicMethodTrait
      * Magic method - tries to call dynamic method and throws exception if
      * this was not possible.
      *
-     * @param string $name Name of the method
-     * @param array  $args Array of arguments to pass to this method
+     * @param string            $name Name of the method
+     * @param array<int, mixed> $args Array of arguments to pass to this method
      *
      * @return mixed
      */

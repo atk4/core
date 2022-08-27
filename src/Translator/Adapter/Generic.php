@@ -15,9 +15,12 @@ class Generic implements ITranslatorAdapter
         setConfig as protected;
     }
 
-    /** @var array */
-    protected $definitions = [];
+    /** @var array<string, array<string, array<string, non-empty-array<string, string>>>> */
+    protected array $definitions = [];
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
     {
         $definition = $this->getDefinition($message, $domain ?? 'atk', $locale ?? 'en');
@@ -32,8 +35,9 @@ class Generic implements ITranslatorAdapter
     }
 
     /**
-     * Return translated string.
-     * if parameters is not empty will replace tokens.
+     * Return translated string. If parameters is not empty will replace tokens.
+     *
+     * @param array<string, mixed> $parameters
      */
     protected function processMessage(string $definition, array $parameters = []): string
     {
@@ -45,66 +49,65 @@ class Generic implements ITranslatorAdapter
     }
 
     /**
-     * @param array|string $definition A string of definitions separated by |
-     * @param array        $parameters An array of parameters
-     * @param int          $count      Requested plural form
+     * @param non-empty-array<string, string> $definition
+     * @param array<string, mixed>            $parameters
+     * @param int                             $count      Requested plural form
      */
-    protected function processMessagePlural($definition, array $parameters = [], int $count = 1): string
+    protected function processMessagePlural(array $definition, array $parameters = [], int $count = 1): string
     {
-        $definitionsForms = is_array($definition) ? $definition : explode('|', $definition);
         $foundDefinition = null;
         switch ($count) {
             case 0:
-                $foundDefinition = $definitionsForms['zero'] ?? end($definitionsForms);
+                $foundDefinition = $definition['zero'] ?? end($definition);
 
                 break;
             case 1:
-                $foundDefinition = $definitionsForms['one'] ?? null;
+                $foundDefinition = $definition['one'] ?? null;
 
                 break;
             default:
-                $foundDefinition = $definitionsForms['other'] ?? null;
+                $foundDefinition = $definition['other'] ?? null;
 
                 break;
         }
 
         // if no definition found get the first from array
-        $definition = $foundDefinition ?? array_shift($definitionsForms);
+        if ($foundDefinition === null) {
+            $foundDefinition = reset($definition);
+        }
 
-        return $this->processMessage($definition, $parameters);
+        return $this->processMessage($foundDefinition, $parameters);
     }
 
     /**
-     * @return array|string|null
+     * @return non-empty-array<string, string>|null
      */
-    protected function getDefinition(string $message, string $domain, ?string $locale)
+    protected function getDefinition(string $message, string $domain, ?string $locale): ?array
     {
         return $this->definitions[$locale][$domain][$message] ?? null;
     }
 
+    /**
+     * @param array<string, string|non-empty-array<string, string>> $data
+     */
     public function addDefinitionFromArray(array $data, string $locale, string $domain): void
     {
-        $this->definitions = array_replace_recursive(
-            $this->definitions,
-            [
-                $locale => [
-                    $domain => $data,
-                ],
-            ]
-        );
+        foreach ($data as $k => $v) {
+            $this->setDefinitionSingle($k, $v, $locale, $domain);
+        }
     }
 
     /**
      * Set or Replace a single definition within a domain.
      *
-     * @param string|array $definition
+     * @param string|non-empty-array<string, string> $definition
      *
      * @return $this
      */
     public function setDefinitionSingle(string $key, $definition, string $locale = 'en', string $domain = 'atk')
     {
         if (is_string($definition)) {
-            $definition = [$definition];
+            $definition = ['one' => $definition];
         }
 
         $this->definitions[$locale][$domain][$key] = $definition;

@@ -30,11 +30,14 @@ abstract class AdapterBaseTest extends TestCase
         Translator::instance()->setAdapter($adapter);
     }
 
-    public function translate(string $message, array $params, string $context, string $locale): string
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    public function translate(string $message, array $parameters, string $context, string $locale): string
     {
         $mock = $this->getTranslatableMock();
 
-        return $mock->_($message, $params, $context, $locale);
+        return $mock->_($message, $parameters, $context, $locale);
     }
 
     public function testBase(): void

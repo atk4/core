@@ -9,8 +9,6 @@ parameters:
         - vendor/
 
     ignoreErrors:
-        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
-
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
@@ -19,10 +17,10 @@ parameters:
         - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
         -
-            path: 'tests\DynamicMethodTraitTest.php'
+            path: 'tests/DynamicMethodTraitTest.php'
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
             count: 35
         -
-            path: 'tests\FactoryTest.php'
+            path: 'tests/FactoryTest.php'
             message: '~^Cannot access property \$(foo|def) on array\|object\.$~'
             count: 10

@@ -15,7 +15,7 @@ class CollectionMock
     protected $fields = [];
 
     /**
-     * @param array|object|null $seed
+     * @param array<mixed>|object|null $seed
      */
     public function addField(string $name, $seed = null): FieldMock
     {

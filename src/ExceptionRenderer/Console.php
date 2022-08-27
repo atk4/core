@@ -20,13 +20,10 @@ class Console extends RendererAbstract
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens(
-            $tokens,
-            <<<TEXT
-                \e[1;41m--[ {TITLE} ]\e[0m
-                {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
-                TEXT
-        );
+        $this->output .= $this->replaceTokens(<<<TEXT
+            \e[1;41m--[ {TITLE} ]\e[0m
+            {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
+            TEXT, $tokens);
     }
 
     protected function processParams(): void
@@ -43,7 +40,7 @@ class Console extends RendererAbstract
         }
 
         foreach ($exception->getParams() as $key => $val) {
-            $key = str_pad((string) $key, 19, ' ', \STR_PAD_LEFT);
+            $key = str_pad($key, 19, ' ', \STR_PAD_LEFT);
             $this->output .= \PHP_EOL . "\e[91m" . $key . ': ' . static::toSafeString($val) . "\e[0m";
         }
     }
@@ -85,7 +82,7 @@ class Console extends RendererAbstract
         $shortTrace = $this->getStackTrace(true);
         $isShortened = end($shortTrace) && key($shortTrace) !== 0 && key($shortTrace) !== 'self';
         foreach ($shortTrace as $index => $call) {
-            $call = $this->parseStackTraceCall($call);
+            $call = $this->parseStackTraceFrame($call);
 
             $escapeFrame = false;
             if ($inAtk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
@@ -116,7 +113,7 @@ class Console extends RendererAbstract
                 }
             }
 
-            $this->output .= $this->replaceTokens($tokens, $text);
+            $this->output .= $this->replaceTokens($text, $tokens);
         }
 
         if ($isShortened) {

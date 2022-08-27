@@ -16,14 +16,14 @@ class Exception extends \Exception
     /** @var string */
     protected $customExceptionTitle = 'Critical Error';
 
-    /** @var array */
+    /** @var array<string, mixed> */
     private $params = [];
 
-    /** @var string[] */
+    /** @var array<int, string> */
     private $solutions = [];
 
     /** @var ITranslatorAdapter */
-    private $adapter;
+    private $translator;
 
     public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
     {
@@ -68,7 +68,7 @@ class Exception extends \Exception
      */
     public function getColorfulText(): string
     {
-        return (string) new ExceptionRenderer\Console($this, $this->adapter);
+        return (string) new ExceptionRenderer\Console($this, $this->translator);
     }
 
     /**
@@ -83,7 +83,7 @@ class Exception extends \Exception
      */
     public function getHtml(): string
     {
-        return (string) new ExceptionRenderer\Html($this, $this->adapter);
+        return (string) new ExceptionRenderer\Html($this, $this->translator);
     }
 
     /**
@@ -91,7 +91,7 @@ class Exception extends \Exception
      */
     public function getJson(): string
     {
-        return (string) new ExceptionRenderer\Json($this, $this->adapter);
+        return (string) new ExceptionRenderer\Json($this, $this->translator);
     }
 
     /**
@@ -106,6 +106,8 @@ class Exception extends \Exception
 
     /**
      * Follow the getter-style of PHP Exception.
+     *
+     * @return array<string, mixed>
      */
     public function getParams(): array
     {
@@ -140,6 +142,8 @@ class Exception extends \Exception
 
     /**
      * Get the solutions array.
+     *
+     * @return array<int, string>
      */
     public function getSolutions(): array
     {
@@ -147,7 +151,7 @@ class Exception extends \Exception
     }
 
     /**
-     * Get the custom Exception title, if defined in $customExceptionTitle.
+     * Get the custom exception title.
      */
     public function getCustomExceptionTitle(): string
     {
@@ -159,9 +163,9 @@ class Exception extends \Exception
      *
      * @return $this
      */
-    public function setTranslatorAdapter(ITranslatorAdapter $adapter = null): self
+    public function setTranslatorAdapter(ITranslatorAdapter $translator = null): self
     {
-        $this->adapter = $adapter;
+        $this->translator = $translator;
 
         return $this;
     }

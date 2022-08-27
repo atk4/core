@@ -13,6 +13,9 @@ trait StaticAddToTrait
 {
     use DiContainerTrait;
 
+    /**
+     * @param array<mixed> $addArgs
+     */
     private static function _addToAdd(object $parent, object $object, array $addArgs, bool $skipAdd = false): void
     {
         if (!$skipAdd) {
@@ -31,6 +34,9 @@ trait StaticAddToTrait
      * $crud = $app->add(['Crud', 'displayFields' => ['name']]);
      *   but the first one design pattern is strongly recommended as it supports refactoring.
      *
+     * @param array<mixed> $seed
+     * @param array<mixed> $addArgs
+     *
      * @return static
      */
     public static function addTo(object $parent, array $seed = [], array $addArgs = [], bool $skipAdd = false)// :static supported by PHP8+
@@ -45,7 +51,8 @@ trait StaticAddToTrait
     /**
      * Same as addTo(), but the first element of seed specifies a class name instead of static::class.
      *
-     * @param array|object $seed the first element specifies a class name, other elements are seed
+     * @param array<mixed>|object $seed    the first element specifies a class name, other elements are seed
+     * @param array<mixed>        $addArgs
      *
      * @return static
      */
@@ -61,7 +68,8 @@ trait StaticAddToTrait
     /**
      * Same as addToWithCl(), but the new object is not asserted to be an instance of this class.
      *
-     * @param array|object $seed the first element specifies a class name, other elements are seed
+     * @param array<mixed>|object $seed    the first element specifies a class name, other elements are seed
+     * @param array<mixed>        $addArgs
      *
      * @return static
      */

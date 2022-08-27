@@ -38,27 +38,28 @@ trait DiContainerTrait
      * Call from __construct() to initialize the properties allowing
      * developer to pass Dependency Injector Container.
      *
-     * @param bool $passively If true, existing non-null values will be kept
+     * @param array<string, mixed> $properties
+     * @param bool                 $passively  If true, existing non-null values will be kept
      *
      * @return $this
      */
     public function setDefaults(array $properties, bool $passively = false)
     {
-        foreach ($properties as $key => $val) {
-            if (is_int($key)) {
-                $key = (string) $key;
+        foreach ($properties as $k => $v) {
+            if (is_int($k)) { // @phpstan-ignore-line
+                $k = (string) $k; // @phpstan-ignore-line
             }
 
-            if (property_exists($this, $key)) {
-                if ($passively && $this->{$key} !== null) {
+            if (property_exists($this, $k)) {
+                if ($passively && $this->{$k} !== null) {
                     continue;
                 }
 
-                if ($val !== null) {
-                    $this->{$key} = $val;
+                if ($v !== null) {
+                    $this->{$k} = $v;
                 }
             } else {
-                $this->setMissingProperty($key, $val);
+                $this->setMissingProperty($k, $v);
             }
         }
 
@@ -96,11 +97,11 @@ trait DiContainerTrait
     }
 
     /**
-     * @param array|object $seed
+     * @param array<mixed>|object $seed
      *
-     * @return array|object
+     * @return array<mixed>|object
      */
-    private static function _fromSeedPrecheck($seed, bool $unsafe)// :self is too strict with unsafe behaviour
+    private static function _fromSeedPrecheck($seed, bool $unsafe)
     {
         if (!is_object($seed)) {
             if (!is_array($seed)) { // @phpstan-ignore-line
@@ -130,8 +131,8 @@ trait DiContainerTrait
      * The best, typehinting-friendly, way to create an object if it should not be
      * immediately added to a parent (otherwise use addTo() method).
      *
-     * @param array|object $seed     the first element specifies a class name, other elements are seed
-     * @param array        $defaults
+     * @param array<mixed>|object $seed     the first element specifies a class name, other elements are seed
+     * @param array<mixed>        $defaults
      *
      * @return static
      */
@@ -150,12 +151,12 @@ trait DiContainerTrait
     /**
      * Same as fromSeed(), but the new object is not asserted to be an instance of this class.
      *
-     * @param array|object $seed     the first element specifies a class name, other elements are seed
-     * @param array        $defaults
+     * @param array<mixed>|object $seed     the first element specifies a class name, other elements are seed
+     * @param array<mixed>        $defaults
      *
      * @return static
      */
-    public static function fromSeedUnsafe($seed = [], $defaults = [])// :self is too strict with unsafe behaviour
+    public static function fromSeedUnsafe($seed = [], $defaults = [])
     {
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');

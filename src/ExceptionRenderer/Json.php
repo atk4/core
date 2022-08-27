@@ -8,8 +8,8 @@ use Atk4\Core\Exception;
 
 class Json extends RendererAbstract
 {
-    /** @var array */
-    protected $json = [
+    /** @var array<string, mixed> */
+    protected array $json = [
         'success' => false,
         'code' => 0,
         'message' => '',
@@ -77,7 +77,7 @@ class Json extends RendererAbstract
         $inAtk = true;
         $trace = $this->getStackTrace(false);
         foreach ($trace as $index => $call) {
-            $call = $this->parseStackTraceCall($call);
+            $call = $this->parseStackTraceFrame($call);
 
             $escapeFrame = false;
             if ($inAtk && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
@@ -107,15 +107,15 @@ class Json extends RendererAbstract
         $this->json['previous'] = $previous->json;
     }
 
-    protected function parseStackTraceCall(array $call): array
+    protected function parseStackTraceFrame(array $frame): array
     {
         return [
-            'line' => $call['line'] ?? '',
-            'file' => $call['file'] ?? '',
-            'class' => $call['class'] ?? null,
-            'object' => ($call['object'] ?? null) !== null ? static::toSafeString($call['object']) : null,
-            'function' => $call['function'] ?? null,
-            'args' => $call['args'] ?? [],
+            'line' => $frame['line'] ?? '',
+            'file' => $frame['file'] ?? '',
+            'class' => $frame['class'] ?? null,
+            'object' => ($frame['object'] ?? null) !== null ? static::toSafeString($frame['object']) : null,
+            'function' => $frame['function'] ?? null,
+            'args' => $frame['args'] ?? [],
         ];
     }
 

@@ -11,7 +11,7 @@ trait DebugTrait
     /** @var bool Is debug enabled? */
     public $debug = false;
 
-    /** @var array Helps debugTraceChange. */
+    /** @var array<string, array<int, string>> Helps debugTraceChange. */
     protected $_prevTrace = [];
 
     /**
@@ -25,7 +25,8 @@ trait DebugTrait
     /**
      * Send some info to debug stream.
      *
-     * @param bool|string $message
+     * @param bool|string  $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -52,8 +53,9 @@ trait DebugTrait
     /**
      * Output log message.
      *
-     * @param mixed  $level
-     * @param string $message
+     * @param mixed        $level
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -101,7 +103,8 @@ trait DebugTrait
     /**
      * System is unusable.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -116,7 +119,8 @@ trait DebugTrait
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -130,7 +134,8 @@ trait DebugTrait
      *
      * Example: Application component unavailable, unexpected exception.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -143,7 +148,8 @@ trait DebugTrait
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -158,7 +164,8 @@ trait DebugTrait
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -170,7 +177,8 @@ trait DebugTrait
     /**
      * Normal but significant events.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
@@ -184,7 +192,8 @@ trait DebugTrait
      *
      * Example: User logs in, SQL logs.
      *
-     * @param string $message
+     * @param string       $message
+     * @param array<mixed> $context
      *
      * @return $this
      */
