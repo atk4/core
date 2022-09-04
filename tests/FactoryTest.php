@@ -166,23 +166,23 @@ class FactoryTest extends TestCase
 
     public function testMerge6(): void
     {
-        $oo = Factory::mergeSeeds(['4' => 'four'], ['5' => 'five']);
-        static::assertSame(['4' => 'four', '5' => 'five'], $oo);
+        $oo = Factory::mergeSeeds([4 => 'four'], [5 => 'five']);
+        static::assertSame([4 => 'four', 5 => 'five'], $oo);
 
-        $oo = Factory::mergeSeeds(['4' => ['four']], ['5' => ['five']]);
-        static::assertSame(['4' => ['four'], '5' => ['five']], $oo);
+        $oo = Factory::mergeSeeds([4 => ['four']], [5 => ['five']]);
+        static::assertSame([4 => ['four'], 5 => ['five']], $oo);
 
-        $oo = Factory::mergeSeeds(['4' => 'four'], ['5' => 'five'], ['6' => 'six']);
-        static::assertSame(['4' => 'four', '5' => 'five', '6' => 'six'], $oo);
+        $oo = Factory::mergeSeeds([4 => 'four'], [5 => 'five'], [6 => 'six']);
+        static::assertSame([4 => 'four', 5 => 'five', 6 => 'six'], $oo);
 
         $oo = Factory::mergeSeeds(['x' => ['four']], ['x' => ['five']]);
         static::assertSame(['x' => ['four']], $oo);
 
-        $oo = Factory::mergeSeeds(['4' => ['four']], ['4' => ['five']]);
-        static::assertSame(['4' => ['four']], $oo);
+        $oo = Factory::mergeSeeds([4 => ['four']], [4 => ['five']]);
+        static::assertSame([4 => ['four']], $oo);
 
-        $oo = Factory::mergeSeeds(['4' => ['200']], ['4' => ['201']]);
-        static::assertSame(['4' => ['200']], $oo);
+        $oo = Factory::mergeSeeds([4 => ['200']], [4 => ['201']]);
+        static::assertSame([4 => ['200']], $oo);
     }
 
     public function testMergeNoDiFail(): void
