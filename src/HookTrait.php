@@ -9,7 +9,7 @@ trait HookTrait
     /**
      * Contains information about configured hooks (callbacks).
      *
-     * @var array<string, array<int, array{0: \Closure, 1?: array<int, mixed>}>>
+     * @var array<string, array<int, array{\Closure, 1?: array<int, mixed>}>>
      */
     protected array $hooks = [];
 

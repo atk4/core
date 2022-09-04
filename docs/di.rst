@@ -56,7 +56,7 @@ offer a better option::
 
     $crud = new Crud();
     $crud->formEdit = new MyForm();
-    $crud->formAdd  = new MyForm();
+    $crud->formAdd = new MyForm();
 
 How to use DiContainerTrait
 ---------------------------

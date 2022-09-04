@@ -36,7 +36,7 @@ Declare a object class in your framework::
 
         public function render()
         {
-            return '<input name="' . $this->name . '" value="' . $value . '"/>';
+            return '<input name="' . $this->name . '" value="' . $value . '" />';
         }
     }
 

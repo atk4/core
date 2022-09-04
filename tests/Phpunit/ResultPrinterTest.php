@@ -37,18 +37,6 @@ class ResultPrinterTest extends TestCase
         static::assertStringContainsString((string) $exception, $resNotWrapped);
         static::assertStringContainsString((string) $innerException, $resNotWrapped);
 
-        $staticClass = get_class(new class() {
-            public static int $counter = 0;
-        });
-        if (++$staticClass::$counter > 2) {
-            // allow this test to be run max. twice, new ExceptionWrapper() is leaking memory,
-            // see https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/ExceptionWrapper.php#L112
-            // https://github.com/sebastianbergmann/phpunit/pull/5012
-            // @codeCoverageIgnoreStart
-            return;
-            // @codeCoverageIgnoreEnd
-        }
-
         $res = $this->printAndReturnDefectTrace(ResultPrinter::class, new ExceptionWrapper($exception));
         static::assertTrue(strlen($res) < strlen($resNotWrapped));
         if (\PHP_MAJOR_VERSION < 8) {
