@@ -77,7 +77,7 @@ problem.
 .. php:method:: getHtml()
 
 Will return nice HTML-formatted exception that will rely on a presence of
-Semantic UI. This will include the error, parameters and backtrace. The code
+Fomantic-UI. This will include the error, parameters and backtrace. The code
 will also make an attempt to locate and highlight the code that have caused the
 problem.
 

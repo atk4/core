@@ -25,11 +25,9 @@ class Translator
     /** Default language of translations */
     protected string $defaultLocale = 'en';
 
-    /**
-     * Singleton no public constructor.
-     */
     private function __construct()
     {
+        // singleton
     }
 
     public function setDefaultLocale(string $locale): self

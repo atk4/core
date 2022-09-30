@@ -45,7 +45,7 @@ to create necessary methods with minimum code footprint::
 
         public $fields = [];
 
-        public function addField($name, $seed = null)
+        public function addField(string $name, $seed = [])
         {
             $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
