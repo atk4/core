@@ -72,7 +72,7 @@ class Exception extends \Exception
     }
 
     /**
-     * Return exception message using HTML block and Semantic UI formatting. It's your job
+     * Return exception message using HTML block and Fomantic-UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
      *   $app = new \Atk4\Ui\App();

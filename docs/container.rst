@@ -73,7 +73,7 @@ Example::
 
         protected $fields = [];
 
-        public function addField($name, $seed = null)
+        public function addField(string $name, $seed = [])
         {
             $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
@@ -82,17 +82,17 @@ Example::
             return $this->_addIntoCollection($name, $field, 'fields');
         }
 
-        public function hasField($name): bool
+        public function hasField(string $name): bool
         {
             return $this->_hasInCollection($name, 'fields');
         }
 
-        public function getField($name)
+        public function getField(string $name)
         {
             return $this->_getFromCollection($name, 'fields');
         }
 
-        public function removeField($name)
+        public function removeField(string $name)
         {
             $this->_removeFromCollection($name, 'fields');
         }
@@ -105,9 +105,9 @@ Methods
 
     Adds a new element into collection::
 
-        public function addField($name, $definition)
+        public function addField(string $name, $seed = [])
         {
-            $field = Factory::factory($definition, []);
+            $field = Factory::factory($seed);
 
             return $this->_addIntoCollection($name, $field, 'fields');
         }
