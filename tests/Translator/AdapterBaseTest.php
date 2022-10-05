@@ -14,6 +14,8 @@ abstract class AdapterBaseTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $adapter = new Generic();
         $adapter->addDefinitionFromArray([
             'Field requires array for defaults' => 'Field requires array for defaults',
