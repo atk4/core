@@ -20,10 +20,10 @@ class Console extends RendererAbstract
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens(<<<TEXT
+        $this->output .= $this->replaceTokens(<<<'EOF'
             \e[1;41m--[ {TITLE} ]\e[0m
             {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
-            TEXT, $tokens);
+            EOF, $tokens);
     }
 
     protected function processParams(): void
@@ -62,21 +62,19 @@ class Console extends RendererAbstract
 
     protected function processStackTrace(): void
     {
-        $this->output .= <<<TEXT
+        $this->output .= <<<'EOF'
 
             \e[1;41m--[ Stack Trace ]\e[0m
-
-            TEXT;
+            EOF . "\n";
 
         $this->processStackTraceInternal();
     }
 
     protected function processStackTraceInternal(): void
     {
-        $text = <<<TEXT
+        $text = <<<'EOF'
             \e[0m{FILE}\e[0m:\e[0;31m{LINE}\e[0m {OBJECT} {CLASS}{FUNCTION_COLOR}{FUNCTION}{FUNCTION_ARGS}
-
-            TEXT;
+            EOF . "\n";
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);
@@ -131,9 +129,9 @@ class Console extends RendererAbstract
         $this->output .= \PHP_EOL . "\e[1;45mCaused by Previous Exception:\e[0m" . \PHP_EOL;
 
         $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
-        $this->output .= <<<TEXT
+        $this->output .= <<<'EOF'
             \e[1;31m--
             \e[0m
-            TEXT;
+            EOF;
     }
 }
