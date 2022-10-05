@@ -32,6 +32,11 @@ class Html extends RendererAbstract
         ', $tokens);
     }
 
+    protected function encodeHtml(string $value): string
+    {
+        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
+    }
+
     protected function processParams(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -56,8 +61,8 @@ class Html extends RendererAbstract
         $textInner = '
                     <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>';
         foreach ($this->exception->getParams() as $key => $val) {
-            $key = htmlentities($key);
-            $val = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', htmlentities(static::toSafeString($val, true))) . '</span>';
+            $key = $this->encodeHtml($key);
+            $val = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', $this->encodeHtml(static::toSafeString($val, true))) . '</span>';
 
             $tokens['{PARAMS}'] .= $this->replaceTokens($textInner, [
                 '{KEY}' => $key,
@@ -95,7 +100,7 @@ class Html extends RendererAbstract
         $textInner = '
                     <tr><td>{VAL}</td></tr>';
         foreach ($exception->getSolutions() as $key => $val) {
-            $tokens['{SOLUTIONS}'] .= $this->replaceTokens($textInner, ['{VAL}' => htmlentities($val)]);
+            $tokens['{SOLUTIONS}'] .= $this->replaceTokens($textInner, ['{VAL}' => $this->encodeHtml($val)]);
         }
 
         $this->output .= $this->replaceTokens($text, $tokens);
@@ -156,8 +161,8 @@ class Html extends RendererAbstract
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
                 if ($escapeFrame) {
-                    $tokens['{FUNCTION_ARGS}'] = '(<br />' . implode(',' . '<br />', array_map(function ($arg) {
-                        return htmlentities(static::toSafeString($arg, false, 1));
+                    $tokens['{FUNCTION_ARGS}'] = '(<br>' . implode(',' . '<br>', array_map(function ($arg) {
+                        return $this->encodeHtml(static::toSafeString($arg, false, 1));
                     }, $call['args'])) . ')';
                 } else {
                     $tokens['{FUNCTION_ARGS}'] = '(...)';
