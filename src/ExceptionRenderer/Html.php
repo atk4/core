@@ -161,7 +161,7 @@ class Html extends RendererAbstract
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
                 if ($escapeFrame) {
-                    $tokens['{FUNCTION_ARGS}'] = '(<br>' . implode(',' . '<br>', array_map(function ($arg) {
+                    $tokens['{FUNCTION_ARGS}'] = '(<br>' . implode(',<br>', array_map(function ($arg) {
                         return $this->encodeHtml(static::toSafeString($arg, false, 1));
                     }, $call['args'])) . ')';
                 } else {

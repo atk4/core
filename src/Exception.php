@@ -75,11 +75,11 @@ class Exception extends \Exception
      * Return exception message using HTML block and Fomantic-UI formatting. It's your job
      * to put it inside boilerplate HTML and output, e.g:.
      *
-     *   $app = new \Atk4\Ui\App();
-     *   $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
-     *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
-     *   $app->run();
-     *   $app->callBeforeExit();
+     * $app = new \Atk4\Ui\App();
+     * $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+     * $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
+     * $app->run();
+     * $app->callBeforeExit();
      */
     public function getHtml(): string
     {
