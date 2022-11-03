@@ -29,21 +29,21 @@ class ExceptionTest extends TestCase
 
         // get HTML
         $ret = $m->getHtml();
-        static::assertMatchesRegularExpression('/TestIt/', $ret);
-        static::assertMatchesRegularExpression('/PrevError/', $ret);
-        static::assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('~TestIt~', $ret);
+        static::assertMatchesRegularExpression('~PrevError~', $ret);
+        static::assertMatchesRegularExpression('~333~', $ret);
 
         // get colorful text
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/TestIt/', $ret);
-        static::assertMatchesRegularExpression('/PrevError/', $ret);
-        static::assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('~TestIt~', $ret);
+        static::assertMatchesRegularExpression('~PrevError~', $ret);
+        static::assertMatchesRegularExpression('~333~', $ret);
 
         // get JSON
         $ret = $m->getJson();
-        static::assertMatchesRegularExpression('/TestIt/', $ret);
-        static::assertMatchesRegularExpression('/PrevError/', $ret);
-        static::assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('~TestIt~', $ret);
+        static::assertMatchesRegularExpression('~PrevError~', $ret);
+        static::assertMatchesRegularExpression('~333~', $ret);
 
         // to safe string
         $ret = RendererAbstract::toSafeString(1);
@@ -79,16 +79,16 @@ class ExceptionTest extends TestCase
         $m->setMessage('bumbum');
 
         $ret = $m->getHtml();
-        static::assertMatchesRegularExpression('/Classic/', $ret);
-        static::assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('~Classic~', $ret);
+        static::assertMatchesRegularExpression('~bumbum~', $ret);
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/Classic/', $ret);
-        static::assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('~Classic~', $ret);
+        static::assertMatchesRegularExpression('~bumbum~', $ret);
 
         $ret = $m->getJson();
-        static::assertMatchesRegularExpression('/Classic/', $ret);
-        static::assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('~Classic~', $ret);
+        static::assertMatchesRegularExpression('~bumbum~', $ret);
     }
 
     public function testSolution(): void
@@ -97,13 +97,13 @@ class ExceptionTest extends TestCase
         $m->addSolution('One Solution');
 
         $ret = $m->getHtml();
-        static::assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('~One Solution~', $ret);
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('~One Solution~', $ret);
 
         $ret = $m->getJson();
-        static::assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('~One Solution~', $ret);
     }
 
     public function testSolution2(): void
@@ -112,15 +112,15 @@ class ExceptionTest extends TestCase
             ->addSolution('1st Solution');
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/1st Solution/', $ret);
+        static::assertMatchesRegularExpression('~1st Solution~', $ret);
 
         $m = (new Exception('Exception with solution'))
             ->addSolution('1st Solution')
             ->addSolution('2nd Solution');
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/1st Solution/', $ret);
-        static::assertMatchesRegularExpression('/2nd Solution/', $ret);
+        static::assertMatchesRegularExpression('~1st Solution~', $ret);
+        static::assertMatchesRegularExpression('~2nd Solution~', $ret);
     }
 
     public function testExceptionFallback(): void

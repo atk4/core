@@ -99,12 +99,8 @@ class DebugTraitTest extends TestCase
         $this->triggerDebugTraceChange($m, 'test1'); // difference is 1 line between calls
         $this->triggerDebugTraceChange($m, 'test1');
 
-        $pattern = '/Call path for .* has diverged \(was (.*):(.*), now (.*):(.*)\)/';
-        $matches = [];
-        preg_match($pattern, $app->log[1], $matches);
-
         // Changes detected
-        static::assertTrue(is_array($matches));
+        preg_match('~Call path for .* has diverged \(was (.*):(.*), now (.*):(.*)\)~', $app->log[1], $matches);
         static::assertCount(5, $matches);
         static::assertSame($matches[1], $matches[3]);
         static::assertSame((string) ($matches[2] + 1), $matches[4]);
