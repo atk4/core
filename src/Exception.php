@@ -95,16 +95,6 @@ class Exception extends \Exception
     }
 
     /**
-     * Safely converts some value to string.
-     *
-     * @param mixed $val
-     */
-    public function toString($val): string
-    {
-        return ExceptionRenderer\RendererAbstract::toSafeString($val);
-    }
-
-    /**
      * Follow the getter-style of PHP Exception.
      *
      * @return array<string, mixed>

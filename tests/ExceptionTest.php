@@ -6,6 +6,7 @@ namespace Atk4\Core\Tests;
 
 use Atk4\Core\Exception;
 use Atk4\Core\NameTrait;
+use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
@@ -44,29 +45,29 @@ class ExceptionTest extends TestCase
         static::assertMatchesRegularExpression('/PrevError/', $ret);
         static::assertMatchesRegularExpression('/333/', $ret);
 
-        // to string
-        $ret = $m->toString(1);
+        // to safe string
+        $ret = RendererAbstract::toSafeString(1);
         static::assertSame('1', $ret);
 
-        $ret = $m->toString('abc');
+        $ret = RendererAbstract::toSafeString('abc');
         static::assertSame('\'abc\'', $ret);
 
-        $ret = $m->toString(new \stdClass());
+        $ret = RendererAbstract::toSafeString(new \stdClass());
         static::assertSame('stdClass', $ret);
 
         $a = new TrackableMock();
         $a->shortName = 'foo';
-        $ret = $m->toString($a);
+        $ret = RendererAbstract::toSafeString($a);
         static::assertSame(TrackableMock::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->shortName = 'foo';
-        $ret = $m->toString($a);
+        $ret = RendererAbstract::toSafeString($a);
         static::assertSame(TrackableMock2::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
-        $ret = $m->toString($a);
+        $ret = RendererAbstract::toSafeString($a);
         static::assertSame(TrackableMock2::class . ' (foo)', $ret);
     }
 
