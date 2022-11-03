@@ -291,8 +291,10 @@ class FactoryTest extends TestCase
     public function testMerge7(): void
     {
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo']);
+        static::assertInstanceOf(FactoryTestDefMock::class, $s1);
         static::assertNull($s1->def);
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo' => 'x']);
+        static::assertInstanceOf(FactoryTestDefMock::class, $s1);
         static::assertSame(['foo' => 'x'], $s1->def);
     }
 
