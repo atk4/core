@@ -12,20 +12,20 @@ Introduction
 This trait can be added to any object to load a configuration.
 Configuration files can be of 4 types : php, php-inline, json, yaml.
 
-Loading can be done in this way :
+Loading can be done in this way:
 
     $object = new Object();
     $object->readConfig('config.php', 'php');
 
-After loading, configuration elements can be retrieved in this way :
+After loading, configuration elements can be retrieved in this way:
 
     $object->getConfig('element_key', 'if not defined use this as default');
 
-if you need an element that is declared inside an array you can use a special syntax :
+if you need an element that is declared inside an array you can use a special syntax:
 
     $object->getConfig('level1_array/level2_array/element_key', 'if not defined use this as default');
 
-Element in config can be defined even manually :
+Element in config can be defined even manually:
 
     $object->setConfig('element_key', $element);
 

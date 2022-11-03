@@ -129,9 +129,9 @@ abstract class RendererAbstract
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {
-            $out = json_encode($val, \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE);
+            $out = json_encode($val, \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
             $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
-            $out = preg_replace('~\\\\([\\\\/])~s', '$1', $out); // unescape slashes
+            $out = preg_replace('~\\\\{2}~s', '$1', $out); // unescape backslashes
             if ($allowNl) {
                 $out = preg_replace('~(\\\\r)?\\\\n|\\\\r~s', "\n", $out); // unescape new lines
             }

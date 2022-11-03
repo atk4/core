@@ -27,7 +27,7 @@ described below:
 Debug
 -----
 
-The design goal of Debug is to be able and display contextual debug information
+The design goal of Debug is to be able to display contextual debug information
 only when it's manually enabled. For instance, if you are having problem with
 user authentication, you should enable ``$auth->debug()``. On other hand - if
 you wish to see persistence-related debug info, then ``$db->debug()`` will

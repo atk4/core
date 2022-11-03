@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\Exception;
+use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
@@ -28,45 +29,45 @@ class ExceptionTest extends TestCase
 
         // get HTML
         $ret = $m->getHtml();
-        static::assertMatchesRegularExpression('/TestIt/', $ret);
-        static::assertMatchesRegularExpression('/PrevError/', $ret);
-        static::assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('~TestIt~', $ret);
+        static::assertMatchesRegularExpression('~PrevError~', $ret);
+        static::assertMatchesRegularExpression('~333~', $ret);
 
         // get colorful text
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/TestIt/', $ret);
-        static::assertMatchesRegularExpression('/PrevError/', $ret);
-        static::assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('~TestIt~', $ret);
+        static::assertMatchesRegularExpression('~PrevError~', $ret);
+        static::assertMatchesRegularExpression('~333~', $ret);
 
         // get JSON
         $ret = $m->getJson();
-        static::assertMatchesRegularExpression('/TestIt/', $ret);
-        static::assertMatchesRegularExpression('/PrevError/', $ret);
-        static::assertMatchesRegularExpression('/333/', $ret);
+        static::assertMatchesRegularExpression('~TestIt~', $ret);
+        static::assertMatchesRegularExpression('~PrevError~', $ret);
+        static::assertMatchesRegularExpression('~333~', $ret);
 
-        // to string
-        $ret = $m->toString(1);
+        // to safe string
+        $ret = RendererAbstract::toSafeString(1);
         static::assertSame('1', $ret);
 
-        $ret = $m->toString('abc');
+        $ret = RendererAbstract::toSafeString('abc');
         static::assertSame('\'abc\'', $ret);
 
-        $ret = $m->toString(new \stdClass());
+        $ret = RendererAbstract::toSafeString(new \stdClass());
         static::assertSame('stdClass', $ret);
 
         $a = new TrackableMock();
         $a->shortName = 'foo';
-        $ret = $m->toString($a);
+        $ret = RendererAbstract::toSafeString($a);
         static::assertSame(TrackableMock::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->shortName = 'foo';
-        $ret = $m->toString($a);
+        $ret = RendererAbstract::toSafeString($a);
         static::assertSame(TrackableMock2::class . ' (foo)', $ret);
 
         $a = new TrackableMock2();
         $a->name = 'foo';
-        $ret = $m->toString($a);
+        $ret = RendererAbstract::toSafeString($a);
         static::assertSame(TrackableMock2::class . ' (foo)', $ret);
     }
 
@@ -78,16 +79,16 @@ class ExceptionTest extends TestCase
         $m->setMessage('bumbum');
 
         $ret = $m->getHtml();
-        static::assertMatchesRegularExpression('/Classic/', $ret);
-        static::assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('~Classic~', $ret);
+        static::assertMatchesRegularExpression('~bumbum~', $ret);
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/Classic/', $ret);
-        static::assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('~Classic~', $ret);
+        static::assertMatchesRegularExpression('~bumbum~', $ret);
 
         $ret = $m->getJson();
-        static::assertMatchesRegularExpression('/Classic/', $ret);
-        static::assertMatchesRegularExpression('/bumbum/', $ret);
+        static::assertMatchesRegularExpression('~Classic~', $ret);
+        static::assertMatchesRegularExpression('~bumbum~', $ret);
     }
 
     public function testSolution(): void
@@ -96,13 +97,13 @@ class ExceptionTest extends TestCase
         $m->addSolution('One Solution');
 
         $ret = $m->getHtml();
-        static::assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('~One Solution~', $ret);
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('~One Solution~', $ret);
 
         $ret = $m->getJson();
-        static::assertMatchesRegularExpression('/One Solution/', $ret);
+        static::assertMatchesRegularExpression('~One Solution~', $ret);
     }
 
     public function testSolution2(): void
@@ -111,15 +112,15 @@ class ExceptionTest extends TestCase
             ->addSolution('1st Solution');
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/1st Solution/', $ret);
+        static::assertMatchesRegularExpression('~1st Solution~', $ret);
 
         $m = (new Exception('Exception with solution'))
             ->addSolution('1st Solution')
             ->addSolution('2nd Solution');
 
         $ret = $m->getColorfulText();
-        static::assertMatchesRegularExpression('/1st Solution/', $ret);
-        static::assertMatchesRegularExpression('/2nd Solution/', $ret);
+        static::assertMatchesRegularExpression('~1st Solution~', $ret);
+        static::assertMatchesRegularExpression('~2nd Solution~', $ret);
     }
 
     public function testExceptionFallback(): void

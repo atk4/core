@@ -291,8 +291,10 @@ class FactoryTest extends TestCase
     public function testMerge7(): void
     {
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo']);
+        static::assertInstanceOf(FactoryTestDefMock::class, $s1);
         static::assertNull($s1->def);
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo' => 'x']);
+        static::assertInstanceOf(FactoryTestDefMock::class, $s1);
         static::assertSame(['foo' => 'x'], $s1->def);
     }
 
@@ -533,7 +535,7 @@ class FactoryTestDefMock extends FactoryTestMock
         setDefaults as private _setDefaults;
     }
 
-    /** @var array<string, mixed> */
+    /** @var array<string, mixed>|null */
     public $def;
 
     /**
@@ -551,22 +553,16 @@ class FactoryTestDefMock extends FactoryTestMock
 
 class FactoryFactoryMock
 {
-    /** @var string */
-    public $a = 'AAA';
-    /** @var string */
-    public $b = 'BBB';
-    /** @var string */
-    public $c;
+    public ?string $a = 'AAA';
+    public ?string $b = 'BBB';
+    public ?string $c = null;
 }
 
 class FactoryFactoryDiMock
 {
     use DiContainerTrait;
 
-    /** @var string */
-    public $a = 'AAA';
-    /** @var string */
-    public $b = 'BBB';
-    /** @var string */
-    public $c;
+    public ?string $a = 'AAA';
+    public ?string $b = 'BBB';
+    public ?string $c = null;
 }
