@@ -33,24 +33,18 @@ class DiMockSat
 {
     use StaticAddToTrait;
 
-    /** @var string */
-    public $a = 'AAA';
-    /** @var string */
-    public $b = 'BBB';
-    /** @var string */
-    public $c;
+    public ?string $a = 'AAA';
+    public ?string $b = 'BBB';
+    public ?string $c = null;
 }
 
 class DiConstructorMockSat
 {
     use StaticAddToTrait;
 
-    /** @var string */
-    public $a = 'AAA';
-    /** @var string */
-    public $b = 'BBB';
-    /** @var string */
-    public $c;
+    public ?string $a = 'AAA';
+    public ?string $b = 'BBB';
+    public ?string $c = null;
 
     public function __construct(string $name)
     {
@@ -66,7 +60,7 @@ class StaticAddToTest extends TestCase
 
         // add to return object
         $tr = StdSat::addTo($m);
-        static::assertNotNull($tr);
+        static::assertSame(StdSat::class, get_class($tr));
 
         // trackable object can be referenced by name
         $tr3 = TrackableMockSat::addTo($m, [], ['foo']);
