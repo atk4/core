@@ -103,7 +103,7 @@ class DebugTraitTest extends TestCase
         preg_match('~Call path for .* has diverged \(was (.*):(.*), now (.*):(.*)\)~', $app->log[1], $matches);
         static::assertCount(5, $matches);
         static::assertSame($matches[1], $matches[3]);
-        static::assertSame((string) ($matches[2] + 1), $matches[4]);
+        static::assertSame((string) ((int) $matches[2] + 1), $matches[4]);
 
         $app->log = null;
 

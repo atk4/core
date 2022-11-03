@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\Exception;
-use Atk4\Core\NameTrait;
 use Atk4\Core\ExceptionRenderer\RendererAbstract;
+use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
 
