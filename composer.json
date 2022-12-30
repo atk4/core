@@ -32,6 +32,7 @@
     "homepage": "https://github.com/atk4/core",
     "require": {
         "php": ">=7.4 <8.3",
+        "benmorel/weakmap-polyfill": "^0.3.0",
         "psr/log": "^1.0",
         "symfony/polyfill-php80": "^1.17",
         "symfony/polyfill-php81": "^1.22",
