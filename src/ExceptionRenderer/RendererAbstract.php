@@ -248,7 +248,8 @@ abstract class RendererAbstract
 
     protected function makeRelativePath(string $path): string
     {
-        if ($path === '' || ($pathReal = realpath($path)) === false) {
+        $pathReal = $path === '' ? false : realpath($path);
+        if ($pathReal === false) {
             throw new Exception('Path not found');
         }
 
