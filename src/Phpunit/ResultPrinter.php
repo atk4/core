@@ -40,7 +40,8 @@ class ResultPrinter extends \PHPUnit\TextUI\DefaultResultPrinter
             }
         }
 
-        if ($trace = Filter::getFilteredStacktrace($e)) {
+        $trace = Filter::getFilteredStacktrace($e);
+        if ($trace) {
             $string .= "\n" . $trace;
         }
 
