@@ -64,18 +64,7 @@ trait TrackableTrait
     public function getDesiredName(): string
     {
         // can be anything, but better to build meaningful name
-        $name = static::class;
-        if ((new \ReflectionClass($name))->isAnonymous()) {
-            $name = '';
-            foreach (class_parents(static::class) as $v) {
-                if (!(new \ReflectionClass($v))->isAnonymous()) {
-                    $name = $v;
-
-                    break;
-                }
-            }
-            $name .= '@anonymous';
-        }
+        $name = get_debug_type($this);
 
         return trim(preg_replace('~^atk4\\\\[^\\\\]+\\\\|[^0-9a-z\x7f-\xfe]+~s', '_', mb_strtolower($name)), '_');
     }
@@ -94,7 +83,7 @@ trait TrackableTrait
                 $this->_app = null; // @phpstan-ignore-line
             }
 
-            // GC : remove reference to owner
+            // GC remove reference to owner
             $this->_owner = null;
         }
     }

@@ -200,9 +200,11 @@ abstract class TestCase extends BaseTestCase
     {
         return \Closure::bind(static function &() use ($obj, $name, $args) {
             $objRefl = new \ReflectionClass($obj);
-            if ($objRefl
-                ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
-                ->returnsReference()) {
+            if (
+                $objRefl
+                    ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
+                    ->returnsReference()
+            ) {
                 return $obj->{$name}(...$args);
             }
 

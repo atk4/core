@@ -14,11 +14,13 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         // add to return object
-        $tr = $m->add($tr2 = new \stdClass());
+        $tr2 = new \stdClass();
+        $tr = $m->add($tr2);
         static::assertSame($tr, $tr2);
 
         // trackable object can be referenced by name
-        $m->add($tr3 = new TrackableMock(), 'foo');
+        $tr3 = new TrackableMock();
+        $m->add($tr3, 'foo');
         $tr = $m->getElement('foo');
         static::assertSame($tr, $tr3);
     }

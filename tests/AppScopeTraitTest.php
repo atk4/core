@@ -33,7 +33,8 @@ class AppScopeTraitTest extends TestCase
         // test for GC
         $m = new AppScopeMock();
         $m->setApp($m);
-        $m->add($child = new AppScopeChildTrackable());
+        $child = new AppScopeChildTrackable();
+        $m->add($child);
         $child->destroy();
         static::assertNull($this->getProtected($child, '_app'));
         static::assertFalse($child->issetOwner());
