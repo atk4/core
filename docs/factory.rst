@@ -166,14 +166,17 @@ Note that passing 'icon' => ['book'] will also use factory to initialize icon ob
 Finally, if you are using IDE and type hinting, a preferred code would be::
 
     use Atk4\Ui\Button;
-    Factory::factory($button = new Button('A Label'), ['icon' => ['book'], 'action' => new Action(..)]);
+
+    $button = new Button('A Label');
+    Factory::factory($button, ['icon' => ['book'], 'action' => new Action(..)]);
 
 This will properly set type to $button variable, while still setting properties for icon/action. More
 commonly, however, you would use this through the add() method::
 
     use Atk4\Ui\Button;
 
-    $view->add([$button = new Button('A Label'), 'icon' => ['book'], 'action' => new Action('..')]);
+    $button = new Button('A Label');
+    $view->add([$button, 'icon' => ['book'], 'action' => new Action('..')]);
 
 Seed Components
 ---------------
