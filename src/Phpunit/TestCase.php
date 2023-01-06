@@ -202,8 +202,9 @@ abstract class TestCase extends BaseTestCase
             $objRefl = new \ReflectionClass($obj);
             if (
                 $objRefl
-                ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
-                ->returnsReference()) {
+                    ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
+                    ->returnsReference()
+            ) {
                 return $obj->{$name}(...$args);
             }
 
