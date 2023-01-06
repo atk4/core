@@ -10,7 +10,7 @@ Introduction
 ============
 
 This trait can be added to any object to load a configuration.
-Configuration files can be of 4 types : php, php-inline, json, yaml.
+Configuration files can be of 4 types: php, php-inline, json, yaml.
 
 Loading can be done in this way:
 

@@ -83,7 +83,7 @@ trait TrackableTrait
                 $this->_app = null; // @phpstan-ignore-line
             }
 
-            // GC : remove reference to owner
+            // GC remove reference to owner
             $this->_owner = null;
         }
     }
