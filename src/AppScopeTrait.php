@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Core;
 
+use Atk4\Ui\App;
+
 /**
  * Typical software design will create the application scope. Most frameworks
  * relies on "static" properties, methods and classes. This does puts some
@@ -14,7 +16,7 @@ namespace Atk4\Core;
  */
 trait AppScopeTrait
 {
-    /** @var \Atk4\Ui\App Always points to current application. */
+    /** @var App */
     private $_app;
 
     /**
@@ -47,8 +49,8 @@ trait AppScopeTrait
 
     protected function assertInstanceOfApp(object $app): void
     {
-        if (!$app instanceof \Atk4\Ui\App) {
-            // called from phpunit, allow to use/test this trait without \Atk4\Ui\App class
+        if (!$app instanceof App) {
+            // called from phpunit, allow to test this trait without Atk4\Ui\App class
             if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
                 foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
                     if (str_starts_with($frame['class'] ?? '', 'Atk4\Core\Tests\\')) {
@@ -57,7 +59,7 @@ trait AppScopeTrait
                 }
             }
 
-            throw new Exception('App must be instance of \Atk4\Ui\App');
+            throw new Exception('App must be instance of Atk4\Ui\App');
         }
     }
 
@@ -67,27 +69,29 @@ trait AppScopeTrait
     }
 
     /**
-     * @return \Atk4\Ui\App
+     * @return App
      */
     public function getApp()
     {
-        $this->assertInstanceOfApp($this->_app);
+        $app = $this->_app;
+        if ($app === null) {
+            throw new Exception('App is not set');
+        }
 
-        return $this->_app;
+        return $app;
     }
 
     /**
-     * @param \Atk4\Ui\App $app
+     * @param App $app
      *
      * @return static
      */
     public function setApp(object $app)
     {
         $this->assertInstanceOfApp($app);
-        if ($this->issetApp() && $this->getApp() !== $app) {
-            if ($this->getApp()->catchExceptions || $this->getApp()->alwaysRun) { // allow to replace App created by AbstractView::initDefaultApp() - TODO fix
-                throw new Exception('App cannot be replaced');
-            }
+
+        if ($this->issetApp()) {
+            throw new Exception('App is already set');
         }
 
         $this->_app = $app;
