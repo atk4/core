@@ -68,7 +68,9 @@ trait ContainerTrait
     protected function _addContainer(object $element, array $args): void
     {
         // Carry on reference to application if we have appScopeTraits set
-        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($element)) {
+        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($element)
+            && (!$element->issetApp() || $element->getApp() !== $this->getApp())
+        ) {
             $element->setApp($this->getApp());
         }
 

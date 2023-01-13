@@ -6,6 +6,7 @@ namespace Atk4\Core\Tests;
 
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\ContainerTrait;
+use Atk4\Core\Exception;
 use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
@@ -38,6 +39,26 @@ class AppScopeTraitTest extends TestCase
         $child->destroy();
         static::assertNull($this->getProtected($child, '_app'));
         static::assertFalse($child->issetOwner());
+    }
+
+    public function testAppNotSetException(): void
+    {
+        $m = new AppScopeMock();
+
+        $this->expectException(Exception::class);
+        $this->expectErrorMessage('App is not set');
+        $m->getApp();
+    }
+
+    public function testAppSetTwiceException(): void
+    {
+        $m = new AppScopeMock();
+        $fakeApp = new \stdClass();
+        $m->setApp($fakeApp);
+
+        $this->expectException(Exception::class);
+        $this->expectErrorMessage('App is already set');
+        $m->setApp($fakeApp);
     }
 }
 

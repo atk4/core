@@ -33,7 +33,7 @@ trait TrackableTrait
     public function setOwner(object $owner)
     {
         if ($this->issetOwner()) {
-            throw new Exception('Owner already set');
+            throw new Exception('Owner is already set');
         }
 
         $this->_owner = $owner;

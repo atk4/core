@@ -48,7 +48,9 @@ trait CollectionTrait
         $this->{$collection}[$name] = $item;
 
         // Carry on reference to application if we have appScopeTraits set
-        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($item)) {
+        if ((TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($item))
+            && (!$item->issetApp() || $item->getApp() !== $this->getApp())
+        ) {
             $item->setApp($this->getApp());
         }
 
