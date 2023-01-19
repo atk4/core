@@ -44,14 +44,14 @@ class Translator
         return $this;
     }
 
-    protected function __clone()
+    private function __clone()
     {
-        throw new Exception('Translator cannot be cloned');
+        // prevent clonning
     }
 
-    public function __wakeup(): void
+    public function __sleep(): array
     {
-        throw new Exception('Translator cannot be serialized');
+        throw new Exception('Serialization is not supported');
     }
 
     public static function instance(): self
