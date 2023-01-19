@@ -57,7 +57,12 @@ trait HookTrait
             unset($hooksByPriority, $hooksByIndex, $hookData);
         }
 
-        $this->_hookOrigThis = new QuietWrapper($this);
+        $this->_hookOrigThis = new class($this) extends QuietWrapper {
+            public function __debugInfo(): array
+            {
+                return ['wrappedObjectId' => spl_object_id($this->get())];
+            }
+        };
     }
 
     /**
