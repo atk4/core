@@ -145,6 +145,40 @@ class ContainerTraitTest extends TestCase
         static::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
     }
 
+    public function testOwnerNotSetException(): void
+    {
+        $m = new TrackableMock();
+
+        $this->expectException(Exception::class);
+        $this->expectErrorMessage('Owner is not set');
+        $m->getOwner();
+    }
+
+    public function testOwnerSetTwiceException(): void
+    {
+        $m = new TrackableMock();
+        $owner = new \stdClass();
+        $m->setOwner($owner);
+
+        $this->expectException(Exception::class);
+        $this->expectErrorMessage('Owner is already set');
+        $m->setOwner($owner);
+    }
+
+    public function testOwnerUnset(): void
+    {
+        $m = new TrackableMock();
+        $owner = new \stdClass();
+        $m->setOwner($owner);
+        static::assertSame($owner, $m->getOwner());
+        $m->unsetOwner();
+
+        $owner = new \stdClass();
+        $m->setOwner($owner);
+        static::assertSame($owner, $m->getOwner());
+        $m->unsetOwner();
+    }
+
     public function testFactoryMock(): void
     {
         $m = new ContainerFactoryMock();

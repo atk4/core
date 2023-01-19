@@ -24,7 +24,12 @@ trait TrackableTrait
 
     public function getOwner(): object
     {
-        return $this->_owner->get();
+        $owner = $this->_owner;
+        if ($owner === null) {
+            throw new Exception('Owner is not set');
+        }
+
+        return $owner->get();
     }
 
     /**
@@ -48,9 +53,7 @@ trait TrackableTrait
      */
     public function unsetOwner()
     {
-        if (!$this->issetOwner()) {
-            throw new Exception('Owner not set');
-        }
+        $this->getOwner(); // assert owner is set
 
         $this->_owner = null;
 
