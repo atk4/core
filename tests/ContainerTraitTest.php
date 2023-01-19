@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core;
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\ContainerTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\Exception;
+use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Core\TrackableTrait;
 
 class ContainerTraitTest extends TestCase
 {
@@ -116,7 +121,7 @@ class ContainerTraitTest extends TestCase
 
         $createTrackableMockFx = function (string $name, bool $isLongName = false) {
             return new class($name, $isLongName) extends TrackableMock {
-                use Core\NameTrait;
+                use NameTrait;
 
                 public function __construct(string $name, bool $isLongName)
                 {
@@ -136,7 +141,7 @@ class ContainerTraitTest extends TestCase
 
         static::assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
 
-        $this->expectException(Core\Exception::class);
+        $this->expectException(Exception::class);
         static::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
     }
 
@@ -156,8 +161,8 @@ class ContainerTraitTest extends TestCase
         // passing name with array key 'name'
         $m = new ContainerMock();
         $m2 = $m->add(new class() extends TrackableMock {
-            use Core\DiContainerTrait;
-            use Core\NameTrait;
+            use DiContainerTrait;
+            use NameTrait;
         }, ['name' => 'foo']);
         static::assertTrue($m->hasElement('foo'));
         static::assertSame('foo', $m2->shortName);
@@ -165,7 +170,7 @@ class ContainerTraitTest extends TestCase
 
     public function testExceptionExists(): void
     {
-        $this->expectException(Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 'foo');
         $m->add(new TrackableMock(), 'foo');
@@ -182,7 +187,7 @@ class ContainerTraitTest extends TestCase
 
     public function testExceptionShortName(): void
     {
-        $this->expectException(Core\Exception::class);
+        $this->expectException(Exception::class);
         $m1 = new ContainerMock();
         $m2 = new ContainerMock();
         $m1foo = $m1->add(new TrackableMock(), 'foo');
@@ -217,13 +222,13 @@ class ContainerTraitTest extends TestCase
     {
         $m = new ContainerMock();
 
-        $this->expectException(Core\Exception::class);
+        $this->expectException(Exception::class);
         $m->getElement('dont_exist');
     }
 
     public function testException5(): void
     {
-        $this->expectException(Core\Exception::class);
+        $this->expectException(Exception::class);
         $m = new ContainerMock();
         $m->removeElement('dont_exist');
     }
@@ -231,26 +236,26 @@ class ContainerTraitTest extends TestCase
 
 class TrackableMock
 {
-    use Core\TrackableTrait;
+    use TrackableTrait;
 }
 class ContainerFactoryMock
 {
-    use Core\ContainerTrait;
-    use Core\NameTrait;
+    use ContainerTrait;
+    use NameTrait;
 }
 
 class TrackableContainerMock
 {
-    use Core\ContainerTrait;
-    use Core\TrackableTrait;
+    use ContainerTrait;
+    use TrackableTrait;
 }
 
 class ContainerAppMock
 {
-    use Core\AppScopeTrait;
-    use Core\ContainerTrait;
-    use Core\NameTrait;
-    use Core\TrackableTrait;
+    use AppScopeTrait;
+    use ContainerTrait;
+    use NameTrait;
+    use TrackableTrait;
 
     public function getElementCount(): int
     {

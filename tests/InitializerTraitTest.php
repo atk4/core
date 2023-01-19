@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core;
+use Atk4\Core\ContainerTrait;
 use Atk4\Core\Exception;
+use Atk4\Core\InitializerTrait;
 use Atk4\Core\Phpunit\TestCase;
 
 class InitializerTraitTest extends TestCase
@@ -23,7 +24,7 @@ class InitializerTraitTest extends TestCase
     public function testInitCalledFromAdd(): void
     {
         $container = new class() {
-            use Core\ContainerTrait;
+            use ContainerTrait;
         };
 
         $m = new InitializerMock();
@@ -63,7 +64,7 @@ class InitializerTraitTest extends TestCase
 
 abstract class AbstractInitializerMock
 {
-    use Core\InitializerTrait;
+    use InitializerTrait;
 }
 
 class InitializerMock extends AbstractInitializerMock

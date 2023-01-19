@@ -44,6 +44,9 @@ class QuietObjectWrapperTest extends TestCase
             EOF . "\n", print_r($o, true));
 
         $o = new QuietObjectWrapper(new class() {
+            /**
+             * @return array<string, mixed>
+             */
             public function __debugInfoQuiet(): array
             {
                 return ['foo' => 1, 'Bar' => 2];
