@@ -17,23 +17,19 @@ abstract class RendererAbstract
 {
     use TranslatableTrait;
 
-    /** @var \Throwable|Exception */
-    public $exception;
+    public \Throwable $exception;
 
-    /** @var \Throwable|Exception|null */
-    public $parentException;
+    public ?\Throwable $parentException;
 
-    /** @var string */
-    public $output = '';
+    public string $output = '';
 
-    /** @var ITranslatorAdapter|null */
-    public $adapter;
+    public ?ITranslatorAdapter $adapter;
 
     public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parentException = null)
     {
-        $this->adapter = $adapter;
         $this->exception = $exception;
         $this->parentException = $parentException;
+        $this->adapter = $adapter;
     }
 
     abstract protected function processHeader(): void;

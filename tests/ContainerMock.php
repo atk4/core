@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core;
+use Atk4\Core\ContainerTrait;
+use Atk4\Core\NameTrait;
 
 class ContainerMock
 {
-    use Core\ContainerTrait;
-    use Core\NameTrait;
+    use ContainerTrait;
+    use NameTrait;
 
     public function getElementCount(): int
     {

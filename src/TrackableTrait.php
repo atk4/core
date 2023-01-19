@@ -11,8 +11,8 @@ namespace Atk4\Core;
  */
 trait TrackableTrait
 {
-    /** @var object|null Link to (parent) object into which we added this object. */
-    private $_owner;
+    /** @var QuietObjectWrapper<object>|null Link to (owner) object into which we added this object. */
+    private ?QuietObjectWrapper $_owner = null;
 
     /** @var string Name of the object in owner's element array. */
     public $shortName;
@@ -24,7 +24,12 @@ trait TrackableTrait
 
     public function getOwner(): object
     {
-        return $this->_owner;
+        $owner = $this->_owner;
+        if ($owner === null) {
+            throw new Exception('Owner is not set');
+        }
+
+        return $owner->get();
     }
 
     /**
@@ -36,7 +41,7 @@ trait TrackableTrait
             throw new Exception('Owner is already set');
         }
 
-        $this->_owner = $owner;
+        $this->_owner = new QuietObjectWrapper($owner);
 
         return $this;
     }
@@ -48,9 +53,7 @@ trait TrackableTrait
      */
     public function unsetOwner()
     {
-        if (!$this->issetOwner()) {
-            throw new Exception('Owner not set');
-        }
+        $this->getOwner(); // assert owner is set
 
         $this->_owner = null;
 
@@ -75,8 +78,8 @@ trait TrackableTrait
      */
     public function destroy(): void
     {
-        if ($this->_owner !== null && TraitUtil::hasContainerTrait($this->_owner)) {
-            $this->_owner->removeElement($this->shortName);
+        if ($this->_owner !== null && TraitUtil::hasContainerTrait($this->_owner->get())) {
+            $this->_owner->get()->removeElement($this->shortName);
 
             // GC remove reference to app is AppScope in use
             if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp()) {

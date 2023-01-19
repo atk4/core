@@ -12,7 +12,7 @@ trait DebugTrait
     public $debug = false;
 
     /** @var array<string, array<int, string>> Helps debugTraceChange. */
-    protected $_prevTrace = [];
+    protected array $_prevTrace = [];
 
     /**
      * Outputs message to STDERR.
