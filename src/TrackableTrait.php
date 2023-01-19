@@ -11,8 +11,8 @@ namespace Atk4\Core;
  */
 trait TrackableTrait
 {
-    /** @var QuietWrapper<object>|null Link to (owner) object into which we added this object. */
-    private ?QuietWrapper $_owner = null;
+    /** @var QuietObjectWrapper<object>|null Link to (owner) object into which we added this object. */
+    private ?QuietObjectWrapper $_owner = null;
 
     /** @var string Name of the object in owner's element array. */
     public $shortName;
@@ -36,7 +36,7 @@ trait TrackableTrait
             throw new Exception('Owner is already set');
         }
 
-        $this->_owner = new QuietWrapper($owner);
+        $this->_owner = new QuietObjectWrapper($owner);
 
         return $this;
     }

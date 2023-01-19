@@ -16,8 +16,8 @@ use Atk4\Ui\App;
  */
 trait AppScopeTrait
 {
-    /** @var QuietWrapper<App>|null */
-    private ?QuietWrapper $_app = null;
+    /** @var QuietObjectWrapper<App>|null */
+    private ?QuietObjectWrapper $_app = null;
 
     /**
      * When using mechanism for ContainerTrait, they inherit name of the
@@ -94,7 +94,7 @@ trait AppScopeTrait
             throw new Exception('App is already set');
         }
 
-        $this->_app = new QuietWrapper($app);
+        $this->_app = new QuietObjectWrapper($app);
 
         return $this;
     }

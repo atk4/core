@@ -9,7 +9,7 @@ namespace Atk4\Core;
  *
  * @template-covariant T of object
  */
-class QuietWrapper
+class QuietObjectWrapper
 {
     /** @var T */
     private object $obj;
