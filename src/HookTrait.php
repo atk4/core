@@ -16,14 +16,13 @@ trait HookTrait
     /** Next hook index counter. */
     private int $_hookIndexCounter = 0;
 
-    /** @var QuietWrapper<static>|null */
-    private ?QuietWrapper $_hookOrigThis = null;
+    /** @var static|null */
+    private ?self $_hookOrigThis = null;
 
     private function _rebindHooksIfCloned(): void
     {
         if ($this->_hookOrigThis !== null) {
-            $hookOrigThis = $this->_hookOrigThis->get();
-            if ($hookOrigThis === $this) {
+            if ($this->_hookOrigThis === $this) {
                 return;
             }
 
@@ -36,12 +35,12 @@ trait HookTrait
                             continue;
                         }
 
-                        if ($fxThis !== $hookOrigThis) {
+                        if ($fxThis !== $this->_hookOrigThis) {
                             // TODO we throw only if the class name is the same, otherwise the check is too strict
                             // and on a bad side - we should not throw when an object with a hook is cloned,
                             // but instead we should throw once the closure this object is cloned
                             // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
-                            if (get_class($fxThis) === get_class($hookOrigThis) || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
+                            if (get_class($fxThis) === get_class($this->_hookOrigThis) || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
                                 throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
                                     ->addMoreInfo('closure_file', $fxRefl->getFileName())
                                     ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
@@ -57,12 +56,7 @@ trait HookTrait
             unset($hooksByPriority, $hooksByIndex, $hookData);
         }
 
-        $this->_hookOrigThis = new class($this) extends QuietWrapper {
-            public function __debugInfo(): array
-            {
-                return ['wrappedObjectId' => spl_object_id($this->get())];
-            }
-        };
+        $this->_hookOrigThis = $this;
     }
 
     /**
