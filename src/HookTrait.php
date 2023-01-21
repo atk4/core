@@ -26,9 +26,9 @@ trait HookTrait
                 return;
             }
 
-            foreach ($this->hooks as &$hooksByPriority) {
-                foreach ($hooksByPriority as &$hooksByIndex) {
-                    foreach ($hooksByIndex as &$hookData) {
+            foreach ($this->hooks as $spot => $hooksByPriority) {
+                foreach ($hooksByPriority as $priority => $hooksByIndex) {
+                    foreach ($hooksByIndex as $index => $hookData) {
                         $fxRefl = new \ReflectionFunction($hookData[0]);
                         $fxThis = $fxRefl->getClosureThis();
                         if ($fxThis === null) {
@@ -49,11 +49,10 @@ trait HookTrait
                             continue;
                         }
 
-                        $hookData[0] = \Closure::bind($hookData[0], $this);
+                        $this->hooks[$spot][$priority][$index][0] = \Closure::bind($hookData[0], $this);
                     }
                 }
             }
-            unset($hooksByPriority, $hooksByIndex, $hookData);
         }
 
         $this->_hookOrigThis = $this;
