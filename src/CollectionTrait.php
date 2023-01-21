@@ -139,32 +139,21 @@ trait CollectionTrait
     protected function _shortenMl(string $ownerName, string $itemShortName, ?string $origItemName): string
     {
         // ugly hack to deduplicate code
-        $collectionTraitHelper = \Closure::bind(function () {
-            $factory = Factory::getInstance();
-            if (!property_exists($factory, 'collectionTraitHelper')) {
-                $collectionTraitHelper = new class() {
-                    use AppScopeTrait;
-                    use ContainerTrait;
+        $collectionTraitHelper = new class() {
+            use AppScopeTrait;
+            use ContainerTrait;
 
-                    public function shorten(?object $app, string $ownerName, string $itemShortName, ?string $origItemName): string
-                    {
-                        try {
-                            $this->setApp($app);
+            public function shorten(?object $app, string $ownerName, string $itemShortName, ?string $origItemName): string
+            {
+                try {
+                    $this->setApp($app);
 
-                            return $this->_shorten($ownerName, $itemShortName, $origItemName);
-                        } finally {
-                            $this->_app = null; // important for GC
-                        }
-                    }
-                };
-
-                // @phpstan-ignore-next-line
-                @$factory->collectionTraitHelper = $collectionTraitHelper;
+                    return $this->_shorten($ownerName, $itemShortName, $origItemName);
+                } finally {
+                    $this->_app = null; // important for GC
+                }
             }
-
-            // @phpstan-ignore-next-line
-            return $factory->collectionTraitHelper;
-        }, null, Factory::class)();
+        };
 
         return $collectionTraitHelper->shorten(TraitUtil::hasAppScopeTrait($this) ? $this->getApp() : null, $ownerName, $itemShortName, $origItemName);
     }
