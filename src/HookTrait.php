@@ -106,7 +106,7 @@ trait HookTrait
                 return $fx(...$args);
             };
         } elseif ($fxThis === null) {
-            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
+            $fxLong = \Closure::bind(static function ($ignore, &...$args) use ($fx) {
                 return $fx(...$args);
             }, null, $fxScopeClassRefl->getName());
         } else {
@@ -123,13 +123,13 @@ trait HookTrait
      */
     private function makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, array $args, bool $isShort): \Closure
     {
-        return function ($ignore, &...$args) use ($getFxThisFx, $fx, $isShort) {
-            $fxThis = $getFxThisFx($this);
-            if ($fxThis === null) {
-                throw new Exception('New $this cannot be null');
+        return static function (self $target, &...$args) use ($getFxThisFx, $fx, $isShort) {
+            $fxThis = $getFxThisFx($target);
+            if (!is_object($fxThis)) {
+                throw new Exception('New $this must be an object');
             }
 
-            return \Closure::bind($fx, $fxThis)(...($isShort ? [] : [$this]), ...$args);
+            return \Closure::bind($fx, $fxThis)(...($isShort ? [] : [$target]), ...$args);
         };
     }
 
