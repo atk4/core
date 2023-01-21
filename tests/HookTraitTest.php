@@ -236,6 +236,12 @@ class HookTraitTest extends TestCase
     {
         $m = new HookMock();
 
+        // unscoped callback
+        $m->onHookShort('inc', \Closure::bind(static function (...$args) {
+            TestCase::assertSame(['y', 'x'], $args);
+        }, null, null), ['x']);
+        $m->hook('inc', ['y']);
+
         // unbound callback
         $m->onHookShort('inc', static function (...$args) {
             static::assertSame(['y', 'x'], $args);
@@ -323,8 +329,8 @@ class HookTraitTest extends TestCase
 
         static::assertSame([$hookThis], $m->hook('inc'));
         static::assertSame(1, $m->result);
-        $mCloned = clone $m;
 
+        $mCloned = clone $m;
         static::assertSame([$hookThis], $m->hook('inc'));
         static::assertSame(2, $m->result);
         static::assertSame(1, $mCloned->result);
@@ -347,6 +353,66 @@ class HookTraitTest extends TestCase
         static::assertSame([$hookThis], $mCloned->hook('inc'));
         static::assertSame(5, $m->result);
         static::assertSame(3, $mCloned->result);
+
+        $m->onHookDynamicShort('incShort', static function () use (&$hookThis) {
+            return $hookThis;
+        }, function (...$args) use (&$hookThis) {
+            TestCase::assertSame($hookThis, $this);
+            TestCase::assertSame(['y', 'x'], $args);
+
+            return $this->hook('inc');
+        }, ['x']);
+        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        static::assertSame(6, $m->result);
+        static::assertSame(3, $mCloned->result);
+
+        $mCloned = clone $m;
+        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        static::assertSame(7, $m->result);
+        static::assertSame(6, $mCloned->result);
+        static::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
+        static::assertSame(8, $m->result);
+        static::assertSame(6, $mCloned->result);
+
+        $hookThis = $mCloned;
+        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        static::assertSame(8, $m->result);
+        static::assertSame(7, $mCloned->result);
+        static::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
+        static::assertSame(8, $m->result);
+        static::assertSame(8, $mCloned->result);
+
+        $hookThis = $m;
+        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        static::assertSame(9, $m->result);
+        static::assertSame(8, $mCloned->result);
+        static::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
+        static::assertSame(10, $m->result);
+        static::assertSame(8, $mCloned->result);
+    }
+
+    public function testOnHookDynamicBoundGetterException(): void
+    {
+        $m = new HookMock();
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('New $this getter must be static');
+        $m->onHookDynamic('inc', function (HookMock $m) {
+            return $m;
+        }, fn ($v) => $v);
+    }
+
+    public function testOnHookDynamicGetterNullException(): void
+    {
+        $m = new HookMock();
+
+        $m->onHookDynamic('inc', static function (HookMock $m) {
+            return null;
+        }, fn ($v) => $v);
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('New $this must be an object');
+        $m->hook('inc');
     }
 
     public function testPassByReference(): void
