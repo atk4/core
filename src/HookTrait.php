@@ -16,47 +16,71 @@ trait HookTrait
     /** Next hook index counter. */
     private int $_hookIndexCounter = 0;
 
-    /** @var static|null */
-    private ?self $_hookOrigThis = null;
+    /** @var \WeakReference<static>|null */
+    private ?\WeakReference $_hookOrigThis = null;
+
+    /**
+     * Optimize GC. When a Closure is guaranteed to be rebound before invoke, it can be rebound
+     * to (deduplicated) fake instance before safely.
+     */
+    private function _rebindHookFxToFakeInstance(\Closure $fx): \Closure
+    {
+        $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
+
+        $instanceWithoutConstructorCache = new HookInstanceWithoutConstructorCache();
+        $fakeThis = $instanceWithoutConstructorCache->getInstance(get_class($fxThis));
+
+        return \Closure::bind($fx, $fakeThis);
+    }
+
+    /**
+     * When hook Closure is bound to $this, rebinding all hooks after clone can be slow, optimize clone
+     * by unbinding $this in favor of rebinding $this when hook is invoked.
+     */
+    private function _unbindHookFxIfBoundToThis(\Closure $fx, bool $isShort): \Closure
+    {
+        $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
+        if ($fxThis !== $this) {
+            return $fx;
+        }
+
+        $fx = $this->_rebindHookFxToFakeInstance($fx);
+
+        return $this->_makeHookDynamicFx(null, $fx, $isShort);
+    }
 
     private function _rebindHooksIfCloned(): void
     {
         if ($this->_hookOrigThis !== null) {
-            if ($this->_hookOrigThis === $this) {
+            $hookOrigThis = $this->_hookOrigThis->get();
+            if ($hookOrigThis === $this) {
                 return;
             }
 
-            foreach ($this->hooks as &$hooksByPriority) {
-                foreach ($hooksByPriority as &$hooksByIndex) {
-                    foreach ($hooksByIndex as &$hookData) {
+            foreach ($this->hooks as $spot => $hooksByPriority) {
+                foreach ($hooksByPriority as $priority => $hooksByIndex) {
+                    foreach ($hooksByIndex as $index => $hookData) {
                         $fxRefl = new \ReflectionFunction($hookData[0]);
                         $fxThis = $fxRefl->getClosureThis();
                         if ($fxThis === null) {
                             continue;
                         }
 
-                        if ($fxThis !== $this->_hookOrigThis) {
-                            // TODO we throw only if the class name is the same, otherwise the check is too strict
-                            // and on a bad side - we should not throw when an object with a hook is cloned,
-                            // but instead we should throw once the closure this object is cloned
-                            // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
-                            if (get_class($fxThis) === get_class($this->_hookOrigThis) || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
-                                throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
-                                    ->addMoreInfo('closure_file', $fxRefl->getFileName())
-                                    ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
-                            }
-
-                            continue;
+                        // TODO we throw only if the class name is the same, otherwise the check is too strict
+                        // and on a bad side - we should not throw when an object with a hook is cloned,
+                        // but instead we should throw once the closure this object is cloned
+                        // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
+                        if (get_class($fxThis) === static::class || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
+                            throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
+                                ->addMoreInfo('closure_file', $fxRefl->getFileName())
+                                ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
                         }
-
-                        $hookData[0] = \Closure::bind($hookData[0], $this);
                     }
                 }
             }
-            unset($hooksByPriority, $hooksByIndex, $hookData);
         }
 
-        $this->_hookOrigThis = $this;
+        $this->_hookOrigThis = \WeakReference::create($this);
     }
 
     /**
@@ -73,6 +97,8 @@ trait HookTrait
     public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
         $this->_rebindHooksIfCloned();
+
+        $fx = $this->_unbindHookFxIfBoundToThis($fx, false);
 
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];
@@ -107,30 +133,49 @@ trait HookTrait
                 return $fx(...$args);
             };
         } elseif ($fxThis === null) {
-            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
+            $fxLong = \Closure::bind(static function ($ignore, &...$args) use ($fx) {
                 return $fx(...$args);
             }, null, $fxScopeClassRefl->getName());
         } else {
-            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
-                return \Closure::bind($fx, $this)(...$args);
-            }, $fxThis, $fxScopeClassRefl->getName());
+            $fxLong = $this->_unbindHookFxIfBoundToThis($fx, true);
+            if ($fxLong === $fx) {
+                $fx = $this->_rebindHookFxToFakeInstance($fx);
+
+                $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
+                    return \Closure::bind($fx, $this)(...$args);
+                }, $fxThis, $fxScopeClassRefl->getName());
+            }
         }
 
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
-    /**
-     * @param array<int, mixed> $args
-     */
-    private function makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, array $args, bool $isShort): \Closure
+    private function _makeHookDynamicFx(?\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
     {
-        return function ($ignore, &...$args) use ($getFxThisFx, $fx, $isShort) {
-            $fxThis = $getFxThisFx($this);
-            if ($fxThis === null) {
-                throw new Exception('New $this cannot be null');
+        if ($getFxThisFx === null) {
+            $getFxThisFxThis = null;
+        } else {
+            $getFxThisFxThis = (new \ReflectionFunction($getFxThisFx))->getClosureThis();
+            if ($getFxThisFxThis !== null) {
+                throw new \TypeError('New $this getter must be static');
+            }
+        }
+
+        $fx = $this->_rebindHookFxToFakeInstance($fx);
+
+        return static function (self $target, &...$args) use ($getFxThisFx, $fx, $isShort) {
+            if ($getFxThisFx === null) {
+                $fxThis = $target;
+            } else {
+                $fxThis = $getFxThisFx($target);
+                if (!is_object($fxThis)) {
+                    throw new \TypeError('New $this must be an object');
+                }
             }
 
-            return \Closure::bind($fx, $fxThis)(...($isShort ? [] : [$this]), ...$args);
+            return $isShort
+                ? \Closure::bind($fx, $fxThis)(...$args)
+                : \Closure::bind($fx, $fxThis)($target, ...$args);
         };
     }
 
@@ -143,11 +188,11 @@ trait HookTrait
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        return $this->onHook($spot, $this->makeHookDynamicFx($getFxThisFx, $fx, $args, false), $args, $priority);
+        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, false), $args, $priority);
     }
 
     /**
-     * Same as makeHookDynamicFx() except no $this is passed to the callback as the 1st argument.
+     * Same as onHookDynamic() except no $this is passed to the callback as the 1st argument.
      *
      * @param array<int, mixed> $args
      *
@@ -155,7 +200,7 @@ trait HookTrait
      */
     public function onHookDynamicShort(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        return $this->onHook($spot, $this->makeHookDynamicFx($getFxThisFx, $fx, $args, true), $args, $priority);
+        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, true), $args, $priority);
     }
 
     /**
