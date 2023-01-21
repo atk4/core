@@ -19,6 +19,20 @@ trait HookTrait
     /** @var static|null */
     private ?self $_hookOrigThis = null;
 
+    /**
+     * Optimize GC. When a Closure is guaranteed to be rebound before invoke, it can be rebound
+     * to (deduplicated) fake instance before safely.
+     */
+    private function _rebindHookFxToFakeInstance(\Closure $fx): \Closure
+    {
+        $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
+
+        $instanceWithoutConstructorCache = new HookInstanceWithoutConstructorCache();
+        $fakeThis = $instanceWithoutConstructorCache->getInstance(get_class($fxThis));
+
+        return \Closure::bind($fx, $fakeThis);
+    }
+
     private function _rebindHooksIfCloned(): void
     {
         if ($this->_hookOrigThis !== null) {
@@ -110,6 +124,8 @@ trait HookTrait
                 return $fx(...$args);
             }, null, $fxScopeClassRefl->getName());
         } else {
+            $fx = $this->_rebindHookFxToFakeInstance($fx);
+
             $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
                 return \Closure::bind($fx, $this)(...$args);
             }, $fxThis, $fxScopeClassRefl->getName());
@@ -118,18 +134,24 @@ trait HookTrait
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
-    /**
-     * @param array<int, mixed> $args
-     */
-    private function makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, array $args, bool $isShort): \Closure
+    private function _makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
     {
+        $getFxThisFxThis = (new \ReflectionFunction($getFxThisFx))->getClosureThis();
+        if ($getFxThisFxThis !== null) {
+            throw new \TypeError('New $this getter must be static');
+        }
+
+        $fx = $this->_rebindHookFxToFakeInstance($fx);
+
         return static function (self $target, &...$args) use ($getFxThisFx, $fx, $isShort) {
             $fxThis = $getFxThisFx($target);
             if (!is_object($fxThis)) {
-                throw new Exception('New $this must be an object');
+                throw new \TypeError('New $this must be an object');
             }
 
-            return \Closure::bind($fx, $fxThis)(...($isShort ? [] : [$target]), ...$args);
+            return $isShort
+                ? \Closure::bind($fx, $fxThis)(...$args)
+                : \Closure::bind($fx, $fxThis)($target, ...$args);
         };
     }
 
@@ -142,11 +164,11 @@ trait HookTrait
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        return $this->onHook($spot, $this->makeHookDynamicFx($getFxThisFx, $fx, $args, false), $args, $priority);
+        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, false), $args, $priority);
     }
 
     /**
-     * Same as makeHookDynamicFx() except no $this is passed to the callback as the 1st argument.
+     * Same as onHookDynamic() except no $this is passed to the callback as the 1st argument.
      *
      * @param array<int, mixed> $args
      *
@@ -154,7 +176,7 @@ trait HookTrait
      */
     public function onHookDynamicShort(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        return $this->onHook($spot, $this->makeHookDynamicFx($getFxThisFx, $fx, $args, true), $args, $priority);
+        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, true), $args, $priority);
     }
 
     /**

@@ -317,7 +317,7 @@ class HookTraitTest extends TestCase
         };
 
         $hookThis = $m;
-        $m->onHookDynamic('inc', function () use (&$hookThis) {
+        $m->onHookDynamic('inc', static function () use (&$hookThis) {
             return $hookThis;
         }, $m->makeCallback());
 
@@ -373,7 +373,7 @@ class HookTraitTest extends TestCase
 
         $value = 0;
         $m = new HookMock();
-        $m->onHookDynamic('inc', function () use ($m) {
+        $m->onHookDynamic('inc', static function () use ($m) {
             return clone $m;
         }, function ($ignoreObject, $ignore1st, int &$value) {
             ++$value;
