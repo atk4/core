@@ -33,6 +33,22 @@ trait HookTrait
         return \Closure::bind($fx, $fakeThis);
     }
 
+    /**
+     * When hook Closure is bound to $this, rebinding all hooks after clone can be slow, optimize clone
+     * by unbinding $this in favor of rebinding $this when hook is invoked.
+     */
+    private function _unbindHookFxIfBoundToThis(\Closure $fx, bool $isShort): \Closure
+    {
+        $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
+        if ($fxThis !== $this) {
+            return $fx;
+        }
+
+        $fx = $this->_rebindHookFxToFakeInstance($fx);
+
+        return $this->_makeHookDynamicFx(null, $fx, $isShort);
+    }
+
     private function _rebindHooksIfCloned(): void
     {
         if ($this->_hookOrigThis !== null) {
@@ -49,21 +65,15 @@ trait HookTrait
                             continue;
                         }
 
-                        if ($fxThis !== $this->_hookOrigThis) {
-                            // TODO we throw only if the class name is the same, otherwise the check is too strict
-                            // and on a bad side - we should not throw when an object with a hook is cloned,
-                            // but instead we should throw once the closure this object is cloned
-                            // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
-                            if (get_class($fxThis) === get_class($this->_hookOrigThis) || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
-                                throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
-                                    ->addMoreInfo('closure_file', $fxRefl->getFileName())
-                                    ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
-                            }
-
-                            continue;
+                        // TODO we throw only if the class name is the same, otherwise the check is too strict
+                        // and on a bad side - we should not throw when an object with a hook is cloned,
+                        // but instead we should throw once the closure this object is cloned
+                        // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
+                        if (get_class($fxThis) === get_class($this->_hookOrigThis) || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
+                            throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
+                                ->addMoreInfo('closure_file', $fxRefl->getFileName())
+                                ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());
                         }
-
-                        $this->hooks[$spot][$priority][$index][0] = \Closure::bind($hookData[0], $this);
                     }
                 }
             }
@@ -86,6 +96,8 @@ trait HookTrait
     public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
         $this->_rebindHooksIfCloned();
+
+        $fx = $this->_unbindHookFxIfBoundToThis($fx, false);
 
         if (!isset($this->hooks[$spot][$priority])) {
             $this->hooks[$spot][$priority] = [];
@@ -124,29 +136,40 @@ trait HookTrait
                 return $fx(...$args);
             }, null, $fxScopeClassRefl->getName());
         } else {
-            $fx = $this->_rebindHookFxToFakeInstance($fx);
+            $fxLong = $this->_unbindHookFxIfBoundToThis($fx, true);
+            if ($fxLong === $fx) {
+                $fx = $this->_rebindHookFxToFakeInstance($fx);
 
-            $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
-                return \Closure::bind($fx, $this)(...$args);
-            }, $fxThis, $fxScopeClassRefl->getName());
+                $fxLong = \Closure::bind(function ($ignore, &...$args) use ($fx) {
+                    return \Closure::bind($fx, $this)(...$args);
+                }, $fxThis, $fxScopeClassRefl->getName());
+            }
         }
 
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
-    private function _makeHookDynamicFx(\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
+    private function _makeHookDynamicFx(?\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
     {
-        $getFxThisFxThis = (new \ReflectionFunction($getFxThisFx))->getClosureThis();
-        if ($getFxThisFxThis !== null) {
-            throw new \TypeError('New $this getter must be static');
+        if ($getFxThisFx === null) {
+            $getFxThisFxThis = null;
+        } else {
+            $getFxThisFxThis = (new \ReflectionFunction($getFxThisFx))->getClosureThis();
+            if ($getFxThisFxThis !== null) {
+                throw new \TypeError('New $this getter must be static');
+            }
         }
 
         $fx = $this->_rebindHookFxToFakeInstance($fx);
 
         return static function (self $target, &...$args) use ($getFxThisFx, $fx, $isShort) {
-            $fxThis = $getFxThisFx($target);
-            if (!is_object($fxThis)) {
-                throw new \TypeError('New $this must be an object');
+            if ($getFxThisFx === null) {
+                $fxThis = $target;
+            } else {
+                $fxThis = $getFxThisFx($target);
+                if (!is_object($fxThis)) {
+                    throw new \TypeError('New $this must be an object');
+                }
             }
 
             return $isShort
