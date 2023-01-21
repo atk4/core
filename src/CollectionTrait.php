@@ -84,6 +84,7 @@ trait CollectionTrait
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
+
         unset($this->{$collection}[$name]);
     }
 
@@ -112,9 +113,7 @@ trait CollectionTrait
      */
     public function _hasInCollection(string $name, string $collection): bool
     {
-        $data = $this->{$collection};
-
-        return isset($data[$name]);
+        return isset($this->{$collection}[$name]);
     }
 
     /**
@@ -122,13 +121,14 @@ trait CollectionTrait
      */
     public function _getFromCollection(string $name, string $collection): object
     {
-        if (!$this->_hasInCollection($name, $collection)) {
+        $res = $this->{$collection}[$name] ?? null;
+        if ($res === null) {
             throw (new Exception('Element is NOT in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
 
-        return $this->{$collection}[$name];
+        return $res;
     }
 
     /**
