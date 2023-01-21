@@ -225,7 +225,7 @@ class HookTraitTest extends TestCase
         $m->result = 0;
 
         $m->onHook('inc', function ($obj) {
-            throw new \Atk4\Core\Exception('stuff went wrong');
+            throw new Exception('stuff went wrong');
         });
 
         $this->expectException(Exception::class);
