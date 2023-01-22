@@ -25,29 +25,28 @@ final class TraitUtil
             $class = get_class($class);
         }
 
-        // prevent mass use for other than internal use then we can decide
-        // if we want to keep support this or replace with pure interfaces
-        if (!str_starts_with($traitName, 'Atk4\Core\\')) {
-            throw new Exception(self::class . '::hasTrait is not indended for use with other than Atk4\Core\* traits');
-        }
-
         if (!isset(self::$_hasTraitCache[$class][$traitName])) {
-            $getUsesFunc = function (string $trait) use (&$getUsesFunc): array {
-                $uses = class_uses($trait);
-                foreach ($uses as $use) {
-                    $uses += $getUsesFunc($use);
+            // prevent mass use for other than internal use then we can decide
+            // if we want to keep support this or replace with pure interfaces
+            if (!str_starts_with($traitName, 'Atk4\Core\\')) {
+                throw new Exception(self::class . '::hasTrait is not indended for use with other than Atk4\Core\* traits');
+            }
+
+            $parentClass = get_parent_class($class);
+            if ($parentClass !== false && self::hasTrait($parentClass, $traitName)) {
+                self::$_hasTraitCache[$class][$traitName] = true;
+            } else {
+                $hasTrait = false;
+                foreach (class_uses($class) as $useName) {
+                    if ($useName === $traitName || self::hasTrait($useName, $traitName)) {
+                        $hasTrait = true;
+
+                        break;
+                    }
                 }
 
-                return $uses;
-            };
-
-            $uses = [];
-            foreach (array_reverse(class_parents($class)) + [-1 => $class] as $v) {
-                $uses += $getUsesFunc($v);
+                self::$_hasTraitCache[$class][$traitName] = $hasTrait;
             }
-            $uses = array_unique($uses);
-
-            self::$_hasTraitCache[$class][$traitName] = in_array($traitName, $uses, true);
         }
 
         return self::$_hasTraitCache[$class][$traitName];
