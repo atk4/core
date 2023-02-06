@@ -67,7 +67,7 @@ class Json extends RendererAbstract
 
     protected function processStackTrace(): void
     {
-        $this->output .= '<span style="color:sandybrown">Stack Trace:</span>' . "\n";
+        $this->output .= '<span style="color: sandybrown;">Stack Trace:</span>' . "\n";
 
         $this->processStackTraceInternal();
     }

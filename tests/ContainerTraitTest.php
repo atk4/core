@@ -150,7 +150,7 @@ class ContainerTraitTest extends TestCase
         $m = new TrackableMock();
 
         $this->expectException(Exception::class);
-        $this->expectErrorMessage('Owner is not set');
+        $this->expectExceptionMessage('Owner is not set');
         $m->getOwner();
     }
 
@@ -161,7 +161,7 @@ class ContainerTraitTest extends TestCase
         $m->setOwner($owner);
 
         $this->expectException(Exception::class);
-        $this->expectErrorMessage('Owner is already set');
+        $this->expectExceptionMessage('Owner is already set');
         $m->setOwner($owner);
     }
 
@@ -236,7 +236,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         if (\PHP_MAJOR_VERSION === 7) {
-            $this->expectWarning();
+            $this->expectWarning(); // @phpstan-ignore-line
         } else {
             $this->expectException(\TypeError::class);
         }
