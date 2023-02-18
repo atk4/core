@@ -3,6 +3,7 @@ includes:
 
 parameters:
     level: 6
+    checkUnionTypes: true # TODO once phpstan finish without any error, remove this line and change phpstan level to 7
     paths:
         - .
     excludePaths:
