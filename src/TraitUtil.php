@@ -58,44 +58,44 @@ final class TraitUtil
     // StaticAddToTrait - not used
     // TranslatableTrait - not used
 
-    public static function hasAppScopeTrait(object $class): bool
+    public static function hasAppScopeTrait(object $obj): bool
     {
-        return self::hasTrait($class, AppScopeTrait::class);
+        return self::hasTrait($obj, AppScopeTrait::class);
     }
 
-    public static function hasContainerTrait(object $class): bool
+    public static function hasContainerTrait(object $obj): bool
     {
-        return self::hasTrait($class, ContainerTrait::class);
+        return self::hasTrait($obj, ContainerTrait::class);
     }
 
     /**
      * Used in Factory and in ui/View only.
      */
-    public static function hasDiContainerTrait(object $class): bool
+    public static function hasDiContainerTrait(object $obj): bool
     {
-        return self::hasTrait($class, DiContainerTrait::class);
+        return self::hasTrait($obj, DiContainerTrait::class);
     }
 
     /**
      * Used in DynamicMethodTrait only.
      */
-    public static function hasHookTrait(object $class): bool
+    public static function hasHookTrait(object $obj): bool
     {
-        return self::hasTrait($class, HookTrait::class);
+        return self::hasTrait($obj, HookTrait::class);
     }
 
-    public static function hasInitializerTrait(object $class): bool
+    public static function hasInitializerTrait(object $obj): bool
     {
-        return self::hasTrait($class, InitializerTrait::class);
+        return self::hasTrait($obj, InitializerTrait::class);
     }
 
-    public static function hasNameTrait(object $class): bool
+    public static function hasNameTrait(object $obj): bool
     {
-        return self::hasTrait($class, NameTrait::class);
+        return self::hasTrait($obj, NameTrait::class);
     }
 
-    public static function hasTrackableTrait(object $class): bool
+    public static function hasTrackableTrait(object $obj): bool
     {
-        return self::hasTrait($class, TrackableTrait::class);
+        return self::hasTrait($obj, TrackableTrait::class);
     }
 }
