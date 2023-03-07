@@ -27,7 +27,22 @@ trait HookTrait
     {
         $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
 
-        $instanceWithoutConstructorCache = new HookInstanceWithoutConstructorCache();
+        $instanceWithoutConstructorCache = new class() {
+            /** @var array<class-string, object> */
+            private static array $_instances = [];
+
+            /**
+             * @param class-string $class
+             */
+            public function getInstance(string $class): object
+            {
+                if (!isset(self::$_instances[$class])) {
+                    self::$_instances[$class] = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
+                }
+
+                return self::$_instances[$class];
+            }
+        };
         $fakeThis = $instanceWithoutConstructorCache->getInstance(get_class($fxThis));
 
         return \Closure::bind($fx, $fakeThis);
