@@ -124,7 +124,7 @@ abstract class TestCase extends BaseTestCase
             };
             $testListenerAdapter = new TestListenerAdapter();
             $testListenerAdapter->add($afterHookTest);
-            $testResult->addListener($testListenerAdapter); // @phpstan-ignore-line
+            $testResult->addListener($testListenerAdapter);
             $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
         }
 
