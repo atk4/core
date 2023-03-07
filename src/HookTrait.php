@@ -150,6 +150,9 @@ trait HookTrait
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
+    /**
+     * @param \Closure($this): object $getFxThisFx
+     */
     private function _makeHookDynamicFx(?\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
     {
         if ($getFxThisFx === null) {
@@ -167,8 +170,8 @@ trait HookTrait
             if ($getFxThisFx === null) {
                 $fxThis = $target;
             } else {
-                $fxThis = $getFxThisFx($target);
-                if (!is_object($fxThis)) {
+                $fxThis = $getFxThisFx($target); // @phpstan-ignore-line
+                if (!is_object($fxThis)) { // @phpstan-ignore-line
                     throw new \TypeError('New $this must be an object');
                 }
             }
@@ -182,6 +185,7 @@ trait HookTrait
     /**
      * Same as onHook() except $this of the callback is dynamically rebound before invoke.
      *
+     * @param \Closure($this): object $getFxThisFx
      * @param array<int, mixed> $args
      *
      * @return int index under which the hook was added
@@ -194,6 +198,7 @@ trait HookTrait
     /**
      * Same as onHookDynamic() except no $this is passed to the callback as the 1st argument.
      *
+     * @param \Closure($this): object $getFxThisFx
      * @param array<int, mixed> $args
      *
      * @return int index under which the hook was added

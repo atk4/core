@@ -29,6 +29,9 @@ class TestCaseTest extends TestCase
         $object = new class($destructFx) {
             public \Closure $destructFx;
 
+            /**
+             * @param \Closure(): void $destructFx
+             */
             public function __construct(\Closure $destructFx)
             {
                 $this->destructFx = $destructFx;
