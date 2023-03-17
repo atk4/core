@@ -406,7 +406,7 @@ class HookTraitTest extends TestCase
     {
         $m = new HookMock();
 
-        $m->onHookDynamic('inc', static function (HookMock $m) {
+        $m->onHookDynamic('inc', static function (HookMock $m) { // @phpstan-ignore-line
             return null;
         }, fn ($v) => $v);
 

@@ -27,7 +27,31 @@ trait HookTrait
     {
         $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
 
-        $instanceWithoutConstructorCache = new HookInstanceWithoutConstructorCache();
+        $instanceWithoutConstructorCache = new class() {
+            /** @var array<class-string, object> */
+            private static array $_instances = [];
+
+            /**
+             * @param class-string $class
+             */
+            public function getInstance(string $class): object
+            {
+                if (!isset(self::$_instances[$class])) {
+                    $dummyInstance = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
+                    foreach ([$class, ...array_keys(class_parents($class))] as $scope) {
+                        \Closure::bind(function () use ($dummyInstance) {
+                            foreach (array_keys(get_object_vars($dummyInstance)) as $k) {
+                                unset($dummyInstance->{$k});
+                            }
+                        }, $dummyInstance, $scope)();
+                    }
+
+                    self::$_instances[$class] = $dummyInstance;
+                }
+
+                return self::$_instances[$class];
+            }
+        };
         $fakeThis = $instanceWithoutConstructorCache->getInstance(get_class($fxThis));
 
         return \Closure::bind($fx, $fakeThis);
@@ -150,6 +174,9 @@ trait HookTrait
         return $this->onHook($spot, $fxLong, $args, $priority);
     }
 
+    /**
+     * @param \Closure($this): object $getFxThisFx
+     */
     private function _makeHookDynamicFx(?\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
     {
         if ($getFxThisFx === null) {
@@ -167,8 +194,8 @@ trait HookTrait
             if ($getFxThisFx === null) {
                 $fxThis = $target;
             } else {
-                $fxThis = $getFxThisFx($target);
-                if (!is_object($fxThis)) {
+                $fxThis = $getFxThisFx($target); // @phpstan-ignore-line
+                if (!is_object($fxThis)) { // @phpstan-ignore-line
                     throw new \TypeError('New $this must be an object');
                 }
             }
@@ -182,25 +209,29 @@ trait HookTrait
     /**
      * Same as onHook() except $this of the callback is dynamically rebound before invoke.
      *
-     * @param array<int, mixed> $args
+     * @param \Closure($this): object $getFxThisFx
+     * @param array<int, mixed>       $args
      *
      * @return int index under which the hook was added
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, false), $args, $priority);
+        // @phpstan-ignore-next-line https://github.com/phpstan/phpstan/issues/9022
+        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, false), $args, $priority); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9009
     }
 
     /**
      * Same as onHookDynamic() except no $this is passed to the callback as the 1st argument.
      *
-     * @param array<int, mixed> $args
+     * @param \Closure($this): object $getFxThisFx
+     * @param array<int, mixed>       $args
      *
      * @return int index under which the hook was added
      */
     public function onHookDynamicShort(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
-        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, true), $args, $priority);
+        // @phpstan-ignore-next-line https://github.com/phpstan/phpstan/issues/9022
+        return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, true), $args, $priority); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9009
     }
 
     /**

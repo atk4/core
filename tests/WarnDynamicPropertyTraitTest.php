@@ -9,6 +9,9 @@ use Atk4\Core\Phpunit\TestCase;
 
 class WarnDynamicPropertyTraitTest extends TestCase
 {
+    /**
+     * @param \Closure(): void $fx
+     */
     protected function runWithErrorConvertedToException(\Closure $fx): void
     {
         set_error_handler(function (int $errno, string $errstr) {
@@ -23,7 +26,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
     public function testIssetException(): void
     {
-        $this->runWithErrorConvertedToException(fn () => null);
+        $this->runWithErrorConvertedToException(function () {});
         $this->runWithErrorConvertedToException(function () {
             $test = new ClassWithWarnDynamicPropertyTrait();
 
