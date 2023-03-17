@@ -207,6 +207,7 @@ trait HookTrait
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
+        // @phpstan-ignore-next-line https://github.com/phpstan/phpstan/issues/9022
         return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, false), $args, $priority); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9009
     }
 
@@ -220,6 +221,7 @@ trait HookTrait
      */
     public function onHookDynamicShort(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
+        // @phpstan-ignore-next-line https://github.com/phpstan/phpstan/issues/9022
         return $this->onHook($spot, $this->_makeHookDynamicFx($getFxThisFx, $fx, true), $args, $priority); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9009
     }
 
