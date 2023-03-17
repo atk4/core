@@ -37,7 +37,16 @@ trait HookTrait
             public function getInstance(string $class): object
             {
                 if (!isset(self::$_instances[$class])) {
-                    self::$_instances[$class] = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
+                    $dummyInstance = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
+                    foreach ([$class, ...class_parents($class)] as $scope) {
+                        \Closure::bind(function () use ($dummyInstance) {
+                            foreach (array_keys(get_object_vars($dummyInstance)) as $k) {
+                                unset($dummyInstance->{$k});
+                            }
+                        }, $dummyInstance, $scope)();
+                    }
+
+                    self::$_instances[$class] = $dummyInstance;
                 }
 
                 return self::$_instances[$class];
