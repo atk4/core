@@ -201,7 +201,7 @@ trait HookTrait
      * Same as onHook() except $this of the callback is dynamically rebound before invoke.
      *
      * @param \Closure($this): object $getFxThisFx
-     * @param array<int, mixed> $args
+     * @param array<int, mixed>       $args
      *
      * @return int index under which the hook was added
      */
@@ -214,7 +214,7 @@ trait HookTrait
      * Same as onHookDynamic() except no $this is passed to the callback as the 1st argument.
      *
      * @param \Closure($this): object $getFxThisFx
-     * @param array<int, mixed> $args
+     * @param array<int, mixed>       $args
      *
      * @return int index under which the hook was added
      */
