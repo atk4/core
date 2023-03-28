@@ -10,7 +10,7 @@ namespace Atk4\Core;
  * 1. use Trait in your APP Class
  *    use \Atk4\Core\ConfigTrait;
  * 2. create config-default.php and/or config.php file and add config values like
- *    $config['key'] = 'value';
+ *    return ['key' => 'value'];
  * 3. call $this->readConfig();
  *    before using config.
  */
@@ -23,7 +23,7 @@ trait ConfigTrait
      * Read config file or files and store it in $config property.
      *
      * Supported formats:
-     *  php         - PHP file with return ['foo'] = 'bar' structure
+     *  php         - PHP file with return ['foo' => 'bar'] structure
      *  json        - JSON file with {'foo':'bar'} structure
      *  yaml        - YAML file with yaml structure
      *
