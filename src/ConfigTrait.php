@@ -24,7 +24,7 @@ trait ConfigTrait
      *
      * Supported formats:
      *  php         - PHP file with return ['foo' => 'bar'] structure
-     *  json        - JSON file with {'foo':'bar'} structure
+     *  json        - JSON file with { 'foo': 'bar' } structure
      *  yaml        - YAML file with yaml structure
      *
      * @param string|array<int, string> $files  One or more filenames
