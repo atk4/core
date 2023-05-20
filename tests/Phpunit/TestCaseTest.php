@@ -52,33 +52,33 @@ class TestCaseTest extends TestCase
      */
     public function testObjectsAreReleasedAfterTest(string $v): void
     {
-        static::assertSame(0, self::$activeObjectsCounter);
-        static::assertSame('default', $this->object);
-        static::assertNull($this->objectTyped);
+        self::assertSame(0, self::$activeObjectsCounter);
+        self::assertSame('default', $this->object);
+        self::assertNull($this->objectTyped);
         $reflectionProperty = new \ReflectionProperty($this, 'objectTypedNoDefault');
         $reflectionProperty->setAccessible(true);
-        static::assertFalse($reflectionProperty->isInitialized($this));
+        self::assertFalse($reflectionProperty->isInitialized($this));
 
         if ($v === 'a') {
             $o = $this->createAndCountObject();
-            static::assertSame(1, self::$activeObjectsCounter);
+            self::assertSame(1, self::$activeObjectsCounter);
             $o = null;
-            static::assertSame(0, self::$activeObjectsCounter);
+            self::assertSame(0, self::$activeObjectsCounter);
             $this->object = $this->createAndCountObject();
-            static::assertSame(1, self::$activeObjectsCounter);
+            self::assertSame(1, self::$activeObjectsCounter);
 
             $this->object = $this->createAndCountObject();
             $this->objectTyped = $this->createAndCountObject();
             // @ is needed because of https://github.com/php/php-src/issues/9389 for burn testing
             @$this->objectTypedNoDefault = $this->createAndCountObject();
-            static::assertNotNull($this->objectTypedNoDefault); // remove once https://github.com/phpstan/phpstan/issues/7818 is fixed
-            static::assertSame(3, self::$activeObjectsCounter);
+            self::assertNotNull($this->objectTypedNoDefault); // remove once https://github.com/phpstan/phpstan/issues/7818 is fixed
+            self::assertSame(3, self::$activeObjectsCounter);
         }
     }
 
     public function testObjectsAreReleasedFromUncaughtException(): void
     {
-        static::assertSame(0, self::$activeObjectsCounter);
+        self::assertSame(0, self::$activeObjectsCounter);
 
         $throwFx = function (object $arg): never {
             throw (new Exception())
@@ -90,16 +90,16 @@ class TestCaseTest extends TestCase
         } catch (\Exception $e) {
             $e = new \Error('wrap', 0, $e);
         }
-        static::assertSame(2, self::$activeObjectsCounter);
+        self::assertSame(2, self::$activeObjectsCounter);
 
         $e2 = null;
         try {
             $this->onNotSuccessfulTest($e);
         } catch (\Error $e2) {
         }
-        static::assertSame($e, $e2);
+        self::assertSame($e, $e2);
 
-        static::assertSame(0, self::$activeObjectsCounter);
+        self::assertSame(0, self::$activeObjectsCounter);
     }
 
     /**
@@ -118,9 +118,9 @@ class TestCaseTest extends TestCase
     public function testProviderCoverage(string $v): void
     {
         if ($v === 'y') {
-            static::assertSame(2, self::$providerCoverageCallCounter);
+            self::assertSame(2, self::$providerCoverageCallCounter);
         }
-        static::assertTrue(in_array($v, ['a', 'b', 'x', 'y'], true));
+        self::assertTrue(in_array($v, ['a', 'b', 'x', 'y'], true));
     }
 
     /**
@@ -138,7 +138,7 @@ class TestCaseTest extends TestCase
      */
     public function testCoverageImplForDoesNotPerformAssertions(string $v): void
     {
-        static::assertFalse($this->doesNotPerformAssertions());
+        self::assertFalse($this->doesNotPerformAssertions());
 
         $staticClass = get_class(new class() {
             public static int $counter = 0;
@@ -150,7 +150,7 @@ class TestCaseTest extends TestCase
             // @codeCoverageIgnoreEnd
         }
 
-        static::assertTrue($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
+        self::assertTrue($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
 
         if ($v === 'b') {
             // make sure TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
@@ -171,7 +171,7 @@ class TestCaseTest extends TestCase
             \Closure::bind(fn () => $this->status = $testStatusOrig, $this, PhpunitTestCase::class)();
         }
 
-        static::assertFalse($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
+        self::assertFalse($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
     }
 
     /**

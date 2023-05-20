@@ -13,12 +13,12 @@ class ReadableCaptionTraitTest extends TestCase
     {
         $a = new ReadableCaptionMock();
 
-        static::assertSame('User Defined Entity', $a->readableCaption('userDefinedEntity'));
-        static::assertSame('New NASA Module', $a->readableCaption('newNASA_module'));
-        static::assertSame('This Is NASA My Big Bull Shit 123 Foo', $a->readableCaption('this\ _isNASA_MyBigBull shit_123\Foo'));
+        self::assertSame('User Defined Entity', $a->readableCaption('userDefinedEntity'));
+        self::assertSame('New NASA Module', $a->readableCaption('newNASA_module'));
+        self::assertSame('This Is NASA My Big Bull Shit 123 Foo', $a->readableCaption('this\ _isNASA_MyBigBull shit_123\Foo'));
 
-        static::assertSame('ID', $a->readableCaption('id'));
-        static::assertSame('Account ID', $a->readableCaption('account_id'));
+        self::assertSame('ID', $a->readableCaption('id'));
+        self::assertSame('Account ID', $a->readableCaption('account_id'));
     }
 }
 

@@ -47,10 +47,10 @@ abstract class AdapterBaseTest extends TestCase
         $message = 'Field requires array for defaults';
 
         $actual = $this->translate($message, [], 'atk', 'en');
-        static::assertSame($message, $actual);
+        self::assertSame($message, $actual);
 
         $actual = $this->translate($message, [], 'atk', 'it');
-        static::assertSame('Il campo richiede un array per i valori predefiniti', $actual);
+        self::assertSame('Il campo richiede un array per i valori predefiniti', $actual);
     }
 
     public function testSubstitution(): void
@@ -58,7 +58,7 @@ abstract class AdapterBaseTest extends TestCase
         $message = 'Unable to serialize field value on load';
 
         $actual = $this->translate($message, ['field' => 'field_name'], 'atk', 'en');
-        static::assertSame('Unable to serialize field value on load (field_name)', $actual);
+        self::assertSame('Unable to serialize field value on load (field_name)', $actual);
     }
 
     public function testPluralZero(): void
@@ -66,7 +66,7 @@ abstract class AdapterBaseTest extends TestCase
         $message = 'Test with plural';
 
         $actual = $this->translate($message, ['count' => 0], 'atk', 'it');
-        static::assertSame('Test zero', $actual);
+        self::assertSame('Test zero', $actual);
     }
 
     public function testPluralBig(): void
@@ -74,7 +74,7 @@ abstract class AdapterBaseTest extends TestCase
         $message = 'Test with plural';
 
         $actual = $this->translate($message, ['count' => 50], 'atk', 'it');
-        static::assertSame('Test sono 50', $actual);
+        self::assertSame('Test sono 50', $actual);
     }
 
     public function testPluralOne(): void
@@ -82,6 +82,6 @@ abstract class AdapterBaseTest extends TestCase
         $message = 'Test with plural';
 
         $actual = $this->translate($message, ['count' => 1], 'atk', 'it');
-        static::assertSame('Test è uno', $actual);
+        self::assertSame('Test è uno', $actual);
     }
 }

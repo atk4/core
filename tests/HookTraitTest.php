@@ -21,11 +21,11 @@ class HookTraitTest extends TestCase
             ++$result;
         });
 
-        static::assertSame(0, $result);
+        self::assertSame(0, $result);
 
         $m->hook('test1');
         $m->hook('test1');
-        static::assertSame(2, $result);
+        self::assertSame(2, $result);
     }
 
     public function testAdvanced(): void
@@ -42,7 +42,7 @@ class HookTraitTest extends TestCase
         }, [], 1);
 
         $m->hook('test1'); // zero will be executed first, then increment
-        static::assertSame(1, $result);
+        self::assertSame(1, $result);
     }
 
     public function testHookException1(): void
@@ -57,7 +57,7 @@ class HookTraitTest extends TestCase
 
         $m->hook('tst', ['parameter']);
 
-        static::assertSame('parameter', $result);
+        self::assertSame('parameter', $result);
     }
 
     public function testOrder(): void
@@ -99,7 +99,7 @@ class HookTraitTest extends TestCase
 
         $ret = $m->hook('spot');
 
-        static::assertSame([
+        self::assertSame([
             $ind + 2 => 1,
             $ind + 1 => 2,
             $ind => 3,
@@ -128,10 +128,10 @@ class HookTraitTest extends TestCase
         $obj->onHook('test', $addFunc);
 
         $res1 = $obj->hook('test', [2, 2]);
-        static::assertSame([4, 4], $res1);
+        self::assertSame([4, 4], $res1);
 
         $res2 = $obj->hook('test', [3, 3]);
-        static::assertSame([9, 6], $res2);
+        self::assertSame([9, 6], $res2);
     }
 
     public function testArgs(): void
@@ -154,10 +154,10 @@ class HookTraitTest extends TestCase
         $obj->onHook('test', $powFunc, [7]);
 
         $res1 = $obj->hook('test', [2, 2]);
-        static::assertSame([4, 4, 8, 256], $res1);
+        self::assertSame([4, 4, 8, 256], $res1);
 
         $res2 = $obj->hook('test', [2, 3]);
-        static::assertSame([6, 5, 13, 2315], $res2);
+        self::assertSame([6, 5, 13, 2315], $res2);
     }
 
     public function testReferences(): void
@@ -173,7 +173,7 @@ class HookTraitTest extends TestCase
         $a = [&$v];
         $obj->hook('inc', $a);
 
-        static::assertSame([2], $a);
+        self::assertSame([2], $a);
 
         $obj = new HookMock();
 
@@ -181,7 +181,7 @@ class HookTraitTest extends TestCase
         $obj->onHook('inc', $incFunc);
         $obj->hook('inc', [&$v]);
 
-        static::assertSame(2, $v);
+        self::assertSame(2, $v);
     }
 
     public function testBreakHook(): void
@@ -201,8 +201,8 @@ class HookTraitTest extends TestCase
         $m->onHook('inc', $incFunc);
 
         $ret = $m->hook('inc');
-        static::assertSame(2, $m->result);
-        static::assertSame('stop', $ret);
+        self::assertSame(2, $m->result);
+        self::assertSame('stop', $ret);
     }
 
     public function testBreakHookBrokenBy(): void
@@ -214,9 +214,9 @@ class HookTraitTest extends TestCase
         });
 
         $ret = $m->hook('inc', [], $brokenBy);
-        static::assertSame('stop', $ret);
-        static::assertInstanceOf(HookBreaker::class, $brokenBy);
-        static::assertSame('stop', $brokenBy->getReturnValue());
+        self::assertSame('stop', $ret);
+        self::assertInstanceOf(HookBreaker::class, $brokenBy);
+        self::assertSame('stop', $brokenBy->getReturnValue());
     }
 
     public function testExceptionInHook(): void
@@ -244,13 +244,13 @@ class HookTraitTest extends TestCase
 
         // unbound callback
         $m->onHookShort('inc', static function (...$args) {
-            static::assertSame(['y', 'x'], $args);
+            self::assertSame(['y', 'x'], $args);
         }, ['x']);
         $m->hook('inc', ['y']);
 
         // bound callback
         $m->onHookShort('inc', function (...$args) {
-            static::assertSame(['y', 'x'], $args);
+            self::assertSame(['y', 'x'], $args);
         }, ['x']);
         $m->hook('inc', ['y']);
     }
@@ -277,7 +277,7 @@ class HookTraitTest extends TestCase
         $m->onHookShort('null_scope_class', \Closure::fromCallable('trim'), ['x']);
         $m = clone $m;
         foreach ($m->hook('inc') as $v) {
-            static::assertNull($v);
+            self::assertNull($v);
         }
 
         // callback bound to the same object
@@ -286,18 +286,18 @@ class HookTraitTest extends TestCase
         $m->onHookShort('inc', $m->makeCallback());
         $m = clone $m;
         foreach ($m->hook('inc') as $v) {
-            static::assertSame($m, $v);
+            self::assertSame($m, $v);
         }
-        static::assertSame(2, $m->result);
+        self::assertSame(2, $m->result);
         foreach ($m->hook('inc') as $v) { // 2nd dispatch
-            static::assertSame($m, $v);
+            self::assertSame($m, $v);
         }
-        static::assertSame(4, $m->result);
+        self::assertSame(4, $m->result);
         $m = clone $m; // 2nd clone
         foreach ($m->hook('inc') as $v) {
-            static::assertSame($m, $v);
+            self::assertSame($m, $v);
         }
-        static::assertSame(6, $m->result);
+        self::assertSame(6, $m->result);
 
         // callback bound to a different object
         $m = $makeMock();
@@ -327,32 +327,32 @@ class HookTraitTest extends TestCase
             return $hookThis;
         }, $m->makeCallback());
 
-        static::assertSame([$hookThis], $m->hook('inc'));
-        static::assertSame(1, $m->result);
+        self::assertSame([$hookThis], $m->hook('inc'));
+        self::assertSame(1, $m->result);
 
         $mCloned = clone $m;
-        static::assertSame([$hookThis], $m->hook('inc'));
-        static::assertSame(2, $m->result);
-        static::assertSame(1, $mCloned->result);
-        static::assertSame([$hookThis], $mCloned->hook('inc'));
-        static::assertSame(3, $m->result);
-        static::assertSame(1, $mCloned->result);
+        self::assertSame([$hookThis], $m->hook('inc'));
+        self::assertSame(2, $m->result);
+        self::assertSame(1, $mCloned->result);
+        self::assertSame([$hookThis], $mCloned->hook('inc'));
+        self::assertSame(3, $m->result);
+        self::assertSame(1, $mCloned->result);
 
         $hookThis = $mCloned;
-        static::assertSame([$hookThis], $m->hook('inc'));
-        static::assertSame(3, $m->result);
-        static::assertSame(2, $mCloned->result);
-        static::assertSame([$hookThis], $mCloned->hook('inc'));
-        static::assertSame(3, $m->result);
-        static::assertSame(3, $mCloned->result);
+        self::assertSame([$hookThis], $m->hook('inc'));
+        self::assertSame(3, $m->result);
+        self::assertSame(2, $mCloned->result);
+        self::assertSame([$hookThis], $mCloned->hook('inc'));
+        self::assertSame(3, $m->result);
+        self::assertSame(3, $mCloned->result);
 
         $hookThis = $m;
-        static::assertSame([$hookThis], $m->hook('inc'));
-        static::assertSame(4, $m->result);
-        static::assertSame(3, $mCloned->result);
-        static::assertSame([$hookThis], $mCloned->hook('inc'));
-        static::assertSame(5, $m->result);
-        static::assertSame(3, $mCloned->result);
+        self::assertSame([$hookThis], $m->hook('inc'));
+        self::assertSame(4, $m->result);
+        self::assertSame(3, $mCloned->result);
+        self::assertSame([$hookThis], $mCloned->hook('inc'));
+        self::assertSame(5, $m->result);
+        self::assertSame(3, $mCloned->result);
 
         $m->onHookDynamicShort('incShort', static function () use (&$hookThis) {
             return $hookThis;
@@ -362,33 +362,33 @@ class HookTraitTest extends TestCase
 
             return $this->hook('inc');
         }, ['x']);
-        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
-        static::assertSame(6, $m->result);
-        static::assertSame(3, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        self::assertSame(6, $m->result);
+        self::assertSame(3, $mCloned->result);
 
         $mCloned = clone $m;
-        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
-        static::assertSame(7, $m->result);
-        static::assertSame(6, $mCloned->result);
-        static::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
-        static::assertSame(8, $m->result);
-        static::assertSame(6, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        self::assertSame(7, $m->result);
+        self::assertSame(6, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
+        self::assertSame(8, $m->result);
+        self::assertSame(6, $mCloned->result);
 
         $hookThis = $mCloned;
-        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
-        static::assertSame(8, $m->result);
-        static::assertSame(7, $mCloned->result);
-        static::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
-        static::assertSame(8, $m->result);
-        static::assertSame(8, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        self::assertSame(8, $m->result);
+        self::assertSame(7, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
+        self::assertSame(8, $m->result);
+        self::assertSame(8, $mCloned->result);
 
         $hookThis = $m;
-        static::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
-        static::assertSame(9, $m->result);
-        static::assertSame(8, $mCloned->result);
-        static::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
-        static::assertSame(10, $m->result);
-        static::assertSame(8, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $m->hook('incShort', ['y']));
+        self::assertSame(9, $m->result);
+        self::assertSame(8, $mCloned->result);
+        self::assertSame([1 => [$hookThis]], $mCloned->hook('incShort', ['y']));
+        self::assertSame(10, $m->result);
+        self::assertSame(8, $mCloned->result);
     }
 
     public function testOnHookDynamicBoundGetterException(): void
@@ -423,9 +423,9 @@ class HookTraitTest extends TestCase
             ++$value;
         });
         $m->hook('inc', ['x', &$value]);
-        static::assertSame(1, $value);
+        self::assertSame(1, $value);
         $m->hook('inc', ['x', &$value]);
-        static::assertSame(2, $value);
+        self::assertSame(2, $value);
 
         $value = 0;
         $m = new HookMock();
@@ -433,9 +433,9 @@ class HookTraitTest extends TestCase
             ++$value;
         });
         $m->hook('inc', ['x', &$value]);
-        static::assertSame(1, $value);
+        self::assertSame(1, $value);
         $m->hook('inc', ['x', &$value]);
-        static::assertSame(2, $value);
+        self::assertSame(2, $value);
 
         $value = 0;
         $m = new HookMock();
@@ -445,9 +445,9 @@ class HookTraitTest extends TestCase
             ++$value;
         });
         $m->hook('inc', ['x', &$value]);
-        static::assertSame(1, $value);
+        self::assertSame(1, $value);
         $m->hook('inc', ['x', &$value]);
-        static::assertSame(2, $value);
+        self::assertSame(2, $value);
     }
 }
 

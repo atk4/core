@@ -14,10 +14,10 @@ class InitializerTraitTest extends TestCase
     public function testInit(): void
     {
         $m = new InitializerMock();
-        static::assertFalse($m->isInitialized());
+        self::assertFalse($m->isInitialized());
         $m->invokeInit();
-        static::assertTrue($m->isInitialized());
-        static::assertTrue($m->result);
+        self::assertTrue($m->isInitialized());
+        self::assertTrue($m->result);
         $m->assertIsInitialized();
     }
 
@@ -29,15 +29,15 @@ class InitializerTraitTest extends TestCase
 
         $m = new InitializerMock();
         $container->add($m);
-        static::assertTrue($m->isInitialized());
-        static::assertTrue($m->result);
+        self::assertTrue($m->isInitialized());
+        self::assertTrue($m->result);
         $m->assertIsInitialized();
     }
 
     public function testInitNotCalled(): void
     {
         $m = new InitializerMock();
-        static::assertFalse($m->isInitialized());
+        self::assertFalse($m->isInitialized());
 
         $this->expectException(Exception::class);
         $m->assertIsInitialized();
@@ -55,7 +55,7 @@ class InitializerTraitTest extends TestCase
     {
         $m = new InitializerMock();
         $m->invokeInit();
-        static::assertTrue($m->isInitialized());
+        self::assertTrue($m->isInitialized());
 
         $this->expectException(Exception::class);
         $m->invokeInit();

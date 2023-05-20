@@ -15,26 +15,26 @@ class FactoryTest extends TestCase
     public function testMerge1(): void
     {
         // string become array
-        static::assertSame(
+        self::assertSame(
             ['hello'],
             Factory::mergeSeeds(['hello'], null)
         );
 
         // left-most value is used
-        static::assertSame(
+        self::assertSame(
             ['one'],
             Factory::mergeSeeds(['one'], ['two'], ['three'], ['four'])
         );
 
         // nulls are ignored
-        static::assertSame(
+        self::assertSame(
             ['two'],
             Factory::mergeSeeds(null, ['two'], ['three'], ['four'])
         );
 
         // object takes precedence
         $o = new FactoryTestDiMock();
-        static::assertSame(
+        self::assertSame(
             $o,
             Factory::mergeSeeds(null, ['two'], $o, ['four'])
         );
@@ -50,27 +50,27 @@ class FactoryTest extends TestCase
     public function testMerge2(): void
     {
         // array argument merging
-        static::assertSame(
+        self::assertSame(
             ['a1', 'a2'],
             Factory::mergeSeeds(['a1', 'a2'], null, ['b1', 'b2'])
         );
 
         // nulls are ignored
-        static::assertSame(
+        self::assertSame(
             ['b1', 'a2', 'c3'],
             Factory::mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'])
         );
 
         // object takes precedence
         $o = new FactoryTestDiMock();
-        static::assertSame(
+        self::assertSame(
             $o,
             Factory::mergeSeeds(['a1'], $o)
         );
 
         // is object is wrapped in array - we dont care
         $o = new FactoryTestDiMock();
-        static::assertSame(
+        self::assertSame(
             ['b1', 'a2', 'c3'],
             Factory::mergeSeeds([null, 'a2', null], ['b1'], ['c1', null, 'c3'], [1 => $o])
         );
@@ -86,13 +86,13 @@ class FactoryTest extends TestCase
     public function testMerge3(): void
     {
         // key/value support
-        static::assertSame(
+        self::assertSame(
             ['a' => 1],
             Factory::mergeSeeds(['a' => 1], ['a' => 2])
         );
 
         // values has no special treatment
-        static::assertSame(
+        self::assertSame(
             ['a' => [1]],
             Factory::mergeSeeds(['a' => [1]], ['a' => 2])
         );
@@ -101,24 +101,24 @@ class FactoryTest extends TestCase
         $o = new FactoryTestDiMock();
         $oo = Factory::mergeSeeds(['foo' => 1], $o);
 
-        static::assertSame($o, $oo);
-        static::assertSame(1, $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(1, $oo->foo);
 
         // even it already has value
         $o = new FactoryTestDiMock();
         $o->foo = 5;
         $oo = Factory::mergeSeeds(['foo' => 1], $o);
 
-        static::assertSame($o, $oo);
-        static::assertSame(1, $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(1, $oo->foo);
 
         // but this way existing value is respected
         $o = new FactoryTestDiMock();
         $o->foo = 5;
         $oo = Factory::mergeSeeds($o, ['foo' => 1]);
 
-        static::assertSame($o, $oo);
-        static::assertSame(5, $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(5, $oo->foo);
     }
 
     public function testMerge4(): void
@@ -128,20 +128,20 @@ class FactoryTest extends TestCase
         $o->foo = ['red'];
         $oo = Factory::mergeSeeds(['foo' => ['green']], $o);
 
-        static::assertSame($o, $oo);
-        static::assertSame(['red', 'green'], $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(['red', 'green'], $oo->foo);
 
         $oo = Factory::mergeSeeds($o, ['foo' => ['white']]);
-        static::assertSame($o, $oo);
-        static::assertSame(['white', 'red', 'green'], $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(['white', 'red', 'green'], $oo->foo);
 
         // still we don't care if they are to the right of the object
         $o = new FactoryTestDiMock();
         $o->foo = ['red'];
         $oo = Factory::mergeSeeds($o, ['foo' => ['green']]);
 
-        static::assertSame($o, $oo);
-        static::assertSame(['red'], $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(['red'], $oo->foo);
     }
 
     public function testMerge5(): void
@@ -152,37 +152,37 @@ class FactoryTest extends TestCase
         $oo = Factory::mergeSeeds(['foo' => ['green']], $o);
         $oo = Factory::mergeSeeds(['foo' => ['xx']], $o);
 
-        static::assertSame($o, $oo);
-        static::assertSame(['red', 'green', 'xx'], $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame(['red', 'green', 'xx'], $oo->foo);
 
         // also without arrays
         $o = new FactoryTestDiMock();
         $o->foo = 'red';
         $oo = Factory::mergeSeeds(['foo' => 'xx'], ['foo' => 'green'], $o, ['foo' => 5]);
 
-        static::assertSame($o, $oo);
-        static::assertSame('xx', $oo->foo);
+        self::assertSame($o, $oo);
+        self::assertSame('xx', $oo->foo);
     }
 
     public function testMerge6(): void
     {
         $oo = Factory::mergeSeeds([4 => 'four'], [5 => 'five']);
-        static::assertSame([4 => 'four', 5 => 'five'], $oo);
+        self::assertSame([4 => 'four', 5 => 'five'], $oo);
 
         $oo = Factory::mergeSeeds([4 => ['four']], [5 => ['five']]);
-        static::assertSame([4 => ['four'], 5 => ['five']], $oo);
+        self::assertSame([4 => ['four'], 5 => ['five']], $oo);
 
         $oo = Factory::mergeSeeds([4 => 'four'], [5 => 'five'], [6 => 'six']);
-        static::assertSame([4 => 'four', 5 => 'five', 6 => 'six'], $oo);
+        self::assertSame([4 => 'four', 5 => 'five', 6 => 'six'], $oo);
 
         $oo = Factory::mergeSeeds(['x' => ['four']], ['x' => ['five']]);
-        static::assertSame(['x' => ['four']], $oo);
+        self::assertSame(['x' => ['four']], $oo);
 
         $oo = Factory::mergeSeeds([4 => ['four']], [4 => ['five']]);
-        static::assertSame([4 => ['four']], $oo);
+        self::assertSame([4 => ['four']], $oo);
 
         $oo = Factory::mergeSeeds([4 => ['200']], [4 => ['201']]);
-        static::assertSame([4 => ['200']], $oo);
+        self::assertSame([4 => ['200']], $oo);
     }
 
     public function testMergeNoDiFail(): void
@@ -197,52 +197,52 @@ class FactoryTest extends TestCase
     public function testBasic(): void
     {
         $s1 = Factory::factory([FactoryTestMock::class]);
-        static::assertSame([], $s1->args);
+        self::assertSame([], $s1->args);
 
         $s1 = Factory::factory(new FactoryTestMock());
-        static::assertSame([], $s1->args);
+        self::assertSame([], $s1->args);
 
         $s1 = Factory::factory(new FactoryTestMock('hello', 'world'));
-        static::assertSame(['hello', 'world'], $s1->args);
+        self::assertSame(['hello', 'world'], $s1->args);
 
         $s1 = Factory::factory(new FactoryTestMock(null, 'world'));
-        static::assertSame([null, 'world'], $s1->args);
+        self::assertSame([null, 'world'], $s1->args);
     }
 
     public function testInjection(): void
     {
         $s1 = Factory::factory(new FactoryTestDiMock(), null); // @phpstan-ignore-line
-        static::assertNotSame('bar', $s1->foo);
+        self::assertNotSame('bar', $s1->foo);
 
         $s1 = Factory::factory(new FactoryTestDiMock(), ['foo' => 'bar']);
-        static::assertSame('bar', $s1->foo);
+        self::assertSame('bar', $s1->foo);
     }
 
     public function testArguments(): void
     {
         /*
         $s1 = Factory::factory([FactoryTestMock::class, 'hello']);
-        static::{'assertEquals'}(['hello'], $s1->args);
+        self::{'assertEquals'}(['hello'], $s1->args);
 
         $s1 = Factory::factory([FactoryTestMock::class, 'hello', 'world']);
-        static::{'assertEquals'}(['hello', 'world'], $s1->args);
+        self::{'assertEquals'}(['hello', 'world'], $s1->args);
          */
 
         $s1 = Factory::factory([FactoryTestMock::class, null, 'world']);
-        static::assertSame([null, 'world'], $s1->args);
+        self::assertSame([null, 'world'], $s1->args);
 
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'foo' => 'bar', 'world']);
-        static::assertSame(['hello', 'world'], $s1->args);
-        static::assertSame('bar', $s1->foo);
+        self::assertSame(['hello', 'world'], $s1->args);
+        self::assertSame('bar', $s1->foo);
     }
 
     public function testDefaults(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'foo' => 'bar', 'world'], ['more', 'baz' => '', 'more', 'args']);
-        static::assertTrue($s1 instanceof FactoryTestDiMock);
-        static::assertSame(['hello', 'world', 'args'], $s1->args);
-        static::assertSame('bar', $s1->foo);
-        static::assertSame('', $s1->baz);
+        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertSame(['hello', 'world', 'args'], $s1->args);
+        self::assertSame('bar', $s1->foo);
+        self::assertSame('', $s1->baz);
 
         $s1->setDefaults([]);
     }
@@ -250,27 +250,27 @@ class FactoryTest extends TestCase
     public function testNull(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'foo' => null, null, 'world'], ['more', 'foo' => 'bar', 'more', 'args']);
-        static::assertTrue($s1 instanceof FactoryTestDiMock);
-        static::assertSame(['more', 'world', 'args'], $s1->args);
-        static::assertSame('bar', $s1->foo);
+        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertSame(['more', 'world', 'args'], $s1->args);
+        self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds([FactoryTestDiMock::class, 'foo' => null, null, 'world'], [FactoryTestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        static::assertTrue($s1 instanceof FactoryTestDiMock);
-        static::assertSame(['more', 'world', 'args'], $s1->args);
-        static::assertSame('bar', $s1->foo);
+        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertSame(['more', 'world', 'args'], $s1->args);
+        self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds([null, 'foo' => null, null, 'world'], [FactoryTestDiMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        static::assertTrue($s1 instanceof FactoryTestDiMock);
-        static::assertSame(['more', 'world', 'args'], $s1->args);
-        static::assertSame('bar', $s1->foo);
+        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertSame(['more', 'world', 'args'], $s1->args);
+        self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds(null, [FactoryTestDiMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        static::assertTrue($s1 instanceof FactoryTestDiMock);
-        static::assertSame(['more', 'more', 'args'], $s1->args);
-        static::assertSame('bar', $s1->foo);
+        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertSame(['more', 'more', 'args'], $s1->args);
+        self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds([], [FactoryTestDiMock::class, 'test']));
-        static::assertSame(['test'], $s1->args);
+        self::assertSame(['test'], $s1->args);
     }
 
     public function testDefaultsObject(): void
@@ -282,26 +282,26 @@ class FactoryTest extends TestCase
     public function testMerge(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'world'], ['more', 'more', 'args']);
-        static::assertSame(['hello', 'world', 'args'], $s1->args);
+        self::assertSame(['hello', 'world', 'args'], $s1->args);
 
         $s1 = Factory::factory([FactoryTestDiMock::class, null, 'world'], ['more', 'more', 'args']);
-        static::assertSame(['more', 'world', 'args'], $s1->args);
+        self::assertSame(['more', 'world', 'args'], $s1->args);
     }
 
     public function testMerge7(): void
     {
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo']);
-        static::assertInstanceOf(FactoryTestDefMock::class, $s1);
-        static::assertNull($s1->def);
+        self::assertInstanceOf(FactoryTestDefMock::class, $s1);
+        self::assertNull($s1->def);
         $s1 = Factory::mergeSeeds(new FactoryTestDefMock(), ['foo' => 'x']);
-        static::assertInstanceOf(FactoryTestDefMock::class, $s1);
-        static::assertSame(['foo' => 'x'], $s1->def);
+        self::assertInstanceOf(FactoryTestDefMock::class, $s1);
+        self::assertSame(['foo' => 'x'], $s1->def);
     }
 
     public function testMerge8(): void
     {
         $s1 = Factory::mergeSeeds(['foo', null, 'arg'], []);
-        static::assertSame(['foo', null, 'arg'], $s1);
+        self::assertSame(['foo', null, 'arg'], $s1);
     }
 
     public function testSeedMustBe(): void
@@ -337,13 +337,13 @@ class FactoryTest extends TestCase
     public function testStringDefault(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class], ['hello']);
-        static::assertTrue($s1 instanceof FactoryTestDiMock);
-        static::assertSame(['hello'], $s1->args);
+        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertSame(['hello'], $s1->args);
 
         // also OK if it's not a DIContainer object
         $s1 = Factory::factory([FactoryTestMock::class], ['hello']);
-        static::assertTrue($s1 instanceof FactoryTestMock);
-        static::assertSame(['hello'], $s1->args);
+        self::assertTrue($s1 instanceof FactoryTestMock);
+        self::assertSame(['hello'], $s1->args);
     }
 
     /**
@@ -365,11 +365,11 @@ class FactoryTest extends TestCase
             ['foo' => ['Label', 'red']]
         );
 
-        static::assertSame(['Button', 'icon' => 'red'], $s1->foo);
+        self::assertSame(['Button', 'icon' => 'red'], $s1->foo);
 
         $s1->setDefaults(['foo' => ['Message', 'detail' => 'blah']]);
 
-        static::assertSame(['Message', 'detail' => 'blah'], $s1->foo);
+        self::assertSame(['Message', 'detail' => 'blah'], $s1->foo);
     }
 
     public function testFactory(): void
@@ -379,11 +379,11 @@ class FactoryTest extends TestCase
         // pass object
         $m1 = new FactoryFactoryMock();
         $m2 = Factory::factory($m1);
-        static::assertSame($m1, $m2);
+        self::assertSame($m1, $m2);
 
         // from array seed
         $m1 = Factory::factory([FactoryFactoryMock::class]);
-        static::assertSame(FactoryFactoryMock::class, get_class($m1));
+        self::assertSame(FactoryFactoryMock::class, get_class($m1));
 
         // from string seed
         $this->expectException(Exception::class);
@@ -410,44 +410,44 @@ class FactoryTest extends TestCase
 
         // as class name
         $m1 = Factory::factory([FactoryFactoryMock::class]);
-        static::assertSame(FactoryFactoryMock::class, get_class($m1));
+        self::assertSame(FactoryFactoryMock::class, get_class($m1));
 
         $m2 = Factory::factory([HookBreaker::class], ['ok']);
-        static::assertSame(HookBreaker::class, get_class($m2));
+        self::assertSame(HookBreaker::class, get_class($m2));
 
         // as object
         $m2 = Factory::factory($m1);
-        static::assertSame(FactoryFactoryMock::class, get_class($m2));
+        self::assertSame(FactoryFactoryMock::class, get_class($m2));
 
         // as class name with parameters
         $m1 = Factory::factory([FactoryFactoryDiMock::class], ['a' => 'XXX', 'b' => 'YYY']);
-        static::assertSame('XXX', $m1->a);
-        static::assertSame('YYY', $m1->b);
-        static::assertNull($m1->c);
+        self::assertSame('XXX', $m1->a);
+        self::assertSame('YYY', $m1->b);
+        self::assertNull($m1->c);
 
         $m1 = Factory::factory([FactoryFactoryDiMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
-        static::assertSame('AAA', $m1->a);
-        static::assertSame('YYY', $m1->b);
-        static::assertSame('ZZZ', $m1->c);
+        self::assertSame('AAA', $m1->a);
+        self::assertSame('YYY', $m1->b);
+        self::assertSame('ZZZ', $m1->c);
 
         // as object with parameters
         $m1 = Factory::factory([FactoryFactoryDiMock::class]);
         $m2 = Factory::factory($m1, ['a' => 'XXX', 'b' => 'YYY']);
-        static::assertSame('XXX', $m2->a);
-        static::assertSame('YYY', $m2->b);
-        static::assertNull($m2->c);
+        self::assertSame('XXX', $m2->a);
+        self::assertSame('YYY', $m2->b);
+        self::assertNull($m2->c);
 
         $m1 = Factory::factory([FactoryFactoryDiMock::class]);
         $m2 = Factory::factory($m1, ['a' => null, 'b' => 'YYY', 'c' => 'ZZZ']);
-        static::assertSame('AAA', $m2->a);
-        static::assertSame('YYY', $m2->b);
-        static::assertSame('ZZZ', $m2->c);
+        self::assertSame('AAA', $m2->a);
+        self::assertSame('YYY', $m2->b);
+        self::assertSame('ZZZ', $m2->c);
 
         $m1 = Factory::factory([FactoryFactoryDiMock::class], ['a' => null, 'b' => 'YYY', 'c' => 'SSS']);
         $m2 = Factory::factory($m1, ['a' => 'XXX', 'b' => null, 'c' => 'ZZZ']);
-        static::assertSame('XXX', $m2->a);
-        static::assertSame('YYY', $m2->b);
-        static::assertSame('ZZZ', $m2->c);
+        self::assertSame('XXX', $m2->a);
+        self::assertSame('YYY', $m2->b);
+        self::assertSame('ZZZ', $m2->c);
 
         // as object wrapped in array
         $this->expectException(Exception::class);

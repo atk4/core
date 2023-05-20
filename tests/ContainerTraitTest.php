@@ -21,13 +21,13 @@ class ContainerTraitTest extends TestCase
         // add to return object
         $tr2 = new \stdClass();
         $tr = $m->add($tr2);
-        static::assertSame($tr, $tr2);
+        self::assertSame($tr, $tr2);
 
         // trackable object can be referenced by name
         $tr3 = new TrackableMock();
         $m->add($tr3, 'foo');
         $tr = $m->getElement('foo');
-        static::assertSame($tr, $tr3);
+        self::assertSame($tr, $tr3);
     }
 
     public function testUniqueNames(): void
@@ -41,15 +41,15 @@ class ContainerTraitTest extends TestCase
         $m->add(new TrackableMock(), '123');
         $m->add(new TrackableMock(), 'false');
 
-        static::assertTrue($m->hasElement('foo bar'));
-        static::assertTrue($m->hasElement('123'));
-        static::assertTrue($m->hasElement('false'));
-        static::assertSame(5, $m->getElementCount());
+        self::assertTrue($m->hasElement('foo bar'));
+        self::assertTrue($m->hasElement('123'));
+        self::assertTrue($m->hasElement('false'));
+        self::assertSame(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
-        static::assertSame(4, $m->getElementCount());
+        self::assertSame(4, $m->getElementCount());
         $anon->destroy();
-        static::assertSame(3, $m->getElementCount());
+        self::assertSame(3, $m->getElementCount());
     }
 
     public function testLongNames(): void
@@ -65,20 +65,20 @@ class ContainerTraitTest extends TestCase
         $x = $m->add(new ContainerAppMock(), 'a');
         $x = $m->add(new ContainerAppMock(), 'mint');
 
-        static::assertSame(
+        self::assertSame(
             '_quick-brown-fox_jumps-over-a-lazy-dog_then-they-go-out-for-a-pint_eat-a-stake',
             $m->unshortenName($this)
         );
 
-        static::assertLessThan(5, count($app->uniqueNameHashes));
-        static::assertGreaterThan(2, count($app->uniqueNameHashes));
+        self::assertLessThan(5, count($app->uniqueNameHashes));
+        self::assertGreaterThan(2, count($app->uniqueNameHashes));
 
         $m->removeElement($x);
 
-        static::assertSame(2, $m->getElementCount());
+        self::assertSame(2, $m->getElementCount());
         $m->add(new \stdClass());
 
-        static::assertSame(2, $m->getElementCount());
+        self::assertSame(2, $m->getElementCount());
     }
 
     public function testLongNames2(): void
@@ -107,9 +107,9 @@ class ContainerTraitTest extends TestCase
         }
 
         // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        static::assertGreaterThanOrEqual(15, $minLength);
+        self::assertGreaterThanOrEqual(15, $minLength);
         // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        static::assertLessThanOrEqual($app->maxNameLength, $maxLength);
+        self::assertLessThanOrEqual($app->maxNameLength, $maxLength);
     }
 
     public function testPreservePresetNames(): void
@@ -134,15 +134,15 @@ class ContainerTraitTest extends TestCase
             };
         };
 
-        static::assertSame('r_foo', $app->add($createTrackableMockFx('foo'))->name);
-        static::assertSame('r_bar', $app->add($createTrackableMockFx('bar'))->name);
-        static::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
-        static::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
+        self::assertSame('r_foo', $app->add($createTrackableMockFx('foo'))->name);
+        self::assertSame('r_bar', $app->add($createTrackableMockFx('bar'))->name);
+        self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
+        self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
 
-        static::assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
+        self::assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
 
         $this->expectException(Exception::class);
-        static::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
+        self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
     }
 
     public function testOwnerNotSetException(): void
@@ -170,12 +170,12 @@ class ContainerTraitTest extends TestCase
         $m = new TrackableMock();
         $owner = new \stdClass();
         $m->setOwner($owner);
-        static::assertSame($owner, $m->getOwner());
+        self::assertSame($owner, $m->getOwner());
         $m->unsetOwner();
 
         $owner = new \stdClass();
         $m->setOwner($owner);
-        static::assertSame($owner, $m->getOwner());
+        self::assertSame($owner, $m->getOwner());
         $m->unsetOwner();
     }
 
@@ -183,11 +183,11 @@ class ContainerTraitTest extends TestCase
     {
         $m = new ContainerFactoryMock();
         $m2 = $m->add([ContainerMock::class]);
-        static::assertSame(ContainerMock::class, get_class($m2));
+        self::assertSame(ContainerMock::class, get_class($m2));
 
         $m3 = $m->add([TrackableContainerMock::class], 'name');
-        static::assertSame(TrackableContainerMock::class, get_class($m3));
-        static::assertSame('name', $m3->shortName);
+        self::assertSame(TrackableContainerMock::class, get_class($m3));
+        self::assertSame('name', $m3->shortName);
     }
 
     public function testArgs(): void
@@ -198,8 +198,8 @@ class ContainerTraitTest extends TestCase
             use DiContainerTrait;
             use NameTrait;
         }, ['name' => 'foo']);
-        static::assertTrue($m->hasElement('foo'));
-        static::assertSame('foo', $m2->shortName);
+        self::assertTrue($m->hasElement('foo'));
+        self::assertSame('foo', $m2->shortName);
     }
 
     public function testExceptionExists(): void
@@ -216,7 +216,7 @@ class ContainerTraitTest extends TestCase
         $m->add(new TrackableMock(), ['desired_name' => 'foo']);
         $m->add(new TrackableMock(), ['desired_name' => 'foo']);
 
-        static::assertTrue($m->hasElement('foo'));
+        self::assertTrue($m->hasElement('foo'));
     }
 
     public function testExceptionShortName(): void
