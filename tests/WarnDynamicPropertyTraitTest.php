@@ -74,9 +74,9 @@ class WarnDynamicPropertyTraitTest extends TestCase
         $test = new class() extends ClassWithWarnDynamicPropertyTrait {
             public bool $p = false;
         };
-        static::assertFalse($test->p);
+        self::assertFalse($test->p);
         $test->p = true;
-        static::assertTrue($test->p);
+        self::assertTrue($test->p);
         unset($test->{'p'});
 
         $this->runWithErrorConvertedToException(function () use ($test) {
@@ -117,14 +117,14 @@ class WarnDynamicPropertyTraitTest extends TestCase
             return true;
         });
         try {
-            static::assertTrue($test->__isset('p'));
-            static::assertFalse($test->p);
-            static::assertFalse($test->__get('p'));
+            self::assertTrue($test->__isset('p'));
+            self::assertFalse($test->p);
+            self::assertFalse($test->__get('p'));
             $test->__set('p', true);
-            static::assertTrue($test->p);
-            static::assertTrue($test->__get('p'));
+            self::assertTrue($test->p);
+            self::assertTrue($test->__get('p'));
             $test->__unset('p');
-            static::assertFalse($test->__isset('p'));
+            self::assertFalse($test->__isset('p'));
         } finally {
             restore_error_handler();
         }

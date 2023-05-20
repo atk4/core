@@ -14,16 +14,16 @@ class DebugTraitTest extends TestCase
     {
         $m = new DebugMock();
 
-        static::assertFalse($m->debug);
+        self::assertFalse($m->debug);
 
         $m->debug();
-        static::assertTrue($m->debug);
+        self::assertTrue($m->debug);
 
         $m->debug(false);
-        static::assertFalse($m->debug);
+        self::assertFalse($m->debug);
 
         $m->debug(true);
-        static::assertTrue($m->debug);
+        self::assertTrue($m->debug);
     }
 
     public function testDebugOutput(): void
@@ -58,7 +58,7 @@ class DebugTraitTest extends TestCase
 
         $m->debug('debug test2');
 
-        static::assertSame(['debug', 'debug test2', []], $app->log);
+        self::assertSame(['debug', 'debug test2', []], $app->log);
     }
 
     public function testLog1(): void
@@ -80,7 +80,7 @@ class DebugTraitTest extends TestCase
         $m->setApp($app);
         $m->log('warning', 'debug test3');
 
-        static::assertSame(['warning', 'debug test3', []], $app->log);
+        self::assertSame(['warning', 'debug test3', []], $app->log);
     }
 
     protected function triggerDebugTraceChange(DebugMock $o, string $trace): void
@@ -101,9 +101,9 @@ class DebugTraitTest extends TestCase
 
         // Changes detected
         preg_match('~Call path for .* has diverged \(was (.*):(.*), now (.*):(.*)\)~', $app->log[1], $matches);
-        static::assertCount(5, $matches);
-        static::assertSame($matches[1], $matches[3]);
-        static::assertSame((string) ((int) $matches[2] + 1), $matches[4]);
+        self::assertCount(5, $matches);
+        self::assertSame($matches[1], $matches[3]);
+        self::assertSame((string) ((int) $matches[2] + 1), $matches[4]);
 
         $app->log = null;
 
@@ -112,7 +112,7 @@ class DebugTraitTest extends TestCase
         }
 
         // No changes in the trace change detected
-        static::assertNull($app->log);
+        self::assertNull($app->log);
     }
 
     public function testPsr(): void
@@ -124,25 +124,25 @@ class DebugTraitTest extends TestCase
         $m->setApp($app);
 
         $m->info('i', ['x']);
-        static::assertSame(['info', 'i', ['x']], $app->log);
+        self::assertSame(['info', 'i', ['x']], $app->log);
 
         $m->warning('t', ['x']);
-        static::assertSame(['warning', 't', ['x']], $app->log);
+        self::assertSame(['warning', 't', ['x']], $app->log);
 
         $m->emergency('em', ['x', 'y']);
-        static::assertSame(['emergency', 'em', ['x', 'y']], $app->log);
+        self::assertSame(['emergency', 'em', ['x', 'y']], $app->log);
 
         $m->alert('al', ['x']);
-        static::assertSame(['alert', 'al', ['x']], $app->log);
+        self::assertSame(['alert', 'al', ['x']], $app->log);
 
         $m->critical('cr', ['x']);
-        static::assertSame(['critical', 'cr', ['x']], $app->log);
+        self::assertSame(['critical', 'cr', ['x']], $app->log);
 
         $m->error('er', ['x']);
-        static::assertSame(['error', 'er', ['x']], $app->log);
+        self::assertSame(['error', 'er', ['x']], $app->log);
 
         $m->notice('nt', ['x']);
-        static::assertSame(['notice', 'nt', ['x']], $app->log);
+        self::assertSame(['notice', 'nt', ['x']], $app->log);
     }
 }
 

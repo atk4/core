@@ -135,11 +135,11 @@ class ConfigTraitTest extends TestCase
         static::{'assertEquals'}($a, $m->getConfigProp());
 
         // test getConfig
-        static::assertSame(789, $m->getConfig('num'));
-        static::assertNull($m->getConfig('unknown'));
-        static::assertSame('default', $m->getConfig('unknown', 'default'));
-        static::assertSame('another', $m->getConfig('arr/sub/two', 'default'));
-        static::assertSame('default', $m->getConfig('arr/sub/three', 'default'));
+        self::assertSame(789, $m->getConfig('num'));
+        self::assertNull($m->getConfig('unknown'));
+        self::assertSame('default', $m->getConfig('unknown', 'default'));
+        self::assertSame('another', $m->getConfig('arr/sub/two', 'default'));
+        self::assertSame('default', $m->getConfig('arr/sub/three', 'default'));
     }
 
     public function testCaseGetConfigPathThatNotExists(): void
@@ -147,7 +147,7 @@ class ConfigTraitTest extends TestCase
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');
         $excepted = $m->getConfig('arr/num/notExists');
-        static::assertNull($excepted);
+        self::assertNull($excepted);
     }
 }
 

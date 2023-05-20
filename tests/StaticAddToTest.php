@@ -60,12 +60,12 @@ class StaticAddToTest extends TestCase
 
         // add to return object
         $tr = StdSat::addTo($m);
-        static::assertSame(StdSat::class, get_class($tr));
+        self::assertSame(StdSat::class, get_class($tr));
 
         // trackable object can be referenced by name
         $tr3 = TrackableMockSat::addTo($m, [], ['foo']);
         $tr = $m->getElement('foo');
-        static::assertSame($tr, $tr3);
+        self::assertSame($tr, $tr3);
 
         // not the same or extended class
         $this->expectException(\TypeError::class);
@@ -77,7 +77,7 @@ class StaticAddToTest extends TestCase
         // object is of the same class
         StdSat::assertInstanceOf(new StdSat());
         $o = new StdSat();
-        static::assertSame($o, StdSat::assertInstanceOf($o));
+        self::assertSame($o, StdSat::assertInstanceOf($o));
 
         // object is a subtype
         StdSat::assertInstanceOf(new StdSat2());
@@ -93,19 +93,19 @@ class StaticAddToTest extends TestCase
 
         // the same class
         $tr = StdSat::addToWithCl($m, [StdSat::class]);
-        static::assertSame(StdSat::class, get_class($tr));
+        self::assertSame(StdSat::class, get_class($tr));
 
         // add object - for BC
         $tr = StdSat::addToWithCl($m, $tr);
-        static::assertSame(StdSat::class, get_class($tr));
+        self::assertSame(StdSat::class, get_class($tr));
 
         // extended class
         $tr = StdSat::addToWithCl($m, [StdSat2::class]);
-        static::assertSame(StdSat2::class, get_class($tr));
+        self::assertSame(StdSat2::class, get_class($tr));
 
         // not the same or extended class - unsafe enabled
         $tr = StdSat::addToWithClUnsafe($m, [\stdClass::class]);
-        static::assertSame(\stdClass::class, get_class($tr));
+        self::assertSame(\stdClass::class, get_class($tr));
 
         // not the same or extended class - unsafe disabled
         $this->expectException(Exception::class);
@@ -123,28 +123,28 @@ class StaticAddToTest extends TestCase
         TrackableMockSat::addTo($m, [], ['123']);
         TrackableMockSat::addTo($m, [], ['false']);
 
-        static::assertTrue($m->hasElement('foo bar'));
-        static::assertTrue($m->hasElement('123'));
-        static::assertTrue($m->hasElement('false'));
-        static::assertSame(5, $m->getElementCount());
+        self::assertTrue($m->hasElement('foo bar'));
+        self::assertTrue($m->hasElement('123'));
+        self::assertTrue($m->hasElement('false'));
+        self::assertSame(5, $m->getElementCount());
 
         $m->getElement('foo bar')->destroy();
-        static::assertSame(4, $m->getElementCount());
+        self::assertSame(4, $m->getElementCount());
         $anon->destroy();
-        static::assertSame(3, $m->getElementCount());
+        self::assertSame(3, $m->getElementCount());
     }
 
     public function testFactoryMock(): void
     {
         $m = new ContainerFactoryMockSat();
         $m1 = DiMockSat::addTo($m, ['a' => 'XXX', 'b' => 'YYY']);
-        static::assertSame('XXX', $m1->a);
-        static::assertSame('YYY', $m1->b);
-        static::assertNull($m1->c);
+        self::assertSame('XXX', $m1->a);
+        self::assertSame('YYY', $m1->b);
+        self::assertNull($m1->c);
 
         $m2 = DiConstructorMockSat::addTo($m, ['a' => 'XXX', 'John', 'b' => 'YYY']);
-        static::assertSame('XXX', $m2->a);
-        static::assertSame('YYY', $m2->b);
-        static::assertSame('John', $m2->c);
+        self::assertSame('XXX', $m2->a);
+        self::assertSame('YYY', $m2->b);
+        self::assertSame('John', $m2->c);
     }
 }

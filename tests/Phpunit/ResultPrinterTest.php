@@ -34,17 +34,17 @@ class ResultPrinterTest extends TestCase
             ->addMoreInfo('y', ['bar' => 2.4, [], [[1]]]);
 
         $resNotWrapped = $this->printAndReturnDefectTrace(ResultPrinter::class, $exception);
-        static::assertStringContainsString((string) $exception, $resNotWrapped);
-        static::assertStringContainsString((string) $innerException, $resNotWrapped);
+        self::assertStringContainsString((string) $exception, $resNotWrapped);
+        self::assertStringContainsString((string) $innerException, $resNotWrapped);
 
         $res = $this->printAndReturnDefectTrace(ResultPrinter::class, new ExceptionWrapper($exception));
-        static::assertTrue(strlen($res) < strlen($resNotWrapped));
+        self::assertTrue(strlen($res) < strlen($resNotWrapped));
         if (\PHP_MAJOR_VERSION < 8) {
             // phpvfscomposer:// is not correctly filtered from stacktrace
             // by PHPUnit\Util\Filter::getFilteredStacktrace() method
             return;
         }
-        static::assertSame(
+        self::assertSame(
             <<<'EOF'
                 Atk4\Core\Exception: My exception
                   x: 'foo'

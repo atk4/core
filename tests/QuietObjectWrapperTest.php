@@ -14,7 +14,7 @@ class QuietObjectWrapperTest extends TestCase
     {
         $oOrig = new \stdClass();
         $o = new QuietObjectWrapper($oOrig);
-        static::assertSame($oOrig, $o->get());
+        self::assertSame($oOrig, $o->get());
     }
 
     public function testNotCloneable(): void
@@ -36,7 +36,7 @@ class QuietObjectWrapperTest extends TestCase
     public function testDebugInfoQuiet(): void
     {
         $o = new QuietObjectWrapper(new \stdClass());
-        static::assertSame(<<<'EOF'
+        self::assertSame(<<<'EOF'
             Atk4\Core\QuietObjectWrapper Object
             (
                 [wrappedClass] => stdClass
@@ -52,7 +52,7 @@ class QuietObjectWrapperTest extends TestCase
                 return ['foo' => 1, 'Bar' => 2];
             }
         });
-        static::assertSame(<<<'EOF'
+        self::assertSame(<<<'EOF'
             Atk4\Core\QuietObjectWrapper Object
             (
                 [wrappedClass] => class@anonymous

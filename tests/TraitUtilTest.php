@@ -13,24 +13,24 @@ class TraitUtilTest extends TestCase
 {
     public function testHasTrait(): void
     {
-        static::assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, NameTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, NameTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(TraitUtilTestC::class, NameTrait::class));
+        self::assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, NameTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, NameTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(TraitUtilTestC::class, NameTrait::class));
 
-        static::assertFalse(TraitUtil::hasTrait(new TraitUtilTestA(), NameTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(new TraitUtilTestB(), NameTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(new TraitUtilTestC(), NameTrait::class));
+        self::assertFalse(TraitUtil::hasTrait(new TraitUtilTestA(), NameTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(new TraitUtilTestB(), NameTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(new TraitUtilTestC(), NameTrait::class));
 
-        static::assertFalse(TraitUtil::hasTrait(new class() extends TraitUtilTestA {
+        self::assertFalse(TraitUtil::hasTrait(new class() extends TraitUtilTestA {
         }, NameTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(new class() extends TraitUtilTestB {
+        self::assertTrue(TraitUtil::hasTrait(new class() extends TraitUtilTestB {
         }, NameTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(new class() extends TraitUtilTestC {
+        self::assertTrue(TraitUtil::hasTrait(new class() extends TraitUtilTestC {
         }, NameTrait::class));
 
-        static::assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, HookTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, HookTrait::class));
-        static::assertTrue(TraitUtil::hasTrait(TraitUtilTestC::class, HookTrait::class));
+        self::assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, HookTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, HookTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(TraitUtilTestC::class, HookTrait::class));
     }
 }
 

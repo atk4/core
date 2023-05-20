@@ -20,16 +20,16 @@ class AppScopeTraitTest extends TestCase
         $m->setApp($fakeApp);
 
         $c = $m->add(new AppScopeChildBasic());
-        static::assertSame($fakeApp, $c->getApp());
+        self::assertSame($fakeApp, $c->getApp());
 
         $c = $m->add(new AppScopeChildWithoutAppScope());
-        static::assertFalse(property_exists($c, 'app'));
-        static::assertFalse(property_exists($c, '_app'));
+        self::assertFalse(property_exists($c, 'app'));
+        self::assertFalse(property_exists($c, '_app'));
 
         $m = new AppScopeMock2();
 
         $c = $m->add(new AppScopeChildBasic());
-        static::assertFalse($c->issetApp());
+        self::assertFalse($c->issetApp());
 
         // test for GC
         $m = new AppScopeMock();
@@ -37,8 +37,8 @@ class AppScopeTraitTest extends TestCase
         $child = new AppScopeChildTrackable();
         $m->add($child);
         $child->destroy();
-        static::assertNull($this->getProtected($child, '_app'));
-        static::assertFalse($child->issetOwner());
+        self::assertNull($this->getProtected($child, '_app'));
+        self::assertFalse($child->issetOwner());
     }
 
     public function testAppNotSetException(): void
