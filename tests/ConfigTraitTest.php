@@ -62,17 +62,17 @@ class ConfigTraitTest extends TestCase
         // default config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.php', 'php');
-        static::{'assertEquals'}($a, $m->getConfigProp());
+        self::{'assertEquals'}($a, $m->getConfigProp());
 
         // json config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.json', 'json');
-        static::{'assertEquals'}($b, $m->getConfigProp());
+        self::{'assertEquals'}($b, $m->getConfigProp());
 
         // yaml config
         $m = new ConfigMock();
         $m->readConfig($this->dir . '/config.yml', 'yaml');
-        static::{'assertEquals'}($c, $m->getConfigProp());
+        self::{'assertEquals'}($c, $m->getConfigProp());
     }
 
     public function testFileReadException(): void
@@ -132,7 +132,7 @@ class ConfigTraitTest extends TestCase
             'arr/sub/two' => 'another', // add one more in deep structure
             'arr' => ['foo' => 'bar'], // merge arrays
         ]);
-        static::{'assertEquals'}($a, $m->getConfigProp());
+        self::{'assertEquals'}($a, $m->getConfigProp());
 
         // test getConfig
         self::assertSame(789, $m->getConfig('num'));

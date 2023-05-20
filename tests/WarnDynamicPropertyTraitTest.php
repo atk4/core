@@ -99,7 +99,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
     {
         $this->runWithErrorConvertedToException(function () {
             $test = new ClassWithWarnDynamicPropertyTrait();
-            static::assertTrue((new \ReflectionClass(get_parent_class($test)))->hasProperty('trace'));
+            self::assertTrue((new \ReflectionClass(get_parent_class($test)))->hasProperty('trace'));
 
             $this->expectException(WarnError::class);
             $this->expectExceptionMessage('Undefined property: Atk4\Core\Exception::$trace');

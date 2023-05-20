@@ -244,13 +244,13 @@ class HookTraitTest extends TestCase
 
         // unbound callback
         $m->onHookShort('inc', static function (...$args) {
-            static::assertSame(['y', 'x'], $args);
+            self::assertSame(['y', 'x'], $args);
         }, ['x']);
         $m->hook('inc', ['y']);
 
         // bound callback
         $m->onHookShort('inc', function (...$args) {
-            static::assertSame(['y', 'x'], $args);
+            self::assertSame(['y', 'x'], $args);
         }, ['x']);
         $m->hook('inc', ['y']);
     }

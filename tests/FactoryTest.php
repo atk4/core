@@ -222,10 +222,10 @@ class FactoryTest extends TestCase
     {
         /*
         $s1 = Factory::factory([FactoryTestMock::class, 'hello']);
-        static::{'assertEquals'}(['hello'], $s1->args);
+        self::{'assertEquals'}(['hello'], $s1->args);
 
         $s1 = Factory::factory([FactoryTestMock::class, 'hello', 'world']);
-        static::{'assertEquals'}(['hello', 'world'], $s1->args);
+        self::{'assertEquals'}(['hello', 'world'], $s1->args);
          */
 
         $s1 = Factory::factory([FactoryTestMock::class, null, 'world']);
