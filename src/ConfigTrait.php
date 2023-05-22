@@ -84,7 +84,7 @@ trait ConfigTrait
     /**
      * Manually set configuration option.
      *
-     * @param string|array<string, mixed> $paths Path to configuration element to set or array of [path => value]
+     * @param string|array<string, mixed>       $paths Path to configuration element to set or array of [path => value]
      * @param ($paths is array ? never : mixed) $value Value to set
      *
      * @return $this
