@@ -19,10 +19,8 @@ class Translator
 
     private ?ITranslatorAdapter $adapter = null;
 
-    /** Default domain of translations */
     protected string $defaultDomain = 'atk';
 
-    /** Default language of translations */
     protected string $defaultLocale = 'en';
 
     private function __construct()

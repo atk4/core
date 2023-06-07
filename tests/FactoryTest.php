@@ -353,9 +353,6 @@ class FactoryTest extends TestCase
         Factory::factory([FactoryTestMock::class], ['foo' => 'hello']);
     }
 
-    /**
-     * Test seed property merging.
-     */
     public function testPropertyMerging(): void
     {
         $s1 = Factory::factory(
@@ -399,9 +396,6 @@ class FactoryTest extends TestCase
         Factory::factory(['wrong_parameter' => 'qwerty']);
     }
 
-    /**
-     * Test factory parameters.
-     */
     public function testFactoryParameters(): void
     {
         $m = new FactoryFactoryDiMock();
