@@ -220,13 +220,11 @@ class FactoryTest extends TestCase
 
     public function testArguments(): void
     {
-        /*
         $s1 = Factory::factory([FactoryTestMock::class, 'hello']);
-        self::{'assertEquals'}(['hello'], $s1->args);
+        self::assertSame(['hello'], $s1->args);
 
         $s1 = Factory::factory([FactoryTestMock::class, 'hello', 'world']);
-        self::{'assertEquals'}(['hello', 'world'], $s1->args);
-         */
+        self::assertSame(['hello', 'world'], $s1->args);
 
         $s1 = Factory::factory([FactoryTestMock::class, null, 'world']);
         self::assertSame([null, 'world'], $s1->args);

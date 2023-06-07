@@ -57,7 +57,7 @@ to create necessary methods with minimum code footprint::
         // hasField, getField, removeField also can be added, see further docs.
     }
 
-Traits add multiple checks to prevert collisions between existing objects, call
+Traits add multiple checks to prevent collisions between existing objects, call
 init() method, carry over $app and set $owner properties and calculate 'name'
 by combining it with the parent.
 
