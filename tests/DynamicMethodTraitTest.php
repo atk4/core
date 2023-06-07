@@ -130,9 +130,6 @@ class DynamicMethodTraitTest extends TestCase
         $m->addMethod('sum', $this->createSumFx());
     }
 
-    /**
-     * Test removing dynamic method.
-     */
     public function testRemoveMethod(): void
     {
         // simple method

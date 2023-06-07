@@ -20,7 +20,7 @@ class ExceptionTest extends TestCase
 
         self::assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
 
-        $m = new Exception('PrevError');
+        $m = new Exception('PreviousError');
         $m = new Exception('TestIt', 123, $m);
         $m->addMoreInfo('a1', 222);
         $m->addMoreInfo('a2', 333);
@@ -30,19 +30,19 @@ class ExceptionTest extends TestCase
         // get HTML
         $ret = $m->getHtml();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
-        self::assertMatchesRegularExpression('~PrevError~', $ret);
+        self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
         // get colorful text
         $ret = $m->getColorfulText();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
-        self::assertMatchesRegularExpression('~PrevError~', $ret);
+        self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
         // get JSON
         $ret = $m->getJson();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
-        self::assertMatchesRegularExpression('~PrevError~', $ret);
+        self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
         // to safe string

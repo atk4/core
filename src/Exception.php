@@ -105,8 +105,6 @@ class Exception extends \Exception
     }
 
     /**
-     * Augment existing exception with more info.
-     *
      * @param mixed $value
      *
      * @return $this
@@ -119,8 +117,6 @@ class Exception extends \Exception
     }
 
     /**
-     * Add a suggested/possible solution to the exception.
-     *
      * @return $this
      */
     public function addSolution(string $solution): self
@@ -131,8 +127,6 @@ class Exception extends \Exception
     }
 
     /**
-     * Get the solutions array.
-     *
      * @return array<int, string>
      */
     public function getSolutions(): array
@@ -140,16 +134,13 @@ class Exception extends \Exception
         return $this->solutions;
     }
 
-    /**
-     * Get the custom exception title.
-     */
     public function getCustomExceptionTitle(): string
     {
         return $this->customExceptionTitle;
     }
 
     /**
-     * Set Custom Translator adapter.
+     * Set custom Translator adapter.
      *
      * @return $this
      */

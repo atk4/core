@@ -12,7 +12,7 @@ trait DebugTrait
     public $debug = false;
 
     /** @var array<string, array<int, string>> Helps debugTraceChange. */
-    protected array $_prevTrace = [];
+    protected array $_previousTrace = [];
 
     /**
      * Outputs message to STDERR.
@@ -90,14 +90,14 @@ trait DebugTrait
             }
         }
 
-        if (isset($this->_prevTrace[$trace]) && array_diff($this->_prevTrace[$trace], $bt)) {
-            $d1 = array_diff($this->_prevTrace[$trace], $bt);
-            $d2 = array_diff($bt, $this->_prevTrace[$trace]);
+        if (isset($this->_previousTrace[$trace]) && array_diff($this->_previousTrace[$trace], $bt)) {
+            $d1 = array_diff($this->_previousTrace[$trace], $bt);
+            $d2 = array_diff($bt, $this->_previousTrace[$trace]);
 
             $this->log('debug', 'Call path for ' . $trace . ' has diverged (was ' . implode(', ', $d1) . ', now ' . implode(', ', $d2) . ")\n");
         }
 
-        $this->_prevTrace[$trace] = $bt;
+        $this->_previousTrace[$trace] = $bt;
     }
 
     /**
