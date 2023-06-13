@@ -66,7 +66,7 @@ trait DiContainerTrait
                     if ($origValue !== null) {
                         $isMissing = false;
                     }
-                } catch (\Exception $e) {
+                } catch (\Exception $e) { // @phpstan-ignore-line
                 }
 
                 if ($isMissing) {
