@@ -99,7 +99,7 @@ class FactoryDiMockConstructorMustNeverBeCalled
 {
     public function __construct()
     {
-        throw new \Error('Contructor must never be called');
+        throw new \Error('Constructor must never be called');
     }
 }
 

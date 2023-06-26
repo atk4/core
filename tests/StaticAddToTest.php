@@ -116,7 +116,7 @@ class StaticAddToTest extends TestCase
     {
         $m = new ContainerMock();
 
-        // two anonymous children should get unique names asigned.
+        // two anonymous children should get unique names assigned.
         TrackableMockSat::addTo($m);
         $anon = TrackableMockSat::addTo($m);
         TrackableMockSat::addTo($m, [], ['foo bar']);

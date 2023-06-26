@@ -98,7 +98,7 @@ Either of those seeds can be replaced with the Object::
     $button->icon = new Icon('book');
 
 If seed is a string then it would be treated as class name. For a class-less seed
-it would be treaded as a first argument to the construcor::
+it would be treaded as a first argument to the constructor::
 
     $button = $app->add('Button');
     $button->icon = 'book';
@@ -112,7 +112,7 @@ good example where getter is needed. Here is a typical lifecycle of an argument:
  1. when object is created "icon" is set to null
  2. seed may have a value for "icon" and can set it to string, array or object
  3. user may explicitly set "icon" to string, array or object
- 4. some code may wish to interract with icon and will expect it to be object
+ 4. some code may wish to interact with icon and will expect it to be object
  5. recursiveRender() will expect icon to be also added inside $button's template
 
 So here are some rules for ATK and add-ons:
@@ -207,7 +207,7 @@ to use. However it can be passed as a second argument to the factory::
 
     $this->icon = Factory::factory([Icon::class, 'book'], $this->icon);
 
-This will use class icon and first argument 'book' as default, but would use exitsing seed version if
+This will use class icon and first argument 'book' as default, but would use existing seed version if
 it was specified. Also it will preserve the object value of an icon.
 
 Factory Defaults

@@ -34,7 +34,7 @@ class ContainerTraitTest extends TestCase
     {
         $m = new ContainerMock();
 
-        // two anonymous children should get unique names asigned.
+        // two anonymous children should get unique names assigned.
         $m->add(new TrackableMock());
         $anon = $m->add(new TrackableMock());
         $m->add(new TrackableMock(), 'foo bar');

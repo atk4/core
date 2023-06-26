@@ -92,7 +92,7 @@ class CollectionTraitTest extends TestCase
     }
 
     /**
-     * Cannot remove non existant object.
+     * Cannot remove non existent object.
      */
     public function testException4(): void
     {
@@ -102,7 +102,7 @@ class CollectionTraitTest extends TestCase
     }
 
     /**
-     * Cannot get non existant object.
+     * Cannot get non existent object.
      */
     public function testException5(): void
     {
@@ -112,7 +112,7 @@ class CollectionTraitTest extends TestCase
     }
 
     /**
-     * Cannot get non existant object.
+     * Cannot get non existent object.
      */
     public function testException6(): void
     {
