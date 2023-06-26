@@ -16,7 +16,7 @@ If your child implements :php:trait:`InitializerTrait` then the method
 You will be able to use :php:meth:`ContainerTrait::getElement()` to access
 elements inside container::
 
-    $object->add(new AnoterObject(), 'test');
+    $object->add(new AnotherObject(), 'test');
     $anotherObject = $object->getElement('test');
 
 If you additionally use :php:trait:`TrackableTrait` together with :php:trait:`NameTrait`

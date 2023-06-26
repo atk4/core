@@ -24,7 +24,7 @@ class QuietObjectWrapper
 
     private function __clone()
     {
-        // prevent clonning
+        // prevent cloning
     }
 
     public function __sleep(): array

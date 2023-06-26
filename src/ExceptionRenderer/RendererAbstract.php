@@ -140,15 +140,15 @@ abstract class RendererAbstract
         }
 
         $out = '[';
-        $supressKeys = array_is_list($val);
+        $suppressKeys = array_is_list($val);
         foreach ($val as $k => $v) {
             $kSafe = static::toSafeString($k);
             $vSafe = static::toSafeString($v, $allowNl, $maxDepth - 1);
 
             if ($allowNl) {
-                $out .= "\n" . '  ' . ($supressKeys ? '' : $kSafe . ': ') . preg_replace('~(?<=\n)~', '    ', $vSafe);
+                $out .= "\n" . '  ' . ($suppressKeys ? '' : $kSafe . ': ') . preg_replace('~(?<=\n)~', '    ', $vSafe);
             } else {
-                $out .= ($supressKeys ? '' : $kSafe . ': ') . $vSafe;
+                $out .= ($suppressKeys ? '' : $kSafe . ': ') . $vSafe;
             }
 
             if ($k !== array_key_last($val)) {
