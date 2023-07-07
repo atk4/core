@@ -49,7 +49,7 @@ echo $m->sum(3, 5); // 8
 
 ## Properties
 
-    None
+None
 
 ## Methods
 

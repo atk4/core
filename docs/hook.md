@@ -16,9 +16,9 @@ necessary.
 
 Some good examples for hook spots are:
 
- - beforeSave
- - afterDelete
- - validation
+- beforeSave
+- afterDelete
+- validation
 
 The framework or application would typically execute hooks like this:
 
@@ -120,9 +120,9 @@ $res2 = $obj->hook('test', [3, 3]);
 As you see in the code above, we were able to pass some arguments into those
 hooks. There are actually 3 sources that are considered for the arguments:
 
- - first argument to callbacks is always the $object
- - arguments passed as 3rd argument to onHook() are included
- - arguments passed as 2nd argument to hook() are included
+- first argument to callbacks is always the $object
+- arguments passed as 3rd argument to onHook() are included
+- arguments passed as 2nd argument to hook() are included
 
 You can also use key declarations if you wish to override arguments:
 

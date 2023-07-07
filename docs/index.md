@@ -18,11 +18,11 @@ but you are welcome to use some or all traits elsewhere.
 Within your application or framework you can quite often have requirement for
 using containers:
 
- - Form containing fields
- - Table containing columns
- - Component containing sub-components
- - Model object containing Field objects
- - Application containing controllers
+- Form containing fields
+- Table containing columns
+- Component containing sub-components
+- Model object containing Field objects
+- Application containing controllers
 
 The natural solution to the problem is to create array like this:
 
@@ -78,12 +78,12 @@ $container->removeElement($child);
 Although containers work with any objects, assigning additional traits to your
 ChildClass can extend the basic functionality.
 
- - :php:trait:`InitializerTrait` will add automatic code execution when adding
- - :php:trait:`AppScopeTrait` will pass value of $app property from container to
-   child.
- - :php:trait:`TrackableTrait` will let you assign unique names to object
- - :php:class:`Factory` will let you specify object class by Seed
- - :php:trait:`DiContainerTrait` will let you with dependency injection
+- :php:trait:`InitializerTrait` will add automatic code execution when adding
+- :php:trait:`AppScopeTrait` will pass value of $app property from container to
+  child.
+- :php:trait:`TrackableTrait` will let you assign unique names to object
+- :php:class:`Factory` will let you specify object class by Seed
+- :php:trait:`DiContainerTrait` will let you with dependency injection
 
 Just to clarify what Seed is:
 
@@ -126,12 +126,12 @@ for your standard objects then executing them.
 
 Yet HookTrait implements many much needed extensions to make hooks work great:
 
- - define multiple hooking spot per object, e.g: 'beforeInit', 'beforeDelete' etc
- - multiple call-back can be assigned to each spot
- - callbacks are executed in order of numeric priority
- - arguments can be passed to callbacks
- - return values can be collected from callbacks
- - callback may "Break Hook" preventing other callbacks from being executed
+- define multiple hooking spot per object, e.g: 'beforeInit', 'beforeDelete' etc
+- multiple call-back can be assigned to each spot
+- callbacks are executed in order of numeric priority
+- arguments can be passed to callbacks
+- return values can be collected from callbacks
+- callback may "Break Hook" preventing other callbacks from being executed
 
 Once you assign :php:trait:`HookTrait` to AnyClass, you can start assigning
 and triggering callbacks:
@@ -267,9 +267,9 @@ The same can be said about web output:
 Agile Core implements :php:class:`Exception` class which offers many benefits
 compared to standard PHP exceptions:
 
- - Pass additional information `(new Exception('Bad argument'))->addMoreInfo('arg', $arg')`
- - Visualize in ASCII or HTML
- - Better means of localization
+- Pass additional information `(new Exception('Bad argument'))->addMoreInfo('arg', $arg')`
+- Visualize in ASCII or HTML
+- Better means of localization
 
 ## Others
 

@@ -45,7 +45,7 @@ then your objects also receive unique "name". From example above:
 
 ### Methods
 
-    None
+None
 
 ## CollectionTrait
 

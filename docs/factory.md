@@ -7,9 +7,9 @@
 This trait is used to initialize object of the appropriate class, handling
 things like:
 
- - determining name of the class with ability to override
- - passing argument to constructors
- - setting default property values
+- determining name of the class with ability to override
+- passing argument to constructors
+- setting default property values
 
 Thanks to Factory trait, the following code:
 
@@ -123,18 +123,18 @@ $button->icon = 'book';
 ATK only uses setters/getters when they make sense. Argument like "icon" is a very
 good example where getter is needed. Here is a typical lifecycle of an argument:
 
- 1. when object is created "icon" is set to null
- 2. seed may have a value for "icon" and can set it to string, array or object
- 3. user may explicitly set "icon" to string, array or object
- 4. some code may wish to interact with icon and will expect it to be object
- 5. recursiveRender() will expect icon to be also added inside $button's template
+1. when object is created "icon" is set to null
+2. seed may have a value for "icon" and can set it to string, array or object
+3. user may explicitly set "icon" to string, array or object
+4. some code may wish to interact with icon and will expect it to be object
+5. recursiveRender() will expect icon to be also added inside $button's template
 
 So here are some rules for ATK and add-ons:
 
- - use class-less seeds where possible, but indicate so in the comments
- - keep seed in its original form as long as possible
- - use getter (getIcon()) which would convert seed into object (if needed)
- - add icon object into render-tree inside recursiveRender() method
+- use class-less seeds where possible, but indicate so in the comments
+- keep seed in its original form as long as possible
+- use getter (getIcon()) which would convert seed into object (if needed)
+- add icon object into render-tree inside recursiveRender() method
 
 If you need some validation (e.g. icon and iconRight cannot be set at the same time
 by the button), do that inside recursiveRender() method or in a custom setter.
@@ -285,10 +285,10 @@ used.
 When both seed and defaults are used, then values inside "seed" will have
 precedence:
 
- - for named arguments any value specified in "seed" will fully override
-   identical value from "defaults", unless if the seed's value is "null".
- - for constructor arguments, the non-null values specified in "seed" will
-   replace corresponding value from $defaults.
+- for named arguments any value specified in "seed" will fully override
+  identical value from "defaults", unless if the seed's value is "null".
+- for constructor arguments, the non-null values specified in "seed" will
+  replace corresponding value from $defaults.
 
 The next example will help you understand the precedence of different argument
 values. See my description below the example:
@@ -331,7 +331,7 @@ Two (or more) seeds can be merged resulting in a new seed with some combined
 properties:
 
 1. Class of a first seed will be selected. If specified as "null" will be picked
-    from next seed.
+   from next seed.
 2. If string as passed as any of the argument it's considered to be a class
 3. If object is passed as any of the argument, it will be used instead ignoring
    all classes and numeric arguments.
@@ -414,9 +414,9 @@ $this->buttonSave = Factory::factory([Button::class], $this->buttonSave);
 
 So the value you specify for the icon will be passed as:
 
- - string: argument to constructor of `Button()`.
- - array: arguments for constructors and inject properties
- - object: will override return value
+- string: argument to constructor of `Button()`.
+- array: arguments for constructors and inject properties
+- object: will override return value
 
 ### Specify Layout
 
@@ -435,18 +435,18 @@ $this->layout = Factory::factory($layout);
 
 The value you specify will be treated like this:
 
- - string: specify a class (prefixed by Layout\)
- - array: specify a class and allow to pass additional argument or constructor options
- - object: will override layout
+- string: specify a class (prefixed by Layout\)
+- array: specify a class and allow to pass additional argument or constructor options
+- object: will override layout
 
 ### Form::addField and Table::addColumn
 
 Agile UI is using form field classes from namespace \Atk4\Ui\FormField\.
 A default class is 'Line' but there are several ways how it can be overridden:
 
- - User can specify $ui['form'] / $ui['table'] property for model's field
- - User can pass 2nd parameter to addField()
- - Class can be inferred from field type
+- User can specify $ui['form'] / $ui['table'] property for model's field
+- User can pass 2nd parameter to addField()
+- Class can be inferred from field type
 
 Each of the above can specify class name, so with 3 seed sources they need
 merging:
