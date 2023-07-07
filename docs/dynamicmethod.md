@@ -1,11 +1,8 @@
-====================
-Dynamic Method Trait
-====================
+# Dynamic Method Trait
 
 .. php:trait:: DynamicMethodTrait
 
-Introduction
-============
+## Introduction
 
 Adds ability to add methods into objects dynamically. That's like a "trait"
 feature of a PHP, but implemented in run-time::
@@ -15,8 +12,7 @@ feature of a PHP, but implemented in run-time::
     });
     $object->test('world');
 
-Global Methods
-==============
+## Global Methods
 
 If object has application scope :php:trait:`AppScopeTrait` and the application
 implements :php:trait:`HookTrait` then executing $object->test() will also
@@ -34,8 +30,8 @@ global method.
 If you attempt to register same method multiple times you will receive an
 exception.
 
-Dynamic Method Arguments
-========================
+## Dynamic Method Arguments
+
 When calling dynamic method first argument which is passed to the method will
 be object itself. Dynamic method will also receive all arguments which are
 given when you call this dynamic method::
@@ -45,13 +41,11 @@ given when you call this dynamic method::
     });
     echo $m->sum(3, 5); // 8
 
-Properties
-==========
+## Properties
 
     None
 
-Methods
-=======
+## Methods
 
 .. php:method:: tryCall($method, $arguments)
 

@@ -1,11 +1,8 @@
-=================
-Initializer Trait
-=================
+# Initializer Trait
 
 .. php:trait:: InitializerTrait
 
-Introduction
-============
+## Introduction
 
 With our traits objects now become linked with the "owner" and the "app".
 Initializer trait allows you to define a method that would be called after
@@ -40,8 +37,7 @@ Declare a object class in your framework::
         }
     }
 
-Methods
-=======
+## Methods
 
 .. php:method:: init()
 

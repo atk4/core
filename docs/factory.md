@@ -1,11 +1,8 @@
-=============
-Factory Class
-=============
+# Factory Class
 
 .. php:class:: Factory
 
-Introduction
-============
+## Introduction
 
 This trait is used to initialize object of the appropriate class, handling
 things like:
@@ -25,8 +22,7 @@ can replace this::
     $button->action = new My\Action();
     $app->add($button);
 
-Type Hinting
-------------
+### Type Hinting
 
 Agile Toolkit 2.1 introduces support for a new syntax. It is functionally
 identical to a short-hand code, but your IDE will properly set type for
@@ -37,13 +33,11 @@ a `$button` to be `class Button` instead of `class View`::
 The traditional `$view->add` will remain available, there are no plans to
 remove that syntax.
 
-Class Name Resolution
-=====================
+## Class Name Resolution
 
 An absolute/full class name must be always provided. Relative class name resolution was obsoleted/removed.
 
-Seed
-====
+## Seed
 
 Using "class" as opposed to initialized object yields many performance gains,
 as initialization of the class may be delayed until it's required. For instance::
@@ -79,8 +73,7 @@ A Seed is an array consisting of class name/object, named and numeric arguments:
 
     $seed = [Button::class, 'My Label', 'icon' => 'book'];
 
-Seed with and without class
----------------------------
+### Seed with and without class
 
 There are two types of seeds - with class name and without. The one above contains
 the class and is used when user needs a flexibility to specify a class::
@@ -103,8 +96,7 @@ it would be treaded as a first argument to the constructor::
     $button = $app->add('Button');
     $button->icon = 'book';
 
-Lifecycle of argument-bound seed
---------------------------------
+### Lifecycle of argument-bound seed
 
 ATK only uses setters/getters when they make sense. Argument like "icon" is a very
 good example where getter is needed. Here is a typical lifecycle of an argument:
@@ -129,8 +121,7 @@ If you do resort to custom setters, make sure they return $this for better chain
 
 Always try to keep things simple for others and also for yourself.
 
-Factory
-=======
+## Factory
 
 As mentioned juts above - at some point your "Seed" must be turned into Object. This
 is done by executing factory method.
@@ -178,8 +169,7 @@ commonly, however, you would use this through the add() method::
     $button = new Button('A Label');
     $view->add([$button, 'icon' => ['book'], 'action' => new Action('..')]);
 
-Seed Components
----------------
+### Seed Components
 
 Class definition - passed as the ``$seed[0]`` and is the only mandatory
 component, e.g::
@@ -199,8 +189,7 @@ by using :php:meth:`DiContainerTrait::setDefaults`.
 
 Factory uses `array_shift` to separate class definition from other components.
 
-Class-less seeds
-----------------
+### Class-less seeds
 
 You cannot create object from a class-less seed, simply because factory would not know which class
 to use. However it can be passed as a second argument to the factory::
@@ -210,8 +199,7 @@ to use. However it can be passed as a second argument to the factory::
 This will use class icon and first argument 'book' as default, but would use existing seed version if
 it was specified. Also it will preserve the object value of an icon.
 
-Factory Defaults
-----------------
+### Factory Defaults
 
 Defaults array takes place of $seed if $seed is missing components. $defaults is
 using identical format to seed, but without the class. If defaults is not an
@@ -246,8 +234,7 @@ value::
 With this it's handy to pass icon as an argument and don't worry if the null is
 used.
 
-Precedence and Usage
---------------------
+### Precedence and Usage
 
 When both seed and defaults are used, then values inside "seed" will have
 precedence:
@@ -288,10 +275,7 @@ The `cake` will be the final value of the example above. Even though `init()`
 method is set to change the value of icon, the `init()` method is only executed
 when object becomes part of RenderTree, but that's not happening here.
 
-
-Seed Merging
-============
-
+## Seed Merging
 
 .. php:method:: mergeSeeds($seed, $seed2, ...)
 
@@ -336,8 +320,7 @@ When object is passed, it will take precedence and absorb all named arguments::
 If multiple objects are specified then early ones take precedence while still
 absorbing all named arguments.
 
-Default and Seed objects
-------------------------
+### Default and Seed objects
 
 When object is passed as 2nd argument to Factory::factory() it takes precedence over
 all array-based seeds. If 1st argument of Factory::factory() is also object, then 1st
@@ -352,15 +335,12 @@ argument object is used::
     Factory::factory(new Icon('book'), new Icon('pencil'));
     // book
 
-
-Usage in frameworks
-===================
+## Usage in frameworks
 
 There are several ways to use Seed Merging and Agile UI / Agile Data makes use
 of those patterns when possible.
 
-Specify Icon for a Button
--------------------------
+### Specify Icon for a Button
 
 As you may know, Button class has icon property, which may be specified as a
 string, seed or object::
@@ -378,8 +358,7 @@ So the value you specify for the icon will be passed as:
  - array: arguments for constructors and inject properties
  - object: will override return value
 
-Specify Layout
---------------
+### Specify Layout
 
 The first thing beginners learn about Agile Toolkit is how to specify layout::
 
@@ -396,8 +375,7 @@ The value you specify will be treated like this:
  - array: specify a class and allow to pass additional argument or constructor options
  - object: will override layout
 
-Form::addField and Table::addColumn
------------------------------------
+### Form::addField and Table::addColumn
 
 Agile UI is using form field classes from namespace \Atk4\Ui\FormField\.
 A default class is 'Line' but there are several ways how it can be overridden:
@@ -416,8 +394,7 @@ Passing an actual object anywhere will use it instead even if you specify seed.
 
 Specify Form Field
 
-addField, addButton, etc
-------------------------
+### addField, addButton, etc
 
 Model::addField, Form::addButton, FormLayout::addHeader imply that the class of
 an added object is known so the argument you specify to those methods ends up

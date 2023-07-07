@@ -1,7 +1,4 @@
-
-========================
-Agile Core Documentation
-========================
+# Agile Core Documentation
 
 Agile Core is a collection of PHP Traits for designing object-oriented
 frameworks. The main purpose for this project is to work as a foundation for
@@ -13,9 +10,7 @@ but you are welcome to use some or all traits elsewhere.
 
    self
 
-Object Containers
-=================
-
+## Object Containers
 
 .. figure:: images/containers.png
    :scale: 50 %
@@ -107,9 +102,7 @@ seed.
     appscope
     di
 
-
-Hooks
-=====
+## Hooks
 
 When you look to make your framework / application extendable, the Hooks is a
 modern standard in PHP applications. This way a 3rd-party addon can execute code
@@ -149,8 +142,7 @@ and triggering callbacks::
 
     hook
 
-Hook-based dynamic Methods
---------------------------
+### Hook-based dynamic Methods
 
 :php:trait:`DynamicMethodTrait` adds ability to add methods into objects
 dynamically.
@@ -186,8 +178,7 @@ The implementation of dynamic methods relies on Hook trait, so to use it::
 
     dynamicmethod
 
-Modelable Objects
-=================
+## Modelable Objects
 
 [Agile Data](https://github.com/atk4/data) features a modern implementation
 for object modeling.
@@ -235,8 +226,7 @@ by a PHP Trait.
 
     modelable
 
-Exceptions
-==========
+## Exceptions
 
 Exceptions in most programming languages are cryptic and confusing, about 5% of
 the trace-back code is useful and it's obscured in most unique ways.
@@ -259,8 +249,7 @@ compared to standard PHP exceptions:
  - Visualize in ASCII or HTML
  - Better means of localization
 
-Others
-======
+## Others
 
 .. toctree::
     :maxdepth: 3

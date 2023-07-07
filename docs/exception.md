@@ -1,11 +1,8 @@
-=========
-Exception
-=========
+# Exception
 
 .. php:class:: Exception
 
-Introduction
-============
+## Introduction
 
 Exception provides several improvements over vanilla PHP exception class. The
 most significant change is introduction of parameters.
@@ -58,9 +55,7 @@ Some param values may be objects.
     Change message (subject) of a current exception. Primary use is for
     localization purposes.
 
-
-Output Formatting
------------------
+### Output Formatting
 
 Exception (at least for now) contains some code to make the exception actually
 look good. This functionality may be removed in the later versions to
@@ -83,14 +78,11 @@ problem.
 
 .. image:: exception-demo.png
 
-Handling Exceptions in ATK Data and ATK UI
-==========================================
+## Handling Exceptions in ATK Data and ATK UI
 
 Sometimes you want your exceptions to be displayed nicely. There are several ways:
 
-Try and Catch block
--------------------
-
+### Try and Catch block
 
 If you want, you can wrap your code inside try / catch block::
 

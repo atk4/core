@@ -1,11 +1,8 @@
-==============
-AppScope Trait
-==============
+# AppScope Trait
 
 .. php:trait:: AppScopeTrait
 
-Introduction
-============
+## Introduction
 
 Typical software design will create the application scope. Most frameworks
 relies on "static" properties, methods and classes. This does puts some
@@ -14,8 +11,7 @@ limitations on your implementation (you can't have multiple applications).
 App Scope will pass the 'app' property into all the object that you're adding,
 so that you know for sure which application you work with.
 
-Properties
-==========
+## Properties
 
 .. php:attr:: app
 
@@ -40,7 +36,6 @@ Properties
     this hash and the value contains the new key. This helps to avoid creating
     many sequential prefixes for the same character sequence.
 
-Methods
-=======
+## Methods
 
 None

@@ -1,18 +1,14 @@
-==========
-Hook Trait
-==========
+# Hook Trait
 
 .. php:trait:: HookTrait
 
-Introduction
-============
+## Introduction
 
 HookTrait adds some methods into your class to registering call-backs that would
 be executed by triggering a hook. All hooks are local to the object, so if you
 want to have application-wide hook then use `app` property.
 
-Hook Spots
-==========
+## Hook Spots
 
 Hook is described by a string identifier which we call hook-spot, which would
 normally be expressing desired action with prefixes "before" or "after if
@@ -34,16 +30,14 @@ You can register multiple call-backs to be executed for the requested `spot`::
         echo "Hook 'spot' is called!";
     });
 
-Adding callbacks
-================
+## Adding callbacks
 
 .. php:method:: onHook($spot, $fx = null, array $args = [], int $priority = 5)
 
 Register a call-back method. Calling several times will register multiple
 callbacks which will be execute in the order that they were added.
 
-Short way to describe callback method
-=====================================
+## Short way to describe callback method
 
 There is a concise syntax for using $fx by specifying object only.
 In case $fx is omitted then $this object is used as $fx.
@@ -64,9 +58,7 @@ In this case a method with same name as $spot will be used as callback::
         // will be called from the hook
     }
 
-
-Callback execution order
-========================
+## Callback execution order
 
 $priority will make hooks execute faster. Default priority is 5, but if you add
 hook with priority 1 it will always be executed before any hooks with priority
@@ -113,8 +105,7 @@ will be placed in array and returned by hook()::
     $res2 = $obj->hook('test', [3, 3]);
     // res2 = [9, 6]
 
-Arguments
-=========
+## Arguments
 
 As you see in the code above, we were able to pass some arguments into those
 hooks. There are actually 3 sources that are considered for the arguments:
@@ -141,8 +132,7 @@ You can also use key declarations if you wish to override arguments::
     $res4 = $obj->hook('test', [2, 3]);
     // res3 = [6, 5, 13, 2315]
 
-Breaking Hooks
-==============
+## Breaking Hooks
 
 .. php:method:: breakHook
 
@@ -173,8 +163,7 @@ call-backs from being executed::
 breakHook method is implemented by throwing a special exception that is then
 caught inside hook() method.
 
-Using references in hooks
-=========================
+## Using references in hooks
 
 In some cases you want hook to change certain value. For example when model
 value is set it may call normalization hook (methods will change $value)::
@@ -189,8 +178,7 @@ value is set it may call normalization hook (methods will change $value)::
         $a = trim($a);
     });
 
-Checking if hook has callbacks
-==============================
+## Checking if hook has callbacks
 
 .. php:method:: hookHasCallbacks()
 

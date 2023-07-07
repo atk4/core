@@ -1,11 +1,8 @@
-===========
-Debug Trait
-===========
+# Debug Trait
 
 .. php:trait:: DebugTrait
 
-Introduction
-============
+## Introduction
 
 Agile Core implements ability for application to implement "debug", "info" and
 "messages". The general idea of them is that they can be generated in the depths
@@ -17,15 +14,13 @@ which fails and it is willing to pass information about this failure to the app.
 This is not as extreme as exception, but still, user needs to be able to find
 this information eventually.
 
-Compatibility with PSR-3
-------------------------
+### Compatibility with PSR-3
 
 Loggers as implemented by PSR-3 define message routing with various LogLevels,
 but it's intended for logging only. The Debug Trait covers a wider context as
 described below:
 
-Debug
------
+### Debug
 
 The design goal of Debug is to be able to display contextual debug information
 only when it's manually enabled. For instance, if you are having problem with
@@ -57,15 +52,13 @@ Executing debug will look for ``$this->getApp()`` link and if the application
 implements ``Psr\Log\LoggerInterface``, then ``$this->getApp()->log()`` will be
 called using LogLevel DEBUG.
 
-Log
----
+### Log
 
 Log method will log message every time. DebugTrait implements the ``log()``
 method which will either display information on the STDOUT (if ``$this->getApp()``
 does not exist or does not implement PSR-3)
 
-debugTraceChange
-----------------
+### debugTraceChange
 
 This method can help you find situations when a certain code is called multiple
 times and when it shouldn't. When called first time it will remember "trace"
@@ -75,10 +68,9 @@ previous and will tell you where trace has diverged.
 This method is pretty valuable when you try to find why certain areas of the
 code have executed multiple times.
 
+## Properties
 
-Properties
-==========
 
-Methods
-=======
+
+## Methods
 

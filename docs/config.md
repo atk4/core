@@ -1,13 +1,10 @@
-=====================
-Config Trait
-=====================
+# Config Trait
 
 .. php:trait:: ConfigTrait
 
 Agile Core implements support for read configuration files of different formats
 
-Introduction
-============
+## Introduction
 
 This trait can be added to any object to load a configuration.
 Configuration files can be of 4 types: php, php-inline, json, yaml.
@@ -29,12 +26,10 @@ Element in config can be defined even manually:
 
     $object->setConfig('element_key', $element);
 
+## Supported Formats
 
-Supported Formats
-=================
+### php
 
-php
----
 Configuration is defined as a return statement
 
     return [
@@ -45,17 +40,15 @@ Configuration is defined as a return statement
         ],
     ];
 
-JSON
-----
+### JSON
+
 Configuration is defined as json
 
-YAML
-----
+### YAML
+
 Configuration is defined as yaml
 
-
-Methods
-=======
+## Methods
 
 .. php:method:: readConfig($files = ['config.php'], $format = 'php')
 
