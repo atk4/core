@@ -8,7 +8,7 @@ With our traits objects now become linked with the "owner" and the "app".
 Initializer trait allows you to define a method that would be called after
 object is linked up into the environment.
 
-Declare a object class in your framework::
+Declare a object class in your framework:
 
 ```
 class FormField
@@ -48,7 +48,7 @@ class FormField_Input extends FormField
     prevents from some serious mistakes.
 
 If you wish to use traits class and extend it, you can use this in your base
-class::
+class:
 
 ```
 class FormField

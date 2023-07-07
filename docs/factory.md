@@ -11,13 +11,13 @@ things like:
  - passing argument to constructors
  - setting default property values
 
-Thanks to Factory trait, the following code::
+Thanks to Factory trait, the following code:
 
 ```
 $button = $app->add(['Button', 'A Label', 'icon' => 'book', 'action' => My\Action::class]);
 ```
 
-can replace this::
+can replace this:
 
 ```
 $button = new \Atk4\Ui\Button('A Label');
@@ -30,7 +30,7 @@ $app->add($button);
 
 Agile Toolkit 2.1 introduces support for a new syntax. It is functionally
 identical to a short-hand code, but your IDE will properly set type for
-a `$button` to be `class Button` instead of `class View`::
+a `$button` to be `class Button` instead of `class View`:
 
 ```
 $button = Button::addTo($view, ['A Label', 'icon' => 'book', 'action' => My\Action::class]);
@@ -46,7 +46,7 @@ An absolute/full class name must be always provided. Relative class name resolut
 ## Seed
 
 Using "class" as opposed to initialized object yields many performance gains,
-as initialization of the class may be delayed until it's required. For instance::
+as initialization of the class may be delayed until it's required. For instance:
 
 ```
 $model->hasMany('Invoices', Invoice::class);
@@ -61,7 +61,7 @@ until you actually traverse into it using `$model->ref('Invoices')` and can offe
 up to 20% performance increase. But in some cases, you want to pass some information
 into the object.
 
-Suppose you want to add a button with an icon::
+Suppose you want to add a button with an icon:
 
 ```
 $button = $view->add('Button');
@@ -69,7 +69,7 @@ $button->icon = new Icon('book');
 ```
 
 It's possible that some call-back execution will come before button rendering, so
-it's better to replace icon with the class::
+it's better to replace icon with the class:
 
 ```
 $button = $view->add('Button');
@@ -81,7 +81,7 @@ the constructor of the Icon class.
 
 This problem is solved in ATK with "Seeds".
 
-A Seed is an array consisting of class name/object, named and numeric arguments::
+A Seed is an array consisting of class name/object, named and numeric arguments:
 
 ```
 $seed = [Button::class, 'My Label', 'icon' => 'book'];
@@ -90,20 +90,20 @@ $seed = [Button::class, 'My Label', 'icon' => 'book'];
 ### Seed with and without class
 
 There are two types of seeds - with class name and without. The one above contains
-the class and is used when user needs a flexibility to specify a class::
+the class and is used when user needs a flexibility to specify a class:
 
 ```
 $app->add(['Button', 'My Label', 'icon' => 'book']);
 ```
 
 The other seed type is class-less and can be used in situations where there are no
-ambiguity about which class is used::
+ambiguity about which class is used:
 
 ```
 $button->icon = ['book'];
 ```
 
-Either of those seeds can be replaced with the Object::
+Either of those seeds can be replaced with the Object:
 
 ```
 $button = $app->add(new Button('My Label'));
@@ -111,7 +111,7 @@ $button->icon = new Icon('book');
 ```
 
 If seed is a string then it would be treated as class name. For a class-less seed
-it would be treaded as a first argument to the constructor::
+it would be treaded as a first argument to the constructor:
 
 ```
 $button = $app->add('Button');
@@ -157,7 +157,7 @@ $defaults will only be sed if object implement DiContainerTrait.
 
 In a conventional PHP, you can create and configure object before passing
 it onto another object. This action is called "dependency injecting".
-Consider this example::
+Consider this example:
 
 ```
 $button = new Button('A Label');
@@ -170,7 +170,7 @@ one-by-one is often inconvenient. Also may require to do it recursively,
 e.g. ``Action`` may have to be configured individually.
 
 Agile Core implements a mechanism to make that possible through using Factory::factory()
-method and specifying a seed argument::
+method and specifying a seed argument:
 
 ```
 use Atk4\Ui\Button;
@@ -180,7 +180,7 @@ $button = Factory::factory([Button::Class, 'A Label', 'icon' => ['book'], 'actio
 
 Note that passing 'icon' => ['book'] will also use factory to initialize icon object.
 
-Finally, if you are using IDE and type hinting, a preferred code would be::
+Finally, if you are using IDE and type hinting, a preferred code would be:
 
 ```
 use Atk4\Ui\Button;
@@ -190,7 +190,7 @@ Factory::factory($button, ['icon' => ['book'], 'action' => new Action(..)]);
 ```
 
 This will properly set type to $button variable, while still setting properties for icon/action. More
-commonly, however, you would use this through the add() method::
+commonly, however, you would use this through the add() method:
 
 ```
 use Atk4\Ui\Button;
@@ -202,13 +202,13 @@ $view->add([$button, 'icon' => ['book'], 'action' => new Action('..')]);
 ### Seed Components
 
 Class definition - passed as the ``$seed[0]`` and is the only mandatory
-component, e.g::
+component, e.g:
 
 ```
 $button = Factory::factory([Button::class]);
 ```
 
-Any other numeric arguments will be passed as constructor arguments::
+Any other numeric arguments will be passed as constructor arguments:
 
 ```
 $button = Factory::factory([Button::class, 'My Label', 'red', 'big']);
@@ -226,7 +226,7 @@ Factory uses `array_shift` to separate class definition from other components.
 ### Class-less seeds
 
 You cannot create object from a class-less seed, simply because factory would not know which class
-to use. However it can be passed as a second argument to the factory::
+to use. However it can be passed as a second argument to the factory:
 
 ```
 $this->icon = Factory::factory([Icon::class, 'book'], $this->icon);
@@ -241,13 +241,13 @@ Defaults array takes place of $seed if $seed is missing components. $defaults is
 using identical format to seed, but without the class. If defaults is not an
 array, then it's wrapped into [].
 
-Array that lacks class is called defaults, e.g.::
+Array that lacks class is called defaults, e.g.:
 
 ```
 $defaults = ['Label', 'My Label', 'big red', 'icon' => 'book'];
 ```
 
-You can pass defaults as second argument to :php:meth:`Factory::factory()`::
+You can pass defaults as second argument to :php:meth:`Factory::factory()`:
 
 ```
 $button = Factory::factory([Button::class], $defaults);
@@ -257,21 +257,21 @@ Executing code above will result in 'Button' class being used with 'My Label' as
 a caption and 'big red' class and 'book' icon.
 
 You may also use ``null`` to skip an argument, for instance in the above example
-if you wish to change the label, but keep the class, use this::
+if you wish to change the label, but keep the class, use this:
 
 ```
 $label = Factory::factory([null, 'Other Label'], $defaults);
 ```
 
 Finally, if you pass key/value pair inside seed with a value of ``null`` then
-default value will still be used::
+default value will still be used:
 
 ```
 $label = Factory::factory(['icon' => null], $defaults);
 ```
 
 This will result icon=book. If you wish to disable icon, you should use ``false``
-value::
+value:
 
 ```
 $label = Factory::factory(['icon' => false], $defaults);
@@ -291,7 +291,7 @@ precedence:
    replace corresponding value from $defaults.
 
 The next example will help you understand the precedence of different argument
-values. See my description below the example::
+values. See my description below the example:
 
 ```
 class RedButton extends Button
@@ -337,7 +337,7 @@ properties:
    all classes and numeric arguments.
    All the key->value pairs will be merged and passed into setDefaults().
 
-Some examples::
+Some examples:
 
 ```
 Factory::mergeSeeds(['Button', 'Button Label'], ['Message', 'Message label']);
@@ -350,14 +350,14 @@ Factory::mergeSeeds(['null, 'Label1', 'icon' => 'book'], ['icon' => 'coin', 'But
 // Results in ['Button', 'Label1', 'icon' => 'book', 'class' => ['red']]
 ```
 
-Seed merging can also be used to merge defaults::
+Seed merging can also be used to merge defaults:
 
 ```
 Factory::mergeSeeds(['label 1'], ['icon' => 'book']);
 // results in ['label 1', 'icon' => 'book']
 ```
 
-When object is passed, it will take precedence and absorb all named arguments::
+When object is passed, it will take precedence and absorb all named arguments:
 
 ```
 Factory::mergeSeeds(
@@ -378,7 +378,7 @@ absorbing all named arguments.
 
 When object is passed as 2nd argument to Factory::factory() it takes precedence over
 all array-based seeds. If 1st argument of Factory::factory() is also object, then 1st
-argument object is used::
+argument object is used:
 
 ```
 Factory::factory([Icon::class, 'book'], ['pencil']);
@@ -399,13 +399,13 @@ of those patterns when possible.
 ### Specify Icon for a Button
 
 As you may know, Button class has icon property, which may be specified as a
-string, seed or object::
+string, seed or object:
 
 ```
 $button = $app->add(['Button', 'icon' => 'book']);
 ```
 
-Well, to implement the button internally, render method uses this::
+Well, to implement the button internally, render method uses this:
 
 ```
 // in Form
@@ -420,14 +420,14 @@ So the value you specify for the icon will be passed as:
 
 ### Specify Layout
 
-The first thing beginners learn about Agile Toolkit is how to specify layout::
+The first thing beginners learn about Agile Toolkit is how to specify layout:
 
 ```
 $app = new \Atk4\Ui\App('Hello World');
 $app->initLayout('Centered');
 ```
 
-The argument for initLayout is passed to factory::
+The argument for initLayout is passed to factory:
 
 ```
 $this->layout = Factory::factory($layout);
@@ -449,7 +449,7 @@ A default class is 'Line' but there are several ways how it can be overridden:
  - Class can be inferred from field type
 
 Each of the above can specify class name, so with 3 seed sources they need
-merging::
+merging:
 
 ```
 $seed = Factory::mergeSeeds($decorator, $field->ui, $inferred, [\Atk4\Ui\FormField\Line::class, 'form' => $this]);
@@ -464,7 +464,7 @@ Specify Form Field
 
 Model::addField, Form::addButton, FormLayout::addHeader imply that the class of
 an added object is known so the argument you specify to those methods ends up
-being a factory's $default::
+being a factory's $default:
 
 ```
 public function addButton($label)
@@ -478,7 +478,7 @@ public function addButton($label)
 
 in this code factory will use a seed with a `null` for label, which means, that
 label will be actually taken from a second argument. This pattern enables 3
-ways to use addButton()::
+ways to use addButton():
 
 ```
 $form->addButton('click me');
@@ -491,7 +491,7 @@ $form->addButton(new MyButton('click me'));
 // Use an object specified instead of a button
 ```
 
-A same logic can be applied to addField::
+A same logic can be applied to addField:
 
 ```
 $model->addField('is_vip', ['type' => 'boolean']);
@@ -504,7 +504,7 @@ $model->addField('is_vip', new MyBoolean());
 // new MyBoolean()
 ```
 
-and the implementation uses factory's default::
+and the implementation uses factory's default:
 
 ```
 $field = Factory::factory($this->fieldSeed);

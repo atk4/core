@@ -20,13 +20,13 @@ Some good examples for hook spots are:
  - afterDelete
  - validation
 
-The framework or application would typically execute hooks like this::
+The framework or application would typically execute hooks like this:
 
 ```
 $obj->hook('spot');
 ```
 
-You can register multiple call-backs to be executed for the requested `spot`::
+You can register multiple call-backs to be executed for the requested `spot`:
 
 ```
 $obj->onHook('spot', function ($obj) {
@@ -46,7 +46,7 @@ callbacks which will be execute in the order that they were added.
 There is a concise syntax for using $fx by specifying object only.
 In case $fx is omitted then $this object is used as $fx.
 
-In this case a method with same name as $spot will be used as callback::
+In this case a method with same name as $spot will be used as callback:
 
 ```
 protected function init(): void
@@ -71,7 +71,7 @@ hook with priority 1 it will always be executed before any hooks with priority
 2, 3, 5 etc.
 
 Normally hooks are executed in the same order as they are added, however if you
-use negative priority, then hooks will be executed in reverse order::
+use negative priority, then hooks will be executed in reverse order:
 
 ```
 $obj->onHook('spot', third, [], -1);
@@ -94,7 +94,7 @@ $obj->onHook('spot', nine, [], 5);
 .. php:method:: hook($spot, $args = null)
 
 execute all hooks in order. Hooks can also return some values and those values
-will be placed in array and returned by hook()::
+will be placed in array and returned by hook():
 
 ```
 $mul = function ($obj, $a, $b) {
@@ -124,7 +124,7 @@ hooks. There are actually 3 sources that are considered for the arguments:
  - arguments passed as 3rd argument to onHook() are included
  - arguments passed as 2nd argument to hook() are included
 
-You can also use key declarations if you wish to override arguments::
+You can also use key declarations if you wish to override arguments:
 
 ```
 // continue from above example
@@ -158,8 +158,7 @@ If you do not pass $return value (or specify null) then list of the values
 collected so far will be returned
 
 Remember that adding breaking hook with a lower priority can prevent other
-call-backs from being executed::
-
+call-backs from being executed:
 
 ```
 $obj->onHook('test', function ($obj) {
@@ -180,7 +179,7 @@ caught inside hook() method.
 ## Using references in hooks
 
 In some cases you want hook to change certain value. For example when model
-value is set it may call normalization hook (methods will change $value)::
+value is set it may call normalization hook (methods will change $value):
 
 ```
 public function set($field, $value)

@@ -84,7 +84,7 @@ Sometimes you want your exceptions to be displayed nicely. There are several way
 
 ### Try and Catch block
 
-If you want, you can wrap your code inside try / catch block::
+If you want, you can wrap your code inside try / catch block:
 
 ```
 try {
@@ -97,7 +97,7 @@ try {
 The other option is to use automatic exception catching, (:php:attr:`\Atk4\Ui\App::catchExceptions`)
 which will automatically catch any unhandled exception then pass it to :php:meth:`\Atk4\Ui\App::caughtException()`.
 
-If you do not instantiate App, or set it up without automatic exception catching::
+If you do not instantiate App, or set it up without automatic exception catching:
 
 ```
 $app = new \Atk4\Ui\App(['catchExceptions' => false]);
@@ -105,7 +105,7 @@ $app = new \Atk4\Ui\App(['catchExceptions' => false]);
 
 then you might want to output message details yourself.
 
-Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHtml`::
+Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHtml`:
 
 ```
 try {
@@ -118,7 +118,7 @@ try {
 ```
 
 Although it's not advisable to output anything else other than the Message to user (in production),
-you can get values of additional parameters through::
+you can get values of additional parameters through:
 
 ```
 $e->getParams();

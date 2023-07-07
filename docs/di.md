@@ -7,7 +7,7 @@ Agile Core implements basic support for Dependency Injection Container.
 ### What is Dependency Injection
 
 As it turns out many PHP projects have built objects which hard-code
-dependencies on another object/class. For instance::
+dependencies on another object/class. For instance:
 
 ```
 $book = new Book();
@@ -25,7 +25,7 @@ In Agile Toolkit this has never been a problem, because all of our objects are
 designed without hard dependencies, globals or statics in the first place.
 
 "Dependency Injection" is just a fancy word for ability to specify other objects
-into class constructor / property::
+into class constructor / property:
 
 ```
 $book = new Book($mydb);
@@ -41,7 +41,7 @@ be good for 1 or 2 arguments.
 
 However in Agile UI there are components that are designed specifically to
 encapsulate many various objects. Crud for example is a fully-functioning
-editing solution, but suppose you want to use custom form object::
+editing solution, but suppose you want to use custom form object:
 
 ```
 $crud = new Crud([
@@ -54,7 +54,7 @@ In this scenario you can't pass all of the properties to the constructor, and
 it's easier to pass it through array of key/values. This pattern is called
 Dependency Injection Container. Theory states that developers who use IDEs
 extensively would prefer to pass "object" and not "array", however we typically
-offer a better option::
+offer a better option:
 
 ```
 $crud = new Crud();
@@ -71,7 +71,7 @@ $crud->formAdd = new MyForm();
 .. php:method: setMissingProperty($propertyName, $value)
 
 Calling this method will set object's properties. If any specified property
-is undefined then it will be skipped. Here is how you should use trait::
+is undefined then it will be skipped. Here is how you should use trait:
 
 ```
 class MyObj
@@ -87,13 +87,13 @@ class MyObj
 
 You can also extend and define what should be done if non-property is passed.
 For example Button component allows you to pass value of $content and $class
-like this::
+like this:
 
 ```
 $button = new Button(['My Button Label', 'red']);
 ```
 
-This is done by overriding setMissingProperty method::
+This is done by overriding setMissingProperty method:
 
 ```
 class MyObj

@@ -24,7 +24,7 @@ using containers:
  - Model object containing Field objects
  - Application containing controllers
 
-The natural solution to the problem is to create array like this::
+The natural solution to the problem is to create array like this:
 
 ```
 public $fields = [];
@@ -34,7 +34,7 @@ After that you would need to create code for adding objects into container, remo
 verify their existence etc.
 
 :php:trait:`CollectionTrait` implements several handy methods which can be used
-to create necessary methods with minimum code footprint::
+to create necessary methods with minimum code footprint:
 
 ```
 class Form
@@ -65,7 +65,7 @@ a more older implementation of :php:trait:`ContainerTrait` is used primarily
 for tracking Render Tree in ATK UI where name is optional and a unique name
 is guaranteed.
 
-When $container is using :php:trait:`ContainerTrait`, this would be a typical code::
+When $container is using :php:trait:`ContainerTrait`, this would be a typical code:
 
 ```
 $child = $container->add(new ChildClass());
@@ -85,7 +85,7 @@ ChildClass can extend the basic functionality.
  - :php:class:`Factory` will let you specify object class by Seed
  - :php:trait:`DiContainerTrait` will let you with dependency injection
 
-Just to clarify what Seed is::
+Just to clarify what Seed is:
 
 ```
 $field = $form->add('TextArea');
@@ -93,7 +93,7 @@ $field = $form->add('TextArea');
 
 In this scenario, even though a new object is added, we don't do it ourselves.
 We simply specify some information on how to create and what properties to
-inject into the object::
+inject into the object:
 
 ```
 $field = $form->add([\Atk4\Ui\FormField\Password::class, 'icon' => ['lock', 'circular inverted'], 'width' => 4);
@@ -134,7 +134,7 @@ Yet HookTrait implements many much needed extensions to make hooks work great:
  - callback may "Break Hook" preventing other callbacks from being executed
 
 Once you assign :php:trait:`HookTrait` to AnyClass, you can start assigning
-and triggering callbacks::
+and triggering callbacks:
 
 ```
 $object = new AnyClass();
@@ -158,7 +158,7 @@ $object->hook('test'); // outputs: helloworld
 
 :php:trait:`DynamicMethodTrait` adds ability to add methods into objects
 dynamically.
-That's like a "trait" feature of a PHP, but implemented in run-time::
+That's like a "trait" feature of a PHP, but implemented in run-time:
 
 ```
 $object->addMethod('test', function ($o, $args) {
@@ -167,7 +167,7 @@ $object->addMethod('test', function ($o, $args) {
 $object->test('world'); // outputs: hello, world
 ```
 
-There are also methods for removing and checking if methods exists, so::
+There are also methods for removing and checking if methods exists, so:
 
 ```
 method_exists($object, 'test');
@@ -178,7 +178,7 @@ $object->hasMethod('test');
 $object->removeMethod('test');
 ```
 
-The implementation of dynamic methods relies on Hook trait, so to use it::
+The implementation of dynamic methods relies on Hook trait, so to use it:
 
 ```
 class AnyClass extends OtherClass
@@ -201,7 +201,7 @@ class AnyClass extends OtherClass
 [Agile Data](https://github.com/atk4/data) features a modern implementation
 for object modeling.
 You may extend [Model](http://agile-data.readthedocs.io/en/develop/model.html)
-class to define a business object, such as - ShoppingBag::
+class to define a business object, such as - ShoppingBag:
 
 ```
 class ShoppingBag extends \Atk4\Data\Model
@@ -233,7 +233,7 @@ not only the UI Components that can be associated with the model. In fact
 endpoints can be associated with models. This is why `setModel()` is implemented
 by a PHP Trait.
 
-:php:trait:`ModelableTrait` allows you to associate your object with a Model::
+:php:trait:`ModelableTrait` allows you to associate your object with a Model:
 
 ```
 $form->setModel('Order');

@@ -29,7 +29,7 @@ you wish to see persistence-related debug info, then ``$db->debug()`` will
 enable that.
 
 Information logged through debug like this on any object that implements
-DebugTrait::
+DebugTrait:
 
 ```
 $this->debug('Things are bad');
@@ -41,7 +41,7 @@ possible to use ``$this->getApp()->debug()``.
 
 Various objects may implement DebugTrait and also invoke $this->debug(), but in
 most cases this will simply be ignored right away unless you manually enable
-debugging for the object::
+debugging for the object:
 
 ```
 $obj1->debug(); // enable debugging

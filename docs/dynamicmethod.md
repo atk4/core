@@ -5,7 +5,7 @@
 ## Introduction
 
 Adds ability to add methods into objects dynamically. That's like a "trait"
-feature of a PHP, but implemented in run-time::
+feature of a PHP, but implemented in run-time:
 
 ```
 $object->addMethod('test', function ($o, $args) {
@@ -18,7 +18,7 @@ $object->test('world');
 
 If object has application scope :php:trait:`AppScopeTrait` and the application
 implements :php:trait:`HookTrait` then executing $object->test() will also
-look for globally-registered method inside the application::
+look for globally-registered method inside the application:
 
 ```
 $object->getApp()->addGlobalMethod('test', function ($app, $o, $args) {
@@ -38,7 +38,7 @@ exception.
 
 When calling dynamic method first argument which is passed to the method will
 be object itself. Dynamic method will also receive all arguments which are
-given when you call this dynamic method::
+given when you call this dynamic method:
 
 ```
 $m->addMethod('sum', function ($m, $a, $b) {

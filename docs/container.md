@@ -12,7 +12,7 @@ If your child implements :php:trait:`InitializerTrait` then the method
 :php:meth:`InitializerTrait::init` will also be invoked after linking is done.
 
 You will be able to use :php:meth:`ContainerTrait::getElement()` to access
-elements inside container::
+elements inside container:
 
 ```
 $object->add(new AnotherObject(), 'test');
@@ -59,7 +59,7 @@ then your objects also receive unique "name". From example above:
     to add another element with same name, it will result in
     exception.
 
-Example::
+Example:
 
 ```
 class Form
