@@ -167,7 +167,7 @@ $button->action = new Action(..);
 
 Because Components can have many optional components, then setting them
 one-by-one is often inconvenient. Also may require to do it recursively,
-e.g. ``Action`` may have to be configured individually.
+e.g. `Action` may have to be configured individually.
 
 Agile Core implements a mechanism to make that possible through using Factory::factory()
 method and specifying a seed argument:
@@ -201,7 +201,7 @@ $view->add([$button, 'icon' => ['book'], 'action' => new Action('..')]);
 
 ### Seed Components
 
-Class definition - passed as the ``$seed[0]`` and is the only mandatory
+Class definition - passed as the `$seed[0]` and is the only mandatory
 component, e.g:
 
 ```
@@ -256,21 +256,21 @@ $button = Factory::factory([Button::class], $defaults);
 Executing code above will result in 'Button' class being used with 'My Label' as
 a caption and 'big red' class and 'book' icon.
 
-You may also use ``null`` to skip an argument, for instance in the above example
+You may also use `null` to skip an argument, for instance in the above example
 if you wish to change the label, but keep the class, use this:
 
 ```
 $label = Factory::factory([null, 'Other Label'], $defaults);
 ```
 
-Finally, if you pass key/value pair inside seed with a value of ``null`` then
+Finally, if you pass key/value pair inside seed with a value of `null` then
 default value will still be used:
 
 ```
 $label = Factory::factory(['icon' => null], $defaults);
 ```
 
-This will result icon=book. If you wish to disable icon, you should use ``false``
+This will result icon=book. If you wish to disable icon, you should use `false`
 value:
 
 ```
