@@ -14,8 +14,10 @@ If your child implements :php:trait:`InitializerTrait` then the method
 You will be able to use :php:meth:`ContainerTrait::getElement()` to access
 elements inside container::
 
-    $object->add(new AnotherObject(), 'test');
-    $anotherObject = $object->getElement('test');
+```
+$object->add(new AnotherObject(), 'test');
+$anotherObject = $object->getElement('test');
+```
 
 If you additionally use :php:trait:`TrackableTrait` together with :php:trait:`NameTrait`
 then your objects also receive unique "name". From example above:
@@ -59,36 +61,38 @@ then your objects also receive unique "name". From example above:
 
 Example::
 
-    class Form
+```
+class Form
+{
+    use Core\CollectionTrait;
+
+    protected $fields = [];
+
+    public function addField(string $name, $seed = [])
     {
-        use Core\CollectionTrait;
+        $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-        protected $fields = [];
+        $field = Factory::factory($seed, ['name' => $name]);
 
-        public function addField(string $name, $seed = [])
-        {
-            $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
-
-            $field = Factory::factory($seed, ['name' => $name]);
-
-            return $this->_addIntoCollection($name, $field, 'fields');
-        }
-
-        public function hasField(string $name): bool
-        {
-            return $this->_hasInCollection($name, 'fields');
-        }
-
-        public function getField(string $name)
-        {
-            return $this->_getFromCollection($name, 'fields');
-        }
-
-        public function removeField(string $name)
-        {
-            $this->_removeFromCollection($name, 'fields');
-        }
+        return $this->_addIntoCollection($name, $field, 'fields');
     }
+
+    public function hasField(string $name): bool
+    {
+        return $this->_hasInCollection($name, 'fields');
+    }
+
+    public function getField(string $name)
+    {
+        return $this->_getFromCollection($name, 'fields');
+    }
+
+    public function removeField(string $name)
+    {
+        $this->_removeFromCollection($name, 'fields');
+    }
+}
+```
 
 ### Methods
 

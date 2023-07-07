@@ -26,7 +26,9 @@ using containers:
 
 The natural solution to the problem is to create array like this::
 
-    public $fields = [];
+```
+public $fields = [];
+```
 
 After that you would need to create code for adding objects into container, removing,
 verify their existence etc.
@@ -34,23 +36,25 @@ verify their existence etc.
 :php:trait:`CollectionTrait` implements several handy methods which can be used
 to create necessary methods with minimum code footprint::
 
-    class Form
+```
+class Form
+{
+    use CollectionTrait;
+
+    public $fields = [];
+
+    public function addField(string $name, $seed = [])
     {
-        use CollectionTrait;
+        $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-        public $fields = [];
+        $field = Factory::factory($seed, ['name' => $name]);
 
-        public function addField(string $name, $seed = [])
-        {
-            $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
-
-            $field = Factory::factory($seed, ['name' => $name]);
-
-            return $this->_addIntoCollection($name, $field, 'fields');
-        }
-
-        // hasField, getField, removeField also can be added, see further docs.
+        return $this->_addIntoCollection($name, $field, 'fields');
     }
+
+    // hasField, getField, removeField also can be added, see further docs.
+}
+```
 
 Traits add multiple checks to prevent collisions between existing objects, call
 init() method, carry over $app and set $owner properties and calculate 'name'
@@ -63,11 +67,13 @@ is guaranteed.
 
 When $container is using :php:trait:`ContainerTrait`, this would be a typical code::
 
-    $child = $container->add(new ChildClass());
+```
+$child = $container->add(new ChildClass());
 
-    // $child is the object of ChildClass
+// $child is the object of ChildClass
 
-    $container->removeElement($child);
+$container->removeElement($child);
+```
 
 Although containers work with any objects, assigning additional traits to your
 ChildClass can extend the basic functionality.
@@ -81,13 +87,17 @@ ChildClass can extend the basic functionality.
 
 Just to clarify what Seed is::
 
-    $field = $form->add('TextArea');
+```
+$field = $form->add('TextArea');
+```
 
 In this scenario, even though a new object is added, we don't do it ourselves.
 We simply specify some information on how to create and what properties to
 inject into the object::
 
-    $field = $form->add([\Atk4\Ui\FormField\Password::class, 'icon' => ['lock', 'circular inverted'], 'width' => 4);
+```
+$field = $form->add([\Atk4\Ui\FormField\Password::class, 'icon' => ['lock', 'circular inverted'], 'width' => 4);
+```
 
 The above code will determine the correct object to implement Password inside
 Form, instantiate it and then even add Icon object which is also defined through
@@ -126,16 +136,18 @@ Yet HookTrait implements many much needed extensions to make hooks work great:
 Once you assign :php:trait:`HookTrait` to AnyClass, you can start assigning
 and triggering callbacks::
 
-    $object = new AnyClass();
+```
+$object = new AnyClass();
 
-    $object->onHook('test', function ($o) {
-        echo 'hello';
-    });
-    $object->onHook('test', function ($o) {
-        echo 'world';
-    });
+$object->onHook('test', function ($o) {
+    echo 'hello';
+});
+$object->onHook('test', function ($o) {
+    echo 'world';
+});
 
-    $object->hook('test'); // outputs: helloworld
+$object->hook('test'); // outputs: helloworld
+```
 
 .. toctree::
     :maxdepth: 3
@@ -148,29 +160,35 @@ and triggering callbacks::
 dynamically.
 That's like a "trait" feature of a PHP, but implemented in run-time::
 
-    $object->addMethod('test', function ($o, $args) {
-        echo 'hello, ' . $args[0];
-    });
-    $object->test('world'); // outputs: hello, world
+```
+$object->addMethod('test', function ($o, $args) {
+    echo 'hello, ' . $args[0];
+});
+$object->test('world'); // outputs: hello, world
+```
 
 There are also methods for removing and checking if methods exists, so::
 
-    method_exists($object, 'test');
-    // now should use
-    $object->hasMethod('test');
+```
+method_exists($object, 'test');
+// now should use
+$object->hasMethod('test');
 
-    // and this way you can remove method
-    $object->removeMethod('test');
+// and this way you can remove method
+$object->removeMethod('test');
+```
 
 The implementation of dynamic methods relies on Hook trait, so to use it::
 
-    class AnyClass extends OtherClass
-    {
-        use HookTrait;
-        use DynamicMethodTrait;
+```
+class AnyClass extends OtherClass
+{
+    use HookTrait;
+    use DynamicMethodTrait;
 
-        // .. your code ..
-    }
+    // .. your code ..
+}
+```
 
 
 .. toctree::
@@ -185,19 +203,21 @@ for object modeling.
 You may extend [Model](http://agile-data.readthedocs.io/en/develop/model.html)
 class to define a business object, such as - ShoppingBag::
 
-    class ShoppingBag extends \Atk4\Data\Model
+```
+class ShoppingBag extends \Atk4\Data\Model
+{
+    public $table = 'shopping_bag';
+
+    protected function init(): void
     {
-        public $table = 'shopping_bag';
+        parent::init();
 
-        protected function init(): void
-        {
-            parent::init();
-
-            $this->hasOne('user_id', new User());
-            $this->hasMany('Items', new Item())
-                ->addField('total_price', ['aggregate' => 'sum', 'field' => 'price']);
-        }
+        $this->hasOne('user_id', new User());
+        $this->hasMany('Items', new Item())
+            ->addField('total_price', ['aggregate' => 'sum', 'field' => 'price']);
     }
+}
+```
 
 Such a model handles references to the user and items, is aware of storage
 details, but it is a non-visual object. Because Model does not know if you will
@@ -215,11 +235,13 @@ by a PHP Trait.
 
 :php:trait:`ModelableTrait` allows you to associate your object with a Model::
 
-    $form->setModel('Order');
+```
+$form->setModel('Order');
 
-    // or
+// or
 
-    $grid->setModel($order->ref('Items'), ['name', 'qty', 'price']);
+$grid->setModel($order->ref('Items'), ['name', 'qty', 'price']);
+```
 
 .. toctree::
     :maxdepth: 3

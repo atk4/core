@@ -86,32 +86,40 @@ Sometimes you want your exceptions to be displayed nicely. There are several way
 
 If you want, you can wrap your code inside try / catch block::
 
-    try {
-        // some code..
-    } catch (\Atk4\Core\Exception $e) {
-        // handle exception
-    }
+```
+try {
+    // some code..
+} catch (\Atk4\Core\Exception $e) {
+    // handle exception
+}
+```
 
 The other option is to use automatic exception catching, (:php:attr:`\Atk4\Ui\App::catchExceptions`)
 which will automatically catch any unhandled exception then pass it to :php:meth:`\Atk4\Ui\App::caughtException()`.
 
 If you do not instantiate App, or set it up without automatic exception catching::
 
-    $app = new \Atk4\Ui\App(['catchExceptions' => false]);
+```
+$app = new \Atk4\Ui\App(['catchExceptions' => false]);
+```
 
 then you might want to output message details yourself.
 
 Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHtml`::
 
-    try {
-        // some code..
-    } catch (\Atk4\Core\Exception $e) {
-        echo $e->getColorfulText();
-    } catch (\Exception $e) {
-        echo $e->getMessage();
-    }
+```
+try {
+    // some code..
+} catch (\Atk4\Core\Exception $e) {
+    echo $e->getColorfulText();
+} catch (\Exception $e) {
+    echo $e->getMessage();
+}
+```
 
 Although it's not advisable to output anything else other than the Message to user (in production),
 you can get values of additional parameters through::
 
-    $e->getParams();
+```
+$e->getParams();
+```

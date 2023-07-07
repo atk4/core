@@ -10,32 +10,34 @@ object is linked up into the environment.
 
 Declare a object class in your framework::
 
-    class FormField
+```
+class FormField
+{
+    use AppScopeTrait;
+    use InitializerTrait;
+    use NameTrait;
+    use TrackableTrait;
+}
+
+class FormField_Input extends FormField
+{
+    public $value = null;
+
+    protected function init(): void
     {
-        use AppScopeTrait;
-        use InitializerTrait;
-        use NameTrait;
-        use TrackableTrait;
-    }
+        parent::init();
 
-    class FormField_Input extends FormField
-    {
-        public $value = null;
-
-        protected function init(): void
-        {
-            parent::init();
-
-            if ($_POST[$this->name) {
-                $this->value = $_POST[$this->name];
-            }
-        }
-
-        public function render()
-        {
-            return $this->getApp()->getTag('input/', ['name' => $this->name, 'value' => $value]);
+        if ($_POST[$this->name) {
+            $this->value = $_POST[$this->name];
         }
     }
+
+    public function render()
+    {
+        return $this->getApp()->getTag('input/', ['name' => $this->name, 'value' => $value]);
+    }
+}
+```
 
 ## Methods
 
@@ -48,23 +50,25 @@ Declare a object class in your framework::
 If you wish to use traits class and extend it, you can use this in your base
 class::
 
-    class FormField
+```
+class FormField
+{
+    use AppScopeTrait;
+    use InitializerTrait {
+        init as _init
+    }
+    use TrackableTrait;
+    use NameTrait;
+
+    public $value = null;
+
+    protected function init(): void
     {
-        use AppScopeTrait;
-        use InitializerTrait {
-            init as _init
-        }
-        use TrackableTrait;
-        use NameTrait;
+        $this->_init(); // call init of InitializerTrait
 
-        public $value = null;
-
-        protected function init(): void
-        {
-            $this->_init(); // call init of InitializerTrait
-
-            if ($_POST[$this->name) {
-                $this->value = $_POST[$this->name];
-            }
+        if ($_POST[$this->name) {
+            $this->value = $_POST[$this->name];
         }
     }
+}
+```
