@@ -76,7 +76,8 @@ Fomantic-UI. This will include the error, parameters and backtrace. The code
 will also make an attempt to locate and highlight the code that have caused the
 problem.
 
-.. image:: exception-demo.png
+:::{image} exception-demo.png
+:::
 
 ## Handling Exceptions in ATK Data and ATK UI
 

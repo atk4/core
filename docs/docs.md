@@ -23,16 +23,19 @@ Make sure you have "Docker" installed, follow simple instructions in
 
 You can integrate PhpStorm build process like this:
 
-.. figure:: images/doc-build-phpstorm1.png
-   :scale: 50 %
-   :alt: Create build configuration for the Dockerfile
+:::{figure} images/doc-build-phpstorm1.png
+:scale: 50 %
+:alt: Create build configuration for the Dockerfile
+:::
 
 
-.. figure:: images/doc-build-phpstorm2.png
-   :scale: 50 %
-   :alt: Adjust Port settings to expose 80 as 8080
+:::{figure} images/doc-build-phpstorm2.png
+:scale: 50 %
+:alt: Adjust Port settings to expose 80 as 8080
+:::
 
-.. figure:: images/doc-build-phpstorm3.png
-   :scale: 50 %
-   :alt: Use "Ctrl+R" anytime to build docs
+:::{figure} images/doc-build-phpstorm3.png
+:scale: 50 %
+:alt: Use "Ctrl+R" anytime to build docs
+:::
 

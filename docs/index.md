@@ -12,8 +12,9 @@ but you are welcome to use some or all traits elsewhere.
 
 ## Object Containers
 
-.. figure:: images/containers.png
-   :scale: 50 %
+:::{figure} images/containers.png
+:scale: 50 %
+:::
 
 Within your application or framework you can quite often have requirement for
 using containers:
@@ -121,8 +122,9 @@ every time components are rendered or data is saved into database.
 Our implementation of Hooks is based around storing callback references in array
 for your standard objects then executing them.
 
-.. figure:: images/containers.png
-   :scale: 50 %
+:::{figure} images/containers.png
+:scale: 50 %
+:::
 
 Yet HookTrait implements many much needed extensions to make hooks work great:
 
@@ -256,13 +258,15 @@ the trace-back code is useful and it's obscured in most unique ways.
 We've got an excellent solution by implementing exceptions our way. Simply
 look at how beautiful and clean they look:
 
-.. figure:: exception-demo.png
-   :scale: 50 %
+:::{figure} exception-demo.png
+:scale: 50 %
+:::
 
 The same can be said about web output:
 
-.. figure:: images/exception-html.png
-   :scale: 50 %
+:::{figure} images/exception-html.png
+:scale: 50 %
+:::
 
 Agile Core implements :php:class:`Exception` class which offers many benefits
 compared to standard PHP exceptions:
