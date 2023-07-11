@@ -1,6 +1,7 @@
 # Factory Class
 
-.. php:class:: Factory
+:::{php:class} Factory
+:::
 
 ## Introduction
 
@@ -149,7 +150,8 @@ As mentioned juts above - at some point your "Seed" must be turned into Object. 
 is done by executing factory method.
 
 
-.. php:method:: factory($seed, $defaults = [])
+:::{php:method} factory($seed, $defaults = [])
+:::
 
 Creates and returns new object. If is_object($seed), then it will be returned and
 $defaults will only be sed if object implement DiContainerTrait.
@@ -325,7 +327,8 @@ when object becomes part of RenderTree, but that's not happening here.
 
 ## Seed Merging
 
-.. php:method:: mergeSeeds($seed, $seed2, ...)
+:::{php:method} mergeSeeds($seed, $seed2, ...)
+:::
 
 Two (or more) seeds can be merged resulting in a new seed with some combined
 properties:

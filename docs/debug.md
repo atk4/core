@@ -1,6 +1,7 @@
 # Debug Trait
 
-.. php:trait:: DebugTrait
+:::{php:trait} DebugTrait
+:::
 
 ## Introduction
 

@@ -1,6 +1,7 @@
 # Modelable Trait
 
-.. php:trait:: ModelableTrait
+:::{php:trait} ModelableTrait
+:::
 
 ## Introduction
 

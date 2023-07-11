@@ -1,6 +1,7 @@
 # Hook Trait
 
-.. php:trait:: HookTrait
+:::{php:trait} HookTrait
+:::
 
 ## Introduction
 
@@ -36,7 +37,8 @@ $obj->onHook('spot', function ($obj) {
 
 ## Adding callbacks
 
-.. php:method:: onHook($spot, $fx = null, array $args = [], int $priority = 5)
+:::{php:method} onHook($spot, $fx = null, array $args = [], int $priority = 5)
+:::
 
 Register a call-back method. Calling several times will register multiple
 callbacks which will be execute in the order that they were added.
@@ -91,7 +93,8 @@ $obj->onHook('spot', nine, [], 5);
 ```
 
 
-.. php:method:: hook($spot, $args = null)
+:::{php:method} hook($spot, $args = null)
+:::
 
 execute all hooks in order. Hooks can also return some values and those values
 will be placed in array and returned by hook():
@@ -146,7 +149,8 @@ $res4 = $obj->hook('test', [2, 3]);
 
 ## Breaking Hooks
 
-.. php:method:: breakHook
+:::{php:method} breakHook
+:::
 
 When this method is called from a call-back then it will cause all other
 callbacks to be skipped.
@@ -195,6 +199,7 @@ $m->onHook('normalize', function (&$a) {
 
 ## Checking if hook has callbacks
 
-.. php:method:: hookHasCallbacks()
+:::{php:method} hookHasCallbacks()
+:::
 
 This method will return true if at least one callback has been set for the hook.
