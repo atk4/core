@@ -438,13 +438,13 @@ $this->layout = Factory::factory($layout);
 
 The value you specify will be treated like this:
 
-- string: specify a class (prefixed by Layout\)
+- string: specify a class (prefixed by Layout)
 - array: specify a class and allow to pass additional argument or constructor options
 - object: will override layout
 
 ### Form::addField and Table::addColumn
 
-Agile UI is using form field classes from namespace \Atk4\Ui\FormField\.
+Agile UI is using form field classes from namespace \Atk4\Ui\FormField.
 A default class is 'Line' but there are several ways how it can be overridden:
 
 - User can specify $ui['form'] / $ui['table'] property for model's field
