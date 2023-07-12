@@ -5,10 +5,11 @@ frameworks. The main purpose for this project is to work as a foundation for
 [Agile UI](https://github.com/atk4/ui) and [Agile Data](https://github.com/atk4/data),
 but you are welcome to use some or all traits elsewhere.
 
-.. toctree::
-   :hidden:
+:::{toctree}
+:hidden:
 
-   self
+self
+:::
 
 ## Object Containers
 
@@ -104,14 +105,15 @@ The above code will determine the correct object to implement Password inside
 Form, instantiate it and then even add Icon object which is also defined through
 seed.
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    container
-    initializer
-    factory
-    appscope
-    di
+container
+initializer
+factory
+appscope
+di
+:::
 
 ## Hooks
 
@@ -151,10 +153,11 @@ $object->onHook('test', function ($o) {
 $object->hook('test'); // outputs: helloworld
 ```
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    hook
+hook
+:::
 
 ### Hook-based dynamic Methods
 
@@ -193,10 +196,11 @@ class AnyClass extends OtherClass
 ```
 
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    dynamicmethod
+dynamicmethod
+:::
 
 ## Modelable Objects
 
@@ -245,10 +249,11 @@ $form->setModel('Order');
 $grid->setModel($order->ref('Items'), ['name', 'qty', 'price']);
 ```
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    modelable
+modelable
+:::
 
 ## Exceptions
 
@@ -277,9 +282,10 @@ compared to standard PHP exceptions:
 
 ## Others
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    debug
-    session
-    docs
+debug
+session
+docs
+:::
