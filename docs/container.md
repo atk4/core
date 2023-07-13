@@ -271,7 +271,7 @@ When name is set for container, then all children will derive their names
 of the parent.
 
 * Parent: foo
-* Child:  foo_child1
+* Child: foo_child1
 
 The name will be unique within this container.
 :::
