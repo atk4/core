@@ -195,7 +195,6 @@ class AnyClass extends OtherClass
 }
 ```
 
-
 :::{toctree}
 :maxdepth: 3
 

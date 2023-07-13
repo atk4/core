@@ -111,7 +111,6 @@ public function addField(string $name, $seed = [])
 Factory usage is optional but would allow you to pass seed into addField()
 :::
 
-
 :::{php:method} _removeFromCollection(string $name, string $collection)
 Remove element with a given name from collection.
 :::

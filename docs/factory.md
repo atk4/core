@@ -149,13 +149,11 @@ Always try to keep things simple for others and also for yourself.
 As mentioned juts above - at some point your "Seed" must be turned into Object. This
 is done by executing factory method.
 
-
 :::{php:method} factory($seed, $defaults = [])
 :::
 
 Creates and returns new object. If is_object($seed), then it will be returned and
 $defaults will only be sed if object implement DiContainerTrait.
-
 
 In a conventional PHP, you can create and configure object before passing
 it onto another object. This action is called "dependency injecting".
@@ -311,7 +309,6 @@ class RedButton extends Button
 $button = Factory::factory([RedButton::class, 'icon' => 'cake'], ['icon' => 'thumbs up']);
 // Question: what would be $button->icon value here?
 ```
-
 
 Factory will start by merging the parameters and will discover that icon is
 specified in the seed and is also mentioned in the second argument - $defaults.

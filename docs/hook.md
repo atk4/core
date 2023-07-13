@@ -92,7 +92,6 @@ $obj->onHook('spot', eight);
 $obj->onHook('spot', nine, [], 5);
 ```
 
-
 :::{php:method} hook($spot, $args = null)
 :::
 

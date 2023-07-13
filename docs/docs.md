@@ -28,7 +28,6 @@ You can integrate PhpStorm build process like this:
 :alt: Create build configuration for the Dockerfile
 :::
 
-
 :::{figure} images/doc-build-phpstorm2.png
 :scale: 50 %
 :alt: Adjust Port settings to expose 80 as 8080
@@ -38,4 +37,3 @@ You can integrate PhpStorm build process like this:
 :scale: 50 %
 :alt: Use "Ctrl+R" anytime to build docs
 :::
-

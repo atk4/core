@@ -67,7 +67,6 @@ Exception (at least for now) contains some code to make the exception actually
 look good. This functionality may be removed in the later versions to
 facilitate use of proper loggers. For now:
 
-
 :::{php:method} getColorfulText()
 :::
 

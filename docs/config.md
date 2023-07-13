@@ -72,4 +72,3 @@ Manually set configuration option
 :::{php:method} getConfig($path, $defaultValue = null)
 Get configuration element
 :::
-
