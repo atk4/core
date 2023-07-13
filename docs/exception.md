@@ -17,7 +17,7 @@ the constructor or using addMoreInfo()
 
 :::{php:method} __construct(error, code, previous)
 This uses same format as a regular PHP exception, but error parameter will
-now support array::
+now support array:
 
 ```
 throw (new Exception('Value is too big'))
@@ -29,7 +29,7 @@ The other option is to supply error is:
 
 :::{php:method} addMoreInfo(param, value)
 Augments exception by providing extra information. This is a typical use
-format::
+format:
 
 ```
 try {
@@ -102,8 +102,8 @@ try {
 }
 ```
 
-The other option is to use automatic exception catching, (:php:attr:`\Atk4\Ui\App::catchExceptions`)
-which will automatically catch any unhandled exception then pass it to :php:meth:`\Atk4\Ui\App::caughtException()`.
+The other option is to use automatic exception catching, ({php:attr}`\Atk4\Ui\App::catchExceptions`)
+which will automatically catch any unhandled exception then pass it to {php:meth}`\Atk4\Ui\App::caughtException()`.
 
 If you do not instantiate App, or set it up without automatic exception catching:
 
@@ -113,7 +113,7 @@ $app = new \Atk4\Ui\App(['catchExceptions' => false]);
 
 then you might want to output message details yourself.
 
-Use :php:meth:`Exception::getColorfulText` or :php:meth:`Exception::getHtml`:
+Use {php:meth}`Exception::getColorfulText` or {php:meth}`Exception::getHtml`:
 
 ```
 try {

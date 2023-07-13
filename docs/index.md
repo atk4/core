@@ -35,7 +35,7 @@ public $fields = [];
 After that you would need to create code for adding objects into container, removing,
 verify their existence etc.
 
-:php:trait:`CollectionTrait` implements several handy methods which can be used
+{php:trait}`CollectionTrait` implements several handy methods which can be used
 to create necessary methods with minimum code footprint:
 
 ```
@@ -63,11 +63,11 @@ init() method, carry over $app and set $owner properties and calculate 'name'
 by combining it with the parent.
 
 CollectionTrait only supports named object - you may not omit the name, however
-a more older implementation of :php:trait:`ContainerTrait` is used primarily
+a more older implementation of {php:trait}`ContainerTrait` is used primarily
 for tracking Render Tree in ATK UI where name is optional and a unique name
 is guaranteed.
 
-When $container is using :php:trait:`ContainerTrait`, this would be a typical code:
+When $container is using {php:trait}`ContainerTrait`, this would be a typical code:
 
 ```
 $child = $container->add(new ChildClass());
@@ -80,12 +80,12 @@ $container->removeElement($child);
 Although containers work with any objects, assigning additional traits to your
 ChildClass can extend the basic functionality.
 
-- :php:trait:`InitializerTrait` will add automatic code execution when adding
-- :php:trait:`AppScopeTrait` will pass value of $app property from container to
+- {php:trait}`InitializerTrait` will add automatic code execution when adding
+- {php:trait}`AppScopeTrait` will pass value of $app property from container to
   child.
-- :php:trait:`TrackableTrait` will let you assign unique names to object
-- :php:class:`Factory` will let you specify object class by Seed
-- :php:trait:`DiContainerTrait` will let you with dependency injection
+- {php:trait}`TrackableTrait` will let you assign unique names to object
+- {php:class}`Factory` will let you specify object class by Seed
+- {php:trait}`DiContainerTrait` will let you with dependency injection
 
 Just to clarify what Seed is:
 
@@ -137,7 +137,7 @@ Yet HookTrait implements many much needed extensions to make hooks work great:
 - return values can be collected from callbacks
 - callback may "Break Hook" preventing other callbacks from being executed
 
-Once you assign :php:trait:`HookTrait` to AnyClass, you can start assigning
+Once you assign {php:trait}`HookTrait` to AnyClass, you can start assigning
 and triggering callbacks:
 
 ```
@@ -161,7 +161,7 @@ hook
 
 ### Hook-based dynamic Methods
 
-:php:trait:`DynamicMethodTrait` adds ability to add methods into objects
+{php:trait}`DynamicMethodTrait` adds ability to add methods into objects
 dynamically.
 That's like a "trait" feature of a PHP, but implemented in run-time:
 
@@ -238,7 +238,7 @@ not only the UI Components that can be associated with the model. In fact
 endpoints can be associated with models. This is why `setModel()` is implemented
 by a PHP Trait.
 
-:php:trait:`ModelableTrait` allows you to associate your object with a Model:
+{php:trait}`ModelableTrait` allows you to associate your object with a Model:
 
 ```
 $form->setModel('Order');
@@ -272,7 +272,7 @@ The same can be said about web output:
 :scale: 50 %
 :::
 
-Agile Core implements :php:class:`Exception` class which offers many benefits
+Agile Core implements {php:class}`Exception` class which offers many benefits
 compared to standard PHP exceptions:
 
 - Pass additional information `(new Exception('Bad argument'))->addMoreInfo('arg', $arg')`

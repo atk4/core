@@ -1,17 +1,17 @@
 # Containers
 
 There are two relevant traits in the Container mechanics. Your "container"
-object should implement :php:trait:`ContainerTrait` and your child objects
-should implement :php:trait:`TrackableTrait` (if not, the $owner/$elements
+object should implement {php:trait}`ContainerTrait` and your child objects
+should implement {php:trait}`TrackableTrait` (if not, the $owner/$elements
 links will not be established)
 
-If both parent and child implement :php:trait:`AppScopeTrait` then the property
-of :php:attr:`AppScopeTrait::app` will be copied from parent to the child also.
+If both parent and child implement {php:trait}`AppScopeTrait` then the property
+of {php:attr}`AppScopeTrait::app` will be copied from parent to the child also.
 
-If your child implements :php:trait:`InitializerTrait` then the method
-:php:meth:`InitializerTrait::init` will also be invoked after linking is done.
+If your child implements {php:trait}`InitializerTrait` then the method
+{php:meth}`InitializerTrait::init` will also be invoked after linking is done.
 
-You will be able to use :php:meth:`ContainerTrait::getElement()` to access
+You will be able to use {php:meth}`ContainerTrait::getElement()` to access
 elements inside container:
 
 ```
@@ -19,7 +19,7 @@ $object->add(new AnotherObject(), 'test');
 $anotherObject = $object->getElement('test');
 ```
 
-If you additionally use :php:trait:`TrackableTrait` together with :php:trait:`NameTrait`
+If you additionally use {php:trait}`TrackableTrait` together with {php:trait}`NameTrait`
 then your objects also receive unique "name". From example above:
 
 * $object->name == "app_object_4"
@@ -29,12 +29,12 @@ then your objects also receive unique "name". From example above:
 
 :::{php:trait} NameTrait
 Name trait only adds the 'name' property. Normally you don't have to use
-it because :php:trait:`TrackableTrait` automatically inherits this trait.
-Due to issues with PHP5 if both :php:trait:`ContainerTrait` and
-:php:trait:`TrackableTrait` are using :php:trait:`NameTrait` and then
+it because {php:trait}`TrackableTrait` automatically inherits this trait.
+Due to issues with PHP5 if both {php:trait}`ContainerTrait` and
+{php:trait}`TrackableTrait` are using {php:trait}`NameTrait` and then
 both applied on the object, the clash results in "strict warning".
-To avoid this, apply :php:trait:`NameTrait` on Containers only if you are
-NOT using :php:trait:`TrackableTrait`.
+To avoid this, apply {php:trait}`NameTrait` on Containers only if you are
+NOT using {php:trait}`TrackableTrait`.
 :::
 
 ### Properties
@@ -97,7 +97,7 @@ class Form
 ### Methods
 
 :::{php:method} _addIntoCollection(string $name, object $object, string $collection)
-Adds a new element into collection::
+Adds a new element into collection:
 
 ```
 public function addField(string $name, $seed = [])
@@ -127,7 +127,7 @@ Same as _hasInCollection but throws exception if element is not found
 Implements name shortening
 :::
 
-Shortening is identical to :php:meth::`ContainerTrait::_shorten`.
+Shortening is identical to {php:meth}`ContainerTrait::_shorten`.
 
 Your object can this train together with ContainerTrait. As per June 2019
 ATK maintainers agreed to gradually refactor ATK Data to use CollectionTrait
@@ -137,8 +137,8 @@ for fields, relations, actions.
 
 :::{php:trait} ContainerTrait
 If you want your framework to keep track of relationships between objects
-by implementing containers, you can use :php:trait:`ContainerTrait`.
-Example::
+by implementing containers, you can use {php:trait}`ContainerTrait`.
+Example:
 
 ```
 class MyContainer extends OtherClass
@@ -161,7 +161,7 @@ class MyItem
 ```
 
 Now the instances of MyItem can be added to instances of MyContainer
-and can keep track::
+and can keep track:
 
 ```
 $parent = new MyContainer();
@@ -189,8 +189,8 @@ Child object names will be derived from the parent name.
 :::{php:attr} elements
 Contains a list of objects that have been "added" into the current
 container. The key is a "shot_name" of the child. The actual link to
-the element will be only present if child uses both :php:trait:`TrackableTrait`
-and :php:trait:`NameTrait` traits, otherwise the value of array key will be "true".
+the element will be only present if child uses both {php:trait}`TrackableTrait`
+and {php:trait}`NameTrait` traits, otherwise the value of array key will be "true".
 :::
 
 ### Methods
@@ -205,9 +205,9 @@ and call _addContainer, _addFactory,.
 Add element into container. Normally you should create a method
 add() inside your class that will execute this method. Because
 multiple traits will want to contribute to your add() method,
-you should see sample implementation in :php:class:`Object::add`.
+you should see sample implementation in {php:class}`Object::add`.
 
-Your minimum code should be::
+Your minimum code should be:
 
 ```
 public function add(object $obj, $args = []): object
@@ -218,7 +218,7 @@ public function add(object $obj, $args = []): object
 }
 ```
 
-$args be in few forms::
+$args be in few forms:
 
 ```
 $args = ['child_name'];
@@ -233,7 +233,7 @@ name already exist.
 
 :::{php:method} removeElement($shortName)
 Will remove element from $elements. You can pass either shortName
-or the object itself. This will be called if :php:meth:`TrackableTrait::destroy`
+or the object itself. This will be called if {php:meth}`TrackableTrait::destroy`
 is called.
 :::
 
@@ -243,7 +243,7 @@ of your children. The reason for shortening a name is to impose reasonable
 limits on overly long names. Name can be used as key in the GET argument
 or form field, so for a longer names they will be shortened.
 
-This method will only be used if current object has :php:trait:`AppScope`,
+This method will only be used if current object has {php:trait}`AppScope`,
 since the application is responsible for keeping shortenings.
 :::
 

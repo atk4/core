@@ -219,7 +219,7 @@ new Button('My Label', 'red', 'big');
 ```
 
 Finally any named values inside seed array will be assigned to class properties
-by using :php:meth:`DiContainerTrait::setDefaults`.
+by using {php:meth}`DiContainerTrait::setDefaults`.
 
 Factory uses `array_shift` to separate class definition from other components.
 
@@ -247,7 +247,7 @@ Array that lacks class is called defaults, e.g.:
 $defaults = ['Label', 'My Label', 'big red', 'icon' => 'book'];
 ```
 
-You can pass defaults as second argument to :php:meth:`Factory::factory()`:
+You can pass defaults as second argument to {php:meth}`Factory::factory()`:
 
 ```
 $button = Factory::factory([Button::class], $defaults);
@@ -315,7 +315,7 @@ specified in the seed and is also mentioned in the second argument - $defaults.
 The seed takes precedence, so icon='cake'.
 
 Factory will then create instance of RedButton with a default icon 'book'.
-It will then execute :php:meth:`DiContainerTrait::setDefaults` with the
+It will then execute {php:meth}`DiContainerTrait::setDefaults` with the
 `['icon' => 'cake']` which will change value of $icon to `cake`.
 
 The `cake` will be the final value of the example above. Even though `init()`
