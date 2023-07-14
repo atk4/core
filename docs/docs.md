@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Writing ATK Docs
 
 New users of Agile Toolkit rely on documentation. To make it easier for the

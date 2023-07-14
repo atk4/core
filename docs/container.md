@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Containers
 
 There are two relevant traits in the Container mechanics. Your "container"
@@ -205,7 +208,7 @@ and call _addContainer, _addFactory,.
 Add element into container. Normally you should create a method
 add() inside your class that will execute this method. Because
 multiple traits will want to contribute to your add() method,
-you should see sample implementation in {php:class}`Object::add`.
+you should see sample implementation in {php:class}`ContainerTrait::add`.
 
 Your minimum code should be:
 
@@ -243,7 +246,7 @@ of your children. The reason for shortening a name is to impose reasonable
 limits on overly long names. Name can be used as key in the GET argument
 or form field, so for a longer names they will be shortened.
 
-This method will only be used if current object has {php:trait}`AppScope`,
+This method will only be used if current object has {php:trait}`AppScopeTrait`,
 since the application is responsible for keeping shortenings.
 :::
 

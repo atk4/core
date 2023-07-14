@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Agile Core Documentation
 
 Agile Core is a collection of PHP Traits for designing object-oriented

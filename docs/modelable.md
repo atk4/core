@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Modelable Trait
 
 :::{php:trait} ModelableTrait

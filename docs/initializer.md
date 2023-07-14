@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Initializer Trait
 
 :::{php:trait} InitializerTrait

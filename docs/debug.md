@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Debug Trait
 
 :::{php:trait} DebugTrait

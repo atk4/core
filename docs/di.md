@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Dependency Injection Container
 
 :::{php:trait} DiContainerTrait
@@ -64,9 +67,6 @@ $crud->formAdd = new MyForm();
 ```
 
 ## How to use DiContainerTrait
-
-:::{php:trait} DiContainerTrait
-:::
 
 :::{php:method} setDefaults($properties, $passively = false)
 :::
