@@ -65,11 +65,14 @@ $crud->formAdd = new MyForm();
 
 ### How to use DiContainerTrait
 
-.. php:trait: DiContainerTrait
+:::{php:trait} DiContainerTrait
+:::
 
-.. php:method: setDefaults($properties, $passively = false)
+:::{php:method} setDefaults($properties, $passively = false)
+:::
 
-.. php:method: setMissingProperty($propertyName, $value)
+:::{php:method} setMissingProperty($propertyName, $value)
+:::
 
 Calling this method will set object's properties. If any specified property
 is undefined then it will be skipped. Here is how you should use trait:
