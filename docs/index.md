@@ -6,7 +6,7 @@ frameworks. The main purpose for this project is to work as a foundation for
 but you are welcome to use some or all traits elsewhere.
 
 :::{toctree}
-:hidden:
+:hidden: true
 
 self
 :::
