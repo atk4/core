@@ -208,7 +208,7 @@ dynamicmethod
 
 [Agile Data](https://github.com/atk4/data) features a modern implementation
 for object modeling.
-You may extend [Model](http://agile-data.readthedocs.io/en/develop/model.html)
+You may extend [Model](https://agile-data.readthedocs.io/en/develop/model.html)
 class to define a business object, such as - ShoppingBag:
 
 ```
