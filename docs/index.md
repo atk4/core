@@ -288,6 +288,6 @@ compared to standard PHP exceptions:
 :maxdepth: 3
 
 debug
-session
-docs
+config
+exception
 :::
