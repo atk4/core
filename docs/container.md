@@ -1,6 +1,4 @@
-==========
-Containers
-==========
+# Containers
 
 There are two relevant traits in the Container mechanics. Your "container"
 object should implement :php:trait:`ContainerTrait` and your child objects
@@ -14,10 +12,12 @@ If your child implements :php:trait:`InitializerTrait` then the method
 :php:meth:`InitializerTrait::init` will also be invoked after linking is done.
 
 You will be able to use :php:meth:`ContainerTrait::getElement()` to access
-elements inside container::
+elements inside container:
 
-    $object->add(new AnotherObject(), 'test');
-    $anotherObject = $object->getElement('test');
+```
+$object->add(new AnotherObject(), 'test');
+$anotherObject = $object->getElement('test');
+```
 
 If you additionally use :php:trait:`TrackableTrait` together with :php:trait:`NameTrait`
 then your objects also receive unique "name". From example above:
@@ -25,10 +25,7 @@ then your objects also receive unique "name". From example above:
 * $object->name == "app_object_4"
 * $anotherObject->name == "app_object_4_test"
 
-
-
-Name Trait
-============
+## Name Trait
 
 .. php:trait:: NameTrait
 
@@ -40,20 +37,17 @@ Name Trait
     To avoid this, apply :php:trait:`NameTrait` on Containers only if you are
     NOT using :php:trait:`TrackableTrait`.
 
-Properties
-----------
+### Properties
 
 .. php:attr:: name
 
     Name of the object.
 
-Methods
--------
+### Methods
 
     None
 
-CollectionTrait
-===================
+## CollectionTrait
 
 .. php:trait:: CollectionTrait
 
@@ -65,41 +59,42 @@ CollectionTrait
     to add another element with same name, it will result in
     exception.
 
-Example::
+Example:
 
-    class Form
+```
+class Form
+{
+    use Core\CollectionTrait;
+
+    protected $fields = [];
+
+    public function addField(string $name, $seed = [])
     {
-        use Core\CollectionTrait;
+        $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
 
-        protected $fields = [];
+        $field = Factory::factory($seed, ['name' => $name]);
 
-        public function addField(string $name, $seed = [])
-        {
-            $seed = Factory::mergeSeeds($seed, [FieldMock::class]);
-
-            $field = Factory::factory($seed, ['name' => $name]);
-
-            return $this->_addIntoCollection($name, $field, 'fields');
-        }
-
-        public function hasField(string $name): bool
-        {
-            return $this->_hasInCollection($name, 'fields');
-        }
-
-        public function getField(string $name)
-        {
-            return $this->_getFromCollection($name, 'fields');
-        }
-
-        public function removeField(string $name)
-        {
-            $this->_removeFromCollection($name, 'fields');
-        }
+        return $this->_addIntoCollection($name, $field, 'fields');
     }
 
-Methods
--------
+    public function hasField(string $name): bool
+    {
+        return $this->_hasInCollection($name, 'fields');
+    }
+
+    public function getField(string $name)
+    {
+        return $this->_getFromCollection($name, 'fields');
+    }
+
+    public function removeField(string $name)
+    {
+        $this->_removeFromCollection($name, 'fields');
+    }
+}
+```
+
+### Methods
 
 .. php:method:: _addIntoCollection(string $name, object $object, string $collection)
 
@@ -137,9 +132,7 @@ Your object can this train together with ContainerTrait. As per June 2019
 ATK maintainers agreed to gradually refactor ATK Data to use CollectionTrait
 for fields, relations, actions.
 
-
-Container Trait
-===============
+## Container Trait
 
 .. php:trait:: ContainerTrait
 
@@ -186,8 +179,7 @@ Container Trait
 
     Child object names will be derived from the parent name.
 
-Properties
-----------
+### Properties
 
 .. php:attr:: elements
 
@@ -196,8 +188,7 @@ Properties
     the element will be only present if child uses both :php:trait:`TrackableTrait`
     and :php:trait:`NameTrait` traits, otherwise the value of array key will be "true".
 
-Methods
--------
+### Methods
 
 .. php:method:: add($obj, $args = [])
 
@@ -261,10 +252,7 @@ Methods
 
     Internal method to create unique name for an element.
 
-
-
-Trackable Trait
-===============
+## Trackable Trait
 
 .. php:trait:: TrackableTrait
 
@@ -279,8 +267,7 @@ Trackable Trait
 
     The name will be unique within this container.
 
-Properties
-----------
+### Properties
 
 .. php:attr:: owner
 
@@ -292,8 +279,7 @@ Properties
     When you add item into the owner, the "shortName" will contain short name
     of this item.
 
-Methods
--------
+### Methods
 
 .. php:method:: getDesiredName
 

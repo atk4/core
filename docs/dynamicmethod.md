@@ -1,32 +1,32 @@
-====================
-Dynamic Method Trait
-====================
+# Dynamic Method Trait
 
 .. php:trait:: DynamicMethodTrait
 
-Introduction
-============
+## Introduction
 
 Adds ability to add methods into objects dynamically. That's like a "trait"
-feature of a PHP, but implemented in run-time::
+feature of a PHP, but implemented in run-time:
 
-    $object->addMethod('test', function ($o, $args) {
-        echo 'hello, ' . $args[0];
-    });
-    $object->test('world');
+```
+$object->addMethod('test', function ($o, $args) {
+    echo 'hello, ' . $args[0];
+});
+$object->test('world');
+```
 
-Global Methods
-==============
+## Global Methods
 
 If object has application scope :php:trait:`AppScopeTrait` and the application
 implements :php:trait:`HookTrait` then executing $object->test() will also
-look for globally-registered method inside the application::
+look for globally-registered method inside the application:
 
-    $object->getApp()->addGlobalMethod('test', function ($app, $o, $args) {
-        echo 'hello, ' . $args[0];
-    });
+```
+$object->getApp()->addGlobalMethod('test', function ($app, $o, $args) {
+    echo 'hello, ' . $args[0];
+});
 
-    $object->test('world');
+$object->test('world');
+```
 
 Of course calling test() on the other object afterwards will trigger same
 global method.
@@ -34,24 +34,24 @@ global method.
 If you attempt to register same method multiple times you will receive an
 exception.
 
-Dynamic Method Arguments
-========================
+## Dynamic Method Arguments
+
 When calling dynamic method first argument which is passed to the method will
 be object itself. Dynamic method will also receive all arguments which are
-given when you call this dynamic method::
+given when you call this dynamic method:
 
-    $m->addMethod('sum', function ($m, $a, $b) {
-        return $a + $b;
-    });
-    echo $m->sum(3, 5); // 8
+```
+$m->addMethod('sum', function ($m, $a, $b) {
+    return $a + $b;
+});
+echo $m->sum(3, 5); // 8
+```
 
-Properties
-==========
+## Properties
 
     None
 
-Methods
-=======
+## Methods
 
 .. php:method:: tryCall($method, $arguments)
 

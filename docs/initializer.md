@@ -1,47 +1,45 @@
-=================
-Initializer Trait
-=================
+# Initializer Trait
 
 .. php:trait:: InitializerTrait
 
-Introduction
-============
+## Introduction
 
 With our traits objects now become linked with the "owner" and the "app".
 Initializer trait allows you to define a method that would be called after
 object is linked up into the environment.
 
-Declare a object class in your framework::
+Declare a object class in your framework:
 
-    class FormField
+```
+class FormField
+{
+    use AppScopeTrait;
+    use InitializerTrait;
+    use NameTrait;
+    use TrackableTrait;
+}
+
+class FormField_Input extends FormField
+{
+    public $value = null;
+
+    protected function init(): void
     {
-        use AppScopeTrait;
-        use InitializerTrait;
-        use NameTrait;
-        use TrackableTrait;
-    }
+        parent::init();
 
-    class FormField_Input extends FormField
-    {
-        public $value = null;
-
-        protected function init(): void
-        {
-            parent::init();
-
-            if ($_POST[$this->name) {
-                $this->value = $_POST[$this->name];
-            }
-        }
-
-        public function render()
-        {
-            return $this->getApp()->getTag('input/', ['name' => $this->name, 'value' => $value]);
+        if ($_POST[$this->name) {
+            $this->value = $_POST[$this->name];
         }
     }
 
-Methods
-=======
+    public function render()
+    {
+        return $this->getApp()->getTag('input/', ['name' => $this->name, 'value' => $value]);
+    }
+}
+```
+
+## Methods
 
 .. php:method:: init()
 
@@ -50,25 +48,27 @@ Methods
     prevents from some serious mistakes.
 
 If you wish to use traits class and extend it, you can use this in your base
-class::
+class:
 
-    class FormField
+```
+class FormField
+{
+    use AppScopeTrait;
+    use InitializerTrait {
+        init as _init
+    }
+    use TrackableTrait;
+    use NameTrait;
+
+    public $value = null;
+
+    protected function init(): void
     {
-        use AppScopeTrait;
-        use InitializerTrait {
-            init as _init
-        }
-        use TrackableTrait;
-        use NameTrait;
+        $this->_init(); // call init of InitializerTrait
 
-        public $value = null;
-
-        protected function init(): void
-        {
-            $this->_init(); // call init of InitializerTrait
-
-            if ($_POST[$this->name) {
-                $this->value = $_POST[$this->name];
-            }
+        if ($_POST[$this->name) {
+            $this->value = $_POST[$this->name];
         }
     }
+}
+```

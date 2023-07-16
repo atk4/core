@@ -1,16 +1,14 @@
-===============
-Modelable Trait
-===============
+# Modelable Trait
 
 .. php:trait:: ModelableTrait
 
-Introduction
-============
+## Introduction
 
-    not yet implemented
+not yet implemented
 
-Properties
-==========
+## Properties
 
-Methods
-=======
+
+
+## Methods
+
