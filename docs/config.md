@@ -1,6 +1,10 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Config Trait
 
-.. php:trait:: ConfigTrait
+:::{php:trait} ConfigTrait
+:::
 
 Agile Core implements support for read configuration files of different formats
 
@@ -60,15 +64,14 @@ Configuration is defined as yaml
 
 ## Methods
 
-.. php:method:: readConfig($files = ['config.php'], $format = 'php')
+:::{php:method} readConfig($files = ['config.php'], $format = 'php')
+Read config file or files and store it in $config property
+:::
 
-    Read config file or files and store it in $config property
+:::{php:method} setConfig($paths = [], $value = null)
+Manually set configuration option
+:::
 
-.. php:method:: setConfig($paths = [], $value = null)
-
-    Manually set configuration option
-
-.. php:method:: getConfig($path, $defaultValue = null)
-
-    Get configuration element
-
+:::{php:method} getConfig($path, $defaultValue = null)
+Get configuration element
+:::

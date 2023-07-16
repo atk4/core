@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Agile Core Documentation
 
 Agile Core is a collection of PHP Traits for designing object-oriented
@@ -5,24 +8,26 @@ frameworks. The main purpose for this project is to work as a foundation for
 [Agile UI](https://github.com/atk4/ui) and [Agile Data](https://github.com/atk4/data),
 but you are welcome to use some or all traits elsewhere.
 
-.. toctree::
-   :hidden:
+:::{toctree}
+:hidden:
 
-   self
+self
+:::
 
 ## Object Containers
 
-.. figure:: images/containers.png
-   :scale: 50 %
+:::{figure} images/containers.png
+:scale: 50 %
+:::
 
 Within your application or framework you can quite often have requirement for
 using containers:
 
- - Form containing fields
- - Table containing columns
- - Component containing sub-components
- - Model object containing Field objects
- - Application containing controllers
+- Form containing fields
+- Table containing columns
+- Component containing sub-components
+- Model object containing Field objects
+- Application containing controllers
 
 The natural solution to the problem is to create array like this:
 
@@ -33,7 +38,7 @@ public $fields = [];
 After that you would need to create code for adding objects into container, removing,
 verify their existence etc.
 
-:php:trait:`CollectionTrait` implements several handy methods which can be used
+{php:trait}`CollectionTrait` implements several handy methods which can be used
 to create necessary methods with minimum code footprint:
 
 ```
@@ -61,11 +66,11 @@ init() method, carry over $app and set $owner properties and calculate 'name'
 by combining it with the parent.
 
 CollectionTrait only supports named object - you may not omit the name, however
-a more older implementation of :php:trait:`ContainerTrait` is used primarily
+a more older implementation of {php:trait}`ContainerTrait` is used primarily
 for tracking Render Tree in ATK UI where name is optional and a unique name
 is guaranteed.
 
-When $container is using :php:trait:`ContainerTrait`, this would be a typical code:
+When $container is using {php:trait}`ContainerTrait`, this would be a typical code:
 
 ```
 $child = $container->add(new ChildClass());
@@ -78,12 +83,12 @@ $container->removeElement($child);
 Although containers work with any objects, assigning additional traits to your
 ChildClass can extend the basic functionality.
 
- - :php:trait:`InitializerTrait` will add automatic code execution when adding
- - :php:trait:`AppScopeTrait` will pass value of $app property from container to
-   child.
- - :php:trait:`TrackableTrait` will let you assign unique names to object
- - :php:class:`Factory` will let you specify object class by Seed
- - :php:trait:`DiContainerTrait` will let you with dependency injection
+- {php:trait}`InitializerTrait` will add automatic code execution when adding
+- {php:trait}`AppScopeTrait` will pass value of $app property from container to
+  child.
+- {php:trait}`TrackableTrait` will let you assign unique names to object
+- {php:class}`Factory` will let you specify object class by Seed
+- {php:trait}`DiContainerTrait` will let you with dependency injection
 
 Just to clarify what Seed is:
 
@@ -103,14 +108,15 @@ The above code will determine the correct object to implement Password inside
 Form, instantiate it and then even add Icon object which is also defined through
 seed.
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    container
-    initializer
-    factory
-    appscope
-    di
+container
+initializer
+factory
+appscope
+di
+:::
 
 ## Hooks
 
@@ -121,19 +127,20 @@ every time components are rendered or data is saved into database.
 Our implementation of Hooks is based around storing callback references in array
 for your standard objects then executing them.
 
-.. figure:: images/containers.png
-   :scale: 50 %
+:::{figure} images/containers.png
+:scale: 50 %
+:::
 
 Yet HookTrait implements many much needed extensions to make hooks work great:
 
- - define multiple hooking spot per object, e.g: 'beforeInit', 'beforeDelete' etc
- - multiple call-back can be assigned to each spot
- - callbacks are executed in order of numeric priority
- - arguments can be passed to callbacks
- - return values can be collected from callbacks
- - callback may "Break Hook" preventing other callbacks from being executed
+- define multiple hooking spot per object, e.g: 'beforeInit', 'beforeDelete' etc
+- multiple call-back can be assigned to each spot
+- callbacks are executed in order of numeric priority
+- arguments can be passed to callbacks
+- return values can be collected from callbacks
+- callback may "Break Hook" preventing other callbacks from being executed
 
-Once you assign :php:trait:`HookTrait` to AnyClass, you can start assigning
+Once you assign {php:trait}`HookTrait` to AnyClass, you can start assigning
 and triggering callbacks:
 
 ```
@@ -149,14 +156,15 @@ $object->onHook('test', function ($o) {
 $object->hook('test'); // outputs: helloworld
 ```
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    hook
+hook
+:::
 
 ### Hook-based dynamic Methods
 
-:php:trait:`DynamicMethodTrait` adds ability to add methods into objects
+{php:trait}`DynamicMethodTrait` adds ability to add methods into objects
 dynamically.
 That's like a "trait" feature of a PHP, but implemented in run-time:
 
@@ -190,17 +198,17 @@ class AnyClass extends OtherClass
 }
 ```
 
+:::{toctree}
+:maxdepth: 3
 
-.. toctree::
-    :maxdepth: 3
-
-    dynamicmethod
+dynamicmethod
+:::
 
 ## Modelable Objects
 
 [Agile Data](https://github.com/atk4/data) features a modern implementation
 for object modeling.
-You may extend [Model](http://agile-data.readthedocs.io/en/develop/model.html)
+You may extend [Model](https://atk4-data.readthedocs.io/en/develop/model.html)
 class to define a business object, such as - ShoppingBag:
 
 ```
@@ -233,7 +241,7 @@ not only the UI Components that can be associated with the model. In fact
 endpoints can be associated with models. This is why `setModel()` is implemented
 by a PHP Trait.
 
-:php:trait:`ModelableTrait` allows you to associate your object with a Model:
+{php:trait}`ModelableTrait` allows you to associate your object with a Model:
 
 ```
 $form->setModel('Order');
@@ -243,10 +251,11 @@ $form->setModel('Order');
 $grid->setModel($order->ref('Items'), ['name', 'qty', 'price']);
 ```
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    modelable
+modelable
+:::
 
 ## Exceptions
 
@@ -256,26 +265,29 @@ the trace-back code is useful and it's obscured in most unique ways.
 We've got an excellent solution by implementing exceptions our way. Simply
 look at how beautiful and clean they look:
 
-.. figure:: exception-demo.png
-   :scale: 50 %
+:::{figure} exception-demo.png
+:scale: 50 %
+:::
 
 The same can be said about web output:
 
-.. figure:: images/exception-html.png
-   :scale: 50 %
+:::{figure} images/exception-html.png
+:scale: 50 %
+:::
 
-Agile Core implements :php:class:`Exception` class which offers many benefits
+Agile Core implements {php:class}`Exception` class which offers many benefits
 compared to standard PHP exceptions:
 
- - Pass additional information `(new Exception('Bad argument'))->addMoreInfo('arg', $arg')`
- - Visualize in ASCII or HTML
- - Better means of localization
+- Pass additional information `(new Exception('Bad argument'))->addMoreInfo('arg', $arg')`
+- Visualize in ASCII or HTML
+- Better means of localization
 
 ## Others
 
-.. toctree::
-    :maxdepth: 3
+:::{toctree}
+:maxdepth: 3
 
-    debug
-    session
-    docs
+debug
+config
+exception
+:::

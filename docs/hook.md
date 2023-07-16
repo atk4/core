@@ -1,6 +1,10 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Hook Trait
 
-.. php:trait:: HookTrait
+:::{php:trait} HookTrait
+:::
 
 ## Introduction
 
@@ -16,9 +20,9 @@ necessary.
 
 Some good examples for hook spots are:
 
- - beforeSave
- - afterDelete
- - validation
+- beforeSave
+- afterDelete
+- validation
 
 The framework or application would typically execute hooks like this:
 
@@ -36,7 +40,8 @@ $obj->onHook('spot', function ($obj) {
 
 ## Adding callbacks
 
-.. php:method:: onHook($spot, $fx = null, array $args = [], int $priority = 5)
+:::{php:method} onHook($spot, $fx = null, array $args = [], int $priority = 5)
+:::
 
 Register a call-back method. Calling several times will register multiple
 callbacks which will be execute in the order that they were added.
@@ -90,8 +95,8 @@ $obj->onHook('spot', eight);
 $obj->onHook('spot', nine, [], 5);
 ```
 
-
-.. php:method:: hook($spot, $args = null)
+:::{php:method} hook($spot, $args = null)
+:::
 
 execute all hooks in order. Hooks can also return some values and those values
 will be placed in array and returned by hook():
@@ -120,9 +125,9 @@ $res2 = $obj->hook('test', [3, 3]);
 As you see in the code above, we were able to pass some arguments into those
 hooks. There are actually 3 sources that are considered for the arguments:
 
- - first argument to callbacks is always the $object
- - arguments passed as 3rd argument to onHook() are included
- - arguments passed as 2nd argument to hook() are included
+- first argument to callbacks is always the $object
+- arguments passed as 3rd argument to onHook() are included
+- arguments passed as 2nd argument to hook() are included
 
 You can also use key declarations if you wish to override arguments:
 
@@ -146,7 +151,8 @@ $res4 = $obj->hook('test', [2, 3]);
 
 ## Breaking Hooks
 
-.. php:method:: breakHook
+:::{php:method} breakHook
+:::
 
 When this method is called from a call-back then it will cause all other
 callbacks to be skipped.
@@ -195,6 +201,7 @@ $m->onHook('normalize', function (&$a) {
 
 ## Checking if hook has callbacks
 
-.. php:method:: hookHasCallbacks()
+:::{php:method} hookHasCallbacks()
+:::
 
 This method will return true if at least one callback has been set for the hook.

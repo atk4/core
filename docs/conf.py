@@ -14,7 +14,10 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinxcontrib.phpdomain',
+    'myst_parser',
 ]
+
+myst_enable_extensions = ['colon_fence', 'linkify']
 
 source_suffix = '.md'
 
@@ -139,7 +142,7 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/': None}
 
 from sphinx.highlighting import lexers
 from pygments.lexers.web import PhpLexer

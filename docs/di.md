@@ -1,10 +1,14 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Dependency Injection Container
 
-.. php:trait:: DiContainerTrait
+:::{php:trait} DiContainerTrait
+:::
 
 Agile Core implements basic support for Dependency Injection Container.
 
-### What is Dependency Injection
+## What is Dependency Injection
 
 As it turns out many PHP projects have built objects which hard-code
 dependencies on another object/class. For instance:
@@ -33,7 +37,7 @@ $book['name'] = 'foo';
 $book->save(); // saves to $mydb
 ```
 
-### What is Dependency Injection Container
+## What is Dependency Injection Container
 
 By design your objects should depend on as little other objects as possible.
 This improves testability of objects, for instance. Typically constructor can
@@ -62,13 +66,13 @@ $crud->formEdit = new MyForm();
 $crud->formAdd = new MyForm();
 ```
 
-### How to use DiContainerTrait
+## How to use DiContainerTrait
 
-.. php:trait: DiContainerTrait
+:::{php:method} setDefaults($properties, $passively = false)
+:::
 
-.. php:method: setDefaults($properties, $passively = false)
-
-.. php:method: setMissingProperty($propertyName, $value)
+:::{php:method} setMissingProperty($propertyName, $value)
+:::
 
 Calling this method will set object's properties. If any specified property
 is undefined then it will be skipped. Here is how you should use trait:
@@ -116,4 +120,3 @@ class MyObj
     }
 }
 ```
-

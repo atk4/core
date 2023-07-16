@@ -1,15 +1,19 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Factory Class
 
-.. php:class:: Factory
+:::{php:class} Factory
+:::
 
 ## Introduction
 
 This trait is used to initialize object of the appropriate class, handling
 things like:
 
- - determining name of the class with ability to override
- - passing argument to constructors
- - setting default property values
+- determining name of the class with ability to override
+- passing argument to constructors
+- setting default property values
 
 Thanks to Factory trait, the following code:
 
@@ -123,18 +127,18 @@ $button->icon = 'book';
 ATK only uses setters/getters when they make sense. Argument like "icon" is a very
 good example where getter is needed. Here is a typical lifecycle of an argument:
 
- 1. when object is created "icon" is set to null
- 2. seed may have a value for "icon" and can set it to string, array or object
- 3. user may explicitly set "icon" to string, array or object
- 4. some code may wish to interact with icon and will expect it to be object
- 5. recursiveRender() will expect icon to be also added inside $button's template
+1. when object is created "icon" is set to null
+2. seed may have a value for "icon" and can set it to string, array or object
+3. user may explicitly set "icon" to string, array or object
+4. some code may wish to interact with icon and will expect it to be object
+5. recursiveRender() will expect icon to be also added inside $button's template
 
 So here are some rules for ATK and add-ons:
 
- - use class-less seeds where possible, but indicate so in the comments
- - keep seed in its original form as long as possible
- - use getter (getIcon()) which would convert seed into object (if needed)
- - add icon object into render-tree inside recursiveRender() method
+- use class-less seeds where possible, but indicate so in the comments
+- keep seed in its original form as long as possible
+- use getter (getIcon()) which would convert seed into object (if needed)
+- add icon object into render-tree inside recursiveRender() method
 
 If you need some validation (e.g. icon and iconRight cannot be set at the same time
 by the button), do that inside recursiveRender() method or in a custom setter.
@@ -148,12 +152,11 @@ Always try to keep things simple for others and also for yourself.
 As mentioned juts above - at some point your "Seed" must be turned into Object. This
 is done by executing factory method.
 
-
-.. php:method:: factory($seed, $defaults = [])
+:::{php:method} factory($seed, $defaults = [])
+:::
 
 Creates and returns new object. If is_object($seed), then it will be returned and
 $defaults will only be sed if object implement DiContainerTrait.
-
 
 In a conventional PHP, you can create and configure object before passing
 it onto another object. This action is called "dependency injecting".
@@ -167,7 +170,7 @@ $button->action = new Action(..);
 
 Because Components can have many optional components, then setting them
 one-by-one is often inconvenient. Also may require to do it recursively,
-e.g. ``Action`` may have to be configured individually.
+e.g. `Action` may have to be configured individually.
 
 Agile Core implements a mechanism to make that possible through using Factory::factory()
 method and specifying a seed argument:
@@ -201,7 +204,7 @@ $view->add([$button, 'icon' => ['book'], 'action' => new Action('..')]);
 
 ### Seed Components
 
-Class definition - passed as the ``$seed[0]`` and is the only mandatory
+Class definition - passed as the `$seed[0]` and is the only mandatory
 component, e.g:
 
 ```
@@ -219,7 +222,7 @@ new Button('My Label', 'red', 'big');
 ```
 
 Finally any named values inside seed array will be assigned to class properties
-by using :php:meth:`DiContainerTrait::setDefaults`.
+by using {php:meth}`DiContainerTrait::setDefaults`.
 
 Factory uses `array_shift` to separate class definition from other components.
 
@@ -247,7 +250,7 @@ Array that lacks class is called defaults, e.g.:
 $defaults = ['Label', 'My Label', 'big red', 'icon' => 'book'];
 ```
 
-You can pass defaults as second argument to :php:meth:`Factory::factory()`:
+You can pass defaults as second argument to {php:meth}`Factory::factory()`:
 
 ```
 $button = Factory::factory([Button::class], $defaults);
@@ -256,21 +259,21 @@ $button = Factory::factory([Button::class], $defaults);
 Executing code above will result in 'Button' class being used with 'My Label' as
 a caption and 'big red' class and 'book' icon.
 
-You may also use ``null`` to skip an argument, for instance in the above example
+You may also use `null` to skip an argument, for instance in the above example
 if you wish to change the label, but keep the class, use this:
 
 ```
 $label = Factory::factory([null, 'Other Label'], $defaults);
 ```
 
-Finally, if you pass key/value pair inside seed with a value of ``null`` then
+Finally, if you pass key/value pair inside seed with a value of `null` then
 default value will still be used:
 
 ```
 $label = Factory::factory(['icon' => null], $defaults);
 ```
 
-This will result icon=book. If you wish to disable icon, you should use ``false``
+This will result icon=book. If you wish to disable icon, you should use `false`
 value:
 
 ```
@@ -285,10 +288,10 @@ used.
 When both seed and defaults are used, then values inside "seed" will have
 precedence:
 
- - for named arguments any value specified in "seed" will fully override
-   identical value from "defaults", unless if the seed's value is "null".
- - for constructor arguments, the non-null values specified in "seed" will
-   replace corresponding value from $defaults.
+- for named arguments any value specified in "seed" will fully override
+  identical value from "defaults", unless if the seed's value is "null".
+- for constructor arguments, the non-null values specified in "seed" will
+  replace corresponding value from $defaults.
 
 The next example will help you understand the precedence of different argument
 values. See my description below the example:
@@ -310,13 +313,12 @@ $button = Factory::factory([RedButton::class, 'icon' => 'cake'], ['icon' => 'thu
 // Question: what would be $button->icon value here?
 ```
 
-
 Factory will start by merging the parameters and will discover that icon is
 specified in the seed and is also mentioned in the second argument - $defaults.
 The seed takes precedence, so icon='cake'.
 
 Factory will then create instance of RedButton with a default icon 'book'.
-It will then execute :php:meth:`DiContainerTrait::setDefaults` with the
+It will then execute {php:meth}`DiContainerTrait::setDefaults` with the
 `['icon' => 'cake']` which will change value of $icon to `cake`.
 
 The `cake` will be the final value of the example above. Even though `init()`
@@ -325,13 +327,14 @@ when object becomes part of RenderTree, but that's not happening here.
 
 ## Seed Merging
 
-.. php:method:: mergeSeeds($seed, $seed2, ...)
+:::{php:method} mergeSeeds($seed, $seed2, ...)
+:::
 
 Two (or more) seeds can be merged resulting in a new seed with some combined
 properties:
 
 1. Class of a first seed will be selected. If specified as "null" will be picked
-    from next seed.
+   from next seed.
 2. If string as passed as any of the argument it's considered to be a class
 3. If object is passed as any of the argument, it will be used instead ignoring
    all classes and numeric arguments.
@@ -414,9 +417,9 @@ $this->buttonSave = Factory::factory([Button::class], $this->buttonSave);
 
 So the value you specify for the icon will be passed as:
 
- - string: argument to constructor of `Button()`.
- - array: arguments for constructors and inject properties
- - object: will override return value
+- string: argument to constructor of `Button()`.
+- array: arguments for constructors and inject properties
+- object: will override return value
 
 ### Specify Layout
 
@@ -435,18 +438,18 @@ $this->layout = Factory::factory($layout);
 
 The value you specify will be treated like this:
 
- - string: specify a class (prefixed by Layout\)
- - array: specify a class and allow to pass additional argument or constructor options
- - object: will override layout
+- string: specify a class (prefixed by Layout)
+- array: specify a class and allow to pass additional argument or constructor options
+- object: will override layout
 
 ### Form::addField and Table::addColumn
 
-Agile UI is using form field classes from namespace \Atk4\Ui\FormField\.
+Agile UI is using form field classes from namespace \Atk4\Ui\FormField.
 A default class is 'Line' but there are several ways how it can be overridden:
 
- - User can specify $ui['form'] / $ui['table'] property for model's field
- - User can pass 2nd parameter to addField()
- - Class can be inferred from field type
+- User can specify $ui['form'] / $ui['table'] property for model's field
+- User can pass 2nd parameter to addField()
+- Class can be inferred from field type
 
 Each of the above can specify class name, so with 3 seed sources they need
 merging:

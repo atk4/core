@@ -1,6 +1,10 @@
+:::{php:namespace} Atk4\Core
+:::
+
 # Dynamic Method Trait
 
-.. php:trait:: DynamicMethodTrait
+:::{php:trait} DynamicMethodTrait
+:::
 
 ## Introduction
 
@@ -16,8 +20,8 @@ $object->test('world');
 
 ## Global Methods
 
-If object has application scope :php:trait:`AppScopeTrait` and the application
-implements :php:trait:`HookTrait` then executing $object->test() will also
+If object has application scope {php:trait}`AppScopeTrait` and the application
+implements {php:trait}`HookTrait` then executing $object->test() will also
 look for globally-registered method inside the application:
 
 ```
@@ -49,33 +53,33 @@ echo $m->sum(3, 5); // 8
 
 ## Properties
 
-    None
+None
 
 ## Methods
 
-.. php:method:: tryCall($method, $arguments)
+:::{php:method} tryCall($method, $arguments)
+Tries to call dynamic method, but doesn't throw exception if it is not
+possible.
+:::
 
-    Tries to call dynamic method, but doesn't throw exception if it is not
-    possible.
+:::{php:method} addMethod($name, $closure)
+Add new method for this object.
+See examples above.
+:::
 
-.. php:method:: addMethod($name, $closure)
+:::{php:method} hasMethod($name)
+Returns true if object has specified method (either native or dynamic).
+Returns true also if specified methods is defined globally.
+:::
 
-    Add new method for this object.
-    See examples above.
+:::{php:method} removeMethod($name)
+Remove dynamically registered method.
+:::
 
-.. php:method:: hasMethod($name)
+:::{php:method} addGlobalMethod($name, $closure)
+Registers a globally-recognized method for all objects.
+:::
 
-    Returns true if object has specified method (either native or dynamic).
-    Returns true also if specified methods is defined globally.
-
-.. php:method:: removeMethod($name)
-
-    Remove dynamically registered method.
-
-.. php:method:: addGlobalMethod($name, $closure)
-
-    Registers a globally-recognized method for all objects.
-
-.. php:method:: hasGlobalMethod($name)
-
-    Return true if such global method exists.
+:::{php:method} hasGlobalMethod($name)
+Return true if such global method exists.
+:::
