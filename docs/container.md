@@ -25,8 +25,8 @@ $anotherObject = $object->getElement('test');
 If you additionally use {php:trait}`TrackableTrait` together with {php:trait}`NameTrait`
 then your objects also receive unique "name". From example above:
 
-- $object->name == "app_object_4"
-- $anotherObject->name == "app_object_4_test"
+- `$object->name` == "app_object_4"
+- `$anotherObject->name` == "app_object_4_test"
 
 ## Name Trait
 

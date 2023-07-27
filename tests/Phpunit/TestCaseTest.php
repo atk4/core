@@ -48,7 +48,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @dataProvider provideProviderAb
+     * @dataProvider provideProviderAbCases
      */
     public function testObjectsAreReleasedAfterTest(string $v): void
     {
@@ -103,17 +103,17 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @return \Traversable<int, array<int, mixed>>
+     * @return iterable<int, array<int, mixed>>
      */
-    public function provideProviderAb(): \Traversable
+    public function provideProviderAbCases(): iterable
     {
         yield ['a'];
         yield ['b'];
     }
 
     /**
-     * @dataProvider provideProviderAb
-     * @dataProvider provideProviderCoverage
+     * @dataProvider provideProviderAbCases
+     * @dataProvider provideProviderCoverageCases
      */
     public function testProviderCoverage(string $v): void
     {
@@ -124,9 +124,9 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @return \Traversable<int, array<int, mixed>>
+     * @return iterable<int, array<int, mixed>>
      */
-    public function provideProviderCoverage(): \Traversable
+    public function provideProviderCoverageCases(): iterable
     {
         yield ['x'];
         ++self::$providerCoverageCallCounter;
@@ -134,7 +134,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @dataProvider provideProviderAb
+     * @dataProvider provideProviderAbCases
      */
     public function testCoverageImplForDoesNotPerformAssertions(string $v): void
     {
