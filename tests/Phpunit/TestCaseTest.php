@@ -103,7 +103,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @return iterable<int, array<int, mixed>>
+     * @return iterable<list<mixed>>
      */
     public function provideProviderAbCases(): iterable
     {
@@ -124,7 +124,7 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @return iterable<int, array<int, mixed>>
+     * @return iterable<list<mixed>>
      */
     public function provideProviderCoverageCases(): iterable
     {
