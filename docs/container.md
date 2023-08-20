@@ -9,7 +9,7 @@ should implement {php:trait}`TrackableTrait` (if not, the $owner/$elements
 links will not be established)
 
 If both parent and child implement {php:trait}`AppScopeTrait` then the property
-of {php:attr}`AppScopeTrait::app` will be copied from parent to the child also.
+of {php:attr}`AppScopeTrait::$app` will be copied from parent to the child also.
 
 If your child implements {php:trait}`InitializerTrait` then the method
 {php:meth}`InitializerTrait::init` will also be invoked after linking is done.
@@ -208,7 +208,7 @@ and call _addContainer, _addFactory,.
 Add element into container. Normally you should create a method
 add() inside your class that will execute this method. Because
 multiple traits will want to contribute to your add() method,
-you should see sample implementation in {php:class}`ContainerTrait::add`.
+you should see sample implementation in {php:meth}`ContainerTrait::add`.
 
 Your minimum code should be:
 
