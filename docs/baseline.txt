@@ -1,0 +1,2 @@
+exception.md: [phpdomain] Target Atk4\Ui\App::catchExceptions not found
+exception.md: [phpdomain] Target Atk4\Ui\App::caughtException not found
