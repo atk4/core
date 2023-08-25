@@ -124,14 +124,10 @@ trait HookTrait
 
         $fx = $this->_unbindHookFxIfBoundToThis($fx, false);
 
-        if (!isset($this->hooks[$spot][$priority])) {
-            $this->hooks[$spot][$priority] = [];
-        }
-
         $index = $this->_hookIndexCounter++;
         $data = [$fx, $args];
         if ($priority < 0) {
-            $this->hooks[$spot][$priority] = [$index => $data] + $this->hooks[$spot][$priority];
+            $this->hooks[$spot][$priority] = [$index => $data] + ($this->hooks[$spot][$priority] ?? []);
         } else {
             $this->hooks[$spot][$priority][$index] = $data;
         }
@@ -237,8 +233,8 @@ trait HookTrait
     /**
      * Delete all hooks for specified spot, priority and index.
      *
-     * @param int|null $priority        filter specific priority, null for all
-     * @param bool     $priorityIsIndex filter by index instead of priority
+     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
+     * @param bool                                        $priorityIsIndex filter by index instead of priority
      *
      * @return static
      */
@@ -249,11 +245,19 @@ trait HookTrait
                 $index = $priority;
                 unset($priority);
 
-                foreach (array_keys($this->hooks[$spot]) as $priority) {
+                foreach (array_keys($this->hooks[$spot] ?? []) as $priority) {
                     unset($this->hooks[$spot][$priority][$index]);
+
+                    if ($this->hooks[$spot][$priority] === []) {
+                        unset($this->hooks[$spot][$priority]);
+                    }
                 }
             } else {
                 unset($this->hooks[$spot][$priority]);
+            }
+
+            if (($this->hooks[$spot] ?? null) === []) {
+                unset($this->hooks[$spot]);
             }
         } else {
             unset($this->hooks[$spot]);
