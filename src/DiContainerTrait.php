@@ -51,7 +51,7 @@ trait DiContainerTrait
             }
 
             if (property_exists($this, $k)) {
-                if ($passively && $this->{$k} !== null) {
+                if ($passively && isset($this->{$k}) && $this->{$k} !== null) {
                     continue;
                 }
 
