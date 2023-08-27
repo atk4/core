@@ -231,6 +231,36 @@ trait HookTrait
     }
 
     /**
+     * Returns true if at least one callback is defined for this hook.
+     *
+     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
+     * @param bool                                        $priorityIsIndex filter by index instead of priority
+     */
+    public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
+    {
+        if (!isset($this->hooks[$spot])) {
+            return false;
+        } elseif ($priority === null) {
+            return true;
+        }
+
+        if ($priorityIsIndex) {
+            $index = $priority;
+            unset($priority);
+
+            foreach (array_keys($this->hooks[$spot]) as $priority) {
+                if (isset($this->hooks[$spot][$priority][$index])) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return isset($this->hooks[$spot][$priority]);
+    }
+
+    /**
      * Delete all hooks for specified spot, priority and index.
      *
      * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
@@ -264,36 +294,6 @@ trait HookTrait
         }
 
         return $this;
-    }
-
-    /**
-     * Returns true if at least one callback is defined for this hook.
-     *
-     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
-     * @param bool                                        $priorityIsIndex filter by index instead of priority
-     */
-    public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
-    {
-        if (!isset($this->hooks[$spot])) {
-            return false;
-        } elseif ($priority === null) {
-            return true;
-        }
-
-        if ($priorityIsIndex) {
-            $index = $priority;
-            unset($priority);
-
-            foreach (array_keys($this->hooks[$spot]) as $priority) {
-                if (isset($this->hooks[$spot][$priority][$index])) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return isset($this->hooks[$spot][$priority]);
     }
 
     /**
