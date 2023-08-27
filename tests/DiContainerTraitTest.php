@@ -43,6 +43,10 @@ class DiContainerTraitTest extends TestCase
         $m = new FactoryDiMock2();
         $m->setDefaults(['a' => null, 'c' => false]);
         self::assertSame([$m->a, $m->b, $m->c], ['AAA', 'BBB', false]);
+
+        $m = new FactoryDiMock2();
+        $m->setDefaults(['typedNotNull' => 'x']);
+        self::assertSame($m->typedNotNull, 'x');
     }
 
     public function testPropertiesPassively(): void
@@ -60,6 +64,10 @@ class DiContainerTraitTest extends TestCase
         $m->a = ['foo'];
         $m->setDefaults(['a' => ['bar']], true);
         self::assertSame([$m->a, $m->b, $m->c], [['foo'], 'BBB', null]);
+
+        $m = new FactoryDiMock2();
+        $m->setDefaults(['typedNotNull' => 'x'], true);
+        self::assertSame($m->typedNotNull, 'x');
     }
 
     /**
@@ -93,6 +101,8 @@ class FactoryDiMock2
     public $b = 'BBB';
     /** @var string */
     public $c;
+
+    public string $typedNotNull;
 }
 
 class FactoryDiMockConstructorMustNeverBeCalled

@@ -449,6 +449,50 @@ class HookTraitTest extends TestCase
         $m->hook('inc', ['x', &$value]);
         self::assertSame(2, $value);
     }
+
+    public function testHasCallbacks(): void
+    {
+        $m = new HookMock();
+        $ind = $m->onHook('foo', function () {});
+
+        self::assertTrue($m->hookHasCallbacks('foo'));
+        self::assertFalse($m->hookHasCallbacks('bar'));
+
+        self::assertTrue($m->hookHasCallbacks('foo', 5));
+        self::assertFalse($m->hookHasCallbacks('foo', 10));
+        self::assertFalse($m->hookHasCallbacks('bar', 5));
+
+        self::assertTrue($m->hookHasCallbacks('foo', $ind, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $ind + 1, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $ind - 1, true));
+        self::assertFalse($m->hookHasCallbacks('bar', $ind, true));
+    }
+
+    public function testRemove(): void
+    {
+        $m = new HookMock();
+        $indA = $m->onHook('foo', function () {}, [], 2);
+        $indB = $m->onHook('foo', function () {});
+        $indC = $m->onHook('foo', function () {});
+
+        self::assertTrue($m->hookHasCallbacks('foo', $indA, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indC, true));
+
+        $m->removeHook('foo', $indC, true);
+        self::assertTrue($m->hookHasCallbacks('foo', $indA, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $indC, true));
+
+        $m->removeHook('foo', 2);
+        self::assertFalse($m->hookHasCallbacks('foo', $indA, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $indC, true));
+
+        self::assertTrue($m->hookHasCallbacks('foo'));
+        $m->removeHook('foo');
+        self::assertFalse($m->hookHasCallbacks('foo'));
+    }
 }
 
 class HookMock

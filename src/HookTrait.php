@@ -124,14 +124,10 @@ trait HookTrait
 
         $fx = $this->_unbindHookFxIfBoundToThis($fx, false);
 
-        if (!isset($this->hooks[$spot][$priority])) {
-            $this->hooks[$spot][$priority] = [];
-        }
-
         $index = $this->_hookIndexCounter++;
         $data = [$fx, $args];
         if ($priority < 0) {
-            $this->hooks[$spot][$priority] = [$index => $data] + $this->hooks[$spot][$priority];
+            $this->hooks[$spot][$priority] = [$index => $data] + ($this->hooks[$spot][$priority] ?? []);
         } else {
             $this->hooks[$spot][$priority][$index] = $data;
         }
@@ -235,38 +231,10 @@ trait HookTrait
     }
 
     /**
-     * Delete all hooks for specified spot, priority and index.
-     *
-     * @param int|null $priority        filter specific priority, null for all
-     * @param bool     $priorityIsIndex filter by index instead of priority
-     *
-     * @return static
-     */
-    public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
-    {
-        if ($priority !== null) {
-            if ($priorityIsIndex) {
-                $index = $priority;
-                unset($priority);
-
-                foreach (array_keys($this->hooks[$spot]) as $priority) {
-                    unset($this->hooks[$spot][$priority][$index]);
-                }
-            } else {
-                unset($this->hooks[$spot][$priority]);
-            }
-        } else {
-            unset($this->hooks[$spot]);
-        }
-
-        return $this;
-    }
-
-    /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param int|null $priority        filter specific priority, null for all
-     * @param bool     $priorityIsIndex filter by index instead of priority
+     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
+     * @param bool                                        $priorityIsIndex filter by index instead of priority
      */
     public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
     {
@@ -290,6 +258,42 @@ trait HookTrait
         }
 
         return isset($this->hooks[$spot][$priority]);
+    }
+
+    /**
+     * Delete all hooks for specified spot, priority and index.
+     *
+     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
+     * @param bool                                        $priorityIsIndex filter by index instead of priority
+     *
+     * @return static
+     */
+    public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
+    {
+        if ($priority !== null) {
+            if ($priorityIsIndex) {
+                $index = $priority;
+                unset($priority);
+
+                foreach (array_keys($this->hooks[$spot] ?? []) as $priority) {
+                    unset($this->hooks[$spot][$priority][$index]);
+
+                    if ($this->hooks[$spot][$priority] === []) {
+                        unset($this->hooks[$spot][$priority]);
+                    }
+                }
+            } else {
+                unset($this->hooks[$spot][$priority]);
+            }
+
+            if (($this->hooks[$spot] ?? null) === []) {
+                unset($this->hooks[$spot]);
+            }
+        } else {
+            unset($this->hooks[$spot]);
+        }
+
+        return $this;
     }
 
     /**
