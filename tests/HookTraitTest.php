@@ -449,6 +449,22 @@ class HookTraitTest extends TestCase
         $m->hook('inc', ['x', &$value]);
         self::assertSame(2, $value);
     }
+
+    public function testHasCallbacks(): void
+    {
+        $m = new HookMock();
+        $ind = $m->onHook('foo', function () {});
+
+        self::assertTrue($m->hookHasCallbacks('foo'));
+        self::assertFalse($m->hookHasCallbacks('bar'));
+
+        self::assertTrue($m->hookHasCallbacks('foo', 5));
+        self::assertFalse($m->hookHasCallbacks('foo', 10));
+
+        self::assertTrue($m->hookHasCallbacks('foo', $ind, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $ind + 1, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $ind - 1, true));
+    }
 }
 
 class HookMock
