@@ -4,9 +4,9 @@ includes:
 parameters:
     level: 6
     paths:
-        - ./
+        - .
     excludePaths:
-        - vendor/
+        - vendor
 
     ignoreErrors:
         # relax strict rules
@@ -18,5 +18,5 @@ parameters:
 
         -
             path: 'tests/DynamicMethodTraitTest.php'
-            message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock|GlobalMethodObjectMock)::\w+\(\)\.$~'
-            count: 35
+            message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock)::\w+\(\)\.$~'
+            count: 10

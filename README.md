@@ -25,7 +25,7 @@ https://atk4-core.readthedocs.io/
 ## Community and Support
 
 [![Stack Overflow Community](https://img.shields.io/stackexchange/stackoverflow/t/atk4.svg)](https://stackoverflow.com/questions/ask?tags=atk4)
-[![Discord Community](https://img.shields.io/badge/discord-User_Forum-green.svg)](https://forum.agiletoolkit.org/c/44)
+[![Discord Community](https://img.shields.io/badge/discord-User_Forum-green.svg)](https://discord.gg/QVKSk2B)
 
 ## Install from Composer
 

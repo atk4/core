@@ -18,26 +18,6 @@ $object->addMethod('test', function ($o, $args) {
 $object->test('world');
 ```
 
-## Global Methods
-
-If object has application scope {php:trait}`AppScopeTrait` and the application
-implements {php:trait}`HookTrait` then executing $object->test() will also
-look for globally-registered method inside the application:
-
-```
-$object->getApp()->addGlobalMethod('test', function ($app, $o, $args) {
-    echo 'hello, ' . $args[0];
-});
-
-$object->test('world');
-```
-
-Of course calling test() on the other object afterwards will trigger same
-global method.
-
-If you attempt to register same method multiple times you will receive an
-exception.
-
 ## Dynamic Method Arguments
 
 When calling dynamic method first argument which is passed to the method will
@@ -74,12 +54,4 @@ Returns true also if specified methods is defined globally.
 
 :::{php:method} removeMethod($name)
 Remove dynamically registered method.
-:::
-
-:::{php:method} addGlobalMethod($name, $closure)
-Registers a globally-recognized method for all objects.
-:::
-
-:::{php:method} hasGlobalMethod($name)
-Return true if such global method exists.
 :::

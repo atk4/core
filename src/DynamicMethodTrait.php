@@ -21,21 +21,11 @@ trait DynamicMethodTrait
      */
     public function __call(string $name, array $args)
     {
-        $hookName = $this->buildMethodHookName($name, false);
+        $hookName = $this->buildMethodHookName($name);
         if (TraitUtil::hasHookTrait($this) && $this->hookHasCallbacks($hookName)) {
             $result = $this->hook($hookName, $args);
 
             return reset($result);
-        }
-
-        if (TraitUtil::hasAppScopeTrait($this)) {
-            $hookName = $this->buildMethodHookName($name, true);
-            if (TraitUtil::hasHookTrait($this->getApp()) && $this->getApp()->hookHasCallbacks($hookName)) {
-                array_unshift($args, $this);
-                $result = $this->getApp()->hook($hookName, $args);
-
-                return reset($result);
-            }
         }
 
         // match native PHP behaviour as much as possible
@@ -58,9 +48,9 @@ trait DynamicMethodTrait
         throw new \Error('Call to undefined method ' . $class . '::' . $name . '()');
     }
 
-    private function buildMethodHookName(string $name, bool $isGlobal): string
+    private function buildMethodHookName(string $name): string
     {
-        return '__atk__method__' . ($isGlobal ? 'g' : 'l') . '__' . $name;
+        return '__atk4__dynamic_method__' . $name;
     }
 
     /**
@@ -73,7 +63,7 @@ trait DynamicMethodTrait
     public function addMethod(string $name, \Closure $fx)
     {
         if (!TraitUtil::hasHookTrait($this)) {
-            throw new Exception('Object must use hookTrait for Dynamic Methods to work');
+            throw new Exception('Object must use HookTrait for dynamic method support');
         }
 
         if ($this->hasMethod($name)) {
@@ -81,7 +71,7 @@ trait DynamicMethodTrait
                 ->addMoreInfo('name', $name);
         }
 
-        $this->onHook($this->buildMethodHookName($name, false), $fx);
+        $this->onHook($this->buildMethodHookName($name), $fx);
 
         return $this;
     }
@@ -94,8 +84,7 @@ trait DynamicMethodTrait
     public function hasMethod(string $name): bool
     {
         return method_exists($this, $name)
-            || (TraitUtil::hasHookTrait($this) && $this->hookHasCallbacks($this->buildMethodHookName($name, false)))
-            || $this->hasGlobalMethod($name);
+            || $this->hookHasCallbacks($this->buildMethodHookName($name));
     }
 
     /**
@@ -107,68 +96,8 @@ trait DynamicMethodTrait
      */
     public function removeMethod(string $name)
     {
-        if (TraitUtil::hasHookTrait($this)) {
-            $this->removeHook($this->buildMethodHookName($name, false));
-        }
+        $this->removeHook($this->buildMethodHookName($name));
 
         return $this;
-    }
-
-    /**
-     * Agile Toolkit objects allow method injection. This is quite similar
-     * to technique used in JavaScript:.
-     *
-     * obj.test = function () { .. }
-     *
-     * All non-existent method calls on all Agile Toolkit objects will be
-     * tried against local table of registered methods and then against
-     * global registered methods.
-     *
-     * addGlobalMethod allows you to register a globally-recognized method for
-     * all Agile Toolkit objects. PHP is not particularly fast about executing
-     * methods like that, but this technique can be used for adding
-     * backward-compatibility or debugging, etc.
-     *
-     * @see self::hasMethod()
-     * @see self::__call()
-     *
-     * @param string $name Name of the method
-     */
-    public function addGlobalMethod(string $name, \Closure $fx): void
-    {
-        if (!TraitUtil::hasAppScopeTrait($this) || !TraitUtil::hasHookTrait($this->getApp())) {
-            throw new Exception('You need AppScopeTrait and HookTrait traits, see docs');
-        }
-
-        if ($this->hasGlobalMethod($name)) {
-            throw (new Exception('Registering global method twice'))
-                ->addMoreInfo('name', $name);
-        }
-
-        $this->getApp()->onHook($this->buildMethodHookName($name, true), $fx);
-    }
-
-    /**
-     * Return true if such global method exists.
-     *
-     * @param string $name Name of the method
-     */
-    public function hasGlobalMethod(string $name): bool
-    {
-        return TraitUtil::hasAppScopeTrait($this)
-            && TraitUtil::hasHookTrait($this->getApp())
-            && $this->getApp()->hookHasCallbacks($this->buildMethodHookName($name, true));
-    }
-
-    /**
-     * Remove dynamically registered global method.
-     *
-     * @param string $name Name of the method
-     */
-    public function removeGlobalMethod(string $name): void
-    {
-        if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasHookTrait($this->getApp())) {
-            $this->getApp()->removeHook($this->buildMethodHookName($name, true));
-        }
     }
 }
