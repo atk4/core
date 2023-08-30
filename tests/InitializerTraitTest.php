@@ -73,7 +73,6 @@ class InitializerTraitTest extends TestCase
         $m = new class() extends AbstractInitializerMock {
             public function init(): void
             {
-                parent::init();
             }
         };
 
