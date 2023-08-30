@@ -184,7 +184,7 @@ abstract class RendererAbstract
      */
     protected function getStackTrace(bool $shorten): array
     {
-        $custTraceFunc = function (\Throwable $ex) {
+        $custTraceFunc = static function (\Throwable $ex) {
             $trace = $ex->getTrace();
 
             return count($trace) > 0 ? array_combine(range(count($trace) - 1, 0, -1), $trace) : [];

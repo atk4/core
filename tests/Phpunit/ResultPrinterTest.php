@@ -20,7 +20,7 @@ class ResultPrinterTest extends TestCase
         $defect = new TestFailure($this, $exception);
         $stream = fopen('php://memory', 'w+');
         $printer = new $resultPrinterClass($stream);
-        \Closure::bind(fn () => $printer->printDefectTrace($defect), null, $resultPrinterClass)();
+        \Closure::bind(static fn () => $printer->printDefectTrace($defect), null, $resultPrinterClass)();
         fseek($stream, 0);
 
         return stream_get_contents($stream);

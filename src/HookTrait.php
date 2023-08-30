@@ -39,7 +39,7 @@ trait HookTrait
                 if (!isset(self::$_instances[$class])) {
                     $dummyInstance = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
                     foreach ([$class, ...array_keys(class_parents($class))] as $scope) {
-                        \Closure::bind(function () use ($dummyInstance) {
+                        \Closure::bind(static function () use ($dummyInstance) {
                             foreach (array_keys(get_object_vars($dummyInstance)) as $k) {
                                 unset($dummyInstance->{$k});
                             }

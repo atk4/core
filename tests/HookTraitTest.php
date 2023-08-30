@@ -17,7 +17,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $result = 0;
 
-        $m->onHook('test1', function () use (&$result) {
+        $m->onHook('test1', static function () use (&$result) {
             ++$result;
         });
 
@@ -33,11 +33,11 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $result = 20;
 
-        $m->onHook('test1', function () use (&$result) {
+        $m->onHook('test1', static function () use (&$result) {
             ++$result;
         });
 
-        $m->onHook('test1', function () use (&$result) {
+        $m->onHook('test1', static function () use (&$result) {
             $result = 0;
         }, [], 1);
 
@@ -51,7 +51,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
 
         $result = '';
-        $m->onHook('tst', function ($m, $arg) use (&$result) {
+        $m->onHook('tst', static function ($m, $arg) use (&$result) {
             $result .= $arg;
         });
 
@@ -63,37 +63,37 @@ class HookTraitTest extends TestCase
     public function testOrder(): void
     {
         $m = new HookMock();
-        $ind = $m->onHook('spot', function () {
+        $ind = $m->onHook('spot', static function () {
             return 3;
         }, [], -1);
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 2;
         }, [], -5);
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 1;
         }, [], -5);
 
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 4;
         }, [], 0);
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 5;
         }, [], 0);
 
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 10;
         }, [], 1000);
 
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 6;
         }, [], 2);
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 7;
         }, [], 5);
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 8;
         });
-        $m->onHook('spot', function () {
+        $m->onHook('spot', static function () {
             return 9;
         }, [], 5);
 
@@ -117,10 +117,10 @@ class HookTraitTest extends TestCase
     {
         $obj = new HookMock();
 
-        $mulFunc = function ($obj, $a, $b) {
+        $mulFunc = static function ($obj, $a, $b) {
             return $a * $b;
         };
-        $addFunc = function ($obj, $a, $b) {
+        $addFunc = static function ($obj, $a, $b) {
             return $a + $b;
         };
 
@@ -138,13 +138,13 @@ class HookTraitTest extends TestCase
     {
         $obj = new HookMock();
 
-        $mulFunc = function ($obj, $a, $b) {
+        $mulFunc = static function ($obj, $a, $b) {
             return $a * $b;
         };
-        $addFunc = function ($obj, $a, $b) {
+        $addFunc = static function ($obj, $a, $b) {
             return $a + $b;
         };
-        $powFunc = function ($obj, $a, $b, $power) {
+        $powFunc = static function ($obj, $a, $b, $power) {
             return $a ** $power + $b ** $power;
         };
 
@@ -164,7 +164,7 @@ class HookTraitTest extends TestCase
     {
         $obj = new HookMock();
 
-        $incFunc = function ($obj, &$a) {
+        $incFunc = static function ($obj, &$a) {
             ++$a;
         };
 
@@ -189,7 +189,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $m->result = 0;
 
-        $incFunc = function ($obj) {
+        $incFunc = static function ($obj) {
             ++$obj->result;
             if ($obj->result === 2) {
                 $obj->breakHook('stop');
@@ -209,7 +209,7 @@ class HookTraitTest extends TestCase
     {
         $m = new HookMock();
 
-        $m->onHook('inc', function () use ($m) {
+        $m->onHook('inc', static function () use ($m) {
             $m->breakHook('stop');
         });
 
@@ -224,7 +224,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
         $m->result = 0;
 
-        $m->onHook('inc', function ($obj) {
+        $m->onHook('inc', static function ($obj) {
             throw new Exception('stuff went wrong');
         });
 
@@ -250,7 +250,7 @@ class HookTraitTest extends TestCase
         $m->hook('inc', ['y']);
 
         // bound callback
-        $m->onHookShort('inc', function (...$args) {
+        $m->onHookShort('inc', static function (...$args) {
             self::assertSame(['y', 'x'], $args);
         }, ['x']);
         $m->hook('inc', ['y']);
@@ -400,7 +400,7 @@ class HookTraitTest extends TestCase
     {
         $value = 0;
         $m = new HookMock();
-        $m->onHook('inc', function ($ignoreObject, $ignore1st, int &$value) {
+        $m->onHook('inc', static function ($ignoreObject, $ignore1st, int &$value) {
             ++$value;
         });
         $m->hook('inc', ['x', &$value]);
@@ -438,7 +438,7 @@ class HookTraitTest extends TestCase
     public function testHasCallbacks(): void
     {
         $m = new HookMock();
-        $ind = $m->onHook('foo', function () {});
+        $ind = $m->onHook('foo', static function () {});
 
         self::assertTrue($m->hookHasCallbacks('foo'));
         self::assertFalse($m->hookHasCallbacks('bar'));
@@ -456,9 +456,9 @@ class HookTraitTest extends TestCase
     public function testRemove(): void
     {
         $m = new HookMock();
-        $indA = $m->onHook('foo', function () {}, [], 2);
-        $indB = $m->onHook('foo', function () {});
-        $indC = $m->onHook('foo', function () {});
+        $indA = $m->onHook('foo', static function () {}, [], 2);
+        $indB = $m->onHook('foo', static function () {});
+        $indC = $m->onHook('foo', static function () {});
 
         self::assertTrue($m->hookHasCallbacks('foo', $indA, true));
         self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
