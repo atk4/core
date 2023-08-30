@@ -184,14 +184,14 @@ abstract class RendererAbstract
      */
     protected function getStackTrace(bool $shorten): array
     {
-        $custTraceFunc = static function (\Throwable $ex) {
+        $custTraceFx = static function (\Throwable $ex) {
             $trace = $ex->getTrace();
 
             return count($trace) > 0 ? array_combine(range(count($trace) - 1, 0, -1), $trace) : [];
         };
 
-        $trace = $custTraceFunc($this->exception);
-        $parentTrace = $shorten && $this->parentException !== null ? $custTraceFunc($this->parentException) : [];
+        $trace = $custTraceFx($this->exception);
+        $parentTrace = $shorten && $this->parentException !== null ? $custTraceFx($this->parentException) : [];
 
         $bothAtk = $this->exception instanceof Exception && $this->parentException instanceof Exception;
         $c = min(count($trace), count($parentTrace));
