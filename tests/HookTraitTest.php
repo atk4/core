@@ -229,6 +229,7 @@ class HookTraitTest extends TestCase
         });
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('stuff went wrong');
         $m->hook('inc');
     }
 
@@ -257,21 +258,8 @@ class HookTraitTest extends TestCase
 
     public function testCloningSafety(): void
     {
-        $makeMock = function () {
-            return new class() extends HookMock {
-                public function makeCallback(): \Closure
-                {
-                    return function () {
-                        $this->incrementResult();
-
-                        return $this;
-                    };
-                }
-            };
-        };
-
         // unbound callback
-        $m = $makeMock();
+        $m = new HookMock();
         $m->onHook('inc', static function () {});
         $m->onHookShort('inc', static function () {});
         $m->onHookShort('null_scope_class', \Closure::fromCallable('trim'), ['x']);
@@ -281,9 +269,9 @@ class HookTraitTest extends TestCase
         }
 
         // callback bound to the same object
-        $m = $makeMock();
-        $m->onHook('inc', $m->makeCallback());
-        $m->onHookShort('inc', $m->makeCallback());
+        $m = new HookMock();
+        $m->onHook('inc', $m->makeIncrementResultFx());
+        $m->onHookShort('inc', $m->makeIncrementResultFx());
         $m = clone $m;
         foreach ($m->hook('inc') as $v) {
             self::assertSame($m, $v);
@@ -300,8 +288,8 @@ class HookTraitTest extends TestCase
         self::assertSame(6, $m->result);
 
         // callback bound to a different object
-        $m = $makeMock();
-        $m->onHook('inc', (clone $m)->makeCallback());
+        $m = new HookMock();
+        $m->onHook('inc', (clone $m)->makeIncrementResultFx());
         $m = clone $m;
 
         $this->expectException(Exception::class);
@@ -311,21 +299,12 @@ class HookTraitTest extends TestCase
 
     public function testOnHookDynamic(): void
     {
-        $m = new class() extends HookMock {
-            public function makeCallback(): \Closure
-            {
-                return function () {
-                    $this->incrementResult();
-
-                    return $this;
-                };
-            }
-        };
+        $m = new HookMock();
 
         $hookThis = $m;
         $m->onHookDynamic('inc', static function () use (&$hookThis) {
             return $hookThis;
-        }, $m->makeCallback());
+        }, $m->makeIncrementResultFx());
 
         self::assertSame([$hookThis], $m->hook('inc'));
         self::assertSame(1, $m->result);
@@ -398,8 +377,10 @@ class HookTraitTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('New $this getter must be static');
         $m->onHookDynamic('inc', function (HookMock $m) {
+            $this->getName(); // prevent PHP CS Fixer to make this anonymous function static
+
             return $m;
-        }, fn ($v) => $v);
+        }, $m->makeIncrementResultFx());
     }
 
     public function testOnHookDynamicGetterNullException(): void
@@ -408,7 +389,7 @@ class HookTraitTest extends TestCase
 
         $m->onHookDynamic('inc', static function (HookMock $m) { // @phpstan-ignore-line
             return null;
-        }, fn ($v) => $v);
+        }, $m->makeIncrementResultFx());
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('New $this must be an object');
@@ -430,6 +411,8 @@ class HookTraitTest extends TestCase
         $value = 0;
         $m = new HookMock();
         $m->onHookShort('inc', function ($ignore1st, int &$value) {
+            $this->getName(); // prevent PHP CS Fixer to make this anonymous function static
+
             ++$value;
         });
         $m->hook('inc', ['x', &$value]);
@@ -442,6 +425,8 @@ class HookTraitTest extends TestCase
         $m->onHookDynamic('inc', static function () use ($m) {
             return clone $m;
         }, function ($ignoreObject, $ignore1st, int &$value) {
+            $this->makeIncrementResultFx(); // @phpstan-ignore-line prevent PHP CS Fixer to make this anonymous function static
+
             ++$value;
         });
         $m->hook('inc', ['x', &$value]);
@@ -505,6 +490,15 @@ class HookMock
     public function incrementResult(): void
     {
         ++$this->result;
+    }
+
+    public function makeIncrementResultFx(): \Closure
+    {
+        return function () {
+            $this->incrementResult();
+
+            return $this;
+        };
     }
 }
 
