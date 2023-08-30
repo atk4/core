@@ -138,7 +138,7 @@ trait DiContainerTrait
      */
     public static function fromSeed($seed = [], $defaults = [])// :static supported by PHP8+
     {
-        if (func_num_args() > 2) { // prevent bad usage
+        if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
@@ -158,7 +158,7 @@ trait DiContainerTrait
      */
     public static function fromSeedUnsafe($seed = [], $defaults = [])
     {
-        if (func_num_args() > 2) { // prevent bad usage
+        if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
