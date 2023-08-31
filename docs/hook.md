@@ -103,11 +103,11 @@ will be placed in array and returned by hook():
 
 ```
 $mul = function ($obj, $a, $b) {
-    return $a*$b;
+    return $a * $b;
 };
 
 $add = function ($obj, $a, $b) {
-    return $a+$b;
+    return $a + $b;
 };
 
 $obj->onHook('test', $mul);
@@ -135,7 +135,7 @@ You can also use key declarations if you wish to override arguments:
 // continue from above example
 
 $pow = function ($obj, $a, $b, $power) {
-    return pow($a, $power)+$pow($b, $power);
+    return pow($a, $power) + pow($b, $power);
 }
 
 $obj->onHook('test', $pow, [2]);
