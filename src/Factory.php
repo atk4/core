@@ -195,7 +195,7 @@ class Factory
      */
     final public static function factory($seed, $defaults = []): object
     {
-        if (func_num_args() > 2) { // prevent bad usage
+        if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 

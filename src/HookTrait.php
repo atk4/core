@@ -39,11 +39,11 @@ trait HookTrait
                 if (!isset(self::$_instances[$class])) {
                     $dummyInstance = (new \ReflectionClass($class))->newInstanceWithoutConstructor();
                     foreach ([$class, ...array_keys(class_parents($class))] as $scope) {
-                        \Closure::bind(function () use ($dummyInstance) {
+                        \Closure::bind(static function () use ($dummyInstance) {
                             foreach (array_keys(get_object_vars($dummyInstance)) as $k) {
                                 unset($dummyInstance->{$k});
                             }
-                        }, $dummyInstance, $scope)();
+                        }, null, $scope)();
                     }
 
                     self::$_instances[$class] = $dummyInstance;
@@ -175,9 +175,7 @@ trait HookTrait
      */
     private function _makeHookDynamicFx(?\Closure $getFxThisFx, \Closure $fx, bool $isShort): \Closure
     {
-        if ($getFxThisFx === null) {
-            $getFxThisFxThis = null;
-        } else {
+        if ($getFxThisFx !== null) {
             $getFxThisFxThis = (new \ReflectionFunction($getFxThisFx))->getClosureThis();
             if ($getFxThisFxThis !== null) {
                 throw new \TypeError('New $this getter must be static');

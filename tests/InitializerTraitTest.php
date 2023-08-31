@@ -40,24 +40,44 @@ class InitializerTraitTest extends TestCase
         self::assertFalse($m->isInitialized());
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object was not initialized');
         $m->assertIsInitialized();
     }
 
-    public function testInitBroken(): void
+    public function testInitNoParentCalledException(): void
     {
-        $m = new InitializerMockBroken();
+        $m = new class() extends AbstractInitializerMock {
+            protected function init(): void
+            {
+            }
+        };
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object was not initialized');
         $m->invokeInit();
     }
 
-    public function testInitCalledTwice(): void
+    public function testInitCalledTwiceException(): void
     {
         $m = new InitializerMock();
         $m->invokeInit();
         self::assertTrue($m->isInitialized());
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object already initialized');
+        $m->invokeInit();
+    }
+
+    public function testInitDeclaredPublicException(): void
+    {
+        $m = new class() extends AbstractInitializerMock {
+            public function init(): void
+            {
+            }
+        };
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Init method must have protected visibility');
         $m->invokeInit();
     }
 }
@@ -77,13 +97,5 @@ class InitializerMock extends AbstractInitializerMock
         parent::init();
 
         $this->result = true;
-    }
-}
-
-class InitializerMockBroken extends AbstractInitializerMock
-{
-    protected function init(): void
-    {
-        // do not call parent
     }
 }

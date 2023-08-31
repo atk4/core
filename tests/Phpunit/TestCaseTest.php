@@ -22,7 +22,7 @@ class TestCaseTest extends TestCase
 
     protected function createAndCountObject(): object
     {
-        $destructFx = function () {
+        $destructFx = static function () {
             --self::$activeObjectsCounter;
         };
 

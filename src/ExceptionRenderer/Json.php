@@ -86,7 +86,7 @@ class Json extends RendererAbstract
             }
 
             if ($escapeFrame) {
-                $call['args'] = array_map(function ($arg) {
+                $call['args'] = array_map(static function ($arg) {
                     return static::toSafeString($arg);
                 }, $call['args']);
             }

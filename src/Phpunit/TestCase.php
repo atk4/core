@@ -111,9 +111,9 @@ abstract class TestCase extends BaseTestCase
                     $this->testResult->beStrictAboutTestsThatDoNotTestAnything(true);
 
                     $testResult = $this->testResult;
-                    foreach (\Closure::bind(fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
+                    foreach (\Closure::bind(static fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
                         if ($listener instanceof TestListenerAdapter) {
-                            foreach (\Closure::bind(fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
+                            foreach (\Closure::bind(static fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
                                 if ($hook === $this) {
                                     $this->testResult->removeListener($listener); // @phpstan-ignore-line
                                 }
@@ -134,7 +134,7 @@ abstract class TestCase extends BaseTestCase
         if (in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true)) {
             $coverage = $this->getTestResultObject()->getCodeCoverage();
             if ($coverage !== null) {
-                $coverageId = \Closure::bind(fn () => $coverage->currentId, null, CodeCoverage::class)();
+                $coverageId = \Closure::bind(static fn () => $coverage->currentId, null, CodeCoverage::class)();
                 if ($coverageId !== null) {
                     $linesToBeCovered = TestUtil::getLinesToBeCovered(static::class, $this->getName(false));
                     $linesToBeUsed = TestUtil::getLinesToBeUsed(static::class, $this->getName(false));
@@ -147,7 +147,7 @@ abstract class TestCase extends BaseTestCase
 
     private function releaseObjectsFromExceptionTrace(\Throwable $e): void
     {
-        $replaceObjectsFx = function ($v) use (&$replaceObjectsFx) {
+        $replaceObjectsFx = static function ($v) use (&$replaceObjectsFx) {
             if (is_object($v) && !$v instanceof \DateTimeInterface) {
                 $v = 'object of ' . get_debug_type($v) . ' class unreferenced by ' . self::class;
             } elseif (is_array($v)) {

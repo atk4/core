@@ -13,7 +13,7 @@ class DynamicMethodTraitTest extends TestCase
 {
     protected function createSumFx(): \Closure
     {
-        return function ($m, $a, $b) {
+        return static function ($m, $a, $b) {
             return $a + $b;
         };
     }
@@ -21,7 +21,7 @@ class DynamicMethodTraitTest extends TestCase
     public function testConstruct(): void
     {
         $m = new DynamicMethodMock();
-        $m->addMethod('test', function () {
+        $m->addMethod('test', static function () {
             return 'world';
         });
 
@@ -54,14 +54,14 @@ class DynamicMethodTraitTest extends TestCase
     {
         $m = new DynamicMethodMock();
 
-        \Closure::bind(function () use ($m) {
+        \Closure::bind(static function () use ($m) {
             $m->protectedMethod();
         }, null, DynamicMethodMock::class)();
 
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('Call to protected method ' . DynamicMethodMock::class
             . '::protectedMethod() from global scope');
-        \Closure::bind(function () use ($m) {
+        \Closure::bind(static function () use ($m) {
             $m->protectedMethod(); // @phpstan-ignore-line
         }, null, null)();
     }

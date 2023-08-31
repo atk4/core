@@ -14,7 +14,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
      */
     protected function runWithErrorConvertedToException(\Closure $fx): void
     {
-        set_error_handler(function (int $errno, string $errstr) {
+        set_error_handler(static function (int $errno, string $errstr) {
             throw new WarnError($errstr);
         });
         try {
@@ -26,7 +26,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
     public function testIssetException(): void
     {
-        $this->runWithErrorConvertedToException(function () {});
+        $this->runWithErrorConvertedToException(static function () {});
         $this->runWithErrorConvertedToException(function () {
             $test = new ClassWithWarnDynamicPropertyTrait();
 
@@ -113,7 +113,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
             public bool $p = false;
         };
 
-        set_error_handler(function () {
+        set_error_handler(static function () {
             return true;
         });
         try {
