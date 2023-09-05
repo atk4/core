@@ -31,12 +31,13 @@
     "homepage": "https://github.com/atk4/core",
     "require": {
         "php": ">=7.4 <8.4",
-        "benmorel/weakmap-polyfill": "^0.3.0",
+        "benmorel/weakmap-polyfill": "^0.4.0",
         "psr/log": "^1.0",
-        "symfony/polyfill-php80": "^1.17",
-        "symfony/polyfill-php81": "^1.22",
-        "symfony/polyfill-php82": "^1.26",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0"
+        "symfony/polyfill-php80": "^1.28",
+        "symfony/polyfill-php81": "^1.28",
+        "symfony/polyfill-php82": "^1.28",
+        "symfony/polyfill-php83": "^1.28",
+        "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0 || ^7.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.13",
