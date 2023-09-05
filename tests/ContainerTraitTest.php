@@ -237,8 +237,10 @@ class ContainerTraitTest extends TestCase
 
         if (\PHP_MAJOR_VERSION === 7) {
             $this->expectWarning(); // @phpstan-ignore-line
+            $this->expectWarningMessage('array_diff_key(): Expected parameter 1 to be an array, int given'); // @phpstan-ignore-line
         } else {
             $this->expectException(\TypeError::class);
+            $this->expectExceptionMessage('array_diff_key(): Argument #1 ($array) must be of type array, int given');
         }
         $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
     }
