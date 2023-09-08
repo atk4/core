@@ -506,7 +506,5 @@ class HookWithDynamicMethodMock extends HookMock
 {
     use DynamicMethodTrait;
 
-    public function foo(): void
-    {
-    }
+    public function foo(): void {}
 }

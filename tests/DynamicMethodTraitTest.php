@@ -120,9 +120,7 @@ class DynamicMethodMock
     use DynamicMethodTrait;
     use HookTrait;
 
-    private function privateMethod(): void
-    {
-    }
+    private function privateMethod(): void {}
 
     protected function protectedMethod(): void
     {
