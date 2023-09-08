@@ -125,9 +125,7 @@ class CollectionTraitTest extends TestCase
             /** @var string */
             public $name;
 
-            protected function init(): void
-            {
-            }
+            protected function init(): void {}
         });
     }
 

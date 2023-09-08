@@ -47,9 +47,7 @@ class InitializerTraitTest extends TestCase
     public function testInitNoParentCalledException(): void
     {
         $m = new class() extends AbstractInitializerMock {
-            protected function init(): void
-            {
-            }
+            protected function init(): void {}
         };
 
         $this->expectException(Exception::class);
@@ -71,9 +69,7 @@ class InitializerTraitTest extends TestCase
     public function testInitDeclaredPublicException(): void
     {
         $m = new class() extends AbstractInitializerMock {
-            public function init(): void
-            {
-            }
+            public function init(): void {}
         };
 
         $this->expectException(Exception::class);

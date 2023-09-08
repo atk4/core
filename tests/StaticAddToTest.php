@@ -15,9 +15,7 @@ class StdSat extends \stdClass
     use StaticAddToTrait;
 }
 
-class StdSat2 extends StdSat
-{
-}
+class StdSat2 extends StdSat {}
 
 class ContainerFactoryMockSat
 {
