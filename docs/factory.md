@@ -310,7 +310,7 @@ class RedButton extends Button
 }
 
 $button = Factory::factory([RedButton::class, 'icon' => 'cake'], ['icon' => 'thumbs up']);
-// Question: what would be $button->icon value here?
+// question: what would be $button->icon value here?
 ```
 
 Factory will start by merging the parameters and will discover that icon is
@@ -347,10 +347,10 @@ Factory::mergeSeeds(['Button', 'Button Label'], ['Message', 'Message label']);
 // results in ['Button', 'Button Label']
 
 Factory::mergeSeeds([null, 'Button Label'], ['Message', 'Message Label']);
-// Results in ['Message', 'Button Label']);
+// results in ['Message', 'Button Label']);
 
 Factory::mergeSeeds(['null, 'Label1', 'icon' => 'book'], ['icon' => 'coin', 'Button'], ['class' => ['red']]);
-// Results in ['Button', 'Label1', 'icon' => 'book', 'class' => ['red']]
+// results in ['Button', 'Label1', 'icon' => 'book', 'class' => ['red']]
 ```
 
 Seed merging can also be used to merge defaults:
@@ -485,13 +485,13 @@ ways to use addButton():
 
 ```
 $form->addButton('click me');
-// Adds a regular button with specified label, as expected
+// adds a regular button with specified label, as expected
 
 $form->addButton(['click me', 'red', 'icon' => 'book']);
-// Specify class of a button and also icon
+// specify class of a button and also icon
 
 $form->addButton(new MyButton('click me'));
-// Use an object specified instead of a button
+// use an object specified instead of a button
 ```
 
 A same logic can be applied to addField:

@@ -67,19 +67,19 @@ trait ContainerTrait
      */
     protected function _addContainer(object $element, array $args): void
     {
-        // Carry on reference to application if we have appScopeTraits set
+        // carry on reference to application if we have appScopeTraits set
         if (TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($element)
             && (!$element->issetApp() || $element->getApp() !== $this->getApp())
         ) {
             $element->setApp($this->getApp());
         }
 
-        // If element is not trackable, then we don't need to do anything with it
+        // if element is not trackable, then we don't need to do anything with it
         if (!TraitUtil::hasTrackableTrait($element)) {
             return;
         }
 
-        // Normalize the arguments, bring name out
+        // normalize the arguments, bring name out
         if (isset($args['desired_name'])) {
             $name = $this->_uniqueElementName($args['desired_name']);
             unset($args['desired_name']);
@@ -98,7 +98,7 @@ trait ContainerTrait
                 ->addMoreInfo('arg', $args);
         }
 
-        // Maybe element already exists
+        // maybe element already exists
         if (isset($this->elements[$name])) {
             throw (new Exception('Element with requested name already exists'))
                 ->addMoreInfo('element', $element)
