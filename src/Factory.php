@@ -79,7 +79,7 @@ class Factory
 
         ksort($arguments, \SORT_NUMERIC);
         if ($obj === null) {
-            $arguments = $arguments + $injection;
+            $arguments += $injection;
 
             return $arguments;
         }
