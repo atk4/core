@@ -41,8 +41,8 @@ trait DebugTrait
     /**
      * Detailed debug information.
      *
-     * @param bool|string|\Stringable $message
-     * @param array<mixed>            $context
+     * @param bool|string|\Stringable                   $message
+     * @param ($message is bool ? never : array<mixed>) $context
      */
     public function debug($message, array $context = []): void
     {
@@ -86,7 +86,7 @@ trait DebugTrait
             $d1 = array_diff($this->_previousTrace[$trace], $bt);
             $d2 = array_diff($bt, $this->_previousTrace[$trace]);
 
-            $this->log('debug', 'Call path for ' . $trace . ' has diverged (was ' . implode(', ', $d1) . ', now ' . implode(', ', $d2) . ")\n");
+            $this->log(LogLevel::DEBUG, 'Call path for ' . $trace . ' has diverged (was ' . implode(', ', $d1) . ', now ' . implode(', ', $d2) . ")\n");
         }
 
         $this->_previousTrace[$trace] = $bt;
