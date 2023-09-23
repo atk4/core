@@ -41,8 +41,8 @@ trait DebugTrait
     /**
      * Detailed debug information.
      *
-     * @param bool|string|\Stringable                   $message
-     * @param ($message is bool ? never : array<mixed>) $context
+     * @param bool|string|\Stringable $message
+     * @param array<mixed>            $context
      */
     public function debug($message, array $context = []): void
     {
