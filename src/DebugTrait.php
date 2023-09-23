@@ -25,8 +25,9 @@ trait DebugTrait
     /**
      * Logs with an arbitrary level.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param mixed              $level
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function log($level, $message, array $context = []): void
     {
@@ -40,8 +41,8 @@ trait DebugTrait
     /**
      * Detailed debug information.
      *
-     * @param bool|string  $message
-     * @param array<mixed> $context
+     * @param bool|string|\Stringable $message
+     * @param array<mixed>            $context
      */
     public function debug($message, array $context = []): void
     {
@@ -94,8 +95,8 @@ trait DebugTrait
     /**
      * System is unusable.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function emergency($message, array $context = []): void
     {
@@ -108,8 +109,8 @@ trait DebugTrait
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function alert($message, array $context = []): void
     {
@@ -121,8 +122,8 @@ trait DebugTrait
      *
      * Example: Application component unavailable, unexpected exception.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function critical($message, array $context = []): void
     {
@@ -133,8 +134,8 @@ trait DebugTrait
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function error($message, array $context = []): void
     {
@@ -147,8 +148,8 @@ trait DebugTrait
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function warning($message, array $context = []): void
     {
@@ -158,8 +159,8 @@ trait DebugTrait
     /**
      * Normal but significant events.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function notice($message, array $context = []): void
     {
@@ -171,8 +172,8 @@ trait DebugTrait
      *
      * Example: User logs in, SQL logs.
      *
-     * @param string       $message
-     * @param array<mixed> $context
+     * @param string|\Stringable $message
+     * @param array<mixed>       $context
      */
     public function info($message, array $context = []): void
     {
