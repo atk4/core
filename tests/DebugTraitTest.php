@@ -16,7 +16,7 @@ class DebugTraitTest extends TestCase
 
         self::assertFalse($m->debug);
 
-        $m->debug();
+        $m->debug(true);
         self::assertTrue($m->debug);
 
         $m->debug(false);
@@ -28,34 +28,31 @@ class DebugTraitTest extends TestCase
 
     public function testDebugOutput(): void
     {
-        $this->expectOutputString("[Atk4\\Core\\Tests\\DebugMock]: debug test1\n");
-
         $m = new DebugMock();
-        $m->debug();
+        $m->debug(true);
 
+        $this->expectOutputString("[Atk4\\Core\\Tests\\DebugMock]: debug test1\n");
         $m->debug('debug test1');
     }
 
     public function testDebugNoOutput(): void
     {
-        $this->expectOutputString('');
-
         $m = new DebugMock();
 
+        $this->expectOutputString('');
         $m->debug('debug test2');
     }
 
     public function testDebugApp(): void
     {
-        $this->expectOutputString('');
-
         $app = new DebugAppMock();
         $app->logger = $app;
 
         $m = new DebugMock();
         $m->setApp($app);
-        $m->debug();
+        $m->debug(true);
 
+        $this->expectOutputString('');
         $m->debug('debug test2');
 
         self::assertSame(['debug', 'debug test2', []], $app->log);
@@ -63,21 +60,21 @@ class DebugTraitTest extends TestCase
 
     public function testLog1(): void
     {
-        $this->expectOutputString("debug test3\n");
-
         $m = new DebugMock();
+
+        $this->expectOutputString("debug test3\n");
         $m->log('warning', 'debug test3');
     }
 
     public function testLog2(): void
     {
-        $this->expectOutputString('');
-
         $app = new DebugAppMock();
         $app->logger = $app;
 
         $m = new DebugMock();
         $m->setApp($app);
+
+        $this->expectOutputString('');
         $m->log('warning', 'debug test3');
 
         self::assertSame(['warning', 'debug test3', []], $app->log);
@@ -166,11 +163,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     /** @var self */
     public $logger;
 
-    /**
-     * @param mixed  $level
-     * @param string $message
-     */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = []): void
     {
         $this->log = [$level, $message, $context];
     }
