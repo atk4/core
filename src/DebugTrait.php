@@ -23,20 +23,33 @@ trait DebugTrait
     }
 
     /**
-     * Send some info to debug stream.
+     * Logs with an arbitrary level.
+     *
+     * @param string       $message
+     * @param array<mixed> $context
+     */
+    public function log($level, $message, array $context = []): void
+    {
+        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
+            $this->getApp()->logger->log($level, $message, $context);
+        } else {
+            $this->_echoStderr($message . "\n");
+        }
+    }
+
+    /**
+     * Detailed debug information.
      *
      * @param bool|string  $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function debug($message = true, array $context = [])
+    public function debug($message, array $context = []): void
     {
         // using this to switch on/off the debug for this object
         if (is_bool($message)) {
             $this->debug = $message;
 
-            return $this;
+            return;
         }
 
         // if debug is enabled, then log it
@@ -46,28 +59,6 @@ trait DebugTrait
             }
             $this->log(LogLevel::DEBUG, $message, $context);
         }
-
-        return $this;
-    }
-
-    /**
-     * Output log message.
-     *
-     * @param mixed        $level
-     * @param string       $message
-     * @param array<mixed> $context
-     *
-     * @return $this
-     */
-    public function log($level, $message, array $context = [])
-    {
-        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
-            $this->getApp()->logger->log($level, $message, $context);
-        } else {
-            $this->_echoStderr($message . "\n");
-        }
-
-        return $this;
     }
 
     /**
@@ -79,7 +70,7 @@ trait DebugTrait
      * Place debugTraceChange inside your hook and give unique $trace identifier. If the method
      * is invoked through different call paths, this debug info will be logged.
      *
-     * Do not leave this method in production code !!!
+     * Do not use this method in production code !!!
      */
     public function debugTraceChange(string $trace = 'default'): void
     {
@@ -105,12 +96,10 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function emergency($message, array $context = [])
+    public function emergency($message, array $context = []): void
     {
-        return $this->log(LogLevel::EMERGENCY, $message, $context);
+        $this->log(LogLevel::EMERGENCY, $message, $context);
     }
 
     /**
@@ -121,12 +110,10 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function alert($message, array $context = [])
+    public function alert($message, array $context = []): void
     {
-        return $this->log(LogLevel::ALERT, $message, $context);
+        $this->log(LogLevel::ALERT, $message, $context);
     }
 
     /**
@@ -136,12 +123,10 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function critical($message, array $context = [])
+    public function critical($message, array $context = []): void
     {
-        return $this->log(LogLevel::CRITICAL, $message, $context);
+        $this->log(LogLevel::CRITICAL, $message, $context);
     }
 
     /**
@@ -150,12 +135,10 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function error($message, array $context = [])
+    public function error($message, array $context = []): void
     {
-        return $this->log(LogLevel::ERROR, $message, $context);
+        $this->log(LogLevel::ERROR, $message, $context);
     }
 
     /**
@@ -166,12 +149,10 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function warning($message, array $context = [])
+    public function warning($message, array $context = []): void
     {
-        return $this->log(LogLevel::WARNING, $message, $context);
+        $this->log(LogLevel::WARNING, $message, $context);
     }
 
     /**
@@ -179,12 +160,10 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function notice($message, array $context = [])
+    public function notice($message, array $context = []): void
     {
-        return $this->log(LogLevel::NOTICE, $message, $context);
+        $this->log(LogLevel::NOTICE, $message, $context);
     }
 
     /**
@@ -194,11 +173,9 @@ trait DebugTrait
      *
      * @param string       $message
      * @param array<mixed> $context
-     *
-     * @return $this
      */
-    public function info($message, array $context = [])
+    public function info($message, array $context = []): void
     {
-        return $this->log(LogLevel::INFO, $message, $context);
+        $this->log(LogLevel::INFO, $message, $context);
     }
 }
