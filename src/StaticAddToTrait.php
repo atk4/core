@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Core;
 
-/**
- * Trait StaticAddToTrait.
- *
- * Intended to be always used with DiContainerTrait trait.
- */
 trait StaticAddToTrait
 {
     use DiContainerTrait;
