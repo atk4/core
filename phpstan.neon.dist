@@ -8,6 +8,8 @@ parameters:
     excludePaths:
         - vendor
 
+    checkMissingOverrideMethodAttribute: true
+
     ignoreErrors:
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
