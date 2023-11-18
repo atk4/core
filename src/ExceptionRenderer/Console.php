@@ -8,6 +8,7 @@ use Atk4\Core\Exception;
 
 class Console extends RendererAbstract
 {
+    #[\Override]
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
@@ -26,6 +27,7 @@ class Console extends RendererAbstract
             EOF, $tokens);
     }
 
+    #[\Override]
     protected function processParams(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -45,6 +47,7 @@ class Console extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processSolutions(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -60,6 +63,7 @@ class Console extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processStackTrace(): void
     {
         $this->output .= <<<'EOF'
@@ -70,6 +74,7 @@ class Console extends RendererAbstract
         $this->processStackTraceInternal();
     }
 
+    #[\Override]
     protected function processStackTraceInternal(): void
     {
         $text = <<<'EOF'
@@ -120,6 +125,7 @@ class Console extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processPreviousException(): void
     {
         if (!$this->exception->getPrevious()) {

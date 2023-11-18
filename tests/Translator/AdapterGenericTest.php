@@ -10,6 +10,7 @@ use Atk4\Core\Translator\Translator;
 
 class AdapterGenericTest extends AdapterTestCase
 {
+    #[\Override]
     public function getTranslatableMock(): object
     {
         return new class() {

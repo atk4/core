@@ -44,6 +44,7 @@ abstract class TestCase extends BaseTestCase
         return (new \ReflectionClass(self::class))->hasMethod('getStatus');
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         // rerun data providers to fix coverage when coverage for test files is enabled
@@ -76,6 +77,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

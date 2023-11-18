@@ -12,6 +12,7 @@ abstract class AdapterTestCase extends TestCase
 {
     abstract public function getTranslatableMock(): object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
