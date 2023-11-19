@@ -105,7 +105,7 @@ class TestCaseTest extends TestCase
     /**
      * @return iterable<list<mixed>>
      */
-    public function provideProviderAbCases(): iterable
+    public static function provideProviderAbCases(): iterable
     {
         yield ['a'];
         yield ['b'];
@@ -126,7 +126,7 @@ class TestCaseTest extends TestCase
     /**
      * @return iterable<list<mixed>>
      */
-    public function provideProviderCoverageCases(): iterable
+    public static function provideProviderCoverageCases(): iterable
     {
         yield ['x'];
         ++self::$providerCoverageCallCounter;
