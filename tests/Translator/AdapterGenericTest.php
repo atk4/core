@@ -8,7 +8,7 @@ use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\Translator;
 
-class AdapterGenericTest extends AdapterBaseTest
+class AdapterGenericTest extends AdapterTestCase
 {
     public function getTranslatableMock(): object
     {

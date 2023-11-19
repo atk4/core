@@ -7,7 +7,7 @@ namespace Atk4\Core\Tests\Translator;
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\TranslatableTrait;
 
-class AdapterAppTest extends AdapterBaseTest
+class AdapterAppTest extends AdapterTestCase
 {
     public function getTranslatableMock(): object
     {
