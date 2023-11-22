@@ -269,7 +269,7 @@ abstract class RendererAbstract
         $str = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
             try {
                 return $this->makeRelativePath($matches[0]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return $matches[0];
             }
         }, $str);
