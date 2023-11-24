@@ -7,6 +7,7 @@ namespace Atk4\Core\Tests\Phpunit;
 use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
+use PHPUnit\Framework\TestStatus\TestStatus;
 use PHPUnit\Runner\BaseTestRunner;
 
 class TestCaseTest extends TestCase
@@ -138,8 +139,8 @@ class TestCaseTest extends TestCase
      */
     public function testCoverageImplForTestMarkedAsIncomplete(): void
     {
-        $testStatusOrig = \Closure::bind(fn () => $this->status, $this, PhpunitTestCase::class)();
-        \Closure::bind(fn () => $this->status = BaseTestRunner::STATUS_INCOMPLETE, $this, PhpunitTestCase::class)();
+        $testStatusOrig = self::isPhpunit9x() ? $this->getStatus() : $this->status();
+        \Closure::bind(fn () => $this->status = TestCase::isPhpunit9x() ? BaseTestRunner::STATUS_INCOMPLETE : TestStatus::incomplete(), $this, PhpunitTestCase::class)();
         try {
             $this->tearDown();
         } finally {
