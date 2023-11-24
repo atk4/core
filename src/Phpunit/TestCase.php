@@ -7,9 +7,7 @@ namespace Atk4\Core\Phpunit;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHPUnit\Framework\TestResult;
-use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BaseTestRunner;
-use PHPUnit\Runner\TestListenerAdapter;
 use PHPUnit\Util\Test as TestUtil;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
@@ -90,44 +88,6 @@ abstract class TestCase extends BaseTestCase
         }
         gc_collect_cycles();
 
-        // fix coverage when no assertion is expected
-        // https://github.com/sebastianbergmann/phpunit/pull/5010
-        if ($this->getStatus() === BaseTestRunner::STATUS_PASSED
-            && $this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()
-            && $this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything()
-        ) {
-            $testResult = $this->getTestResultObject();
-            $afterHookTest = new class($testResult) implements AfterTestHook {
-                /** @var TestResult */
-                public $testResult;
-
-                public function __construct(TestResult $testResult)
-                {
-                    $this->testResult = $testResult;
-                }
-
-                public function executeAfterTest(string $test, float $time): void
-                {
-                    $this->testResult->beStrictAboutTestsThatDoNotTestAnything(true);
-
-                    $testResult = $this->testResult;
-                    foreach (\Closure::bind(static fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
-                        if ($listener instanceof TestListenerAdapter) {
-                            foreach (\Closure::bind(static fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
-                                if ($hook === $this) {
-                                    $this->testResult->removeListener($listener); // @phpstan-ignore-line
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            $testListenerAdapter = new TestListenerAdapter();
-            $testListenerAdapter->add($afterHookTest);
-            $testResult->addListener($testListenerAdapter);
-            $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
-        }
-
         // fix coverage for skipped/incomplete tests
         // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830
         // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857
@@ -184,71 +144,5 @@ abstract class TestCase extends BaseTestCase
         gc_collect_cycles();
 
         parent::onNotSuccessfulTest($e);
-    }
-
-    /**
-     * Calls protected method.
-     *
-     * NOTE: this method must only be used for low-level functionality, not
-     * for general test-scripts.
-     *
-     * @param mixed ...$args
-     *
-     * @return mixed
-     */
-    public function &callProtected(object $obj, string $name, ...$args)
-    {
-        return \Closure::bind(static function &() use ($obj, $name, $args) {
-            $objRefl = new \ReflectionClass($obj);
-            if (
-                $objRefl
-                    ->getMethod(!$objRefl->hasMethod($name) && $objRefl->hasMethod('__call') ? '__call' : $name)
-                    ->returnsReference()
-            ) {
-                return $obj->{$name}(...$args);
-            }
-
-            $v = $obj->{$name}(...$args);
-
-            return $v;
-        }, null, $obj)();
-    }
-
-    /**
-     * Returns protected property value.
-     *
-     * NOTE: this method must only be used for low-level functionality, not
-     * for general test-scripts.
-     *
-     * @return mixed
-     */
-    public function &getProtected(object $obj, string $name)
-    {
-        return \Closure::bind(static function &() use ($obj, $name) {
-            return $obj->{$name};
-        }, null, $obj)();
-    }
-
-    /**
-     * Sets protected property value.
-     *
-     * NOTE: this method must only be used for low-level functionality, not
-     * for general test-scripts.
-     *
-     * @param mixed $value
-     *
-     * @return static
-     */
-    public function setProtected(object $obj, string $name, &$value, bool $byReference = false)
-    {
-        \Closure::bind(static function () use ($obj, $name, &$value, $byReference) {
-            if ($byReference) {
-                $obj->{$name} = &$value;
-            } else {
-                $obj->{$name} = $value;
-            }
-        }, null, $obj)();
-
-        return $this;
     }
 }

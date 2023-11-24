@@ -134,47 +134,6 @@ class TestCaseTest extends TestCase
     }
 
     /**
-     * @dataProvider provideProviderAbCases
-     */
-    public function testCoverageImplForDoesNotPerformAssertions(string $v): void
-    {
-        self::assertFalse($this->doesNotPerformAssertions());
-
-        $staticClass = get_class(new class() {
-            public static int $counter = 0;
-        });
-        if ($v === 'a' && ++$staticClass::$counter > 1) {
-            // allow TestCase::runBare() to be run more than once
-            // @codeCoverageIgnoreStart
-            return;
-            // @codeCoverageIgnoreEnd
-        }
-
-        self::assertTrue($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
-
-        if ($v === 'b') {
-            // make sure TestResult::$beStrictAboutTestsThatDoNotTestAnything is reset
-            // after this test by AfterTestHook hook added by our TestCase
-            return;
-        }
-
-        $testStatusOrig = \Closure::bind(fn () => $this->status, $this, PhpunitTestCase::class)();
-        \Closure::bind(fn () => $this->status = BaseTestRunner::STATUS_PASSED, $this, PhpunitTestCase::class)();
-        try {
-            \Closure::bind(fn () => $this->doesNotPerformAssertions = true, $this, PhpunitTestCase::class)();
-            try {
-                $this->tearDown();
-            } finally {
-                \Closure::bind(fn () => $this->doesNotPerformAssertions = false, $this, PhpunitTestCase::class)();
-            }
-        } finally {
-            \Closure::bind(fn () => $this->status = $testStatusOrig, $this, PhpunitTestCase::class)();
-        }
-
-        self::assertFalse($this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything());
-    }
-
-    /**
      * @doesNotPerformAssertions
      */
     public function testCoverageImplForTestMarkedAsIncomplete(): void

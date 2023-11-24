@@ -2,7 +2,7 @@
 
 **Collection of PHP Traits for designing object-oriented frameworks.**
 
-![Build](https://github.com/atk4/core/workflows/Unit/badge.svg)
+[![Build](https://github.com/atk4/core/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/core/actions?query=branch:develop)
 [![CodeCov](https://codecov.io/gh/atk4/core/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/core)
 [![GitHub release](https://img.shields.io/github/release/atk4/core.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
