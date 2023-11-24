@@ -24,36 +24,16 @@ parameters:
         # remove once PHPUnit 9.x support is removed
         -
             path: 'src/Phpunit/TestCase.php'
-            message: '~^Access to constant STATUS_INCOMPLETE on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
-            count: 1
+            message: '~^Access to constant (STATUS_INCOMPLETE|STATUS_SKIPPED) on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
+            count: 2
         -
             path: 'src/Phpunit/TestCase.php'
-            message: '~^Access to constant STATUS_SKIPPED on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
-            count: 1
+            message: '~^Call to an undefined method Atk4\\Core\\Phpunit\\TestCase::(getName|getStatus|getTestResultObject)\(\)\.$~'
+            count: 4
         -
             path: 'src/Phpunit/TestCase.php'
-            message: '~^Call to an undefined method Atk4\\Core\\Phpunit\\TestCase::getStatus\(\)\.$~'
-            count: 1
-        -
-            path: 'src/Phpunit/TestCase.php'
-            message: '~^Call to an undefined method Atk4\\Core\\Phpunit\\TestCase::getTestResultObject\(\)\.$~'
-            count: 1
-        -
-            path: 'src/Phpunit/TestCase.php'
-            message: '~^Call to an undefined method Atk4\\Core\\Phpunit\\TestCase::getName\(\)\.$~'
-            count: 1
-        -
-            path: 'src/Phpunit/TestCase.php'
-            message: '~^Call to an undefined static method PHPUnit\\Util\\Test::getLinesToBeCovered\(\)\.$~'
-            count: 1
-        -
-            path: 'src/Phpunit/TestCase.php'
-            message: '~^Call to an undefined method Atk4\\Core\\Phpunit\\TestCase::getName\(\)\.$~'
-            count: 1
-        -
-            path: 'src/Phpunit/TestCase.php'
-            message: '~^Call to an undefined static method PHPUnit\\Util\\Test::getLinesToBeUsed\(\)\.$~'
-            count: 1
+            message: '~^Call to an undefined static method PHPUnit\\Util\\Test::(getLinesToBeCovered|getLinesToBeUsed)\(\)\.$~'
+            count: 2
         -
             path: 'tests/HookTraitTest.php'
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\HookTraitTest::getName\(\)\.$~'
