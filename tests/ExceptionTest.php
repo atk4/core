@@ -123,6 +123,28 @@ class ExceptionTest extends TestCase
         self::assertMatchesRegularExpression('~2nd Solution~', $ret);
     }
 
+    public function testPhpunitSelfDescribing(): void
+    {
+        $m = (new Exception('My exception', 0))
+            ->addMoreInfo('x', 'foo')
+            ->addMoreInfo('y', ['bar' => 2.4, [], [[1]]]);
+
+        self::assertSame(
+            <<<'EOF'
+                Atk4\Core\Exception: My exception
+                  x: 'foo'
+                  y: [
+                      'bar': 2.4,
+                      0: [],
+                      1: [
+                          ...
+                        ]
+                    ]
+                EOF . "\n", // NL in the string is not parsed by Netbeans, see https://github.com/apache/netbeans/issues/4345
+            $m->toString()
+        );
+    }
+
     public function testExceptionFallback(): void
     {
         $m = new ExceptionTestThrowError('test', 2);
