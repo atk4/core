@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Core;
 
+use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use Atk4\Core\Translator\ITranslatorAdapter;
+use PHPUnit\Framework\SelfDescribing;
 
 /**
  * Base exception of all Agile Toolkit exceptions.
  */
-class Exception extends \Exception
+class Exception extends \Exception implements SelfDescribing
 {
     use WarnDynamicPropertyTrait;
 
@@ -53,6 +55,17 @@ class Exception extends \Exception
         $this->message = $message;
 
         return $this;
+    }
+
+    public function toString(): string
+    {
+        $res = static::class . ': ' . $this->getMessage() . "\n";
+        foreach ($this->getParams() as $param => $value) {
+            $valueStr = RendererAbstract::toSafeString($value, true);
+            $res .= '  ' . $param . ': ' . str_replace("\n", "\n" . '    ', $valueStr) . "\n";
+        }
+
+        return $res;
     }
 
     /**
