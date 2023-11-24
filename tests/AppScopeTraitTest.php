@@ -37,7 +37,7 @@ class AppScopeTraitTest extends TestCase
         $child = new AppScopeChildTrackable();
         $m->add($child);
         $child->destroy();
-        self::assertNull($this->getProtected($child, '_app'));
+        self::assertNull(\Closure::bind(static fn () => $child->_app, null, AppScopeChildTrackable::class)());
         self::assertFalse($child->issetOwner());
     }
 
