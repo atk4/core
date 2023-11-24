@@ -9,7 +9,6 @@ use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
-use PHPUnit\Event\Code\ThrowableBuilder;
 
 class ExceptionTest extends TestCase
 {
@@ -126,19 +125,12 @@ class ExceptionTest extends TestCase
 
     public function testPhpunitSelfDescribing(): void
     {
-        $innerLine = __LINE__ + 1;
-        $innerException = new \Error('Inner Exception');
-        $line = __LINE__ + 1;
-        $line -= 2; // https://github.com/sebastianbergmann/phpunit/issues/5574
-        $exception = (new Exception('My exception', 0, $innerException))
+        $m = (new Exception('My exception', 0))
             ->addMoreInfo('x', 'foo')
             ->addMoreInfo('y', ['bar' => 2.4, [], [[1]]]);
 
-        $phpunitThrowable = ThrowableBuilder::from($exception);
-        $phpunitThrowableStr = str_replace(\PHP_EOL, "\n", $phpunitThrowable->asString());
-
         self::assertSame(
-            str_replace('[lineMain]', (string) $line, str_replace('[lineInner]', (string) $innerLine, <<<'EOF'
+            <<<'EOF'
                 Atk4\Core\Exception: My exception
                   x: 'foo'
                   y: [
@@ -148,15 +140,8 @@ class ExceptionTest extends TestCase
                           ...
                         ]
                     ]
-
-                self.php:[lineMain]
-
-                Caused by
-                Error: Inner Exception
-
-                self.php:[lineInner]
-                EOF)) . "\n", // NL in the string is not parsed by Netbeans, see https://github.com/apache/netbeans/issues/4345
-            str_replace(__FILE__, 'self.php', $phpunitThrowableStr)
+                EOF . "\n", // NL in the string is not parsed by Netbeans, see https://github.com/apache/netbeans/issues/4345
+            $m->toString()
         );
     }
 
