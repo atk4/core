@@ -7,9 +7,7 @@ namespace Atk4\Core\Phpunit;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHPUnit\Framework\TestResult;
-use PHPUnit\Runner\AfterTestHook;
 use PHPUnit\Runner\BaseTestRunner;
-use PHPUnit\Runner\TestListenerAdapter;
 use PHPUnit\Util\Test as TestUtil;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
@@ -89,44 +87,6 @@ abstract class TestCase extends BaseTestCase
             gc_collect_cycles();
         }
         gc_collect_cycles();
-
-        // fix coverage when no assertion is expected
-        // https://github.com/sebastianbergmann/phpunit/pull/5010
-        if ($this->getStatus() === BaseTestRunner::STATUS_PASSED
-            && $this->getNumAssertions() === 0 && $this->doesNotPerformAssertions()
-            && $this->getTestResultObject()->isStrictAboutTestsThatDoNotTestAnything()
-        ) {
-            $testResult = $this->getTestResultObject();
-            $afterHookTest = new class($testResult) implements AfterTestHook {
-                /** @var TestResult */
-                public $testResult;
-
-                public function __construct(TestResult $testResult)
-                {
-                    $this->testResult = $testResult;
-                }
-
-                public function executeAfterTest(string $test, float $time): void
-                {
-                    $this->testResult->beStrictAboutTestsThatDoNotTestAnything(true);
-
-                    $testResult = $this->testResult;
-                    foreach (\Closure::bind(static fn () => $testResult->listeners, null, TestResult::class)() as $listener) { // @phpstan-ignore-line
-                        if ($listener instanceof TestListenerAdapter) {
-                            foreach (\Closure::bind(static fn () => $listener->hooks, null, TestListenerAdapter::class)() as $hook) {
-                                if ($hook === $this) {
-                                    $this->testResult->removeListener($listener); // @phpstan-ignore-line
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            $testListenerAdapter = new TestListenerAdapter();
-            $testListenerAdapter->add($afterHookTest);
-            $testResult->addListener($testListenerAdapter);
-            $testResult->beStrictAboutTestsThatDoNotTestAnything(false);
-        }
 
         // fix coverage for skipped/incomplete tests
         // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830
