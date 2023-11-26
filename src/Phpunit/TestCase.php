@@ -7,16 +7,42 @@ namespace Atk4\Core\Phpunit;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHPUnit\Framework\TestResult;
+use PHPUnit\Metadata\Api\CodeCoverage as CodeCoverageMetadata;
 use PHPUnit\Runner\BaseTestRunner;
+use PHPUnit\Runner\CodeCoverage;
 use PHPUnit\Util\Test as TestUtil;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\CodeCoverage as CodeCoverageRaw;
+
+if (\PHP_VERSION_ID >= 8_01_00) {
+    trait Phpunit9xTestCaseTrait
+    {
+        protected function onNotSuccessfulTest(\Throwable $e): never
+        {
+            $this->_onNotSuccessfulTest($e);
+        }
+    }
+} else {
+    trait Phpunit9xTestCaseTrait
+    {
+        protected function onNotSuccessfulTest(\Throwable $e): void
+        {
+            $this->_onNotSuccessfulTest($e);
+        }
+    }
+}
 
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
  */
 abstract class TestCase extends BaseTestCase
 {
+    use Phpunit9xTestCaseTrait;
     use WarnDynamicPropertyTrait;
+
+    final public static function isPhpunit9x(): bool
+    {
+        return (new \ReflectionClass(self::class))->hasMethod('getStatus');
+    }
 
     protected function setUp(): void
     {
@@ -89,15 +115,15 @@ abstract class TestCase extends BaseTestCase
         gc_collect_cycles();
 
         // fix coverage for skipped/incomplete tests
-        // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830
-        // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857
-        if (in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true)) {
-            $coverage = $this->getTestResultObject()->getCodeCoverage();
+        // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L154
+        // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L178
+        if (self::isPhpunit9x() ? in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true) : $this->status()->isSkipped() || $this->status()->isIncomplete()) {
+            $coverage = self::isPhpunit9x() ? $this->getTestResultObject()->getCodeCoverage() : (CodeCoverage::instance()->isActive() ? CodeCoverage::instance() : null);
             if ($coverage !== null) {
-                $coverageId = \Closure::bind(static fn () => $coverage->currentId, null, CodeCoverage::class)();
+                $coverageId = self::isPhpunit9x() ? \Closure::bind(static fn () => $coverage->currentId, null, CodeCoverageRaw::class)() : (\Closure::bind(static fn () => $coverage->collecting, null, CodeCoverage::class)() ? $this : null);
                 if ($coverageId !== null) {
-                    $linesToBeCovered = TestUtil::getLinesToBeCovered(static::class, $this->getName(false));
-                    $linesToBeUsed = TestUtil::getLinesToBeUsed(static::class, $this->getName(false));
+                    $linesToBeCovered = self::isPhpunit9x() ? TestUtil::getLinesToBeCovered(static::class, $this->getName(false)) : (new CodeCoverageMetadata())->linesToBeCovered(static::class, $this->name());
+                    $linesToBeUsed = self::isPhpunit9x() ? TestUtil::getLinesToBeUsed(static::class, $this->getName(false)) : (new CodeCoverageMetadata())->linesToBeUsed(static::class, $this->name());
                     $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
                     $coverage->start($coverageId);
                 }
@@ -131,7 +157,10 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    protected function onNotSuccessfulTest(\Throwable $e): void
+    /**
+     * @return never
+     */
+    protected function _onNotSuccessfulTest(\Throwable $e): void
     {
         // release objects from uncaught exception as it is never released
         $this->releaseObjectsFromExceptionTrace($e);

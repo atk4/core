@@ -8,7 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\Translator\Adapter\Generic;
 use Atk4\Core\Translator\Translator;
 
-abstract class AdapterBaseTest extends TestCase
+abstract class AdapterTestCase extends TestCase
 {
     abstract public function getTranslatableMock(): object;
 

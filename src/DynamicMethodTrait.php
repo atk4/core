@@ -67,7 +67,7 @@ trait DynamicMethodTrait
         }
 
         if ($this->hasMethod($name)) {
-            throw (new Exception('Registering method twice'))
+            throw (new Exception('Method is already defined'))
                 ->addMoreInfo('name', $name);
         }
 

@@ -71,6 +71,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodWithoutHookMock();
 
         $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to undefined method ' . DynamicMethodWithoutHookMock::class . '::unknownMethod()');
         $m->unknownMethod();
     }
 
@@ -79,6 +80,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodWithoutHookMock();
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object must use HookTrait for dynamic method support');
         $m->addMethod('sum', $this->createSumFx());
     }
 
@@ -101,6 +103,7 @@ class DynamicMethodTraitTest extends TestCase
         $m->addMethod('sum', $this->createSumFx());
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Method is already defined');
         $m->addMethod('sum', $this->createSumFx());
     }
 

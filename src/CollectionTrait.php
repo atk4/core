@@ -27,10 +27,10 @@ trait CollectionTrait
      *
      * @param string $collection property name
      */
-    public function _addIntoCollection(string $name, object $item, string $collection): object
+    protected function _addIntoCollection(string $name, object $item, string $collection): object
     {
         if (!isset($this->{$collection}) || !is_array($this->{$collection})) {
-            throw (new Exception('Collection does NOT exist'))
+            throw (new Exception('Collection does not exist'))
                 ->addMoreInfo('collection', $collection);
         }
 
@@ -41,11 +41,10 @@ trait CollectionTrait
         }
 
         if ($this->_hasInCollection($name, $collection)) {
-            throw (new Exception('Element with the same name already exist in the collection'))
+            throw (new Exception('Element with the same name already exists in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
-        $this->{$collection}[$name] = $item;
 
         // carry on reference to application if we have appScopeTraits set
         if ((TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($item))
@@ -69,6 +68,8 @@ trait CollectionTrait
             }
         }
 
+        $this->{$collection}[$name] = $item;
+
         return $item;
     }
 
@@ -77,10 +78,10 @@ trait CollectionTrait
      *
      * @param string $collection property name
      */
-    public function _removeFromCollection(string $name, string $collection): void
+    protected function _removeFromCollection(string $name, string $collection): void
     {
         if (!$this->_hasInCollection($name, $collection)) {
-            throw (new Exception('Element is NOT in the collection'))
+            throw (new Exception('Element is not in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
@@ -94,7 +95,7 @@ trait CollectionTrait
      *
      * @param string $collectionName property name to be cloned
      */
-    public function _cloneCollection(string $collectionName): void
+    protected function _cloneCollection(string $collectionName): void
     {
         $this->{$collectionName} = array_map(function ($item) {
             $item = clone $item;
@@ -111,7 +112,7 @@ trait CollectionTrait
      *
      * @param string $collection property name
      */
-    public function _hasInCollection(string $name, string $collection): bool
+    protected function _hasInCollection(string $name, string $collection): bool
     {
         return isset($this->{$collection}[$name]);
     }
@@ -119,11 +120,11 @@ trait CollectionTrait
     /**
      * @param string $collection property name
      */
-    public function _getFromCollection(string $name, string $collection): object
+    protected function _getFromCollection(string $name, string $collection): object
     {
         $res = $this->{$collection}[$name] ?? null;
         if ($res === null) {
-            throw (new Exception('Element is NOT in the collection'))
+            throw (new Exception('Element is not in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }

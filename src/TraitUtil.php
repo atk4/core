@@ -29,7 +29,7 @@ final class TraitUtil
             // prevent mass use for other than internal use then we can decide
             // if we want to keep support this or replace with pure interfaces
             if (!str_starts_with($traitName, 'Atk4\Core\\')) {
-                throw new Exception(self::class . '::hasTrait is not intended for use with other than Atk4\Core\* traits');
+                throw new Exception(self::class . '::hasTrait() method is not intended for use with other than Atk4\Core\* traits');
             }
 
             $parentClass = get_parent_class($class);

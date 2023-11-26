@@ -142,6 +142,7 @@ class ContainerTraitTest extends TestCase
         self::assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Element has too long desired name');
         self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
     }
 
@@ -204,9 +205,11 @@ class ContainerTraitTest extends TestCase
 
     public function testExceptionExists(): void
     {
-        $this->expectException(Exception::class);
         $m = new ContainerMock();
         $m->add(new TrackableMock(), 'foo');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Element with requested name already exists');
         $m->add(new TrackableMock(), 'foo');
     }
 
@@ -221,14 +224,14 @@ class ContainerTraitTest extends TestCase
 
     public function testExceptionShortName(): void
     {
-        $this->expectException(Exception::class);
         $m1 = new ContainerMock();
         $m2 = new ContainerMock();
         $m1foo = $m1->add(new TrackableMock(), 'foo');
         $m2foo = $m2->add(new TrackableMock(), 'foo');
 
-        // will carry on short name and run into collision.
-        $m2->add($m1foo);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Element with requested name already exists');
+        $m2->add($m1foo); // will carry on short name and run into collision
     }
 
     public function testExceptionArg2(): void
@@ -236,12 +239,13 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         if (\PHP_MAJOR_VERSION === 7) {
-            $this->expectWarning(); // @phpstan-ignore-line
-            $this->expectWarningMessage('array_diff_key(): Expected parameter 1 to be an array, int given'); // @phpstan-ignore-line
-        } else {
-            $this->expectException(\TypeError::class);
-            $this->expectExceptionMessage('array_diff_key(): Argument #1 ($array) must be of type array, int given');
+            self::assertNotNull('Expecting E_WARNING is deprecated in PHPUnit 9'); // @phpstan-ignore-line
+
+            return;
         }
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('array_diff_key(): Argument #1 ($array) must be of type array, int given');
         $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
     }
 
@@ -259,13 +263,16 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Child element not found');
         $m->getElement('dont_exist');
     }
 
     public function testException5(): void
     {
-        $this->expectException(Exception::class);
         $m = new ContainerMock();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Child element not found');
         $m->removeElement('dont_exist');
     }
 }
