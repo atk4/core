@@ -377,7 +377,7 @@ class HookTraitTest extends TestCase
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('New $this getter must be static');
         $m->onHookDynamic('inc', function (HookMock $m) {
-            self::isPhpunit9x() ? $this->getName() : $this->name(); // prevent PHP CS Fixer to make this anonymous function static
+            self::isPhpunit9x() ? $this->getName(false) : $this->name(); // prevent PHP CS Fixer to make this anonymous function static
 
             return $m;
         }, $m->makeIncrementResultFx());
@@ -411,7 +411,7 @@ class HookTraitTest extends TestCase
         $value = 0;
         $m = new HookMock();
         $m->onHookShort('inc', function ($ignore1st, int &$value) {
-            self::isPhpunit9x() ? $this->getName() : $this->name(); // prevent PHP CS Fixer to make this anonymous function static
+            self::isPhpunit9x() ? $this->getName(false) : $this->name(); // prevent PHP CS Fixer to make this anonymous function static
 
             ++$value;
         });
