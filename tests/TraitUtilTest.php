@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Core\tests;
 
+use Atk4\Core\Exception;
 use Atk4\Core\HookTrait;
 use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TraitUtil;
+use PHPUnit\Framework\MockObject\Method as MockObjectMethodTrait;
 
 class TraitUtilTest extends TestCase
 {
@@ -28,6 +30,13 @@ class TraitUtilTest extends TestCase
         self::assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, HookTrait::class));
         self::assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, HookTrait::class));
         self::assertTrue(TraitUtil::hasTrait(TraitUtilTestC::class, HookTrait::class));
+    }
+
+    public function testHasTraitNoAtk4CoreException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(TraitUtil::class . '::hasTrait() method is not intended for use with other than Atk4\Core\* traits');
+        TraitUtil::hasTrait(TraitUtilTestA::class, MockObjectMethodTrait::class);
     }
 }
 
