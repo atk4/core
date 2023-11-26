@@ -57,6 +57,21 @@ class CollectionTraitTest extends TestCase
         self::assertSame(40, strlen($longField->name));
     }
 
+    public function testCloneCollection(): void
+    {
+        $m = new CollectionMock();
+        $m->addField('a', [FieldMock::class]);
+        $m->addField('b', [FieldMockCustom::class]);
+
+        $mCloned = clone $m;
+        \Closure::bind(static fn () => $m->_cloneCollection('fields'), null, CollectionMock::class)();
+
+        self::assertNotSame($m->getField('a'), $mCloned->getField('a'));
+        self::assertNotSame($m->getField('b'), $mCloned->getField('b'));
+        self::assertSame('b', $m->getField('b')->shortName);
+        self::assertSame('b', $mCloned->getField('b')->shortName);
+    }
+
     /**
      * Bad collection name.
      */
