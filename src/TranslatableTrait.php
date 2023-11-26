@@ -12,7 +12,7 @@ use Atk4\Core\Translator\Translator;
 trait TranslatableTrait
 {
     /**
-     * Translates the given message.
+     * Translate the given message.
      *
      * @param string               $message    The message to be translated
      * @param array<string, mixed> $parameters Array of parameters used to translate message

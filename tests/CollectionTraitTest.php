@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\AppScopeTrait;
-use Atk4\Core\DiContainerTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\InitializerTrait;
 use Atk4\Core\NameTrait;
@@ -68,8 +67,8 @@ class CollectionTraitTest extends TestCase
 
         self::assertNotSame($m->getField('a'), $mCloned->getField('a'));
         self::assertNotSame($m->getField('b'), $mCloned->getField('b'));
-        self::assertSame('b', $m->getField('b')->shortName);
-        self::assertSame('b', $mCloned->getField('b')->shortName);
+        self::assertSame('b', $m->getField('b')->shortName); // @phpstan-ignore-line
+        self::assertSame('b', $mCloned->getField('b')->shortName); // @phpstan-ignore-line
     }
 
     /**
@@ -112,7 +111,7 @@ class CollectionTraitTest extends TestCase
     /**
      * Cannot get non existent object.
      */
-    public function testException5(): void
+    public function testException4(): void
     {
         $m = new CollectionMock();
 
@@ -124,7 +123,7 @@ class CollectionTraitTest extends TestCase
     /**
      * Cannot remove non existent object.
      */
-    public function testException4(): void
+    public function testException5(): void
     {
         $m = new CollectionMock();
 
@@ -133,21 +132,14 @@ class CollectionTraitTest extends TestCase
         \Closure::bind(static fn () => $m->_removeFromCollection('dont_exist', 'fields'), null, CollectionMock::class)(); // does not exist
     }
 
-    /**
-     * Cannot get non existent object.
-     */
     public function testException6(): void
     {
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Object was not initialized');
-        $m->addField('test', new class() {
-            use DiContainerTrait;
+        $m->addField('test', new class() extends FieldMock {
             use InitializerTrait;
-
-            /** @var string */
-            public $name;
 
             protected function init(): void {}
         });
