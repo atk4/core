@@ -8,6 +8,10 @@ use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use PHPUnit\Framework\SelfDescribing;
 
+if (!interface_exists(SelfDescribing::class)) {
+    eval('namespace PHPUnit\Framework; interface SelfDescribing { public function toString(): string; }');
+}
+
 /**
  * Base exception of all Agile Toolkit exceptions.
  */
