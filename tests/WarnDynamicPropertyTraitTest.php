@@ -131,4 +131,4 @@ class WarnDynamicPropertyTraitTest extends TestCase
     }
 }
 
-class WarnError extends \Exception {}
+class WarnError extends \ErrorException {}
