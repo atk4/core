@@ -45,7 +45,6 @@ trait CollectionTrait
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
-        $this->{$collection}[$name] = $item;
 
         // carry on reference to application if we have appScopeTraits set
         if ((TraitUtil::hasAppScopeTrait($this) && TraitUtil::hasAppScopeTrait($item))
@@ -68,6 +67,8 @@ trait CollectionTrait
                 $item->invokeInit();
             }
         }
+
+        $this->{$collection}[$name] = $item;
 
         return $item;
     }
