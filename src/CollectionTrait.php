@@ -27,7 +27,7 @@ trait CollectionTrait
      *
      * @param string $collection property name
      */
-    public function _addIntoCollection(string $name, object $item, string $collection): object
+    protected function _addIntoCollection(string $name, object $item, string $collection): object
     {
         if (!isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw (new Exception('Collection does NOT exist'))
@@ -77,7 +77,7 @@ trait CollectionTrait
      *
      * @param string $collection property name
      */
-    public function _removeFromCollection(string $name, string $collection): void
+    protected function _removeFromCollection(string $name, string $collection): void
     {
         if (!$this->_hasInCollection($name, $collection)) {
             throw (new Exception('Element is NOT in the collection'))
@@ -94,7 +94,7 @@ trait CollectionTrait
      *
      * @param string $collectionName property name to be cloned
      */
-    public function _cloneCollection(string $collectionName): void
+    protected function _cloneCollection(string $collectionName): void
     {
         $this->{$collectionName} = array_map(function ($item) {
             $item = clone $item;
@@ -111,7 +111,7 @@ trait CollectionTrait
      *
      * @param string $collection property name
      */
-    public function _hasInCollection(string $name, string $collection): bool
+    protected function _hasInCollection(string $name, string $collection): bool
     {
         return isset($this->{$collection}[$name]);
     }
@@ -119,7 +119,7 @@ trait CollectionTrait
     /**
      * @param string $collection property name
      */
-    public function _getFromCollection(string $name, string $collection): object
+    protected function _getFromCollection(string $name, string $collection): object
     {
         $res = $this->{$collection}[$name] ?? null;
         if ($res === null) {

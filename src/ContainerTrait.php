@@ -24,7 +24,7 @@ trait ContainerTrait
     /**
      * Returns unique element name based on desired name.
      */
-    public function _uniqueElementName(string $desired): string
+    protected function _uniqueElementName(string $desired): string
     {
         if (!isset($this->_elementNameCounts[$desired])) {
             $this->_elementNameCounts[$desired] = 1;
