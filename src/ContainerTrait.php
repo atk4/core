@@ -130,7 +130,7 @@ trait ContainerTrait
         }
 
         if (!isset($this->elements[$shortName])) {
-            throw (new Exception('Could not remove child from parent. Instead of destroy() try using removeField / removeColumn / ..'))
+            throw (new Exception('Child element not found'))
                 ->addMoreInfo('parent', $this)
                 ->addMoreInfo('name', $shortName);
         }

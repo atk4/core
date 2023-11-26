@@ -231,7 +231,7 @@ $args = ['name' => 'child_name']; // obsolete, backward-compatible
 ```
 
 Method will return the object. Will throw exception if child with same
-name already exist.
+name already exists.
 :::
 
 :::{php:method} removeElement($shortName)

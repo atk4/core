@@ -30,7 +30,7 @@ trait CollectionTrait
     protected function _addIntoCollection(string $name, object $item, string $collection): object
     {
         if (!isset($this->{$collection}) || !is_array($this->{$collection})) {
-            throw (new Exception('Collection does NOT exist'))
+            throw (new Exception('Collection does not exist'))
                 ->addMoreInfo('collection', $collection);
         }
 
@@ -41,7 +41,7 @@ trait CollectionTrait
         }
 
         if ($this->_hasInCollection($name, $collection)) {
-            throw (new Exception('Element with the same name already exist in the collection'))
+            throw (new Exception('Element with the same name already exists in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
@@ -80,7 +80,7 @@ trait CollectionTrait
     protected function _removeFromCollection(string $name, string $collection): void
     {
         if (!$this->_hasInCollection($name, $collection)) {
-            throw (new Exception('Element is NOT in the collection'))
+            throw (new Exception('Element is not in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }
@@ -123,7 +123,7 @@ trait CollectionTrait
     {
         $res = $this->{$collection}[$name] ?? null;
         if ($res === null) {
-            throw (new Exception('Element is NOT in the collection'))
+            throw (new Exception('Element is not in the collection'))
                 ->addMoreInfo('collection', $collection)
                 ->addMoreInfo('name', $name);
         }

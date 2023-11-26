@@ -77,22 +77,28 @@ class ConfigTraitTest extends TestCase
 
     public function testFileReadException(): void
     {
-        $this->expectException(Exception::class);
         $m = new ConfigMock();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot read config file');
         $m->readConfig('unknown_file.php');
     }
 
     public function testFileBadFormatException(): void
     {
-        $this->expectException(Exception::class);
         $m = new ConfigMock();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('File was read but has a bad format');
         $m->readConfig($this->dir . '/config_bad_format.php');
     }
 
     public function testWrongFileFormatException(): void
     {
-        $this->expectException(Exception::class);
         $m = new ConfigMock();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unknown Format. Allowed formats: php, json, yml');
         $m->readConfig($this->dir . '/config.yml', 'wrong-format');
     }
 
