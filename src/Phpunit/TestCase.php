@@ -16,6 +16,7 @@ use SebastianBergmann\CodeCoverage\CodeCoverage as CodeCoverageRaw;
 if (\PHP_VERSION_ID >= 8_01_00) {
     trait Phpunit9xTestCaseTrait
     {
+        #[\Override]
         protected function onNotSuccessfulTest(\Throwable $e): never
         {
             $this->_onNotSuccessfulTest($e);
@@ -24,6 +25,7 @@ if (\PHP_VERSION_ID >= 8_01_00) {
 } else {
     trait Phpunit9xTestCaseTrait
     {
+        #[\Override]
         protected function onNotSuccessfulTest(\Throwable $e): void
         {
             $this->_onNotSuccessfulTest($e);
@@ -44,6 +46,7 @@ abstract class TestCase extends BaseTestCase
         return (new \ReflectionClass(self::class))->hasMethod('getStatus');
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         // rerun data providers to fix coverage when coverage for test files is enabled
@@ -76,6 +79,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

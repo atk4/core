@@ -61,6 +61,7 @@ class Exception extends \Exception implements SelfDescribing
         return $this;
     }
 
+    #[\Override]
     public function toString(): string
     {
         $res = static::class . ': ' . $this->getMessage() . "\n";

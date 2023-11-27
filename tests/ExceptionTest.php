@@ -185,6 +185,7 @@ class TrackableMock2
 
 class ExceptionTestThrowError extends Exception
 {
+    #[\Override]
     public function getCustomExceptionTitle(): string
     {
         throw new \Exception('just to cover __string');

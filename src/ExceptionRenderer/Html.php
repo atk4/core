@@ -8,6 +8,7 @@ use Atk4\Core\Exception;
 
 class Html extends RendererAbstract
 {
+    #[\Override]
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
@@ -37,6 +38,7 @@ class Html extends RendererAbstract
         return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
     }
 
+    #[\Override]
     protected function processParams(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -73,6 +75,7 @@ class Html extends RendererAbstract
         $this->output .= $this->replaceTokens($text, $tokens);
     }
 
+    #[\Override]
     protected function processSolutions(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -106,6 +109,7 @@ class Html extends RendererAbstract
         $this->output .= $this->replaceTokens($text, $tokens);
     }
 
+    #[\Override]
     protected function processStackTrace(): void
     {
         $this->output .= '
@@ -123,6 +127,7 @@ class Html extends RendererAbstract
         ';
     }
 
+    #[\Override]
     protected function processStackTraceInternal(): void
     {
         $text = '
@@ -184,6 +189,7 @@ class Html extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processPreviousException(): void
     {
         if (!$this->exception->getPrevious()) {

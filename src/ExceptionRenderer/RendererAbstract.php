@@ -53,6 +53,7 @@ abstract class RendererAbstract
         $this->processPreviousException();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         try {

@@ -163,6 +163,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     /** @var self */
     public $logger;
 
+    #[\Override]
     public function log($level, $message, array $context = []): void
     {
         $this->log = [$level, $message, $context];

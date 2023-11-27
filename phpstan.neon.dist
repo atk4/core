@@ -8,6 +8,8 @@ parameters:
     excludePaths:
         - vendor
 
+    checkMissingOverrideMethodAttribute: true
+
     ignoreErrors:
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
@@ -46,3 +48,9 @@ parameters:
             path: 'tests/Phpunit/TestCaseTest.php'
             message: '~^Access to constant STATUS_INCOMPLETE on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
             count: 1
+
+        # https://github.com/phpstan/phpstan/issues/10150
+        -
+            path: 'src/DebugTrait.php'
+            message: '~^Method Atk4\\Core\\Tests\\DebugPsrMock::\w+\(\) overrides method Psr\\Log\\LoggerInterface::\w+\(\) but is missing the #\[\\Override\] attribute\.$~'
+            count: 9

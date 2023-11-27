@@ -21,6 +21,7 @@ class Json extends RendererAbstract
         'previous' => [],
     ];
 
+    #[\Override]
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
@@ -32,6 +33,7 @@ class Json extends RendererAbstract
         $this->json['class'] = $class;
     }
 
+    #[\Override]
     protected function processParams(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -47,6 +49,7 @@ class Json extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processSolutions(): void
     {
         if (!$this->exception instanceof Exception) {
@@ -65,6 +68,7 @@ class Json extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processStackTrace(): void
     {
         $this->output .= '<span style="color: sandybrown;">Stack Trace:</span>' . "\n";
@@ -72,6 +76,7 @@ class Json extends RendererAbstract
         $this->processStackTraceInternal();
     }
 
+    #[\Override]
     protected function processStackTraceInternal(): void
     {
         $inAtk = true;
@@ -95,6 +100,7 @@ class Json extends RendererAbstract
         }
     }
 
+    #[\Override]
     protected function processPreviousException(): void
     {
         if (!$this->exception->getPrevious()) {
@@ -107,6 +113,7 @@ class Json extends RendererAbstract
         $this->json['previous'] = $previous->json;
     }
 
+    #[\Override]
     protected function parseStackTraceFrame(array $frame): array
     {
         return [
@@ -119,6 +126,7 @@ class Json extends RendererAbstract
         ];
     }
 
+    #[\Override]
     public function __toString(): string
     {
         try {
