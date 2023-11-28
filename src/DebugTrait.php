@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Core;
 
+use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 trait DebugTrait
@@ -25,13 +26,13 @@ trait DebugTrait
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed              $level
+     * @param LogLevel::*        $level
      * @param string|\Stringable $message
      * @param array<mixed>       $context
      */
     public function log($level, $message, array $context = []): void
     {
-        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
+        if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof LoggerInterface) {
             $this->getApp()->logger->log($level, $message, $context);
         } else {
             $this->_echoStderr($message . "\n");
@@ -55,7 +56,7 @@ trait DebugTrait
 
         // if debug is enabled, then log it
         if ($this->debug) {
-            if (!TraitUtil::hasAppScopeTrait($this) || !$this->issetApp() || !$this->getApp()->logger instanceof \Psr\Log\LoggerInterface) {
+            if (!TraitUtil::hasAppScopeTrait($this) || !$this->issetApp() || !$this->getApp()->logger instanceof LoggerInterface) {
                 $message = '[' . static::class . ']: ' . $message;
             }
             $this->log(LogLevel::DEBUG, $message, $context);
