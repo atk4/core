@@ -4,7 +4,7 @@
 
 [![Build](https://github.com/atk4/core/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/core/actions?query=branch:develop)
 [![CodeCov](https://codecov.io/gh/atk4/core/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/core)
-[![GitHub release](https://img.shields.io/github/release/atk4/core.svg)](CHANGELOG.md)
+[![GitHub release](https://img.shields.io/github/release/atk4/core.svg)](https://github.com/atk4/core/releases)
 [![Code Climate](https://codeclimate.com/github/atk4/core/badges/gpa.svg)](https://codeclimate.com/github/atk4/core)
 
 Agile Core was created for [Agile Data](https://github.com/atk4/data) and [Agile UI](https://github.com/atk4/ui), but can be used in any other framework too. You will mostly find PHP Traits here, that add functionality into your objects such as:
@@ -37,5 +37,5 @@ composer require atk4/core
 
 Agile Core is part of [Agile Toolkit - PHP UI Framework](https://atk4.org/). If you like this project, you should also look into:
 
-- [Agile Data](https://github.com/atk4/data) - [![GitHub release](https://img.shields.io/github/release/atk4/data.svg?label=Agile+Data)]()
-- [Agile UI](https://github.com/atk4/ui) - [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg?label=Agile+UI)]()
+- [Agile Data](https://github.com/atk4/data) - [![GitHub release](https://img.shields.io/github/release/atk4/data.svg?label=Agile+Data)](https://github.com/atk4/data/releases)
+- [Agile UI](https://github.com/atk4/ui) - [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg?label=Agile+UI)](https://github.com/atk4/ui/releases)
