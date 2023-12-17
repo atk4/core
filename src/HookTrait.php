@@ -6,11 +6,7 @@ namespace Atk4\Core;
 
 trait HookTrait
 {
-    /**
-     * Contains information about configured hooks (callbacks).
-     *
-     * @var array<string, array<int, array<int, array{\Closure, 1?: array<int, mixed>}>>>
-     */
+    /** @var array<string, array<int, array<int, array{\Closure, 1?: array<int, mixed>}>>> Configured hooks (callbacks). */
     protected array $hooks = [];
 
     /** Next hook index counter. */
@@ -18,6 +14,9 @@ trait HookTrait
 
     /** @var \WeakReference<static>|null */
     private ?\WeakReference $_hookOrigThis = null;
+
+    /** @var string[] */
+    private $_hookActiveSpots = [];
 
     /**
      * Optimize GC. When a Closure is guaranteed to be rebound before invoke, it can be rebound
@@ -107,6 +106,15 @@ trait HookTrait
         $this->_hookOrigThis = \WeakReference::create($this);
     }
 
+    private function _hookRequireInactive(string $spot): void
+    {
+        if ($this->_hookActiveSpots[$spot] ?? false) {
+            throw (new Exception('Hook spot must be inactive for requested operation, but it is already executing'))
+                ->addMoreInfo('object', $this)
+                ->addMoreInfo('spot', $spot);
+        }
+    }
+
     /**
      * Add another callback to be executed during hook($spot);.
      *
@@ -121,6 +129,7 @@ trait HookTrait
     public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
         $this->_rebindHooksIfCloned();
+        $this->_hookRequireInactive($spot);
 
         $fx = $this->_unbindHookFxIfBoundToThis($fx, false);
 
@@ -268,6 +277,8 @@ trait HookTrait
      */
     public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
     {
+        $this->_hookRequireInactive($spot);
+
         if ($priority !== null) {
             if ($priorityIsIndex) {
                 $index = $priority;
@@ -305,13 +316,16 @@ trait HookTrait
     {
         $brokenBy = null;
         $this->_rebindHooksIfCloned();
+        $this->_hookRequireInactive($spot);
 
         $return = [];
         if (isset($this->hooks[$spot])) {
-            krsort($this->hooks[$spot]); // lower priority is called sooner
-            $hooksBackup = $this->hooks[$spot];
+            ksort($this->hooks[$spot]); // lower priority is called sooner
+
             try {
-                while ($hooks = array_pop($this->hooks[$spot])) {
+                $this->_hookActiveSpots[$spot] = true;
+
+                foreach ($this->hooks[$spot] as $hooks) {
                     foreach ($hooks as $index => [$hookFx, $hookArgs]) {
                         $return[$index] = $hookFx($this, ...$args, ...$hookArgs);
                     }
@@ -321,7 +335,7 @@ trait HookTrait
 
                 return $e->getReturnValue();
             } finally {
-                $this->hooks[$spot] = $hooksBackup;
+                $this->_hookActiveSpots[$spot] = false;
             }
         }
 
