@@ -7,6 +7,7 @@ namespace Atk4\Core\Tests;
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DebugTrait;
 use Atk4\Core\Phpunit\TestCase;
+use Psr\Log\LoggerInterface;
 
 class DebugTraitTest extends TestCase
 {
@@ -154,7 +155,7 @@ class DebugMock
     }
 }
 
-class DebugAppMock implements \Psr\Log\LoggerInterface
+class DebugAppMock implements LoggerInterface
 {
     use \Psr\Log\LoggerTrait;
 
@@ -170,7 +171,7 @@ class DebugAppMock implements \Psr\Log\LoggerInterface
     }
 }
 
-class DebugPsrMock implements \Psr\Log\LoggerInterface
+class DebugPsrMock implements LoggerInterface
 {
     use AppScopeTrait;
     use DebugTrait;
