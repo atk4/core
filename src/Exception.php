@@ -97,7 +97,7 @@ class Exception extends \Exception implements SelfDescribing
      * $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
      * $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      * $app->run();
-     * $app->callBeforeExit();
+     * $app->callExit();
      */
     public function getHtml(): string
     {
