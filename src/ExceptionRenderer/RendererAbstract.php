@@ -9,6 +9,7 @@ use Atk4\Core\TraitUtil;
 use Atk4\Core\TranslatableTrait;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use Atk4\Core\Translator\Translator;
+use Composer\Autoload\ClassLoader;
 
 /**
  * @phpstan-consistent-constructor
@@ -234,7 +235,7 @@ abstract class RendererAbstract
 
     protected function getVendorDirectory(): string
     {
-        $loaderFile = realpath((new \ReflectionClass(\Composer\Autoload\ClassLoader::class))->getFileName());
+        $loaderFile = realpath((new \ReflectionClass(ClassLoader::class))->getFileName());
         $coreDir = realpath(dirname(__DIR__, 2) . '/');
         if (str_starts_with($loaderFile, $coreDir . \DIRECTORY_SEPARATOR)) { // this repo is main project
             return realpath(dirname($loaderFile, 2) . '/');

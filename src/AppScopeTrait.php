@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core;
 
 use Atk4\Ui\App;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Typical software design will create the application scope. Most frameworks
@@ -51,7 +52,7 @@ trait AppScopeTrait
     {
         if (!$app instanceof App) {
             // called from phpunit, allow to test this trait without Atk4\Ui\App class
-            if (class_exists(\PHPUnit\Framework\TestCase::class, false)) {
+            if (class_exists(TestCase::class, false)) {
                 foreach (debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS) as $frame) {
                     if (str_starts_with($frame['class'] ?? '', 'Atk4\Core\Tests\\')) {
                         return;

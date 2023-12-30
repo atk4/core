@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Core;
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * This trait makes it possible for you to read config files and various configurations
  * use:
@@ -58,7 +60,7 @@ trait ConfigTrait
 
                     break;
                 case 'yaml':
-                    $tempConfig = \Symfony\Component\Yaml\Yaml::parseFile($file);
+                    $tempConfig = Yaml::parseFile($file);
 
                     break;
                 default:
