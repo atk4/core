@@ -67,7 +67,7 @@ Example:
 ```
 class Form
 {
-    use Core\CollectionTrait;
+    use CollectionTrait;
 
     protected $fields = [];
 

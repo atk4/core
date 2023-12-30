@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Phpunit;
 
+use Atk4\Core\Exception as CoreException;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
-use PHPUnit\Framework\TestResult;
 use PHPUnit\Metadata\Api\CodeCoverage as CodeCoverageMetadata;
 use PHPUnit\Runner\BaseTestRunner;
 use PHPUnit\Runner\CodeCoverage;
@@ -150,8 +150,8 @@ abstract class TestCase extends BaseTestCase
         $traceReflectionProperty = new \ReflectionProperty($e instanceof \Exception ? \Exception::class : \Error::class, 'trace');
         $traceReflectionProperty->setAccessible(true);
         $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
-        if ($e instanceof \Atk4\Core\Exception) {
-            $paramsReflectionProperty = new \ReflectionProperty(\Atk4\Core\Exception::class, 'params');
+        if ($e instanceof CoreException) {
+            $paramsReflectionProperty = new \ReflectionProperty(CoreException::class, 'params');
             $paramsReflectionProperty->setAccessible(true);
             $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
         }

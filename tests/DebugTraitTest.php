@@ -8,6 +8,7 @@ use Atk4\Core\AppScopeTrait;
 use Atk4\Core\DebugTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
 
 class DebugTraitTest extends TestCase
 {
@@ -157,7 +158,7 @@ class DebugMock
 
 class DebugAppMock implements LoggerInterface
 {
-    use \Psr\Log\LoggerTrait;
+    use LoggerTrait;
 
     /** @var array<int, mixed>|null */
     public $log;
