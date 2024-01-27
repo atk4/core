@@ -120,9 +120,7 @@ abstract class RendererAbstract
      */
     public static function toSafeString($val, bool $allowNl = false, int $maxDepth = 2): string
     {
-        if ($val instanceof \Closure) {
-            return 'closure';
-        } elseif (is_object($val)) {
+        if (is_object($val)) {
             return get_class($val) . (TraitUtil::hasTrackableTrait($val)
                 ? ' (' . (get_object_vars($val)['name'] ?? ($val->shortName ?? '')) . ')'
                 : '');

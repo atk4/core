@@ -52,7 +52,11 @@ class ExceptionTest extends TestCase
 
         self::assertSame('\'abc\'', RendererAbstract::toSafeString('abc'));
 
-        self::assertSame('stdClass', RendererAbstract::toSafeString(new \stdClass()));
+        self::assertSame(\stdClass::class, RendererAbstract::toSafeString(new \stdClass()));
+
+        self::assertSame(\DateTime::class, RendererAbstract::toSafeString(new \DateTime()));
+
+        self::assertSame(\Closure::class, RendererAbstract::toSafeString(static fn () => true));
 
         $a = new TrackableMock();
         $a->shortName = 'foo';
