@@ -10,8 +10,7 @@ namespace Atk4\Core;
  */
 trait InitializerTrait
 {
-    /** @var bool */
-    private $_initialized = false;
+    private bool $_initialized = false;
 
     /**
      * Initialize object. Always call parent::init(). Do not call directly.

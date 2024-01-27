@@ -69,7 +69,7 @@ class Form
 {
     use CollectionTrait;
 
-    protected $fields = [];
+    protected array $fields = [];
 
     public function addField(string $name, $seed = [])
     {

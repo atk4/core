@@ -10,6 +10,5 @@ class FieldMock
 {
     use DiContainerTrait;
 
-    /** @var string */
-    public $name;
+    public string $name;
 }

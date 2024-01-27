@@ -12,7 +12,7 @@ class CollectionMock
     use CollectionTrait;
 
     /** @var array<string, FieldMock> */
-    protected $fields = [];
+    protected array $fields = [];
 
     /**
      * @param array<mixed>|FieldMock|null $seed

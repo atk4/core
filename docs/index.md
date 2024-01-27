@@ -32,7 +32,7 @@ using containers:
 The natural solution to the problem is to create array like this:
 
 ```
-public $fields = [];
+public array $fields = [];
 ```
 
 After that you would need to create code for adding objects into container, removing,
@@ -46,7 +46,7 @@ class Form
 {
     use CollectionTrait;
 
-    public $fields = [];
+    public array $fields = [];
 
     public function addField(string $name, $seed = [])
     {

@@ -10,8 +10,7 @@ use Atk4\Core\Phpunit\TestCase;
 
 class ConfigTraitTest extends TestCase
 {
-    /** @var string */
-    public $dir = __DIR__ . '/config_test';
+    public string $dir = __DIR__ . '/config_test';
 
     public function testFileRead(): void
     {

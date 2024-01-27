@@ -19,7 +19,7 @@ trait ContainerTrait
     public array $elements = [];
 
     /** @var array<string, int> */
-    private $_elementNameCounts = [];
+    private array $_elementNameCounts = [];
 
     /**
      * Returns unique element name based on desired name.
@@ -86,7 +86,7 @@ trait ContainerTrait
         } elseif (isset($args['name'])) {
             $name = $args['name'];
             unset($args['name']);
-        } elseif ($element->shortName !== null) {
+        } elseif (($element->shortName ?? null) !== null) {
             $name = $this->_uniqueElementName($element->shortName);
         } else {
             $desiredName = $element->getDesiredName();
@@ -110,7 +110,7 @@ trait ContainerTrait
         $element->setOwner($this);
         $element->shortName = $name;
         if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($element)) {
-            $element->name = $this->_shorten($this->name ?: '', $element->shortName, $element->name); // @phpstan-ignore-line
+            $element->name = $this->_shorten($this->name ?? '', $element->shortName, $element->name ?? null); // @phpstan-ignore-line
         }
 
         $this->elements[$element->shortName] = $element;

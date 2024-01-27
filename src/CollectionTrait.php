@@ -58,7 +58,7 @@ trait CollectionTrait
             $item->shortName = $name;
             $item->setOwner($this);
             if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($item)) {
-                $item->name = $this->_shortenMl($this->name . '-' . $collection, $item->shortName, $item->name); // @phpstan-ignore-line
+                $item->name = $this->_shortenMl(($this->name ?? '') . '-' . $collection, $item->shortName, $item->name ?? null); // @phpstan-ignore-line
             }
         }
 
