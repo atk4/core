@@ -86,7 +86,7 @@ trait ContainerTrait
         } elseif (isset($args['name'])) {
             $name = $args['name'];
             unset($args['name']);
-        } elseif ((new \ReflectionProperty($element, 'shortName'))->isInitialized($element)) {
+        } elseif (($element->shortName ?? null) !== null) {
             $name = $this->_uniqueElementName($element->shortName);
         } else {
             $desiredName = $element->getDesiredName();
