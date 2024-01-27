@@ -25,7 +25,7 @@ class FormField
 
 class FormField_Input extends FormField
 {
-    public $value = null;
+    public string $value;
 
     protected function init(): void
     {
@@ -64,7 +64,7 @@ class FormField
     use TrackableTrait;
     use NameTrait;
 
-    public $value = null;
+    public string $value;
 
     protected function init(): void
     {

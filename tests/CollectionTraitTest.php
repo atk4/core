@@ -35,12 +35,11 @@ class CollectionTraitTest extends TestCase
     {
         $m = new CollectionMockWithApp();
         $m->setApp(new class() {
-            /** @var string */
-            public $name = 'app';
-            /** @var int */
-            public $maxNameLength = 40;
+            public string $name = 'app';
+
+            public int $maxNameLength = 40;
             /** @var array<string, string> */
-            public $uniqueNameHashes = [];
+            public array $uniqueNameHashes = [];
         });
         $m->name = 'form';
 
