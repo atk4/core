@@ -14,8 +14,8 @@ trait TrackableTrait
     /** @var QuietObjectWrapper<object>|null Link to (owner) object into which we added this object. */
     private ?QuietObjectWrapper $_owner = null;
 
-    /** @var string Name of the object in owner's element array. */
-    public $shortName;
+    /** @var non-falsy-string Name of the object in owner's element array. */
+    public string $shortName;
 
     public function issetOwner(): bool
     {
