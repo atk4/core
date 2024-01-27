@@ -44,31 +44,30 @@ class ExceptionTest extends TestCase
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
+    }
 
-        // to safe string
-        $ret = RendererAbstract::toSafeString(1);
-        self::assertSame('1', $ret);
+    public function testToSafeString(): void
+    {
+        self::assertSame('1', RendererAbstract::toSafeString(1));
 
-        $ret = RendererAbstract::toSafeString('abc');
-        self::assertSame('\'abc\'', $ret);
+        self::assertSame('\'abc\'', RendererAbstract::toSafeString('abc'));
 
-        $ret = RendererAbstract::toSafeString(new \stdClass());
-        self::assertSame('stdClass', $ret);
+        self::assertSame('stdClass', RendererAbstract::toSafeString(new \stdClass()));
 
         $a = new TrackableMock();
         $a->shortName = 'foo';
-        $ret = RendererAbstract::toSafeString($a);
-        self::assertSame(TrackableMock::class . ' (foo)', $ret);
+        self::assertSame(TrackableMock::class . ' (foo)', RendererAbstract::toSafeString($a));
+
+        $a = new TrackableMock();
+        self::assertSame(TrackableMock::class . ' ()', RendererAbstract::toSafeString($a));
 
         $a = new TrackableMock2();
         $a->shortName = 'foo';
-        $ret = RendererAbstract::toSafeString($a);
-        self::assertSame(TrackableMock2::class . ' (foo)', $ret);
+        self::assertSame(TrackableMock2::class . ' (foo)', RendererAbstract::toSafeString($a));
 
         $a = new TrackableMock2();
         $a->name = 'foo';
-        $ret = RendererAbstract::toSafeString($a);
-        self::assertSame(TrackableMock2::class . ' (foo)', $ret);
+        self::assertSame(TrackableMock2::class . ' (foo)', RendererAbstract::toSafeString($a));
     }
 
     public function testMore(): void

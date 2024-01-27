@@ -108,7 +108,7 @@ abstract class RendererAbstract
 
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
-                ? get_object_vars($parsed['object'])['name'] ?? $parsed['object']->shortName
+                ? get_object_vars($parsed['object'])['name'] ?? ($parsed['object']->shortName ?? '')
                 : str_replace("\0", ' ', $this->tryRelativizePathsInString(get_class($parsed['object'])));
         }
 
@@ -123,7 +123,9 @@ abstract class RendererAbstract
         if ($val instanceof \Closure) {
             return 'closure';
         } elseif (is_object($val)) {
-            return get_class($val) . (TraitUtil::hasTrackableTrait($val) ? ' (' . (get_object_vars($val)['name'] ?? $val->shortName) . ')' : '');
+            return get_class($val) . (TraitUtil::hasTrackableTrait($val)
+                ? ' (' . (get_object_vars($val)['name'] ?? ($val->shortName ?? '')) . ')'
+                : '');
         } elseif (is_resource($val)) {
             return 'resource';
         } elseif (is_scalar($val) || $val === null) {
