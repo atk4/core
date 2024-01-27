@@ -19,7 +19,7 @@ trait ContainerTrait
     public array $elements = [];
 
     /** @var array<string, int> */
-    private $_elementNameCounts = [];
+    private array $_elementNameCounts = [];
 
     /**
      * Returns unique element name based on desired name.
