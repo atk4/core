@@ -58,6 +58,8 @@ class ExceptionTest extends TestCase
 
         self::assertSame(\Closure::class, RendererAbstract::toSafeString(static fn () => true));
 
+        self::assertSame('resource (stream)', RendererAbstract::toSafeString(opendir(__DIR__)));
+
         $a = new TrackableMock();
         $a->shortName = 'foo';
         self::assertSame(TrackableMock::class . ' (foo)', RendererAbstract::toSafeString($a));
