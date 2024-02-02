@@ -27,7 +27,7 @@ class Factory
     /**
      * @param array<mixed>|object|null ...$seeds
      *
-     * @return ($args is object ? object : array<mixed>)
+     * @return ($seeds is object ? object : array<mixed>)
      */
     protected function _mergeSeeds(...$seeds)
     {
@@ -173,7 +173,7 @@ class Factory
      *
      * @param array<mixed>|object|null ...$seeds
      *
-     * @return ($args is object ? object : array<mixed>) if one seed is an object, that object is returned
+     * @return ($seeds is object ? object : array<mixed>) if one seed is an object, that object is returned
      */
     final public static function mergeSeeds(...$seeds)
     {
