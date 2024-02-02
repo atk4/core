@@ -124,7 +124,7 @@ abstract class RendererAbstract
             return get_class($val) . (TraitUtil::hasTrackableTrait($val)
                 ? ' (' . (get_object_vars($val)['name'] ?? ($val->shortName ?? '')) . ')'
                 : '');
-        } elseif (is_resource($val)) {
+        } elseif (str_replace(' (closed)', '', gettype($val)) === 'resource') {
             return get_debug_type($val);
         } elseif (is_scalar($val) || $val === null) {
             $out = json_encode($val, \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
