@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\AppScopeTrait;
+use Atk4\Core\ContainerTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\InitializerTrait;
 use Atk4\Core\NameTrait;
@@ -53,6 +54,25 @@ class CollectionTraitTest extends TestCase
 
         $longField = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [FieldMockCustom::class]);
         self::assertSame(40, strlen($longField->name));
+
+        $mWithContainerTrait = new class() extends CollectionMockWithApp {
+            use ContainerTrait {
+                _shorten as private __shorten;
+            }
+
+            protected function _shorten(string $ownerName, string $itemShortName, ?string $origItemName): string
+            {
+                return $this->__shorten($ownerName, 'X' . $itemShortName, $origItemName);
+            }
+        };
+        $mWithContainerTrait->setApp($m->getApp());
+        $mWithContainerTrait->name = 'form';
+
+        /** @var FieldMockCustom $surnameField2 */
+        $surnameField2 = $mWithContainerTrait->addField('surname', [FieldMockCustom::class]);
+
+        self::assertSame('form-fields_Xsurname', $surnameField2->name);
+        self::assertSame($mWithContainerTrait, $surnameField2->getOwner());
     }
 
     public function testCloneCollection(): void

@@ -93,7 +93,7 @@ trait HookTrait
                         // TODO we throw only if the class name is the same, otherwise the check is too strict
                         // and on a bad side - we should not throw when an object with a hook is cloned,
                         // but instead we should throw once the closure this object is cloned
-                        // example of legit use: https://github.com/atk4/audit/blob/eb9810e085a40caedb435044d7318f4d8dd93e11/src/Controller.php#L85
+                        // example of legit use: https://github.com/atk4/audit/blob/eb9810e085/src/Controller.php#L85
                         if (get_class($fxThis) === static::class || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
                             throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
                                 ->addMoreInfo('closure_file', $fxRefl->getFileName())

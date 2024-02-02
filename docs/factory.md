@@ -465,7 +465,7 @@ Specify Form Field
 
 ### addField, addButton, etc
 
-Model::addField, Form::addButton, FormLayout::addHeader imply that the class of
+Model::addField, Form::addButton, Form\Layout::addHeader imply that the class of
 an added object is known so the argument you specify to those methods ends up
 being a factory's $default:
 

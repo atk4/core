@@ -112,7 +112,7 @@ abstract class TestCase extends BaseTestCase
         }
 
         // once PHP 8.0 support is dropped, needed only once, see:
-        // https://github.com/php/php-src/commit/b58d74547f7700526b2d7e632032ed808abab442
+        // https://github.com/php/php-src/commit/b58d74547f
         if (\PHP_VERSION_ID < 80100) {
             gc_collect_cycles();
         }
@@ -170,7 +170,7 @@ abstract class TestCase extends BaseTestCase
         $this->releaseObjectsFromExceptionTrace($e);
 
         // once PHP 8.0 support is dropped, needed only once, see:
-        // https://github.com/php/php-src/commit/b58d74547f7700526b2d7e632032ed808abab442
+        // https://github.com/php/php-src/commit/b58d74547f
         if (\PHP_VERSION_ID < 80100) {
             gc_collect_cycles();
         }
