@@ -15,7 +15,7 @@ want to have application-wide hook then use `app` property.
 ## Hook Spots
 
 Hook is described by a string identifier which we call hook-spot, which would
-normally be expressing desired action with prefixes "before" or "after if
+normally be expressing desired action with prefixes "before" or "after" if
 necessary.
 
 Some good examples for hook spots are:
