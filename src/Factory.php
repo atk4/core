@@ -173,7 +173,7 @@ class Factory
      *
      * @param array<mixed>|object|null ...$seeds
      *
-     * @return ($args is object ? object : array<mixed>) if at least one seed is an object, will return object
+     * @return ($args is object ? object : array<mixed>) if one seed is an object, that object is returned
      */
     final public static function mergeSeeds(...$seeds)
     {
