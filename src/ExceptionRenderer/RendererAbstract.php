@@ -125,7 +125,7 @@ abstract class RendererAbstract
                 ? ' (' . (get_object_vars($val)['name'] ?? ($val->shortName ?? '')) . ')'
                 : '');
         } elseif (is_resource($val)) {
-            return 'resource (' . get_resource_type($val) . ')';
+            return get_debug_type($val);
         } elseif (is_scalar($val) || $val === null) {
             $out = json_encode($val, \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
             $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
