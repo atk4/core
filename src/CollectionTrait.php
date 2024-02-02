@@ -139,6 +139,10 @@ trait CollectionTrait
      */
     protected function _shortenMl(string $ownerName, string $itemShortName, ?string $origItemName): string
     {
+        if (TraitUtil::hasContainerTrait($this)) {
+            return $this->_shorten($ownerName, $itemShortName, $origItemName);;
+        }
+
         // ugly hack to deduplicate code
         $collectionTraitHelper = new class() {
             use AppScopeTrait;
