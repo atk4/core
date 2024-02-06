@@ -50,9 +50,6 @@ class TestCaseTest extends TestCase
         return $object;
     }
 
-    /**
-     * @dataProvider provideProviderAbCases
-     */
     #[DataProvider('provideProviderAbCases')]
     public function testObjectsAreReleasedAfterTest(string $v): void
     {
@@ -115,10 +112,6 @@ class TestCaseTest extends TestCase
         yield ['b'];
     }
 
-    /**
-     * @dataProvider provideProviderAbCases
-     * @dataProvider provideProviderCoverageCases
-     */
     #[DataProvider('provideProviderAbCases')]
     #[DataProvider('provideProviderCoverageCases')]
     public function testProviderCoverage(string $v): void
@@ -139,9 +132,6 @@ class TestCaseTest extends TestCase
         yield ['y'];
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     #[DoesNotPerformAssertions]
     public function testCoverageImplForTestMarkedAsIncomplete(): void
     {

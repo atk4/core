@@ -76,9 +76,6 @@ class DiContainerTraitTest extends TestCase
         self::assertSame('x', $m->typedNotNull);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     #[DoesNotPerformAssertions]
     public function testPassively(): void
     {
