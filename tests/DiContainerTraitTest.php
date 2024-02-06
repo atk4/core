@@ -7,6 +7,7 @@ namespace Atk4\Core\Tests;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 class DiContainerTraitTest extends TestCase
 {
@@ -78,6 +79,7 @@ class DiContainerTraitTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testPassively(): void
     {
         $m = new FactoryDiMock2();
