@@ -25,7 +25,7 @@ class Exception extends \Exception implements SelfDescribing
     /** @var array<string, mixed> */
     private $params = [];
 
-    /** @var array<int, string> */
+    /** @var list<string> */
     private $solutions = [];
 
     /** @var ITranslatorAdapter */
@@ -145,7 +145,7 @@ class Exception extends \Exception implements SelfDescribing
     }
 
     /**
-     * @return array<int, string>
+     * @return list<string>
      */
     public function getSolutions(): array
     {

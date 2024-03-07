@@ -58,6 +58,8 @@ abstract class TestCase extends BaseTestCase
         $classRefl = new \ReflectionClass(static::class);
         foreach ($classRefl->getMethods() as $methodRefl) {
             $methodDoc = $methodRefl->getDocComment();
+            // https://github.com/sebastianbergmann/phpunit/blob/9.6.16/src/Util/Test.php#L334
+            // https://github.com/sebastianbergmann/phpunit/blob/9.6.16/src/Framework/TestCase.php#L2543
             if ($methodDoc !== false && preg_match_all('~@dataProvider[ \t]+([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $methodDoc, $matchesAll, \PREG_SET_ORDER)) {
                 foreach ($matchesAll as $matches) {
                     $providerClassRefl = $matches[1] === '' ? $classRefl : new \ReflectionClass($matches[1]);

@@ -51,7 +51,7 @@ class DiContainerTraitTest extends TestCase
 
         $m = new FactoryDiMock2();
         $m->setDefaults(['typedNotNull' => 'x']);
-        self::assertSame($m->typedNotNull, 'x');
+        self::assertSame('x', $m->typedNotNull);
     }
 
     public function testPropertiesPassively(): void
@@ -72,7 +72,7 @@ class DiContainerTraitTest extends TestCase
 
         $m = new FactoryDiMock2();
         $m->setDefaults(['typedNotNull' => 'x'], true);
-        self::assertSame($m->typedNotNull, 'x');
+        self::assertSame('x', $m->typedNotNull);
     }
 
     /**
