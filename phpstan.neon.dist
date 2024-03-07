@@ -3,17 +3,16 @@ includes:
 
 parameters:
     level: 6
+    checkMissingOverrideMethodAttribute: true
     paths:
         - .
     excludePaths:
         - vendor
 
-    checkMissingOverrideMethodAttribute: true
-
     ignoreErrors:
         # relax strict rules
-        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
-        - '~^Variable (static )?(property access|method call) on .+\.~'
+        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
+        - '~^Variable (static )?(property access|method call) on .+\.$~'
 
         # fix unresolveable atk4/ui \Atk4\Ui\App class
         - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
