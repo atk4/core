@@ -157,7 +157,6 @@ trait DiContainerTrait
         $seed = self::_fromSeedPrecheck($seed, true);
         $object = Factory::factory($seed, $defaults);
 
-        // @phpstan-ignore-next-line https://github.com/phpstan/phpstan/issues/9022
         return $object; // @phpstan-ignore-line
     }
 }
