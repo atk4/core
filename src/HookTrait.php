@@ -325,7 +325,7 @@ trait HookTrait
             }
         }
 
-        return $return;
+        return $return; // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10684
     }
 
     /**
