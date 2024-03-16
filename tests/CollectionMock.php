@@ -23,7 +23,9 @@ class CollectionMock
 
         $field = Factory::factory($seed);
 
-        return $this->_addIntoCollection($name, $field, 'fields');
+        $this->_addIntoCollection($name, $field, 'fields');
+
+        return $field;
     }
 
     public function hasField(string $name): bool

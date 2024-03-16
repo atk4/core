@@ -22,12 +22,14 @@ trait CollectionTrait
      * {
      *     $field = Field::fromSeed($seed);
      *
-     *     return $this->_addIntoCollection($name, $field, 'fields');
+     *     $this->_addIntoCollection($name, $field, 'fields');
+     *
+     *     return $field;
      * }
      *
      * @param string $collection property name
      */
-    protected function _addIntoCollection(string $name, object $item, string $collection): object
+    protected function _addIntoCollection(string $name, object $item, string $collection): void
     {
         if (!isset($this->{$collection}) || !is_array($this->{$collection})) {
             throw (new Exception('Collection does not exist'))
@@ -75,8 +77,6 @@ trait CollectionTrait
                 }
             }
         }
-
-        return $item;
     }
 
     /**

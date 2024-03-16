@@ -54,7 +54,9 @@ class Form
 
         $field = Factory::factory($seed, ['name' => $name]);
 
-        return $this->_addIntoCollection($name, $field, 'fields');
+        $this->_addIntoCollection($name, $field, 'fields');
+
+        return $field;
     }
 
     // hasField, getField, removeField also can be added, see further docs.

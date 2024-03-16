@@ -77,7 +77,9 @@ class Form
 
         $field = Factory::factory($seed, ['name' => $name]);
 
-        return $this->_addIntoCollection($name, $field, 'fields');
+        $this->_addIntoCollection($name, $field, 'fields');
+
+        return $field;
     }
 
     public function hasField(string $name): bool
@@ -107,7 +109,9 @@ public function addField(string $name, $seed = [])
 {
     $field = Factory::factory($seed);
 
-    return $this->_addIntoCollection($name, $field, 'fields');
+    $this->_addIntoCollection($name, $field, 'fields');
+
+    return $field;
 }
 ```
 
@@ -230,8 +234,7 @@ $args = ['child_name', 'db' => $mydb];
 $args = ['name' => 'child_name']; // obsolete, backward-compatible
 ```
 
-Method will return the object. Will throw exception if child with same
-name already exists.
+Method throws an exception if child with the same name already exists.
 :::
 
 :::{php:method} removeElement($shortName)
