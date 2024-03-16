@@ -18,7 +18,7 @@ trait CollectionTrait
     /**
      * Use this method trait like this:.
      *
-     * function addField($name, $definition)
+     * function addField(string $name, $definition)
      * {
      *     $field = Field::fromSeed($seed);
      *
@@ -62,13 +62,19 @@ trait CollectionTrait
             }
         }
 
+        $this->{$collection}[$name] = $item;
+
         if (TraitUtil::hasInitializerTrait($item)) {
             if (!$item->isInitialized()) {
-                $item->invokeInit();
+                try {
+                    $item->invokeInit();
+                } catch (\Throwable $e) {
+                    unset($this->{$collection}[$name]);
+
+                    throw $e;
+                }
             }
         }
-
-        $this->{$collection}[$name] = $item;
 
         return $item;
     }

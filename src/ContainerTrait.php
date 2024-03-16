@@ -52,7 +52,15 @@ trait ContainerTrait
 
         if (TraitUtil::hasInitializerTrait($obj)) {
             if (!$obj->isInitialized()) {
-                $obj->invokeInit();
+                try {
+                    $obj->invokeInit();
+                } catch (\Throwable $e) {
+                    if (TraitUtil::hasTrackableTrait($obj)) {
+                        unset($this->elements[$obj->shortName]);
+                    }
+
+                    throw $e;
+                }
             }
         }
 
