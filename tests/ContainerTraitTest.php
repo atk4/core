@@ -8,6 +8,7 @@ use Atk4\Core\AppScopeTrait;
 use Atk4\Core\ContainerTrait;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Core\Exception;
+use Atk4\Core\InitializerTrait;
 use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\TrackableTrait;
@@ -274,6 +275,42 @@ class ContainerTraitTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Child element not found');
         $m->removeElement('dont_exist');
+    }
+
+    public function testParentInitNotCalledException(): void
+    {
+        $m = new ContainerMock();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object was not initialized');
+        $m->add(new class() extends TrackableMock {
+            use InitializerTrait;
+
+            protected function init(): void {}
+        });
+    }
+
+    public function testExceptionInInitMustNotAdd(): void
+    {
+        $m = new ContainerMock();
+
+        $e = null;
+        try {
+            $m->add(new class() extends TrackableMock {
+                use InitializerTrait;
+
+                protected function init(): void
+                {
+                    throw new Exception('from init');
+                }
+            }, 'foo');
+        } catch (Exception $e) {
+        }
+        self::assertSame('from init', $e->getMessage());
+
+        self::assertFalse($m->hasElement('foo'));
+        $m->add(new TrackableMock(), 'foo');
+        self::assertTrue($m->hasElement('foo'));
     }
 }
 

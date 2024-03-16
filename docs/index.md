@@ -220,8 +220,8 @@ class ShoppingBag extends \Atk4\Data\Model
     {
         parent::init();
 
-        $this->hasOne('user_id', new User());
-        $this->hasMany('Items', new Item())
+        $this->hasOne('user_id', ['model' => [User::class]]);
+        $this->hasMany('Items', ['model' => [Item::class]])
             ->addField('total_price', ['aggregate' => 'sum', 'field' => 'price']);
     }
 }

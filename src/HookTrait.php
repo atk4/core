@@ -148,14 +148,10 @@ trait HookTrait
         $fxRefl = new \ReflectionFunction($fx);
         $fxScopeClassRefl = $fxRefl->getClosureScopeClass();
         $fxThis = $fxRefl->getClosureThis();
-        if ($fxScopeClassRefl === null) {
-            $fxLong = static function ($ignore, &...$args) use ($fx) {
-                return $fx(...$args);
-            };
-        } elseif ($fxThis === null) {
+        if ($fxThis === null) {
             $fxLong = \Closure::bind(static function ($ignore, &...$args) use ($fx) {
                 return $fx(...$args);
-            }, null, $fxScopeClassRefl->getName());
+            }, null, $fxScopeClassRefl !== null ? $fxScopeClassRefl->getName() : null);
         } else {
             $fxLong = $this->_unbindHookFxIfBoundToThis($fx, true);
             if ($fxLong === $fx) {
@@ -302,6 +298,7 @@ trait HookTrait
     public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
     {
         $brokenBy = null;
+
         $this->_rebindHooksIfCloned();
 
         $return = [];
@@ -323,7 +320,7 @@ trait HookTrait
             }
         }
 
-        return $return; // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10684
+        return $return;
     }
 
     /**

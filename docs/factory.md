@@ -53,11 +53,11 @@ Using "class" as opposed to initialized object yields many performance gains,
 as initialization of the class may be delayed until it's required. For instance:
 
 ```
-$model->hasMany('Invoices', Invoice::class);
+$model->hasMany('Invoices', ['model' => [Invoice::class]]);
 
 // is faster than
 
-$model->hasMany('Invoices', new Invoice());
+$model->hasMany('Invoices', ['model' => new Invoice()]);
 ```
 
 That is due to the fact that creating instance of "Invoice" class is not required

@@ -23,9 +23,6 @@ class CollectionMock
 
         $field = Factory::factory($seed);
 
-        $shortNameProp = $field instanceof FieldMockCustom ? 'shortName' : 'name';
-        Factory::factory($seed, [$shortNameProp => $name]);
-
         return $this->_addIntoCollection($name, $field, 'fields');
     }
 

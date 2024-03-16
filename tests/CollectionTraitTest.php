@@ -151,17 +151,40 @@ class CollectionTraitTest extends TestCase
         \Closure::bind(static fn () => $m->_removeFromCollection('dont_exist', 'fields'), null, CollectionMock::class)(); // does not exist
     }
 
-    public function testException6(): void
+    public function testParentInitNotCalledException(): void
     {
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Object was not initialized');
-        $m->addField('test', new class() extends FieldMock {
+        $m->addField('foo', new class() extends FieldMock {
             use InitializerTrait;
 
             protected function init(): void {}
         });
+    }
+
+    public function testExceptionInInitMustNotAdd(): void
+    {
+        $m = new CollectionMock();
+
+        $e = null;
+        try {
+            $m->addField('foo', new class() extends FieldMock {
+                use InitializerTrait;
+
+                protected function init(): void
+                {
+                    throw new Exception('from init');
+                }
+            });
+        } catch (Exception $e) {
+        }
+        self::assertSame('from init', $e->getMessage());
+
+        self::assertFalse($m->hasField('foo'));
+        $m->addField('foo', new FieldMock());
+        self::assertTrue($m->hasField('foo'));
     }
 
     public function testClone(): void
