@@ -68,7 +68,7 @@ trait StaticAddToTrait
      *
      * @return static
      */
-    public static function addToWithClUnsafe(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false)// :self is too strict with unsafe behaviour
+    public static function addToWithClUnsafe(object $parent, $seed = [], array $addArgs = [], bool $skipAdd = false)
     {
         $object = static::fromSeedUnsafe($seed);
 

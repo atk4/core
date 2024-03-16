@@ -89,8 +89,8 @@ trait DiContainerTrait
     {
         if (!$object instanceof static) {
             throw (new Exception('Object is not an instance of static class'))
-                ->addMoreInfo('static_class', static::class)
-                ->addMoreInfo('object_class', get_class($object));
+                ->addMoreInfo('staticClass', static::class)
+                ->addMoreInfo('objectClass', get_class($object));
         }
 
         return $object;
@@ -98,15 +98,13 @@ trait DiContainerTrait
 
     /**
      * @param array<mixed>|object $seed
-     *
-     * @return array<mixed>|object
      */
-    private static function _fromSeedPrecheck($seed, bool $unsafe)
+    private static function _fromSeedPrecheck($seed, bool $unsafe): void
     {
         if (!is_object($seed)) {
             if (!is_array($seed)) { // @phpstan-ignore-line
                 throw (new Exception('Seed must be an array or an object'))
-                    ->addMoreInfo('seed_type', gettype($seed));
+                    ->addMoreInfo('seed', $seed);
             }
 
             if (!isset($seed[0])) {
@@ -117,12 +115,10 @@ trait DiContainerTrait
             $cl = $seed[0];
             if (!$unsafe && !is_a($cl, static::class, true)) {
                 throw (new Exception('Seed class is not a subtype of static class'))
-                    ->addMoreInfo('static_class', static::class)
-                    ->addMoreInfo('seed_class', $cl);
+                    ->addMoreInfo('staticClass', static::class)
+                    ->addMoreInfo('seedClass', $cl);
             }
         }
-
-        return $seed;
     }
 
     /**
@@ -138,7 +134,7 @@ trait DiContainerTrait
      */
     public static function fromSeed($seed = [], $defaults = [])// :static supported by PHP8+
     {
-        $seed = self::_fromSeedPrecheck($seed, false);
+        self::_fromSeedPrecheck($seed, false);
         $object = Factory::factory($seed, $defaults);
 
         return static::assertInstanceOf($object);
@@ -154,7 +150,7 @@ trait DiContainerTrait
      */
     public static function fromSeedUnsafe($seed = [], $defaults = [])
     {
-        $seed = self::_fromSeedPrecheck($seed, true);
+        self::_fromSeedPrecheck($seed, true);
         $object = Factory::factory($seed, $defaults);
 
         return $object; // @phpstan-ignore-line
