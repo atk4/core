@@ -87,7 +87,7 @@ class Translator
      *
      * @return string The translated string
      */
-    public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
+    public function _(string $message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         return $this->getAdapter()->_($message, $parameters, $domain ?? $this->defaultDomain, $locale ?? $this->defaultLocale);
     }

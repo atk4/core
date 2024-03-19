@@ -28,10 +28,10 @@ class Exception extends \Exception implements SelfDescribing
     /** @var list<string> */
     private $solutions = [];
 
-    /** @var ITranslatorAdapter */
+    /** @var ITranslatorAdapter|null */
     private $translator;
 
-    public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
+    public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
@@ -162,7 +162,7 @@ class Exception extends \Exception implements SelfDescribing
      *
      * @return $this
      */
-    public function setTranslatorAdapter(ITranslatorAdapter $translator = null): self
+    public function setTranslatorAdapter(?ITranslatorAdapter $translator = null): self
     {
         $this->translator = $translator;
 

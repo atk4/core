@@ -164,8 +164,8 @@ class HookTraitTest extends TestCase
     {
         $obj = new HookMock();
 
-        $incFx = static function ($obj, &$a) {
-            ++$a;
+        $incFx = static function ($obj, int &$value) {
+            ++$value;
         };
 
         $obj->onHook('inc', $incFx);

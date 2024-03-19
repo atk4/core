@@ -228,7 +228,7 @@ trait HookTrait
      * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
      * @param bool                                        $priorityIsIndex filter by index instead of priority
      */
-    public function hookHasCallbacks(string $spot, int $priority = null, bool $priorityIsIndex = false): bool
+    public function hookHasCallbacks(string $spot, ?int $priority = null, bool $priorityIsIndex = false): bool
     {
         if (!isset($this->hooks[$spot])) {
             return false;
@@ -260,7 +260,7 @@ trait HookTrait
      *
      * @return static
      */
-    public function removeHook(string $spot, int $priority = null, bool $priorityIsIndex = false)
+    public function removeHook(string $spot, ?int $priority = null, bool $priorityIsIndex = false)
     {
         if ($priority !== null) {
             if ($priorityIsIndex) {
@@ -293,9 +293,11 @@ trait HookTrait
      *
      * @param array<int, mixed> $args
      *
+     * @param-out HookBreaker|null $brokenBy
+     *
      * @return array<int, mixed>|mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
-    public function hook(string $spot, array $args = [], HookBreaker &$brokenBy = null)
+    public function hook(string $spot, array $args = [], &$brokenBy = null)
     {
         $brokenBy = null;
 

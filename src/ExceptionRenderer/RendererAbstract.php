@@ -26,7 +26,7 @@ abstract class RendererAbstract
 
     public ?ITranslatorAdapter $adapter;
 
-    public function __construct(\Throwable $exception, ITranslatorAdapter $adapter = null, \Throwable $parentException = null)
+    public function __construct(\Throwable $exception, ?ITranslatorAdapter $adapter = null, ?\Throwable $parentException = null)
     {
         $this->exception = $exception;
         $this->parentException = $parentException;
@@ -226,7 +226,7 @@ abstract class RendererAbstract
     /**
      * @param array<string, mixed> $parameters
      */
-    public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string
+    public function _(string $message, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         return $this->adapter
             ? $this->adapter->_($message, $parameters, $domain, $locale)
