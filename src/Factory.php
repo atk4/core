@@ -123,12 +123,8 @@ class Factory
      * @param array<mixed>|object $seed
      * @param array<mixed>        $defaults
      */
-    protected function _factory($seed, array $defaults = null): object
+    protected function _factory($seed, array $defaults): object
     {
-        if ($defaults === null) { // should be deprecated soon (with [] default value)
-            $defaults = [];
-        }
-
         if (!is_array($seed) && !is_object($seed)) { // @phpstan-ignore-line
             throw new Exception('Use of non-array (' . gettype($seed) . ') seed is not supported');
         }
@@ -197,6 +193,10 @@ class Factory
     {
         if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
+        }
+
+        if ($defaults === null) { // @phpstan-ignore-line should be deprecated soon
+            $defaults = [];
         }
 
         return self::getInstance()->_factory($seed, $defaults);

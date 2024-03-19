@@ -16,5 +16,5 @@ interface ITranslatorAdapter
      *
      * @return string The translated string
      */
-    public function _(string $message, array $parameters = [], string $domain = null, string $locale = null): string;
+    public function _(string $message, array $parameters = [], ?string $domain = null, ?string $locale = null): string;
 }

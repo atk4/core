@@ -148,7 +148,8 @@ class ExceptionTest extends TestCase
                           ...
                         ]
                     ]
-                EOF . "\n", // NL in the string is not parsed by Netbeans, see https://github.com/apache/netbeans/issues/4345
+
+                EOF,
             $m->toString()
         );
     }

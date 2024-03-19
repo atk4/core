@@ -69,7 +69,8 @@ class Console extends RendererAbstract
         $this->output .= <<<'EOF'
 
             \e[1;41m--[ Stack Trace ]\e[0m
-            EOF . "\n";
+
+            EOF;
 
         $this->processStackTraceInternal();
     }
@@ -79,7 +80,8 @@ class Console extends RendererAbstract
     {
         $text = <<<'EOF'
             \e[0m{FILE}\e[0m:\e[0;31m{LINE}\e[0m {OBJECT} {CLASS}{FUNCTION_COLOR}{FUNCTION}{FUNCTION_ARGS}
-            EOF . "\n";
+
+            EOF;
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);

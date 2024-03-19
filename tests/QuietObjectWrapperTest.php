@@ -41,7 +41,8 @@ class QuietObjectWrapperTest extends TestCase
             (
                 [wrappedClass] => stdClass
             )
-            EOF . "\n", print_r($o, true));
+
+            EOF, print_r($o, true));
 
         $o = new QuietObjectWrapper(new class() {
             /**
@@ -59,6 +60,7 @@ class QuietObjectWrapperTest extends TestCase
                 [foo] => 1
                 [Bar] => 2
             )
-            EOF . "\n", print_r($o, true));
+
+            EOF, print_r($o, true));
     }
 }
