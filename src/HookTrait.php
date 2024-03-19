@@ -292,6 +292,7 @@ trait HookTrait
      * Execute all closures assigned to $spot.
      *
      * @param array<int, mixed> $args
+     * @param mixed             $brokenBy
      *
      * @param-out HookBreaker|null $brokenBy
      *

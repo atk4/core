@@ -189,13 +189,13 @@ class Factory
      * @param array<mixed>|object $seed
      * @param array<mixed>        $defaults
      */
-    final public static function factory($seed, ?array $defaults = []): object
+    final public static function factory($seed, $defaults = []): object
     {
         if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
-        if ($defaults === null) { // should be deprecated soon
+        if ($defaults === null) { // @phpstan-ignore-line should be deprecated soon
             $defaults = [];
         }
 
