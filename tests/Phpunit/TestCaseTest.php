@@ -6,6 +6,8 @@ namespace Atk4\Core\Tests\Phpunit;
 
 use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase as PhpunitTestCase;
 use PHPUnit\Framework\TestStatus\TestStatus;
 use PHPUnit\Runner\BaseTestRunner;
@@ -48,9 +50,7 @@ class TestCaseTest extends TestCase
         return $object;
     }
 
-    /**
-     * @dataProvider provideProviderAbCases
-     */
+    #[DataProvider('provideProviderAbCases')]
     public function testObjectsAreReleasedAfterTest(string $v): void
     {
         self::assertSame(0, self::$activeObjectsCounter);
@@ -112,10 +112,8 @@ class TestCaseTest extends TestCase
         yield ['b'];
     }
 
-    /**
-     * @dataProvider provideProviderAbCases
-     * @dataProvider provideProviderCoverageCases
-     */
+    #[DataProvider('provideProviderAbCases')]
+    #[DataProvider('provideProviderCoverageCases')]
     public function testProviderCoverage(string $v): void
     {
         if ($v === 'y') {
@@ -134,9 +132,7 @@ class TestCaseTest extends TestCase
         yield ['y'];
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[DoesNotPerformAssertions]
     public function testCoverageImplForTestMarkedAsIncomplete(): void
     {
         $testStatusOrig = self::isPhpunit9x() ? $this->getStatus() : $this->status();
