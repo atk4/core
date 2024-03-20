@@ -45,21 +45,48 @@ trait DiContainerTrait
      */
     public function setDefaults(array $properties, bool $passively = false)
     {
-        foreach ($properties as $k => $v) {
-            if (is_int($k)) { // @phpstan-ignore-line
-                $k = (string) $k; // @phpstan-ignore-line
+        foreach ($properties as $name => $val) {
+            if (is_int($name)) { // @phpstan-ignore-line
+                $this->setMissingProperty((string) $name, $val); // @phpstan-ignore-line
+
+                continue;
             }
 
-            if (property_exists($this, $k)) {
-                if ($passively && isset($this->{$k}) && $this->{$k} !== null) {
-                    continue;
+            $getterName = 'get' . ucfirst($name);
+            $setterName = 'set' . ucfirst($name);
+
+            $setterExists = method_exists($this, $setterName) && $setterName !== 'setDefaults';
+
+            if ($setterExists) { // when setter is declared, getter is expected to be declared too
+                $origValue = $this->{$getterName}();
+            } elseif (property_exists($this, $name)) {
+                $origValue = $this->{$name};
+            } else { // property may be magical
+                $isMissing = true;
+
+                try {
+                    $origValue = $this->{$name} ?? null;
+                    if ($origValue !== null) {
+                        $isMissing = false;
+                    }
+                } catch (\Exception $e) { // @phpstan-ignore-line
                 }
 
-                if ($v !== null) {
-                    $this->{$k} = $v;
+                if ($isMissing) {
+                    $this->setMissingProperty($name, $val);
                 }
-            } else {
-                $this->setMissingProperty($k, $v);
+            }
+
+            if ($passively && $origValue !== null) {
+                continue;
+            }
+
+            if ($val !== null) {
+                if ($setterExists) {
+                    $this->{$setterName}($val);
+                } else {
+                    $this->{$name} = $val;
+                }
             }
         }
 
