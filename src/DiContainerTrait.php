@@ -54,20 +54,36 @@ trait DiContainerTrait
             $setterName = 'set' . ucfirst($k);
             $setterExists = method_exists($this, $setterName) && $setterName !== 'setDefaults';
 
-            if ($setterExists || property_exists($this, $k)) {
-                if ($passively && ($setterExists ? $this->{$getterName}() : (isset($this->{$k}) && $this->{$k} !== null))) {
-                    continue;
+            if ($setterExists) { // when setter is declared, getter is expected to be declared too
+                $origValue = $this->{$getterName}();
+            } elseif (property_exists($this, $k)) {
+                $origValue = $this->{$k} ?? null;
+            } else { // property may be magical
+                $isMissing = true;
+
+                try {
+                    $origValue = $this->{$k} ?? null;
+                    if ($origValue !== null) {
+                        $isMissing = false;
+                    }
+                } catch (\Exception $e) {
                 }
 
-                if ($v !== null) {
-                    if ($setterExists) {
-                        $this->{$setterName}($v);
-                    } else {
-                        $this->{$k} = $v;
-                    }
+                if ($isMissing) {
+                    $this->setMissingProperty($k, $v);
                 }
-            } else {
-                $this->setMissingProperty($k, $v);
+            }
+
+            if ($passively && $origValue !== null) {
+                continue;
+            }
+
+            if ($v !== null) {
+                if ($setterExists) {
+                    $this->{$setterName}($v);
+                } else {
+                    $this->{$k} = $v;
+                }
             }
         }
 
