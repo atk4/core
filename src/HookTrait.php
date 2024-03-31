@@ -6,11 +6,7 @@ namespace Atk4\Core;
 
 trait HookTrait
 {
-    /**
-     * Contains information about configured hooks (callbacks).
-     *
-     * @var array<string, array<int, array<int, array{\Closure, 1?: array<int, mixed>}>>>
-     */
+    /** @var array<string, array<int, array<int, array{\Closure, 1?: array<int, mixed>}>>> Configured hooks (callbacks). */
     protected array $hooks = [];
 
     /** Next hook index counter. */
