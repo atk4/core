@@ -304,18 +304,48 @@ trait HookTrait
         if (isset($this->hooks[$spot])) {
             krsort($this->hooks[$spot]); // lower priority is called sooner
             $hooksBackup = $this->hooks[$spot];
+            $priorities = array_keys($hooksBackup);
+
             try {
-                while ($hooks = array_pop($this->hooks[$spot])) {
-                    foreach ($hooks as $index => [$hookFx, $hookArgs]) {
+                while (($priority = array_pop($priorities)) !== null) {
+                    $hooks2Backup = $this->hooks[$spot][$priority];
+                    $indexes = array_reverse(array_keys($hooks2Backup));
+
+                    while (($index = array_pop($indexes)) !== null) {
+                        [$hookFx, $hookArgs] = $this->hooks[$spot][$priority][$index];
+
                         $return[$index] = $hookFx($this, ...$args, ...$hookArgs);
+
+                        if (!isset($this->hooks[$spot][$priority])) {
+                            break;
+                        } elseif ($hooks2Backup !== $this->hooks[$spot][$priority]) {
+                            $hooks2Backup = $this->hooks[$spot][$priority];
+                            $indexes = array_reverse(array_keys($hooks2Backup));
+                            foreach ($indexes as $k => $i) {
+                                if ($i <= $index) {
+                                    unset($indexes[$k]);
+                                }
+                            }
+                        }
+                    }
+
+                    if (!isset($this->hooks[$spot])) { // @phpstan-ignore-line
+                        break;
+                    } elseif ($hooksBackup !== $this->hooks[$spot]) {
+                        krsort($this->hooks[$spot]);
+                        $hooksBackup = $this->hooks[$spot];
+                        $priorities = array_keys($hooksBackup);
+                        foreach ($priorities as $k => $p) {
+                            if ($p <= $priority) {
+                                unset($priorities[$k]);
+                            }
+                        }
                     }
                 }
             } catch (HookBreaker $e) {
                 $brokenBy = $e;
 
                 return $e->getReturnValue();
-            } finally {
-                $this->hooks[$spot] = $hooksBackup;
             }
         }
 

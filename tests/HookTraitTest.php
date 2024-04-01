@@ -63,7 +63,8 @@ class HookTraitTest extends TestCase
     public function testOrder(): void
     {
         $m = new HookMock();
-        $ind = $m->onHook('spot', static function () {
+
+        $m->onHook('spot', static function () {
             return 3;
         }, [], -1);
         $m->onHook('spot', static function () {
@@ -100,16 +101,16 @@ class HookTraitTest extends TestCase
         $ret = $m->hook('spot');
 
         self::assertSame([
-            $ind + 2 => 1,
-            $ind + 1 => 2,
-            $ind => 3,
-            $ind + 3 => 4,
-            $ind + 4 => 5,
-            $ind + 6 => 6,
-            $ind + 7 => 7,
-            $ind + 8 => 8,
-            $ind + 9 => 9,
-            $ind + 5 => 10,
+            2 => 1,
+            1 => 2,
+            0 => 3,
+            3 => 4,
+            4 => 5,
+            6 => 6,
+            7 => 7,
+            8 => 8,
+            9 => 9,
+            5 => 10,
         ], $ret);
     }
 
@@ -132,6 +133,49 @@ class HookTraitTest extends TestCase
 
         $res2 = $obj->hook('test', [3, 3]);
         self::assertSame([9, 6], $res2);
+    }
+
+    public function testUpdateWhenActive(): void
+    {
+        $m = new HookMock();
+
+        $addHooksFx = static function (int $priority, string $res) use ($m) {
+            $m->onHook('spot', static function () use ($m, $priority, $res) {
+                $m->onHook('spot', static function () use ($res) {
+                    return $res . 'a';
+                }, [], $priority);
+                $m->onHook('spot', static function () use ($m, $priority, $res) {
+                    $m->removeHook('spot', $priority);
+
+                    return $res . 'b';
+                }, [], $priority);
+
+                return $res;
+            }, [], $priority);
+        };
+
+        $addHooksFx(-2, '1');
+        $addHooksFx(-1, '2');
+        $addHooksFx(-1, '3');
+        $addHooksFx(0, '4');
+        $addHooksFx(1, '5');
+        $addHooksFx(1, '6');
+
+        $ret = $m->hook('spot');
+
+        self::assertSame([
+            0 => '1',
+            7 => '1b',
+            2 => '3',
+            9 => '3b',
+            3 => '4',
+            10 => '4a',
+            11 => '4b',
+            4 => '5',
+            5 => '6',
+            12 => '5a',
+            13 => '5b',
+        ], $ret);
     }
 
     public function testArgs(): void
