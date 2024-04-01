@@ -323,9 +323,8 @@ class HookTraitTest extends TestCase
         $m->hook('inc', ['y']);
     }
 
-    public function testCloningSafety(): void
+    public function testCloningSafetyUnboundClosure(): void
     {
-        // unbound callback
         $m = new HookMock();
         $m->onHook('inc', static function () {});
         $m->onHookShort('inc', static function () {});
@@ -334,8 +333,10 @@ class HookTraitTest extends TestCase
         foreach ($m->hook('inc') as $v) {
             self::assertNull($v);
         }
+    }
 
-        // callback bound to the same object
+    public function testCloningSafetyBoundClosureSameObject(): void
+    {
         $m = new HookMock();
         $m->onHook('inc', $m->makeIncrementResultFx());
         $m->onHookShort('inc', $m->makeIncrementResultFx());
@@ -353,8 +354,10 @@ class HookTraitTest extends TestCase
             self::assertSame($m, $v);
         }
         self::assertSame(6, $m->result);
+    }
 
-        // callback bound to a different object
+    public function testCloningSafetyBoundClosureDifferentObjectException(): void
+    {
         $m = new HookMock();
         $m->onHook('inc', (clone $m)->makeIncrementResultFx());
         $m = clone $m;
