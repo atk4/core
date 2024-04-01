@@ -162,13 +162,13 @@ class HookTraitTest extends TestCase
         $addHooksFx(1, '6');
 
         $priority = 10;
-        $ind = $m->onHook('spot', static fn () => 'x', [], $priority);
-        $ind2 = $m->onHook('spot', static function () use ($m, $priority, $ind, &$ind2, &$ind3) {
+        $indexPrevious = $m->onHook('spot', static fn () => 'x', [], $priority);
+        $indexCurrent = $m->onHook('spot', static function () use ($m, $priority, $indexPrevious, &$indexCurrent, &$indexNext) {
             $m->onHook('spot', static fn () => 'ya', [], $priority);
 
-            $m->removeHook('spot', $ind, true);
-            $m->removeHook('spot', $ind2, true);
-            $m->removeHook('spot', $ind3, true); // @phpstan-ignore-line
+            $m->removeHook('spot', $indexPrevious, true);
+            $m->removeHook('spot', $indexCurrent, true);
+            $m->removeHook('spot', $indexNext, true); // @phpstan-ignore-line
 
             $m->onHook('spot', static function () use ($m, $priority) {
                 $m->removeHook('spot', $priority);
@@ -178,7 +178,7 @@ class HookTraitTest extends TestCase
 
             return 'y';
         }, [], $priority);
-        $ind3 = $m->onHook('spot', static fn () => 'z', [], $priority);
+        $indexNext = $m->onHook('spot', static fn () => 'z', [], $priority);
 
         $ret = $m->hook('spot');
 
@@ -505,7 +505,7 @@ class HookTraitTest extends TestCase
     public function testHasCallbacks(): void
     {
         $m = new HookMock();
-        $ind = $m->onHook('foo', static function () {});
+        $index = $m->onHook('foo', static function () {});
 
         self::assertTrue($m->hookHasCallbacks('foo'));
         self::assertFalse($m->hookHasCallbacks('bar'));
@@ -514,32 +514,32 @@ class HookTraitTest extends TestCase
         self::assertFalse($m->hookHasCallbacks('foo', 10));
         self::assertFalse($m->hookHasCallbacks('bar', 5));
 
-        self::assertTrue($m->hookHasCallbacks('foo', $ind, true));
-        self::assertFalse($m->hookHasCallbacks('foo', $ind + 1, true));
-        self::assertFalse($m->hookHasCallbacks('foo', $ind - 1, true));
-        self::assertFalse($m->hookHasCallbacks('bar', $ind, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $index, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $index + 1, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $index - 1, true));
+        self::assertFalse($m->hookHasCallbacks('bar', $index, true));
     }
 
     public function testRemove(): void
     {
         $m = new HookMock();
-        $indA = $m->onHook('foo', static function () {}, [], 2);
-        $indB = $m->onHook('foo', static function () {});
-        $indC = $m->onHook('foo', static function () {});
+        $indexA = $m->onHook('foo', static function () {}, [], 2);
+        $indexB = $m->onHook('foo', static function () {});
+        $indexC = $m->onHook('foo', static function () {});
 
-        self::assertTrue($m->hookHasCallbacks('foo', $indA, true));
-        self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
-        self::assertTrue($m->hookHasCallbacks('foo', $indC, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indexA, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indexB, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indexC, true));
 
-        $m->removeHook('foo', $indC, true);
-        self::assertTrue($m->hookHasCallbacks('foo', $indA, true));
-        self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
-        self::assertFalse($m->hookHasCallbacks('foo', $indC, true));
+        $m->removeHook('foo', $indexC, true);
+        self::assertTrue($m->hookHasCallbacks('foo', $indexA, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indexB, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $indexC, true));
 
         $m->removeHook('foo', 2);
-        self::assertFalse($m->hookHasCallbacks('foo', $indA, true));
-        self::assertTrue($m->hookHasCallbacks('foo', $indB, true));
-        self::assertFalse($m->hookHasCallbacks('foo', $indC, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $indexA, true));
+        self::assertTrue($m->hookHasCallbacks('foo', $indexB, true));
+        self::assertFalse($m->hookHasCallbacks('foo', $indexC, true));
 
         self::assertTrue($m->hookHasCallbacks('foo'));
         $m->removeHook('foo');
