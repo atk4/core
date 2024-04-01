@@ -163,17 +163,22 @@ class HookTraitTest extends TestCase
 
         $priority = 10;
         $ind = $m->onHook('spot', static fn () => 'x', [], $priority);
-        $m->onHook('spot', static function () use ($m, $priority, $ind, &$ind2) {
+        $ind2 = $m->onHook('spot', static function () use ($m, $priority, $ind, &$ind2, &$ind3) {
             $m->onHook('spot', static fn () => 'ya', [], $priority);
 
             $m->removeHook('spot', $ind, true);
-            $m->removeHook('spot', $ind2, true); // @phpstan-ignore-line
+            $m->removeHook('spot', $ind2, true);
+            $m->removeHook('spot', $ind3, true); // @phpstan-ignore-line
 
-            $m->onHook('spot', static fn () => 'yb', [], $priority);
+            $m->onHook('spot', static function () use ($m, $priority) {
+                $m->removeHook('spot', $priority);
+
+                return 'yb';
+            }, [], $priority);
 
             return 'y';
         }, [], $priority);
-        $ind2 = $m->onHook('spot', static fn () => 'z', [], $priority);
+        $ind3 = $m->onHook('spot', static fn () => 'z', [], $priority);
 
         $ret = $m->hook('spot');
 
