@@ -161,20 +161,38 @@ class HookTraitTest extends TestCase
         $addHooksFx(1, '5');
         $addHooksFx(1, '6');
 
+        $priority = 10;
+        $ind = $m->onHook('spot', static fn () => 'x', [], $priority);
+        $m->onHook('spot', static function () use ($m, $priority, $ind, &$ind2) {
+            $m->onHook('spot', static fn () => 'ya', [], $priority);
+
+            $m->removeHook('spot', $ind, true);
+            $m->removeHook('spot', $ind2, true); // @phpstan-ignore-line
+
+            $m->onHook('spot', static fn () => 'yb', [], $priority);
+
+            return 'y';
+        }, [], $priority);
+        $ind2 = $m->onHook('spot', static fn () => 'z', [], $priority);
+
         $ret = $m->hook('spot');
 
         self::assertSame([
             0 => '1',
-            7 => '1b',
+            10 => '1b',
             2 => '3',
-            9 => '3b',
+            12 => '3b',
             3 => '4',
-            10 => '4a',
-            11 => '4b',
+            13 => '4a',
+            14 => '4b',
             4 => '5',
             5 => '6',
-            12 => '5a',
-            13 => '5b',
+            15 => '5a',
+            16 => '5b',
+            6 => 'x',
+            7 => 'y',
+            19 => 'ya',
+            20 => 'yb',
         ], $ret);
     }
 
