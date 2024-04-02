@@ -14,7 +14,7 @@ use PHPUnit\Runner\CodeCoverage;
 use PHPUnit\Util\Test as TestUtil;
 use SebastianBergmann\CodeCoverage\CodeCoverage as CodeCoverageRaw;
 
-if (\PHP_VERSION_ID >= 8_01_00) {
+if (\PHP_VERSION_ID >= 80100) {
     trait Phpunit9xTestCaseTrait
     {
         #[\Override]
@@ -104,11 +104,11 @@ abstract class TestCase extends BaseTestCase
             \Closure::bind(function () use ($class) {
                 foreach (array_keys(array_intersect_key(array_diff_key(get_object_vars($this), get_class_vars(BaseTestCase::class)), get_class_vars($class))) as $k) {
                     $reflectionProperty = new \ReflectionProperty($class, $k);
-                    if (\PHP_MAJOR_VERSION < 8
+                    if (\PHP_MAJOR_VERSION === 7
                         ? array_key_exists($k, $reflectionProperty->getDeclaringClass()->getDefaultProperties())
                         : (null ?? $reflectionProperty->hasDefaultValue()) // @phpstan-ignore-line for PHP 7.x
                     ) {
-                        $this->{$k} = \PHP_MAJOR_VERSION < 8
+                        $this->{$k} = \PHP_MAJOR_VERSION === 7
                             ? $reflectionProperty->getDeclaringClass()->getDefaultProperties()[$k]
                             : (null ?? $reflectionProperty->getDefaultValue()); // @phpstan-ignore-line for PHP 7.x
                     } else {

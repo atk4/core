@@ -255,7 +255,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage(\PHP_MAJOR_VERSION < 8 ? 'Class \'hello\' not found' : 'Class "hello" not found');
+        $this->expectExceptionMessage(\PHP_MAJOR_VERSION === 7 ? 'Class \'hello\' not found' : 'Class "hello" not found');
         $m->add(['hello']);
     }
 
