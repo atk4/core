@@ -58,11 +58,18 @@ final class TraitUtil
     // StaticAddToTrait - not used
     // TranslatableTrait - not used
 
+    /**
+     * @phpstan-assert-if-true int $obj->maxNameLength
+     * @phpstan-assert-if-true array<string, string> $obj->uniqueNameHashes
+     */
     public static function hasAppScopeTrait(object $obj): bool
     {
         return self::hasTrait($obj, AppScopeTrait::class);
     }
 
+    /**
+     * @phpstan-assert-if-true array<string, object> $obj->elements
+     */
     public static function hasContainerTrait(object $obj): bool
     {
         return self::hasTrait($obj, ContainerTrait::class);
@@ -78,6 +85,8 @@ final class TraitUtil
 
     /**
      * Used in DynamicMethodTrait only.
+     *
+     * @phpstan-assert-if-true array<string, array<int, array<int, array{\Closure, 1?: array<int, mixed>}>>> $obj->hooks
      */
     public static function hasHookTrait(object $obj): bool
     {
@@ -89,11 +98,17 @@ final class TraitUtil
         return self::hasTrait($obj, InitializerTrait::class);
     }
 
+    /**
+     * @phpstan-assert-if-true string $obj->name
+     */
     public static function hasNameTrait(object $obj): bool
     {
         return self::hasTrait($obj, NameTrait::class);
     }
 
+    /**
+     * @phpstan-assert-if-true string $obj->shortName
+     */
     public static function hasTrackableTrait(object $obj): bool
     {
         return self::hasTrait($obj, TrackableTrait::class);
