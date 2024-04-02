@@ -55,14 +55,15 @@ abstract class TestCase extends BaseTestCase
             /** @var array<string, true> */
             public static $processedMethods = [];
         });
-        $classRefl = new \ReflectionClass(static::class);
-        foreach ($classRefl->getMethods() as $methodRefl) {
-            $methodDoc = $methodRefl->getDocComment();
-            // https://github.com/sebastianbergmann/phpunit/blob/9.6.16/src/Util/Test.php#L334
-            // https://github.com/sebastianbergmann/phpunit/blob/9.6.16/src/Framework/TestCase.php#L2543
-            if ($methodDoc !== false && preg_match_all('~@dataProvider[ \t]+([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $methodDoc, $matchesAll, \PREG_SET_ORDER)) {
-                foreach ($matchesAll as $matches) {
-                    $providerClassRefl = $matches[1] === '' ? $classRefl : new \ReflectionClass($matches[1]);
+
+        $annotations = TestUtil::parseTestMethodAnnotations(
+            static::class,
+            self::isPhpunit9x() ? $this->getName(false) : $this->name(),
+        );
+
+        foreach ($annotations['method']['dataProvider'] ?? [] as $dataProviderAnnotation) {
+            if (preg_match('~^([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $dataProviderAnnotation, $matches)) {
+                    $providerClassRefl = new \ReflectionClass($matches[1] === '' ? static::class : $matches[1]);
                     $providerMethodRefl = $providerClassRefl->getMethod($matches[2]);
                     $key = $providerClassRefl->getName() . '::' . $providerMethodRefl->getName();
                     if (!isset($staticClass::$processedMethods[$key])) {
@@ -74,7 +75,6 @@ abstract class TestCase extends BaseTestCase
                             iterator_to_array($provider);
                         }
                     }
-                }
             }
         }
 
