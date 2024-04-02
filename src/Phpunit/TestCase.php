@@ -8,6 +8,7 @@ use Atk4\Core\Exception as CoreException;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHPUnit\Metadata\Api\CodeCoverage as CodeCoverageMetadata;
+use PHPUnit\Metadata\Parser\Registry as MetadataRegistry;
 use PHPUnit\Runner\BaseTestRunner;
 use PHPUnit\Runner\CodeCoverage;
 use PHPUnit\Util\Test as TestUtil;
@@ -56,25 +57,29 @@ abstract class TestCase extends BaseTestCase
             public static $processedMethods = [];
         });
 
-        $annotations = TestUtil::parseTestMethodAnnotations(
-            static::class,
-            self::isPhpunit9x() ? $this->getName(false) : $this->name(),
-        );
+        $metadataDataProviders = [];
+        if (self::isPhpunit9x()) {
+            $annotations = TestUtil::parseTestMethodAnnotations(static::class, $this->getName(false));
+            foreach ($annotations['method']['dataProvider'] ?? [] as $dataProviderAnnotation) {
+                preg_match('~^([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $dataProviderAnnotation, $matches);
+                $metadataDataProviders[] = [$matches[1] === '' ? static::class : $matches[1], $matches[2]];
+            }
+        } else {
+            $metadataDataProviders = MetadataRegistry::parser()->forClassAndMethod(static::class, $this->name())->isDataProvider();
+        }
 
-        foreach ($annotations['method']['dataProvider'] ?? [] as $dataProviderAnnotation) {
-            if (preg_match('~^([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $dataProviderAnnotation, $matches)) {
-                    $providerClassRefl = new \ReflectionClass($matches[1] === '' ? static::class : $matches[1]);
-                    $providerMethodRefl = $providerClassRefl->getMethod($matches[2]);
-                    $key = $providerClassRefl->getName() . '::' . $providerMethodRefl->getName();
-                    if (!isset($staticClass::$processedMethods[$key])) {
-                        $staticClass::$processedMethods[$key] = true;
-                        $providerInstance = $providerClassRefl->newInstanceWithoutConstructor();
-                        $provider = $providerMethodRefl->invoke($providerInstance);
-                        if (!is_array($provider)) {
-                            // yield all provider data
-                            iterator_to_array($provider);
-                        }
-                    }
+        foreach ($metadataDataProviders as $metadataDataProvider) {
+            $providerClassRefl = new \ReflectionClass(self::isPhpunit9x() ? $metadataDataProvider[0] : $metadataDataProvider->className());
+            $providerMethodRefl = $providerClassRefl->getMethod(self::isPhpunit9x() ? $metadataDataProvider[1] : $metadataDataProvider->methodName());
+            $key = $providerClassRefl->getName() . '::' . $providerMethodRefl->getName();
+            if (!isset($staticClass::$processedMethods[$key])) {
+                $staticClass::$processedMethods[$key] = true;
+                $providerInstance = $providerClassRefl->newInstanceWithoutConstructor();
+                $provider = $providerMethodRefl->invoke($providerInstance);
+                if (!is_array($provider)) {
+                    // yield all provider data
+                    iterator_to_array($provider);
+                }
             }
         }
 
