@@ -61,7 +61,7 @@ abstract class TestCase extends BaseTestCase
         if (self::isPhpunit9x()) {
             $annotations = TestUtil::parseTestMethodAnnotations(static::class, $this->getName(false));
             foreach ($annotations['method']['dataProvider'] ?? [] as $dataProviderAnnotation) {
-                preg_match('~^([\w\x7f-\xff]+::)?([\w\x7f-\xff]+)~', $dataProviderAnnotation, $matches);
+                preg_match('~^(?:([\\\\\w\x7f-\xff]+)::)?([\w\x7f-\xff]+)~', $dataProviderAnnotation, $matches);
                 $metadataDataProviders[] = [$matches[1] === '' ? static::class : $matches[1], $matches[2]];
             }
         } else {
