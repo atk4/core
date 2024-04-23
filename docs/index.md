@@ -69,7 +69,7 @@ by combining it with the parent.
 
 CollectionTrait only supports named object - you may not omit the name, however
 a more older implementation of {php:trait}`ContainerTrait` is used primarily
-for tracking Render Tree in ATK UI where name is optional and a unique name
+for tracking render tree in ATK UI where name is optional and a unique name
 is guaranteed.
 
 When $container is using {php:trait}`ContainerTrait`, this would be a typical code:
