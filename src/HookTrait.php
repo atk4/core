@@ -180,8 +180,8 @@ trait HookTrait
             if ($getFxThisFx === null) {
                 $fxThis = $target;
             } else {
-                $fxThis = $getFxThisFx($target); // @phpstan-ignore-line
-                if (!is_object($fxThis)) { // @phpstan-ignore-line
+                $fxThis = $getFxThisFx($target); // @phpstan-ignore argument.type
+                if (!is_object($fxThis)) { // @phpstan-ignore function.alreadyNarrowedType
                     throw new \TypeError('New $this must be an object');
                 }
             }
@@ -329,7 +329,7 @@ trait HookTrait
                         }
                     }
 
-                    if (!isset($this->hooks[$spot])) { // @phpstan-ignore-line
+                    if (!isset($this->hooks[$spot])) { // @phpstan-ignore isset.offset
                         break;
                     } elseif ($hooksBackup !== $this->hooks[$spot]) {
                         krsort($this->hooks[$spot]);

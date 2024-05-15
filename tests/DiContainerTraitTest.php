@@ -36,7 +36,7 @@ class DiContainerTraitTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Property for specified object is not defined');
-        $m->setDefaults([5 => 'qwerty']); // @phpstan-ignore-line
+        $m->setDefaults([5 => 'qwerty']); // @phpstan-ignore argument.type
     }
 
     public function testProperties(): void

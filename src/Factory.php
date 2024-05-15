@@ -125,7 +125,7 @@ class Factory
      */
     protected function _factory($seed, array $defaults): object
     {
-        if (!is_array($seed) && !is_object($seed)) { // @phpstan-ignore-line
+        if (!is_array($seed) && !is_object($seed)) { // @phpstan-ignore function.alreadyNarrowedType, booleanAnd.alwaysFalse
             throw new Exception('Use of non-array (' . gettype($seed) . ') seed is not supported');
         }
 
@@ -195,7 +195,7 @@ class Factory
             throw new \Error('Too many method arguments');
         }
 
-        if ($defaults === null) { // @phpstan-ignore-line should be deprecated soon
+        if ($defaults === null) { // @phpstan-ignore identical.alwaysFalse (should be deprecated soon)
             $defaults = [];
         }
 

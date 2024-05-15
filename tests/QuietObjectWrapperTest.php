@@ -22,7 +22,7 @@ class QuietObjectWrapperTest extends TestCase
         $o = new QuietObjectWrapper(new \stdClass());
 
         $this->expectException(\Error::class);
-        clone $o;
+        clone $o; // @phpstan-ignore expr.resultUnused
     }
 
     public function testNotSerializeable(): void

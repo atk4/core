@@ -60,7 +60,7 @@ trait CollectionTrait
             $item->shortName = $name;
             $item->setOwner($this);
             if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($item)) {
-                $item->name = $this->_shortenMl($this->name ?? '', $collection, $item->shortName, $item->name ?? null); // @phpstan-ignore-line
+                $item->name = $this->_shortenMl($this->name ?? '', $collection, $item->shortName, $item->name ?? null); // @phpstan-ignore property.notFound
             }
         }
 
@@ -148,7 +148,7 @@ trait CollectionTrait
         $ownerName .= '-' . $collectionName;
 
         if (TraitUtil::hasContainerTrait($this)) {
-            return $this->_shorten($ownerName, $itemShortName, $origItemName); // @phpstan-ignore-line
+            return $this->_shorten($ownerName, $itemShortName, $origItemName); // @phpstan-ignore method.notFound
         }
 
         // ugly hack to deduplicate code

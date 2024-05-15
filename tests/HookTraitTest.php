@@ -168,7 +168,7 @@ class HookTraitTest extends TestCase
 
             $m->removeHook('spot', $indexPrevious, true);
             $m->removeHook('spot', $indexCurrent, true);
-            $m->removeHook('spot', $indexNext, true); // @phpstan-ignore-line
+            $m->removeHook('spot', $indexNext, true); // @phpstan-ignore argument.type
 
             $m->onHook('spot', static function () use ($m, $priority) {
                 $m->removeHook('spot', $priority);
@@ -457,7 +457,7 @@ class HookTraitTest extends TestCase
     {
         $m = new HookMock();
 
-        $m->onHookDynamic('inc', static function (HookMock $m) { // @phpstan-ignore-line
+        $m->onHookDynamic('inc', static function (HookMock $m) { // @phpstan-ignore argument.type
             return null;
         }, $m->makeIncrementResultFx());
 
@@ -495,7 +495,7 @@ class HookTraitTest extends TestCase
         $m->onHookDynamic('inc', static function () use ($m) {
             return clone $m;
         }, function ($ignoreObject, $ignore1st, int &$value) {
-            $this->makeIncrementResultFx(); // @phpstan-ignore-line prevent PHP CS Fixer to make this anonymous function static
+            $this->makeIncrementResultFx(); // @phpstan-ignore method.notFound (prevent PHP CS Fixer to make this anonymous function static)
 
             ++$value;
         });

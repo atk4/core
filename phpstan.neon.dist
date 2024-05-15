@@ -19,41 +19,50 @@ parameters:
 
         -
             path: 'tests/DynamicMethodTraitTest.php'
+            identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock)::\w+\(\)\.$~'
             count: 10
 
         # remove once PHPUnit 9.x support is removed
         -
             path: 'src/Phpunit/TestCase.php'
+            identifier: class.notFound
             message: '~^Access to constant (STATUS_INCOMPLETE|STATUS_SKIPPED) on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
             count: 2
         -
             path: 'src/Phpunit/TestCase.php'
+            identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Core\\Phpunit\\TestCase::(getName|getStatus|getTestResultObject)\(\)\.$~'
             count: 5
         -
             path: 'src/Phpunit/TestCase.php'
+            identifier: staticMethod.notFound
             message: '~^Call to an undefined static method PHPUnit\\Util\\Test::(getLinesToBeCovered|getLinesToBeUsed|parseTestMethodAnnotations)\(\)\.$~'
             count: 3
         -
             path: 'src/Phpunit/TestCase.php'
+            identifier: method.nonObject
             message: '~^Cannot call method (className|methodName)\(\) on array<int, string>\|PHPUnit\\Metadata\\Metadata\.$~'
             count: 2
         -
             path: 'tests/HookTraitTest.php'
+            identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\HookTraitTest::getName\(\)\.$~'
             count: 2
         -
             path: 'tests/Phpunit/TestCaseTest.php'
+            identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\Phpunit\\TestCaseTest::getStatus\(\)\.$~'
             count: 1
         -
             path: 'tests/Phpunit/TestCaseTest.php'
+            identifier: class.notFound
             message: '~^Access to constant STATUS_INCOMPLETE on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
             count: 1
 
         # https://github.com/phpstan/phpstan/issues/10150
         -
             path: 'src/DebugTrait.php'
+            identifier: method.missingOverride
             message: '~^Method Atk4\\Core\\Tests\\DebugPsrMock::\w+\(\) overrides method Psr\\Log\\LoggerInterface::\w+\(\) but is missing the #\[\\Override\] attribute\.$~'
             count: 9

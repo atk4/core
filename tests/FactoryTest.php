@@ -211,7 +211,7 @@ class FactoryTest extends TestCase
 
     public function testInjection(): void
     {
-        $s1 = Factory::factory(new FactoryTestDiMock(), null); // @phpstan-ignore-line
+        $s1 = Factory::factory(new FactoryTestDiMock(), null); // @phpstan-ignore argument.type
         self::assertNotSame('bar', $s1->foo);
 
         $s1 = Factory::factory(new FactoryTestDiMock(), ['foo' => 'bar']);
@@ -329,7 +329,7 @@ class FactoryTest extends TestCase
     public function testGiveClassFirst(): void
     {
         $this->expectException(\TypeError::class);
-        Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore-line
+        Factory::factory(['foo' => 'bar'], new FactoryTestDiMock()); // @phpstan-ignore argument.type
     }
 
     public function testStringDefault(): void
@@ -382,7 +382,7 @@ class FactoryTest extends TestCase
 
         // from string seed
         $this->expectException(Exception::class);
-        Factory::factory(FactoryFactoryMock::class); // @phpstan-ignore-line
+        Factory::factory(FactoryFactoryMock::class); // @phpstan-ignore argument.type
     }
 
     /**

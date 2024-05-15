@@ -86,8 +86,8 @@ class CollectionTraitTest extends TestCase
 
         self::assertNotSame($m->getField('a'), $mCloned->getField('a'));
         self::assertNotSame($m->getField('b'), $mCloned->getField('b'));
-        self::assertSame('b', $m->getField('b')->shortName); // @phpstan-ignore-line
-        self::assertSame('b', $mCloned->getField('b')->shortName); // @phpstan-ignore-line
+        self::assertSame('b', $m->getField('b')->shortName); // @phpstan-ignore property.notFound
+        self::assertSame('b', $mCloned->getField('b')->shortName); // @phpstan-ignore property.notFound
     }
 
     /**

@@ -83,7 +83,7 @@ trait TrackableTrait
 
             // GC remove reference to app is AppScope in use
             if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp()) {
-                $this->_app = null; // @phpstan-ignore-line
+                $this->_app = null; // @phpstan-ignore property.notFound
             }
 
             // GC remove reference to owner

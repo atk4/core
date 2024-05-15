@@ -62,7 +62,7 @@ class DynamicMethodTraitTest extends TestCase
         $this->expectExceptionMessage('Call to protected method ' . DynamicMethodMock::class
             . '::protectedMethod() from global scope');
         \Closure::bind(static function () use ($m) {
-            $m->protectedMethod(); // @phpstan-ignore-line
+            $m->protectedMethod(); // @phpstan-ignore method.protected
         }, null, null)();
     }
 

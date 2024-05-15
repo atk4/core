@@ -46,8 +46,8 @@ trait DiContainerTrait
     public function setDefaults(array $properties, bool $passively = false)
     {
         foreach ($properties as $k => $v) {
-            if (is_int($k)) { // @phpstan-ignore-line
-                $k = (string) $k; // @phpstan-ignore-line
+            if (is_int($k)) { // @phpstan-ignore function.impossibleType
+                $k = (string) $k; // @phpstan-ignore cast.useless
             }
 
             if (property_exists($this, $k)) {
@@ -102,7 +102,7 @@ trait DiContainerTrait
     private static function _fromSeedPrecheck($seed, bool $unsafe): void
     {
         if (!is_object($seed)) {
-            if (!is_array($seed)) { // @phpstan-ignore-line
+            if (!is_array($seed)) { // @phpstan-ignore function.alreadyNarrowedType
                 throw (new Exception('Seed must be an array or an object'))
                     ->addMoreInfo('seed', $seed);
             }
@@ -153,6 +153,6 @@ trait DiContainerTrait
         self::_fromSeedPrecheck($seed, true);
         $object = Factory::factory($seed, $defaults);
 
-        return $object; // @phpstan-ignore-line
+        return $object; // @phpstan-ignore return.type
     }
 }

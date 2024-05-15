@@ -67,7 +67,7 @@ class StaticAddToTest extends TestCase
 
         // not the same or extended class
         $this->expectException(\TypeError::class);
-        StdSat::addTo($m, $tr); // @phpstan-ignore-line
+        StdSat::addTo($m, $tr); // @phpstan-ignore argument.type
     }
 
     public function testAssertInstanceOf(): void

@@ -240,14 +240,14 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         if (\PHP_MAJOR_VERSION === 7) {
-            self::assertNotNull('Expecting E_WARNING is deprecated in PHPUnit 9'); // @phpstan-ignore-line
+            self::assertNotNull('Expecting E_WARNING is deprecated in PHPUnit 9'); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
             return;
         }
 
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage('array_diff_key(): Argument #1 ($array) must be of type array, int given');
-        $m->add(new TrackableMock(), 123); // @phpstan-ignore-line
+        $m->add(new TrackableMock(), 123); // @phpstan-ignore argument.type
     }
 
     public function testException3(): void

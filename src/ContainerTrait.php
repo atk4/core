@@ -118,7 +118,7 @@ trait ContainerTrait
         $element->setOwner($this);
         $element->shortName = $name;
         if (TraitUtil::hasTrackableTrait($this) && TraitUtil::hasNameTrait($this) && TraitUtil::hasNameTrait($element)) {
-            $element->name = $this->_shorten($this->name ?? '', $element->shortName, $element->name ?? null); // @phpstan-ignore-line
+            $element->name = $this->_shorten($this->name ?? '', $element->shortName, $element->name ?? null); // @phpstan-ignore property.notFound
         }
 
         $this->elements[$element->shortName] = $element;
