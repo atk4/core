@@ -90,7 +90,7 @@ trait HookTrait
                         // and on a bad side - we should not throw when an object with a hook is cloned,
                         // but instead we should throw once the closure this object is cloned
                         // example of legit use: https://github.com/atk4/audit/blob/eb9810e085/src/Controller.php#L85
-                        if (get_class($fxThis) === static::class || preg_match('~^Atk4\\\\(?:Core|Data)~', get_class($fxThis))) {
+                        if (get_class($fxThis) === static::class || preg_match('~^Atk4\\\(?:Core|Data)~', get_class($fxThis))) {
                             throw (new Exception('Object cannot be cloned with hook bound to a different object than this'))
                                 ->addMoreInfo('closure_file', $fxRefl->getFileName())
                                 ->addMoreInfo('closure_start_line', $fxRefl->getStartLine());

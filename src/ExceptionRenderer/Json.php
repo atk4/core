@@ -85,7 +85,7 @@ class Json extends RendererAbstract
             $call = $this->parseStackTraceFrame($call);
 
             $escapeFrame = false;
-            if ($inAtk && $call['file'] !== '' && !preg_match('~atk4[/\\\\][^/\\\\]+[/\\\\]src[/\\\\]~', $call['file'])) {
+            if ($inAtk && $call['file'] !== '' && !preg_match('~atk4[/\\\][^/\\\]+[/\\\]src[/\\\]~', $call['file'])) {
                 $escapeFrame = true;
                 $inAtk = false;
             }

@@ -69,7 +69,7 @@ trait TrackableTrait
         // can be anything, but better to build meaningful name
         $name = get_debug_type($this);
 
-        return trim(preg_replace('~^atk4\\\\[^\\\\]+\\\\|[^0-9a-z\x7f-\xfe]+~s', '_', mb_strtolower($name)), '_');
+        return trim(preg_replace('~^atk4\\\[^\\\]+\\\|[^0-9a-z\x7f-\xfe]+~s', '_', mb_strtolower($name)), '_');
     }
 
     /**

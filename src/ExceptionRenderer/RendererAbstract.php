@@ -128,10 +128,10 @@ abstract class RendererAbstract
             return get_debug_type($val);
         } elseif (is_scalar($val) || $val === null) {
             $out = json_encode($val, \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
-            $out = preg_replace('~\\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
-            $out = preg_replace('~\\\\{2}~s', '$1', $out); // unescape backslashes
+            $out = preg_replace('~\\\"~', '"', preg_replace('~^"|"$~s', '\'', $out)); // use single quotes
+            $out = preg_replace('~\\\{2}~s', '$1', $out); // unescape backslashes
             if ($allowNl) {
-                $out = preg_replace('~(\\\\r)?\\\\n|\\\\r~s', "\n", $out); // unescape new lines
+                $out = preg_replace('~(\\\r)?\\\n|\\\r~s', "\n", $out); // unescape new lines
             }
 
             return $out;
@@ -268,7 +268,7 @@ abstract class RendererAbstract
 
     protected function tryRelativizePathsInString(string $str): string
     {
-        $str = preg_replace_callback('~(?<!\w)(?:[/\\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
+        $str = preg_replace_callback('~(?<!\w)(?:[/\\\]|[a-z]:)\w?+[^:"\',;]*?\.php(?!\w)~i', function ($matches) {
             try {
                 return $this->makeRelativePath($matches[0]);
             } catch (Exception $e) {
