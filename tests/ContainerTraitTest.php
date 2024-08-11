@@ -196,7 +196,7 @@ class ContainerTraitTest extends TestCase
     {
         // passing name with array key 'name'
         $m = new ContainerMock();
-        $m2 = $m->add(new class() extends TrackableMock {
+        $m2 = $m->add(new class extends TrackableMock {
             use DiContainerTrait;
             use NameTrait;
         }, ['name' => 'foo']);
@@ -283,7 +283,7 @@ class ContainerTraitTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Object was not initialized');
-        $m->add(new class() extends TrackableMock {
+        $m->add(new class extends TrackableMock {
             use InitializerTrait;
 
             protected function init(): void {}
@@ -296,7 +296,7 @@ class ContainerTraitTest extends TestCase
 
         $e = null;
         try {
-            $m->add(new class() extends TrackableMock {
+            $m->add(new class extends TrackableMock {
                 use InitializerTrait;
 
                 protected function init(): void

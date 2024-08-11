@@ -52,7 +52,7 @@ abstract class TestCase extends BaseTestCase
     {
         // rerun data providers to fix coverage when coverage for test files is enabled
         // https://github.com/sebastianbergmann/php-code-coverage/issues/920
-        $staticClass = get_class(new class() {
+        $staticClass = get_class(new class {
             /** @var array<string, true> */
             public static $processedMethods = [];
         });

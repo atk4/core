@@ -13,7 +13,7 @@ class AdapterGenericTest extends AdapterTestCase
     #[\Override]
     public function getTranslatableMock(): object
     {
-        return new class() {
+        return new class {
             use TranslatableTrait;
         };
     }

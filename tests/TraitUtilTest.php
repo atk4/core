@@ -23,9 +23,9 @@ class TraitUtilTest extends TestCase
         self::assertTrue(TraitUtil::hasTrait(new TraitUtilTestB(), NameTrait::class));
         self::assertTrue(TraitUtil::hasTrait(new TraitUtilTestC(), NameTrait::class));
 
-        self::assertFalse(TraitUtil::hasTrait(new class() extends TraitUtilTestA {}, NameTrait::class));
-        self::assertTrue(TraitUtil::hasTrait(new class() extends TraitUtilTestB {}, NameTrait::class));
-        self::assertTrue(TraitUtil::hasTrait(new class() extends TraitUtilTestC {}, NameTrait::class));
+        self::assertFalse(TraitUtil::hasTrait(new class extends TraitUtilTestA {}, NameTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(new class extends TraitUtilTestB {}, NameTrait::class));
+        self::assertTrue(TraitUtil::hasTrait(new class extends TraitUtilTestC {}, NameTrait::class));
 
         self::assertFalse(TraitUtil::hasTrait(TraitUtilTestA::class, HookTrait::class));
         self::assertTrue(TraitUtil::hasTrait(TraitUtilTestB::class, HookTrait::class));

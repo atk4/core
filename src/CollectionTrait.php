@@ -152,7 +152,7 @@ trait CollectionTrait
         }
 
         // ugly hack to deduplicate code
-        $collectionTraitHelper = new class() {
+        $collectionTraitHelper = new class {
             use AppScopeTrait;
             use ContainerTrait;
 
