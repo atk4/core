@@ -23,7 +23,7 @@ class InitializerTraitTest extends TestCase
 
     public function testInitCalledFromAdd(): void
     {
-        $container = new class() {
+        $container = new class {
             use ContainerTrait;
         };
 
@@ -46,7 +46,7 @@ class InitializerTraitTest extends TestCase
 
     public function testInitNoParentCalledException(): void
     {
-        $m = new class() extends AbstractInitializerMock {
+        $m = new class extends AbstractInitializerMock {
             #[\Override]
             protected function init(): void {}
         };
@@ -69,7 +69,7 @@ class InitializerTraitTest extends TestCase
 
     public function testInitDeclaredPublicException(): void
     {
-        $m = new class() extends AbstractInitializerMock {
+        $m = new class extends AbstractInitializerMock {
             #[\Override]
             public function init(): void {}
         };

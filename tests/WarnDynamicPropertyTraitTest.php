@@ -71,7 +71,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
     public function testGetSetPublicProperty(): void
     {
-        $test = new class() extends ClassWithWarnDynamicPropertyTrait {
+        $test = new class extends ClassWithWarnDynamicPropertyTrait {
             public bool $p = false;
         };
         self::assertFalse($test->p);
@@ -109,7 +109,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
     public function testGetSetWithWarningSuppressed(): void
     {
-        $test = new class() extends ClassWithWarnDynamicPropertyTrait {
+        $test = new class extends ClassWithWarnDynamicPropertyTrait {
             public bool $p = false;
         };
 

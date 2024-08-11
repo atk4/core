@@ -44,7 +44,7 @@ class QuietObjectWrapperTest extends TestCase
 
             EOF, print_r($o, true));
 
-        $o = new QuietObjectWrapper(new class() {
+        $o = new QuietObjectWrapper(new class {
             /**
              * @return array<string, mixed>
              */

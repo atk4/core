@@ -23,7 +23,7 @@ trait HookTrait
     {
         $fxThis = (new \ReflectionFunction($fx))->getClosureThis();
 
-        $instanceWithoutConstructorCache = new class() {
+        $instanceWithoutConstructorCache = new class {
             /** @var array<class-string, object> */
             private static array $_instances = [];
 

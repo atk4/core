@@ -35,7 +35,7 @@ class CollectionTraitTest extends TestCase
     public function testBasicWithApp(): void
     {
         $m = new CollectionMockWithApp();
-        $m->setApp(new class() {
+        $m->setApp(new class {
             public string $name = 'app';
 
             public int $maxNameLength = 40;
@@ -55,7 +55,7 @@ class CollectionTraitTest extends TestCase
         $longField = $m->addField('very-long-and-annoying-name-which-will-be-shortened', [FieldMockCustom::class]);
         self::assertSame(40, strlen($longField->name));
 
-        $mWithContainerTrait = new class() extends CollectionMockWithApp {
+        $mWithContainerTrait = new class extends CollectionMockWithApp {
             use ContainerTrait {
                 _shorten as private __shorten;
             }
@@ -157,7 +157,7 @@ class CollectionTraitTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Object was not initialized');
-        $m->addField('foo', new class() extends FieldMock {
+        $m->addField('foo', new class extends FieldMock {
             use InitializerTrait;
 
             protected function init(): void {}
@@ -170,7 +170,7 @@ class CollectionTraitTest extends TestCase
 
         $e = null;
         try {
-            $m->addField('foo', new class() extends FieldMock {
+            $m->addField('foo', new class extends FieldMock {
                 use InitializerTrait;
 
                 protected function init(): void

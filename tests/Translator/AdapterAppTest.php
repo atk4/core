@@ -12,11 +12,11 @@ class AdapterAppTest extends AdapterTestCase
     #[\Override]
     public function getTranslatableMock(): object
     {
-        $app = new class() {
+        $app = new class {
             use TranslatableTrait;
         };
 
-        $mock = new class() {
+        $mock = new class {
             use AppScopeTrait;
             use TranslatableTrait;
         };
