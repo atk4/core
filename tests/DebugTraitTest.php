@@ -165,6 +165,10 @@ class DebugAppMock implements LoggerInterface
     /** @var self */
     public $logger;
 
+    /**
+     * @param mixed              $level
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function log($level, $message, array $context = []): void
     {
