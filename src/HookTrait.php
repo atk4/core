@@ -6,10 +6,10 @@ namespace Atk4\Core;
 
 trait HookTrait
 {
-    /** @var array<string, array<int, array<int, array{\Closure, list<mixed>}>>> Configured hooks (callbacks). */
+    /** @var array<string, array<int, array<int<0, max>, array{\Closure, list<mixed>}>>> Configured hooks (callbacks). */
     protected array $hooks = [];
 
-    /** Next hook index counter. */
+    /** @var int<0, max> Next hook index counter. */
     private int $_hookIndexCounter = 0;
 
     /** @var \WeakReference<static>|null */
@@ -112,7 +112,7 @@ trait HookTrait
      *
      * @param list<mixed> $args
      *
-     * @return int index under which the hook was added
+     * @return int<0, max> index under which the hook was added
      */
     public function onHook(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
@@ -136,7 +136,7 @@ trait HookTrait
      *
      * @param list<mixed> $args
      *
-     * @return int index under which the hook was added
+     * @return int<0, max> index under which the hook was added
      */
     public function onHookShort(string $spot, \Closure $fx, array $args = [], int $priority = 5): int
     {
@@ -198,7 +198,7 @@ trait HookTrait
      * @param \Closure($this): object $getFxThisFx
      * @param list<mixed>             $args
      *
-     * @return int index under which the hook was added
+     * @return int<0, max> index under which the hook was added
      */
     public function onHookDynamic(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
@@ -211,7 +211,7 @@ trait HookTrait
      * @param \Closure($this): object $getFxThisFx
      * @param list<mixed>             $args
      *
-     * @return int index under which the hook was added
+     * @return int<0, max> index under which the hook was added
      */
     public function onHookDynamicShort(string $spot, \Closure $getFxThisFx, \Closure $fx, array $args = [], int $priority = 5): int
     {
@@ -221,8 +221,8 @@ trait HookTrait
     /**
      * Returns true if at least one callback is defined for this hook.
      *
-     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
-     * @param bool                                        $priorityIsIndex filter by index instead of priority
+     * @param ($priorityIsIndex is true ? int<0, max> : int|null) $priority        filter specific priority, null for all
+     * @param bool                                                $priorityIsIndex filter by index instead of priority
      */
     public function hookHasCallbacks(string $spot, ?int $priority = null, bool $priorityIsIndex = false): bool
     {
@@ -251,8 +251,8 @@ trait HookTrait
     /**
      * Delete all hooks for specified spot, priority and index.
      *
-     * @param ($priorityIsIndex is true ? int : int|null) $priority        filter specific priority, null for all
-     * @param bool                                        $priorityIsIndex filter by index instead of priority
+     * @param ($priorityIsIndex is true ? int<0, max> : int|null) $priority        filter specific priority, null for all
+     * @param bool                                                $priorityIsIndex filter by index instead of priority
      *
      * @return static
      */
@@ -292,7 +292,7 @@ trait HookTrait
      *
      * @param-out HookBreaker|null $brokenBy
      *
-     * @return array<int, mixed>|mixed Array of responses indexed by hook indexes or value specified to breakHook
+     * @return array<int<0, max>, mixed>|mixed Array of responses indexed by hook indexes or value specified to breakHook
      */
     public function hook(string $spot, array $args = [], &$brokenBy = null)
     {
