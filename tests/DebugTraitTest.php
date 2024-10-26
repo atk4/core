@@ -160,7 +160,7 @@ class DebugAppMock implements LoggerInterface
 {
     use LoggerTrait;
 
-    /** @var array<int, mixed>|null */
+    /** @var array{mixed, string|\Stringable, array<mixed>}|null */
     public $log;
     /** @var self */
     public $logger;

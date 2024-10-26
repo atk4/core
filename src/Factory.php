@@ -111,8 +111,8 @@ class Factory
     }
 
     /**
-     * @param class-string      $className
-     * @param array<int, mixed> $ctorArgs
+     * @param class-string $className
+     * @param list<mixed>  $ctorArgs
      */
     protected function _newObject(string $className, array $ctorArgs): object
     {

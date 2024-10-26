@@ -6,7 +6,7 @@ namespace Atk4\Core;
 
 trait HookTrait
 {
-    /** @var array<string, array<int, array<int, array{\Closure, 1?: array<int, mixed>}>>> Configured hooks (callbacks). */
+    /** @var array<string, array<int, array<int, array{\Closure, list<mixed>}>>> Configured hooks (callbacks). */
     protected array $hooks = [];
 
     /** Next hook index counter. */
@@ -110,7 +110,7 @@ trait HookTrait
      *
      * If priority is negative, then hook is prepended (executed first for the same priority).
      *
-     * @param array<int, mixed> $args
+     * @param list<mixed> $args
      *
      * @return int index under which the hook was added
      */
@@ -134,7 +134,7 @@ trait HookTrait
     /**
      * Same as onHook() except no $this is passed to the callback as the 1st argument.
      *
-     * @param array<int, mixed> $args
+     * @param list<mixed> $args
      *
      * @return int index under which the hook was added
      */
@@ -196,7 +196,7 @@ trait HookTrait
      * Same as onHook() except $this of the callback is dynamically rebound before invoke.
      *
      * @param \Closure($this): object $getFxThisFx
-     * @param array<int, mixed>       $args
+     * @param list<mixed>             $args
      *
      * @return int index under which the hook was added
      */
@@ -209,7 +209,7 @@ trait HookTrait
      * Same as onHookDynamic() except no $this is passed to the callback as the 1st argument.
      *
      * @param \Closure($this): object $getFxThisFx
-     * @param array<int, mixed>       $args
+     * @param list<mixed>             $args
      *
      * @return int index under which the hook was added
      */
@@ -287,8 +287,8 @@ trait HookTrait
     /**
      * Execute all closures assigned to $spot.
      *
-     * @param array<int, mixed> $args
-     * @param mixed             $brokenBy
+     * @param list<mixed> $args
+     * @param mixed       $brokenBy
      *
      * @param-out HookBreaker|null $brokenBy
      *
