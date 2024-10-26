@@ -106,7 +106,7 @@ class FactoryDiMock2
 {
     use DiContainerTrait;
 
-    /** @var string|array<int, string> */
+    /** @var string|list<string> */
     public $a = 'AAA';
     /** @var string */
     public $b = 'BBB';

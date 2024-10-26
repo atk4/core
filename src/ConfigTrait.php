@@ -29,8 +29,8 @@ trait ConfigTrait
      *  json        - JSON file with { 'foo': 'bar' } structure
      *  yaml        - YAML file with yaml structure
      *
-     * @param string|array<int, string> $files  One or more filenames
-     * @param string                    $format Optional format for config files
+     * @param string|list<string> $files  One or more filenames
+     * @param string              $format Optional format for config files
      *
      * @return $this
      */

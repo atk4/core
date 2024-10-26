@@ -12,8 +12,8 @@ trait DebugTrait
     /** @var bool Is debug enabled? */
     public $debug = false;
 
-    /** @var array<string, array<int, string>> Helps debugTraceChange. */
-    protected array $_previousTrace = [];
+    /** @var array<string, list<string>> */
+    private array $_previousTrace = [];
 
     /**
      * Outputs message to STDERR.

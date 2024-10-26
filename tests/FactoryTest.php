@@ -476,7 +476,7 @@ class FactoryTestMock
 {
     /** @var array<mixed> */
     public $args;
-    /** @var int|string|array<int, string> */
+    /** @var int|string|list<string> */
     public $foo;
     /** @var int|string */
     public $baz = 0;
