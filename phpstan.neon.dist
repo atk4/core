@@ -14,7 +14,7 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
         - '~^Variable (static )?(property access|method call) on .+\.$~'
 
-        # fix unresolveable atk4/ui \Atk4\Ui\App class
+        # fix unresolvable atk4/ui \Atk4\Ui\App class
         - '~^(.+(?<!\w)Atk4\\Ui\\App(?!\w).+|Call to an undefined method .+::(issetApp|getApp)\(\)\.)$~'
 
         -
@@ -42,7 +42,7 @@ parameters:
         -
             path: 'src/Phpunit/TestCase.php'
             identifier: method.nonObject
-            message: '~^Cannot call method (className|methodName)\(\) on array<int, string>\|PHPUnit\\Metadata\\Metadata\.$~'
+            message: '~^Cannot call method (className|methodName)\(\) on list<string>\|PHPUnit\\Metadata\\Metadata\.$~'
             count: 2
         -
             path: 'tests/HookTraitTest.php'
