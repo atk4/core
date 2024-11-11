@@ -42,7 +42,7 @@ parameters:
         -
             path: 'src/Phpunit/TestCase.php'
             identifier: method.nonObject
-            message: '~^Cannot call method (className|methodName)\(\) on array<int, string>\|PHPUnit\\Metadata\\Metadata\.$~'
+            message: '~^Cannot call method (className|methodName)\(\) on list<string>\|PHPUnit\\Metadata\\Metadata\.$~'
             count: 2
         -
             path: 'tests/HookTraitTest.php'
