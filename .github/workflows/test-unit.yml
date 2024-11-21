@@ -135,7 +135,6 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: atk4/core
           fail_ci_if_error: true
           files: coverage/merged.xml
 
