@@ -134,7 +134,6 @@ jobs:
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v5
         with:
-          os: alpine
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           files: coverage/merged.xml
