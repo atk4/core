@@ -153,4 +153,9 @@ class TestCaseTest extends TestCase
             \Closure::bind(fn () => $this->status = $testStatusOrig, $this, PhpunitTestCase::class)();
         }
     }
+
+    public function testZendAssertions(): void
+    {
+        self::assertSame('1', ini_get('zend.assertions'));
+    }
 }
