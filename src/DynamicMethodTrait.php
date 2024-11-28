@@ -28,7 +28,7 @@ trait DynamicMethodTrait
             return reset($result);
         }
 
-        // match native PHP behaviour as much as possible
+        // match native PHP behavior as much as possible
         // https://3v4l.org/eAv7t
         $class = static::class;
         do {

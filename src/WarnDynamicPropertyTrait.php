@@ -12,7 +12,7 @@ trait WarnDynamicPropertyTrait
 {
     protected function warnPropertyDoesNotExist(string $name): void
     {
-        // match native PHP behaviour as much as possible
+        // match native PHP behavior as much as possible
         // https://3v4l.org/2KR3m
         $class = static::class;
         try {
