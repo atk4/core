@@ -24,8 +24,8 @@ source_suffix = '.md'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Agile Toolkit Core'
-copyright = u'2016, Agile Toolkit'
+project = u'Agile Core'
+copyright = u'2016-2025, Agile Toolkit'
 
 exclude_patterns = ['_build']
 
@@ -54,7 +54,7 @@ highlight_language = 'php'
 # -- Options for HTML output ----------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of built-in themes.
+# a list of builtin themes.
 html_theme = 'sphinx_rtd_theme'
 
 # Add any extra paths that contain custom files (such as robots.txt or
