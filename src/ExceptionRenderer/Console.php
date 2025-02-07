@@ -32,12 +32,13 @@ class Console extends RendererAbstract
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens("\n".
-            self::text('--[ {TITLE} ]', [self::BOLD, self::BG_COLOR_RED]) . "\n".
+        $this->output .= $this->replaceTokens("\n" .
+            self::text('--[ {TITLE} ]', [self::BOLD, self::BG_COLOR_RED]) . "\n" .
             self::text('{CLASS}: ') .
                 self::text('{MESSAGE}', [self::BOLD, self::COLOR_BLACK]) .
-                self::text(' {CODE}', [self::COLOR_RED]) . "\n"
-            , $tokens);
+                self::text(' {CODE}', [self::COLOR_RED]) . "\n",
+            $tokens
+        );
     }
 
     #[\Override]
