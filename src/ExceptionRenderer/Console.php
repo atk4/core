@@ -35,7 +35,7 @@ class Console extends RendererAbstract
         $this->output .= $this->replaceTokens(
             "\n" .
             self::text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n" .
-            self::text('{CLASS}: ') .
+            self::text('{CLASS}: ', [self::FORMAT_RESET]) .
                 self::text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) .
                 self::text(' {CODE}', [self::COLOR_RED]) . "\n",
             $tokens
@@ -144,15 +144,15 @@ class Console extends RendererAbstract
 
         $this->output .= "\n" .
             self::text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n" .
-            self::text((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception))) .
+            self::text((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)), [self::FORMAT_RESET]) .
             self::text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
     }
 
     /**
      * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BG_COLOR_*> $formats
      */
-    private static function text(string $text, array $formats = []): string
+    private static function text(string $text, array $formats): string
     {
-        return implode('', $formats) . $text . (count($formats) === 0 ? '' : self::FORMAT_RESET);
+        return implode('', $formats) . $text . self::FORMAT_RESET;
     }
 }
