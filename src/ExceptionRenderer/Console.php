@@ -8,6 +8,17 @@ use Atk4\Core\Exception;
 
 class Console extends RendererAbstract
 {
+    private const RESET = "\e[0m";
+    private const BOLD = "\e[1m";
+    private const COLOR_BLACK = "\e[30m";
+    private const COLOR_RED = "\e[31m";
+    private const COLOR_GREEN = "\e[32m";
+    private const COLOR_YELLOW = "\e[33m";
+    private const BG_COLOR_RED = "\e[41m";
+    private const BG_COLOR_MAGENTA = "\e[45m";
+    private const COLOR_BRIGHT_RED = "\e[91m";
+    private const COLOR_BRIGHT_GREEN = "\e[92m";
+
     #[\Override]
     protected function processHeader(): void
     {
@@ -21,10 +32,12 @@ class Console extends RendererAbstract
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens(<<<EOF
-            \e[1;41m--[ {TITLE} ]\e[0m
-            {CLASS}: \e[1;30m{MESSAGE}\e[0;31m {CODE}
-            EOF, $tokens);
+        $this->output .= $this->replaceTokens("\n".
+            self::text('--[ {TITLE} ]', [self::BOLD, self::BG_COLOR_RED]) . "\n".
+            self::text('{CLASS}: ') .
+                self::text('{MESSAGE}', [self::BOLD, self::COLOR_BLACK]) .
+                self::text(' {CODE}', [self::COLOR_RED]) . "\n"
+            , $tokens);
     }
 
     #[\Override]
@@ -43,7 +56,7 @@ class Console extends RendererAbstract
 
         foreach ($exception->getParams() as $key => $val) {
             $key = str_pad($key, 19, ' ', \STR_PAD_LEFT);
-            $this->output .= \PHP_EOL . "\e[91m" . $key . ': ' . static::toSafeString($val) . "\e[0m";
+            $this->output .= "\n" . self::text($key . ': ' . static::toSafeString($val), [self::COLOR_BRIGHT_RED]);
         }
     }
 
@@ -59,29 +72,24 @@ class Console extends RendererAbstract
         }
 
         foreach ($this->exception->getSolutions() as $key => $val) {
-            $this->output .= \PHP_EOL . "\e[92mSolution: " . $val . "\e[0m";
+            $this->output .= "\n" . self::text('Solution: ' . $val, [self::COLOR_BRIGHT_GREEN]);
         }
     }
 
     #[\Override]
     protected function processStackTrace(): void
     {
-        $this->output .= <<<EOF
-
-            \e[1;41m--[ Stack Trace ]\e[0m
-
-            EOF;
-
+        $this->output .= "\n" . self::text('--[ Stack Trace ]', [self::BOLD, self::BG_COLOR_RED]) . "\n";
         $this->processStackTraceInternal();
     }
 
     #[\Override]
     protected function processStackTraceInternal(): void
     {
-        $text = <<<EOF
-            \e[0m{FILE}\e[0m:\e[0;31m{LINE}\e[0m {OBJECT} {CLASS}{FUNCTION_COLOR}{FUNCTION}{FUNCTION_ARGS}\e[0m
-
-            EOF;
+        $text = self::text('{FILE}:', [self::RESET]) .
+                self::text('{LINE}', [self::COLOR_RED]) . ' ' .
+                self::text('{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}', [self::RESET]) .
+                "\n";
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);
@@ -95,14 +103,13 @@ class Console extends RendererAbstract
                 $inAtk = false;
             }
 
-            $tokens = [];
-            $tokens['{FILE}'] = str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT);
-            $tokens['{LINE}'] = str_pad($call['line'], 4, ' ', \STR_PAD_LEFT);
-            $tokens['{OBJECT}'] = $call['object'] !== null ? " - \e[0;32m" . $call['object_formatted'] . "\e[0m" : '';
-            $tokens['{CLASS}'] = $call['class'] !== null ? "\e[0;32m" . $call['class_formatted'] . "::\e[0m" : '';
-
-            $tokens['{FUNCTION_COLOR}'] = $escapeFrame ? "\e[0;31m" : "\e[0;33m";
-            $tokens['{FUNCTION}'] = $call['function'];
+            $tokens = [
+                '{FILE}' => str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT),
+                '{LINE}' => str_pad($call['line'], 4, ' ', \STR_PAD_LEFT),
+                '{OBJECT}' => $call['object'] !== null ? ' - ' . self::text($call['object_formatted'], [self::COLOR_GREEN]) : '',
+                '{CLASS}' => $call['class'] !== null ? self::text($call['class_formatted'] . '::', [self::COLOR_GREEN]) : '',
+                '{FUNCTION}' => $call['class'] !== null ? self::text($call['function'], [$escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW]) : '',
+            ];
 
             if ($index === 'self') {
                 $tokens['{FUNCTION_ARGS}'] = '';
@@ -110,9 +117,9 @@ class Console extends RendererAbstract
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
                 if ($escapeFrame) {
-                    $tokens['{FUNCTION_ARGS}'] = "\e[0;31m(" . \PHP_EOL . str_repeat(' ', 40) . implode(',' . \PHP_EOL . str_repeat(' ', 40), array_map(static function ($arg) {
+                    $tokens['{FUNCTION_ARGS}'] = self::text('(' . "\n" . str_repeat(' ', 40) . implode(',' . "\n" . str_repeat(' ', 40), array_map(static function ($arg) {
                         return static::toSafeString($arg);
-                    }, $call['args'])) . ')';
+                    }, $call['args'])) . ')', [self::COLOR_RED]);
                 } else {
                     $tokens['{FUNCTION_ARGS}'] = '(...)';
                 }
@@ -122,8 +129,7 @@ class Console extends RendererAbstract
         }
 
         if ($isShortened) {
-            $this->output .= '...
-            ';
+            $this->output .= '...' . "\n";
         }
     }
 
@@ -134,12 +140,17 @@ class Console extends RendererAbstract
             return;
         }
 
-        $this->output .= \PHP_EOL . "\e[1;45mCaused by Previous Exception:\e[0m" . \PHP_EOL;
+        $this->output .= "\n" .
+            self::text('Caused by Previous Exception:', [self::BOLD, self::BG_COLOR_MAGENTA]) . "\n" .
+            self::text((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception))) .
+            self::text('--', [self::BOLD, self::COLOR_RED]);
+    }
 
-        $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
-        $this->output .= <<<EOF
-            \e[1;31m--
-            \e[0m
-            EOF;
+    /**
+     * Style text with ASCII colors.
+     */
+    private static function text(string $text, array $styles = []): string
+    {
+        return implode('', $styles) . $text . (count($styles) === 0 ? '' : self::RESET);
     }
 }
