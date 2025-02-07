@@ -9,7 +9,7 @@ use Atk4\Core\Exception;
 class Console extends RendererAbstract
 {
     private const RESET = "\e[0m";
-    private const BOLD = "\e[1m";
+    private const FORMAT_BOLD = "\e[1m";
     private const COLOR_BLACK = "\e[30m";
     private const COLOR_RED = "\e[31m";
     private const COLOR_GREEN = "\e[32m";
@@ -149,9 +149,7 @@ class Console extends RendererAbstract
     }
 
     /**
-     * Style text with ASCII colors.
-     *
-     * @param array<int,string> $styles
+     * @param non-empty-list<self::RESET|self::FORMAT_*|self::COLOR_*|BG_COLOR_*> $styles
      */
     private static function text(string $text, array $styles = []): string
     {
