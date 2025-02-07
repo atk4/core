@@ -46,6 +46,28 @@ class ExceptionTest extends TestCase
         self::assertMatchesRegularExpression('~333~', $ret);
     }
 
+    public function testColorfulText(): void
+    {
+        $m = new Exception('TestIt');
+
+        $ret = $m->getColorfulText();
+        self::assertStringContainsString("\e[", $ret);
+        self::assertStringNotContainsString('\e[', $ret);
+        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // reset colors at the end
+
+        $m->addMoreInfo('a1', 111);
+        $ret = $m->getColorfulText();
+        self::assertStringContainsString("\e[", $ret);
+        self::assertStringNotContainsString('\e[', $ret);
+        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // reset colors at the end
+
+        $m->addSolution('Simple solution');
+        $ret = $m->getColorfulText();
+        self::assertStringContainsString("\e[", $ret);
+        self::assertStringNotContainsString('\e[', $ret);
+        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // reset colors at the end
+    }
+
     public function testToSafeString(): void
     {
         self::assertSame('1', RendererAbstract::toSafeString(1));
