@@ -150,6 +150,8 @@ class Console extends RendererAbstract
 
     /**
      * Style text with ASCII colors.
+     *
+     * @param array<int,string> $styles
      */
     private static function text(string $text, array $styles = []): string
     {
