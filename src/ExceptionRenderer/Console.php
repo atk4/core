@@ -35,8 +35,8 @@ class Console extends RendererAbstract
         $this->output .= $this->replaceTokens(
             $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
                 . '{CLASS}: '
-                . $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK])
-                . $this->text(' {CODE}', [self::COLOR_RED]) . "\n",
+                . $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) . ' '
+                . $this->text('{CODE}', [self::COLOR_RED]) . "\n",
             $tokens
         );
     }
