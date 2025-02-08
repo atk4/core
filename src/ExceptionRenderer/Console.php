@@ -33,11 +33,11 @@ class Console extends RendererAbstract
         ];
 
         $this->output .= $this->replaceTokens(
-            "\n" .
-            $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n" .
-            '{CLASS}: ' .
-                $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) .
-                $this->text(' {CODE}', [self::COLOR_RED]) . "\n",
+            "\n"
+            . $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n"
+            . '{CLASS}: '
+                . $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK])
+                . $this->text(' {CODE}', [self::COLOR_RED]) . "\n",
             $tokens
         );
     }
@@ -88,10 +88,10 @@ class Console extends RendererAbstract
     #[\Override]
     protected function processStackTraceInternal(): void
     {
-        $text = '{FILE}:' .
-                $this->text('{LINE}', [self::COLOR_RED]) . ' ' .
-                '{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}' .
-                "\n";
+        $text = '{FILE}:'
+                . $this->text('{LINE}', [self::COLOR_RED]) . ' '
+                . '{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}'
+                . "\n";
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);
@@ -142,10 +142,10 @@ class Console extends RendererAbstract
             return;
         }
 
-        $this->output .= "\n" .
-            $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n" .
-            ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception))) .
-            $this->text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
+        $this->output .= "\n"
+            . $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n"
+            . ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)))
+            . $this->text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
     }
 
     /**
