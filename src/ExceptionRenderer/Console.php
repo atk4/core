@@ -27,17 +27,6 @@ class Console extends RendererAbstract
         return implode('', $formats) . $text . self::RESET;
     }
 
-    private function untextEmpty(string $value): string
-    {
-        return preg_replace('~' . "\e" . '\[\d+m' . preg_quote(self::RESET) . '~', '', $value);
-    }
-
-    #[\Override]
-    protected function replaceTokens(string $text, array $tokens): string
-    {
-        return $this->untextEmpty(parent::replaceTokens($text, $tokens));
-    }
-
     protected function processAll(): void
     {
         $this->output .= self::RESET;
