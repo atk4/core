@@ -29,6 +29,7 @@ class Console extends RendererAbstract
         return implode('', $formats) . $text . self::RESET;
     }
 
+    #[\Override]
     protected function processAll(): void
     {
         $this->output .= self::RESET;
