@@ -48,22 +48,31 @@ class ExceptionTest extends TestCase
 
     public function testColorfulText(): void
     {
+        // there are no format codes after last reset code
+        $reset_at_end = '~\e\[0m(?!.*\e\[[0-9;]*m)~s';
+
+        // every sequence of format codes are reset before using another format
+        $reset_every_format = '~(\e\[[0-9;]*m)+(?!\e\[0m)(?=\e\[[0-9;]*m)~s';
+
         $m = new Exception('TestIt');
 
         $ret = $m->getColorfulText();
         self::assertStringContainsString("\e[", $ret);
         self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // format is reset
+        self::assertMatchesRegularExpression($reset_at_end, $ret);
+        self::assertMatchesRegularExpression($reset_every_format, $ret);
 
         $m->addMoreInfo('a1', 111);
         $ret = $m->getColorfulText();
         self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // format is reset
+        self::assertMatchesRegularExpression($reset_at_end, $ret);
+        self::assertMatchesRegularExpression($reset_every_format, $ret);
 
         $m->addSolution('Simple solution');
         $ret = $m->getColorfulText();
         self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // format is reset
+        self::assertMatchesRegularExpression($reset_at_end, $ret);
+        self::assertMatchesRegularExpression($reset_every_format, $ret);
     }
 
     public function testToSafeString(): void
