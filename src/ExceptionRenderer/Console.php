@@ -8,7 +8,7 @@ use Atk4\Core\Exception;
 
 class Console extends RendererAbstract
 {
-    private const FORMAT_RESET = "\e[0m";
+    private const RESET = "\e[0m";
     private const FORMAT_BOLD = "\e[1m";
     private const COLOR_BLACK = "\e[30m";
     private const COLOR_RED = "\e[31m";
@@ -35,7 +35,7 @@ class Console extends RendererAbstract
         $this->output .= $this->replaceTokens(
             "\n" .
             self::text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n" .
-            self::text('{CLASS}: ', [self::FORMAT_RESET]) .
+            '{CLASS}: ' .
                 self::text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) .
                 self::text(' {CODE}', [self::COLOR_RED]) . "\n",
             $tokens
@@ -88,9 +88,9 @@ class Console extends RendererAbstract
     #[\Override]
     protected function processStackTraceInternal(): void
     {
-        $text = self::text('{FILE}:', [self::FORMAT_RESET]) .
+        $text = '{FILE}:' .
                 self::text('{LINE}', [self::COLOR_RED]) . ' ' .
-                self::text('{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}', [self::FORMAT_RESET]) .
+                '{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}' .
                 "\n";
 
         $inAtk = true;
@@ -144,7 +144,7 @@ class Console extends RendererAbstract
 
         $this->output .= "\n" .
             self::text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n" .
-            self::text((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)), [self::FORMAT_RESET]) .
+            ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception))) .
             self::text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
     }
 
@@ -153,6 +153,6 @@ class Console extends RendererAbstract
      */
     private static function text(string $text, array $formats): string
     {
-        return implode('', $formats) . $text . self::FORMAT_RESET;
+        return implode('', $formats) . $text . self::RESET;
     }
 }
