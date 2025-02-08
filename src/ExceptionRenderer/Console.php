@@ -19,6 +19,25 @@ class Console extends RendererAbstract
     private const COLOR_BRIGHT_RED = "\e[91m";
     private const COLOR_BRIGHT_GREEN = "\e[92m";
 
+    /**
+     * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BACKGROUND_COLOR_*> $formats
+     */
+    private function text(string $text, array $formats): string
+    {
+        return implode('', $formats) . $text . self::RESET;
+    }
+
+    private function untextEmpty(string $value): string
+    {
+        return preg_replace('~' . "\e" . '\[\d+m' . preg_quote(self::RESET) . '~', '', $value);
+    }
+
+    #[\Override]
+    protected function replaceTokens(string $text, array $tokens): string
+    {
+        return $this->untextEmpty(parent::replaceTokens($text, $tokens));
+    }
+
     protected function processAll(): void
     {
         $this->output .= self::RESET;
@@ -152,13 +171,5 @@ class Console extends RendererAbstract
             . $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_MAGENTA]) . "\n"
             . ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)))
             . $this->text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
-    }
-
-    /**
-     * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BACKGROUND_COLOR_*> $formats
-     */
-    private function text(string $text, array $formats): string
-    {
-        return implode('', $formats) . $text . self::RESET;
     }
 }
