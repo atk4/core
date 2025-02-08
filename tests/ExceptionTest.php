@@ -14,30 +14,30 @@ class ExceptionTest extends TestCase
 {
     public function testBasic(): void
     {
-        $m = (new Exception('TestIt'))
+        $ex = (new Exception('TestIt'))
             ->addMoreInfo('a1', 111)
             ->addMoreInfo('a2', 222);
 
-        self::assertSame(['a1' => 111, 'a2' => 222], $m->getParams());
+        self::assertSame(['a1' => 111, 'a2' => 222], $ex->getParams());
 
-        $m = new Exception('PreviousError');
-        $m = new Exception('TestIt', 123, $m);
-        $m->addMoreInfo('a1', 222);
-        $m->addMoreInfo('a2', 333);
+        $ex = new Exception('PreviousError');
+        $ex = new Exception('TestIt', 123, $ex);
+        $ex->addMoreInfo('a1', 222);
+        $ex->addMoreInfo('a2', 333);
 
-        self::assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
+        self::assertSame(['a1' => 222, 'a2' => 333], $ex->getParams());
 
-        $ret = $m->getHtml();
+        $ret = $ex->getHtml();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
-        $ret = $m->getColorfulText();
+        $ret = $ex->getColorfulText();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
-        $ret = $m->getJson();
+        $ret = $ex->getJson();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
@@ -78,59 +78,59 @@ class ExceptionTest extends TestCase
 
     public function testMore(): void
     {
-        $m = new \Exception('Classic Exception');
+        $ex = new \Exception('Classic Exception');
 
-        $m = new Exception('atk4 exception', 0, $m);
-        $m->setMessage('bumbum');
+        $ex = new Exception('atk4 exception', 0, $ex);
+        $ex->setMessage('bumbum');
 
-        $ret = $m->getHtml();
+        $ret = $ex->getHtml();
         self::assertMatchesRegularExpression('~Classic~', $ret);
         self::assertMatchesRegularExpression('~bumbum~', $ret);
 
-        $ret = $m->getColorfulText();
+        $ret = $ex->getColorfulText();
         self::assertMatchesRegularExpression('~Classic~', $ret);
         self::assertMatchesRegularExpression('~bumbum~', $ret);
 
-        $ret = $m->getJson();
+        $ret = $ex->getJson();
         self::assertMatchesRegularExpression('~Classic~', $ret);
         self::assertMatchesRegularExpression('~bumbum~', $ret);
     }
 
     public function testSolution(): void
     {
-        $m = new Exception('Exception with solution');
-        $m->addSolution('One Solution');
+        $ex = new Exception('Exception with solution');
+        $ex->addSolution('One Solution');
 
-        $ret = $m->getHtml();
+        $ret = $ex->getHtml();
         self::assertMatchesRegularExpression('~One Solution~', $ret);
 
-        $ret = $m->getColorfulText();
+        $ret = $ex->getColorfulText();
         self::assertMatchesRegularExpression('~One Solution~', $ret);
 
-        $ret = $m->getJson();
+        $ret = $ex->getJson();
         self::assertMatchesRegularExpression('~One Solution~', $ret);
     }
 
     public function testSolution2(): void
     {
-        $m = (new Exception('Exception with solution'))
+        $ex = (new Exception('Exception with solution'))
             ->addSolution('1st Solution');
 
-        $ret = $m->getColorfulText();
+        $ret = $ex->getColorfulText();
         self::assertMatchesRegularExpression('~1st Solution~', $ret);
 
-        $m = (new Exception('Exception with solution'))
+        $ex = (new Exception('Exception with solution'))
             ->addSolution('1st Solution')
             ->addSolution('2nd Solution');
 
-        $ret = $m->getColorfulText();
+        $ret = $ex->getColorfulText();
         self::assertMatchesRegularExpression('~1st Solution~', $ret);
         self::assertMatchesRegularExpression('~2nd Solution~', $ret);
     }
 
     public function testPhpunitSelfDescribing(): void
     {
-        $m = (new Exception('My exception', 0))
+        $ex = (new Exception('My exception', 0))
             ->addMoreInfo('x', 'foo')
             ->addMoreInfo('y', ['bar' => 2.4, [], [[1]]]);
 
@@ -147,17 +147,17 @@ class ExceptionTest extends TestCase
                     ]
 
                 EOF,
-            $m->toString()
+            $ex->toString()
         );
     }
 
     public function testExceptionFallback(): void
     {
-        $m = new ExceptionTestThrowError('test', 2);
+        $ex = new ExceptionTestThrowError('test', 2);
         $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionTestThrowError::class . '(2): test !!';
-        self::assertSame($expectedFallbackText, $m->getHtml());
-        self::assertSame($expectedFallbackText, $m->getColorfulText());
+        self::assertSame($expectedFallbackText, $ex->getHtml());
+        self::assertSame($expectedFallbackText, $ex->getColorfulText());
         self::assertSame(
             json_encode(
                 [
@@ -178,7 +178,7 @@ class ExceptionTest extends TestCase
                 ],
                 \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
             ),
-            $m->getJson()
+            $ex->getJson()
         );
     }
 }
