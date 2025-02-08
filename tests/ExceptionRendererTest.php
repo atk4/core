@@ -35,6 +35,9 @@ class ExceptionRendererTest extends TestCase
     {
         $ex = $this->createExceptionWithConstantTrace();
 
+        self::assertStringStartsWith('<', $ex->getHtml());
+        self::assertStringEndsWith(">\n", $ex->getHtml());
+
         self::assertSame(<<<'EOF'
             <div class="ui negative icon message">
                 <i class="warning sign icon"></i>
@@ -95,6 +98,9 @@ class ExceptionRendererTest extends TestCase
     {
         $ex = $this->createExceptionWithConstantTrace();
 
+        self::assertStringStartsWith('{', $ex->getJson());
+        self::assertStringEndsWith('}', $ex->getJson());
+
         self::assertSame(<<<'EOF'
             {
                 "success": false,
@@ -146,6 +152,8 @@ class ExceptionRendererTest extends TestCase
     {
         $ex = $this->createExceptionWithConstantTrace();
 
+        self::assertStringStartsWith("\e[0m", $ex->getColorfulText());
+        self::assertStringEndsWith("\n", $ex->getColorfulText());
         self::assertStringNotContainsString('\e[', $ex->getColorfulText());
 
         self::assertSame(<<<"EOF"
