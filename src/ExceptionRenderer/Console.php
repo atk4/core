@@ -19,6 +19,13 @@ class Console extends RendererAbstract
     private const COLOR_BRIGHT_RED = "\e[91m";
     private const COLOR_BRIGHT_GREEN = "\e[92m";
 
+    protected function processAll(): void
+    {
+        $this->output .= self::RESET;
+
+        parent::processAll();
+    }
+
     #[\Override]
     protected function processHeader(): void
     {
