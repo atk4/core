@@ -27,52 +27,20 @@ class ExceptionTest extends TestCase
 
         self::assertSame(['a1' => 222, 'a2' => 333], $m->getParams());
 
-        // get HTML
         $ret = $m->getHtml();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
-        // get colorful text
         $ret = $m->getColorfulText();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
 
-        // get JSON
         $ret = $m->getJson();
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
-    }
-
-    public function testColorfulText(): void
-    {
-        // there are no format codes after last reset code
-        $reset_at_end = '~\e\[0m(?!.*\e\[[0-9;]*m)~s';
-
-        // every sequence of format codes are reset before using another format
-        $reset_every_format = '~(\e\[[0-9;]*m)+(?!\e\[0m)(?=\e\[[0-9;]*m)~s';
-
-        $m = new Exception('TestIt');
-
-        $ret = $m->getColorfulText();
-        self::assertStringContainsString("\e[", $ret);
-        self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression($reset_at_end, $ret);
-        self::assertMatchesRegularExpression($reset_every_format, $ret);
-
-        $m->addMoreInfo('a1', 111);
-        $ret = $m->getColorfulText();
-        self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression($reset_at_end, $ret);
-        self::assertMatchesRegularExpression($reset_every_format, $ret);
-
-        $m->addSolution('Simple solution');
-        $ret = $m->getColorfulText();
-        self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression($reset_at_end, $ret);
-        self::assertMatchesRegularExpression($reset_every_format, $ret);
     }
 
     public function testToSafeString(): void

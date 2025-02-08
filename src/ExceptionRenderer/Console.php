@@ -24,6 +24,8 @@ class Console extends RendererAbstract
      */
     private function text(string $text, array $formats): string
     {
+        assert(!str_contains($text, "\e["));
+
         return implode('', $formats) . $text . self::RESET;
     }
 
@@ -104,8 +106,7 @@ class Console extends RendererAbstract
     {
         $text = '{FILE}:'
             . $this->text('{LINE}', [self::COLOR_RED]) . ' '
-            . '{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}'
-            . "\n";
+            . '{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}';
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);
@@ -143,7 +144,7 @@ class Console extends RendererAbstract
                 }
             }
 
-            $this->output .= $this->replaceTokens($text, $tokens);
+            $this->output .= rtrim($this->replaceTokens($text, $tokens), ' ') . "\n";
         }
 
         if ($isShortened) {
