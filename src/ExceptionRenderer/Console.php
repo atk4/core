@@ -14,8 +14,8 @@ class Console extends RendererAbstract
     private const COLOR_RED = "\e[31m";
     private const COLOR_GREEN = "\e[32m";
     private const COLOR_YELLOW = "\e[33m";
-    private const BG_COLOR_RED = "\e[41m";
-    private const BG_COLOR_MAGENTA = "\e[45m";
+    private const BACKGROUND_COLOR_RED = "\e[41m";
+    private const BACKGROUND_COLOR_MAGENTA = "\e[45m";
     private const COLOR_BRIGHT_RED = "\e[91m";
     private const COLOR_BRIGHT_GREEN = "\e[92m";
 
@@ -34,7 +34,7 @@ class Console extends RendererAbstract
 
         $this->output .= $this->replaceTokens(
             "\n"
-            . $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n"
+            . $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
             . '{CLASS}: '
                 . $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK])
                 . $this->text(' {CODE}', [self::COLOR_RED]) . "\n",
@@ -81,7 +81,7 @@ class Console extends RendererAbstract
     #[\Override]
     protected function processStackTrace(): void
     {
-        $this->output .= "\n" . $this->text('--[ Stack Trace ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n";
+        $this->output .= "\n" . $this->text('--[ Stack Trace ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n";
         $this->processStackTraceInternal();
     }
 
@@ -143,13 +143,13 @@ class Console extends RendererAbstract
         }
 
         $this->output .= "\n"
-            . $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n"
+            . $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_MAGENTA]) . "\n"
             . ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)))
             . $this->text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
     }
 
     /**
-     * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BG_COLOR_*> $formats
+     * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BACKGROUND_COLOR_*> $formats
      */
     private function text(string $text, array $formats): string
     {
