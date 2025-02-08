@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Core\Tests;
 
 use Atk4\Core\Exception;
-use Atk4\Core\ExceptionRenderer\RendererAbstract;
-use Atk4\Core\NameTrait;
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Core\TrackableTrait;
 
 class ExceptionTest extends TestCase
 {
@@ -41,39 +38,6 @@ class ExceptionTest extends TestCase
         self::assertMatchesRegularExpression('~TestIt~', $ret);
         self::assertMatchesRegularExpression('~PreviousError~', $ret);
         self::assertMatchesRegularExpression('~333~', $ret);
-    }
-
-    public function testToSafeString(): void
-    {
-        self::assertSame('1', RendererAbstract::toSafeString(1));
-
-        self::assertSame('\'abc\'', RendererAbstract::toSafeString('abc'));
-
-        self::assertSame(\stdClass::class, RendererAbstract::toSafeString(new \stdClass()));
-
-        self::assertSame(\DateTime::class, RendererAbstract::toSafeString(new \DateTime()));
-
-        self::assertSame(\Closure::class, RendererAbstract::toSafeString(static fn () => true));
-
-        $resource = opendir(__DIR__);
-        self::assertSame('resource (stream)', RendererAbstract::toSafeString($resource));
-        closedir($resource);
-        self::assertSame('resource (closed)', RendererAbstract::toSafeString($resource));
-
-        $a = new TrackableMock();
-        $a->shortName = 'foo';
-        self::assertSame(TrackableMock::class . ' (foo)', RendererAbstract::toSafeString($a));
-
-        $a = new TrackableMock();
-        self::assertSame(TrackableMock::class . ' ()', RendererAbstract::toSafeString($a));
-
-        $a = new TrackableMock2();
-        $a->shortName = 'foo';
-        self::assertSame(TrackableMock2::class . ' (foo)', RendererAbstract::toSafeString($a));
-
-        $a = new TrackableMock2();
-        $a->name = 'foo';
-        self::assertSame(TrackableMock2::class . ' (foo)', RendererAbstract::toSafeString($a));
     }
 
     public function testMore(): void
@@ -149,51 +113,5 @@ class ExceptionTest extends TestCase
                 EOF,
             $ex->toString()
         );
-    }
-
-    public function testExceptionFallback(): void
-    {
-        $ex = new ExceptionTestThrowError('test', 2);
-        $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
-            . ExceptionTestThrowError::class . '(2): test !!';
-        self::assertSame($expectedFallbackText, $ex->getHtml());
-        self::assertSame($expectedFallbackText, $ex->getColorfulText());
-        self::assertSame(
-            json_encode(
-                [
-                    'success' => false,
-                    'code' => 2,
-                    'message' => 'Error during json renderer: test',
-                    'title' => ExceptionTestThrowError::class,
-                    'class' => ExceptionTestThrowError::class,
-                    'params' => [],
-                    'solution' => [],
-                    'trace' => [],
-                    'previous' => [
-                        'title' => 'Exception',
-                        'class' => 'Exception',
-                        'code' => 0,
-                        'message' => 'just to cover __string',
-                    ],
-                ],
-                \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
-            ),
-            $ex->getJson()
-        );
-    }
-}
-
-class TrackableMock2
-{
-    use NameTrait;
-    use TrackableTrait;
-}
-
-class ExceptionTestThrowError extends Exception
-{
-    #[\Override]
-    public function getCustomExceptionTitle(): string
-    {
-        throw new \Exception('just to cover __string');
     }
 }
