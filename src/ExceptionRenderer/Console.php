@@ -34,10 +34,10 @@ class Console extends RendererAbstract
 
         $this->output .= $this->replaceTokens(
             "\n" .
-            self::text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n" .
+            $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n" .
             '{CLASS}: ' .
-                self::text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) .
-                self::text(' {CODE}', [self::COLOR_RED]) . "\n",
+                $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) .
+                $this->text(' {CODE}', [self::COLOR_RED]) . "\n",
             $tokens
         );
     }
@@ -58,7 +58,7 @@ class Console extends RendererAbstract
 
         foreach ($exception->getParams() as $key => $val) {
             $key = str_pad($key, 19, ' ', \STR_PAD_LEFT);
-            $this->output .= "\n" . self::text($key . ': ' . static::toSafeString($val), [self::COLOR_BRIGHT_RED]);
+            $this->output .= "\n" . $this->text($key . ': ' . static::toSafeString($val), [self::COLOR_BRIGHT_RED]);
         }
     }
 
@@ -74,14 +74,14 @@ class Console extends RendererAbstract
         }
 
         foreach ($this->exception->getSolutions() as $key => $val) {
-            $this->output .= "\n" . self::text('Solution: ' . $val, [self::COLOR_BRIGHT_GREEN]);
+            $this->output .= "\n" . $this->text('Solution: ' . $val, [self::COLOR_BRIGHT_GREEN]);
         }
     }
 
     #[\Override]
     protected function processStackTrace(): void
     {
-        $this->output .= "\n" . self::text('--[ Stack Trace ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n";
+        $this->output .= "\n" . $this->text('--[ Stack Trace ]', [self::FORMAT_BOLD, self::BG_COLOR_RED]) . "\n";
         $this->processStackTraceInternal();
     }
 
@@ -89,7 +89,7 @@ class Console extends RendererAbstract
     protected function processStackTraceInternal(): void
     {
         $text = '{FILE}:' .
-                self::text('{LINE}', [self::COLOR_RED]) . ' ' .
+                $this->text('{LINE}', [self::COLOR_RED]) . ' ' .
                 '{OBJECT} {CLASS}{FUNCTION}{FUNCTION_ARGS}' .
                 "\n";
 
@@ -108,9 +108,9 @@ class Console extends RendererAbstract
             $tokens = [
                 '{FILE}' => str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT),
                 '{LINE}' => str_pad($call['line'], 4, ' ', \STR_PAD_LEFT),
-                '{OBJECT}' => $call['object'] !== null ? ' - ' . self::text($call['object_formatted'], [self::COLOR_GREEN]) : '',
-                '{CLASS}' => $call['class'] !== null ? self::text($call['class_formatted'] . '::', [self::COLOR_GREEN]) : '',
-                '{FUNCTION}' => $call['class'] !== null ? self::text($call['function'], [$escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW]) : '',
+                '{OBJECT}' => $call['object'] !== null ? ' - ' . $this->text($call['object_formatted'], [self::COLOR_GREEN]) : '',
+                '{CLASS}' => $call['class'] !== null ? $this->text($call['class_formatted'] . '::', [self::COLOR_GREEN]) : '',
+                '{FUNCTION}' => $call['class'] !== null ? $this->text($call['function'], [$escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW]) : '',
             ];
 
             if ($index === 'self') {
@@ -119,7 +119,7 @@ class Console extends RendererAbstract
                 $tokens['{FUNCTION_ARGS}'] = '()';
             } else {
                 if ($escapeFrame) {
-                    $tokens['{FUNCTION_ARGS}'] = self::text('(' . "\n" . str_repeat(' ', 40) . implode(',' . "\n" . str_repeat(' ', 40), array_map(static function ($arg) {
+                    $tokens['{FUNCTION_ARGS}'] = $this->text('(' . "\n" . str_repeat(' ', 40) . implode(',' . "\n" . str_repeat(' ', 40), array_map(static function ($arg) {
                         return static::toSafeString($arg);
                     }, $call['args'])) . ')', [self::COLOR_RED]);
                 } else {
@@ -143,15 +143,15 @@ class Console extends RendererAbstract
         }
 
         $this->output .= "\n" .
-            self::text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n" .
+            $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BG_COLOR_MAGENTA]) . "\n" .
             ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception))) .
-            self::text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
+            $this->text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
     }
 
     /**
      * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BG_COLOR_*> $formats
      */
-    private static function text(string $text, array $formats): string
+    private function text(string $text, array $formats): string
     {
         return implode('', $formats) . $text . self::RESET;
     }
