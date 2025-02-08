@@ -135,7 +135,7 @@ class Console extends RendererAbstract
                 '{LINE}' => str_pad($call['line'], 4, ' ', \STR_PAD_LEFT),
                 '{OBJECT}' => $call['object'] !== null ? ' - ' . $this->text($call['object_formatted'], [self::COLOR_GREEN]) : '',
                 '{CLASS}' => $call['class'] !== null ? $this->text($call['class_formatted'] . '::', [self::COLOR_GREEN]) : '',
-                '{FUNCTION}' => $call['class'] !== null ? $this->text($call['function'], [$escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW]) : '',
+                '{FUNCTION}' => $call['function'] !== null ? $this->text($call['function'], [$escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW]) : '',
             ];
 
             if ($index === 'self') {
