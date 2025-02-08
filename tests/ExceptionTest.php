@@ -53,19 +53,17 @@ class ExceptionTest extends TestCase
         $ret = $m->getColorfulText();
         self::assertStringContainsString("\e[", $ret);
         self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // reset colors at the end
+        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // format is reset
 
         $m->addMoreInfo('a1', 111);
         $ret = $m->getColorfulText();
-        self::assertStringContainsString("\e[", $ret);
         self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // reset colors at the end
+        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // format is reset
 
         $m->addSolution('Simple solution');
         $ret = $m->getColorfulText();
-        self::assertStringContainsString("\e[", $ret);
         self::assertStringNotContainsString('\e[', $ret);
-        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // reset colors at the end
+        self::assertMatchesRegularExpression('~\e\[0m(?!.*\e\[[0-9;]*m)~s', $ret); // format is reset
     }
 
     public function testToSafeString(): void
