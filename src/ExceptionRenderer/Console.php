@@ -130,25 +130,27 @@ class Console extends RendererAbstract
                 $inAtk = false;
             }
 
+            $functionColor = $escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW;
+
             $tokens = [
                 '{FILE}' => str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT),
                 '{LINE}' => str_pad($call['line'], 4, ' ', \STR_PAD_LEFT),
                 '{OBJECT}' => $call['object'] !== null ? ' - ' . $this->text($call['object_formatted'], [self::COLOR_GREEN]) : '',
                 '{CLASS}' => $call['class'] !== null ? $this->text($call['class_formatted'] . '::', [self::COLOR_GREEN]) : '',
-                '{FUNCTION}' => $call['function'] !== null ? $this->text($call['function'], [$escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW]) : '',
+                '{FUNCTION}' => $call['function'] !== null ? $this->text($call['function'], [$functionColor]) : '',
             ];
 
             if ($index === 'self') {
                 $tokens['{FUNCTION_ARGS}'] = '';
             } elseif (count($call['args']) === 0) {
-                $tokens['{FUNCTION_ARGS}'] = '()';
+                $tokens['{FUNCTION_ARGS}'] = $this->text('()', [$functionColor]);
             } else {
                 if ($escapeFrame) {
                     $tokens['{FUNCTION_ARGS}'] = $this->text('(' . "\n" . str_repeat(' ', 40) . implode(',' . "\n" . str_repeat(' ', 40), array_map(static function ($arg) {
                         return static::toSafeString($arg);
                     }, $call['args'])) . ')', [self::COLOR_RED]);
                 } else {
-                    $tokens['{FUNCTION_ARGS}'] = '(...)';
+                    $tokens['{FUNCTION_ARGS}'] = $this->text('(...)', [$functionColor]);
                 }
             }
 
