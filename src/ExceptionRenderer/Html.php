@@ -21,7 +21,7 @@ class Html extends RendererAbstract
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
-        $this->output .= $this->replaceTokens('
+        $this->output .= $this->replaceTokens(<<<'EOF'
             <div class="ui negative icon message">
                 <i class="warning sign icon"></i>
                 <div class="content">
@@ -30,7 +30,8 @@ class Html extends RendererAbstract
                     {MESSAGE}
                 </div>
             </div>
-        ', $tokens);
+
+            EOF, $tokens);
     }
 
     protected function encodeHtml(string $value): string
@@ -49,19 +50,23 @@ class Html extends RendererAbstract
             return;
         }
 
-        $text = '
+        $text = <<<'EOF'
+
             <table class="ui very compact small selectable table top aligned">
                 <thead><tr><th colspan="2" class="ui inverted red table">Exception Parameters</th></tr></thead>
                 <tbody>{PARAMS}
                 </tbody>
             </table>
-        ';
+
+            EOF;
 
         $tokens = [
             '{PARAMS}' => '',
         ];
-        $textInner = '
-                    <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>';
+        $textInner = <<<'EOF'
+
+                    <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>
+            EOF;
         foreach ($this->exception->getParams() as $key => $val) {
             $key = $this->encodeHtml($key);
             $val = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', $this->encodeHtml(static::toSafeString($val, true))) . '</span>';
@@ -89,19 +94,23 @@ class Html extends RendererAbstract
             return;
         }
 
-        $text = '
+        $text = <<<'EOF'
+
             <table class="ui very compact small selectable table top aligned">
                 <thead><tr><th colspan="2" class="ui inverted green table">Suggested solutions</th></tr></thead>
                 <tbody>{SOLUTIONS}
                 </tbody>
             </table>
-        ';
+
+            EOF;
 
         $tokens = [
             '{SOLUTIONS}' => '',
         ];
-        $textInner = '
-                    <tr><td>{VAL}</td></tr>';
+        $textInner = <<<'EOF'
+
+                    <tr><td>{VAL}</td></tr>
+            EOF;
         foreach ($exception->getSolutions() as $key => $val) {
             $tokens['{SOLUTIONS}'] .= $this->replaceTokens($textInner, ['{VAL}' => $this->encodeHtml($val)]);
         }
@@ -112,32 +121,38 @@ class Html extends RendererAbstract
     #[\Override]
     protected function processStackTrace(): void
     {
-        $this->output .= '
+        $this->output .= <<<'EOF'
+
             <table class="ui very compact small selectable table top aligned">
                 <thead><tr><th colspan="4">Stack Trace</th></tr></thead>
                 <thead><tr><th style="text-align: right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
                 <tbody>
-        ';
+
+            EOF;
 
         $this->processStackTraceInternal();
 
-        $this->output .= '
+        $this->output .= <<<'EOF'
+
                 </tbody>
             </table>
-        ';
+
+            EOF;
     }
 
     #[\Override]
     protected function processStackTraceInternal(): void
     {
-        $text = '
+        $text = <<<'EOF'
+
             <tr class="{CSS_CLASS}">
                 <td style="text-align: right">{INDEX}</td>
                 <td>{FILE_LINE}</td>
                 <td>{OBJECT}</td>
                 <td>{FUNCTION}{FUNCTION_ARGS}</td>
             </tr>
-        ';
+
+            EOF;
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);
@@ -178,14 +193,16 @@ class Html extends RendererAbstract
         }
 
         if ($isShortened) {
-            $this->output .= '
+            $this->output .= <<<'EOF'
+
                 <tr>
                     <td style="text-align: right">...</td>
                     <td></td>
                     <td></td>
                     <td></td>
                 </tr>
-            ';
+
+                EOF;
         }
     }
 
@@ -196,11 +213,13 @@ class Html extends RendererAbstract
             return;
         }
 
-        $this->output .= '
+        $this->output .= <<<'EOF'
+
             <div class="ui top attached segment">
                 <div class="ui top attached label">Caused by Previous Exception:</div>
             </div>
-        ';
+
+            EOF;
 
         $this->output .= (string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception));
     }

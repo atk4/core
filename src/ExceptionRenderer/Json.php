@@ -129,8 +129,12 @@ class Json extends RendererAbstract
     #[\Override]
     public function __toString(): string
     {
+        $toStringFx = fn () => json_encode($this->json, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT | \JSON_THROW_ON_ERROR);
+
         try {
             $this->processAll();
+
+            return $toStringFx();
         } catch (\Throwable $e) {
             // fallback if error occur
             $this->json = [
@@ -153,6 +157,6 @@ class Json extends RendererAbstract
             ];
         }
 
-        return (string) json_encode($this->json, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE);
+        return $toStringFx();
     }
 }
