@@ -62,7 +62,7 @@ class Console extends RendererAbstract
             $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
                 . '{CLASS}: '
                 . $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) . ' '
-                . $this->text('{CODE}', [self::COLOR_RED]) . "\n",
+                . $this->text('{CODE}', [self::COLOR_RED]),
             $tokens
         );
     }
