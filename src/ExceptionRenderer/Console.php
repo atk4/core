@@ -25,25 +25,24 @@ class Console extends RendererAbstract
     private function text(string $text, array $formats): string
     {
         assert(!str_contains($text, "\e["));
-        
-        $format = '';
-        foreach ($formats as $f) {
-            if (substr($format, -1) === 'm' && substr($f, 0, 2) === "\e[" && substr($f, -1) === "m") {
-                $format = substr($format, 0, -1) . ';' . substr($f, 2);
-            } else {
-                $format .= $f;
-            }
-        }
 
-        return $format . $text . self::RESET;
+        return implode('', $formats) . $text . self::RESET;
+    }
+
+    private function optimizeText(string $value): string
+    {
+        $res = preg_replace("~\e\[\d{1,2}m\e\[0m~", '', $value);
+        $res = preg_replace("~(?<=\e\[\d|\e\[\d\d)m\e\[(\d{1,2})(?=m)~", ';$1', $res);
+        
+        return implode("\n", array_map(static fn ($v) => rtrim($v, ' '), explode("\n", $res)));
     }
 
     #[\Override]
     protected function processAll(): void
     {
-        $this->output .= self::RESET;
-
         parent::processAll();
+
+        $this->output = $this->optimizeText(self::RESET . $this->output);
     }
 
     #[\Override]
@@ -154,7 +153,7 @@ class Console extends RendererAbstract
                 }
             }
 
-            $this->output .= rtrim($this->replaceTokens($text, $tokens), ' ') . "\n";
+            $this->output .= $this->replaceTokens($text, $tokens) . "\n";
         }
 
         if ($isShortened) {
