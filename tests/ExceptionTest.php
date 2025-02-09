@@ -17,27 +17,26 @@ class ExceptionTest extends TestCase
 
         self::assertSame(['a1' => 111, 'a2' => 222], $ex->getParams());
 
-        $ex = new Exception('PreviousError');
-        $ex = new Exception('TestIt', 123, $ex);
+        $ex = new Exception('TestIt', 123, new Exception('PreviousError'));
         $ex->addMoreInfo('a1', 222);
         $ex->addMoreInfo('a2', 333);
 
         self::assertSame(['a1' => 222, 'a2' => 333], $ex->getParams());
 
         $ret = $ex->getHtml();
-        self::assertMatchesRegularExpression('~TestIt~', $ret);
-        self::assertMatchesRegularExpression('~PreviousError~', $ret);
-        self::assertMatchesRegularExpression('~333~', $ret);
+        self::assertStringContainsString('TestIt', $ret);
+        self::assertStringContainsString('PreviousError', $ret);
+        self::assertStringContainsString('333', $ret);
 
         $ret = $ex->getColorfulText();
-        self::assertMatchesRegularExpression('~TestIt~', $ret);
-        self::assertMatchesRegularExpression('~PreviousError~', $ret);
-        self::assertMatchesRegularExpression('~333~', $ret);
+        self::assertStringContainsString('TestIt', $ret);
+        self::assertStringContainsString('PreviousError', $ret);
+        self::assertStringContainsString('333', $ret);
 
         $ret = $ex->getJson();
-        self::assertMatchesRegularExpression('~TestIt~', $ret);
-        self::assertMatchesRegularExpression('~PreviousError~', $ret);
-        self::assertMatchesRegularExpression('~333~', $ret);
+        self::assertStringContainsString('TestIt', $ret);
+        self::assertStringContainsString('PreviousError', $ret);
+        self::assertStringContainsString('333', $ret);
     }
 
     public function testMore(): void
@@ -48,16 +47,16 @@ class ExceptionTest extends TestCase
         $ex->setMessage('bumbum');
 
         $ret = $ex->getHtml();
-        self::assertMatchesRegularExpression('~Classic~', $ret);
-        self::assertMatchesRegularExpression('~bumbum~', $ret);
+        self::assertStringContainsString('Classic', $ret);
+        self::assertStringContainsString('bumbum', $ret);
 
         $ret = $ex->getColorfulText();
-        self::assertMatchesRegularExpression('~Classic~', $ret);
-        self::assertMatchesRegularExpression('~bumbum~', $ret);
+        self::assertStringContainsString('Classic', $ret);
+        self::assertStringContainsString('bumbum', $ret);
 
         $ret = $ex->getJson();
-        self::assertMatchesRegularExpression('~Classic~', $ret);
-        self::assertMatchesRegularExpression('~bumbum~', $ret);
+        self::assertStringContainsString('Classic', $ret);
+        self::assertStringContainsString('bumbum', $ret);
     }
 
     public function testSolution(): void
@@ -66,13 +65,13 @@ class ExceptionTest extends TestCase
         $ex->addSolution('One Solution');
 
         $ret = $ex->getHtml();
-        self::assertMatchesRegularExpression('~One Solution~', $ret);
+        self::assertStringContainsString('One Solution', $ret);
 
         $ret = $ex->getColorfulText();
-        self::assertMatchesRegularExpression('~One Solution~', $ret);
+        self::assertStringContainsString('One Solution', $ret);
 
         $ret = $ex->getJson();
-        self::assertMatchesRegularExpression('~One Solution~', $ret);
+        self::assertStringContainsString('One Solution', $ret);
     }
 
     public function testSolution2(): void
@@ -81,15 +80,15 @@ class ExceptionTest extends TestCase
             ->addSolution('1st Solution');
 
         $ret = $ex->getColorfulText();
-        self::assertMatchesRegularExpression('~1st Solution~', $ret);
+        self::assertStringContainsString('1st Solution', $ret);
 
         $ex = (new Exception('Exception with solution'))
             ->addSolution('1st Solution')
             ->addSolution('2nd Solution');
 
         $ret = $ex->getColorfulText();
-        self::assertMatchesRegularExpression('~1st Solution~', $ret);
-        self::assertMatchesRegularExpression('~2nd Solution~', $ret);
+        self::assertStringContainsString('1st Solution', $ret);
+        self::assertStringContainsString('2nd Solution', $ret);
     }
 
     public function testPhpunitSelfDescribing(): void

@@ -226,7 +226,7 @@ class ExceptionRendererTest extends TestCase
                         'title' => 'Exception',
                         'class' => 'Exception',
                         'code' => 0,
-                        'message' => 'just to cover __string',
+                        'message' => 'Break __string()',
                     ],
                 ],
                 \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
@@ -247,6 +247,6 @@ class ExceptionThrowError extends Exception
     #[\Override]
     public function getCustomExceptionTitle(): string
     {
-        throw new \Exception('just to cover __string');
+        throw new \Exception('Break __string()');
     }
 }
