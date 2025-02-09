@@ -9,6 +9,7 @@ use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 class StdSat extends \stdClass
 {
@@ -90,8 +91,16 @@ class StaticAddToTest extends TestCase
 
         // object is not a subtype
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object is not an instance of static class');
         StdSat2::assertInstanceOf(new StdSat());
+    }
 
+    /**
+     * @doesNotPerformAssertions
+     */
+    #[DoesNotPerformAssertions]
+    public function testAssertInstanceOfPhpstan(): void
+    {
         $o = $this->createStdSat2();
         $o->foo(); // @phpstan-ignore method.nonObject
 
