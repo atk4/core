@@ -9,13 +9,17 @@ use Atk4\Core\Exception;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\StaticAddToTrait;
 use Atk4\Core\TrackableTrait;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 class StdSat extends \stdClass
 {
     use StaticAddToTrait;
 }
 
-class StdSat2 extends StdSat {}
+class StdSat2 extends StdSat
+{
+    public function foo(): void {}
+}
 
 class ContainerFactoryMockSat
 {
@@ -82,7 +86,33 @@ class StaticAddToTest extends TestCase
 
         // object is not a subtype
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object is not an instance of static class');
         StdSat2::assertInstanceOf(new StdSat());
+    }
+
+    private function createStdSat2(): \stdClass
+    {
+        return new StdSat2();
+    }
+
+    /**
+     * @doesNotPerformAssertions
+     */
+    #[DoesNotPerformAssertions]
+    public function testAssertInstanceOfPhpstan(): void
+    {
+        $o = $this->createStdSat2();
+        $o->foo(); // @phpstan-ignore method.nonObject
+
+        $o = $this->createStdSat2();
+        StdSat2::assertInstanceOf($o)->foo();
+
+        $o = new StdSat2();
+        StdSat::assertInstanceOf($o)->foo();
+
+        $o = $this->createStdSat2();
+        StdSat2::assertInstanceOf($o);
+        $o->foo(); // @phpstan-ignore method.nonObject (TODO remove once https://github.com/phpstan/phpstan/issues/12548 is fixed)
     }
 
     public function testWithClassName(): void

@@ -10,27 +10,23 @@ class Json extends RendererAbstract
 {
     /** @var array<string, mixed> */
     protected array $json = [
-        'success' => false,
-        'code' => 0,
         'message' => '',
         'title' => '',
         'class' => '',
+        'code' => 0,
         'params' => [],
         'solution' => [],
         'trace' => [],
-        'previous' => [],
+        'previous' => null,
     ];
 
     #[\Override]
     protected function processHeader(): void
     {
-        $title = $this->getExceptionTitle();
-        $class = get_class($this->exception);
-
-        $this->json['code'] = $this->exception->getCode();
         $this->json['message'] = $this->getExceptionMessage();
-        $this->json['title'] = $title;
-        $this->json['class'] = $class;
+        $this->json['title'] = $this->getExceptionTitle();
+        $this->json['class'] = get_class($this->exception);
+        $this->json['code'] = $this->exception->getCode();
     }
 
     #[\Override]
@@ -96,7 +92,7 @@ class Json extends RendererAbstract
                 }, $call['args']);
             }
 
-            $this->json['stack'][] = $call;
+            $this->json['trace'][] = $call;
         }
     }
 
@@ -117,8 +113,8 @@ class Json extends RendererAbstract
     protected function parseStackTraceFrame(array $frame): array
     {
         return [
-            'line' => $frame['line'] ?? '',
             'file' => $frame['file'] ?? '',
+            'line' => $frame['line'] ?? '',
             'class' => $frame['class'] ?? null,
             'object' => ($frame['object'] ?? null) !== null ? static::toSafeString($frame['object']) : null,
             'function' => $frame['function'] ?? null,
@@ -138,21 +134,20 @@ class Json extends RendererAbstract
         } catch (\Throwable $e) {
             // fallback if error occur
             $this->json = [
-                'success' => false,
-                'code' => $this->exception->getCode(),
-                'message' => 'Error during json renderer: ' . $this->exception->getMessage(),
+                'message' => 'ATK4 CORE ERROR - EXCEPTION JSON RENDER FAILED: ' . $this->exception->getMessage(),
                 // avoid translation
                 // 'message' => $this->_($this->exception->getMessage()),
                 'title' => get_class($this->exception),
                 'class' => get_class($this->exception),
+                'code' => $this->exception->getCode(),
                 'params' => [],
                 'solution' => [],
                 'trace' => [],
                 'previous' => [
+                    'message' => $e->getMessage(),
                     'title' => get_class($e),
                     'class' => get_class($e),
                     'code' => $e->getCode(),
-                    'message' => $e->getMessage(),
                 ],
             ];
         }

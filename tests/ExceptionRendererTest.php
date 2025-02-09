@@ -14,39 +14,38 @@ class ExceptionRendererTest extends TestCase
 {
     protected function createExceptionWithConstantTrace(): Exception
     {
-        $ex = new Exception('My exception for <a> tag');
-        $ex->addMoreInfo('foo', 111);
-        $ex->addSolution('Use <b> tag');
-
-        foreach ([
-            'file' => '/a/ex.php',
-            'line' => 10,
-            'trace' => [
-                ['file' => '/a/text.php', 'line' => 12345, 'function' => 'formatValue', 'class' => self::class, 'object' => $this, 'type' => '->', 'args' => ['xxx']],
-                ['file' => '/a/main.php', 'line' => 20, 'function' => 'main', 'class' => self::class, 'type' => '::', 'args' => []],
-            ],
-        ] as $k => $v) {
+        $setExceptionPropertyFx = static function (\Exception $e, string $k, $v) {
             $propRefl = new \ReflectionProperty(\Exception::class, $k);
             $propRefl->setAccessible(true);
-            $propRefl->setValue($ex, $v);
-        }
+            $propRefl->setValue($e, $v);
+        };
 
-        return $ex;
+        $e = new Exception('My exception for <a> tag', 5);
+        $e->addMoreInfo('foo', 111);
+        $e->addSolution('Use <b> tag');
+        $setExceptionPropertyFx($e, 'file', '/a/ex.php');
+        $setExceptionPropertyFx($e, 'line', 10);
+        $setExceptionPropertyFx($e, 'trace', [
+            ['file' => '/a/text.php', 'line' => 12345, 'function' => 'formatValue', 'class' => self::class, 'object' => $this, 'type' => '->', 'args' => ['xxx']],
+            ['file' => '/a/main.php', 'line' => 20, 'function' => 'main', 'class' => self::class, 'type' => '::', 'args' => []],
+        ]);
+
+        return $e;
     }
 
     public function testFormatHtml(): void
     {
-        $ex = $this->createExceptionWithConstantTrace();
+        $e = $this->createExceptionWithConstantTrace();
 
-        self::assertStringStartsWith('<', $ex->getHtml());
-        self::assertStringEndsWith(">\n", $ex->getHtml());
+        self::assertStringStartsWith('<', $e->getHtml());
+        self::assertStringEndsWith(">\n", $e->getHtml());
 
         self::assertSame(<<<'EOF'
             <div class="ui negative icon message">
                 <i class="warning sign icon"></i>
                 <div class="content">
                     <div class="header">Critical Error</div>
-                    Atk4\Core\Exception:
+                    Atk4\Core\Exception [code: 5]:
                     My exception for <a> tag
                 </div>
             </div>
@@ -70,67 +69,64 @@ class ExceptionRendererTest extends TestCase
                 <thead><tr><th style="text-align: right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
                 <tbody>
 
-            <tr class="negative">
-                <td style="text-align: right"></td>
-                <td>/a/ex.php:10</td>
-                <td></td>
-                <td></td>
-            </tr>
+                    <tr class="negative">
+                        <td style="text-align: right"></td>
+                        <td>/a/ex.php:10</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
-            <tr class="">
-                <td style="text-align: right">2</td>
-                <td>/a/text.php:12345</td>
-                <td>Atk4\Core\Tests\ExceptionRendererTest</td>
-                <td>formatValue(...)</td>
-            </tr>
+                    <tr class="">
+                        <td style="text-align: right">2</td>
+                        <td>/a/text.php:12345</td>
+                        <td>Atk4\Core\Tests\ExceptionRendererTest</td>
+                        <td>formatValue(...)</td>
+                    </tr>
 
-            <tr class="">
-                <td style="text-align: right">1</td>
-                <td>/a/main.php:20</td>
-                <td></td>
-                <td>main()</td>
-            </tr>
+                    <tr class="">
+                        <td style="text-align: right">1</td>
+                        <td>/a/main.php:20</td>
+                        <td></td>
+                        <td>main()</td>
+                    </tr>
 
                 </tbody>
             </table>
 
-            EOF, $ex->getHtml());
+            EOF, $e->getHtml());
     }
 
     public function testFormatJson(): void
     {
-        $ex = $this->createExceptionWithConstantTrace();
+        $e = $this->createExceptionWithConstantTrace();
 
-        self::assertStringStartsWith('{', $ex->getJson());
-        self::assertStringEndsWith('}', $ex->getJson());
+        self::assertStringStartsWith('{', $e->getJson());
+        self::assertStringEndsWith('}', $e->getJson());
 
         self::assertSame(<<<'EOF'
             {
-                "success": false,
-                "code": 0,
                 "message": "My exception for <a> tag",
                 "title": "Critical Error",
                 "class": "Atk4\\Core\\Exception",
+                "code": 5,
                 "params": {
                     "foo": "111"
                 },
                 "solution": [
                     "Use <b> tag"
                 ],
-                "trace": [],
-                "previous": [],
-                "stack": [
+                "trace": [
                     {
-                        "line": 10,
                         "file": "/a/ex.php",
+                        "line": 10,
                         "class": null,
                         "object": null,
                         "function": null,
                         "args": []
                     },
                     {
-                        "line": 12345,
                         "file": "/a/text.php",
+                        "line": 12345,
                         "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
                         "object": "Atk4\\Core\\Tests\\ExceptionRendererTest",
                         "function": "formatValue",
@@ -139,37 +135,44 @@ class ExceptionRendererTest extends TestCase
                         ]
                     },
                     {
-                        "line": 20,
                         "file": "/a/main.php",
+                        "line": 20,
                         "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
                         "object": null,
                         "function": "main",
                         "args": []
                     }
-                ]
+                ],
+                "previous": null
             }
-            EOF, $ex->getJson());
+            EOF, $e->getJson());
     }
 
     public function testFormatConsole(): void
     {
-        $ex = $this->createExceptionWithConstantTrace();
+        $e = $this->createExceptionWithConstantTrace();
 
-        self::assertStringStartsWith("\e[0m", $ex->getColorfulText());
-        self::assertStringEndsWith("\n", $ex->getColorfulText());
-        self::assertStringNotContainsString('\e[', $ex->getColorfulText());
+        self::assertStringStartsWith("\e[0;", $e->getColorfulText());
+        self::assertStringEndsWith("\n", $e->getColorfulText());
 
-        self::assertSame(<<<"EOF"
-            \e[0m\e[1m\e[41m--[ Critical Error ]\e[0m
-            Atk4\\Core\\Exception: \e[1m\e[30mMy exception for <a> tag\e[0m \e[31m\e[0m
+        self::assertSame(str_replace("\e", '\e', <<<"EOF"
+            \e[0;1;41m--[ Critical Error ]\e[0m
+            Atk4\\Core\\Exception: \e[1;30mMy exception for <a> tag\e[0m \e[31m[code: 5]\e[0m
             \e[91m                foo: 111\e[0m
             \e[92mSolution: Use <b> tag\e[0m
-            \e[1m\e[41m--[ Stack Trace ]\e[0m
+            \e[1;41m--[ Stack Trace ]\e[0m
                                            /a/ex.php:\e[31m  10\e[0m
-                                         /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0m\e[33mformatValue\e[0m\e[33m(...)\e[0m
-                                         /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0m\e[33mmain\e[0m\e[33m()\e[0m
+                                         /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mformatValue\e[0;33m(...)\e[0m
+                                         /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mmain\e[0;33m()\e[0m
 
-            EOF, $ex->getColorfulText());
+            EOF), str_replace("\e", '\e', $e->getColorfulText()));
+
+        self::assertStringNotContainsString('\e[', $e->getColorfulText());
+
+        $e->setMessage("prevent\eESC");
+        self::assertStringNotContainsString("prevent\e", $e->getColorfulText());
+        self::assertStringNotContainsString("\eESC", $e->getColorfulText());
+        self::assertStringContainsString('preventESC', $e->getColorfulText());
     }
 
     public function testToSafeString(): void
@@ -207,32 +210,31 @@ class ExceptionRendererTest extends TestCase
 
     public function testExceptionFallback(): void
     {
-        $ex = new ExceptionThrowError('test', 2);
-        $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
+        $e = new ExceptionThrowError('test', 2);
+        $epectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionThrowError::class . '(2): test !!';
-        self::assertSame($expectedFallbackText, $ex->getHtml());
-        self::assertSame($expectedFallbackText, $ex->getColorfulText());
+        self::assertSame($epectedFallbackText, $e->getHtml());
+        self::assertSame($epectedFallbackText, $e->getColorfulText());
         self::assertSame(
             json_encode(
                 [
-                    'success' => false,
-                    'code' => 2,
-                    'message' => 'Error during json renderer: test',
+                    'message' => 'ATK4 CORE ERROR - EXCEPTION JSON RENDER FAILED: test',
                     'title' => ExceptionThrowError::class,
                     'class' => ExceptionThrowError::class,
+                    'code' => 2,
                     'params' => [],
                     'solution' => [],
                     'trace' => [],
                     'previous' => [
+                        'message' => 'Break __string()',
                         'title' => 'Exception',
                         'class' => 'Exception',
                         'code' => 0,
-                        'message' => 'just to cover __string',
                     ],
                 ],
                 \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
             ),
-            $ex->getJson()
+            $e->getJson()
         );
     }
 }
@@ -248,6 +250,6 @@ class ExceptionThrowError extends Exception
     #[\Override]
     public function getCustomExceptionTitle(): string
     {
-        throw new \Exception('just to cover __string');
+        throw new \Exception('Break __string()');
     }
 }
