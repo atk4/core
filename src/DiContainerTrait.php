@@ -83,11 +83,7 @@ trait DiContainerTrait
      * The best, typehinting-friendly, way to annotate object type if it not defined
      * at method header or strong typing in method header cannot be used.
      *
-     * @template T of object
-     *
-     * @param T $object
-     *
-     * @return (T is static ? T : static)
+     * @return static
      */
     public static function assertInstanceOf(object $object)// :static supported by PHP8+
     {
