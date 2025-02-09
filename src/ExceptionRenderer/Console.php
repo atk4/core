@@ -25,8 +25,17 @@ class Console extends RendererAbstract
     private function text(string $text, array $formats): string
     {
         assert(!str_contains($text, "\e["));
+        
+        $format = '';
+        foreach ($formats as $f) {
+            if (substr($format, -1) === 'm' && substr($f, 0, 2) === "\e[" && substr($f, -1) === "m") {
+                $format = substr($format, 0, -1) . ';' . substr($f, 2);
+            } else {
+                $format .= $f;
+            }
+        }
 
-        return implode('', $formats) . $text . self::RESET;
+        return $format . $text . self::RESET;
     }
 
     #[\Override]

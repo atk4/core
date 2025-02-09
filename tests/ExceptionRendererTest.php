@@ -160,11 +160,11 @@ class ExceptionRendererTest extends TestCase
         self::assertStringNotContainsString('\e[', $ex->getColorfulText());
 
         self::assertSame(<<<"EOF"
-            \e[0m\e[1m\e[41m--[ Critical Error ]\e[0m
-            Atk4\\Core\\Exception: \e[1m\e[30mMy exception for <a> tag\e[0m \e[31m\e[0m
+            \e[0m\e[1;41m--[ Critical Error ]\e[0m
+            Atk4\\Core\\Exception: \e[1;30mMy exception for <a> tag\e[0m \e[31m\e[0m
             \e[91m                foo: 111\e[0m
             \e[92mSolution: Use <b> tag\e[0m
-            \e[1m\e[41m--[ Stack Trace ]\e[0m
+            \e[1;41m--[ Stack Trace ]\e[0m
                                            /a/ex.php:\e[31m  10\e[0m
                                          /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0m\e[33mformatValue\e[0m\e[33m(...)\e[0m
                                          /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0m\e[33mmain\e[0m\e[33m()\e[0m
