@@ -88,8 +88,6 @@ trait DiContainerTrait
      * @param T $object
      *
      * @return (T is static ? T : static)
-     *
-     * @phpstan-assert static $object
      */
     public static function assertInstanceOf(object $object)// :static supported by PHP8+
     {

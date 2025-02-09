@@ -100,7 +100,7 @@ class StaticAddToTest extends TestCase
 
         $o = $this->createStdSat2();
         StdSat2::assertInstanceOf($o);
-        $o->foo();
+        $o->foo(); // @phpstan-ignore method.nonObject (TODO remove once https://github.com/phpstan/phpstan/issues/12548 is fixed)
     }
 
     public function testWithClassName(): void
