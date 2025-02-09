@@ -145,12 +145,12 @@ class Html extends RendererAbstract
     {
         $text = <<<'EOF'
 
-            <tr class="{CSS_CLASS}">
-                <td style="text-align: right">{INDEX}</td>
-                <td>{FILE_LINE}</td>
-                <td>{OBJECT}</td>
-                <td>{FUNCTION}{FUNCTION_ARGS}</td>
-            </tr>
+                    <tr class="{CSS_CLASS}">
+                        <td style="text-align: right">{INDEX}</td>
+                        <td>{FILE_LINE}</td>
+                        <td>{OBJECT}</td>
+                        <td>{FUNCTION}{FUNCTION_ARGS}</td>
+                    </tr>
 
             EOF;
 

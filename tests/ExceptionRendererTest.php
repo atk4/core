@@ -70,26 +70,26 @@ class ExceptionRendererTest extends TestCase
                 <thead><tr><th style="text-align: right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
                 <tbody>
 
-            <tr class="negative">
-                <td style="text-align: right"></td>
-                <td>/a/ex.php:10</td>
-                <td></td>
-                <td></td>
-            </tr>
+                    <tr class="negative">
+                        <td style="text-align: right"></td>
+                        <td>/a/ex.php:10</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
 
-            <tr class="">
-                <td style="text-align: right">2</td>
-                <td>/a/text.php:12345</td>
-                <td>Atk4\Core\Tests\ExceptionRendererTest</td>
-                <td>formatValue(...)</td>
-            </tr>
+                    <tr class="">
+                        <td style="text-align: right">2</td>
+                        <td>/a/text.php:12345</td>
+                        <td>Atk4\Core\Tests\ExceptionRendererTest</td>
+                        <td>formatValue(...)</td>
+                    </tr>
 
-            <tr class="">
-                <td style="text-align: right">1</td>
-                <td>/a/main.php:20</td>
-                <td></td>
-                <td>main()</td>
-            </tr>
+                    <tr class="">
+                        <td style="text-align: right">1</td>
+                        <td>/a/main.php:20</td>
+                        <td></td>
+                        <td>main()</td>
+                    </tr>
 
                 </tbody>
             </table>
