@@ -74,11 +74,6 @@ class StaticAddToTest extends TestCase
         StdSat::addTo($m, $tr); // @phpstan-ignore argument.type
     }
 
-    private function createStdSat2(): \stdClass
-    {
-        return new StdSat2();
-    }
-
     public function testAssertInstanceOf(): void
     {
         // object is of the same class
@@ -95,6 +90,11 @@ class StaticAddToTest extends TestCase
         StdSat2::assertInstanceOf(new StdSat());
     }
 
+    private function createStdSat2(): \stdClass
+    {
+        return new StdSat2();
+    }
+
     /**
      * @doesNotPerformAssertions
      */
@@ -106,6 +106,9 @@ class StaticAddToTest extends TestCase
 
         $o = $this->createStdSat2();
         StdSat2::assertInstanceOf($o)->foo();
+
+        $o = new StdSat2();
+        StdSat::assertInstanceOf($o)->foo();
 
         $o = $this->createStdSat2();
         StdSat2::assertInstanceOf($o);
