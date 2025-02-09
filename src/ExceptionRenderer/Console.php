@@ -56,7 +56,7 @@ class Console extends RendererAbstract
         $this->output .= $this->text('--[ ' . $title . ' ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
             . $this->text($class . ': ')
             . $this->text($this->getExceptionMessage(), [self::FORMAT_BOLD, self::COLOR_BLACK])
-            . $this->text($this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '', [self::COLOR_RED]);
+            . ($this->exception->getCode() !== 0 ? ' ' . $this->text('[code: ' . $this->exception->getCode() . ']', [self::COLOR_RED]) : '');
     }
 
     #[\Override]

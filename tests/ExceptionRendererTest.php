@@ -20,7 +20,7 @@ class ExceptionRendererTest extends TestCase
             $propRefl->setValue($e, $v);
         };
 
-        $e = new Exception('My exception for <a> tag');
+        $e = new Exception('My exception for <a> tag', 5);
         $e->addMoreInfo('foo', 111);
         $e->addSolution('Use <b> tag');
         $setExceptionPropertyFx($e, 'file', '/a/ex.php');
@@ -45,7 +45,7 @@ class ExceptionRendererTest extends TestCase
                 <i class="warning sign icon"></i>
                 <div class="content">
                     <div class="header">Critical Error</div>
-                    Atk4\Core\Exception:
+                    Atk4\Core\Exception [code: 5]:
                     My exception for <a> tag
                 </div>
             </div>
@@ -108,7 +108,7 @@ class ExceptionRendererTest extends TestCase
                 "message": "My exception for <a> tag",
                 "title": "Critical Error",
                 "class": "Atk4\\Core\\Exception",
-                "code": 0,
+                "code": 5,
                 "params": {
                     "foo": "111"
                 },
@@ -157,7 +157,7 @@ class ExceptionRendererTest extends TestCase
 
         self::assertSame(str_replace("\e", '\e', <<<"EOF"
             \e[0;1;41m--[ Critical Error ]\e[0m
-            Atk4\\Core\\Exception: \e[1;30mMy exception for <a> tag\e[0m
+            Atk4\\Core\\Exception: \e[1;30mMy exception for <a> tag\e[0m \e[31m[code: 5]\e[0m
             \e[91m                foo: 111\e[0m
             \e[92mSolution: Use <b> tag\e[0m
             \e[1;41m--[ Stack Trace ]\e[0m
