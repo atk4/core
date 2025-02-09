@@ -134,7 +134,7 @@ class Json extends RendererAbstract
         } catch (\Throwable $e) {
             // fallback if error occur
             $this->json = [
-                'message' => 'Error during json renderer: ' . $this->exception->getMessage(),
+                'message' => 'ATK4 CORE ERROR - EXCEPTION JSON RENDER FAILED: ' . $this->exception->getMessage(),
                 // avoid translation
                 // 'message' => $this->_($this->exception->getMessage()),
                 'title' => get_class($this->exception),

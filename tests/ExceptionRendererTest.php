@@ -212,7 +212,7 @@ class ExceptionRendererTest extends TestCase
         self::assertSame(
             json_encode(
                 [
-                    'message' => 'Error during json renderer: test',
+                    'message' => 'ATK4 CORE ERROR - EXCEPTION JSON RENDER FAILED: test',
                     'title' => ExceptionThrowError::class,
                     'class' => ExceptionThrowError::class,
                     'code' => 2,
