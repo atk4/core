@@ -31,9 +31,9 @@ class Console extends RendererAbstract
 
     private function optimizeText(string $value): string
     {
-        $res = preg_replace("~\e\[\d{1,2}m\e\[0m~", '', $value);
-        $res = preg_replace("~(?<=\e\[\d|\e\[\d\d)m\e\[(\d{1,2})(?=m)~", ';$1', $res);
-        
+        $res = preg_replace("~\e\\[\\d{1,2}m\e\\[0m~", '', $value);
+        $res = preg_replace("~(?<=\e\\[\\d|\e\\[\\d{2})m\e\\[(\\d{1,2})(?=m)~", ';$1', $res);
+
         return implode("\n", array_map(static fn ($v) => rtrim($v, ' '), explode("\n", $res)));
     }
 
