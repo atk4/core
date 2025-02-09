@@ -105,10 +105,10 @@ class ExceptionRendererTest extends TestCase
 
         self::assertSame(<<<'EOF'
             {
-                "code": 0,
                 "message": "My exception for <a> tag",
                 "title": "Critical Error",
                 "class": "Atk4\\Core\\Exception",
+                "code": 0,
                 "params": {
                     "foo": "111"
                 },
@@ -117,16 +117,16 @@ class ExceptionRendererTest extends TestCase
                 ],
                 "trace": [
                     {
-                        "line": 10,
                         "file": "/a/ex.php",
+                        "line": 10,
                         "class": null,
                         "object": null,
                         "function": null,
                         "args": []
                     },
                     {
-                        "line": 12345,
                         "file": "/a/text.php",
+                        "line": 12345,
                         "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
                         "object": "Atk4\\Core\\Tests\\ExceptionRendererTest",
                         "function": "formatValue",
@@ -135,15 +135,15 @@ class ExceptionRendererTest extends TestCase
                         ]
                     },
                     {
-                        "line": 20,
                         "file": "/a/main.php",
+                        "line": 20,
                         "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
                         "object": null,
                         "function": "main",
                         "args": []
                     }
                 ],
-                "previous": []
+                "previous": null
             }
             EOF, $e->getJson());
     }
@@ -212,18 +212,18 @@ class ExceptionRendererTest extends TestCase
         self::assertSame(
             json_encode(
                 [
-                    'code' => 2,
                     'message' => 'Error during json renderer: test',
                     'title' => ExceptionThrowError::class,
                     'class' => ExceptionThrowError::class,
+                    'code' => 2,
                     'params' => [],
                     'solution' => [],
                     'trace' => [],
                     'previous' => [
+                        'message' => 'Break __string()',
                         'title' => 'Exception',
                         'class' => 'Exception',
                         'code' => 0,
-                        'message' => 'Break __string()',
                     ],
                 ],
                 \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
