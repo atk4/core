@@ -96,7 +96,7 @@ class Json extends RendererAbstract
                 }, $call['args']);
             }
 
-            $this->json['stack'][] = $call;
+            $this->json['trace'][] = $call;
         }
     }
 

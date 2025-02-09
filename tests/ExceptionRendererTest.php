@@ -117,9 +117,7 @@ class ExceptionRendererTest extends TestCase
                 "solution": [
                     "Use <b> tag"
                 ],
-                "trace": [],
-                "previous": [],
-                "stack": [
+                "trace": [
                     {
                         "line": 10,
                         "file": "/a/ex.php",
@@ -146,7 +144,8 @@ class ExceptionRendererTest extends TestCase
                         "function": "main",
                         "args": []
                     }
-                ]
+                ],
+                "previous": []
             }
             EOF, $ex->getJson());
     }
