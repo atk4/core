@@ -14,32 +14,31 @@ class ExceptionRendererTest extends TestCase
 {
     protected function createExceptionWithConstantTrace(): Exception
     {
-        $ex = new Exception('My exception for <a> tag');
-        $ex->addMoreInfo('foo', 111);
-        $ex->addSolution('Use <b> tag');
-
-        foreach ([
-            'file' => '/a/ex.php',
-            'line' => 10,
-            'trace' => [
-                ['file' => '/a/text.php', 'line' => 12345, 'function' => 'formatValue', 'class' => self::class, 'object' => $this, 'type' => '->', 'args' => ['xxx']],
-                ['file' => '/a/main.php', 'line' => 20, 'function' => 'main', 'class' => self::class, 'type' => '::', 'args' => []],
-            ],
-        ] as $k => $v) {
+        $setExceptionPropertyFx = static function (\Exception $e, string $k, $v) {
             $propRefl = new \ReflectionProperty(\Exception::class, $k);
             $propRefl->setAccessible(true);
-            $propRefl->setValue($ex, $v);
-        }
+            $propRefl->setValue($e, $v);
+        };
 
-        return $ex;
+        $e = new Exception('My exception for <a> tag');
+        $e->addMoreInfo('foo', 111);
+        $e->addSolution('Use <b> tag');
+        $setExceptionPropertyFx($e, 'file', '/a/ex.php');
+        $setExceptionPropertyFx($e, 'line', 10);
+        $setExceptionPropertyFx($e, 'trace', [
+            ['file' => '/a/text.php', 'line' => 12345, 'function' => 'formatValue', 'class' => self::class, 'object' => $this, 'type' => '->', 'args' => ['xxx']],
+            ['file' => '/a/main.php', 'line' => 20, 'function' => 'main', 'class' => self::class, 'type' => '::', 'args' => []],
+        ]);
+
+        return $e;
     }
 
     public function testFormatHtml(): void
     {
-        $ex = $this->createExceptionWithConstantTrace();
+        $e = $this->createExceptionWithConstantTrace();
 
-        self::assertStringStartsWith('<', $ex->getHtml());
-        self::assertStringEndsWith(">\n", $ex->getHtml());
+        self::assertStringStartsWith('<', $e->getHtml());
+        self::assertStringEndsWith(">\n", $e->getHtml());
 
         self::assertSame(<<<'EOF'
             <div class="ui negative icon message">
@@ -94,15 +93,15 @@ class ExceptionRendererTest extends TestCase
                 </tbody>
             </table>
 
-            EOF, $ex->getHtml());
+            EOF, $e->getHtml());
     }
 
     public function testFormatJson(): void
     {
-        $ex = $this->createExceptionWithConstantTrace();
+        $e = $this->createExceptionWithConstantTrace();
 
-        self::assertStringStartsWith('{', $ex->getJson());
-        self::assertStringEndsWith('}', $ex->getJson());
+        self::assertStringStartsWith('{', $e->getJson());
+        self::assertStringEndsWith('}', $e->getJson());
 
         self::assertSame(<<<'EOF'
             {
@@ -147,16 +146,16 @@ class ExceptionRendererTest extends TestCase
                 ],
                 "previous": []
             }
-            EOF, $ex->getJson());
+            EOF, $e->getJson());
     }
 
     public function testFormatConsole(): void
     {
-        $ex = $this->createExceptionWithConstantTrace();
+        $e = $this->createExceptionWithConstantTrace();
 
-        self::assertStringStartsWith("\e[0;", $ex->getColorfulText());
-        self::assertStringEndsWith("\n", $ex->getColorfulText());
-        self::assertStringNotContainsString('\e[', $ex->getColorfulText());
+        self::assertStringStartsWith("\e[0;", $e->getColorfulText());
+        self::assertStringEndsWith("\n", $e->getColorfulText());
+        self::assertStringNotContainsString('\e[', $e->getColorfulText());
 
         self::assertSame(str_replace("\e", '\e', <<<"EOF"
             \e[0;1;41m--[ Critical Error ]\e[0m
@@ -168,7 +167,7 @@ class ExceptionRendererTest extends TestCase
                                          /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mformatValue\e[0;33m(...)\e[0m
                                          /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mmain\e[0;33m()\e[0m
 
-            EOF), str_replace("\e", '\e', $ex->getColorfulText()));
+            EOF), str_replace("\e", '\e', $e->getColorfulText()));
     }
 
     public function testToSafeString(): void
@@ -206,11 +205,11 @@ class ExceptionRendererTest extends TestCase
 
     public function testExceptionFallback(): void
     {
-        $ex = new ExceptionThrowError('test', 2);
-        $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
+        $e = new ExceptionThrowError('test', 2);
+        $epectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionThrowError::class . '(2): test !!';
-        self::assertSame($expectedFallbackText, $ex->getHtml());
-        self::assertSame($expectedFallbackText, $ex->getColorfulText());
+        self::assertSame($epectedFallbackText, $e->getHtml());
+        self::assertSame($epectedFallbackText, $e->getColorfulText());
         self::assertSame(
             json_encode(
                 [
@@ -231,7 +230,7 @@ class ExceptionRendererTest extends TestCase
                 ],
                 \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
             ),
-            $ex->getJson()
+            $e->getJson()
         );
     }
 }
