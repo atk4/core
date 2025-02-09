@@ -10,7 +10,6 @@ class Json extends RendererAbstract
 {
     /** @var array<string, mixed> */
     protected array $json = [
-        'success' => false,
         'code' => 0,
         'message' => '',
         'title' => '',
@@ -138,7 +137,6 @@ class Json extends RendererAbstract
         } catch (\Throwable $e) {
             // fallback if error occur
             $this->json = [
-                'success' => false,
                 'code' => $this->exception->getCode(),
                 'message' => 'Error during json renderer: ' . $this->exception->getMessage(),
                 // avoid translation

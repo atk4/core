@@ -105,7 +105,6 @@ class ExceptionRendererTest extends TestCase
 
         self::assertSame(<<<'EOF'
             {
-                "success": false,
                 "code": 0,
                 "message": "My exception for <a> tag",
                 "title": "Critical Error",
@@ -213,7 +212,6 @@ class ExceptionRendererTest extends TestCase
         self::assertSame(
             json_encode(
                 [
-                    'success' => false,
                     'code' => 2,
                     'message' => 'Error during json renderer: test',
                     'title' => ExceptionThrowError::class,
