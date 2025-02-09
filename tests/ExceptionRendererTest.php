@@ -211,10 +211,10 @@ class ExceptionRendererTest extends TestCase
     public function testExceptionFallback(): void
     {
         $e = new ExceptionThrowError('test', 2);
-        $epectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
+        $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
             . ExceptionThrowError::class . '(2): test !!';
-        self::assertSame($epectedFallbackText, $e->getHtml());
-        self::assertSame($epectedFallbackText, $e->getColorfulText());
+        self::assertSame($expectedFallbackText, $e->getHtml());
+        self::assertSame($expectedFallbackText, $e->getColorfulText());
         self::assertSame(
             json_encode(
                 [
