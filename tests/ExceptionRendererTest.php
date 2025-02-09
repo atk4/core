@@ -155,7 +155,7 @@ class ExceptionRendererTest extends TestCase
         self::assertStringStartsWith("\e[0;", $e->getColorfulText());
         self::assertStringEndsWith("\n", $e->getColorfulText());
 
-        self::assertSame(str_replace("\e", '\e', <<<"EOF"
+        $expectedText = <<<"EOF"
             \e[0;1;41m--[ Critical Error ]\e[0m
             Atk4\\Core\\Exception: \e[1;30mMy exception for <a> tag\e[0m \e[31m[code: 5]\e[0m
             \e[91m                foo: 111\e[0m
@@ -165,7 +165,9 @@ class ExceptionRendererTest extends TestCase
                                          /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mformatValue\e[0;33m(...)\e[0m
                                          /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mmain\e[0;33m()\e[0m
 
-            EOF), str_replace("\e", '\e', $e->getColorfulText()));
+            EOF;
+        self::assertSame(str_replace("\e", '\e', $expectedText), str_replace("\e", '\e', $e->getColorfulText()));
+        self::assertSame($expectedText, $e->getColorfulText());
 
         self::assertStringNotContainsString('\e[', $e->getColorfulText());
 
