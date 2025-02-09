@@ -15,7 +15,10 @@ class StdSat extends \stdClass
     use StaticAddToTrait;
 }
 
-class StdSat2 extends StdSat {}
+class StdSat2 extends StdSat
+{
+    public function foo(): void {}
+}
 
 class ContainerFactoryMockSat
 {
@@ -70,6 +73,11 @@ class StaticAddToTest extends TestCase
         StdSat::addTo($m, $tr); // @phpstan-ignore argument.type
     }
 
+    private function createStdSat2(): \stdClass
+    {
+        return new StdSat2();
+    }
+
     public function testAssertInstanceOf(): void
     {
         // object is of the same class
@@ -83,6 +91,16 @@ class StaticAddToTest extends TestCase
         // object is not a subtype
         $this->expectException(Exception::class);
         StdSat2::assertInstanceOf(new StdSat());
+
+        $o = $this->createStdSat2();
+        $o->foo(); // @phpstan-ignore method.nonObject
+
+        $o = $this->createStdSat2();
+        StdSat2::assertInstanceOf($o)->foo();
+
+        $o = $this->createStdSat2();
+        StdSat2::assertInstanceOf($o);
+        $o->foo();
     }
 
     public function testWithClassName(): void
