@@ -154,7 +154,6 @@ class ExceptionRendererTest extends TestCase
 
         self::assertStringStartsWith("\e[0;", $e->getColorfulText());
         self::assertStringEndsWith("\n", $e->getColorfulText());
-        self::assertStringNotContainsString('\e[', $e->getColorfulText());
 
         self::assertSame(str_replace("\e", '\e', <<<"EOF"
             \e[0;1;41m--[ Critical Error ]\e[0m
@@ -167,6 +166,13 @@ class ExceptionRendererTest extends TestCase
                                          /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mmain\e[0;33m()\e[0m
 
             EOF), str_replace("\e", '\e', $e->getColorfulText()));
+
+        self::assertStringNotContainsString('\e[', $e->getColorfulText());
+
+        $e->setMessage("prevent\eESC");
+        self::assertStringNotContainsString("prevent\e", $e->getColorfulText());
+        self::assertStringNotContainsString("\eESC", $e->getColorfulText());
+        self::assertStringContainsString('preventESC', $e->getColorfulText());
     }
 
     public function testToSafeString(): void

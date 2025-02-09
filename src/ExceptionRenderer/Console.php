@@ -20,13 +20,15 @@ class Console extends RendererAbstract
     private const COLOR_BRIGHT_GREEN = "\e[92m";
 
     /**
-     * @param non-empty-list<self::FORMAT_*|self::COLOR_*|self::BACKGROUND_COLOR_*> $formats
+     * @param list<self::FORMAT_*|self::COLOR_*|self::BACKGROUND_COLOR_*> $formats
      */
-    private function text(string $text, array $formats): string
+    private function text(string $text, array $formats = []): string
     {
-        assert(!str_contains($text, "\e["));
+        $text = str_replace("\e", '', $text);
 
-        return implode('', $formats) . $text . self::RESET;
+        return $formats === []
+            ? $text
+            : implode('', $formats) . $text . self::RESET;
     }
 
     private function optimizeText(string $value): string
@@ -51,20 +53,10 @@ class Console extends RendererAbstract
         $title = $this->getExceptionTitle();
         $class = get_class($this->exception);
 
-        $tokens = [
-            '{TITLE}' => $title,
-            '{CLASS}' => $class,
-            '{MESSAGE}' => $this->getExceptionMessage(),
-            '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
-        ];
-
-        $this->output .= $this->replaceTokens(
-            $this->text('--[ {TITLE} ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
-                . '{CLASS}: '
-                . $this->text('{MESSAGE}', [self::FORMAT_BOLD, self::COLOR_BLACK]) . ' '
-                . $this->text('{CODE}', [self::COLOR_RED]),
-            $tokens
-        );
+        $this->output .= $this->text('--[ ' . $title . ' ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
+            . $this->text($class . ': ')
+            . $this->text($this->getExceptionMessage(), [self::FORMAT_BOLD, self::COLOR_BLACK])
+            . $this->text($this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '', [self::COLOR_RED]);
     }
 
     #[\Override]
@@ -132,8 +124,8 @@ class Console extends RendererAbstract
             $functionColor = $escapeFrame ? self::COLOR_RED : self::COLOR_YELLOW;
 
             $tokens = [
-                '{FILE}' => str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT),
-                '{LINE}' => str_pad($call['line'], 4, ' ', \STR_PAD_LEFT),
+                '{FILE}' => $this->text(str_pad(mb_substr($call['file_rel'], -40), 40, ' ', \STR_PAD_LEFT)),
+                '{LINE}' => $this->text(str_pad($call['line'], 4, ' ', \STR_PAD_LEFT)),
                 '{OBJECT}' => $call['object'] !== null ? ' - ' . $this->text($call['object_formatted'], [self::COLOR_GREEN]) : '',
                 '{CLASS}' => $call['class'] !== null ? $this->text($call['class_formatted'] . '::', [self::COLOR_GREEN]) : '',
                 '{FUNCTION}' => $call['function'] !== null ? $this->text($call['function'], [$functionColor]) : '',
