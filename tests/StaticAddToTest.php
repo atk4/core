@@ -101,6 +101,14 @@ class StaticAddToTest extends TestCase
     }
 
     /**
+     * @return StdSat2|false
+     */
+    private function createStdSat2AsUnionWithFalse() // @phpstan-ignore return.unusedType
+    {
+        return new StdSat2();
+    }
+
+    /**
      * @return mixed
      */
     private function createStdSat2AsMixed()
@@ -124,10 +132,13 @@ class StaticAddToTest extends TestCase
         StdSat::assertInstanceOf($o)->foo();
 
         $o = $this->createStdSat2AsNullable();
-        StdSat2::assertInstanceOf($o)->foo(); // @phpstan-ignore argument.templateType (https://github.com/phpstan/phpstan/issues/12558)
+        StdSat2::assertInstanceOf($o)->foo();
+
+        $o = $this->createStdSat2AsUnionWithFalse();
+        StdSat2::assertInstanceOf($o)->foo();
 
         $o = $this->createStdSat2AsMixed();
-        StdSat2::assertInstanceOf($o)->foo(); // @phpstan-ignore argument.templateType (https://github.com/phpstan/phpstan/issues/12558)
+        StdSat2::assertInstanceOf($o)->foo();
 
         $o = $this->createStdSat2AsParent();
         StdSat2::assertInstanceOf($o);
