@@ -90,7 +90,28 @@ class StaticAddToTest extends TestCase
         StdSat2::assertInstanceOf(new StdSat());
     }
 
-    private function createStdSat2(): \stdClass
+    private function createStdSat2AsParent(): \stdClass
+    {
+        return new StdSat2();
+    }
+
+    private function createStdSat2AsNullable(): ?StdSat2 // @phpstan-ignore return.unusedType
+    {
+        return new StdSat2();
+    }
+
+    /**
+     * @return StdSat2|false
+     */
+    private function createStdSat2AsUnionWithFalse() // @phpstan-ignore return.unusedType
+    {
+        return new StdSat2();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function createStdSat2AsMixed()
     {
         return new StdSat2();
     }
@@ -101,16 +122,25 @@ class StaticAddToTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testAssertInstanceOfPhpstan(): void
     {
-        $o = $this->createStdSat2();
+        $o = $this->createStdSat2AsParent();
         $o->foo(); // @phpstan-ignore method.nonObject
 
-        $o = $this->createStdSat2();
+        $o = $this->createStdSat2AsParent();
         StdSat2::assertInstanceOf($o)->foo();
 
         $o = new StdSat2();
         StdSat::assertInstanceOf($o)->foo();
 
-        $o = $this->createStdSat2();
+        $o = $this->createStdSat2AsNullable();
+        StdSat2::assertInstanceOf($o)->foo();
+
+        $o = $this->createStdSat2AsUnionWithFalse();
+        StdSat2::assertInstanceOf($o)->foo();
+
+        $o = $this->createStdSat2AsMixed();
+        StdSat2::assertInstanceOf($o)->foo();
+
+        $o = $this->createStdSat2AsParent();
         StdSat2::assertInstanceOf($o);
         $o->foo(); // @phpstan-ignore method.nonObject (TODO remove once https://github.com/phpstan/phpstan/issues/12548 is fixed)
     }
