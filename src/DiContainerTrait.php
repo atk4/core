@@ -83,7 +83,7 @@ trait DiContainerTrait
      * The best, typehinting-friendly, way to annotate object type if it not defined
      * at method header or strong typing in method header cannot be used.
      *
-     * @template T
+     * @template T of object = object
      *
      * @param T $object
      *
