@@ -80,6 +80,15 @@ class TestCaseTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function provideProviderAbCases(): iterable
+    {
+        yield ['a'];
+        yield ['b'];
+    }
+
     public function testObjectsAreReleasedFromUncaughtException(): void
     {
         self::assertSame(0, self::$activeObjectsCounter);
@@ -104,15 +113,6 @@ class TestCaseTest extends TestCase
         self::assertSame($e, $e2);
 
         self::assertSame(0, self::$activeObjectsCounter);
-    }
-
-    /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideProviderAbCases(): iterable
-    {
-        yield ['a'];
-        yield ['b'];
     }
 
     /**
