@@ -47,6 +47,11 @@ abstract class TestCase extends BaseTestCase
         return (new \ReflectionClass(self::class))->hasMethod('getStatus');
     }
 
+    private static function isPhpunit11x(): bool
+    {
+        return (new \ReflectionClass(self::class))->hasMethod('setLocale');
+    }
+
     #[\Override]
     protected function setUp(): void
     {
@@ -127,15 +132,15 @@ abstract class TestCase extends BaseTestCase
 
         // fix coverage for skipped/incomplete tests
         // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L154
-        // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L178
+        // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L178 https://github.com/sebastianbergmann/phpunit/blob/12.0.4/src/Framework/TestRunner/TestRunner.php#L159
         if (self::isPhpunit9x() ? in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true) : $this->status()->isSkipped() || $this->status()->isIncomplete()) {
             $coverage = self::isPhpunit9x() ? $this->getTestResultObject()->getCodeCoverage() : (CodeCoverage::instance()->isActive() ? CodeCoverage::instance() : null);
             if ($coverage !== null) {
                 $coverageId = self::isPhpunit9x() ? \Closure::bind(static fn () => $coverage->currentId, null, CodeCoverageRaw::class)() : (\Closure::bind(static fn () => $coverage->collecting, null, CodeCoverage::class)() ? $this : null);
                 if ($coverageId !== null) {
-                    $linesToBeCovered = self::isPhpunit9x() ? TestUtil::getLinesToBeCovered(static::class, $this->getName(false)) : (new CodeCoverageMetadata())->linesToBeCovered(static::class, $this->name());
-                    $linesToBeUsed = self::isPhpunit9x() ? TestUtil::getLinesToBeUsed(static::class, $this->getName(false)) : (new CodeCoverageMetadata())->linesToBeUsed(static::class, $this->name());
-                    $coverage->stop(true, $linesToBeCovered, $linesToBeUsed);
+                    $covers = self::isPhpunit9x() ? TestUtil::getLinesToBeCovered(static::class, $this->getName(false)) : (self::isPhpunit11x() ? (new CodeCoverageMetadata())->linesToBeCovered(static::class, $this->name()) : (new CodeCoverageMetadata())->coversTargets(static::class, $this->name()));
+                    $uses = self::isPhpunit9x() ? TestUtil::getLinesToBeUsed(static::class, $this->getName(false)) : (self::isPhpunit11x() ? (new CodeCoverageMetadata())->linesToBeUsed(static::class, $this->name()) : (new CodeCoverageMetadata())->usesTargets(static::class, $this->name()));
+                    $coverage->stop(true, $covers, $uses);
                     $coverage->start($coverageId);
                 }
             }
