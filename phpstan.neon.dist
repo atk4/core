@@ -36,6 +36,11 @@ parameters:
             count: 5
         -
             path: 'src/Phpunit/TestCase.php'
+            identifier: method.notFound
+            message: '~^Call to an undefined method PHPUnit\\Metadata\\Api\\CodeCoverage::(linesToBeCovered|linesToBeUsed)\(\)\.$~'
+            count: 2
+        -
+            path: 'src/Phpunit/TestCase.php'
             identifier: staticMethod.notFound
             message: '~^Call to an undefined static method PHPUnit\\Util\\Test::(getLinesToBeCovered|getLinesToBeUsed|parseTestMethodAnnotations)\(\)\.$~'
             count: 3
