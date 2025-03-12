@@ -263,7 +263,7 @@ class ExceptionRendererTest extends TestCase
         self::assertSame(\DateTime::class, RendererAbstract::toSafeString(new \DateTime()));
         self::assertSame(\Closure::class, RendererAbstract::toSafeString(static fn () => true));
 
-        self::assertStringStartsWith('class@anonymous ', RendererAbstract::toSafeString(new class([]) {}));
+        self::assertStringStartsWith('class@anonymous ', RendererAbstract::toSafeString(new class {}));
         self::assertStringStartsWith('ArrayIterator@anonymous ', RendererAbstract::toSafeString(new class([]) extends \ArrayIterator {}));
 
         $resource = opendir(__DIR__);
