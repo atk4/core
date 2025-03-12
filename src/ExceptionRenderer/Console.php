@@ -51,7 +51,7 @@ class Console extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = get_class($this->exception);
+        $class = $this->formatClass(get_class($this->exception));
 
         $this->output .= $this->text('--[ ' . $title . ' ]', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_RED]) . "\n"
             . $this->text($class . ': ')

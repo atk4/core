@@ -17,7 +17,7 @@ class Html extends RendererAbstract
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = get_class($this->exception);
+        $class = $this->formatClass(get_class($this->exception));
 
         $tokens = [
             '{TITLE}' => $this->encodeHtml($title),

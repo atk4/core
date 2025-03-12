@@ -78,6 +78,11 @@ abstract class RendererAbstract
         return str_replace(array_keys($tokens), array_values($tokens), $text);
     }
 
+    protected function formatClass(string $class): string
+    {
+        return str_replace("\0", ' ', $this->tryRelativizePathsInString($class));
+    }
+
     /**
      * @param array<string, mixed> $frame
      *
@@ -103,13 +108,13 @@ abstract class RendererAbstract
         }
 
         if ($parsed['class'] !== null) {
-            $parsed['class_formatted'] = str_replace("\0", ' ', $this->tryRelativizePathsInString($parsed['class']));
+            $parsed['class_formatted'] = $this->formatClass($parsed['class']);
         }
 
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
                 ? get_object_vars($parsed['object'])['name'] ?? ($parsed['object']->shortName ?? '')
-                : str_replace("\0", ' ', $this->tryRelativizePathsInString(get_class($parsed['object'])));
+                : $this->formatClass(get_class($parsed['object']));
         }
 
         return $parsed;

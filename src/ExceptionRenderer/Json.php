@@ -112,7 +112,7 @@ class Json extends RendererAbstract
     #[\Override]
     protected function parseStackTraceFrame(array $frame): array
     {
-        return [
+        return [ // @phpstan-ignore return.type
             'file' => $frame['file'] ?? '',
             'line' => $frame['line'] ?? '',
             'class' => $frame['class'] ?? null,
