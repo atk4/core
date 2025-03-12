@@ -149,7 +149,7 @@ class Console extends RendererAbstract
         }
 
         if ($isShortened) {
-            $this->output .= '...' . "\n";
+            $this->output .= str_pad('...', 40, ' ', \STR_PAD_LEFT) . "\n";
         }
     }
 
@@ -162,7 +162,6 @@ class Console extends RendererAbstract
 
         $this->output .= "\n"
             . $this->text('Caused by Previous Exception:', [self::FORMAT_BOLD, self::BACKGROUND_COLOR_MAGENTA]) . "\n"
-            . ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)))
-            . $this->text('--', [self::FORMAT_BOLD, self::COLOR_RED]);
+            . ((string) (new static($this->exception->getPrevious(), $this->adapter, $this->exception)));
     }
 }

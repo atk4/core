@@ -194,12 +194,12 @@ class Html extends RendererAbstract
         if ($isShortened) {
             $this->output .= <<<'EOF'
 
-                <tr>
-                    <td style="text-align: right">...</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                        <tr>
+                            <td style="text-align: right">...</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
 
                 EOF;
         }
@@ -217,6 +217,7 @@ class Html extends RendererAbstract
             <div class="ui top attached segment">
                 <div class="ui top attached label">Caused by Previous Exception:</div>
             </div>
+
 
             EOF;
 
