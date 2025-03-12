@@ -46,7 +46,7 @@ class ExceptionRendererTest extends TestCase
                 <div class="content">
                     <div class="header">Critical Error</div>
                     Atk4\Core\Exception [code: 5]:
-                    My exception for <a> tag
+                    My exception for &lt;a&gt; tag
                 </div>
             </div>
 
@@ -72,7 +72,7 @@ class ExceptionRendererTest extends TestCase
                     <tr class="negative">
                         <td style="text-align: right"></td>
                         <td>/a/ex.php:10</td>
-                        <td></td>
+                        <td>-</td>
                         <td></td>
                     </tr>
 
@@ -86,7 +86,7 @@ class ExceptionRendererTest extends TestCase
                     <tr class="">
                         <td style="text-align: right">1</td>
                         <td>/a/main.php:20</td>
-                        <td></td>
+                        <td>-</td>
                         <td>main()</td>
                     </tr>
 

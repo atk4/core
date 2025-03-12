@@ -81,7 +81,7 @@ abstract class RendererAbstract
     /**
      * @param array<string, mixed> $frame
      *
-     * @return array<string, mixed>
+     * @return array{line: string, file: string, class: ?string, object: ?string, function: ?string, args: array<int|string, mixed>, class_formatted: ?string, object_formatted: ?string, file_rel: string}
      */
     protected function parseStackTraceFrame(array $frame): array
     {
