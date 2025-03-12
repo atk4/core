@@ -80,6 +80,17 @@ abstract class RendererAbstract
 
     protected function formatClass(string $class): string
     {
+        if (!str_contains($class, "\0")) {
+            return $class;
+        }
+
+        if (\PHP_MAJOR_VERSION === 7 && str_starts_with($class, 'class@')) {
+            $parentClass = get_parent_class($class);
+            if ($parentClass !== false) {
+                $class = $parentClass . substr($class, 5);
+            }
+        }
+
         return str_replace("\0", ' ', $this->tryRelativizePathsInString($class));
     }
 
@@ -126,7 +137,9 @@ abstract class RendererAbstract
     public static function toSafeString($val, bool $allowNl = false, int $maxDepth = 2): string
     {
         if (is_object($val)) {
-            return get_class($val) . (TraitUtil::hasTrackableTrait($val)
+            $dummyRenderer = new Html(new \Exception());
+
+            return $dummyRenderer->formatClass(get_class($val)) . (TraitUtil::hasTrackableTrait($val)
                 ? ' (' . (get_object_vars($val)['name'] ?? ($val->shortName ?? '')) . ')'
                 : '');
         } elseif (str_replace(' (closed)', '', gettype($val)) === 'resource') {

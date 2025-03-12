@@ -257,14 +257,14 @@ class ExceptionRendererTest extends TestCase
     public function testToSafeString(): void
     {
         self::assertSame('1', RendererAbstract::toSafeString(1));
-
         self::assertSame('\'abc\'', RendererAbstract::toSafeString('abc'));
 
         self::assertSame(\stdClass::class, RendererAbstract::toSafeString(new \stdClass()));
-
         self::assertSame(\DateTime::class, RendererAbstract::toSafeString(new \DateTime()));
-
         self::assertSame(\Closure::class, RendererAbstract::toSafeString(static fn () => true));
+
+        self::assertStringStartsWith('class@anonymous ', RendererAbstract::toSafeString(new class([]) {}));
+        self::assertStringStartsWith('ArrayIterator@anonymous ', RendererAbstract::toSafeString(new class([]) extends \ArrayIterator {}));
 
         $resource = opendir(__DIR__);
         self::assertSame('resource (stream)', RendererAbstract::toSafeString($resource));
