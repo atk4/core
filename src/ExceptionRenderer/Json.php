@@ -25,7 +25,7 @@ class Json extends RendererAbstract
     {
         $this->json['message'] = $this->getExceptionMessage();
         $this->json['title'] = $this->getExceptionTitle();
-        $this->json['class'] = get_class($this->exception);
+        $this->json['class'] = $this->formatClass(get_class($this->exception));
         $this->json['code'] = $this->exception->getCode();
     }
 
