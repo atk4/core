@@ -78,10 +78,26 @@ abstract class RendererAbstract
         return str_replace(array_keys($tokens), array_values($tokens), $text);
     }
 
+    protected function formatClass(string $class): string
+    {
+        if (!str_contains($class, "\0")) {
+            return $class;
+        }
+
+        if (\PHP_MAJOR_VERSION === 7 && str_starts_with($class, 'class@')) {
+            $parentClass = get_parent_class($class);
+            if ($parentClass !== false) {
+                $class = $parentClass . substr($class, 5);
+            }
+        }
+
+        return str_replace("\0", ' ', $this->tryRelativizePathsInString($class));
+    }
+
     /**
      * @param array<string, mixed> $frame
      *
-     * @return array<string, mixed>
+     * @return array{line: string, file: string, class: ?string, object: ?string, function: ?string, args: array<int|string, mixed>, class_formatted: ?string, object_formatted: ?string, file_rel: string}
      */
     protected function parseStackTraceFrame(array $frame): array
     {
@@ -103,13 +119,13 @@ abstract class RendererAbstract
         }
 
         if ($parsed['class'] !== null) {
-            $parsed['class_formatted'] = str_replace("\0", ' ', $this->tryRelativizePathsInString($parsed['class']));
+            $parsed['class_formatted'] = $this->formatClass($parsed['class']);
         }
 
         if ($parsed['object'] !== null) {
             $parsed['object_formatted'] = TraitUtil::hasTrackableTrait($parsed['object'])
                 ? get_object_vars($parsed['object'])['name'] ?? ($parsed['object']->shortName ?? '')
-                : str_replace("\0", ' ', $this->tryRelativizePathsInString(get_class($parsed['object'])));
+                : $this->formatClass(get_class($parsed['object']));
         }
 
         return $parsed;
@@ -121,7 +137,9 @@ abstract class RendererAbstract
     public static function toSafeString($val, bool $allowNl = false, int $maxDepth = 2): string
     {
         if (is_object($val)) {
-            return get_class($val) . (TraitUtil::hasTrackableTrait($val)
+            $dummyRenderer = new Html(new \Exception());
+
+            return $dummyRenderer->formatClass(get_class($val)) . (TraitUtil::hasTrackableTrait($val)
                 ? ' (' . (get_object_vars($val)['name'] ?? ($val->shortName ?? '')) . ')'
                 : '');
         } elseif (str_replace(' (closed)', '', gettype($val)) === 'resource') {

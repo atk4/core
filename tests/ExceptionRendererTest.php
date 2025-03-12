@@ -20,15 +20,24 @@ class ExceptionRendererTest extends TestCase
             $propRefl->setValue($e, $v);
         };
 
+        // based on https://3v4l.org/PqPXM
         $e = new Exception('My exception for <a> tag', 5);
         $e->addMoreInfo('foo', 111);
         $e->addSolution('Use <b> tag');
         $setExceptionPropertyFx($e, 'file', '/a/ex.php');
         $setExceptionPropertyFx($e, 'line', 10);
         $setExceptionPropertyFx($e, 'trace', [
-            ['file' => '/a/text.php', 'line' => 12345, 'function' => 'formatValue', 'class' => self::class, 'object' => $this, 'type' => '->', 'args' => ['xxx']],
             ['file' => '/a/main.php', 'line' => 20, 'function' => 'main', 'class' => self::class, 'type' => '::', 'args' => []],
         ]);
+
+        $ePrevious = new \ClosedGeneratorException('kůň');
+        $setExceptionPropertyFx($ePrevious, 'file', '/a/gen.php');
+        $setExceptionPropertyFx($ePrevious, 'line', 1556677);
+        $setExceptionPropertyFx($ePrevious, 'trace', [
+            ['file' => '/a/text.php', 'line' => 12345, 'function' => 'formatValue', 'class' => self::class, 'object' => $this, 'type' => '->', 'args' => ['xxx']],
+            ...$e->getTrace(),
+        ]);
+        $setExceptionPropertyFx($e, 'previous', $ePrevious);
 
         return $e;
     }
@@ -46,7 +55,7 @@ class ExceptionRendererTest extends TestCase
                 <div class="content">
                     <div class="header">Critical Error</div>
                     Atk4\Core\Exception [code: 5]:
-                    My exception for <a> tag
+                    My exception for &lt;a&gt; tag
                 </div>
             </div>
 
@@ -72,7 +81,42 @@ class ExceptionRendererTest extends TestCase
                     <tr class="negative">
                         <td style="text-align: right"></td>
                         <td>/a/ex.php:10</td>
+                        <td>-</td>
                         <td></td>
+                    </tr>
+
+                    <tr class="">
+                        <td style="text-align: right">1</td>
+                        <td>/a/main.php:20</td>
+                        <td>-</td>
+                        <td>main()</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <div class="ui top attached segment">
+                <div class="ui top attached label">Caused by Previous Exception:</div>
+            </div>
+
+            <div class="ui negative icon message">
+                <i class="warning sign icon"></i>
+                <div class="content">
+                    <div class="header">Critical Error</div>
+                    ClosedGeneratorException:
+                    kůň
+                </div>
+            </div>
+
+            <table class="ui very compact small selectable table top aligned">
+                <thead><tr><th colspan="4">Stack Trace</th></tr></thead>
+                <thead><tr><th style="text-align: right">#</th><th>File</th><th>Object</th><th>Method</th></tr></thead>
+                <tbody>
+
+                    <tr class="negative">
+                        <td style="text-align: right"></td>
+                        <td>/a/gen.php:1556677</td>
+                        <td>-</td>
                         <td></td>
                     </tr>
 
@@ -83,11 +127,11 @@ class ExceptionRendererTest extends TestCase
                         <td>formatValue(...)</td>
                     </tr>
 
-                    <tr class="">
-                        <td style="text-align: right">1</td>
-                        <td>/a/main.php:20</td>
+                    <tr>
+                        <td style="text-align: right">...</td>
                         <td></td>
-                        <td>main()</td>
+                        <td></td>
+                        <td></td>
                     </tr>
 
                 </tbody>
@@ -125,16 +169,6 @@ class ExceptionRendererTest extends TestCase
                         "args": []
                     },
                     {
-                        "file": "/a/text.php",
-                        "line": 12345,
-                        "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
-                        "object": "Atk4\\Core\\Tests\\ExceptionRendererTest",
-                        "function": "formatValue",
-                        "args": [
-                            "xxx"
-                        ]
-                    },
-                    {
                         "file": "/a/main.php",
                         "line": 20,
                         "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
@@ -143,7 +177,43 @@ class ExceptionRendererTest extends TestCase
                         "args": []
                     }
                 ],
-                "previous": null
+                "previous": {
+                    "message": "kůň",
+                    "title": "Critical Error",
+                    "class": "ClosedGeneratorException",
+                    "code": 0,
+                    "params": [],
+                    "solution": [],
+                    "trace": [
+                        {
+                            "file": "/a/gen.php",
+                            "line": 1556677,
+                            "class": null,
+                            "object": null,
+                            "function": null,
+                            "args": []
+                        },
+                        {
+                            "file": "/a/text.php",
+                            "line": 12345,
+                            "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
+                            "object": "Atk4\\Core\\Tests\\ExceptionRendererTest",
+                            "function": "formatValue",
+                            "args": [
+                                "xxx"
+                            ]
+                        },
+                        {
+                            "file": "/a/main.php",
+                            "line": 20,
+                            "class": "Atk4\\Core\\Tests\\ExceptionRendererTest",
+                            "object": null,
+                            "function": "main",
+                            "args": []
+                        }
+                    ],
+                    "previous": null
+                }
             }
             EOF, $e->getJson());
     }
@@ -162,8 +232,15 @@ class ExceptionRendererTest extends TestCase
             \e[92mSolution: Use <b> tag\e[0m
             \e[1;41m--[ Stack Trace ]\e[0m
                                            /a/ex.php:\e[31m  10\e[0m
-                                         /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mformatValue\e[0;33m(...)\e[0m
                                          /a/main.php:\e[31m  20\e[0m  \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mmain\e[0;33m()\e[0m
+
+            \e[1;45mCaused by Previous Exception:\e[0m
+            \e[0;1;41m--[ Critical Error ]\e[0m
+            ClosedGeneratorException: \e[1;30mkůň\e[0m
+            \e[1;41m--[ Stack Trace ]\e[0m
+                                          /a/gen.php:\e[31m1556677\e[0m
+                                         /a/text.php:\e[31m12345\e[0m  - \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest\e[0m \e[32mAtk4\\Core\\Tests\\ExceptionRendererTest::\e[0;33mformatValue\e[0;33m(...)\e[0m
+                                                 ...
 
             EOF;
         self::assertSame(str_replace("\e", '\e', $expectedText), str_replace("\e", '\e', $e->getColorfulText()));
@@ -180,14 +257,14 @@ class ExceptionRendererTest extends TestCase
     public function testToSafeString(): void
     {
         self::assertSame('1', RendererAbstract::toSafeString(1));
-
         self::assertSame('\'abc\'', RendererAbstract::toSafeString('abc'));
 
         self::assertSame(\stdClass::class, RendererAbstract::toSafeString(new \stdClass()));
-
         self::assertSame(\DateTime::class, RendererAbstract::toSafeString(new \DateTime()));
-
         self::assertSame(\Closure::class, RendererAbstract::toSafeString(static fn () => true));
+
+        self::assertStringStartsWith('class@anonymous ', RendererAbstract::toSafeString(new class {}));
+        self::assertStringStartsWith('ArrayIterator@anonymous ', RendererAbstract::toSafeString(new class([]) extends \ArrayIterator {}));
 
         $resource = opendir(__DIR__);
         self::assertSame('resource (stream)', RendererAbstract::toSafeString($resource));

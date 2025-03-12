@@ -25,7 +25,7 @@ class Json extends RendererAbstract
     {
         $this->json['message'] = $this->getExceptionMessage();
         $this->json['title'] = $this->getExceptionTitle();
-        $this->json['class'] = get_class($this->exception);
+        $this->json['class'] = $this->formatClass(get_class($this->exception));
         $this->json['code'] = $this->exception->getCode();
     }
 
@@ -112,7 +112,7 @@ class Json extends RendererAbstract
     #[\Override]
     protected function parseStackTraceFrame(array $frame): array
     {
-        return [
+        return [ // @phpstan-ignore return.type
             'file' => $frame['file'] ?? '',
             'line' => $frame['line'] ?? '',
             'class' => $frame['class'] ?? null,

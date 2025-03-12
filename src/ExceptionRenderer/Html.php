@@ -8,16 +8,21 @@ use Atk4\Core\Exception;
 
 class Html extends RendererAbstract
 {
+    protected function encodeHtml(string $value): string
+    {
+        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
+    }
+
     #[\Override]
     protected function processHeader(): void
     {
         $title = $this->getExceptionTitle();
-        $class = get_class($this->exception);
+        $class = $this->formatClass(get_class($this->exception));
 
         $tokens = [
-            '{TITLE}' => $title,
-            '{CLASS}' => $class,
-            '{MESSAGE}' => $this->getExceptionMessage(),
+            '{TITLE}' => $this->encodeHtml($title),
+            '{CLASS}' => $this->encodeHtml($class),
+            '{MESSAGE}' => $this->encodeHtml($this->getExceptionMessage()),
             '{CODE}' => $this->exception->getCode() ? ' [code: ' . $this->exception->getCode() . ']' : '',
         ];
 
@@ -32,11 +37,6 @@ class Html extends RendererAbstract
             </div>
 
             EOF, $tokens);
-    }
-
-    protected function encodeHtml(string $value): string
-    {
-        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
     }
 
     #[\Override]
@@ -68,12 +68,11 @@ class Html extends RendererAbstract
                     <tr><td><b>{KEY}</b></td><td style="width: 100%;">{VAL}</td></tr>
             EOF;
         foreach ($this->exception->getParams() as $key => $val) {
-            $key = $this->encodeHtml($key);
-            $val = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', $this->encodeHtml(static::toSafeString($val, true))) . '</span>';
+            $valHtml = '<span style="white-space: pre-wrap;">' . preg_replace('~(?<=\n)( +)~', '$1$1', $this->encodeHtml(static::toSafeString($val, true))) . '</span>';
 
             $tokens['{PARAMS}'] .= $this->replaceTokens($textInner, [
-                '{KEY}' => $key,
-                '{VAL}' => $val,
+                '{KEY}' => $this->encodeHtml($key),
+                '{VAL}' => $valHtml,
             ]);
         }
 
@@ -168,9 +167,9 @@ class Html extends RendererAbstract
 
             $tokens = [];
             $tokens['{INDEX}'] = $index === 'self' ? '' : $index + 1;
-            $tokens['{FILE_LINE}'] = $call['file_rel'] !== '' ? $call['file_rel'] . ':' . $call['line'] : '';
-            $tokens['{OBJECT}'] = $call['object'] !== false ? $call['object_formatted'] : '-';
-            $tokens['{CLASS}'] = $call['class'] !== false ? $call['class_formatted'] . '::' : '';
+            $tokens['{FILE_LINE}'] = $call['file_rel'] !== '' ? $this->encodeHtml($call['file_rel']) . ':' . $call['line'] : '';
+            $tokens['{OBJECT}'] = $call['object'] !== null ? $this->encodeHtml($call['object_formatted']) : '-';
+            $tokens['{CLASS}'] = $call['class'] !== null ? $this->encodeHtml($call['class_formatted']) . '::' : '';
             $tokens['{CSS_CLASS}'] = $escapeFrame ? 'negative' : '';
 
             $tokens['{FUNCTION}'] = $call['function'];
@@ -195,12 +194,12 @@ class Html extends RendererAbstract
         if ($isShortened) {
             $this->output .= <<<'EOF'
 
-                <tr>
-                    <td style="text-align: right">...</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                        <tr>
+                            <td style="text-align: right">...</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
 
                 EOF;
         }
@@ -218,6 +217,7 @@ class Html extends RendererAbstract
             <div class="ui top attached segment">
                 <div class="ui top attached label">Caused by Previous Exception:</div>
             </div>
+
 
             EOF;
 
