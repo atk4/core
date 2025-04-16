@@ -30,7 +30,7 @@ trait DebugTrait
      * @param string|\Stringable $message
      * @param array<mixed>       $context
      */
-    public function log($level, $message, array $context = []): void
+    public function log($level, $message, array $context = []): void // @phpstan-ignore method.childParameterType
     {
         if (TraitUtil::hasAppScopeTrait($this) && $this->issetApp() && $this->getApp()->logger instanceof LoggerInterface) {
             $this->getApp()->logger->log($level, $message, $context);

@@ -64,10 +64,3 @@ parameters:
             identifier: class.notFound
             message: '~^Access to constant STATUS_INCOMPLETE on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
             count: 1
-
-        # https://github.com/phpstan/phpstan/issues/10150
-        -
-            path: 'src/DebugTrait.php'
-            identifier: method.missingOverride
-            message: '~^Method Atk4\\Core\\Tests\\DebugPsrMock::\w+\(\) overrides method Psr\\Log\\LoggerInterface::\w+\(\) but is missing the #\[\\Override\] attribute\.$~'
-            count: 9
