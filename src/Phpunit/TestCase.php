@@ -64,13 +64,13 @@ abstract class TestCase extends BaseTestCase
 
         $metadataDataProviders = [];
         if (self::isPhpunit9x()) {
-            $annotations = TestUtil::parseTestMethodAnnotations(static::class, $this->getName(false));
+            $annotations = TestUtil::parseTestMethodAnnotations(static::class, $this->getName(false)); // @phpstan-ignore staticMethod.internalClass
             foreach ($annotations['method']['dataProvider'] ?? [] as $dataProviderAnnotation) {
                 preg_match('~^(?:([\\\\\w\x7f-\xff]+)::)?([\w\x7f-\xff]+)~', $dataProviderAnnotation, $matches);
                 $metadataDataProviders[] = [$matches[1] === '' ? static::class : $matches[1], $matches[2]];
             }
         } else {
-            $metadataDataProviders = MetadataRegistry::parser()->forClassAndMethod(static::class, $this->name())->isDataProvider();
+            $metadataDataProviders = MetadataRegistry::parser()->forClassAndMethod(static::class, $this->name())->isDataProvider(); // @phpstan-ignore method.internal, method.internalInterface, staticMethod.internalClass
         }
 
         foreach ($metadataDataProviders as $metadataDataProvider) {
@@ -133,13 +133,13 @@ abstract class TestCase extends BaseTestCase
         // fix coverage for skipped/incomplete tests
         // based on https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L830 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L154
         // and https://github.com/sebastianbergmann/phpunit/blob/9.5.21/src/Framework/TestResult.php#L857 https://github.com/sebastianbergmann/phpunit/blob/10.4.2/src/Framework/TestRunner.php#L178 https://github.com/sebastianbergmann/phpunit/blob/12.0.4/src/Framework/TestRunner/TestRunner.php#L159
-        if (self::isPhpunit9x() ? in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true) : $this->status()->isSkipped() || $this->status()->isIncomplete()) {
-            $coverage = self::isPhpunit9x() ? $this->getTestResultObject()->getCodeCoverage() : (CodeCoverage::instance()->isActive() ? CodeCoverage::instance() : null);
+        if (self::isPhpunit9x() ? in_array($this->getStatus(), [BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true) : $this->status()->isSkipped() || $this->status()->isIncomplete()) { // @phpstan-ignore method.internal, method.internal, method.internalClass, method.internalClass
+            $coverage = self::isPhpunit9x() ? $this->getTestResultObject()->getCodeCoverage() : (CodeCoverage::instance()->isActive() ? CodeCoverage::instance() : null); // @phpstan-ignore method.internalClass, staticMethod.internalClass, staticMethod.internalClass
             if ($coverage !== null) {
-                $coverageId = self::isPhpunit9x() ? \Closure::bind(static fn () => $coverage->currentId, null, CodeCoverageRaw::class)() : (\Closure::bind(static fn () => $coverage->collecting, null, CodeCoverage::class)() ? $this : null);
+                $coverageId = self::isPhpunit9x() ? \Closure::bind(static fn () => $coverage->currentId, null, CodeCoverageRaw::class)() : (\Closure::bind(static fn () => $coverage->collecting, null, CodeCoverage::class)() ? $this : null); // @phpstan-ignore classConstant.internalClass
                 if ($coverageId !== null) {
-                    $covers = self::isPhpunit9x() ? TestUtil::getLinesToBeCovered(static::class, $this->getName(false)) : (self::isPhpunit11x() ? (new CodeCoverageMetadata())->linesToBeCovered(static::class, $this->name()) : (new CodeCoverageMetadata())->coversTargets(static::class, $this->name()));
-                    $uses = self::isPhpunit9x() ? TestUtil::getLinesToBeUsed(static::class, $this->getName(false)) : (self::isPhpunit11x() ? (new CodeCoverageMetadata())->linesToBeUsed(static::class, $this->name()) : (new CodeCoverageMetadata())->usesTargets(static::class, $this->name()));
+                    $covers = self::isPhpunit9x() ? TestUtil::getLinesToBeCovered(static::class, $this->getName(false)) : (self::isPhpunit11x() ? (new CodeCoverageMetadata())->linesToBeCovered(static::class, $this->name()) : (new CodeCoverageMetadata())->coversTargets(static::class, $this->name())); // @phpstan-ignore method.internal, method.internal, method.internalClass, staticMethod.internalClass, new.internalClass, new.internalClass
+                    $uses = self::isPhpunit9x() ? TestUtil::getLinesToBeUsed(static::class, $this->getName(false)) : (self::isPhpunit11x() ? (new CodeCoverageMetadata())->linesToBeUsed(static::class, $this->name()) : (new CodeCoverageMetadata())->usesTargets(static::class, $this->name())); // @phpstan-ignore method.internal, method.internal, method.internalClass, staticMethod.internalClass, new.internalClass, new.internalClass
                     $coverage->stop(true, $covers, $uses);
                     $coverage->start($coverageId);
                 }

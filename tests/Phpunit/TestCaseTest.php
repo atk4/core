@@ -145,8 +145,8 @@ class TestCaseTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testCoverageImplForTestMarkedAsIncomplete(): void
     {
-        $testStatusOrig = self::isPhpunit9x() ? $this->getStatus() : $this->status();
-        \Closure::bind(fn () => $this->status = TestCase::isPhpunit9x() ? BaseTestRunner::STATUS_INCOMPLETE : TestStatus::incomplete(), $this, PhpunitTestCase::class)();
+        $testStatusOrig = self::isPhpunit9x() ? $this->getStatus() : $this->status(); // @phpstan-ignore method.internal
+        \Closure::bind(fn () => $this->status = TestCase::isPhpunit9x() ? BaseTestRunner::STATUS_INCOMPLETE : TestStatus::incomplete(), $this, PhpunitTestCase::class)(); // @phpstan-ignore staticMethod.internalClass
         try {
             $this->tearDown();
         } finally {

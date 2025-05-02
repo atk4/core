@@ -8,14 +8,14 @@ use Atk4\Core\ExceptionRenderer\RendererAbstract;
 use Atk4\Core\Translator\ITranslatorAdapter;
 use PHPUnit\Framework\SelfDescribing;
 
-if (!interface_exists(SelfDescribing::class)) {
+if (!interface_exists(SelfDescribing::class)) { // @phpstan-ignore classConstant.internalInterface
     eval('namespace PHPUnit\Framework; interface SelfDescribing { public function toString(): string; }');
 }
 
 /**
  * Base exception of all Agile Toolkit exceptions.
  */
-class Exception extends \Exception implements SelfDescribing
+class Exception extends \Exception implements SelfDescribing // @phpstan-ignore class.implementsInternalInterface
 {
     use WarnDynamicPropertyTrait;
 
