@@ -91,7 +91,9 @@ abstract class RendererAbstract
             }
         }
 
-        return str_replace("\0", ' ', $this->tryRelativizePathsInString($class));
+        $class = str_replace("\0", ' ', substr($class, 0, strrpos($class, '$')));
+
+        return $this->tryRelativizePathsInString($class);
     }
 
     /**

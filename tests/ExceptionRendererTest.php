@@ -265,6 +265,7 @@ class ExceptionRendererTest extends TestCase
 
         self::assertStringStartsWith('class@anonymous ', RendererAbstract::toSafeString(new class {}));
         self::assertStringStartsWith('ArrayIterator@anonymous ', RendererAbstract::toSafeString(new class([]) extends \ArrayIterator {}));
+        self::assertMatchesRegularExpression('~^class@anonymous .+:\d+$~', RendererAbstract::toSafeString(new class {}));
 
         $resource = opendir(__DIR__);
         self::assertSame('resource (stream)', RendererAbstract::toSafeString($resource));
