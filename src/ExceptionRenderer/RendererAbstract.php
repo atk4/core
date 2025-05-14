@@ -18,13 +18,13 @@ abstract class RendererAbstract
 {
     use TranslatableTrait;
 
-    public \Throwable $exception;
+    protected \Throwable $exception;
 
-    public ?\Throwable $parentException;
+    protected ?\Throwable $parentException;
 
-    public string $output = '';
+    protected string $output = '';
 
-    public ?ITranslatorAdapter $adapter;
+    protected ?ITranslatorAdapter $adapter;
 
     public function __construct(\Throwable $exception, ?ITranslatorAdapter $adapter = null, ?\Throwable $parentException = null)
     {
