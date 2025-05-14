@@ -55,7 +55,10 @@
     "autoload": {
         "psr-4": {
             "Atk4\\Core\\": "src/"
-        }
+        },
+        "files": [
+            "bootstrap-functions.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
