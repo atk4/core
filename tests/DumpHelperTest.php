@@ -292,8 +292,57 @@ class DumpHelperTest extends TestCase
      */
     public static function providePrintReadableCases(): iterable
     {
+        yield [static fn () => [null, 'null']];
+
+        yield [static fn () => [false, 'false']];
+        yield [static fn () => [true, 'true']];
+
+        yield [static fn () => [fopen('php://memory', 'r+'), 'resource<stream>']];
         yield [static function () {
-            return [null, 'null'];
+            $handle = fopen('php://memory', 'r+');
+            fclose($handle);
+
+            return [$handle, 'resource<*closed*>'];
         }];
+
+        yield [static fn () => [0, 'int: 0']];
+        yield [static fn () => [5, 'int: 5']];
+        yield [static fn () => [-5, 'int: -5']];
+        yield [static fn () => [999, 'int: 999']];
+        yield [static fn () => [1_000, 'int: 1_000']];
+        yield [static fn () => [2_001_002_003, 'int: 2_001_002_003']];
+        yield [static fn () => [-2_001_002_003, 'int: -2_001_002_003']];
+        yield [static fn () => [PHP_INT_MAX, PHP_INT_SIZE === 4 ? 'int: 2_147_483_647' : 'int: 9_223_372_036_854_775_807']];
+        yield [static fn () => [PHP_INT_MIN, PHP_INT_SIZE === 4 ? 'int: -2_147_483_648' : 'int: -9_223_372_036_854_775_808']];
+
+        yield [static fn () => [0.0, 'float: 0.0']];
+        yield [static fn () => [-0.0, 'float: -0.0']];
+        yield [static fn () => [5.0, 'float: 5.0']];
+        yield [static fn () => [-5.0, 'float: -5.0']];
+        yield [static fn () => [8.202343767574732, 'float: 8.202343767574732']];
+        yield [static fn () => [99_999_999_999_999_980.0, 'float: 99_999_999_999_999_980.0']];
+        yield [static fn () => [100_000_000_000_000_000.0, 'float: 1.0E+17']];
+        yield [static fn () => [0.000005, 'float: 5.0E-6']];
+        yield [static fn () => [-0.000005, 'float: -5.0E-6']];
+        yield [static fn () => [INF, 'float: INF']];
+        yield [static fn () => [-INF, 'float: -INF']];
+        yield [static fn () => [NAN, 'float: NAN']];
+
+        yield [static fn () => ['', 'empty-string']];
+        yield [static fn () => ['0', 'string: 0']];
+        yield [static fn () => ['foo bar', 'string: foo bar']];
+        yield [static fn () => ['<img src="x" />', 'string: <img src="x" />']];
+
+        yield [static fn () => [new \stdClass(), 'stdClass']];
+        yield [static fn () => [new class {}, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . __LINE__ . '#1: ']];
+        yield [static fn () => [new QuietObjectWrapper(new \DateTime('2013-02-20 20:00:12 UTC')), QuietObjectWrapper::class . '#1: ']];
+        yield [static fn () => [new class(new \DateTime('2013-02-20 20:00:12 UTC')) extends QuietObjectWrapper {}, QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . __LINE__ . '#1: ']];
+
+        yield [static function () {
+            $dt = new \DateTime();
+
+            return [[$dt, \WeakReference::create($dt)], 'list<DateTime|WeakReference>: '];
+        }];
+        yield [static fn () => [\WeakReference::create(new \DateTime()), 'WeakReference<*destroyed*>:']];
     }
 }

@@ -144,6 +144,47 @@ class DumpHelper
     }
 
     /**
+     * @param mixed ...$values
+     */
+    private function describeTypeShallow(...$values): string
+    {
+        $types = [];
+
+        foreach ($values as $value) {
+            if (is_bool($value)) {
+                $type = $value
+                    ? 'true'
+                    : 'false';
+            } elseif (is_array($value) && array_is_list($value)) {
+                $type = 'list';
+            } elseif (is_object($value)) {
+                $type = $this->formatClass(get_class($value));
+            } elseif (is_resource($value) || gettype($value) === 'resource (closed)') {
+                $type = 'resource';
+            } else {
+                $type = get_debug_type($value);
+            }
+
+            $types[$type] = $type;
+        }
+
+        sort($types);
+
+        return implode('|', $types);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    protected function describeType($value): string
+    {
+        $type = $this->describeTypeShallow($value);
+
+
+        return $type;
+    }
+
+    /**
      * Improved version of native print_r() function.
      *
      * Objects and array references are printed only once.
@@ -153,5 +194,6 @@ class DumpHelper
      * @param mixed $value
      */
     public function printReadable($value): void
+    {
     }
 }
