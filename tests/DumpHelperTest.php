@@ -71,8 +71,8 @@ class DumpHelperTest extends TestCase
         ]];
 
         yield 'redeclared private property' => [new class($dt) extends QuietObjectWrapper {
-            private bool $obj;
-            private bool $a;
+            private bool $obj; // @phpstan-ignore property.onlyWritten
+            private bool $a; // @phpstan-ignore property.onlyWritten
             protected bool $b;
             public bool $c;
 
@@ -203,7 +203,7 @@ class DumpHelperTest extends TestCase
         yield 'object recursive' => [static function () {
             $o = new QuietObjectWrapper(new \DateTime());
             \Closure::bind(static function () use (&$o) {
-                $o->obj = &$o;
+                $o->obj = &$o; // @phpstan-ignore assign.propertyType
             }, null, QuietObjectWrapper::class)();
             $oCopy = $o;
 
