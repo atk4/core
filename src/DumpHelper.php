@@ -18,6 +18,9 @@ class DumpHelper
         }, null, HtmlExceptionRenderer::class)();
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getObjectProperties(object $value): array
     {
         $reflProperties = [];
@@ -43,7 +46,7 @@ class DumpHelper
 
         $res = [];
         foreach ($reflProperties as $k => $reflProperties2) {
-            if (is_string($k) && str_ends_with($k, "\n")) {
+            if (str_ends_with($k, "\n")) {
                 $k = substr($k, 0, -1);
 
                 $res[$k] = &$value->{$k};
@@ -80,14 +83,16 @@ class DumpHelper
     /**
      * @param mixed $value
      */
-    private function getRid(&$value): ?string
+    private function getRid(&$value): string
     {
         return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
     }
 
     /**
-     * @param mixed $value
-     * @param mixed $rootValue
+     * @param mixed                       $value
+     * @param mixed                       $rootValue
+     * @param array<int, positive-int>    $duplicateOids
+     * @param array<string, positive-int> $duplicateRids
      */
     protected function findDuplicateOidsRids(&$value, &$rootValue, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
@@ -121,7 +126,7 @@ class DumpHelper
             return;
         }
 
-        if (is_object($value) && $duplicateOids[$oid] === 1) {
+        if (is_object($value) && $duplicateOids[$oid] === 1) { // @phpstan-ignore variable.undefined
             $v = $value;
             unset($value);
             $value = $this->getObjectProperties($v);

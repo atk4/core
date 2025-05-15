@@ -8,6 +8,7 @@ use Atk4\Core\DumpHelper;
 use Atk4\Core\ExceptionRenderer\Html as HtmlExceptionRenderer;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Core\QuietObjectWrapper;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DumpHelperTest extends TestCase
 {
