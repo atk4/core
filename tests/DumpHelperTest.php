@@ -97,4 +97,89 @@ class DumpHelperTest extends TestCase
             'parentException' => null,
         ]];
     }
+
+    /**
+     * @param mixed $value
+     */
+    private static function getRid(&$value): string
+    {
+        return \Closure::bind(static function () use (&$value) {
+            return (new DumpHelper())->getRid($value);
+        }, null, DumpHelper::class)();
+    }
+
+    /**
+     * @dataProvider provideFindDuplicateOidsRidsCases
+     *
+     * @param \Closure(): array{mixed, array<int, positive-int>, array<string, positive-int>} $makeCaseFx
+     */
+    #[DataProvider('provideFindDuplicateOidsRidsCases')]
+    public function testFindDuplicateOidsRids(\Closure $makeCaseFx, int $maxDepth = 50): void
+    {
+        [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
+
+        $dumpHelper = new DumpHelper();
+        $duplicateOids = [];
+        $duplicateRids = [];
+        \Closure::bind(static function () use ($dumpHelper, &$value, $maxDepth, &$duplicateOids, &$duplicateRids) {
+            $dumpHelper->findDuplicateOidsRids($value, $maxDepth, $duplicateOids, $duplicateRids);
+        }, null, DumpHelper::class)();
+
+        self::assertSame($expectedDuplicateOids, $duplicateOids);
+        self::assertSame($expectedDuplicateRids, $duplicateRids);
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function provideFindDuplicateOidsRidsCases(): iterable
+    {
+        yield 'scalar' => [static function () {
+            $v = 10.5;
+
+            return [$v, [], [
+                self::getRid($v) => 1,
+            ]];
+        }];
+
+        yield 'object' => [static function () {
+            $v = new \DateTime();
+
+            return [$v, [
+                spl_object_id($v) => 1,
+            ], [
+                self::getRid($v) => 1,
+            ]];
+        }];
+
+        yield 'array with objects' => [static function () {
+            $dt = new \DateTime();
+            $dt2 = new \DateTime();
+            $dtCopy = $dt;
+            $arr = [&$dt, &$dt2, &$dt, &$dtCopy];
+
+            return [$arr, [
+                spl_object_id($dt) => 3,
+                spl_object_id($dt2) => 1,
+            ], [
+                self::getRid($arr) => 1,
+                self::getRid($dt) => 2,
+                self::getRid($dt2) => 1,
+                self::getRid($dtCopy) => 1,
+            ]];
+        }];
+
+        yield 'array recursive' => [static function () {
+            $v = false;
+            $v2 = [&$v];
+            $v2[] = &$v2;
+            $arr = [&$v2];
+
+            return [$arr, [], [
+                self::getRid($arr) => 1,
+                self::getRid($v2) => 2,
+                self::getRid($v) => 1,
+            ]];
+        }];
+    }
 }
