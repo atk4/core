@@ -196,6 +196,24 @@ class DumpHelperTest extends TestCase
             ]];
         }];
 
+        yield 'object recursive' => [static function () {
+            $v = false;
+            $o = new \stdClass();
+            $o->foo = &$v;
+            $o->bar = &$o;
+            $oCopy = $o;
+            $arr = [&$o, &$o, &$oCopy];
+
+            return [$arr, [
+                spl_object_id($o) => 4,
+            ], [
+                self::getRid($arr) => 1,
+                self::getRid($o) => 3,
+                self::getRid($v) => 1,
+                self::getRid($oCopy) => 1,
+            ]];
+        }];
+
         yield 'array max depth 0' => [static function () {
             $dt = new \DateTime();
             $arr = [&$dt, [1]];
