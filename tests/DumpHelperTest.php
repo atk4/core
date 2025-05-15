@@ -21,6 +21,8 @@ class DumpHelperTest extends TestCase
 
     /**
      * @dataProvider provideGetObjectPropertiesCases
+     *
+     * @param array<string, mixed> $expectedResult
      */
     #[DataProvider('provideGetObjectPropertiesCases')]
     public function testGetObjectProperties(object $value, array $expectedResult): void
@@ -39,8 +41,11 @@ class DumpHelperTest extends TestCase
         yield 'no properties' => [new \stdClass(), []];
 
         yield 'sort' => [new class extends \stdClass {
+            /** @var string */
             public $bar = 'x';
+            /** @var string */
             public $bar2 = 'y';
+            /** @var string */
             public $bar10 = 'z';
         }, [
             'bar' => 'x',
@@ -49,6 +54,7 @@ class DumpHelperTest extends TestCase
         ]];
 
         $o = new class extends \stdClass {
+            /** @var string */
             public $bar2 = 'x';
         };
         $o->foo = 1;
@@ -70,9 +76,6 @@ class DumpHelperTest extends TestCase
             protected bool $b;
             public bool $c;
 
-            /**
-             * @param T $obj
-             */
             public function __construct(object $obj)
             {
                 parent::__construct($obj);
@@ -85,7 +88,7 @@ class DumpHelperTest extends TestCase
             'b' => null,
             'c' => null,
             'obj:' . QuietObjectWrapper::class => $dt,
-            'obj:' . QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 21) => true,
+            'obj:' . QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 18) => true,
         ]];
 
         $exception = new \Exception();
