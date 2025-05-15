@@ -197,20 +197,30 @@ class DumpHelperTest extends TestCase
         }];
 
         yield 'object recursive' => [static function () {
-            $v = false;
-            $o = new \stdClass();
-            $o->foo = &$v;
-            $o->bar = &$o;
+            $o = new QuietObjectWrapper(new \DateTime());
+            \Closure::bind(static function () use (&$o) {
+                $o->obj = &$o;
+            }, null, QuietObjectWrapper::class)();
             $oCopy = $o;
-            $arr = [&$o, &$o, &$oCopy];
+
+            $v = false;
+            $oDynamic = new \stdClass();
+            $oDynamic->foo = &$v;
+            $oDynamic->bar = &$oDynamic;
+            $oDynamicCopy = $oDynamic;
+
+            $arr = [&$o, &$o, &$oDynamic, &$oDynamic, &$oCopy, &$oDynamicCopy];
 
             return [$arr, [
                 spl_object_id($o) => 4,
+                spl_object_id($oDynamic) => 4,
             ], [
                 self::getRid($arr) => 1,
                 self::getRid($o) => 3,
+                self::getRid($oDynamic) => 3,
                 self::getRid($v) => 1,
                 self::getRid($oCopy) => 1,
+                self::getRid($oDynamicCopy) => 1,
             ]];
         }];
 

@@ -35,7 +35,7 @@ class DumpHelper
 
         foreach (get_object_vars($value) as $k => $v) {
             if (!isset($reflProperties[$k])) {
-                $reflProperties[$k . "\n"] = $v;
+                $reflProperties[$k . "\n"] = true;
             }
         }
 
@@ -44,23 +44,33 @@ class DumpHelper
         $res = [];
         foreach ($reflProperties as $k => $reflProperties2) {
             if (is_string($k) && str_ends_with($k, "\n")) {
-                $res[substr($k, 0, -1)] = $reflProperties2;
+                $k = substr($k, 0, -1);
+
+                $res[$k] = &$value->{$k};
 
                 continue;
             }
 
             foreach (array_reverse($reflProperties2) as $relfProperty) {
                 $name = $relfProperty->getName();
+                $class = $relfProperty->getDeclaringClass()->getName();
+
+                $k = $name;
                 if ($relfProperty->isPrivate() && count($reflProperties2) > 1) {
-                    $name .= ':' . $this->formatClass($relfProperty->getDeclaringClass()->getName());
+                    $k .= ':' . $this->formatClass($class);
                 }
 
                 if (\PHP_MAJOR_VERSION === 7) {
                     $relfProperty->setAccessible(true);
                 }
-                $res[$name] = $relfProperty->isInitialized($value)
-                    ? $relfProperty->getValue($value)
-                    : null;
+
+                if (!$relfProperty->isInitialized($value)) {
+                    $res[$k] = null;
+                } else {
+                    $res[$k] = &\Closure::bind(static function &() use (&$value, $name) {
+                        return $value->{$name};
+                    }, null, $class)();
+                }
             }
         }
 
