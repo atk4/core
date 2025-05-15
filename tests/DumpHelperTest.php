@@ -195,5 +195,38 @@ class DumpHelperTest extends TestCase
                 self::getRid($v) => 1,
             ]];
         }];
+
+        yield 'array max depth 0' => [static function () {
+            $dt = new \DateTime();
+            $arr = [&$dt, [1]];
+
+            return [$arr, [], [
+                self::getRid($arr) => 1,
+            ]];
+        }, 0];
+
+        yield 'array max depth -1' => [static function () {
+            $dt = new \DateTime();
+            $arr = [&$dt, [1]];
+
+            return [$arr, [], [
+                self::getRid($arr) => 1,
+            ]];
+        }, 0];
+
+        yield 'array max depth 1' => [static function () {
+            $dt = new \DateTime();
+            $dt2 = new \DateTime();
+            $v = [&$dt2, [1]];
+            $arr = [&$dt, &$v];
+
+            return [$arr, [
+                spl_object_id($dt) => 1,
+            ], [
+                self::getRid($arr) => 1,
+                self::getRid($dt) => 1,
+                self::getRid($arr[1]) => 1,
+            ]];
+        }, 1];
     }
 }
