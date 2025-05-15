@@ -119,12 +119,15 @@ class DumpHelperTest extends TestCase
         [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
 
         $dumpHelper = new DumpHelper();
+        $rootValue = &$value;
         $duplicateOids = [];
         $duplicateRids = [];
-        \Closure::bind(static function () use ($dumpHelper, &$value, $maxDepth, &$duplicateOids, &$duplicateRids) {
-            $dumpHelper->findDuplicateOidsRids($value, $maxDepth, $duplicateOids, $duplicateRids);
+        \Closure::bind(static function () use ($dumpHelper, &$value, &$rootValue, $maxDepth, &$duplicateOids, &$duplicateRids) {
+            $dumpHelper->findDuplicateOidsRids($value, $rootValue, $maxDepth, $duplicateOids, $duplicateRids);
         }, null, DumpHelper::class)();
 
+        self::assertSame($value, $rootValue);
+        self::assertSame(self::getRid($value), self::getRid($rootValue));
         self::assertSame($expectedDuplicateOids, $duplicateOids);
         self::assertSame($expectedDuplicateRids, $duplicateRids);
     }
@@ -178,6 +181,17 @@ class DumpHelperTest extends TestCase
             return [$arr, [], [
                 self::getRid($arr) => 1,
                 self::getRid($v2) => 2,
+                self::getRid($v) => 1,
+            ]];
+        }];
+
+        yield 'array recursive top' => [static function () {
+            $v = false;
+            $arr = [&$v];
+            $arr[] = &$arr;
+
+            return [$arr, [], [
+                self::getRid($arr) => 2,
                 self::getRid($v) => 1,
             ]];
         }];

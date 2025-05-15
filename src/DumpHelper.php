@@ -77,8 +77,9 @@ class DumpHelper
 
     /**
      * @param mixed $value
+     * @param mixed $rootValue
      */
-    protected function findDuplicateOidsRids(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
+    protected function findDuplicateOidsRids(&$value, &$rootValue, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
         if (is_object($value)) {
             $oid = spl_object_id($value);
@@ -100,6 +101,16 @@ class DumpHelper
 
         $duplicateRids[$rid] = 1;
 
+        $ridRootValue = $this->getRid($rootValue);
+        if (is_array($value) && $value === $rootValue && $rid !== $ridRootValue) { // TODO fix compare when NAN is present https://github.com/php/php-src/issues/18563
+            $rootValue = &$value;
+            $duplicateOids = [];
+            $duplicateRids = [];
+            $this->findDuplicateOidsRids($rootValue, $rootValue, $maxDepth, $duplicateOids, $duplicateRids);
+
+            return;
+        }
+
         if (is_object($value) && $duplicateOids[$oid] === 1) {
             $v = $value;
             unset($value);
@@ -108,7 +119,11 @@ class DumpHelper
 
         if (is_array($value) && $depth < $maxDepth) {
             foreach ($value as &$v) {
-                $this->findDuplicateOidsRids($v, $maxDepth, $duplicateOids, $duplicateRids, $depth + 1);
+                $this->findDuplicateOidsRids($v, $rootValue, $maxDepth, $duplicateOids, $duplicateRids, $depth + 1);
+
+                if ($this->getRid($rootValue) !== $ridRootValue) {
+                    break;
+                }
             }
         }
     }
