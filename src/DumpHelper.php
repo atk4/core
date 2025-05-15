@@ -63,7 +63,7 @@ class DumpHelper
                     $k .= ':' . $this->formatClass($class);
                 }
 
-                if (\PHP_MAJOR_VERSION === 7) {
+                if (\PHP_VERSION_ID < 8_01_00) {
                     $relfProperty->setAccessible(true);
                 }
 
