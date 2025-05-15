@@ -261,4 +261,39 @@ class DumpHelperTest extends TestCase
             ]];
         }, 1];
     }
+
+    /**
+     * @dataProvider providePrintReadableCases
+     *
+     * @param \Closure(): array{mixed, string} $makeCaseFx
+     */
+    #[DataProvider('providePrintReadableCases')]
+    public function testPrintReadable(\Closure $makeCaseFx): void
+    {
+        [$value, $expectedOutput] = $makeCaseFx();
+
+        ob_start();
+        $dumpHelper = new DumpHelper();
+        $dumpHelper->printReadable($value);
+        $output = ob_get_clean();
+
+        self::assertStringEndsWith("\n", $output);
+        self::assertSame($expectedOutput, substr($output, 0, -1));
+
+        ob_start();
+        atk4_print_r($value);
+        $output2 = ob_get_clean();
+
+        self::assertSame($output, $output2);
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function providePrintReadableCases(): iterable
+    {
+        yield [static function () {
+            return [null, 'null'];
+        }];
+    }
 }

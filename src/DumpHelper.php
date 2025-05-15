@@ -142,4 +142,16 @@ class DumpHelper
             }
         }
     }
+
+    /**
+     * Improved version of native print_r() function.
+     *
+     * Objects and array references are printed only once.
+     *
+     * https://github.com/php/php-src/blob/php-8.4.7/Zend/zend.c#L543
+     *
+     * @param mixed $value
+     */
+    public function printReadable($value): void
+    }
 }
