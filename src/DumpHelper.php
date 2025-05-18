@@ -293,11 +293,11 @@ class DumpHelper
     }
 
     /**
-     * @param mixed                       $value
-     * @param array<int, positive-int>    $duplicateOids
-     * @param array<string, positive-int> $duplicateRids
+     * @param mixed                         $value
+     * @param array<int, -1|int<2, max>>    $duplicateOids
+     * @param array<string, -1|int<2, max>> $duplicateRids
      */
-    protected function _printReadable(&$value, int $maxDepth, array $duplicateOids, array $duplicateRids, int $depth = 0): void
+    protected function _printReadable(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
         if (is_int($value) || is_float($value) || is_string($value)) {
             $this->printScalar($value, $depth);
@@ -316,6 +316,19 @@ class DumpHelper
         ++$depth;
 
         echo ' ';
+
+        if (is_object($value)) {
+            $oid = spl_object_id($value);
+            if (($duplicateOids[$oid] ?? 0) !== 0) {
+                if ($duplicateOids[$oid] < 0) {
+                    echo '*deduplicated*';
+
+                    return;
+                } else {
+                    $duplicateOids[$oid] = -1;
+                }
+            }
+        }
 
         $isObject = false;
         if (is_object($value)) {

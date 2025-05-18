@@ -405,6 +405,32 @@ class DumpHelperTest extends TestCase
             )];
         }];
 
+        yield 'deduplicate objects' => [static function () {
+            $dt = new \DateTime('2013-02-20 20:00:12 UTC');
+            $dt2 = new \DateTime('2013-02-20 20:00:12 UTC');
+            $o = new QuietObjectWrapper($dt);
+
+            return [[$dt, $dt, $dt2, [$dt], $o, $o], sprintf(
+                <<<'EOD'
+                    list<Atk4\Core\QuietObjectWrapper|DateTime|list> [
+                        %s {},
+                        %1$s *deduplicated*,
+                        %s {},
+                        list<DateTime> [
+                            %1$s *deduplicated*
+                        ],
+                        %s {
+                            'obj': %1$s *deduplicated*
+                        },
+                        %3$s *deduplicated*
+                    ]
+                    EOD,
+                \DateTime::class . '#' . spl_object_id($dt),
+                \DateTime::class . '#' . spl_object_id($dt2),
+                QuietObjectWrapper::class . '#' . spl_object_id($o),
+            )];
+        }];
+
         yield [static function () {
             $dt = new \DateTime();
             $ref = \WeakReference::create($dt);
