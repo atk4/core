@@ -360,7 +360,9 @@ class DumpHelper
 
         $isObject = false;
         if (is_object($value)) {
-            $value = $this->getObjectProperties($value);
+            $v = $value;
+            unset($value);
+            $value = $this->getObjectProperties($v);
             $isObject = true;
         }
 

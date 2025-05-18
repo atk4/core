@@ -504,6 +504,41 @@ class DumpHelperTest extends TestCase
                 \stdClass::class . '#' . spl_object_id($o),
             )];
         }];
+        yield 'track references thru expanded object' => [static function () {
+            $v = true;
+            $v2 = [&$v];
+            $o = new \stdClass();
+            $o->foo = $v2;
+            $o->bar = &$v2;
+            $o->baz = [&$v2];
+
+            return [[&$v2, &$v, $o, [&$v2, &$v, $o], &$o], sprintf(
+                <<<'EOD'
+                    list<list|stdClass|true> [
+                        &0 list<true> [
+                            &1 true
+                        ],
+                        &1 true,
+                        %s {
+                            'bar': &0 list<true> *deduplicated*,
+                            'baz': list<list> [
+                                &0 list<true> *deduplicated*
+                            ],
+                            'foo': list<true> [
+                                &1 true
+                            ]
+                        },
+                        list<list|stdClass|true> [
+                            &0 list<true> *deduplicated*,
+                            &1 true,
+                            %1$s *deduplicated*
+                        ],
+                        %1$s *deduplicated*
+                    ]
+                    EOD,
+                \stdClass::class . '#' . spl_object_id($o),
+            )];
+        }];
 
         yield [static function () {
             $dt = new \DateTime();
