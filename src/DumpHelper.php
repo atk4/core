@@ -181,7 +181,11 @@ class DumpHelper
             $types[$type] = $type;
         }
 
-        if (isset($types['array']) && isset($types['list'])) {
+        if (isset($types['false']) && isset($types['true'])) {
+            unset($types['false']);
+            unset($types['true']);
+            $types['bool'] = 'bool';
+        } elseif (isset($types['array']) && isset($types['list'])) {
             unset($types['list']);
         }
 

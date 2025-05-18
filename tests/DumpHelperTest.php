@@ -354,6 +354,13 @@ class DumpHelperTest extends TestCase
                 'bar' => true
             ]
             EOD]];
+        yield 'false and true union' => [static fn () => [[false, true, 1], <<<'EOD'
+            list<bool|int> [
+                false,
+                true,
+                1
+            ]
+            EOD]];
         yield 'non-list and list union' => [static fn () => [[['foo' => true], [true], []], <<<'EOD'
             list<array> [
                 array<string, true> [
