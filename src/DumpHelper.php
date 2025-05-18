@@ -249,6 +249,13 @@ class DumpHelper
      */
     protected function _printReadable(&$value, array $duplicateOids, array $duplicateRids, int $depth = 0): void
     {
+        if (is_int($value) || is_float($value) || is_string($value)) {
+            $this->printScalar($value);
+            echo "\n";
+
+            return;
+        }
+
         $type = $this->describeType($value);
 
         echo $type;
@@ -259,18 +266,12 @@ class DumpHelper
             return;
         }
 
-        echo ': ';
+        echo ' ';
 
         $isObject = false;
         if (is_object($value)) {
             $value = $this->getObjectProperties($value);
             $isObject = true;
-        }
-        if (!is_array($value)) {
-            $this->printScalar($value);
-            echo "\n";
-
-            return;
         }
 
         echo $isObject ? '{' : '[';
@@ -292,7 +293,7 @@ class DumpHelper
     }
 
     /**
-     * @param scalar $value
+     * @param int|float|string $value
      */
     protected function printScalar($value): void
     {

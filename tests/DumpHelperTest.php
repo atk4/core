@@ -305,41 +305,41 @@ class DumpHelperTest extends TestCase
             return [$handle, 'resource<*closed*>'];
         }];
 
-        yield [static fn () => [0, 'int: 0']];
-        yield [static fn () => [5, 'int: 5']];
-        yield [static fn () => [-5, 'int: -5']];
-        yield [static fn () => [999, 'int: 999']];
-        yield [static fn () => [1_000, 'int: 1_000']];
-        yield [static fn () => [2_001_002_003, 'int: 2_001_002_003']];
-        yield [static fn () => [-2_001_002_003, 'int: -2_001_002_003']];
-        yield [static fn () => [\PHP_INT_MAX, \PHP_INT_SIZE === 4 ? 'int: 2_147_483_647' : 'int: 9_223_372_036_854_775_807']];
-        yield [static fn () => [\PHP_INT_MIN, \PHP_INT_SIZE === 4 ? 'int: -2_147_483_648' : 'int: -9_223_372_036_854_775_808']];
+        yield [static fn () => [0, '0']];
+        yield [static fn () => [5, '5']];
+        yield [static fn () => [-5, '-5']];
+        yield [static fn () => [999, '999']];
+        yield [static fn () => [1_000, '1_000']];
+        yield [static fn () => [2_001_002_003, '2_001_002_003']];
+        yield [static fn () => [-2_001_002_003, '-2_001_002_003']];
+        yield [static fn () => [\PHP_INT_MAX, \PHP_INT_SIZE === 4 ? '2_147_483_647' : '9_223_372_036_854_775_807']];
+        yield [static fn () => [\PHP_INT_MIN, \PHP_INT_SIZE === 4 ? '-2_147_483_648' : '-9_223_372_036_854_775_808']];
 
-        yield [static fn () => [0.0, 'float: 0.0']];
-        yield [static fn () => [-0.0, 'float: -0.0']];
-        yield [static fn () => [5.0, 'float: 5.0']];
-        yield [static fn () => [-5.0, 'float: -5.0']];
-        yield [static fn () => [8.202343767574732, 'float: 8.202343767574732']];
-        yield [static fn () => [99_999_999_999_999_980.0, 'float: 99_999_999_999_999_980.0']];
-        yield [static fn () => [100_000_000_000_000_000.0, 'float: 1.0E+17']];
-        yield [static fn () => [0.000005, 'float: 5.0E-6']];
-        yield [static fn () => [-0.000005, 'float: -5.0E-6']];
-        yield [static fn () => [\INF, 'float: INF']];
-        yield [static fn () => [-\INF, 'float: -INF']];
-        yield [static fn () => [\NAN, 'float: NAN']];
+        yield [static fn () => [0.0, '0.0']];
+        yield [static fn () => [-0.0, '-0.0']];
+        yield [static fn () => [5.0, '5.0']];
+        yield [static fn () => [-5.0, '-5.0']];
+        yield [static fn () => [8.202343767574732, '8.202343767574732']];
+        yield [static fn () => [99_999_999_999_999_980.0, '99_999_999_999_999_980.0']];
+        yield [static fn () => [100_000_000_000_000_000.0, '1.0E+17']];
+        yield [static fn () => [0.000005, '5.0E-6']];
+        yield [static fn () => [-0.000005, '-5.0E-6']];
+        yield [static fn () => [\INF, 'INF']];
+        yield [static fn () => [-\INF, '-INF']];
+        yield [static fn () => [\NAN, 'NAN']];
 
-        yield [static fn () => ['', 'empty-string: \'\'']];
-        yield [static fn () => ['0', 'string: \'0\'']];
-        yield [static fn () => ['foo bar', 'string: \'foo bar\'']];
-        yield [static fn () => ['<img src="x" />', 'string: \'<img src="x" />\'']];
-        yield [static fn () => ['foo\'bar', 'string: \'foo\\\'bar\'']];
-        yield [static fn () => ['foo\bar', 'string: \'foo\bar\'']];
-        yield [static fn () => ['foo\\\'bar', 'string: \'foo\\\\\\\'bar\'']];
-        yield [static fn () => ['foo\\\\\'bar', 'string: \'foo\\\\\\\\\\\'bar\'']];
+        yield [static fn () => ['', '\'\'']];
+        yield [static fn () => ['0', '\'0\'']];
+        yield [static fn () => ['foo bar', '\'foo bar\'']];
+        yield [static fn () => ['<img src="x" />', '\'<img src="x" />\'']];
+        yield [static fn () => ['foo\'bar', '\'foo\\\'bar\'']];
+        yield [static fn () => ['foo\bar', '\'foo\bar\'']];
+        yield [static fn () => ['foo\\\'bar', '\'foo\\\\\\\'bar\'']];
+        yield [static fn () => ['foo\\\\\'bar', '\'foo\\\\\\\\\\\'bar\'']];
 
-        yield [static fn () => [[], 'empty-array: []']];
+        yield [static fn () => [[], 'empty-array []']];
         yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
-            array<string, true>: [
+            array<string, true> [
                 'foo' => true
                 'bar' => true
             ]
@@ -348,12 +348,12 @@ class DumpHelperTest extends TestCase
         yield [static function () {
             $o = new \stdClass();
 
-            return [$o, \stdClass::class . '#' . spl_object_id($o) . ': {}'];
+            return [$o, \stdClass::class . '#' . spl_object_id($o) . ' {}'];
         }];
         yield [static function () {
             $o = new class {};
 
-            return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ': {}'];
+            return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ' {}'];
         }];
         yield [static function () {
             $dt = new \DateTime('2013-02-20 20:00:12 UTC');
@@ -361,8 +361,8 @@ class DumpHelperTest extends TestCase
 
             return [$o, sprintf(
                 <<<'EOD'
-                    %s: {
-                        'obj': %s: {}
+                    %s {
+                        'obj': %s {}
                     }
                     EOD,
                 QuietObjectWrapper::class . '#' . spl_object_id($o),
@@ -375,8 +375,8 @@ class DumpHelperTest extends TestCase
 
             return [$o, sprintf(
                 <<<'EOD'
-                    %s: {
-                        'obj': %s: {}
+                    %s {
+                        'obj': %s {}
                     }
                     EOD,
                 QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 8) . '#' . spl_object_id($o),
@@ -390,9 +390,9 @@ class DumpHelperTest extends TestCase
 
             return [$v, sprintf(
                 <<<'EOD'
-                    list<DateTime|WeakReference>: [
-                        0 => %s: {}
-                        1 => WeakReference<%1$s>%s: {}
+                    list<DateTime|WeakReference> [
+                        0 => %s {}
+                        1 => WeakReference<%1$s>%s {}
                     ]
                     EOD,
                 \DateTime::class . '#' . spl_object_id($dt),
@@ -402,7 +402,7 @@ class DumpHelperTest extends TestCase
         yield [static function () {
             $o = \WeakReference::create(new \DateTime());
 
-            return [$o, 'WeakReference<*destroyed*>#' . spl_object_id($o) . ': {}'];
+            return [$o, 'WeakReference<*destroyed*>#' . spl_object_id($o) . ' {}'];
         }];
     }
 }
