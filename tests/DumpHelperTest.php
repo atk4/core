@@ -340,7 +340,7 @@ class DumpHelperTest extends TestCase
         yield [static fn () => [[], 'empty-array []']];
         yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
             array<string, true> [
-                'foo' => true
+                'foo' => true,
                 'bar' => true
             ]
             EOD]];
@@ -391,7 +391,7 @@ class DumpHelperTest extends TestCase
             return [$v, sprintf(
                 <<<'EOD'
                     list<DateTime|WeakReference> [
-                        0 => %s {}
+                        0 => %s {},
                         1 => WeakReference<%1$s>%s {}
                     ]
                     EOD,

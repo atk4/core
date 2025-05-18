@@ -240,6 +240,7 @@ class DumpHelper
         $duplicateRids = array_diff($duplicateRids, [1]);
 
         $this->_printReadable($rootValue, $duplicateOids, $duplicateRids);
+        echo "\n";
     }
 
     /**
@@ -251,7 +252,6 @@ class DumpHelper
     {
         if (is_int($value) || is_float($value) || is_string($value)) {
             $this->printScalar($value);
-            echo "\n";
 
             return;
         }
@@ -261,8 +261,6 @@ class DumpHelper
         echo $type;
 
         if ($value === null || is_bool($value) || is_resource($value) || gettype($value) === 'resource (closed)') {
-            echo "\n";
-
             return;
         }
 
@@ -282,14 +280,20 @@ class DumpHelper
 
         foreach ($value as $k => $v) {
             echo str_repeat('    ', $depth + 1);
+
             $this->printScalar($k);
             echo $isObject ? ': ' : ' => ';
+
             $this->_printReadable($v, $duplicateOids, $duplicateRids, $depth + 1);
+
+            if ($k !== array_key_last($value)) {
+                echo ',';
+            }
+
+            echo "\n";
         }
 
         echo $isObject ? '}' : ']';
-
-        echo "\n";
     }
 
     /**
