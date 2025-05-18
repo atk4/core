@@ -317,8 +317,10 @@ class DumpHelper
         foreach ($value as $k => $v) {
             echo str_repeat('    ', $depth + 1);
 
-            $this->printScalar($k);
-            echo $isObject ? ': ' : ' => ';
+            if ($isObject || !array_is_list($value)) {
+                $this->printScalar($k);
+                echo $isObject ? ': ' : ' => ';
+            }
 
             $this->_printReadable($v, $duplicateOids, $duplicateRids, $depth + 1);
 

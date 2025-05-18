@@ -391,8 +391,8 @@ class DumpHelperTest extends TestCase
             return [$v, sprintf(
                 <<<'EOD'
                     list<DateTime|WeakReference> [
-                        0 => %s {},
-                        1 => WeakReference<%1$s>%s {}
+                        %s {},
+                        WeakReference<%1$s>%s {}
                     ]
                     EOD,
                 \DateTime::class . '#' . spl_object_id($dt),
