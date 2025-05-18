@@ -180,6 +180,9 @@ class DumpHelper
     {
         $type = $this->describeTypeShallow($value);
 
+        if ($value === '') {
+            $type = 'empty-string';
+        }
 
         return $type;
     }
