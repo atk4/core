@@ -268,20 +268,28 @@ class DumpHelperTest extends TestCase
      * @param \Closure(): array{mixed, string} $makeCaseFx
      */
     #[DataProvider('providePrintReadableCases')]
-    public function testPrintReadable(\Closure $makeCaseFx): void
+    public function testPrintReadable(\Closure $makeCaseFx, ?int $maxDepth = null): void
     {
         [$value, $expectedOutput] = $makeCaseFx();
 
         ob_start();
         $dumpHelper = new DumpHelper();
-        $dumpHelper->printReadable($value);
+        if ($maxDepth === null) {
+            $dumpHelper->printReadable($value);
+        } else {
+            $dumpHelper->printReadable($value, $maxDepth);
+        }
         $output = ob_get_clean();
 
         self::assertStringEndsWith("\n", $output);
         self::assertSame($expectedOutput, substr($output, 0, -1));
 
         ob_start();
-        atk4_print_r($value);
+        if ($maxDepth === null) {
+            atk4_print_r($value);
+        } else {
+            atk4_print_r($value, $maxDepth);
+        }
         $output2 = ob_get_clean();
 
         self::assertSame($output, $output2);
@@ -346,6 +354,17 @@ class DumpHelperTest extends TestCase
                 'bar' => true
             ]
             EOD]];
+        yield 'non-list and list union' => [static fn () => [[['foo' => true], [true], []], <<<'EOD'
+            list<array> [
+                array<string, true> [
+                    'foo' => true
+                ],
+                list<true> [
+                    true
+                ],
+                empty-array []
+            ]
+            EOD]];
 
         yield [static function () {
             $o = new \stdClass();
@@ -388,9 +407,9 @@ class DumpHelperTest extends TestCase
 
         yield [static function () {
             $dt = new \DateTime();
-            $v = [$dt, \WeakReference::create($dt)];
+            $ref = \WeakReference::create($dt);
 
-            return [$v, sprintf(
+            return [[$dt, $ref], sprintf(
                 <<<'EOD'
                     list<DateTime|WeakReference> [
                         %s {},
@@ -398,7 +417,7 @@ class DumpHelperTest extends TestCase
                     ]
                     EOD,
                 \DateTime::class . '#' . spl_object_id($dt),
-                '#' . spl_object_id($v[1]),
+                '#' . spl_object_id($ref),
             )];
         }];
         yield [static function () {
@@ -406,5 +425,42 @@ class DumpHelperTest extends TestCase
 
             return [$o, 'WeakReference<*destroyed*>#' . spl_object_id($o) . ' {}'];
         }];
+
+        yield [static fn () => ['foo ', '\'foo \''], 0];
+        yield [static fn () => [null, 'null'], 0];
+        yield [static fn () => [false, 'false'], 0];
+        yield [static fn () => [fopen('php://memory', 'r+'), 'resource<stream>'], 0];
+        yield [static fn () => [10, '10'], 0];
+        yield [static fn () => [10.0, '10.0'], 0];
+        yield [static fn () => [[], 'empty-array []'], -1];
+        yield [static fn () => [[], 'empty-array []'], 0];
+        yield [static fn () => [[], 'empty-array []'], 1];
+        yield [static fn () => [['foo' => true], 'array<string, true> [...]'], 0];
+        yield [static fn () => [['foo' => true], <<<'EOD'
+            array<string, true> [
+                'foo' => true
+            ]
+            EOD], 1];
+        yield [static fn () => [['foo' => []], 'array<string, list> [...]'], 0];
+        yield [static fn () => [['foo' => []], <<<'EOD'
+            array<string, list> [
+                'foo' => empty-array []
+            ]
+            EOD], 1];
+        yield [static fn () => [['foo' => [true]], 'array<string, list> [...]'], 0];
+        yield [static fn () => [['foo' => [true]], <<<'EOD'
+            array<string, list> [
+                'foo' => list<true> [...]
+            ]
+            EOD], 1];
+        yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
+            array<string, true> [...]
+            EOD], 0];
+        yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
+            array<string, true> [
+                'foo' => true,
+                'bar' => true
+            ]
+            EOD], 1];
     }
 }

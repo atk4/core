@@ -178,6 +178,10 @@ class DumpHelper
             $types[$type] = $type;
         }
 
+        if (isset($types['array']) && isset($types['list'])) {
+            unset($types['list']);
+        }
+
         sort($types);
 
         return implode('|', $types);
@@ -274,7 +278,7 @@ class DumpHelper
      *
      * @param mixed $value
      */
-    public function printReadable($value): void
+    public function printReadable($value, int $maxDepth = 50): void
     {
         $rootValue = &$value;
         $duplicateOids = [];
@@ -284,7 +288,7 @@ class DumpHelper
         $duplicateOids = array_diff($duplicateOids, [1]);
         $duplicateRids = array_diff($duplicateRids, [1]);
 
-        $this->_printReadable($rootValue, $duplicateOids, $duplicateRids);
+        $this->_printReadable($rootValue, $maxDepth, $duplicateOids, $duplicateRids);
         echo "\n";
     }
 
@@ -293,7 +297,7 @@ class DumpHelper
      * @param array<int, positive-int>    $duplicateOids
      * @param array<string, positive-int> $duplicateRids
      */
-    protected function _printReadable(&$value, array $duplicateOids, array $duplicateRids, int $depth = 0): void
+    protected function _printReadable(&$value, int $maxDepth, array $duplicateOids, array $duplicateRids, int $depth = 0): void
     {
         if (is_int($value) || is_float($value) || is_string($value)) {
             $this->printScalar($value, $depth);
@@ -309,6 +313,8 @@ class DumpHelper
             return;
         }
 
+        ++$depth;
+
         echo ' ';
 
         $isObject = false;
@@ -320,18 +326,25 @@ class DumpHelper
         echo $isObject ? '{' : '[';
 
         if ($value !== []) {
+            if ($depth > $maxDepth) {
+                echo '...';
+                echo $isObject ? '}' : ']';
+
+                return;
+            }
+
             echo "\n";
         }
 
         foreach ($value as $k => $v) {
-            echo $this->makeIndent($depth + 1);
+            echo $this->makeIndent($depth);
 
             if ($isObject || !array_is_list($value)) {
-                $this->printScalar($k, $depth + 1);
+                $this->printScalar($k, $depth);
                 echo $isObject ? ': ' : ' => ';
             }
 
-            $this->_printReadable($v, $duplicateOids, $duplicateRids, $depth + 1);
+            $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
 
             if ($k !== array_key_last($value)) {
                 echo ',';
@@ -340,6 +353,9 @@ class DumpHelper
             echo "\n";
         }
 
+        if ($value !== []) {
+            echo $this->makeIndent($depth - 1);
+        }
         echo $isObject ? '}' : ']';
     }
 }
