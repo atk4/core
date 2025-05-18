@@ -182,6 +182,10 @@ class DumpHelper
 
         if ($value === '') {
             $type = 'empty-string';
+        } elseif (is_resource($value) || gettype($value) === 'resource (closed)') {
+            $type .= '<'
+                . (gettype($value) === 'resource (closed)' ? '*closed*' : substr(get_debug_type($value), strlen('resource ('), -1))
+                . '>';
         }
 
         return $type;

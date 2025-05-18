@@ -328,7 +328,7 @@ class DumpHelperTest extends TestCase
         yield [static fn () => [-INF, 'float: -INF']];
         yield [static fn () => [NAN, 'float: NAN']];
 
-        yield [static fn () => ['', 'empty-string']];
+        yield [static fn () => ['', 'empty-string: \'\'']];
         yield [static fn () => ['0', 'string: \'0\'']];
         yield [static fn () => ['foo bar', 'string: \'foo bar\'']];
         yield [static fn () => ['<img src="x" />', 'string: \'<img src="x" />\'']];
