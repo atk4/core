@@ -405,6 +405,24 @@ class DumpHelperTest extends TestCase
             )];
         }];
 
+        yield 'deduplicate array references' => [static function () {
+            $arr = [true];
+
+            return [[&$arr, &$arr, $arr, [&$arr]], <<<'EOD'
+                list<list> [
+                    &0 list<true> [
+                        true
+                    ],
+                    &0 list<true> *deduplicated*,
+                    list<true> [
+                        true
+                    ],
+                    list<list> [
+                        &0 list<true> *deduplicated*
+                    ]
+                ]
+                EOD];
+        }];
         yield 'deduplicate objects' => [static function () {
             $dt = new \DateTime('2013-02-20 20:00:12 UTC');
             $dt2 = new \DateTime('2013-02-20 20:00:12 UTC');
@@ -428,6 +446,62 @@ class DumpHelperTest extends TestCase
                 \DateTime::class . '#' . spl_object_id($dt),
                 \DateTime::class . '#' . spl_object_id($dt2),
                 QuietObjectWrapper::class . '#' . spl_object_id($o),
+            )];
+        }];
+        yield 'track references for all native types' => [static function () {
+            $null = null;
+            $bool = true;
+            $int = 1;
+            $float = 1.0;
+            $str = 'x';
+            $arr = [];
+            $o = new \stdClass();
+            $resource = fopen('php://memory', 'r+');
+
+            $arr2 = [$null, $bool, $int, $float, $str, $arr, $o, $resource];
+
+            return [[
+                [&$null, &$bool, &$int, &$float, &$str, &$arr, &$o, &$resource],
+                &$arr2,
+                [&$null, &$bool, &$int, &$float, &$str, &$arr, &$o, &$resource],
+                &$arr2,
+            ], sprintf(
+                <<<'EOD'
+                    list<list> [
+                        list<float|int|list|null|resource|stdClass|string|true> [
+                            &0 null,
+                            &1 true,
+                            &2 1,
+                            &3 1.0,
+                            &4 'x',
+                            &5 empty-array [],
+                            &6 %s {},
+                            &7 resource<stream>
+                        ],
+                        &8 list<float|int|list|null|resource|stdClass|string|true> [
+                            null,
+                            true,
+                            1,
+                            1.0,
+                            'x',
+                            empty-array [],
+                            %1$s *deduplicated*,
+                            resource<stream>
+                        ],
+                        list<float|int|list|null|resource|stdClass|string|true> [
+                            &0 null,
+                            &1 true,
+                            &2 1,
+                            &3 1.0,
+                            &4 'x',
+                            &5 empty-array *deduplicated*,
+                            &6 %1$s *deduplicated*,
+                            &7 resource<stream>
+                        ],
+                        &8 list<float|int|list|null|resource|stdClass|string|true> *deduplicated*
+                    ]
+                    EOD,
+                \stdClass::class . '#' . spl_object_id($o),
             )];
         }];
 

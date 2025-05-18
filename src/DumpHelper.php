@@ -143,14 +143,17 @@ class DumpHelper
         }
     }
 
-    protected function formatOid(int $oid): string
+    protected function formatOid(int $value): string
     {
-        return '#' . $oid;
+        return '#' . $value;
     }
 
-    protected function formatRid(string $rid): string
+    /**
+     * @param int<-1, max> $ridIndex
+     */
+    protected function formatRidIndex(int $value): string
     {
-        return '&' . $rid;
+        return '&' . ($value === -1 ? '?' : $value);
     }
 
     /**
@@ -288,17 +291,36 @@ class DumpHelper
         $duplicateOids = array_diff($duplicateOids, [1]);
         $duplicateRids = array_diff($duplicateRids, [1]);
 
-        $this->_printReadable($rootValue, $maxDepth, $duplicateOids, $duplicateRids);
+        $duplicateRidsWithIndex = [];
+        $i = array_key_first($duplicateRids) === $this->getRid($rootValue)
+            ? -2
+            : -1;
+        foreach ($duplicateRids as $k => $v) {
+            $duplicateRidsWithIndex[$k] = [$v, ++$i];
+        }
+
+        $this->_printReadable($rootValue, $maxDepth, $duplicateOids, $duplicateRidsWithIndex);
         echo "\n";
     }
 
     /**
-     * @param mixed                         $value
-     * @param array<int, -1|int<2, max>>    $duplicateOids
-     * @param array<string, -1|int<2, max>> $duplicateRids
+     * @param mixed                                              $value
+     * @param array<int, -1|int<2, max>>                         $duplicateOids
+     * @param array<string, array{-1|int<2, max>, int<-1, max>}> $duplicateRids
      */
     protected function _printReadable(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
+        $rid = $this->getRid($value);
+        $isNewRef = false;
+        if (($duplicateRids[$rid][0] ?? 0) !== 0) {
+            echo $this->formatRidIndex($duplicateRids[$rid][1]) . ' ';
+
+            if ($duplicateRids[$rid][0] > 0) {
+                $duplicateRids[$rid][0] = -1;
+                $isNewRef = true;
+            }
+        }
+
         if (is_int($value) || is_float($value) || is_string($value)) {
             $this->printScalar($value, $depth);
 
@@ -316,6 +338,12 @@ class DumpHelper
         ++$depth;
 
         echo ' ';
+
+        if (($duplicateRids[$rid][0] ?? 0) < 0 && !$isNewRef) {
+            echo '*deduplicated*';
+
+            return;
+        }
 
         if (is_object($value)) {
             $oid = spl_object_id($value);
@@ -349,7 +377,7 @@ class DumpHelper
             echo "\n";
         }
 
-        foreach ($value as $k => $v) {
+        foreach ($value as $k => &$v) {
             echo $this->makeIndent($depth);
 
             if ($isObject || !array_is_list($value)) {
