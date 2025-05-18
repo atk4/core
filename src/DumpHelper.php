@@ -220,10 +220,15 @@ class DumpHelper
         return $type;
     }
 
+    protected function makeIndent(int $depth): string
+    {
+        return str_repeat('    ', $depth);
+    }
+
     /**
      * @param int|float|string $value
      */
-    protected function printScalar($value): void
+    protected function printScalar($value, int $depth): void
     {
         if (is_int($value) || (is_float($value) && is_finite($value))) {
             if (is_int($value)) {
@@ -249,8 +254,12 @@ class DumpHelper
 
             $value = strrev(implode('_', str_split(strrev($str), 3)))
                 . ($decimal === false ? '' : $decimal);
+        } elseif (is_float($value)) {
+            $value = (string) $value;
         } elseif (is_string($value)) {
-            $value = '\'' . preg_replace('~\\\(?=\\\|\')|\'~', '\\\$0', $value) . '\'';
+            $value = str_contains($value, "\n") || str_contains($value, "\r")
+                ? "<<<'EOD'\n" . implode('', array_map(fn ($v) => $this->makeIndent($depth + 1) . $v, preg_split('~(?:\r\n?|\n)\K~', $value . "\nEOD")))
+                : '\'' . preg_replace('~\\\(?=\\\|\')|\'~', '\\\$0', $value) . '\'';
         }
 
         echo $value;
@@ -287,7 +296,7 @@ class DumpHelper
     protected function _printReadable(&$value, array $duplicateOids, array $duplicateRids, int $depth = 0): void
     {
         if (is_int($value) || is_float($value) || is_string($value)) {
-            $this->printScalar($value);
+            $this->printScalar($value, $depth);
 
             return;
         }
@@ -315,10 +324,10 @@ class DumpHelper
         }
 
         foreach ($value as $k => $v) {
-            echo str_repeat('    ', $depth + 1);
+            echo $this->makeIndent($depth + 1);
 
             if ($isObject || !array_is_list($value)) {
-                $this->printScalar($k);
+                $this->printScalar($k, $depth + 1);
                 echo $isObject ? ': ' : ' => ';
             }
 

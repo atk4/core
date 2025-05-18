@@ -336,6 +336,8 @@ class DumpHelperTest extends TestCase
         yield [static fn () => ['foo\bar', '\'foo\bar\'']];
         yield [static fn () => ['foo\\\'bar', '\'foo\\\\\\\'bar\'']];
         yield [static fn () => ['foo\\\\\'bar', '\'foo\\\\\\\\\\\'bar\'']];
+        yield [static fn () => ["a\nb", "<<<'EOD'\n    a\n    b\n    EOD"]];
+        yield [static fn () => ["a\rb\r\n", "<<<'EOD'\n    a\r    b\r\n    \n    EOD"]];
 
         yield [static fn () => [[], 'empty-array []']];
         yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
