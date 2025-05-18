@@ -202,5 +202,20 @@ class DumpHelper
      */
     public function printReadable($value): void
     {
+        $rootValue = &$value;
+        $duplicateOids = [];
+        $duplicateRids = [];
+        $this->findDuplicateOidsRids($value, $rootValue, \PHP_INT_MAX, $duplicateOids, $duplicateRids);
+
+        $this->_printReadable($rootValue, $duplicateOids, $duplicateRids);
+    }
+
+    /**
+     * @param mixed                       $value
+     * @param array<int, positive-int>    $duplicateOids
+     * @param array<string, positive-int> $duplicateRids
+     */
+    protected function _printReadable(&$value, array $duplicateOids, array $duplicateRids): void
+    {
     }
 }
