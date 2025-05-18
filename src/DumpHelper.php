@@ -143,6 +143,16 @@ class DumpHelper
         }
     }
 
+    protected function formatOid(int $oid): string
+    {
+        return '#' . $oid;
+    }
+
+    protected function formatRid(string $rid): string
+    {
+        return '&' . $rid;
+    }
+
     /**
      * @param mixed ...$values
      */
@@ -182,6 +192,25 @@ class DumpHelper
 
         if ($value === '') {
             $type = 'empty-string';
+        } elseif (is_array($value)) {
+            if ($value === []) {
+                $type = 'empty-array';
+            } else {
+                $type .= '<'
+                    . (array_is_list($value) ? '' : $this->describeTypeShallow(...array_keys($value)) . ', ')
+                    . $this->describeTypeShallow(...array_values($value))
+                    . '>';
+            }
+        } elseif (is_object($value)) {
+            if ($value instanceof \WeakReference) {
+                $v = $value->get();
+                $type .= '<'
+                    . ($v === null ? '*destroyed*' : $this->describeTypeShallow($v))
+                    . (is_object($v) ? $this->formatOid(spl_object_id($v)) : '')
+                    . '>';
+            }
+
+            $type .= $this->formatOid(spl_object_id($value));
         } elseif (is_resource($value) || gettype($value) === 'resource (closed)') {
             $type .= '<'
                 . (gettype($value) === 'resource (closed)' ? '*closed*' : substr(get_debug_type($value), strlen('resource ('), -1))
@@ -207,6 +236,9 @@ class DumpHelper
         $duplicateRids = [];
         $this->findDuplicateOidsRids($value, $rootValue, \PHP_INT_MAX, $duplicateOids, $duplicateRids);
 
+        $duplicateOids = array_diff($duplicateOids, [1]);
+        $duplicateRids = array_diff($duplicateRids, [1]);
+
         $this->_printReadable($rootValue, $duplicateOids, $duplicateRids);
     }
 
@@ -215,7 +247,83 @@ class DumpHelper
      * @param array<int, positive-int>    $duplicateOids
      * @param array<string, positive-int> $duplicateRids
      */
-    protected function _printReadable(&$value, array $duplicateOids, array $duplicateRids): void
+    protected function _printReadable(&$value, array $duplicateOids, array $duplicateRids, int $depth = 0): void
     {
+        $type = $this->describeType($value);
+
+        echo $type;
+
+        if ($value === null || is_bool($value) || is_resource($value) || gettype($value) === 'resource (closed)') {
+            echo "\n";
+
+            return;
+        }
+
+        echo ': ';
+
+        $isObject = false;
+        if (is_object($value)) {
+            $value = $this->getObjectProperties($value);
+            $isObject = true;
+        }
+        if (!is_array($value)) {
+            $this->printScalar($value);
+            echo "\n";
+
+            return;
+        }
+
+        echo $isObject ? '{' : '[';
+
+        if ($value !== []) {
+            echo "\n";
+        }
+
+        foreach ($value as $k => $v) {
+            echo str_repeat('    ', $depth + 1);
+            $this->printScalar($k);
+            echo $isObject ? ': ' : ' => ';
+            $this->_printReadable($v, $duplicateOids, $duplicateRids, $depth + 1);
+        }
+
+        echo $isObject ? '}' : ']';
+
+        echo "\n";
+    }
+
+    /**
+     * @param scalar $value
+     */
+    protected function printScalar($value): void
+    {
+        if (is_int($value) || (is_float($value) && is_finite($value))) {
+            if (is_int($value)) {
+                $str = (string) $value;
+            } else {
+                $precisionBackup = ini_get('precision');
+                ini_set('precision', '-1');
+                try {
+                    $str = (string) $value;
+                } finally {
+                    ini_set('precision', $precisionBackup);
+                }
+            }
+
+            if (str_contains($str, '.')) {
+                $decimal = substr($str, strpos($str, '.'));
+                $str = substr($str, 0, -strlen($decimal));
+            } elseif (is_float($value)) {
+                $decimal = '.0';
+            } else {
+                $decimal = false;
+            }
+
+            $value = strrev(implode('_', str_split(strrev($str), 3)))
+                . ($decimal === false ? '' : $decimal);
+        } elseif (is_string($value)) {
+            $value = '\'' . preg_replace('~\\\(?=\\\|\')|\'~', '\\\$0', $value) . '\'';
+        }
+
+        echo $value;
     }
 }

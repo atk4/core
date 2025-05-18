@@ -9,6 +9,6 @@ use Atk4\Core\DumpHelper;
  */
 function atk4_print_r($value): void
 {
-    $dumpHelper = new DumpHelper();
-    $dumpHelper->printReadable($value);
+    $dumpHelper = new DumpHelper(); // @phpstan-ignore new.internalClass
+    $dumpHelper->printReadable($value); // @phpstan-ignore method.internalClass
 }
