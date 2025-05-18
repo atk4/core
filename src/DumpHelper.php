@@ -149,7 +149,7 @@ class DumpHelper
     }
 
     /**
-     * @param int<-1, max> $ridIndex
+     * @param int<-1, max> $value
      */
     protected function formatRidIndex(int $value): string
     {
@@ -356,9 +356,9 @@ class DumpHelper
                     echo '*deduplicated*';
 
                     return;
-                } else {
-                    $duplicateOids[$oid] = -1;
                 }
+
+                $duplicateOids[$oid] = -1;
             }
         }
 
