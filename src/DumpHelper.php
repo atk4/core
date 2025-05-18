@@ -221,6 +221,42 @@ class DumpHelper
     }
 
     /**
+     * @param int|float|string $value
+     */
+    protected function printScalar($value): void
+    {
+        if (is_int($value) || (is_float($value) && is_finite($value))) {
+            if (is_int($value)) {
+                $str = (string) $value;
+            } else {
+                $precisionBackup = ini_get('precision');
+                ini_set('precision', '-1');
+                try {
+                    $str = (string) $value;
+                } finally {
+                    ini_set('precision', $precisionBackup);
+                }
+            }
+
+            if (str_contains($str, '.')) {
+                $decimal = substr($str, strpos($str, '.'));
+                $str = substr($str, 0, -strlen($decimal));
+            } elseif (is_float($value)) {
+                $decimal = '.0';
+            } else {
+                $decimal = false;
+            }
+
+            $value = strrev(implode('_', str_split(strrev($str), 3)))
+                . ($decimal === false ? '' : $decimal);
+        } elseif (is_string($value)) {
+            $value = '\'' . preg_replace('~\\\(?=\\\|\')|\'~', '\\\$0', $value) . '\'';
+        }
+
+        echo $value;
+    }
+
+    /**
      * Improved version of native print_r() function.
      *
      * Objects and array references are printed only once.
@@ -294,41 +330,5 @@ class DumpHelper
         }
 
         echo $isObject ? '}' : ']';
-    }
-
-    /**
-     * @param int|float|string $value
-     */
-    protected function printScalar($value): void
-    {
-        if (is_int($value) || (is_float($value) && is_finite($value))) {
-            if (is_int($value)) {
-                $str = (string) $value;
-            } else {
-                $precisionBackup = ini_get('precision');
-                ini_set('precision', '-1');
-                try {
-                    $str = (string) $value;
-                } finally {
-                    ini_set('precision', $precisionBackup);
-                }
-            }
-
-            if (str_contains($str, '.')) {
-                $decimal = substr($str, strpos($str, '.'));
-                $str = substr($str, 0, -strlen($decimal));
-            } elseif (is_float($value)) {
-                $decimal = '.0';
-            } else {
-                $decimal = false;
-            }
-
-            $value = strrev(implode('_', str_split(strrev($str), 3)))
-                . ($decimal === false ? '' : $decimal);
-        } elseif (is_string($value)) {
-            $value = '\'' . preg_replace('~\\\(?=\\\|\')|\'~', '\\\$0', $value) . '\'';
-        }
-
-        echo $value;
     }
 }
