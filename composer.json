@@ -1,7 +1,5 @@
 {
     "name": "atk4/core",
-    "description": "Agile Core - collection of PHP Traits for designing object-oriented frameworks",
-    "license": "MIT",
     "type": "library",
     "version": "dev-develop",
     "require": {
@@ -14,11 +12,6 @@
         "symfony/polyfill-php83": "^1.28",
         "symfony/polyfill-php84": "^1.29",
         "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0 || ^7.0"
-    },
-    "require-dev": {
-        "ergebnis/phpunit-slow-test-detector": "^2.9",
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "phpunit/phpunit": "^9.5.5 || ^10.5 || ^11.0 || ^12.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
