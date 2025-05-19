@@ -550,7 +550,7 @@ class DumpHelperTest extends TestCase
             $arr = [false];
             $arr[] = &$arr;
 
-            // TODO & below should not be needed
+            // TODO "&" below should be not needed "if $rootValue replace concept is extended for every array"
             return [[&$arr], <<<'EOD'
                 list<list> [
                     &0 list<false|list> [
