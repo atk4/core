@@ -546,6 +546,31 @@ class DumpHelperTest extends TestCase
                 \stdClass::class . '#' . spl_object_id($o),
             )];
         }];
+        yield 'track array recursion' => [static function () {
+            $arr = [false];
+            $arr[] = &$arr;
+
+            // TODO & below should not be needed
+            return [[&$arr], <<<'EOD'
+                list<list> [
+                    &0 list<false|list> [
+                        false,
+                        &0 list<false|list> *recursion*
+                    ]
+                ]
+                EOD];
+        }];
+        yield 'track array recursion top' => [static function () {
+            $arr = [false];
+            $arr[] = &$arr;
+
+            return [$arr, <<<'EOD'
+                &0? list<false|list> [
+                    false,
+                    &0? list<false|list> *recursion*
+                ]
+                EOD];
+        }];
         yield 'track object recursion' => [static function () {
             $o = new QuietObjectWrapper(new \DateTime());
             \Closure::bind(static function () use (&$o) {
