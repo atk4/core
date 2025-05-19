@@ -39,7 +39,9 @@ class DumpHelperTest extends TestCase
         [$value, $expectedDuplicateRids] = $makeCaseFx();
 
         $duplicateRids = [];
-        $this->findDuplicateRids($value, $duplicateRids);
+        \Closure::bind(function () use (&$value, &$duplicateRids) {
+            $this->findDuplicateRids($value, $duplicateRids);
+        }, $this, self::class)();
 
         self::assertSame($expectedDuplicateRids, $duplicateRids);
     }
