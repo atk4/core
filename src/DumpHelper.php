@@ -344,7 +344,9 @@ class DumpHelper
         echo ' ';
 
         if (($duplicateRids[$rid][0] ?? 0) < 0 && !$isNewDuplicateRef) {
-            echo '*deduplicated*';
+            echo $duplicateRids[$rid][0] < -1
+                ? '*recursion*'
+                : '*deduplicated*';
 
             return;
         }
@@ -395,14 +397,21 @@ class DumpHelper
                 echo $isObject ? ': ' : ' => ';
             }
 
-            if ($isNewDuplicateObject) {
-                --$duplicateOids[$oid];
+            if ($isNewDuplicateRef) {
+                --$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
             }
+            if ($isNewDuplicateObject) {
+                --$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
+            }
+
             try {
                 $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
             } finally {
+                if ($isNewDuplicateRef) {
+                    ++$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
+                }
                 if ($isNewDuplicateObject) {
-                    ++$duplicateOids[$oid];
+                    ++$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
                 }
             }
 
@@ -413,8 +422,10 @@ class DumpHelper
             echo "\n";
         }
 
+        --$depth;
+
         if ($value !== []) {
-            echo $this->makeIndent($depth - 1);
+            echo $this->makeIndent($depth);
         }
         echo $isObject ? '}' : ']';
     }
