@@ -8,19 +8,12 @@ use Atk4\Core\Phpunit\TestCase;
 
 class DumpHelperTest extends TestCase
 {
-    /**
-     * @param mixed $value
-     */
     private function getRid(&$value): string
     {
         return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
     }
 
-    /**
-     * @param mixed                       $value
-     * @param array<string, positive-int> $duplicateRids
-     */
-    protected function findDuplicateRids(&$value, int $maxDepth, array &$duplicateRids, int $depth = 0): void
+    protected function findDuplicateRids(&$value, array &$duplicateRids): void
     {
         $rid = $this->getRid($value);
         $c = $duplicateRids[$rid] ?? 0;
@@ -47,7 +40,7 @@ class DumpHelperTest extends TestCase
 
         $duplicateRids = [];
         \Closure::bind(function () use (&$value, &$duplicateRids) {
-            $this->findDuplicateRids($value, 50, $duplicateRids);
+            $this->findDuplicateRids($value, $duplicateRids);
         }, $this, self::class)();
 
         self::assertSame($expectedDuplicateRids, $duplicateRids);
