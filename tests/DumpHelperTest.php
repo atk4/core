@@ -28,6 +28,8 @@ class DumpHelperTest extends TestCase
 
     public function testFindDuplicateRids(): void
     {
+        // gc_disable(); - has no effect
+
         $makeCaseFx = function () {
             $v = 10.5;
 
