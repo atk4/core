@@ -141,6 +141,10 @@ jobs:
         run: |
           mkdir coverage
 
-      - name: "Run tests"
+      - name: "Run tests /wo opcache"
+        run: |
+          php -d opcache.enable_cli=0 repro.php
+
+      - name: "Run tests /w opcache"
         run: |
           php -d opcache.enable_cli=1 repro.php
