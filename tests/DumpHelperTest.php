@@ -176,7 +176,7 @@ class DumpHelperTest extends TestCase
             ]];
         }];
 
-        yield 'array recursive' => [static function () {
+        yield 'array recursion' => [static function () {
             $v = false;
             $v2 = [&$v];
             $v2[] = &$v2;
@@ -189,7 +189,7 @@ class DumpHelperTest extends TestCase
             ]];
         }];
 
-        yield 'array recursive top' => [static function () {
+        yield 'array recursion top' => [static function () {
             $v = false;
             $arr = [&$v];
             $arr[] = &$arr;
@@ -200,7 +200,7 @@ class DumpHelperTest extends TestCase
             ]];
         }];
 
-        yield 'object recursive' => [static function () {
+        yield 'object recursion' => [static function () {
             $o = new QuietObjectWrapper(new \DateTime());
             \Closure::bind(static function () use (&$o) {
                 $o->obj = &$o; // @phpstan-ignore assign.propertyType
@@ -544,6 +544,37 @@ class DumpHelperTest extends TestCase
                     ]
                     EOD,
                 \stdClass::class . '#' . spl_object_id($o),
+            )];
+        }];
+        yield 'track object recursion' => [static function () {
+            $o = new QuietObjectWrapper(new \DateTime());
+            \Closure::bind(static function () use (&$o) {
+                $o->obj = &$o; // @phpstan-ignore assign.propertyType
+            }, null, QuietObjectWrapper::class)();
+
+            $oDynamic = new \stdClass();
+            $oDynamic->foo = false;
+            $oDynamic->bar = &$oDynamic;
+
+            $arr = [$o, $o, $oDynamic, $oDynamic, &$oDynamic];
+
+            return [$arr, sprintf(
+                <<<'EOD'
+                    list<Atk4\Core\QuietObjectWrapper|stdClass> [
+                        %s {
+                            'obj': %1$s *recursion*
+                        },
+                        %1$s *deduplicated*,
+                        %s {
+                            'bar': &0 %2$s *recursion*,
+                            'foo': false
+                        },
+                        %2$s *deduplicated*,
+                        &0 %2$s *deduplicated*
+                    ]
+                    EOD,
+                QuietObjectWrapper::class . '#' . spl_object_id($o),
+                \stdClass::class . '#' . spl_object_id($oDynamic),
             )];
         }];
 

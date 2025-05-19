@@ -308,20 +308,20 @@ class DumpHelper
     }
 
     /**
-     * @param mixed                                              $value
-     * @param array<int, -1|int<2, max>>                         $duplicateOids
-     * @param array<string, array{-1|int<2, max>, int<-1, max>}> $duplicateRids
+     * @param mixed                                                 $value
+     * @param array<int, -2|-1|int<2, max>>                         $duplicateOids
+     * @param array<string, array{-2|-1|int<2, max>, int<-1, max>}> $duplicateRids
      */
     protected function _printReadable(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
         $rid = $this->getRid($value);
-        $isNewRef = false;
+        $isNewDuplicateRef = false;
         if (($duplicateRids[$rid][0] ?? 0) !== 0) {
             echo $this->formatRidIndex($duplicateRids[$rid][1]) . ' ';
 
             if ($duplicateRids[$rid][0] > 0) {
                 $duplicateRids[$rid][0] = -1;
-                $isNewRef = true;
+                $isNewDuplicateRef = true;
             }
         }
 
@@ -343,22 +343,26 @@ class DumpHelper
 
         echo ' ';
 
-        if (($duplicateRids[$rid][0] ?? 0) < 0 && !$isNewRef) {
+        if (($duplicateRids[$rid][0] ?? 0) < 0 && !$isNewDuplicateRef) {
             echo '*deduplicated*';
 
             return;
         }
 
+        $isNewDuplicateObject = false;
         if (is_object($value)) {
             $oid = spl_object_id($value);
             if (($duplicateOids[$oid] ?? 0) !== 0) {
                 if ($duplicateOids[$oid] < 0) {
-                    echo '*deduplicated*';
+                    echo $duplicateOids[$oid] < -1
+                        ? '*recursion*'
+                        : '*deduplicated*';
 
                     return;
                 }
 
                 $duplicateOids[$oid] = -1;
+                $isNewDuplicateObject = true;
             }
         }
 
@@ -391,7 +395,16 @@ class DumpHelper
                 echo $isObject ? ': ' : ' => ';
             }
 
-            $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
+            if ($isNewDuplicateObject) {
+                --$duplicateOids[$oid];
+            }
+            try {
+                $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
+            } finally {
+                if ($isNewDuplicateObject) {
+                    ++$duplicateOids[$oid];
+                }
+            }
 
             if ($k !== array_key_last($value)) {
                 echo ',';
