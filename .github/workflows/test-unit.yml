@@ -28,10 +28,22 @@ jobs:
 
       - name: "Run tests /wo opcache"
         run: |
-          set -e
-          for i in {1..10000}; do php -d opcache.enable_cli=0 repro.php || exit $?; done
+          i=0
+          while [ "$i" -lt 10000 ]; do
+              php -d opcache.enable_cli=0 repro.php
+              if [ $? -ne 0 ]; then
+                  exit $?
+              fi
+              i=$((i + 1))
+          done
 
       - name: "Run tests /w opcache"
         run: |
-          set -e
-          for i in {1..10000}; do php -d opcache.enable_cli=1 repro.php || exit $?; done
+          i=0
+          while [ "$i" -lt 10000 ]; do
+              php -d opcache.enable_cli=1 repro.php
+              if [ $? -ne 0 ]; then
+                  exit $?
+              fi
+              i=$((i + 1))
+          done
