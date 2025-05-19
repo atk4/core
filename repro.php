@@ -50,7 +50,5 @@ class DumpHelperTest
     }
 }
 
-xdebug_start_code_coverage();
-
 $test = new DumpHelperTest();
 $test->testFindDuplicateRids();
