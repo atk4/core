@@ -4,8 +4,7 @@
     "version": "dev-develop",
     "require": {
         "php": ">=7.4 <8.5",
-        "psr/log": "^1.0 || ^2.0 || ^3.0",
-        "symfony/polyfill-php80": "^1.28"
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
