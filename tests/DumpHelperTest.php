@@ -123,15 +123,12 @@ class DumpHelperTest extends TestCase
         [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
 
         $dumpHelper = new DumpHelper();
-        $rootValue = &$value;
         $duplicateOids = [];
         $duplicateRids = [];
-        \Closure::bind(static function () use ($dumpHelper, &$value, &$rootValue, $maxDepth, &$duplicateOids, &$duplicateRids) {
-            $dumpHelper->findDuplicateOidsRids($value, $rootValue, $maxDepth, $duplicateOids, $duplicateRids);
+        \Closure::bind(static function () use ($dumpHelper, &$value, $maxDepth, &$duplicateOids, &$duplicateRids) {
+            $dumpHelper->findDuplicateOidsRids($value, $maxDepth, $duplicateOids, $duplicateRids);
         }, null, DumpHelper::class)();
 
-        self::assertSame($value, $rootValue);
-        self::assertSame(self::getRid($value), self::getRid($rootValue));
         self::assertSame($expectedDuplicateOids, $duplicateOids);
         self::assertSame($expectedDuplicateRids, $duplicateRids);
     }
@@ -185,17 +182,6 @@ class DumpHelperTest extends TestCase
             return [$arr, [], [
                 self::getRid($arr) => 1,
                 self::getRid($v2) => 2,
-                self::getRid($v) => 1,
-            ]];
-        }];
-
-        yield 'array recursion top' => [static function () {
-            $v = false;
-            $arr = [&$v];
-            $arr[] = &$arr;
-
-            return [$arr, [], [
-                self::getRid($arr) => 2,
                 self::getRid($v) => 1,
             ]];
         }];
@@ -550,24 +536,13 @@ class DumpHelperTest extends TestCase
             $arr = [false];
             $arr[] = &$arr;
 
-            // TODO "&" below should be not needed "if $rootValue replace concept is extended for every array"
+            // TODO "&" below should be not needed
             return [[&$arr], <<<'EOD'
                 list<list> [
                     &0 list<false|list> [
                         false,
                         &0 list<false|list> *recursion*
                     ]
-                ]
-                EOD];
-        }];
-        yield 'track array recursion top' => [static function () {
-            $arr = [false];
-            $arr[] = &$arr;
-
-            return [$arr, <<<'EOD'
-                &0? list<false|list> [
-                    false,
-                    &0? list<false|list> *recursion*
                 ]
                 EOD];
         }];
