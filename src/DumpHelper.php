@@ -186,9 +186,7 @@ class DumpHelper
     {
         $type = $this->describeTypeShallow($value);
 
-        if ($value === '') {
-            $type = 'empty-string';
-        } elseif (is_array($value)) {
+        if (is_array($value)) {
             if ($value === []) {
                 $type = 'empty-array';
             } else {
