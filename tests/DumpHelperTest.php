@@ -6,7 +6,6 @@ namespace Atk4\Core\Tests;
 
 use Atk4\Core\DumpHelper;
 use Atk4\Core\Phpunit\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 class DumpHelperTest extends TestCase
 {
@@ -20,38 +19,26 @@ class DumpHelperTest extends TestCase
         }, null, DumpHelper::class)();
     }
 
-    /**
-     * @dataProvider provideFindDuplicateOidsRidsCases
-     *
-     * @param \Closure(): array{mixed, array<int, positive-int>, array<string, positive-int>} $makeCaseFx
-     */
-    #[DataProvider('provideFindDuplicateOidsRidsCases')]
-    public function testFindDuplicateOidsRids(\Closure $makeCaseFx, int $maxDepth = 50): void
+    public function testFindDuplicateOidsRids(): void
     {
-        [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
-
-        $dumpHelper = new DumpHelper();
-        $duplicateOids = [];
-        $duplicateRids = [];
-        \Closure::bind(static function () use ($dumpHelper, &$value, $maxDepth, &$duplicateOids, &$duplicateRids) {
-            $dumpHelper->findDuplicateOidsRids($value, $maxDepth, $duplicateOids, $duplicateRids);
-        }, null, DumpHelper::class)();
-
-        self::assertSame($expectedDuplicateOids, $duplicateOids);
-        self::assertSame($expectedDuplicateRids, $duplicateRids);
-    }
-
-    /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideFindDuplicateOidsRidsCases(): iterable
-    {
-        yield 'scalar' => [static function () {
+        $makeCaseFx = static function () {
             $v = 10.5;
 
             return [$v, [], [
                 self::getRid($v) => 1,
             ]];
-        }];
+        };
+
+        [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
+
+        $dumpHelper = new DumpHelper();
+        $duplicateOids = [];
+        $duplicateRids = [];
+        \Closure::bind(static function () use ($dumpHelper, &$value, &$duplicateOids, &$duplicateRids) {
+            $dumpHelper->findDuplicateOidsRids($value, 50, $duplicateOids, $duplicateRids);
+        }, null, DumpHelper::class)();
+
+        self::assertSame($expectedDuplicateOids, $duplicateOids);
+        self::assertSame($expectedDuplicateRids, $duplicateRids);
     }
 }
