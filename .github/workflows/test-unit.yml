@@ -27,27 +27,9 @@ jobs:
           composer update
 
       - name: "Run tests /wo opcache"
-        run: >
-          php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
-          && php -d opcache.enable_cli=0 repro.php
+        run: |
+          for i in {1..10000}; do php -d opcache.enable_cli=0 repro.php || exit $?; done
 
       - name: "Run tests /w opcache"
-        run: >
-          php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
-          && php -d opcache.enable_cli=1 repro.php
+        run: |
+          for i in {1..10000}; do php -d opcache.enable_cli=1 repro.php || exit $?; done
