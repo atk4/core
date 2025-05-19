@@ -23,8 +23,20 @@ class DumpHelperTest extends TestCase
     protected function findDuplicateRids(&$value, int $maxDepth, array &$duplicateRids, int $depth = 0): void
     {
         $rid = $this->getRid($value);
+        $c = $duplicateRids[$rid] ?? 0;
+        if ($c !== 0) {
+            ++$duplicateRids[$rid];
+
+            return;
+        }
 
         $duplicateRids[$rid] = 1;
+
+        if (is_array($value) && $depth < $maxDepth) {
+            foreach ($value as &$v) {
+                $this->findDuplicateRids($v, $maxDepth, $duplicateRids, $depth + 1);
+            }
+        }
     }
 
     public function testFindDuplicateRids(): void
@@ -40,7 +52,9 @@ class DumpHelperTest extends TestCase
         [$value, $expectedDuplicateRids] = $makeCaseFx();
 
         $duplicateRids = [];
-        $this->findDuplicateRids($value, 50, $duplicateRids);
+        \Closure::bind(function () use (&$value, &$duplicateRids) {
+            $this->findDuplicateRids($value, 50, $duplicateRids);
+        }, $this, self::class)();
 
         self::assertSame($expectedDuplicateRids, $duplicateRids);
     }
