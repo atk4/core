@@ -22,10 +22,6 @@ jobs:
         run: |
           php --version
 
-      - name: Install PHP dependencies
-        run: |
-          composer update
-
       - name: "Run tests /wo opcache"
         run: |
           i=0
