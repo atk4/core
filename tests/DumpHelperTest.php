@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Core\Tests;
 
-use Atk4\Core\DumpHelper;
 use Atk4\Core\Phpunit\TestCase;
 
 class DumpHelperTest extends TestCase
@@ -12,33 +11,51 @@ class DumpHelperTest extends TestCase
     /**
      * @param mixed $value
      */
-    private static function getRid(&$value): string
+    private function getRid(&$value): string
     {
-        return \Closure::bind(static function () use (&$value) {
-            return (new DumpHelper())->getRid($value);
-        }, null, DumpHelper::class)();
+        return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
     }
 
-    public function testFindDuplicateOidsRids(): void
+    /**
+     * @param mixed                       $value
+     * @param array<string, positive-int> $duplicateRids
+     */
+    protected function findDuplicateRids(&$value, int $maxDepth, array &$duplicateRids, int $depth = 0): void
     {
-        $makeCaseFx = static function () {
+        $rid = $this->getRid($value);
+        $c = $duplicateRids[$rid] ?? 0;
+        if ($c !== 0) {
+            ++$duplicateRids[$rid];
+
+            return;
+        }
+
+        $duplicateRids[$rid] = 1;
+
+        if (is_array($value) && $depth < $maxDepth) {
+            foreach ($value as &$v) {
+                $this->findDuplicateRids($v, $maxDepth, $duplicateRids, $depth + 1);
+            }
+        }
+    }
+
+    public function testFindDuplicateRids(): void
+    {
+        $makeCaseFx = function () {
             $v = 10.5;
 
-            return [$v, [], [
-                self::getRid($v) => 1,
+            return [$v, [
+                $this->getRid($v) => 1,
             ]];
         };
 
-        [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
+        [$value, $expectedDuplicateRids] = $makeCaseFx();
 
-        $dumpHelper = new DumpHelper();
-        $duplicateOids = [];
         $duplicateRids = [];
-        \Closure::bind(static function () use ($dumpHelper, &$value, &$duplicateOids, &$duplicateRids) {
-            $dumpHelper->findDuplicateOidsRids($value, 50, $duplicateOids, $duplicateRids);
-        }, null, DumpHelper::class)();
+        \Closure::bind(function () use (&$value, &$duplicateRids) {
+            $this->findDuplicateRids($value, 50, $duplicateRids);
+        }, $this, self::class)();
 
-        self::assertSame($expectedDuplicateOids, $duplicateOids);
         self::assertSame($expectedDuplicateRids, $duplicateRids);
     }
 }
