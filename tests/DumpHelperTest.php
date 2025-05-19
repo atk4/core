@@ -122,8 +122,6 @@ class DumpHelperTest extends TestCase
     {
         [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
 
-        self::getRid($value); // TODO remove asap, hotfix CI PHP 8.2+ with coverage
-
         $dumpHelper = new DumpHelper();
         $duplicateOids = [];
         $duplicateRids = [];
