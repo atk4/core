@@ -28,9 +28,27 @@ jobs:
           composer update --optimize-autoloader
 
       - name: "Run tests /wo opcache"
-        run: |
+        run: >
           php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
+          && php -d opcache.enable_cli=0 repro.php
 
       - name: "Run tests /w opcache"
-        run: |
+        run: >
           php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
+          && php -d opcache.enable_cli=1 repro.php
