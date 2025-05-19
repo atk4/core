@@ -31,12 +31,6 @@ class DumpHelperTest extends TestCase
         }
 
         $duplicateRids[$rid] = 1;
-
-        if (is_array($value) && $depth < $maxDepth) {
-            foreach ($value as &$v) {
-                $this->findDuplicateRids($v, $maxDepth, $duplicateRids, $depth + 1);
-            }
-        }
     }
 
     public function testFindDuplicateRids(): void
