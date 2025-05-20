@@ -144,19 +144,11 @@ class DumpHelper
     }
 
     /**
-     * @param mixed $value
-     */
-    private function getRid(&$value): string
-    {
-        return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
-    }
-
-    /**
      * @param mixed                       $value
      * @param array<int, positive-int>    $duplicateOids
      * @param array<string, positive-int> $duplicateRids
      */
-    protected function findDuplicateOidsRids(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
+    protected function findDuplicateOidsRids(&$value, ?string $rid, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
         if (is_object($value)) {
             $oid = spl_object_id($value);
@@ -168,15 +160,16 @@ class DumpHelper
             }
         }
 
-        $rid = $this->getRid($value);
-        $c = $duplicateRids[$rid] ?? 0;
-        if ($c !== 0) {
-            ++$duplicateRids[$rid];
+        if ($rid !== null) {
+            $c = $duplicateRids[$rid] ?? 0;
+            if ($c !== 0) {
+                ++$duplicateRids[$rid];
 
-            return;
+                return;
+            }
+
+            $duplicateRids[$rid] = 1;
         }
-
-        $duplicateRids[$rid] = 1;
 
         if (is_object($value) && $duplicateOids[$oid] === 1) { // @phpstan-ignore variable.undefined
             $v = $value;
@@ -185,10 +178,29 @@ class DumpHelper
         }
 
         if (is_array($value) && $depth < $maxDepth) {
-            foreach ($value as &$v) {
-                $this->findDuplicateOidsRids($v, $maxDepth, $duplicateOids, $duplicateRids, $depth + 1);
+            foreach (array_keys($value) as $k) {
+                $reflectionReference = \ReflectionReference::fromArrayElement($value, $k);
+                if ($reflectionReference !== null) {
+                    $v = &$value[$k];
+                    $rid = $reflectionReference->getId();
+                } else {
+                    $v = $value[$k];
+                    $rid = null;
+                }
+
+                $this->findDuplicateOidsRids($v, $rid, $maxDepth, $duplicateOids, $duplicateRids, $depth + 1);
+
+                unset($v);
             }
         }
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function getRid(&$value): string
+    {
+        return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
     }
 
     protected function formatOid(int $value): string

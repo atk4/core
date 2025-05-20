@@ -134,13 +134,13 @@ class DumpHelperTest extends TestCase
     {
         [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
 
-        self::getRid($value); // TODO remove asap, hotfix CI PHP 8.2+ with coverage https://github.com/php/php-src/issues/18600
+        $rid = self::getRid($value); // TODO remove asap, hotfix CI PHP 8.2+ with coverage https://github.com/php/php-src/issues/18600
 
         $dumpHelper = new DumpHelper();
         $duplicateOids = [];
         $duplicateRids = [];
-        \Closure::bind(static function () use ($dumpHelper, &$value, $maxDepth, &$duplicateOids, &$duplicateRids) {
-            $dumpHelper->findDuplicateOidsRids($value, $maxDepth, $duplicateOids, $duplicateRids);
+        \Closure::bind(static function () use ($dumpHelper, &$value, $rid, $maxDepth, &$duplicateOids, &$duplicateRids) {
+            $dumpHelper->findDuplicateOidsRids($value, $rid, $maxDepth, $duplicateOids, $duplicateRids);
         }, null, DumpHelper::class)();
 
         self::assertSame($expectedDuplicateOids, $duplicateOids);
@@ -182,8 +182,6 @@ class DumpHelperTest extends TestCase
             ], [
                 self::getRid($arr) => 1,
                 self::getRid($dt) => 2,
-                self::getRid($dt2) => 1,
-                self::getRid($dtCopy) => 1,
             ]];
         }];
 
@@ -191,12 +189,12 @@ class DumpHelperTest extends TestCase
             $v = false;
             $v2 = [&$v];
             $v2[] = &$v2;
-            $arr = [&$v2];
+            $arr = [&$v2, &$v];
 
             return [$arr, [], [
                 self::getRid($arr) => 1,
                 self::getRid($v2) => 2,
-                self::getRid($v) => 1,
+                self::getRid($v) => 2,
             ]];
         }];
 
@@ -213,7 +211,7 @@ class DumpHelperTest extends TestCase
             $oDynamic->bar = &$oDynamic;
             $oDynamicCopy = $oDynamic;
 
-            $arr = [&$o, &$o, &$oDynamic, &$oDynamic, &$oCopy, &$oDynamicCopy];
+            $arr = [&$o, &$o, &$oDynamic, &$oDynamic, &$v, &$oCopy, &$oDynamicCopy];
 
             return [$arr, [
                 spl_object_id($o) => 4,
@@ -222,9 +220,7 @@ class DumpHelperTest extends TestCase
                 self::getRid($arr) => 1,
                 self::getRid($o) => 3,
                 self::getRid($oDynamic) => 3,
-                self::getRid($v) => 1,
-                self::getRid($oCopy) => 1,
-                self::getRid($oDynamicCopy) => 1,
+                self::getRid($v) => 2,
             ]];
         }];
 
@@ -250,14 +246,14 @@ class DumpHelperTest extends TestCase
             $dt = new \DateTime();
             $dt2 = new \DateTime();
             $v = [&$dt2, [1]];
-            $arr = [&$dt, &$v];
+            $arr = [&$dt, &$v, &$dt, &$v];
 
             return [$arr, [
-                spl_object_id($dt) => 1,
+                spl_object_id($dt) => 2,
             ], [
                 self::getRid($arr) => 1,
-                self::getRid($dt) => 1,
-                self::getRid($arr[1]) => 1,
+                self::getRid($dt) => 2,
+                self::getRid($v) => 2,
             ]];
         }, 1];
     }
