@@ -19,6 +19,16 @@ class DumpHelperTest extends TestCase
         }, null, HtmlExceptionRenderer::class)();
     }
 
+    private static function getPropertyMangledPrivateName(string $class, string $name): string
+    {
+        return "\0" . $class . "\0" . $name;
+    }
+
+    private static function getPropertyMangledProtectedName(string $name): string
+    {
+        return "\0*\0" . $name;
+    }
+
     /**
      * @dataProvider provideGetObjectPropertiesCases
      *
@@ -40,17 +50,17 @@ class DumpHelperTest extends TestCase
     {
         yield 'no properties' => [new \stdClass(), []];
 
-        yield 'sort' => [new class extends \stdClass {
+        yield 'preserve order' => [new class extends \stdClass {
             /** @var string */
             public $bar = 'x';
             /** @var string */
             public $bar2 = 'y';
             /** @var string */
-            public $bar10 = 'z';
+            public $bar1 = 'z';
         }, [
             'bar' => 'x',
-            'bar10' => 'z',
             'bar2' => 'y',
+            'bar1' => 'z',
         ]];
 
         $o = new class extends \stdClass {
@@ -60,45 +70,47 @@ class DumpHelperTest extends TestCase
         $o->foo = 1;
         $o->bar = null;
         yield 'dynamic property' => [$o, [
-            'bar' => null,
             'bar2' => 'x',
             'foo' => 1,
+            'bar' => null,
         ]];
 
         $dt = new \DateTime();
         yield 'private property' => [new QuietObjectWrapper($dt), [
-            'obj' => $dt,
+            self::getPropertyMangledPrivateName(QuietObjectWrapper::class, 'obj') => $dt,
         ]];
 
-        yield 'redeclared private property' => [new class($dt) extends QuietObjectWrapper {
-            private bool $obj; // @phpstan-ignore property.onlyWritten
+        $oPrivateAnonymous = new class($dt) extends QuietObjectWrapper {
             private bool $a; // @phpstan-ignore property.onlyWritten
             protected bool $b;
             public bool $c;
+            private bool $obj; // @phpstan-ignore property.onlyWritten
 
             public function __construct(object $obj)
             {
                 parent::__construct($obj);
 
-                $this->obj = true;
                 $this->a = true;
+                $this->obj = true;
             }
-        }, [
-            'a' => true,
-            'b' => null,
+        };
+        yield 'redeclared private property' => [$oPrivateAnonymous, [
+            self::getPropertyMangledPrivateName(QuietObjectWrapper::class, 'obj') => $dt,
+            self::getPropertyMangledPrivateName(get_class($oPrivateAnonymous), 'a') => true,
+            self::getPropertyMangledProtectedName('b') => null,
             'c' => null,
-            'obj:' . QuietObjectWrapper::class => $dt,
-            'obj:' . QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 18) => true,
+            self::getPropertyMangledPrivateName(get_class($oPrivateAnonymous), 'obj') => true,
         ]];
 
         $exception = new \Exception();
-        yield 'redeclared protected property' => [new class($exception) extends HtmlExceptionRenderer {
+        $oProtectedAnonymous = new class($exception) extends HtmlExceptionRenderer {
             public \Throwable $exception;
-        }, [
-            'adapter' => null,
+        };
+        yield 'redeclared protected property' => [$oProtectedAnonymous, [
             'exception' => $exception,
-            'output' => '',
-            'parentException' => null,
+            self::getPropertyMangledProtectedName('parentException') => null,
+            self::getPropertyMangledProtectedName('output') => '',
+            self::getPropertyMangledProtectedName('adapter') => null,
         ]];
     }
 

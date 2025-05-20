@@ -11,11 +11,80 @@ use Atk4\Core\ExceptionRenderer\Html as HtmlExceptionRenderer;
  */
 class DumpHelper
 {
-    protected function formatClass(string $class): string
+    /** @var array<class-string, array<string, \ReflectionProperty>> */
+    private static array $classReflectionPropertiesCache = [];
+
+    protected function getPropertyMangledName(\ReflectionProperty $reflectionProperty): string
     {
-        return \Closure::bind(static function () use ($class) {
-            return (new HtmlExceptionRenderer((new \ReflectionClass(\Exception::class))->newInstanceWithoutConstructor()))->formatClass($class);
-        }, null, HtmlExceptionRenderer::class)();
+        // https://github.com/php/php-src/issues/18605#issuecomment-2894260586
+        $key = $reflectionProperty->getName();
+        if ($reflectionProperty->isPrivate()) {
+            $key = "\0" . $reflectionProperty->getDeclaringClass()->getName() . "\0" . $key;
+        } elseif ($reflectionProperty->isProtected()) {
+            $key = "\0*\0" . $key;
+        }
+
+        return $key;
+    }
+
+    protected function formatPropertyMangledName(string $key): string
+    {
+        if (str_starts_with($key, "\0")) {
+            $pos = strpos($key, "\0", 1);
+            assert($pos !== false);
+
+            $extra = substr($key, 1, $pos - 1);
+            $key = substr($key, $pos + 1);
+
+            if ($extra !== '*') {
+                $key .= ':' . $extra;
+            }
+        }
+
+        return $key;
+    }
+
+    /**
+     * @param class-string $class
+     *
+     * @return array<string, \ReflectionProperty>
+     */
+    protected function getClassReflectionProperties(string $class): array
+    {
+        $res = self::$classReflectionPropertiesCache[$class] ?? null;
+
+        if ($res === null) {
+            $parentClass = get_parent_class($class);
+            $res = $parentClass === false
+                ? []
+                : $this->getClassReflectionProperties($parentClass);
+
+
+            foreach ((new \ReflectionClass($class))->getProperties() as $reflectionProperty) {
+                if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) {
+                    continue;
+                }
+
+                $k = $this->getPropertyMangledName($reflectionProperty);
+                $kProtected = "\0*\0" . $k;
+                if (isset($res[$kProtected])) {
+                    assert(!isset($res[$k]));
+
+                    $pos = array_flip(array_keys($res))[$kProtected];
+                    $res = array_merge(
+                        array_slice($res, 0, $pos, true),
+                        [$k => $reflectionProperty],
+                        array_slice($res, $pos + 1, true),
+                    );
+                } else {
+                    $res[$k] = $reflectionProperty;
+                }
+            }
+
+            self::$classReflectionPropertiesCache[$class] = $res;
+        }
+
+        return $res;
     }
 
     /**
@@ -23,61 +92,55 @@ class DumpHelper
      */
     protected function getObjectProperties(object $value): array
     {
-        $reflProperties = [];
-        $class = get_class($value);
-        do {
-            $reflClass = new \ReflectionClass($class);
-            foreach ($reflClass->getProperties() as $relfProperty) {
-                if (!$relfProperty->isStatic()) {
-                    if (!isset($reflProperties[$relfProperty->getName()]) || $relfProperty->isPrivate()) {
-                        $reflProperties[$relfProperty->getName()][] = $relfProperty;
+        $res = (array) $value;
+
+        $classReflectionProperties = $this->getClassReflectionProperties(get_class($value));
+
+        $resFromCastKeys = array_keys($res);
+        $classReflectionPropertiesKeys = array_keys($classReflectionProperties);
+
+        if ($resFromCastKeys !== $classReflectionPropertiesKeys) {
+            $resFromCast = $res;
+
+            $res = [];
+            foreach ($classReflectionProperties as $reflectionProperty) {
+                $k = $this->getPropertyMangledName($reflectionProperty);
+
+                if (!array_key_exists($k, $resFromCast)) {
+                    $res[$k] = null;
+                } else {
+                    $reflectionReference = \ReflectionReference::fromArrayElement($resFromCast, $k);
+                    if ($reflectionReference !== null) {
+                        $res[$k] = &$resFromCast[$k];
+                    } else {
+                        $res[$k] = $resFromCast[$k];
                     }
                 }
             }
-        } while (($class = get_parent_class($class)) !== false);
 
-        foreach (get_object_vars($value) as $k => $v) {
-            if (!isset($reflProperties[$k])) {
-                $reflProperties[$k . "\n"] = true;
-            }
-        }
+            foreach (array_diff($resFromCastKeys, $classReflectionPropertiesKeys) as $k) {
+                assert($k === $this->formatPropertyMangledName($k));
 
-        ksort($reflProperties);
-
-        $res = [];
-        foreach ($reflProperties as $k => $reflProperties2) {
-            if (str_ends_with($k, "\n")) {
-                $k = substr($k, 0, -1);
-
-                $res[$k] = &$value->{$k};
-
-                continue;
-            }
-
-            foreach (array_reverse($reflProperties2) as $relfProperty) {
-                $name = $relfProperty->getName();
-                $class = $relfProperty->getDeclaringClass()->getName();
-
-                $k = $name;
-                if ($relfProperty->isPrivate() && count($reflProperties2) > 1) {
-                    $k .= ':' . $this->formatClass($class);
-                }
-
-                if (\PHP_VERSION_ID < 8_01_00) {
-                    $relfProperty->setAccessible(true);
-                }
-
-                if (!$relfProperty->isInitialized($value)) {
-                    $res[$k] = null;
+                $reflectionReference = \ReflectionReference::fromArrayElement($resFromCast, $k);
+                if ($reflectionReference !== null) {
+                    $res[$k] = &$resFromCast[$k];
                 } else {
-                    $res[$k] = &\Closure::bind(static function &() use (&$value, $name) {
-                        return $value->{$name};
-                    }, null, $class)();
+                    $res[$k] = $resFromCast[$k];
                 }
             }
         }
 
         return $res;
+    }
+
+    /**
+     * @param class-string $class
+     */
+    protected function formatClass(string $class): string
+    {
+        return \Closure::bind(static function () use ($class) {
+            return (new HtmlExceptionRenderer((new \ReflectionClass(\Exception::class))->newInstanceWithoutConstructor()))->formatClass($class);
+        }, null, HtmlExceptionRenderer::class)();
     }
 
     /**
