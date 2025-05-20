@@ -12,7 +12,13 @@ use Atk4\Core\ExceptionRenderer\Html as HtmlExceptionRenderer;
 class DumpHelper
 {
     /** @var array<class-string, array<string, \ReflectionProperty>> */
-    private static array $classReflectionPropertiesCache = [];
+    private static array $reflectionPropertiesCache = [];
+
+    /** @var array<class-string, string> */
+    private static array $formatClassCache = [];
+
+    /** @var array<class-string, array<string, string>> */
+    private static array $formatPropertyMangledNameCache = [];
 
     protected function getPropertyMangledName(\ReflectionProperty $reflectionProperty): string
     {
@@ -34,38 +40,39 @@ class DumpHelper
      */
     protected function getReflectionProperties(string $class): array
     {
-        $res = self::$classReflectionPropertiesCache[$class] ?? null;
+        $res = self::$reflectionPropertiesCache[$class] ?? null;
+        if ($res !== null) {
+            return $res;
+        }
 
-        if ($res === null) {
-            $parentClass = get_parent_class($class);
-            $res = $parentClass === false
-                ? []
-                : $this->getReflectionProperties($parentClass);
+        $parentClass = get_parent_class($class);
+        $res = $parentClass === false
+            ? []
+            : $this->getReflectionProperties($parentClass);
 
 
-            foreach ((new \ReflectionClass($class))->getProperties() as $reflectionProperty) {
-                if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) {
-                    continue;
-                }
-
-                $k = $this->getPropertyMangledName($reflectionProperty);
-                $kProtected = "\0*\0" . $k;
-                if (isset($res[$kProtected])) {
-                    assert(!isset($res[$k]));
-
-                    $pos = array_flip(array_keys($res))[$kProtected];
-                    $res = array_merge(
-                        array_slice($res, 0, $pos, true),
-                        [$k => $reflectionProperty],
-                        array_slice($res, $pos + 1, true),
-                    );
-                } else {
-                    $res[$k] = $reflectionProperty;
-                }
+        foreach ((new \ReflectionClass($class))->getProperties() as $reflectionProperty) {
+            if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) {
+                continue;
             }
 
-            self::$classReflectionPropertiesCache[$class] = $res;
+            $k = $this->getPropertyMangledName($reflectionProperty);
+            $kProtected = "\0*\0" . $k;
+            if (isset($res[$kProtected])) {
+                assert(!isset($res[$k]));
+
+                $pos = array_flip(array_keys($res))[$kProtected];
+                $res = array_merge(
+                    array_slice($res, 0, $pos, true),
+                    [$k => $reflectionProperty],
+                    array_slice($res, $pos + 1, true),
+                );
+            } else {
+                $res[$k] = $reflectionProperty;
+            }
         }
+
+        self::$reflectionPropertiesCache[$class] = $res;
 
         return $res;
     }
@@ -121,26 +128,46 @@ class DumpHelper
      */
     protected function formatClass(string $class): string
     {
-        return \Closure::bind(static function () use ($class) {
-            return (new HtmlExceptionRenderer((new \ReflectionClass(\Exception::class))->newInstanceWithoutConstructor()))->formatClass($class);
-        }, null, HtmlExceptionRenderer::class)();
-    }
-
-    protected function formatPropertyMangledName(string $key): string
-    {
-        if (str_starts_with($key, "\0")) {
-            $pos = strpos($key, "\0", 1);
-            assert($pos !== false);
-
-            $extra = substr($key, 1, $pos - 1);
-            $key = substr($key, $pos + 1);
-
-            if ($extra !== '*') {
-                $key .= ':' . $extra;
-            }
+        $res = self::$formatClassCache[$class] ?? null;
+        if ($res !== null) {
+            return $res;
         }
 
-        return $key;
+        assert($class === (new \ReflectionClass($class))->getName());
+
+        $res = \Closure::bind(static function () use ($class) {
+            return (new HtmlExceptionRenderer((new \ReflectionClass(\Exception::class))->newInstanceWithoutConstructor()))->formatClass($class);
+        }, null, HtmlExceptionRenderer::class)();
+
+        self::$formatClassCache[$class] = $res;
+
+        return $res;
+    }
+
+    protected function formatPropertyMangledName(string $class, string $key): string
+    {
+        if (!str_starts_with($key, "\0")) {
+            return $key;
+        }
+
+        $res = self::$formatPropertyMangledNameCache[$class][$key] ?? null;
+        if ($res !== null) {
+            return $res;
+        }
+
+        $pos = strpos($key, "\0", 1);
+        assert($pos !== false);
+
+        $extra = substr($key, 1, $pos - 1);
+        $res = substr($key, $pos + 1);
+
+        if ($extra !== '*') {
+            $res .= ':' . $this->formatClass($extra);
+        }
+
+        self::$formatPropertyMangledNameCache[$class][$key] = $res;
+
+        return $res;
     }
 
     /**
@@ -424,11 +451,13 @@ class DumpHelper
         }
 
         $isObject = false;
+        $class = false;
         if (is_object($value)) {
             $v = $value;
             unset($value);
             $value = $this->getObjectProperties($v);
             $isObject = true;
+            $class = get_class($v);
         }
 
         echo $isObject ? '{' : '[';
@@ -448,7 +477,7 @@ class DumpHelper
             echo $this->makeIndent($depth);
 
             if ($isObject || !array_is_list($value)) {
-                $this->printScalar($k, $depth);
+                $this->printScalar($isObject ? $this->formatPropertyMangledName($class, $k) : $k, $depth);
                 echo $isObject ? ': ' : ' => ';
             }
 
