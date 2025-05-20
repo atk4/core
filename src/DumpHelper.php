@@ -27,29 +27,12 @@ class DumpHelper
         return $key;
     }
 
-    protected function formatPropertyMangledName(string $key): string
-    {
-        if (str_starts_with($key, "\0")) {
-            $pos = strpos($key, "\0", 1);
-            assert($pos !== false);
-
-            $extra = substr($key, 1, $pos - 1);
-            $key = substr($key, $pos + 1);
-
-            if ($extra !== '*') {
-                $key .= ':' . $extra;
-            }
-        }
-
-        return $key;
-    }
-
     /**
      * @param class-string $class
      *
      * @return array<string, \ReflectionProperty>
      */
-    protected function getClassReflectionProperties(string $class): array
+    protected function getReflectionProperties(string $class): array
     {
         $res = self::$classReflectionPropertiesCache[$class] ?? null;
 
@@ -57,7 +40,7 @@ class DumpHelper
             $parentClass = get_parent_class($class);
             $res = $parentClass === false
                 ? []
-                : $this->getClassReflectionProperties($parentClass);
+                : $this->getReflectionProperties($parentClass);
 
 
             foreach ((new \ReflectionClass($class))->getProperties() as $reflectionProperty) {
@@ -94,16 +77,16 @@ class DumpHelper
     {
         $res = (array) $value;
 
-        $classReflectionProperties = $this->getClassReflectionProperties(get_class($value));
+        $reflectionProperties = $this->getReflectionProperties(get_class($value));
 
         $resFromCastKeys = array_keys($res);
-        $classReflectionPropertiesKeys = array_keys($classReflectionProperties);
+        $classReflectionPropertiesKeys = array_keys($reflectionProperties);
 
         if ($resFromCastKeys !== $classReflectionPropertiesKeys) {
             $resFromCast = $res;
 
             $res = [];
-            foreach ($classReflectionProperties as $reflectionProperty) {
+            foreach ($reflectionProperties as $reflectionProperty) {
                 $k = $this->getPropertyMangledName($reflectionProperty);
 
                 if (!array_key_exists($k, $resFromCast)) {
@@ -119,7 +102,7 @@ class DumpHelper
             }
 
             foreach (array_diff($resFromCastKeys, $classReflectionPropertiesKeys) as $k) {
-                assert($k === $this->formatPropertyMangledName($k));
+                assert(!str_starts_with($k, "\0"));
 
                 $reflectionReference = \ReflectionReference::fromArrayElement($resFromCast, $k);
                 if ($reflectionReference !== null) {
@@ -141,6 +124,23 @@ class DumpHelper
         return \Closure::bind(static function () use ($class) {
             return (new HtmlExceptionRenderer((new \ReflectionClass(\Exception::class))->newInstanceWithoutConstructor()))->formatClass($class);
         }, null, HtmlExceptionRenderer::class)();
+    }
+
+    protected function formatPropertyMangledName(string $key): string
+    {
+        if (str_starts_with($key, "\0")) {
+            $pos = strpos($key, "\0", 1);
+            assert($pos !== false);
+
+            $extra = substr($key, 1, $pos - 1);
+            $key = substr($key, $pos + 1);
+
+            if ($extra !== '*') {
+                $key .= ':' . $extra;
+            }
+        }
+
+        return $key;
     }
 
     /**
