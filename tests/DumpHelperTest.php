@@ -379,6 +379,31 @@ class DumpHelperTest extends TestCase
 
             return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ' {}'];
         }];
+        yield 'dynamic property with special characters' => [static function () {
+            $o = new class {};
+            $o->{"x\0y"} = 'a';
+            $o->{"x\ny"} = 'b';
+            $o->{'x-y'} = 'c';
+            $o->{0} = 'd';
+            $o->{'1.0'} = 'e';
+
+            return [$o, sprintf(
+                <<<'EOF'
+                    %s {
+                        'x%sy': 'a',
+                        <<<'EOD'
+                            x
+                            y
+                            EOD: 'b',
+                        'x-y': 'c',
+                        0: 'd',
+                        '1.0': 'e'
+                    }
+                    EOF,
+                'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 20) . '#' . spl_object_id($o),
+                "\0"
+            )];
+        }];
         yield 'private property' => [static function () {
             $dt = new \DateTime('2013-02-20 20:00:12 UTC');
             $o = new QuietObjectWrapper($dt);

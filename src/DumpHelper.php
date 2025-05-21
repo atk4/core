@@ -108,7 +108,7 @@ class DumpHelper
             }
 
             foreach (array_diff($resFromCastKeys, $classReflectionPropertiesKeys) as $k) {
-                assert(!str_starts_with($k, "\0"));
+                assert(is_int($k) ||!str_starts_with($k, "\0"));
 
                 $reflectionReference = \ReflectionReference::fromArrayElement($resFromCast, $k);
                 if ($reflectionReference !== null) {
@@ -487,7 +487,7 @@ class DumpHelper
             echo $this->makeIndent($depth);
 
             if ($isObject || !array_is_list($value)) {
-                $this->printScalar($isObject ? $this->formatPropertyMangledName($class, $k) : $k, $depth);
+                $this->printScalar($isObject && is_string($k) ? $this->formatPropertyMangledName($class, $k) : $k, $depth);
                 echo $isObject ? ': ' : ' => ';
             }
 
