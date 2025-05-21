@@ -509,7 +509,7 @@ class DumpHelper
 
             if ($reflectionProperty !== null && !$reflectionProperty->isInitialized($object)) {
                 echo $reflectionProperty->hasType()
-                    ? '*uninitialized*'
+                    ? '*uninitialized*' // https://github.com/php/php-src/issues/18620
                     : '*unset*';
             } else {
                 if ($isNewDuplicateRef) {
