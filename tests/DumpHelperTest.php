@@ -492,6 +492,60 @@ class DumpHelperTest extends TestCase
                 DumpHelperPriPro::class
             )];
         }];
+        yield 'redeclared private property ii' => [static function () {
+            $o = new class('x', 'y') extends DumpHelperPriPro {
+                protected bool $pri;
+                public string $pro;
+
+                public function __construct(string $pri, string $pro)
+                {
+                    parent::__construct($pri, $pro);
+
+                    $this->pri = false;
+                    $this->pro = $pro;
+                }
+            };
+
+            return [$o, sprintf(
+                <<<'EOD'
+                    %s#%d {
+                        'pri:%s': 'x',
+                        'pro': 'y',
+                        'pri': false
+                    }
+                    EOD,
+                DumpHelperPriPro::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 21),
+                spl_object_id($o),
+                DumpHelperPriPro::class
+            )];
+        }];
+        yield 'redeclared private property iii' => [static function () {
+            $o = new class('x', 'y') extends DumpHelperPriPro {
+                public bool $pri;
+                public string $pro;
+
+                public function __construct(string $pri, string $pro)
+                {
+                    parent::__construct($pri, $pro);
+
+                    $this->pri = false;
+                    $this->pro = $pro;
+                }
+            };
+
+            return [$o, sprintf(
+                <<<'EOD'
+                    %s#%d {
+                        'pri:%s': 'x',
+                        'pro': 'y',
+                        'pri': false
+                    }
+                    EOD,
+                DumpHelperPriPro::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 21),
+                spl_object_id($o),
+                DumpHelperPriPro::class
+            )];
+        }];
         yield 'deduplicate array references' => [static function () {
             $arr = [true];
 
