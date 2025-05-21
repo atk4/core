@@ -476,8 +476,8 @@ class DumpHelperTest extends TestCase
             $o = new class('x', 'y') extends DumpHelperPriPro {
                 protected string $pro;
                 private bool $a; // @phpstan-ignore property.onlyWritten
-                protected bool $b;
-                public bool $c;
+                protected bool $b = false;
+                public bool $c = false;
                 private bool $pri; // @phpstan-ignore property.onlyWritten
 
                 public function __construct(string $pri, string $pro)
@@ -496,8 +496,8 @@ class DumpHelperTest extends TestCase
                         'pri:%s': 'x',
                         'pro': 'y',
                         'a': true,
-                        'b': null,
-                        'c': null,
+                        'b': false,
+                        'c': false,
                         'pri:%1$s': false
                     }
                     EOD,
@@ -560,6 +560,55 @@ class DumpHelperTest extends TestCase
                 DumpHelperPriPro::class
             )];
         }];
+        yield 'uninitialized property' => [static function () {
+            $o = (new \ReflectionClass(DumpHelperPriPro::class))->newInstanceWithoutConstructor();
+
+            return [$o, sprintf(
+                <<<'EOD'
+                    %s {
+                        'pri': *uninitialized*,
+                        'pro': *uninitialized*
+                    }
+                    EOD,
+                DumpHelperPriPro::class . '#' . spl_object_id($o)
+            )];
+        }];
+        yield 'unset property' => [static function () {
+            $o = new class {
+                /** @var mixed */
+                public $foo;
+            };
+            unset($o->{'foo'});
+
+            $oTyped = new DumpHelperPriPro('x', 'y');
+            \Closure::bind(static function () use ($oTyped) {
+                unset($oTyped->{'pri'});
+            }, null, DumpHelperPriPro::class)();
+
+            $oDynamic = new \stdClass();
+            $oDynamic->foo = 5;
+            unset($oDynamic->{'foo'});
+
+            return [[$o, $oTyped, $oDynamic], sprintf(
+                <<<'EOD'
+                    list<%s|%s|stdClass> [
+                        %2$s#%d {
+                            'foo': *unset*
+                        },
+                        %1$s#%d {
+                            'pri': *uninitialized*,
+                            'pro': 'y'
+                        },
+                        %s {}
+                    ]
+                    EOD,
+                DumpHelperPriPro::class,
+                'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 29),
+                spl_object_id($o),
+                spl_object_id($oTyped),
+                \stdClass::class . '#' . spl_object_id($oDynamic)
+            )];
+        }];
         yield '__debugInfo() implemented' => [static function () {
             $o = new DumpHelperWithDebugInfo();
             $o->foo = $o;
@@ -580,7 +629,7 @@ class DumpHelperTest extends TestCase
                     EOD,
                 DumpHelperWithDebugInfo::class,
                 DumpHelperWithDebugInfo::class . '#' . spl_object_id($o),
-                DumpHelperWithDebugInfo::class . '#' . spl_object_id($o2),
+                DumpHelperWithDebugInfo::class . '#' . spl_object_id($o2)
             )];
         }];
         yield 'deduplicate array references' => [static function () {

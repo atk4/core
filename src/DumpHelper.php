@@ -55,6 +55,10 @@ class DumpHelper
                 continue;
             }
 
+            if (\PHP_VERSION_ID < 8_01_00) {
+                $reflectionProperty->setAccessible(true);
+            }
+
             $k = $this->getPropertyMangledName($reflectionProperty);
             $kProtected = "\0*\0" . $k;
             if (isset($res[$kProtected])) {
@@ -471,22 +475,19 @@ class DumpHelper
             }
         }
 
-        $isObject = false;
-        $class = false;
+        $object = false;
         if (is_object($value)) {
-            $v = $value;
+            $object = $value;
             unset($value);
-            $value = $this->getObjectProperties($v);
-            $isObject = true;
-            $class = get_class($v);
+            $value = $this->getObjectProperties($object);
         }
 
-        echo $isObject ? '{' : '[';
+        echo $object !== false ? '{' : '[';
 
         if ($value !== []) {
             if ($depth > $maxDepth) {
                 echo '...';
-                echo $isObject ? '}' : ']';
+                echo $object !== false ? '}' : ']';
 
                 return;
             }
@@ -497,26 +498,36 @@ class DumpHelper
         foreach ($value as $k => &$v) {
             echo $this->makeIndent($depth);
 
-            if ($isObject || !array_is_list($value)) {
-                $this->printScalar($isObject && is_string($k) ? $this->formatPropertyMangledName($class, $k) : $k, $depth);
-                echo $isObject ? ': ' : ' => ';
+            if ($object !== false || !array_is_list($value)) {
+                $this->printScalar($object !== false && is_string($k) ? $this->formatPropertyMangledName(get_class($object), $k) : $k, $depth);
+                echo $object !== false ? ': ' : ' => ';
             }
 
-            if ($isNewDuplicateRef) {
-                --$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
-            }
-            if ($isNewDuplicateObject) {
-                --$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
-            }
+            $reflectionProperty = $object !== false && $v === null
+                ? $this->getReflectionProperties(get_class($object))[$k] ?? null
+                : null;
 
-            try {
-                $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
-            } finally {
+            if ($reflectionProperty !== null && !$reflectionProperty->isInitialized($object)) {
+                echo $reflectionProperty->hasType()
+                    ? '*uninitialized*'
+                    : '*unset*';
+            } else {
                 if ($isNewDuplicateRef) {
-                    ++$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
+                    --$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
                 }
                 if ($isNewDuplicateObject) {
-                    ++$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
+                    --$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
+                }
+
+                try {
+                    $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
+                } finally {
+                    if ($isNewDuplicateRef) {
+                        ++$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
+                    }
+                    if ($isNewDuplicateObject) {
+                        ++$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
+                    }
                 }
             }
 
@@ -532,6 +543,6 @@ class DumpHelper
         if ($value !== []) {
             echo $this->makeIndent($depth);
         }
-        echo $isObject ? '}' : ']';
+        echo $object !== false ? '}' : ']';
     }
 }
