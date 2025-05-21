@@ -157,12 +157,23 @@ class DumpHelper
 
         $pos = strpos($key, "\0", 1);
         assert($pos !== false);
-
         $extra = substr($key, 1, $pos - 1);
         $res = substr($key, $pos + 1);
 
+        if (str_ends_with($extra, '@anonymous')) {
+            $pos = strpos($res, "\0");
+            assert($pos !== false);
+            $extra = $extra . "\0" . substr($res, 0, $pos);
+            $res = substr($res, $pos + 1);
+        }
+
         if ($extra !== '*') {
-            $res .= ':' . $this->formatClass($extra);
+            $reflectionProperties = array_filter($this->getReflectionProperties($class), static fn ($v) => $v->getName() === $res);
+            if (count($reflectionProperties) === 1) {
+                assert(array_key_first($reflectionProperties) === $key);
+            } else {
+                $res .= ':' . $this->formatClass($extra);
+            }
         }
 
         self::$formatPropertyMangledNameCache[$class][$key] = $res;
@@ -374,7 +385,7 @@ class DumpHelper
     {
         $duplicateOids = [];
         $duplicateRids = [];
-        $this->findDuplicateOidsRids($value, \PHP_INT_MAX, $duplicateOids, $duplicateRids);
+        $this->findDuplicateOidsRids($value, $this->getRid($value), \PHP_INT_MAX, $duplicateOids, $duplicateRids);
 
         $duplicateOids = array_diff($duplicateOids, [1]);
         $duplicateRids = array_diff($duplicateRids, [1]);

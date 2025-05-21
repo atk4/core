@@ -379,35 +379,114 @@ class DumpHelperTest extends TestCase
 
             return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ' {}'];
         }];
-        yield [static function () {
+        yield 'private property' => [static function () {
             $dt = new \DateTime('2013-02-20 20:00:12 UTC');
             $o = new QuietObjectWrapper($dt);
 
             return [$o, sprintf(
                 <<<'EOD'
                     %s {
-                        'obj': %s {}
+                        'obj': %s {
+                            'date': '2013-02-20 20:00:12.000000',
+                            'timezone_type': 3,
+                            'timezone': 'UTC'
+                        }
                     }
                     EOD,
                 QuietObjectWrapper::class . '#' . spl_object_id($o),
                 \DateTime::class . '#' . spl_object_id($dt),
             )];
         }];
-        yield [static function () {
+        yield 'private property in child class' => [static function () {
             $dt = new \DateTime('2013-02-20 20:00:12 UTC');
             $o = new class($dt) extends QuietObjectWrapper {};
 
             return [$o, sprintf(
                 <<<'EOD'
                     %s {
-                        'obj': %s {}
+                        'obj': %s {
+                            'date': '2013-02-20 20:00:12.000000',
+                            'timezone_type': 3,
+                            'timezone': 'UTC'
+                        }
                     }
                     EOD,
-                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 8) . '#' . spl_object_id($o),
+                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 12) . '#' . spl_object_id($o),
                 \DateTime::class . '#' . spl_object_id($dt),
             )];
         }];
+        yield 'redeclared private property' => [static function () {
+            $v = new \stdClass();
+            $o = new class($v) extends QuietObjectWrapper {
+                private bool $a; // @phpstan-ignore property.onlyWritten
+                protected bool $b;
+                public bool $c;
+                private bool $obj; // @phpstan-ignore property.onlyWritten
 
+                public function __construct(object $obj)
+                {
+                    parent::__construct($obj);
+
+                    $this->a = true;
+                    $this->obj = true;
+                }
+            };
+
+            $v2 = new \stdClass();
+            $o2 = new class($v2) extends QuietObjectWrapper {
+                protected bool $obj;
+
+                public function __construct(object $obj)
+                {
+                    parent::__construct($obj);
+
+                    $this->obj = true;
+                }
+            };
+
+            $v3 = new \stdClass();
+            $o3 = new class($v3) extends QuietObjectWrapper {
+                public bool $obj;
+
+                public function __construct(object $obj)
+                {
+                    parent::__construct($obj);
+
+                    $this->obj = true;
+                }
+            };
+
+            return [[$o, $o2, $o3], sprintf(
+                <<<'EOD'
+                    list<%s|%s|%s> [
+                        %1$s#%d {
+                            'obj:Atk4\Core\QuietObjectWrapper': %s {},
+                            'a': true,
+                            'b': null,
+                            'c': null,
+                            'obj:%1$s': true
+                        },
+                        %2$s#%d {
+                            'obj:Atk4\Core\QuietObjectWrapper': %s {},
+                            'obj': true
+                        },
+                        %3$s#%d {
+                            'obj:Atk4\Core\QuietObjectWrapper': %s {},
+                            'obj': true
+                        }
+                    ]
+                    EOD,
+                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 59),
+                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 44),
+                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 33),
+                spl_object_id($o),
+                \stdClass::class . '#' . spl_object_id($v),
+                spl_object_id($o2),
+                \stdClass::class . '#' . spl_object_id($v2),
+                spl_object_id($o3),
+                \stdClass::class . '#' . spl_object_id($v3),
+            )];
+        }];
         yield 'deduplicate array references' => [static function () {
             $arr = [true];
 
