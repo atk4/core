@@ -81,6 +81,10 @@ class DumpHelper
      */
     protected function getObjectProperties(object $value): array
     {
+        if (method_exists($value, '__debugInfo')) {
+            return $value->__debugInfo();
+        }
+
         $res = (array) $value;
 
         $reflectionProperties = $this->getReflectionProperties(get_class($value));

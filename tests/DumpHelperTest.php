@@ -103,6 +103,20 @@ class DumpHelperTest extends TestCase
             'c' => null,
             self::getPropertyMangledPrivateName(get_class($o2), 'pri') => false,
         ]];
+
+        $o3 = new DumpHelperWithDebugInfo();
+        $o3->foo = 10;
+        yield '__debugInfo() implemented' => [$o3, [
+            'x' => 10,
+        ]];
+
+        $o4 = new class extends DumpHelperWithDebugInfo {
+            public int $bar = 20;
+        };
+        $o4->foo = 10;
+        yield '__debugInfo() implemented in child class' => [$o4, [
+            'x' => 10,
+        ]];
     }
 
     /**
@@ -546,6 +560,29 @@ class DumpHelperTest extends TestCase
                 DumpHelperPriPro::class
             )];
         }];
+        yield '__debugInfo() implemented' => [static function () {
+            $o = new DumpHelperWithDebugInfo();
+            $o->foo = $o;
+
+            $o2 = new DumpHelperWithDebugInfo();
+            $o2->foo = &$o;
+
+            return [[$o, $o2], sprintf(
+                <<<'EOD'
+                    list<%s> [
+                        %s {
+                            'x': %2$s *recursion*
+                        },
+                        %s {
+                            'x': %2$s *deduplicated*
+                        }
+                    ]
+                    EOD,
+                DumpHelperWithDebugInfo::class,
+                DumpHelperWithDebugInfo::class . '#' . spl_object_id($o),
+                DumpHelperWithDebugInfo::class . '#' . spl_object_id($o2),
+            )];
+        }];
         yield 'deduplicate array references' => [static function () {
             $arr = [true];
 
@@ -795,5 +832,19 @@ class DumpHelperPriPro
     {
         $this->pri = $pri;
         $this->pro = $pro;
+    }
+}
+
+class DumpHelperWithDebugInfo
+{
+    /** @var mixed */
+    public $foo;
+
+    /**
+     * @return array{x: mixed}
+     */
+    public function __debugInfo(): array
+    {
+        return ['x' => $this->foo];
     }
 }
