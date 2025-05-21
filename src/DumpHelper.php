@@ -50,9 +50,8 @@ class DumpHelper
             ? []
             : $this->getReflectionProperties($parentClass);
 
-
         foreach ((new \ReflectionClass($class))->getProperties() as $reflectionProperty) {
-            if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) {
+            if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) { // @phpstan-ignore method.notFound
                 continue;
             }
 
@@ -65,7 +64,7 @@ class DumpHelper
                 $res = array_merge(
                     array_slice($res, 0, $pos, true),
                     [$k => $reflectionProperty],
-                    array_slice($res, $pos + 1, true),
+                    array_slice($res, $pos + 1, null, true),
                 );
             } else {
                 $res[$k] = $reflectionProperty;
@@ -209,7 +208,7 @@ class DumpHelper
             $duplicateRids[$rid] = 1;
         }
 
-        if (is_object($value) && $duplicateOids[$oid] === 1) { // @phpstan-ignore variable.undefined
+        if (is_object($value) && $duplicateOids[$oid] === 1) {
             $v = $value;
             unset($value);
             $value = $this->getObjectProperties($v);
