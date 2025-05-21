@@ -88,7 +88,9 @@ class DumpHelper
         $resFromCastKeys = array_keys($res);
         $classReflectionPropertiesKeys = array_keys($reflectionProperties);
 
-        if ($resFromCastKeys !== $classReflectionPropertiesKeys) {
+        if ($resFromCastKeys === $classReflectionPropertiesKeys) {
+            // optimization only
+        } else {
             $resFromCast = $res;
 
             $res = [];

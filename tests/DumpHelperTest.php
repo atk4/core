@@ -698,7 +698,7 @@ class DumpHelperTest extends TestCase
         yield 'track object recursion' => [static function () {
             $o = new \stdClass();
             $o->obj = &$o;
-            $o2 = new class() {
+            $o2 = new class extends \stdClass {
                 public object $obj;
             };
             $o2->obj = &$o;
@@ -708,7 +708,7 @@ class DumpHelperTest extends TestCase
 
             return [$arr, sprintf(
                 <<<'EOD'
-                    list<%s|stdClass> [
+                    list<stdClass|%s> [
                         %s {
                             'obj': &0 %2$s *recursion*
                         },
@@ -720,7 +720,7 @@ class DumpHelperTest extends TestCase
                         }
                     ]
                     EOD,
-                'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 22),
+                \stdClass::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 22),
                 \stdClass::class . '#' . spl_object_id($o),
                 spl_object_id($o2)
             )];
