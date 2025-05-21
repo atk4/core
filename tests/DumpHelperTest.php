@@ -380,7 +380,7 @@ class DumpHelperTest extends TestCase
             return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ' {}'];
         }];
         yield 'dynamic property with special characters' => [static function () {
-            $o = new class {};
+            $o = new \stdClass();
             $o->{"x\0y"} = 'a';
             $o->{"x\ny"} = 'b';
             $o->{'x-y'} = 'c';
@@ -400,7 +400,7 @@ class DumpHelperTest extends TestCase
                         '1.0': 'e'
                     }
                     EOF,
-                'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 20) . '#' . spl_object_id($o),
+                'stdClass#' . spl_object_id($o),
                 "\0"
             )];
         }];
@@ -531,17 +531,17 @@ class DumpHelperTest extends TestCase
                 EOD];
         }];
         yield 'deduplicate objects' => [static function () {
-            $dt = new \DateTime('2013-02-20 20:00:12 UTC');
-            $dt2 = new \DateTime('2013-02-20 20:00:12 UTC');
-            $o = new QuietObjectWrapper($dt);
+            $o = new \stdClass();
+            $o2 = new \stdClass();
+            $o3 = new QuietObjectWrapper($o);
 
-            return [[$dt, $dt, $dt2, [$dt], $o, $o], sprintf(
+            return [[$o, $o, $o2, [$o], $o3, $o3], sprintf(
                 <<<'EOD'
-                    list<Atk4\Core\QuietObjectWrapper|DateTime|list> [
+                    list<Atk4\Core\QuietObjectWrapper|list|stdClass> [
                         %s {},
                         %1$s *deduplicated*,
                         %s {},
-                        list<DateTime> [
+                        list<stdClass> [
                             %1$s *deduplicated*
                         ],
                         %s {
@@ -550,9 +550,9 @@ class DumpHelperTest extends TestCase
                         %3$s *deduplicated*
                     ]
                     EOD,
-                \DateTime::class . '#' . spl_object_id($dt),
-                \DateTime::class . '#' . spl_object_id($dt2),
-                QuietObjectWrapper::class . '#' . spl_object_id($o),
+                \stdClass::class . '#' . spl_object_id($o),
+                \stdClass::class . '#' . spl_object_id($o2),
+                QuietObjectWrapper::class . '#' . spl_object_id($o3),
             )];
         }];
         yield 'track references for all native types' => [static function () {
@@ -627,12 +627,12 @@ class DumpHelperTest extends TestCase
                         ],
                         &1 true,
                         %s {
+                            'foo': list<true> [
+                                &1 true
+                            ],
                             'bar': &0 list<true> *deduplicated*,
                             'baz': list<list> [
                                 &0 list<true> *deduplicated*
-                            ],
-                            'foo': list<true> [
-                                &1 true
                             ]
                         },
                         list<list|stdClass|true> [
@@ -680,8 +680,8 @@ class DumpHelperTest extends TestCase
                         },
                         %1$s *deduplicated*,
                         %s {
-                            'bar': &0 %2$s *recursion*,
-                            'foo': false
+                            'foo': false,
+                            'bar': &0 %2$s *recursion*
                         },
                         %2$s *deduplicated*,
                         &0 %2$s *deduplicated*
@@ -693,24 +693,24 @@ class DumpHelperTest extends TestCase
         }];
 
         yield [static function () {
-            $dt = new \DateTime();
-            $ref = \WeakReference::create($dt);
+            $o = new \stdClass();
+            $ref = \WeakReference::create($o);
 
-            return [[$dt, $ref], sprintf(
+            return [[$o, $ref], sprintf(
                 <<<'EOD'
-                    list<DateTime|WeakReference> [
+                    list<WeakReference|stdClass> [
                         %s {},
                         WeakReference<%1$s>%s {}
                     ]
                     EOD,
-                \DateTime::class . '#' . spl_object_id($dt),
+                \stdClass::class . '#' . spl_object_id($o),
                 '#' . spl_object_id($ref),
             )];
         }];
         yield [static function () {
-            $o = \WeakReference::create(new \DateTime());
+            $ref = \WeakReference::create(new \stdClass());
 
-            return [$o, 'WeakReference<*destroyed*>#' . spl_object_id($o) . ' {}'];
+            return [$ref, 'WeakReference<*destroyed*>#' . spl_object_id($ref) . ' {}'];
         }];
 
         yield [static fn () => ['foo ', '\'foo \''], 0];

@@ -108,7 +108,7 @@ class DumpHelper
             }
 
             foreach (array_diff($resFromCastKeys, $classReflectionPropertiesKeys) as $k) {
-                assert(is_int($k) ||!str_starts_with($k, "\0"));
+                assert(is_int($k) || !str_starts_with($k, "\0"));
 
                 $reflectionReference = \ReflectionReference::fromArrayElement($resFromCast, $k);
                 if ($reflectionReference !== null) {
