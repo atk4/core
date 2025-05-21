@@ -839,36 +839,78 @@ class DumpHelperTest extends TestCase
         yield [static fn () => [fopen('php://memory', 'r+'), 'resource<stream>'], 0];
         yield [static fn () => [10, '10'], 0];
         yield [static fn () => [10.0, '10.0'], 0];
-        yield [static fn () => [[], 'empty-array []'], -1];
-        yield [static fn () => [[], 'empty-array []'], 0];
-        yield [static fn () => [[], 'empty-array []'], 1];
-        yield [static fn () => [['foo' => true], 'array<string, true> [...]'], 0];
-        yield [static fn () => [['foo' => true], <<<'EOD'
+        $arrEmpty = [];
+        yield [static fn () => [$arrEmpty, 'empty-array []'], -1];
+        yield [static fn () => [$arrEmpty, 'empty-array []'], 0];
+        yield [static fn () => [$arrEmpty, 'empty-array []'], 1];
+        $arrScalar = ['foo' => true];
+        yield [static fn () => [$arrScalar, 'array<string, true> [...]'], 0];
+        yield [static fn () => [$arrScalar, <<<'EOD'
             array<string, true> [
                 'foo' => true
             ]
             EOD], 1];
-        yield [static fn () => [['foo' => []], 'array<string, list> [...]'], 0];
-        yield [static fn () => [['foo' => []], <<<'EOD'
+        $arrArrEmpty = ['foo' => []];
+        yield [static fn () => [$arrArrEmpty, 'array<string, list> [...]'], 0];
+        yield [static fn () => [$arrArrEmpty, <<<'EOD'
             array<string, list> [
                 'foo' => empty-array []
             ]
             EOD], 1];
-        yield [static fn () => [['foo' => [true]], 'array<string, list> [...]'], 0];
-        yield [static fn () => [['foo' => [true]], <<<'EOD'
+        $arrArrScalar = ['foo' => [true]];
+        yield [static fn () => [$arrArrScalar, 'array<string, list> [...]'], 0];
+        yield [static fn () => [$arrArrScalar, <<<'EOD'
             array<string, list> [
                 'foo' => list<true> [...]
             ]
             EOD], 1];
-        yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
+        $arrTwoScalars = ['foo' => true, 'bar' => true];
+        yield [static fn () => [$arrTwoScalars, <<<'EOD'
             array<string, true> [...]
             EOD], 0];
-        yield [static fn () => [['foo' => true, 'bar' => true], <<<'EOD'
+        yield [static fn () => [$arrTwoScalars, <<<'EOD'
             array<string, true> [
                 'foo' => true,
                 'bar' => true
             ]
             EOD], 1];
+        $v = false;
+        $arrRefArrRef = [&$v, [&$v]];
+        yield [static fn () => [$arrRefArrRef, 'list<false|list> [...]'], 0];
+        yield [static fn () => [$arrRefArrRef, <<<'EOD'
+            list<false|list> [
+                & false,
+                list<false> [...]
+            ]
+            EOD], 1];
+        yield [static fn () => [$arrRefArrRef, <<<'EOD'
+            list<false|list> [
+                &0 false,
+                list<false> [
+                    &0 false
+                ]
+            ]
+            EOD], 2];
+        $v2 = false;
+        $arrRefArrRef2 = [&$v, [&$v], &$v2, &$v2];
+        yield [static fn () => [$arrRefArrRef2, <<<'EOD'
+            list<false|list> [
+                & false,
+                list<false> [...],
+                &0 false,
+                &0 false
+            ]
+            EOD], 1];
+        yield [static fn () => [$arrRefArrRef2, <<<'EOD'
+            list<false|list> [
+                &0 false,
+                list<false> [
+                    &0 false
+                ],
+                &1 false,
+                &1 false
+            ]
+            EOD], 2];
     }
 }
 

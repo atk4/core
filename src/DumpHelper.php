@@ -265,7 +265,7 @@ class DumpHelper
      */
     protected function formatRidIndex(int $value): string
     {
-        return '&' . ($value === -1 ? '?' : $value);
+        return '&' . ($value === -1 ? '' : $value);
     }
 
     /**
@@ -399,15 +399,14 @@ class DumpHelper
     {
         $duplicateOids = [];
         $duplicateRids = [];
-        $this->findDuplicateOidsRids($value, $this->getRid($value), \PHP_INT_MAX, $duplicateOids, $duplicateRids);
+        $this->findDuplicateOidsRids($value, null, $maxDepth, $duplicateOids, $duplicateRids);
 
         $duplicateOids = array_diff($duplicateOids, [1]);
-        $duplicateRids = array_diff($duplicateRids, [1]);
 
         $duplicateRidsWithIndex = [];
         $i = -1;
         foreach ($duplicateRids as $k => $v) {
-            $duplicateRidsWithIndex[$k] = [$v, ++$i];
+            $duplicateRidsWithIndex[$k] = [$v, $v === 1 ? -1 : ++$i];
         }
 
         $this->_printReadable($value, $maxDepth, $duplicateOids, $duplicateRidsWithIndex);
@@ -417,7 +416,7 @@ class DumpHelper
     /**
      * @param mixed                                                 $value
      * @param array<int, -2|-1|int<2, max>>                         $duplicateOids
-     * @param array<string, array{-2|-1|int<2, max>, int<-1, max>}> $duplicateRids
+     * @param array<string, array{-2|-1|int<1, max>, int<-1, max>}> $duplicateRids
      */
     protected function _printReadable(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
