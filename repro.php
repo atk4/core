@@ -38,8 +38,6 @@ class DumpHelperTest
 
         [$value, $expectedDuplicateRids] = $makeCaseFx();
 
-        $this->getRid($value);
-
         $duplicateRids = [];
         \Closure::bind(function () use (&$value, &$duplicateRids) {
             $this->findDuplicateRids($value, $duplicateRids);
