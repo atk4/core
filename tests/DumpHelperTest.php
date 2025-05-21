@@ -7,7 +7,6 @@ namespace Atk4\Core\Tests;
 use Atk4\Core\DumpHelper;
 use Atk4\Core\ExceptionRenderer\Html as HtmlExceptionRenderer;
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Core\QuietObjectWrapper;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class DumpHelperTest extends TestCase
@@ -75,42 +74,34 @@ class DumpHelperTest extends TestCase
             'bar' => null,
         ]];
 
-        $dt = new \DateTime();
-        yield 'private property' => [new QuietObjectWrapper($dt), [
-            self::getPropertyMangledPrivateName(QuietObjectWrapper::class, 'obj') => $dt,
+        yield 'private property' => [new DumpHelperPriPro('x', 'y'), [
+            self::getPropertyMangledPrivateName(DumpHelperPriPro::class, 'pri') => 'x',
+            self::getPropertyMangledProtectedName('pro') => 'y',
         ]];
 
-        $oPrivateAnonymous = new class($dt) extends QuietObjectWrapper {
+        $o2 = new class('x', 'y') extends DumpHelperPriPro {
+            protected string $pro;
             private bool $a; // @phpstan-ignore property.onlyWritten
             protected bool $b;
             public bool $c;
-            private bool $obj; // @phpstan-ignore property.onlyWritten
+            private bool $pri; // @phpstan-ignore property.onlyWritten
 
-            public function __construct(object $obj)
+            public function __construct(string $pri, string $pro)
             {
-                parent::__construct($obj);
+                parent::__construct($pri, $pro);
 
                 $this->a = true;
-                $this->obj = true;
+                $this->pri = false;
+                $this->pro = $pro;
             }
         };
-        yield 'redeclared private property' => [$oPrivateAnonymous, [
-            self::getPropertyMangledPrivateName(QuietObjectWrapper::class, 'obj') => $dt,
-            self::getPropertyMangledPrivateName(get_class($oPrivateAnonymous), 'a') => true,
+        yield 'redeclared private property' => [$o2, [
+            self::getPropertyMangledPrivateName(DumpHelperPriPro::class, 'pri') => 'x',
+            self::getPropertyMangledProtectedName('pro') => 'y',
+            self::getPropertyMangledPrivateName(get_class($o2), 'a') => true,
             self::getPropertyMangledProtectedName('b') => null,
             'c' => null,
-            self::getPropertyMangledPrivateName(get_class($oPrivateAnonymous), 'obj') => true,
-        ]];
-
-        $exception = new \Exception();
-        $oProtectedAnonymous = new class($exception) extends HtmlExceptionRenderer {
-            public \Throwable $exception;
-        };
-        yield 'redeclared protected property' => [$oProtectedAnonymous, [
-            'exception' => $exception,
-            self::getPropertyMangledProtectedName('parentException') => null,
-            self::getPropertyMangledProtectedName('output') => '',
-            self::getPropertyMangledProtectedName('adapter') => null,
+            self::getPropertyMangledPrivateName(get_class($o2), 'pri') => false,
         ]];
     }
 
@@ -161,58 +152,66 @@ class DumpHelperTest extends TestCase
         }];
 
         yield 'object' => [static function () {
-            $v = new \DateTime();
+            $o = new \stdClass();
 
-            return [$v, [
-                spl_object_id($v) => 1,
+            return [$o, [
+                spl_object_id($o) => 1,
             ], [
-                self::getRid($v) => 1,
+                self::getRid($o) => 1,
+            ]];
+        }];
+
+        yield 'DateTime' => [static function () {
+            $o = new \DateTime('2013-02-20 20:00:12 UTC');
+
+            return [$o, [
+                spl_object_id($o) => 1,
+            ], [
+                self::getRid($o) => 1,
             ]];
         }];
 
         yield 'Closure' => [static function () {
-            $v = static fn () => true;
+            $fx = static fn () => true;
 
-            return [$v, [
-                spl_object_id($v) => 1,
+            return [$fx, [
+                spl_object_id($fx) => 1,
             ], [
-                self::getRid($v) => 1,
+                self::getRid($fx) => 1,
             ]];
         }];
 
         yield 'array with objects' => [static function () {
-            $dt = new \DateTime();
-            $dt2 = new \DateTime();
-            $dtCopy = $dt;
-            $arr = [&$dt, &$dt2, &$dt, &$dtCopy];
+            $o = new \stdClass();
+            $o2 = new \stdClass();
+            $oCopy = $o;
+            $arr = [&$o, &$o2, &$o, &$oCopy];
 
             return [$arr, [
-                spl_object_id($dt) => 3,
-                spl_object_id($dt2) => 1,
+                spl_object_id($o) => 3,
+                spl_object_id($o2) => 1,
             ], [
                 self::getRid($arr) => 1,
-                self::getRid($dt) => 2,
+                self::getRid($o) => 2,
             ]];
         }];
 
         yield 'array recursion' => [static function () {
             $v = false;
-            $v2 = [&$v];
-            $v2[] = &$v2;
-            $arr = [&$v2, &$v];
+            $arr = [&$v];
+            $arr[] = &$arr;
+            $arr2 = [&$arr, &$v];
 
-            return [$arr, [], [
-                self::getRid($arr) => 1,
-                self::getRid($v2) => 2,
+            return [$arr2, [], [
+                self::getRid($arr2) => 1,
+                self::getRid($arr) => 2,
                 self::getRid($v) => 2,
             ]];
         }];
 
         yield 'object recursion' => [static function () {
-            $o = new QuietObjectWrapper(new \DateTime());
-            \Closure::bind(static function () use (&$o) {
-                $o->obj = &$o; // @phpstan-ignore assign.propertyType
-            }, null, QuietObjectWrapper::class)();
+            $o = new \stdClass();
+            $o->foo = &$o;
             $oCopy = $o;
 
             $v = false;
@@ -235,8 +234,8 @@ class DumpHelperTest extends TestCase
         }];
 
         yield 'array max depth 0' => [static function () {
-            $dt = new \DateTime();
-            $arr = [&$dt, [1]];
+            $o = new \stdClass();
+            $arr = [&$o, [1]];
 
             return [$arr, [], [
                 self::getRid($arr) => 1,
@@ -244,8 +243,8 @@ class DumpHelperTest extends TestCase
         }, 0];
 
         yield 'array max depth -1' => [static function () {
-            $dt = new \DateTime();
-            $arr = [&$dt, [1]];
+            $o = new \stdClass();
+            $arr = [&$o, [1]];
 
             return [$arr, [], [
                 self::getRid($arr) => 1,
@@ -253,16 +252,16 @@ class DumpHelperTest extends TestCase
         }, 0];
 
         yield 'array max depth 1' => [static function () {
-            $dt = new \DateTime();
-            $dt2 = new \DateTime();
-            $v = [&$dt2, [1]];
-            $arr = [&$dt, &$v, &$dt, &$v];
+            $o = new \stdClass();
+            $o2 = new \stdClass();
+            $v = [&$o2, [1]];
+            $arr = [&$o, &$v, &$o, &$v];
 
             return [$arr, [
-                spl_object_id($dt) => 2,
+                spl_object_id($o) => 2,
             ], [
                 self::getRid($arr) => 1,
-                self::getRid($dt) => 2,
+                self::getRid($o) => 2,
                 self::getRid($v) => 2,
             ]];
         }, 1];
@@ -390,6 +389,20 @@ class DumpHelperTest extends TestCase
             return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ' {}'];
         }];
         yield [static function () {
+            $dt = new \DateTime('2013-02-20 20:00:12 UTC');
+
+            return [$dt, sprintf(
+                <<<'EOF'
+                    %s {
+                        'date': '2013-02-20 20:00:12.000000',
+                        'timezone_type': 3,
+                        'timezone': 'UTC'
+                    }
+                    EOF,
+                \DateTime::class . '#' . spl_object_id($dt)
+            )];
+        }];
+        yield [static function () {
             $fx = static fn () => true;
 
             return [$fx, \Closure::class . '#' . spl_object_id($fx) . ' {}'];
@@ -420,111 +433,63 @@ class DumpHelperTest extends TestCase
             )];
         }];
         yield 'private property' => [static function () {
-            $dt = new \DateTime('2013-02-20 20:00:12 UTC');
-            $o = new QuietObjectWrapper($dt);
+            $o = new DumpHelperPriPro('x', 'y');
 
             return [$o, sprintf(
                 <<<'EOD'
                     %s {
-                        'obj': %s {
-                            'date': '2013-02-20 20:00:12.000000',
-                            'timezone_type': 3,
-                            'timezone': 'UTC'
-                        }
+                        'pri': 'x',
+                        'pro': 'y'
                     }
                     EOD,
-                QuietObjectWrapper::class . '#' . spl_object_id($o),
-                \DateTime::class . '#' . spl_object_id($dt),
+                DumpHelperPriPro::class . '#' . spl_object_id($o),
             )];
         }];
         yield 'private property in child class' => [static function () {
-            $dt = new \DateTime('2013-02-20 20:00:12 UTC');
-            $o = new class($dt) extends QuietObjectWrapper {};
+            $o = new class('x', 'y') extends DumpHelperPriPro {};
 
             return [$o, sprintf(
                 <<<'EOD'
                     %s {
-                        'obj': %s {
-                            'date': '2013-02-20 20:00:12.000000',
-                            'timezone_type': 3,
-                            'timezone': 'UTC'
-                        }
+                        'pri': 'x',
+                        'pro': 'y'
                     }
                     EOD,
-                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 12) . '#' . spl_object_id($o),
-                \DateTime::class . '#' . spl_object_id($dt),
+                DumpHelperPriPro::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 9) . '#' . spl_object_id($o)
             )];
         }];
         yield 'redeclared private property' => [static function () {
-            $v = new \stdClass();
-            $o = new class($v) extends QuietObjectWrapper {
+            $o = new class('x', 'y') extends DumpHelperPriPro {
+                protected string $pro;
                 private bool $a; // @phpstan-ignore property.onlyWritten
                 protected bool $b;
                 public bool $c;
-                private bool $obj; // @phpstan-ignore property.onlyWritten
+                private bool $pri; // @phpstan-ignore property.onlyWritten
 
-                public function __construct(object $obj)
+                public function __construct(string $pri, string $pro)
                 {
-                    parent::__construct($obj);
+                    parent::__construct($pri, $pro);
 
                     $this->a = true;
-                    $this->obj = true;
+                    $this->pri = false;
+                    $this->pro = $pro;
                 }
             };
 
-            $v2 = new \stdClass();
-            $o2 = new class($v2) extends QuietObjectWrapper {
-                protected bool $obj;
-
-                public function __construct(object $obj)
-                {
-                    parent::__construct($obj);
-
-                    $this->obj = true;
-                }
-            };
-
-            $v3 = new \stdClass();
-            $o3 = new class($v3) extends QuietObjectWrapper {
-                public bool $obj;
-
-                public function __construct(object $obj)
-                {
-                    parent::__construct($obj);
-
-                    $this->obj = true;
-                }
-            };
-
-            return [[$o, $o2, $o3], sprintf(
+            return [$o, sprintf(
                 <<<'EOD'
-                    list<%s|%s|%s> [
-                        %1$s#%d {
-                            'obj:Atk4\Core\QuietObjectWrapper': %s {},
-                            'a': true,
-                            'b': null,
-                            'c': null,
-                            'obj:%1$s': true
-                        },
-                        %2$s#%d {
-                            'obj:Atk4\Core\QuietObjectWrapper': %s {},
-                            'obj': true
-                        },
-                        %3$s#%d {
-                            'obj:Atk4\Core\QuietObjectWrapper': %s {},
-                            'obj': true
-                        }
-                    ]
+                    %s#%d {
+                        'pri:%s': 'x',
+                        'pro': 'y',
+                        'a': true,
+                        'b': null,
+                        'c': null,
+                        'pri:%1$s': false
+                    }
                     EOD,
-                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 59),
-                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 44),
-                QuietObjectWrapper::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 33),
+                DumpHelperPriPro::class . '@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 28),
                 spl_object_id($o),
-                \stdClass::class . '#' . spl_object_id($v),
-                spl_object_id($o2),
-                \stdClass::class . '#' . spl_object_id($v2),
-                spl_object_id($o3),
-                \stdClass::class . '#' . spl_object_id($v3),
+                DumpHelperPriPro::class
             )];
         }];
         yield 'deduplicate array references' => [static function () {
@@ -548,11 +513,12 @@ class DumpHelperTest extends TestCase
         yield 'deduplicate objects' => [static function () {
             $o = new \stdClass();
             $o2 = new \stdClass();
-            $o3 = new QuietObjectWrapper($o);
+            $o3 = new \stdClass();
+            $o3->foo = $o2;
 
             return [[$o, $o, $o2, [$o], $o3, $o3], sprintf(
                 <<<'EOD'
-                    list<Atk4\Core\QuietObjectWrapper|list|stdClass> [
+                    list<list|stdClass> [
                         %s {},
                         %1$s *deduplicated*,
                         %s {},
@@ -560,14 +526,14 @@ class DumpHelperTest extends TestCase
                             %1$s *deduplicated*
                         ],
                         %s {
-                            'obj': %1$s *deduplicated*
+                            'foo': %2$s *deduplicated*
                         },
                         %3$s *deduplicated*
                     ]
                     EOD,
                 \stdClass::class . '#' . spl_object_id($o),
                 \stdClass::class . '#' . spl_object_id($o2),
-                QuietObjectWrapper::class . '#' . spl_object_id($o3),
+                \stdClass::class . '#' . spl_object_id($o3),
             )];
         }];
         yield 'track references for all native types' => [static function () {
@@ -676,34 +642,22 @@ class DumpHelperTest extends TestCase
                 EOD];
         }];
         yield 'track object recursion' => [static function () {
-            $o = new QuietObjectWrapper(new \DateTime());
-            \Closure::bind(static function () use (&$o) {
-                $o->obj = &$o; // @phpstan-ignore assign.propertyType
-            }, null, QuietObjectWrapper::class)();
+            $o = new \stdClass();
+            $o->obj = &$o;
 
-            $oDynamic = new \stdClass();
-            $oDynamic->foo = false;
-            $oDynamic->bar = &$oDynamic;
-
-            $arr = [$o, $o, $oDynamic, $oDynamic, &$oDynamic];
+            $arr = [$o, $o, &$o];
 
             return [$arr, sprintf(
                 <<<'EOD'
-                    list<Atk4\Core\QuietObjectWrapper|stdClass> [
+                    list<stdClass> [
                         %s {
-                            'obj': %1$s *recursion*
+                            'obj': &0 %1$s *recursion*
                         },
                         %1$s *deduplicated*,
-                        %s {
-                            'foo': false,
-                            'bar': &0 %2$s *recursion*
-                        },
-                        %2$s *deduplicated*,
-                        &0 %2$s *deduplicated*
+                        &0 %1$s *deduplicated*
                     ]
                     EOD,
-                QuietObjectWrapper::class . '#' . spl_object_id($o),
-                \stdClass::class . '#' . spl_object_id($oDynamic),
+                \stdClass::class . '#' . spl_object_id($o),
             )];
         }];
 
@@ -764,5 +718,17 @@ class DumpHelperTest extends TestCase
                 'bar' => true
             ]
             EOD], 1];
+    }
+}
+
+class DumpHelperPriPro
+{
+    private string $pri; // @phpstan-ignore property.onlyWritten
+    protected string $pro;
+
+    public function __construct(string $pri, string $pro)
+    {
+        $this->pri = $pri;
+        $this->pro = $pro;
     }
 }
