@@ -119,6 +119,11 @@ class DumpHelper
             }
         }
 
+        // https://github.com/php/php-src/issues/18610
+        if ($res === [$value]) {
+            $res = [];
+        }
+
         return $res;
     }
 

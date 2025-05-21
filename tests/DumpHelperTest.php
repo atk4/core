@@ -170,6 +170,16 @@ class DumpHelperTest extends TestCase
             ]];
         }];
 
+        yield 'Closure' => [static function () {
+            $v = static fn () => true;
+
+            return [$v, [
+                spl_object_id($v) => 1,
+            ], [
+                self::getRid($v) => 1,
+            ]];
+        }];
+
         yield 'array with objects' => [static function () {
             $dt = new \DateTime();
             $dt2 = new \DateTime();
@@ -378,6 +388,11 @@ class DumpHelperTest extends TestCase
             $o = new class {};
 
             return [$o, 'class@anonymous ' . self::relativizePath(__FILE__) . ':' . (__LINE__ - 2) . '#' . spl_object_id($o) . ' {}'];
+        }];
+        yield [static function () {
+            $fx = static fn () => true;
+
+            return [$fx, \Closure::class . '#' . spl_object_id($fx) . ' {}'];
         }];
         yield 'dynamic property with special characters' => [static function () {
             $o = new \stdClass();
