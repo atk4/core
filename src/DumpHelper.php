@@ -247,14 +247,6 @@ class DumpHelper
         }
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function getRid(&$value): string
-    {
-        return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
-    }
-
     protected function formatOid(int $value): string
     {
         return '#' . $value;
@@ -391,9 +383,9 @@ class DumpHelper
      *
      * Objects and array references are printed only once.
      *
-     * https://github.com/php/php-src/blob/php-8.4.7/Zend/zend.c#L543
-     *
      * @param mixed $value
+     *
+     * @see https://github.com/php/php-src/blob/php-8.4.7/Zend/zend.c#L543
      */
     public function printReadable($value, int $maxDepth = 50): void
     {
@@ -401,26 +393,23 @@ class DumpHelper
         $duplicateRids = [];
         $this->findDuplicateOidsRids($value, null, $maxDepth, $duplicateOids, $duplicateRids);
 
-        $duplicateOids = array_diff($duplicateOids, [1]);
-
         $duplicateRidsWithIndex = [];
         $i = -1;
         foreach ($duplicateRids as $k => $v) {
             $duplicateRidsWithIndex[$k] = [$v, $v === 1 ? -1 : ++$i];
         }
 
-        $this->_printReadable($value, $maxDepth, $duplicateOids, $duplicateRidsWithIndex);
+        $this->_printReadable($value, null, $maxDepth, $duplicateOids, $duplicateRidsWithIndex);
         echo "\n";
     }
 
     /**
      * @param mixed                                                 $value
-     * @param array<int, -2|-1|int<2, max>>                         $duplicateOids
+     * @param array<int, -2|-1|int<1, max>>                         $duplicateOids
      * @param array<string, array{-2|-1|int<1, max>, int<-1, max>}> $duplicateRids
      */
-    protected function _printReadable(&$value, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
+    protected function _printReadable(&$value, ?string $rid, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
-        $rid = $this->getRid($value);
         $isNewDuplicateRef = false;
         if (($duplicateRids[$rid][0] ?? 0) !== 0) {
             echo $this->formatRidIndex($duplicateRids[$rid][1]) . ' ';
@@ -460,7 +449,7 @@ class DumpHelper
         $isNewDuplicateObject = false;
         if (is_object($value)) {
             $oid = spl_object_id($value);
-            if (($duplicateOids[$oid] ?? 0) !== 0) {
+            if (($duplicateOids[$oid] ?? 1) !== 1) {
                 if ($duplicateOids[$oid] < 0) {
                     echo $duplicateOids[$oid] < -1
                         ? '*recursion*'
@@ -494,7 +483,16 @@ class DumpHelper
             echo "\n";
         }
 
-        foreach ($value as $k => &$v) {
+        foreach (array_keys($value) as $k) {
+            $reflectionReference = \ReflectionReference::fromArrayElement($value, $k);
+            if ($reflectionReference !== null) {
+                $v = &$value[$k];
+                $vRid = $reflectionReference->getId();
+            } else {
+                $v = $value[$k];
+                $vRid = null;
+            }
+
             echo $this->makeIndent($depth);
 
             if ($object !== false || !array_is_list($value)) {
@@ -519,7 +517,7 @@ class DumpHelper
                 }
 
                 try {
-                    $this->_printReadable($v, $maxDepth, $duplicateOids, $duplicateRids, $depth);
+                    $this->_printReadable($v, $vRid, $maxDepth, $duplicateOids, $duplicateRids, $depth);
                 } finally {
                     if ($isNewDuplicateRef) {
                         ++$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
@@ -535,6 +533,8 @@ class DumpHelper
             }
 
             echo "\n";
+
+            unset($v);
         }
 
         --$depth;

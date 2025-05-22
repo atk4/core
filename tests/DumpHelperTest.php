@@ -124,9 +124,7 @@ class DumpHelperTest extends TestCase
      */
     private static function getRid(&$value): string
     {
-        return \Closure::bind(static function () use (&$value) {
-            return (new DumpHelper())->getRid($value);
-        }, null, DumpHelper::class)();
+        return \ReflectionReference::fromArrayElement([&$value], 0)->getId();
     }
 
     /**
