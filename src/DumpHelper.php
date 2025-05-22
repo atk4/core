@@ -399,8 +399,19 @@ class DumpHelper
             $duplicateRidsWithIndex[$k] = [$v, $v === 1 ? -1 : ++$i];
         }
 
-        $this->_printReadable($value, null, $maxDepth, $duplicateOids, $duplicateRidsWithIndex);
-        echo "\n";
+        ob_start();
+        $flushed = false;
+        try {
+            $this->_printReadable($value, null, $maxDepth, $duplicateOids, $duplicateRidsWithIndex);
+            echo "\n";
+
+            $flushed = true;
+            ob_end_flush();
+        } finally {
+            if (!$flushed) {
+                ob_end_clean();
+            }
+        }
     }
 
     /**
