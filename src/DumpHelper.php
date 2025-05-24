@@ -229,6 +229,10 @@ class DumpHelper
             $value = $this->getObjectProperties($v);
         }
 
+        if (is_array($value) && count($value) <= 1) {
+            ++$maxDepth;
+        }
+
         if (is_array($value) && $depth < $maxDepth) {
             foreach (array_keys($value) as $k) {
                 $reflectionReference = \ReflectionReference::fromArrayElement($value, $k);
@@ -445,8 +449,6 @@ class DumpHelper
             return;
         }
 
-        ++$depth;
-
         echo ' ';
 
         if (($duplicateRids[$rid][0] ?? 0) < 0 && !$isNewDuplicateRef) {
@@ -480,6 +482,12 @@ class DumpHelper
             unset($value);
             $value = $this->getObjectProperties($object);
         }
+
+        if (is_array($value) && count($value) <= 1) {
+            ++$maxDepth;
+        }
+
+        ++$depth;
 
         echo $object !== false ? '{' : '[';
 

@@ -270,13 +270,13 @@ class DumpHelperTest extends TestCase
             $o2 = new \stdClass();
             $oThrow = new DumpHelperWithDebugInfoThrow();
             $v = [&$o2, [1], $oThrow];
-            $arr = [&$o, &$v, &$o, &$v];
+            $arr = [&$o, &$v, &$o, &$v, [&$o], [[&$o]], [&$o, &$o]];
 
             return [$arr, [
-                spl_object_id($o) => 2,
+                spl_object_id($o) => 4,
             ], [
                 self::getRid($arr) => 1,
-                self::getRid($o) => 2,
+                self::getRid($o) => 4,
                 self::getRid($v) => 2,
             ]];
         }, 1];
