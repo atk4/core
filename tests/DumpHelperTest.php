@@ -915,6 +915,16 @@ class DumpHelperTest extends TestCase
             ]
             EOD], 2];
     }
+
+    public function testPrintReadableExpandException(): void
+    {
+        $dumpHelper = new DumpHelper();
+        $arrArrScalarThrow = ['foo' => [true], new DumpHelperWithDebugInfoThrow()];
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Depth limit must be honored');
+        $dumpHelper->printReadable($arrArrScalarThrow, 1);
+    }
 }
 
 class DumpHelperPriPro
@@ -950,6 +960,6 @@ class DumpHelperWithDebugInfoThrow
      */
     public function __debugInfo(): array
     {
-        throw new \Error();
+        throw new \Error('Depth limit must be honored');
     }
 }
