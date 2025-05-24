@@ -247,7 +247,8 @@ class DumpHelperTest extends TestCase
 
         yield 'array max depth 0' => [static function () {
             $o = new \stdClass();
-            $arr = [&$o, [1]];
+            $oThrow = new DumpHelperWithDebugInfoThrow();
+            $arr = [$o, [1], $oThrow];
 
             return [$arr, [], [
                 self::getRid($arr) => 1,
@@ -256,7 +257,8 @@ class DumpHelperTest extends TestCase
 
         yield 'array max depth -1' => [static function () {
             $o = new \stdClass();
-            $arr = [&$o, [1]];
+            $oThrow = new DumpHelperWithDebugInfoThrow();
+            $arr = [$o, [1], $oThrow];
 
             return [$arr, [], [
                 self::getRid($arr) => 1,
@@ -266,7 +268,8 @@ class DumpHelperTest extends TestCase
         yield 'array max depth 1' => [static function () {
             $o = new \stdClass();
             $o2 = new \stdClass();
-            $v = [&$o2, [1]];
+            $oThrow = new DumpHelperWithDebugInfoThrow();
+            $v = [&$o2, [1], $oThrow];
             $arr = [&$o, &$v, &$o, &$v];
 
             return [$arr, [
@@ -872,6 +875,8 @@ class DumpHelperTest extends TestCase
                 'bar' => true
             ]
             EOD], 1];
+        $arrArrScalarThrow = ['foo' => [true], new DumpHelperWithDebugInfoThrow()];
+        yield [static fn () => [$arrArrScalarThrow, 'array<int|string, ' . DumpHelperWithDebugInfoThrow::class . '|list> [...]'], 0];
         $v = false;
         $arrRefArrRef = [&$v, [&$v]];
         yield [static fn () => [$arrRefArrRef, 'list<false|list> [...]'], 0];
@@ -935,5 +940,16 @@ class DumpHelperWithDebugInfo
     public function __debugInfo(): array
     {
         return ['x' => $this->foo];
+    }
+}
+
+class DumpHelperWithDebugInfoThrow
+{
+    /**
+     * @return never
+     */
+    public function __debugInfo(): array
+    {
+        throw new \Error();
     }
 }
