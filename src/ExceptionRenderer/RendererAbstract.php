@@ -18,13 +18,13 @@ abstract class RendererAbstract
 {
     use TranslatableTrait;
 
-    public \Throwable $exception;
+    protected \Throwable $exception;
 
-    public ?\Throwable $parentException;
+    protected ?\Throwable $parentException;
 
-    public string $output = '';
+    protected string $output = '';
 
-    public ?ITranslatorAdapter $adapter;
+    protected ?ITranslatorAdapter $adapter;
 
     public function __construct(\Throwable $exception, ?ITranslatorAdapter $adapter = null, ?\Throwable $parentException = null)
     {
@@ -91,7 +91,9 @@ abstract class RendererAbstract
             }
         }
 
-        return str_replace("\0", ' ', $this->tryRelativizePathsInString($class));
+        $class = str_replace("\0", ' ', substr($class, 0, strrpos($class, '$')));
+
+        return $this->tryRelativizePathsInString($class);
     }
 
     /**
