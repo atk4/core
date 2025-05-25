@@ -131,19 +131,18 @@ class DumpHelperTest extends TestCase
      * @dataProvider provideFindDuplicateOidsRidsCases
      *
      * @param \Closure(): array{mixed, array<int, positive-int>, array<string, positive-int>} $makeCaseFx
+     * @param int<0, max>                                                                     $maxDepth
      */
     #[DataProvider('provideFindDuplicateOidsRidsCases')]
-    public function testFindDuplicateOidsRids(\Closure $makeCaseFx, int $maxDepth = 50): void
+    public function testFindDuplicateOidsRids(\Closure $makeCaseFx, int $maxDepth = \PHP_INT_MAX): void
     {
         [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
-
-        $rid = self::getRid($value); // TODO remove asap, hotfix CI PHP 8.2+ with coverage https://github.com/php/php-src/issues/18600
 
         $dumpHelper = new DumpHelper();
         $duplicateOids = [];
         $duplicateRids = [];
-        \Closure::bind(static function () use ($dumpHelper, &$value, $rid, $maxDepth, &$duplicateOids, &$duplicateRids) {
-            $dumpHelper->findDuplicateOidsRids($value, $rid, $maxDepth, $duplicateOids, $duplicateRids);
+        \Closure::bind(static function () use ($dumpHelper, $value, $maxDepth, &$duplicateOids, &$duplicateRids) {
+            $dumpHelper->findDuplicateOidsRids($value, null, $maxDepth, $duplicateOids, $duplicateRids);
         }, null, DumpHelper::class)();
 
         self::assertSame($expectedDuplicateOids, $duplicateOids);
@@ -158,9 +157,7 @@ class DumpHelperTest extends TestCase
         yield 'scalar' => [static function () {
             $v = 10.5;
 
-            return [$v, [], [
-                self::getRid($v) => 1,
-            ]];
+            return [$v, [], []];
         }];
 
         yield 'object' => [static function () {
@@ -168,9 +165,7 @@ class DumpHelperTest extends TestCase
 
             return [$o, [
                 spl_object_id($o) => 1,
-            ], [
-                self::getRid($o) => 1,
-            ]];
+            ], []];
         }];
 
         yield 'DateTime' => [static function () {
@@ -178,9 +173,7 @@ class DumpHelperTest extends TestCase
 
             return [$o, [
                 spl_object_id($o) => 1,
-            ], [
-                self::getRid($o) => 1,
-            ]];
+            ], []];
         }];
 
         yield 'Closure' => [static function () {
@@ -188,9 +181,7 @@ class DumpHelperTest extends TestCase
 
             return [$fx, [
                 spl_object_id($fx) => 1,
-            ], [
-                self::getRid($fx) => 1,
-            ]];
+            ], []];
         }];
 
         yield 'array with objects' => [static function () {
@@ -203,7 +194,6 @@ class DumpHelperTest extends TestCase
                 spl_object_id($o) => 3,
                 spl_object_id($o2) => 1,
             ], [
-                self::getRid($arr) => 1,
                 self::getRid($o) => 2,
             ]];
         }];
@@ -215,9 +205,19 @@ class DumpHelperTest extends TestCase
             $arr2 = [&$arr, &$v];
 
             return [$arr2, [], [
-                self::getRid($arr2) => 1,
                 self::getRid($arr) => 2,
                 self::getRid($v) => 2,
+            ]];
+        }];
+
+        yield 'array recursion top' => [static function () {
+            $v = false;
+            $arr = [&$v, &$v];
+            $arr[] = &$arr;
+
+            return [$arr, [], [
+                self::getRid($v) => 4,
+                self::getRid($arr) => 2,
             ]];
         }];
 
@@ -238,7 +238,6 @@ class DumpHelperTest extends TestCase
                 spl_object_id($o) => 4,
                 spl_object_id($oDynamic) => 4,
             ], [
-                self::getRid($arr) => 1,
                 self::getRid($o) => 3,
                 self::getRid($oDynamic) => 3,
                 self::getRid($v) => 2,
@@ -250,9 +249,7 @@ class DumpHelperTest extends TestCase
             $oThrow = new DumpHelperWithDebugInfoThrow();
             $arr = [$o, [1], $oThrow];
 
-            return [$arr, [], [
-                self::getRid($arr) => 1,
-            ]];
+            return [$arr, [], []];
         }, 0];
 
         yield 'array max depth -1' => [static function () {
@@ -260,9 +257,7 @@ class DumpHelperTest extends TestCase
             $oThrow = new DumpHelperWithDebugInfoThrow();
             $arr = [$o, [1], $oThrow];
 
-            return [$arr, [], [
-                self::getRid($arr) => 1,
-            ]];
+            return [$arr, [], []];
         }, 0];
 
         yield 'array max depth 1' => [static function () {
@@ -275,7 +270,6 @@ class DumpHelperTest extends TestCase
             return [$arr, [
                 spl_object_id($o) => 4,
             ], [
-                self::getRid($arr) => 1,
                 self::getRid($o) => 4,
                 self::getRid($v) => 2,
             ]];
@@ -286,6 +280,7 @@ class DumpHelperTest extends TestCase
      * @dataProvider providePrintReadableCases
      *
      * @param \Closure(): array{mixed, string} $makeCaseFx
+     * @param int<0, max>                      $maxDepth
      */
     #[DataProvider('providePrintReadableCases')]
     public function testPrintReadable(\Closure $makeCaseFx, ?int $maxDepth = null): void
@@ -772,12 +767,28 @@ class DumpHelperTest extends TestCase
             $arr = [false];
             $arr[] = &$arr;
 
-            // TODO "&" below should be not needed
             return [[&$arr], <<<'EOD'
                 list<list> [
                     &0 list<false|list> [
                         false,
                         &0 list<false|list> *recursion*
+                    ]
+                ]
+                EOD];
+        }];
+        yield 'track array recursion top' => [static function () {
+            $v = false;
+            $arr = [&$v, &$v];
+            $arr[] = &$arr;
+
+            return [$arr, <<<'EOD'
+                list<false|list> [
+                    &0 false,
+                    &0 false,
+                    &1 list<false|list> [
+                        &0 false,
+                        &0 false,
+                        &1 list<false|list> *recursion*
                     ]
                 ]
                 EOD];
@@ -885,6 +896,11 @@ class DumpHelperTest extends TestCase
                 ]
             ]
             EOD], 3];
+        yield [static fn () => [[[]], <<<'EOD'
+            list<list> [
+                empty-array []
+            ]
+            EOD], \PHP_INT_MAX];
         $arrThrow = ['foo' => true, new DumpHelperWithDebugInfoThrow()];
         yield [static fn () => [$arrThrow, 'array<int|string, ' . DumpHelperWithDebugInfoThrow::class . '|true> [...]'], 0];
         $v = false;

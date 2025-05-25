@@ -9,7 +9,8 @@ use Atk4\Core\DumpHelper;
  *
  * Objects and array references are printed only once.
  *
- * @param mixed $value
+ * @param mixed       $value
+ * @param int<0, max> $maxDepth
  */
 function atk4_print_r($value, int $maxDepth = 50): void
 {
