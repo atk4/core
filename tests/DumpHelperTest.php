@@ -131,9 +131,10 @@ class DumpHelperTest extends TestCase
      * @dataProvider provideFindDuplicateOidsRidsCases
      *
      * @param \Closure(): array{mixed, array<int, positive-int>, array<string, positive-int>} $makeCaseFx
+     * @param int<0, max>                                                                     $maxDepth
      */
     #[DataProvider('provideFindDuplicateOidsRidsCases')]
-    public function testFindDuplicateOidsRids(\Closure $makeCaseFx, int $maxDepth = 50): void
+    public function testFindDuplicateOidsRids(\Closure $makeCaseFx, int $maxDepth = \PHP_INT_MAX): void
     {
         [$value, $expectedDuplicateOids, $expectedDuplicateRids] = $makeCaseFx();
 
@@ -268,6 +269,7 @@ class DumpHelperTest extends TestCase
      * @dataProvider providePrintReadableCases
      *
      * @param \Closure(): array{mixed, string} $makeCaseFx
+     * @param int<0, max>                      $maxDepth
      */
     #[DataProvider('providePrintReadableCases')]
     public function testPrintReadable(\Closure $makeCaseFx, ?int $maxDepth = null): void
@@ -866,6 +868,11 @@ class DumpHelperTest extends TestCase
                 ]
             ]
             EOD], 3];
+        yield [static fn () => [[[]], <<<'EOD'
+            list<list> [
+                empty-array []
+            ]
+            EOD], \PHP_INT_MAX];
         $arrThrow = ['foo' => true, new DumpHelperWithDebugInfoThrow()];
         yield [static fn () => [$arrThrow, 'array<int|string, ' . DumpHelperWithDebugInfoThrow::class . '|true> [...]'], 0];
         $v = false;

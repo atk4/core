@@ -197,6 +197,7 @@ class DumpHelper
 
     /**
      * @param mixed                       $value
+     * @param int<0, max>                 $maxDepth
      * @param array<int, positive-int>    $duplicateOids
      * @param array<string, positive-int> $duplicateRids
      */
@@ -229,7 +230,7 @@ class DumpHelper
             $value = $this->getObjectProperties($v);
         }
 
-        if (is_array($value) && count($value) <= 1) {
+        if (is_array($value) && count($value) <= 1 && $maxDepth < \PHP_INT_MAX) {
             ++$maxDepth;
         }
 
@@ -387,7 +388,8 @@ class DumpHelper
      *
      * Objects and array references are printed only once.
      *
-     * @param mixed $value
+     * @param mixed       $value
+     * @param int<0, max> $maxDepth
      *
      * @see https://github.com/php/php-src/blob/php-8.4.7/Zend/zend.c#L543
      */
@@ -420,6 +422,7 @@ class DumpHelper
 
     /**
      * @param mixed                                                 $value
+     * @param int<0, max>                                           $maxDepth
      * @param array<int, -2|-1|int<1, max>>                         $duplicateOids
      * @param array<string, array{-2|-1|int<1, max>, int<-1, max>}> $duplicateRids
      */
@@ -483,7 +486,7 @@ class DumpHelper
             $value = $this->getObjectProperties($object);
         }
 
-        if (is_array($value) && count($value) <= 1) {
+        if (is_array($value) && count($value) <= 1 && $maxDepth < \PHP_INT_MAX) {
             ++$maxDepth;
         }
 
