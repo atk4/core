@@ -772,7 +772,6 @@ class DumpHelperTest extends TestCase
             $arr = [false];
             $arr[] = &$arr;
 
-            // TODO "&" below should be not needed
             return [[&$arr], <<<'EOD'
                 list<list> [
                     &0 list<false|list> [
