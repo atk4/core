@@ -210,6 +210,17 @@ class DumpHelperTest extends TestCase
             ]];
         }];
 
+        yield 'array recursion top' => [static function () {
+            $v = false;
+            $arr = [&$v, &$v];
+            $arr[] = &$arr;
+
+            return [$arr, [], [
+                self::getRid($v) => 4,
+                self::getRid($arr) => 2,
+            ]];
+        }];
+
         yield 'object recursion' => [static function () {
             $o = new \stdClass();
             $o->foo = &$o;
@@ -761,6 +772,23 @@ class DumpHelperTest extends TestCase
                     &0 list<false|list> [
                         false,
                         &0 list<false|list> *recursion*
+                    ]
+                ]
+                EOD];
+        }];
+        yield 'track array recursion top' => [static function () {
+            $v = false;
+            $arr = [&$v, &$v];
+            $arr[] = &$arr;
+
+            return [$arr, <<<'EOD'
+                list<false|list> [
+                    &0 false,
+                    &0 false,
+                    &1 list<false|list> [
+                        &0 false,
+                        &0 false,
+                        &1 list<false|list> *recursion*
                     ]
                 ]
                 EOD];
