@@ -14,7 +14,7 @@ use PHPUnit\Runner\CodeCoverage;
 use PHPUnit\Util\Test as TestUtil;
 use SebastianBergmann\CodeCoverage\CodeCoverage as CodeCoverageRaw;
 
-if (\PHP_VERSION_ID >= 80100) {
+if (\PHP_VERSION_ID >= 8_01_00) {
     trait Phpunit9xTestCaseTrait
     {
         #[\Override]
@@ -125,7 +125,7 @@ abstract class TestCase extends BaseTestCase
 
         // once PHP 8.0 support is dropped, needed only once, see:
         // https://github.com/php/php-src/commit/b58d74547f
-        if (\PHP_VERSION_ID < 80100) {
+        if (\PHP_VERSION_ID < 8_01_00) {
             gc_collect_cycles();
         }
         gc_collect_cycles();
@@ -183,7 +183,7 @@ abstract class TestCase extends BaseTestCase
 
         // once PHP 8.0 support is dropped, needed only once, see:
         // https://github.com/php/php-src/commit/b58d74547f
-        if (\PHP_VERSION_ID < 80100) {
+        if (\PHP_VERSION_ID < 8_01_00) {
             gc_collect_cycles();
         }
         gc_collect_cycles();

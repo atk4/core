@@ -120,7 +120,7 @@ class ContainerTraitTest extends TestCase
         $app->name = 'r';
         $app->maxNameLength = 40;
 
-        $createTrackableMockFx = function (string $name, bool $isLongName = false) {
+        $createTrackableMockFx = static function (string $name, bool $isLongName = false) {
             return new class($name, $isLongName) extends TrackableMock {
                 use NameTrait;
 
