@@ -69,7 +69,6 @@ class Generic implements ITranslatorAdapter
                 break;
         }
 
-        // if no definition found get the first from array
         if ($foundDefinition === null) {
             $foundDefinition = array_first($definition);
         }
