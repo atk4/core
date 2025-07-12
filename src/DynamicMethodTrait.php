@@ -25,7 +25,7 @@ trait DynamicMethodTrait
         if (TraitUtil::hasHookTrait($this) && $this->hookHasCallbacks($hookName)) {
             $result = $this->hook($hookName, $args);
 
-            return reset($result);
+            return array_first($result);
         }
 
         // match native PHP behavior as much as possible
