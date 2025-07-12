@@ -56,7 +56,7 @@ class Generic implements ITranslatorAdapter
         $foundDefinition = null;
         switch ($count) {
             case 0:
-                $foundDefinition = $definition['zero'] ?? end($definition);
+                $foundDefinition = $definition['zero'] ?? array_last($definition);
 
                 break;
             case 1:
@@ -71,7 +71,7 @@ class Generic implements ITranslatorAdapter
 
         // if no definition found get the first from array
         if ($foundDefinition === null) {
-            $foundDefinition = reset($definition);
+            $foundDefinition = array_first($definition);
         }
 
         return $this->processMessage($foundDefinition, $parameters);

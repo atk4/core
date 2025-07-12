@@ -155,7 +155,7 @@ class Html extends RendererAbstract
 
         $inAtk = true;
         $shortTrace = $this->getStackTrace(true);
-        $isShortened = end($shortTrace) && key($shortTrace) !== 0 && key($shortTrace) !== 'self';
+        $isShortened = array_key_last($shortTrace) > 0 && array_key_last($shortTrace) !== 'self';
         foreach ($shortTrace as $index => $call) {
             $call = $this->parseStackTraceFrame($call);
 
