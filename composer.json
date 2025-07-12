@@ -38,7 +38,7 @@
         "symfony/polyfill-php82": "^1.28",
         "symfony/polyfill-php83": "^1.28",
         "symfony/polyfill-php84": "^1.29",
-        "symfony/polyfill-php85": "dev-1.x as 1.33 || ^1.33",
+        "symfony/polyfill-php85": "^1.33 || 1.x-dev as 1.33",
         "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0 || ^7.0"
     },
     "require-dev": {
