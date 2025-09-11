@@ -23,7 +23,7 @@ class Translator
 
     protected string $defaultLocale = 'en';
 
-    private function __construct()
+    protected function __construct()
     {
         // singleton
     }
