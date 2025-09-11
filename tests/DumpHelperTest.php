@@ -81,10 +81,10 @@ class DumpHelperTest extends TestCase
 
         $o2 = new class('x', 'y') extends DumpHelperPriPro {
             protected string $pro;
-            private bool $a; // @phpstan-ignore property.onlyWritten
+            private bool $a; // @phpstan-ignore property.onlyWritten, property.tooWideBool
             protected bool $b;
             public bool $c;
-            private bool $pri; // @phpstan-ignore property.onlyWritten
+            private bool $pri; // @phpstan-ignore property.onlyWritten, property.tooWideBool
 
             public function __construct(string $pri, string $pro)
             {
@@ -471,10 +471,10 @@ class DumpHelperTest extends TestCase
         yield 'redeclared private property' => [static function () {
             $o = new class('x', 'y') extends DumpHelperPriPro {
                 protected string $pro;
-                private bool $a; // @phpstan-ignore property.onlyWritten
+                private bool $a; // @phpstan-ignore property.onlyWritten, property.tooWideBool
                 protected bool $b = false;
                 public bool $c = false;
-                private bool $pri; // @phpstan-ignore property.onlyWritten
+                private bool $pri; // @phpstan-ignore property.onlyWritten, property.tooWideBool
 
                 public function __construct(string $pri, string $pro)
                 {
