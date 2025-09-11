@@ -329,7 +329,7 @@ trait HookTrait
                         }
                     }
 
-                    if (!isset($this->hooks[$spot])) { // @phpstan-ignore isset.offset
+                    if (!isset($this->hooks[$spot])) { // @phpstan-ignore isset.offset, isset.initializedProperty, notIdentical.alwaysTrue
                         break;
                     } elseif ($hooksBackup !== $this->hooks[$spot]) {
                         krsort($this->hooks[$spot]);
