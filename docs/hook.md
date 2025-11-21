@@ -194,7 +194,7 @@ public function set($field, $value)
     $this->data[$field] = $value;
 }
 
-$m->onHook('normalize', function (&$a) {
+$m->onHook('normalize', function ($entity, &$a) {
     $a = trim($a);
 });
 ```
