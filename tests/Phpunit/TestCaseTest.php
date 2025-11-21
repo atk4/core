@@ -60,7 +60,9 @@ class TestCaseTest extends TestCase
         self::assertSame('default', $this->object);
         self::assertNull($this->objectTyped);
         $reflectionProperty = new \ReflectionProperty($this, 'objectTypedNoDefault');
-        $reflectionProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 8_01_00) {
+            $reflectionProperty->setAccessible(true);
+        }
         self::assertFalse($reflectionProperty->isInitialized($this));
 
         if ($v === 'a') {

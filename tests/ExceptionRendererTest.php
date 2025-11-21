@@ -16,7 +16,9 @@ class ExceptionRendererTest extends TestCase
     {
         $setExceptionPropertyFx = static function (\Exception $e, string $k, $v) {
             $propRefl = new \ReflectionProperty(\Exception::class, $k);
-            $propRefl->setAccessible(true);
+            if (\PHP_VERSION_ID < 8_01_00) {
+                $propRefl->setAccessible(true);
+            }
             $propRefl->setValue($e, $v);
         };
 
