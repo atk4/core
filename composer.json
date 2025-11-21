@@ -51,6 +51,11 @@
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^9.5.5 || ^10.0 || ^11.0 || ^12.0"
     },
+    "conflict": {
+        "nikic/php-parser": "<4.19 || >=5 <5.1",
+        "phar-io/manifest": "<2.0.4",
+        "sebastian/recursion-context": ">=6 <6.0.3 || 7.0.0"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
