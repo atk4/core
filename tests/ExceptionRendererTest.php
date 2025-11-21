@@ -16,7 +16,9 @@ class ExceptionRendererTest extends TestCase
     {
         $setExceptionPropertyFx = static function (\Exception $e, string $k, $v) {
             $propRefl = new \ReflectionProperty(\Exception::class, $k);
-            $propRefl->setAccessible(true);
+            if (\PHP_VERSION_ID < 8_01_00) {
+                $propRefl->setAccessible(true);
+            }
             $propRefl->setValue($e, $v);
         };
 
@@ -290,15 +292,15 @@ class ExceptionRendererTest extends TestCase
 
     public function testExceptionFallback(): void
     {
-        $e = new ExceptionThrowError('test', 2);
+        $e = new ExceptionThrowError('test / 👍', 2);
         $expectedFallbackText = '!! ATK4 CORE ERROR - EXCEPTION RENDER FAILED: '
-            . ExceptionThrowError::class . '(2): test !!';
+            . ExceptionThrowError::class . '(2): test / 👍 !!';
         self::assertSame($expectedFallbackText, $e->getHtml());
         self::assertSame($expectedFallbackText, $e->getColorfulText());
         self::assertSame(
             json_encode(
                 [
-                    'message' => 'ATK4 CORE ERROR - EXCEPTION JSON RENDER FAILED: test',
+                    'message' => 'ATK4 CORE ERROR - EXCEPTION JSON RENDER FAILED: test / 👍',
                     'title' => ExceptionThrowError::class,
                     'class' => ExceptionThrowError::class,
                     'code' => 2,
@@ -312,7 +314,7 @@ class ExceptionRendererTest extends TestCase
                         'code' => 0,
                     ],
                 ],
-                \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE
+                \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE
             ),
             $e->getJson()
         );

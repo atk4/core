@@ -160,11 +160,15 @@ abstract class TestCase extends BaseTestCase
         };
 
         $traceReflectionProperty = new \ReflectionProperty($e instanceof \Exception ? \Exception::class : \Error::class, 'trace');
-        $traceReflectionProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 8_01_00) {
+            $traceReflectionProperty->setAccessible(true);
+        }
         $traceReflectionProperty->setValue($e, $replaceObjectsFx($traceReflectionProperty->getValue($e)));
         if ($e instanceof CoreException) {
             $paramsReflectionProperty = new \ReflectionProperty(CoreException::class, 'params');
-            $paramsReflectionProperty->setAccessible(true);
+            if (\PHP_VERSION_ID < 8_01_00) {
+                $paramsReflectionProperty->setAccessible(true);
+            }
             $paramsReflectionProperty->setValue($e, $replaceObjectsFx($paramsReflectionProperty->getValue($e)));
         }
 

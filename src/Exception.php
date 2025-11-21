@@ -44,7 +44,9 @@ class Exception extends \Exception implements SelfDescribing // @phpstan-ignore 
             }
         }
         $traceReflectionProperty = new \ReflectionProperty(parent::class, 'trace');
-        $traceReflectionProperty->setAccessible(true);
+        if (\PHP_VERSION_ID < 8_01_00) {
+            $traceReflectionProperty->setAccessible(true);
+        }
         $traceReflectionProperty->setValue($this, $trace);
     }
 

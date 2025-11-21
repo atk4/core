@@ -18,15 +18,6 @@ namespace Atk4\Core;
  *  - ignore defaults that have null value
  *  - if existing property and default have array, then both arrays will be merged
  *
- * Several classes may opt to extend setDefaults, for example in Agile UI
- * setDefaults is extended to support classes and content:
- *
- * $segment->setDefaults(['Hello There', 'red', 'ui' => 'segment']);
- *
- * WARNING: Do not use this trait unless you have a lot of properties
- * to inject. Also follow the guidelines on
- * https://github.com/atk4/ui/wiki/Object-Constructors
- *
  * Relying on this trait excessively may cause anger management issues to
  * some code reviewers.
  */
