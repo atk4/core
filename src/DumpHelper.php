@@ -373,7 +373,9 @@ class DumpHelper
             $value = strrev(implode('_', str_split(strrev($str), 3)))
                 . ($decimal === false ? '' : $decimal);
         } elseif (is_float($value)) {
-            $value = (string) $value;
+            $value = is_nan($value)
+                ? 'NAN'
+                : (string) $value;
         } elseif (is_string($value)) {
             $value = str_contains($value, "\n") || str_contains($value, "\r")
                 ? "<<<'EOD'\n" . implode('', array_map(fn ($v) => $this->makeIndent($depth + 1) . $v, preg_split('~(?:\r\n?|\n)\K~', $value . "\nEOD")))
@@ -428,6 +430,10 @@ class DumpHelper
      */
     protected function _printReadable(&$value, ?string $rid, int $maxDepth, array &$duplicateOids, array &$duplicateRids, int $depth = 0): void
     {
+        if (\PHP_VERSION_ID >= 8_05_00 && $rid === null) {
+            $rid = '';
+        }
+
         $isNewDuplicateRef = false;
         if (($duplicateRids[$rid][0] ?? 0) !== 0) {
             echo $this->formatRidIndex($duplicateRids[$rid][1]) . ' ';
