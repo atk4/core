@@ -27,7 +27,7 @@ class QuietObjectWrapper
         // prevent cloning
     }
 
-    public function __sleep(): array
+    public function __serialize(): array
     {
         throw new Exception('Serialization is not supported');
     }
