@@ -51,7 +51,7 @@ class DumpHelper
             : $this->getReflectionProperties($parentClass);
 
         foreach ((new \ReflectionClass($class))->getProperties() as $reflectionProperty) {
-            if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) { // @phpstan-ignore method.notFound
+            if (\PHP_VERSION_ID >= 8_04_00 && $reflectionProperty->isVirtual()) {
                 continue;
             }
 
