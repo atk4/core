@@ -39,7 +39,7 @@
         "symfony/polyfill-php83": "^1.30",
         "symfony/polyfill-php84": "^1.30",
         "symfony/polyfill-php85": "^1.33",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0 || ^7.0"
+        "symfony/yaml": "^3.4 || ^4.4 || ^5.1 || ^6.0 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.13",
@@ -49,7 +49,7 @@
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^9.5.5 || ^10.0 || ^11.0 || ^12.0"
+        "phpunit/phpunit": "^9.5.5 || ^10.0 || ^11.0 || ^12.0 || ^13.0"
     },
     "conflict": {
         "sebastian/recursion-context": ">=6 <6.0.3 || 7.0.0"
