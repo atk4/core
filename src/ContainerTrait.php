@@ -71,7 +71,7 @@ trait ContainerTrait
      * Extension to add() method which will perform linking of
      * the object with the current class.
      *
-     * @param array{desired_name?: string, name?: string} $args
+     * @param array{desired_name?: string, name?: string, ...<mixed, mixed>} $args
      */
     protected function _addContainer(object $element, array $args): void
     {
