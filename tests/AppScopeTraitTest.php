@@ -69,7 +69,7 @@ class AppScopeMock
     use NameTrait;
 
     /**
-     * @param array<mixed, mixed> $args
+     * @param array<mixed> $args
      */
     public function add(object $obj, array $args = []): object
     {
@@ -84,7 +84,7 @@ class AppScopeMock2
     use ContainerTrait;
 
     /**
-     * @param array<mixed, mixed> $args
+     * @param array<mixed> $args
      */
     public function add(object $obj, array $args = []): object
     {
