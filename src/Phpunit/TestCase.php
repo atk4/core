@@ -34,12 +34,36 @@ if (\PHP_VERSION_ID >= 8_01_00) {
     }
 }
 
+if (method_exists(BaseTestCase::class, 'expectExceptionMessageIs')) {
+    trait Phpunit132TestCaseTrait {}
+} else {
+    trait Phpunit132TestCaseTrait
+    {
+        /**
+         * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
+         */
+        public function expectExceptionMessageIs(string $message): void
+        {
+            $this->expectExceptionMessage($message); // WARNING: not exact
+        }
+
+        /**
+         * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
+         */
+        public function expectExceptionMessageIsOrContains(string $message): void
+        {
+            $this->expectExceptionMessage($message);
+        }
+    }
+}
+
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
  */
 abstract class TestCase extends BaseTestCase
 {
     use Phpunit9xTestCaseTrait;
+    use Phpunit132TestCaseTrait;
     use WarnDynamicPropertyTrait;
 
     final public static function isPhpunit9x(): bool
@@ -193,29 +217,5 @@ abstract class TestCase extends BaseTestCase
         gc_collect_cycles();
 
         parent::onNotSuccessfulTest($e);
-    }
-
-    /**
-     * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
-     */
-    public function expectExceptionMessageIs(string $message): void
-    {
-        if (method_exists(parent::class, 'expectExceptionMessageIs')) {
-            parent::expectExceptionMessageIs($message);
-        } else {
-            $this->expectExceptionMessage($message); // WARNING: not exact
-        }
-    }
-
-    /**
-     * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
-     */
-    public function expectExceptionMessageIsOrContains(string $message): void
-    {
-        if (method_exists(parent::class, 'expectExceptionMessageIsOrContains')) {
-            parent::expectExceptionMessageIsOrContains($message);
-        } else {
-            $this->expectExceptionMessage($message);
-        }
     }
 }
