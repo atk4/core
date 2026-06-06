@@ -46,7 +46,7 @@ class AppScopeTraitTest extends TestCase
         $m = new AppScopeMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('App is not set');
+        $this->expectExceptionMessageIs('App is not set');
         $m->getApp();
     }
 
@@ -57,7 +57,7 @@ class AppScopeTraitTest extends TestCase
         $m->setApp($fakeApp);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('App is already set');
+        $this->expectExceptionMessageIs('App is already set');
         $m->setApp($fakeApp);
     }
 }

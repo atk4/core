@@ -194,4 +194,28 @@ abstract class TestCase extends BaseTestCase
 
         parent::onNotSuccessfulTest($e);
     }
+
+    /**
+     * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
+     */
+    public function expectExceptionMessageIs(string $message): void
+    {
+        if (method_exists(parent::class, 'expectExceptionMessageIs')) {
+            parent::expectExceptionMessageIs($message);
+        } else {
+            $this->expectExceptionMessage($message); // WARNING: not exact
+        }
+    }
+
+    /**
+     * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
+     */
+    public function expectExceptionMessageIsOrContains(string $message): void
+    {
+        if (method_exists(parent::class, 'expectExceptionMessageIsOrContains')) {
+            parent::expectExceptionMessageIsOrContains($message);
+        } else {
+            $this->expectExceptionMessage($message);
+        }
+    }
 }

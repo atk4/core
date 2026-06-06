@@ -35,7 +35,7 @@ class TraitUtilTest extends TestCase
     public function testHasTraitNoAtk4CoreException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage(TraitUtil::class . '::hasTrait() method is not intended for use with other than Atk4\Core\* traits');
+        $this->expectExceptionMessageIs(TraitUtil::class . '::hasTrait() method is not intended for use with other than Atk4\Core\* traits');
         TraitUtil::hasTrait(TraitUtilTestA::class, MockObjectMethodTrait::class); // @phpstan-ignore classConstant.internalTrait
     }
 }

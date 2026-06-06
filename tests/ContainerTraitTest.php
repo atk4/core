@@ -143,7 +143,7 @@ class ContainerTraitTest extends TestCase
         self::assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Element has too long desired name');
+        $this->expectExceptionMessageIs('Element has too long desired name');
         self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100), true))->name));
     }
 
@@ -152,7 +152,7 @@ class ContainerTraitTest extends TestCase
         $m = new TrackableMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Owner is not set');
+        $this->expectExceptionMessageIs('Owner is not set');
         $m->getOwner();
     }
 
@@ -163,7 +163,7 @@ class ContainerTraitTest extends TestCase
         $m->setOwner($owner);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Owner is already set');
+        $this->expectExceptionMessageIs('Owner is already set');
         $m->setOwner($owner);
     }
 
@@ -210,7 +210,7 @@ class ContainerTraitTest extends TestCase
         $m->add(new TrackableMock(), 'foo');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Element with requested name already exists');
+        $this->expectExceptionMessageIs('Element with requested name already exists');
         $m->add(new TrackableMock(), 'foo');
     }
 
@@ -231,7 +231,7 @@ class ContainerTraitTest extends TestCase
         $m2foo = $m2->add(new TrackableMock(), 'foo');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Element with requested name already exists');
+        $this->expectExceptionMessageIs('Element with requested name already exists');
         $m2->add($m1foo); // will carry on short name and run into collision
     }
 
@@ -246,7 +246,7 @@ class ContainerTraitTest extends TestCase
         }
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('array_diff_key(): Argument #1 ($array) must be of type array, int given');
+        $this->expectExceptionMessageIs('array_diff_key(): Argument #1 ($array) must be of type array, int given');
         $m->add(new TrackableMock(), 123); // @phpstan-ignore argument.type
     }
 
@@ -255,7 +255,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage(\PHP_MAJOR_VERSION === 7 ? 'Class \'hello\' not found' : 'Class "hello" not found');
+        $this->expectExceptionMessageIs(\PHP_MAJOR_VERSION === 7 ? 'Class \'hello\' not found' : 'Class "hello" not found');
         $m->add(['hello']);
     }
 
@@ -264,7 +264,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Child element not found');
+        $this->expectExceptionMessageIs('Child element not found');
         $m->getElement('dont_exist');
     }
 
@@ -273,7 +273,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Child element not found');
+        $this->expectExceptionMessageIs('Child element not found');
         $m->removeElement('dont_exist');
     }
 
@@ -282,7 +282,7 @@ class ContainerTraitTest extends TestCase
         $m = new ContainerMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object was not initialized');
+        $this->expectExceptionMessageIs('Object was not initialized');
         $m->add(new class extends TrackableMock {
             use InitializerTrait;
 

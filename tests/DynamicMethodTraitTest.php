@@ -36,7 +36,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to undefined method ' . DynamicMethodMock::class . '::unknownMethod()');
+        $this->expectExceptionMessageIs('Call to undefined method ' . DynamicMethodMock::class . '::unknownMethod()');
         $m->unknownMethod();
     }
 
@@ -45,7 +45,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to private method ' . DynamicMethodMock::class
+        $this->expectExceptionMessageIs('Call to private method ' . DynamicMethodMock::class
             . '::privateMethod() from scope ' . static::class);
         $m->__call('privateMethod', []);
     }
@@ -59,7 +59,7 @@ class DynamicMethodTraitTest extends TestCase
         }, null, DynamicMethodMock::class)();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to protected method ' . DynamicMethodMock::class
+        $this->expectExceptionMessageIs('Call to protected method ' . DynamicMethodMock::class
             . '::protectedMethod() from global scope');
         \Closure::bind(static function () use ($m) {
             $m->protectedMethod(); // @phpstan-ignore method.protected
@@ -71,7 +71,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodWithoutHookMock();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Call to undefined method ' . DynamicMethodWithoutHookMock::class . '::unknownMethod()');
+        $this->expectExceptionMessageIs('Call to undefined method ' . DynamicMethodWithoutHookMock::class . '::unknownMethod()');
         $m->unknownMethod();
     }
 
@@ -80,7 +80,7 @@ class DynamicMethodTraitTest extends TestCase
         $m = new DynamicMethodWithoutHookMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object must use HookTrait for dynamic method support');
+        $this->expectExceptionMessageIs('Object must use HookTrait for dynamic method support');
         $m->addMethod('sum', $this->createSumFx());
     }
 
@@ -103,7 +103,7 @@ class DynamicMethodTraitTest extends TestCase
         $m->addMethod('sum', $this->createSumFx());
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Method is already defined');
+        $this->expectExceptionMessageIs('Method is already defined');
         $m->addMethod('sum', $this->createSumFx());
     }
 

@@ -954,7 +954,7 @@ class DumpHelperTest extends TestCase
         $arrArrScalarThrow = ['foo' => [true], new DumpHelperWithDebugInfoThrow()];
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Depth limit must be honored');
+        $this->expectExceptionMessageIs('Depth limit must be honored');
         $dumpHelper->printReadable($arrArrScalarThrow, 1);
     }
 }

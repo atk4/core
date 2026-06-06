@@ -40,7 +40,7 @@ class InitializerTraitTest extends TestCase
         self::assertFalse($m->isInitialized());
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object was not initialized');
+        $this->expectExceptionMessageIs('Object was not initialized');
         $m->assertIsInitialized();
     }
 
@@ -52,7 +52,7 @@ class InitializerTraitTest extends TestCase
         };
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object was not initialized');
+        $this->expectExceptionMessageIs('Object was not initialized');
         $m->invokeInit();
     }
 
@@ -63,7 +63,7 @@ class InitializerTraitTest extends TestCase
         self::assertTrue($m->isInitialized());
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object already initialized');
+        $this->expectExceptionMessageIs('Object already initialized');
         $m->invokeInit();
     }
 
@@ -75,7 +75,7 @@ class InitializerTraitTest extends TestCase
         };
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Init method must have protected visibility');
+        $this->expectExceptionMessageIs('Init method must have protected visibility');
         $m->invokeInit();
     }
 }

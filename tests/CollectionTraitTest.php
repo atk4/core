@@ -98,7 +98,7 @@ class CollectionTraitTest extends TestCase
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Collection does not exist');
+        $this->expectExceptionMessageIs('Collection does not exist');
         \Closure::bind(static fn () => $m->_addIntoCollection('foo', (object) [], ''), null, CollectionMock::class)(); // empty collection name
     }
 
@@ -110,7 +110,7 @@ class CollectionTraitTest extends TestCase
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Empty name is not supported');
+        $this->expectExceptionMessageIs('Empty name is not supported');
         \Closure::bind(static fn () => $m->_addIntoCollection('', (object) [], 'fields'), null, CollectionMock::class)(); // empty object name
     }
 
@@ -123,7 +123,7 @@ class CollectionTraitTest extends TestCase
         \Closure::bind(static fn () => $m->_addIntoCollection('foo', (object) [], 'fields'), null, CollectionMock::class)();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Element with the same name already exists in the collection');
+        $this->expectExceptionMessageIs('Element with the same name already exists in the collection');
         \Closure::bind(static fn () => $m->_addIntoCollection('foo', (object) [], 'fields'), null, CollectionMock::class)(); // already exists
     }
 
@@ -135,7 +135,7 @@ class CollectionTraitTest extends TestCase
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Element is not in the collection');
+        $this->expectExceptionMessageIs('Element is not in the collection');
         \Closure::bind(static fn () => $m->_getFromCollection('dont_exist', 'fields'), null, CollectionMock::class)(); // does not exist
     }
 
@@ -147,7 +147,7 @@ class CollectionTraitTest extends TestCase
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Element is not in the collection');
+        $this->expectExceptionMessageIs('Element is not in the collection');
         \Closure::bind(static fn () => $m->_removeFromCollection('dont_exist', 'fields'), null, CollectionMock::class)(); // does not exist
     }
 
@@ -156,7 +156,7 @@ class CollectionTraitTest extends TestCase
         $m = new CollectionMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object was not initialized');
+        $this->expectExceptionMessageIs('Object was not initialized');
         $m->addField('foo', new class extends FieldMock {
             use InitializerTrait;
 

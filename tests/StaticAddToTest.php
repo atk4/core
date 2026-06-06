@@ -86,7 +86,7 @@ class StaticAddToTest extends TestCase
 
         // object is not a subtype
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object is not an instance of static class');
+        $this->expectExceptionMessageIs('Object is not an instance of static class');
         StdSat2::assertInstanceOf(new StdSat());
     }
 
