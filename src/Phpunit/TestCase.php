@@ -44,7 +44,7 @@ if (method_exists(BaseTestCase::class, 'expectExceptionMessageIs')) { // @phpsta
          */
         public function expectExceptionMessageIs(string $message): void
         {
-            $this->expectExceptionMessage($message); // WARNING: not exact
+            $this->expectExceptionMessageMatches('~^' . preg_quote($message, '~') . '$~');
         }
 
         /**
