@@ -34,7 +34,7 @@ if (\PHP_VERSION_ID >= 8_01_00) {
     }
 }
 
-if (method_exists(BaseTestCase::class, 'expectExceptionMessageIs')) {
+if (method_exists(BaseTestCase::class, 'expectExceptionMessageIs')) { // @phpstan-ignore function.alreadyNarrowedType
     trait Phpunit132TestCaseTrait {}
 } else {
     trait Phpunit132TestCaseTrait
@@ -62,8 +62,8 @@ if (method_exists(BaseTestCase::class, 'expectExceptionMessageIs')) {
  */
 abstract class TestCase extends BaseTestCase
 {
-    use Phpunit9xTestCaseTrait;
     use Phpunit132TestCaseTrait;
+    use Phpunit9xTestCaseTrait;
     use WarnDynamicPropertyTrait;
 
     final public static function isPhpunit9x(): bool
