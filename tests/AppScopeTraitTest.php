@@ -46,7 +46,7 @@ class AppScopeTraitTest extends TestCase
         $m = new AppScopeMock();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('App is not set');
+        $this->expectExceptionMessageIs('App is not set');
         $m->getApp();
     }
 
@@ -57,7 +57,7 @@ class AppScopeTraitTest extends TestCase
         $m->setApp($fakeApp);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('App is already set');
+        $this->expectExceptionMessageIs('App is already set');
         $m->setApp($fakeApp);
     }
 }
@@ -69,7 +69,7 @@ class AppScopeMock
     use NameTrait;
 
     /**
-     * @param array{desired_name?: string, name?: string} $args
+     * @param array<mixed> $args
      */
     public function add(object $obj, array $args = []): object
     {
@@ -84,7 +84,7 @@ class AppScopeMock2
     use ContainerTrait;
 
     /**
-     * @param array{desired_name?: string, name?: string} $args
+     * @param array<mixed> $args
      */
     public function add(object $obj, array $args = []): object
     {

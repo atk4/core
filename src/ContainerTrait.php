@@ -41,8 +41,8 @@ trait ContainerTrait
      * use this add() method. If you are also using factory, or
      * initializer then redefine add() and call _addContainer, _addFactory.
      *
-     * @param object|array<mixed, mixed> $obj
-     * @param array<mixed, mixed>|string $args
+     * @param object|array<mixed> $obj
+     * @param array<mixed>|string $args
      */
     public function add($obj, $args = []): object
     {
@@ -71,7 +71,7 @@ trait ContainerTrait
      * Extension to add() method which will perform linking of
      * the object with the current class.
      *
-     * @param array{desired_name?: string, name?: string} $args
+     * @param array{desired_name?: string, name?: string, ...<mixed>} $args
      */
     protected function _addContainer(object $element, array $args): void
     {

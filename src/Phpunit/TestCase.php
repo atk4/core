@@ -34,11 +34,35 @@ if (\PHP_VERSION_ID >= 8_01_00) {
     }
 }
 
+if (method_exists(BaseTestCase::class, 'expectExceptionMessageIs')) { // @phpstan-ignore function.alreadyNarrowedType
+    trait Phpunit132TestCaseTrait {}
+} else {
+    trait Phpunit132TestCaseTrait
+    {
+        /**
+         * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
+         */
+        public function expectExceptionMessageIs(string $message): void
+        {
+            $this->expectExceptionMessageMatches('~^' . preg_quote($message, '~') . '$~');
+        }
+
+        /**
+         * Backport https://github.com/sebastianbergmann/phpunit/commit/8987840e .
+         */
+        public function expectExceptionMessageIsOrContains(string $message): void
+        {
+            $this->expectExceptionMessage($message);
+        }
+    }
+}
+
 /**
  * Generic TestCase for PHPUnit tests for ATK4 repos.
  */
 abstract class TestCase extends BaseTestCase
 {
+    use Phpunit132TestCaseTrait;
     use Phpunit9xTestCaseTrait;
     use WarnDynamicPropertyTrait;
 

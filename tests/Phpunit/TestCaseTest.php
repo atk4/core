@@ -23,6 +23,22 @@ class TestCaseTest extends TestCase
 
     private static int $providerCoverageCallCounter = 0;
 
+    public function testExpectExceptionMessageIs(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageIs('foo ^');
+
+        throw new Exception('foo ^');
+    }
+
+    public function testExpectExceptionMessageIsOrContains(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageIsOrContains('foo ^');
+
+        throw new Exception('x foo ^ y');
+    }
+
     protected function createAndCountObject(): object
     {
         $destructFx = static function () {

@@ -296,7 +296,7 @@ class HookTraitTest extends TestCase
         });
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('stuff went wrong');
+        $this->expectExceptionMessageIs('stuff went wrong');
         $m->hook('inc');
     }
 
@@ -363,7 +363,7 @@ class HookTraitTest extends TestCase
         $m = clone $m;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object cannot be cloned with hook bound to a different object than this');
+        $this->expectExceptionMessageIs('Object cannot be cloned with hook bound to a different object than this');
         $m->hook('inc');
     }
 
@@ -445,7 +445,7 @@ class HookTraitTest extends TestCase
         $m = new HookMock();
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('New $this getter must be static');
+        $this->expectExceptionMessageIs('New $this getter must be static');
         $m->onHookDynamic('inc', function (HookMock $m) {
             self::isPhpunit9x() ? $this->getName(false) : $this->name(); // @phpstan-ignore method.internal (prevent PHP CS Fixer to make this anonymous function static)
 
@@ -462,7 +462,7 @@ class HookTraitTest extends TestCase
         }, $m->makeIncrementResultFx());
 
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('New $this must be an object');
+        $this->expectExceptionMessageIs('New $this must be an object');
         $m->hook('inc');
     }
 

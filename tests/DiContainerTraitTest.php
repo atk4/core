@@ -17,7 +17,7 @@ class DiContainerTraitTest extends TestCase
         self::assertSame(StdSat2::class, get_class(StdSat::fromSeed([StdSat2::class])));
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Seed class is not a subtype of static class');
+        $this->expectExceptionMessageIs('Seed class is not a subtype of static class');
         StdSat2::fromSeed([StdSat::class]);
     }
 
@@ -26,7 +26,7 @@ class DiContainerTraitTest extends TestCase
         $m = new FactoryDiMock2();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Property for specified object is not defined');
+        $this->expectExceptionMessageIs('Property for specified object is not defined');
         $m->setDefaults(['not_exist' => 'qwerty']);
     }
 
@@ -35,7 +35,7 @@ class DiContainerTraitTest extends TestCase
         $m = new FactoryDiMock2();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Property for specified object is not defined');
+        $this->expectExceptionMessageIs('Property for specified object is not defined');
         $m->setDefaults([5 => 'qwerty']); // @phpstan-ignore argument.type
     }
 
@@ -97,7 +97,7 @@ class DiContainerTraitTest extends TestCase
         self::assertTrue($catchCalled);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Seed class is not a subtype of static class');
+        $this->expectExceptionMessageIs('Seed class is not a subtype of static class');
         FactoryDiMockConstructorMustNeverBeCalled2::fromSeed([FactoryDiMockConstructorMustNeverBeCalled::class]);
     }
 }
