@@ -103,7 +103,7 @@ class WarnDynamicPropertyTraitTest extends TestCase
 
             $this->expectException(WarnError::class);
             $this->expectExceptionMessageIs('Undefined property: Atk4\Core\Exception::$trace');
-            $test->trace; // @phpstan-ignore property.notFound, expr.resultUnused
+            $test->trace; // @phpstan-ignore property.private, expr.resultUnused
         });
     }
 
