@@ -23,6 +23,13 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Core\\Tests\\(DynamicMethodMock|DynamicMethodWithoutHookMock)::\w+\(\)\.$~'
             count: 10
 
+        # TODO report to phpstan, errors cannot be ignore inline
+        -
+            path: 'src/HookTrait.php'
+            identifier: isset.initializedProperty
+            message: '~^Property Atk4\\Core\\Tests\\\w+::\$hooks in isset\(\) is not nullable nor uninitialized\.$~'
+            count: 3
+
         # remove once PHPUnit 9.x support is removed
         -
             path: 'src/Phpunit/TestCase.php'
