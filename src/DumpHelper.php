@@ -541,7 +541,7 @@ class DumpHelper
                     --$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
                 }
                 if ($isNewDuplicateObject) {
-                    --$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
+                    --$duplicateOids[$oid]; // @phpstan-ignore parameterByRef.type
                 }
 
                 try {
@@ -551,7 +551,7 @@ class DumpHelper
                         ++$duplicateRids[$rid][0]; // @phpstan-ignore parameterByRef.type
                     }
                     if ($isNewDuplicateObject) {
-                        ++$duplicateOids[$oid]; // @phpstan-ignore variable.undefined, parameterByRef.type
+                        ++$duplicateOids[$oid]; // @phpstan-ignore parameterByRef.type
                     }
                 }
             }

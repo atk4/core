@@ -150,7 +150,7 @@ class FactoryTest extends TestCase
         $o = new FactoryTestViewMock();
         $o->foo = ['red'];
         $oo = Factory::mergeSeeds(['foo' => ['green']], $o);
-        $oo = Factory::mergeSeeds(['foo' => ['xx']], $o);
+        Factory::mergeSeeds(['foo' => ['xx']], $o);
 
         self::assertSame($o, $oo);
         self::assertSame(['red', 'green', 'xx'], $oo->foo);
@@ -369,8 +369,6 @@ class FactoryTest extends TestCase
 
     public function testFactory(): void
     {
-        $m = new FactoryFactoryMock();
-
         // pass object
         $m1 = new FactoryFactoryMock();
         $m2 = Factory::factory($m1);
@@ -392,14 +390,11 @@ class FactoryTest extends TestCase
     {
         // wrong 1st parameter
         $this->expectException(Exception::class);
-        $m = new FactoryFactoryMock();
         Factory::factory(['wrong_parameter' => 'qwerty']);
     }
 
     public function testFactoryParameters(): void
     {
-        $m = new FactoryFactoryDiMock();
-
         // as class name
         $m1 = Factory::factory([FactoryFactoryMock::class]);
         self::assertSame(FactoryFactoryMock::class, get_class($m1));
@@ -454,7 +449,6 @@ class FactoryTest extends TestCase
     {
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);
-        $m = new FactoryFactoryMock();
         Factory::factory([FactoryFactoryMock::class], ['not_exist' => 'test']);
     }
 
@@ -466,7 +460,6 @@ class FactoryTest extends TestCase
     {
         // wrong property in 2nd parameter
         $this->expectException(Exception::class);
-        $m = new FactoryFactoryMock();
         $m1 = Factory::factory([FactoryFactoryMock::class]);
         Factory::factory($m1, ['not_exist' => 'test']);
     }

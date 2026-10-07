@@ -86,11 +86,7 @@ class Console extends RendererAbstract
             return;
         }
 
-        if (count($this->exception->getSolutions()) === 0) {
-            return;
-        }
-
-        foreach ($this->exception->getSolutions() as $key => $val) {
+        foreach ($this->exception->getSolutions() as $val) {
             $this->output .= "\n" . $this->text('Solution: ' . $val, [self::COLOR_BRIGHT_GREEN]);
         }
     }

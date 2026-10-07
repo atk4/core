@@ -62,8 +62,8 @@ class ContainerTraitTest extends TestCase
         $m = $m->add(new ContainerAppMock(), 'jumps-over-a-lazy-dog');
         $m = $m->add(new ContainerAppMock(), 'then-they-go-out-for-a-pint');
         $m = $m->add(new ContainerAppMock(), 'eat-a-stake');
-        $x = $m->add(new ContainerAppMock(), 'with');
-        $x = $m->add(new ContainerAppMock(), 'a');
+        $x = $m->add(new ContainerAppMock(), 'with'); // @phpstan-ignore assign.overwritten
+        $x = $m->add(new ContainerAppMock(), 'a'); // @phpstan-ignore assign.overwritten
         $x = $m->add(new ContainerAppMock(), 'mint');
 
         self::assertSame(
@@ -79,7 +79,7 @@ class ContainerTraitTest extends TestCase
         self::assertSame(2, $m->getElementCount());
         $m->add(new \stdClass());
 
-        self::assertSame(2, $m->getElementCount());
+        self::assertSame(2, $m->getElementCount()); // @phpstan-ignore staticMethod.alreadyNarrowedType
     }
 
     public function testLongNames2(): void
@@ -89,28 +89,24 @@ class ContainerTraitTest extends TestCase
         $app->maxNameLength = 40;
         $app->name = 'my-app-name-is-pretty-long';
 
-        $minLength = 9999;
-        $minLengthValue = '';
-        $maxLength = 0;
-        $maxLengthValue = '';
+        $minLengthValue = null;
+        $maxLengthValue = null;
 
         for ($x = 1; $x < 100; ++$x) {
             $sh = str_repeat('x', $x);
             $m = $app->add(new ContainerAppMock(), $sh);
-            if (strlen($m->name) > $maxLength) {
-                $maxLength = strlen($m->name);
+            if ($maxLengthValue === null || strlen($m->name) > strlen($maxLengthValue)) {
                 $maxLengthValue = $m->name;
             }
-            if (strlen($m->name) < $minLength) {
-                $minLength = strlen($m->name);
+            if ($minLengthValue === null || strlen($m->name) < strlen($minLengthValue)) {
                 $minLengthValue = $m->name;
             }
         }
 
         // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        self::assertGreaterThanOrEqual(15, $minLength);
+        self::assertGreaterThanOrEqual(15, strlen($minLengthValue));
         // hash is 10 and we want 5 chars minimum for the right side e.g. XYXYXYXY__abcde
-        self::assertLessThanOrEqual($app->maxNameLength, $maxLength);
+        self::assertLessThanOrEqual($app->maxNameLength, strlen($maxLengthValue));
     }
 
     public function testPreservePresetNames(): void
@@ -138,7 +134,7 @@ class ContainerTraitTest extends TestCase
         self::assertSame('r_foo', $app->add($createTrackableMockFx('foo'))->name);
         self::assertSame('r_bar', $app->add($createTrackableMockFx('bar'))->name);
         self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
-        self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name));
+        self::assertSame(40, strlen($app->add($createTrackableMockFx(str_repeat('x', 100)))->name)); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
         self::assertSame('foo', $app->add($createTrackableMockFx('foo', true))->name);
 
@@ -227,12 +223,12 @@ class ContainerTraitTest extends TestCase
     {
         $m1 = new ContainerMock();
         $m2 = new ContainerMock();
-        $m1foo = $m1->add(new TrackableMock(), 'foo');
-        $m2foo = $m2->add(new TrackableMock(), 'foo');
+        $m1Foo = $m1->add(new TrackableMock(), 'foo');
+        $m2->add(new TrackableMock(), 'foo');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessageIs('Element with requested name already exists');
-        $m2->add($m1foo); // will carry on short name and run into collision
+        $m2->add($m1Foo); // will carry on short name and run into collision
     }
 
     public function testExceptionArg2(): void

@@ -55,12 +55,8 @@ class Json extends RendererAbstract
         /** @var Exception $exception */
         $exception = $this->exception;
 
-        if (count($exception->getSolutions()) === 0) {
-            return;
-        }
-
-        foreach ($exception->getSolutions() as $key => $val) {
-            $this->json['solution'][$key] = $val;
+        foreach ($exception->getSolutions() as $i => $val) {
+            $this->json['solution'][$i] = $val;
         }
     }
 
@@ -77,7 +73,7 @@ class Json extends RendererAbstract
     {
         $inAtk = true;
         $trace = $this->getStackTrace(false);
-        foreach ($trace as $index => $call) {
+        foreach ($trace as $call) {
             $call = $this->parseStackTraceFrame($call);
 
             $escapeFrame = false;
@@ -104,7 +100,7 @@ class Json extends RendererAbstract
         }
 
         $previous = new static($this->exception->getPrevious(), $this->adapter);
-        $text = (string) $previous; // need to trigger processAll;
+        $text = (string) $previous; // need to trigger processAll() @phpstan-ignore variable.unused
 
         $this->json['previous'] = $previous->json;
     }

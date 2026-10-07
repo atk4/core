@@ -77,9 +77,9 @@ trait HookTrait
                 return;
             }
 
-            foreach ($this->hooks as $spot => $hooksByPriority) {
-                foreach ($hooksByPriority as $priority => $hooksByIndex) {
-                    foreach ($hooksByIndex as $index => $hookData) {
+            foreach ($this->hooks as $hooksByPriority) {
+                foreach ($hooksByPriority as $hooksByIndex) {
+                    foreach ($hooksByIndex as $hookData) {
                         $fxRefl = new \ReflectionFunction($hookData[0]);
                         $fxThis = $fxRefl->getClosureThis();
                         if ($fxThis === null) {

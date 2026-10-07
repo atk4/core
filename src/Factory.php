@@ -37,7 +37,7 @@ class Factory
         $injection = [];
         $obj = null;
         $beforeObjKeys = null;
-        foreach ($seeds as $seedIndex => $seed) {
+        foreach ($seeds as $seed) {
             if (is_object($seed)) {
                 if ($obj !== null) {
                     throw new Exception('Two or more objects specified as seed');

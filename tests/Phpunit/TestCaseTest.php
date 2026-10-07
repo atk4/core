@@ -82,9 +82,9 @@ class TestCaseTest extends TestCase
         self::assertFalse($reflectionProperty->isInitialized($this));
 
         if ($v === 'a') {
-            $o = $this->createAndCountObject();
+            $o = $this->createAndCountObject(); // @phpstan-ignore variable.unused
             self::assertSame(1, self::$activeObjectsCounter);
-            $o = null;
+            $o = null; // @phpstan-ignore variable.unused
             self::assertSame(0, self::$activeObjectsCounter);
             $this->object = $this->createAndCountObject();
             self::assertSame(1, self::$activeObjectsCounter);
@@ -115,7 +115,6 @@ class TestCaseTest extends TestCase
             throw (new Exception())
                 ->addMoreInfo('x', $this->createAndCountObject());
         };
-        $e = null;
         try {
             $throwFx($this->createAndCountObject());
         } catch (\Exception $e) {
@@ -123,7 +122,6 @@ class TestCaseTest extends TestCase
         }
         self::assertSame(2, self::$activeObjectsCounter);
 
-        $e2 = null;
         try {
             $this->onNotSuccessfulTest($e);
         } catch (\Error $e2) {

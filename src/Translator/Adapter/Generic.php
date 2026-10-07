@@ -53,7 +53,6 @@ class Generic implements ITranslatorAdapter
      */
     protected function processMessagePlural(array $definition, array $parameters = [], int $count = 1): string
     {
-        $foundDefinition = null;
         switch ($count) {
             case 0:
                 $foundDefinition = $definition['zero'] ?? array_last($definition);

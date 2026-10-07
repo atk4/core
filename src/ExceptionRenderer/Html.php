@@ -110,7 +110,7 @@ class Html extends RendererAbstract
 
                     <tr><td>{VAL}</td></tr>
             EOF;
-        foreach ($exception->getSolutions() as $key => $val) {
+        foreach ($exception->getSolutions() as $val) {
             $tokens['{SOLUTIONS}'] .= $this->replaceTokens($textInner, ['{VAL}' => $this->encodeHtml($val)]);
         }
 
