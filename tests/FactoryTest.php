@@ -237,7 +237,7 @@ class FactoryTest extends TestCase
     public function testDefaults(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'hello', 'foo' => 'bar', 'world'], ['more', 'baz' => '', 'more', 'args']);
-        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertInstanceOf(FactoryTestDiMock::class, $s1);
         self::assertSame(['hello', 'world', 'args'], $s1->args);
         self::assertSame('bar', $s1->foo);
         self::assertSame('', $s1->baz);
@@ -248,22 +248,22 @@ class FactoryTest extends TestCase
     public function testNull(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class, 'foo' => null, null, 'world'], ['more', 'foo' => 'bar', 'more', 'args']);
-        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertInstanceOf(FactoryTestDiMock::class, $s1);
         self::assertSame(['more', 'world', 'args'], $s1->args);
         self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds([FactoryTestDiMock::class, 'foo' => null, null, 'world'], [FactoryTestMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertInstanceOf(FactoryTestDiMock::class, $s1);
         self::assertSame(['more', 'world', 'args'], $s1->args);
         self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds([null, 'foo' => null, null, 'world'], [FactoryTestDiMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertInstanceOf(FactoryTestDiMock::class, $s1);
         self::assertSame(['more', 'world', 'args'], $s1->args);
         self::assertSame('bar', $s1->foo);
 
         $s1 = Factory::factory(Factory::mergeSeeds(null, [FactoryTestDiMock::class, 'more', 'foo' => 'bar', 'more', 'args']));
-        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertInstanceOf(FactoryTestDiMock::class, $s1);
         self::assertSame(['more', 'more', 'args'], $s1->args);
         self::assertSame('bar', $s1->foo);
 
@@ -335,12 +335,12 @@ class FactoryTest extends TestCase
     public function testStringDefault(): void
     {
         $s1 = Factory::factory([FactoryTestDiMock::class], ['hello']);
-        self::assertTrue($s1 instanceof FactoryTestDiMock);
+        self::assertInstanceOf(FactoryTestDiMock::class, $s1);
         self::assertSame(['hello'], $s1->args);
 
         // also OK if it's not a DIContainer object
         $s1 = Factory::factory([FactoryTestMock::class], ['hello']);
-        self::assertTrue($s1 instanceof FactoryTestMock);
+        self::assertInstanceOf(FactoryTestMock::class, $s1);
         self::assertSame(['hello'], $s1->args);
     }
 
